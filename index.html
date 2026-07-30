@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Marathon</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- GATE -->
+<div id="gate" class="gate">
+  <div class="gate-card">
+    <div class="eyebrow">Entry check-in</div>
+    <h1>IELTS Marathon</h1>
+    <p>30 days, no rest days. Enter your access code to get on the board.</p>
+    <form id="gate-form">
+      <input type="password" id="gate-input" placeholder="Access code" autocomplete="off" required>
+      <button type="submit">Enter</button>
+      <div class="gate-error" id="gate-error"></div>
+    </form>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div id="content" style="display:none;">
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">IELTS <span>MARATHON</span></div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">30-day training block</div>
+      <h1>Your Marathon Board</h1>
+      <p class="tag">Eight stages a day, thirty days straight. Pick a day below and run the full leg: article, vocab, reading, writing, sample, video, questions.</p>
+
+      <div class="progress-shell">
+        <span class="label" id="progress-label">1 / 30 days live</span>
+        <div class="bar-track"><div class="bar-fill" id="progress-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0;">
+    <div class="wrap">
+      <div id="track-grid" class="track-grid"></div>
+    </div>
+  </section>
+
+  <div class="finish-line">— day 30 is the finish line —</div>
+</div>
+
+<script src="script.js"></script>
+<script>
+  function buildGrid(code) {
+    const grid = document.getElementById('track-grid');
+    const openDays = [1]; // add more numbers here as you build out each day, e.g. [1, 2, 3]
+
+    document.getElementById('progress-label').textContent = `${openDays.length} / 30 days live`;
+    document.getElementById('progress-fill').style.width = `${(openDays.length / 30) * 100}%`;
+
+    let html = '';
+    for (let d = 1; d <= 30; d++) {
+      const isOpen = openDays.includes(d);
+      const isFinish = d === 30;
+      if (isOpen) {
+        html += `<a class="day-chip open${isFinish ? ' finish' : ''}" href="days/day${d}.html?code=${encodeURIComponent(code)}">
+          <span class="num">${String(d).padStart(2, '0')}</span>
+          <span class="lbl">Day ${d}</span>
+          <span class="meta">9 sections</span>
+        </a>`;
+      } else {
+        html += `<div class="day-chip locked${isFinish ? ' finish' : ''}" title="Coming soon">
+          <span class="num">${String(d).padStart(2, '0')}</span>
+          <span class="lbl">Day ${d}</span>
+          <span class="meta">${isFinish ? 'Finish' : 'Coming soon'}</span>
+        </div>`;
+      }
+    }
+    grid.innerHTML = html;
+  }
+
+  initGate(buildGrid);
+</script>
+</body>
+</html>
