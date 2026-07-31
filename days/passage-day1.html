@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Practice – Katherine Mansfield</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background-color: #ffffff; line-height: 1.4; font-size: 16px; }
+
+        .header {
+            background-color: #ffffff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            height: 60px;
+        }
+
+        .telegram-link {
+            color: #0088cc;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .telegram-link:hover { text-decoration: underline; }
+        .telegram-link::before {
+            content: '';
+            display: inline-block;
+            width: 20px; height: 20px;
+            background-color: currentColor;
+            -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23l7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3L3.64 12c-.88-.25-.89-1.37.2-1.64l16.56-6.4c.75-.29 1.4.22 1.2.94l-2.67 12.61c-.22.95-1.13 1.18-1.78.73l-4.5-3.32l-2.23 2.15c-.47.44-1.29.21-1.48-.37z"/></svg>');
+            mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23l7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3L3.64 12c-.88-.25-.89-1.37.2-1.64l16.56-6.4c.75-.29 1.4.22 1.2.94l-2.67 12.61c-.22.95-1.13 1.18-1.78.73l-4.5-3.32l-2.23 2.15c-.47.44-1.29.21-1.48-.37z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .timer-container {
+            display: flex;
+            align-items: center;
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .timer-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 15px;
+        }
+        .timer-controls button {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            padding: 0;
+            cursor: pointer;
+            width: 32px; height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .timer-controls button:hover { background: #e0e0e0; }
+        .timer-controls button svg { width: 20px; height: 20px; fill: #333; }
+
+        .main-container {
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            height: calc(100vh - 60px);
+        }
+
+        .part-header {
+            background-color: #f1f2ec;
+            padding: 15px 20px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+            margin: 10px 20px;
+            border-radius: 5px;
+        }
+        .part-header p { margin: 0; }
+        .part-header p:first-child { margin-bottom: 5px; }
+
+        .panels-container { display: flex; flex: 1; overflow: hidden; }
+
+        .passage-panel {
+            flex: 1;
+            padding: 20px 20px 100px;
+            overflow-y: auto;
+            min-width: 200px;
+        }
+
+        .reading-passage h4 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .reading-passage .subtitle {
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 18px;
+            font-size: 15px;
+            color: #444;
+        }
+        .reading-passage p { margin-bottom: 1.2em; }
+
+        .resizer {
+            width: 10px;
+            cursor: col-resize;
+            background-color: #f0f0f0;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="30" viewBox="0 0 10 30"><path d="M4 11h2v2H4zM4 15h2v2H4zM4 19h2v2H4z" fill="%23888"/></svg>');
+            background-repeat: no-repeat;
+            background-position: center;
+            flex-shrink: 0;
+        }
+
+        .questions-panel {
+            flex: 1;
+            padding: 20px 20px 100px;
+            overflow-y: auto;
+            min-width: 200px;
+            border-left: 1px solid #e0e0e0;
+        }
+
+        /* Questions */
+        .question { margin-bottom: 40px; }
+        .question p { margin-bottom: 10px; }
+        .question-prompt { margin-bottom: 20px; }
+        .question ul { list-style: none; padding-left: 0; }
+        .question ul li { margin-bottom: 5px; }
+
+        /* T/F/NG */
+        .tf-question { margin-bottom: 25px; padding: 10px 0; border-radius: 4px; }
+        .tf-question-line {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 5px 0;
+            border-radius: 4px;
+        }
+        .tf-question-number {
+            border: 2px solid #ccc;
+            padding: 2px 8px;
+            margin-right: 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .tf-question-text { padding-top: 3px; }
+        .tf-options { padding-left: 5px; }
+        .tf-option { display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; }
+        .tf-option input[type="radio"] { margin-right: 10px; transform: scale(1.2); }
+        .tf-question.correct .tf-question-line { background-color: #e9f7ef; }
+        .tf-question.incorrect .tf-question-line { background-color: #f8d7da; }
+
+        /* Answer inputs */
+        .answer-input {
+            border: 1px solid #888;
+            border-radius: 4px;
+            background-color: #fff;
+            padding: 2px 5px;
+            font-size: 16px;
+            text-align: center;
+            margin: 0 4px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            position: relative;
+            z-index: 10;
+            pointer-events: auto;
+        }
+        .answer-input:focus { border-color: #4a90e2; box-shadow: 0 0 3px 1px rgba(74,144,226,0.5); outline: none; }
+        .answer-input::placeholder { color: #999; font-weight: bold; }
+        .answer-input.correct { border-color: #28a745; background-color: #e9f7ef; }
+        .answer-input.incorrect { border-color: #dc3545; background-color: #f8d7da; color: #721c24; }
+
+        /* Notes completion */
+        .notes-section { margin-top: 10px; }
+        .notes-year {
+            font-weight: bold;
+            font-size: 15px;
+            margin: 18px 0 8px;
+            color: #333;
+        }
+        .notes-list { list-style: none; padding-left: 0; }
+        .notes-list li {
+            margin-bottom: 10px;
+            font-size: 15px;
+            line-height: 1.9;
+            padding-left: 16px;
+            position: relative;
+        }
+        .notes-list li::before {
+            content: '–';
+            position: absolute;
+            left: 0;
+        }
+
+        /* Correct answer display after check */
+        .correct-answer-display {
+            font-weight: bold;
+            color: #28a745;
+            margin-left: 8px;
+            font-size: 14px;
+        }
+
+        /* Bottom nav */
+        .nav-row {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #ffffff;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            height: 80px;
+            z-index: 100;
+            border-top: 1px solid #e0e0e0;
+        }
+        .footer__questionWrapper { display: flex; align-items: center; margin-right: 20px; }
+        .footer__questionNo {
+            background: none;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .footer__questionNo:hover { background-color: #f8f9fa; }
+        .footer__subquestionWrapper { display: flex; gap: 2px; margin-left: 10px; }
+
+        .subQuestion {
+            width: 32px; height: 32px;
+            border: 1px solid #ccc;
+            background: white;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+            transition: all 0.2s;
+        }
+        .subQuestion.answered { background-color: #e9ecef; border-color: #ddd; }
+        .subQuestion.correct { background-color: #28a745; color: white; border-color: #28a745; }
+        .subQuestion.incorrect { background-color: #dc3545; color: white; border-color: #dc3545; }
+        .subQuestion.active { background-color: #4a90e2; color: white; border-color: #4a90e2; }
+        .subQuestion:hover:not(.correct):not(.incorrect) { background-color: #f0f0f0; border-color: #999; }
+
+        .footer__deliverButton {
+            margin-left: auto;
+            margin-right: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 15px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 150px;
+            justify-content: center;
+        }
+        .footer__deliverButton:hover { background-color: #e0e0e0; }
+
+        /* Nav arrows */
+        .nav-arrows {
+            position: fixed;
+            bottom: 100px; right: 20px;
+            display: flex;
+            gap: 5px;
+            z-index: 101;
+        }
+        .nav-arrow {
+            width: 50px; height: 50px;
+            background: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .nav-arrow:hover { background: #555; }
+        .nav-arrow:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* Context menu */
+        .context-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: none;
+            min-width: 140px;
+        }
+        .context-menu-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .context-menu-item:hover { background-color: #f8f9fa; }
+        .context-menu-item:last-child { border-bottom: none; }
+        .highlight { background-color: #ffff00; }
+        .comment-highlight { background-color: #90EE90; position: relative; cursor: help; }
+        .comment-tooltip {
+            position: absolute;
+            bottom: 100%; left: 50%;
+            transform: translateX(-50%);
+            background: #333; color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .comment-highlight:hover .comment-tooltip { opacity: 1; }
+
+        /* Results modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.hidden { display: none; }
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .modal-close-btn {
+            position: absolute; top: 10px; right: 15px;
+            background: none; border: none;
+            font-size: 28px; cursor: pointer; color: #888;
+        }
+        .results-summary { margin: 15px 0; font-size: 18px; }
+        .results-summary p { margin-bottom: 8px; }
+        .results-details-container { overflow-y: auto; padding-right: 10px; }
+        .result-row {
+            display: grid;
+            grid-template-columns: 40px 1fr 1fr;
+            gap: 15px;
+            padding: 8px 5px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 15px;
+        }
+        .result-row.incorrect { background-color: #f8d7da; }
+        .result-row .q-num { font-weight: bold; }
+        .result-row .correct-ans { color: #155724; font-weight: 500; }
+
+        .hidden { display: none !important; }
+        .attemptedCount { font-size: 14px; color: #666; margin-left: 5px; font-weight: 400; }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="timer-container">
+        <span class="timer-display">20:00</span>
+        <div class="timer-controls">
+            <button id="timer-toggle-btn" title="Pause/Resume Timer">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8 5v14l11-7L8 5z"/></svg>
+            </button>
+            <button id="timer-reset-btn" title="Reset Timer">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+            </button>
+        </div>
+    </div>
+    <a href="https://t.me/IELTS_sv" target="_blank" class="telegram-link">
+        IELTS by AB
+    </a>
+</div>
+
+<!-- MAIN -->
+<div class="main-container" id="main-container">
+    <div id="passage-header-container">
+        <div class="part-header">
+            <p><strong>Part 1</strong></p>
+            <p>You should spend about 20 minutes on Questions 1–13 which are based on Reading Passage 1.</p>
+        </div>
+    </div>
+
+    <div class="panels-container">
+
+        <!-- PASSAGE -->
+        <div class="passage-panel" id="passage-panel">
+            <div class="reading-passage">
+                <h4>Katherine Mansfield</h4>
+                <p class="subtitle">Katherine Mansfield was a modernist writer of short fiction who was born and brought up in New Zealand.</p>
+
+                <p>Katherine Mansfield Beauchamp Murry was born in 1888, into a prominent family in Wellington, New Zealand. She became one of New Zealand's best-known writers, using the pen name of Katherine Mansfield. The daughter of a banker, and born into a middle-class family, she was also a first cousin of Countess Elizabeth von Arnim, a distinguished novelist in her time. Mansfield had two older sisters and a younger brother. Her father, Harold Beauchamp, went on to become the chairman of the Bank of New Zealand. In 1893, the Mansfield family moved to Karori, a suburb of Wellington, where Mansfield would spend the happiest years of her childhood; she later used her memories of this time as an inspiration for her <em>Prelude</em> story.</p>
+
+                <p>Her first published stories appeared in the High School Reporter and the Wellington Girls' High School magazine in 1898 and 1899. In 1902, she developed strong feelings for a musician who played the cello, Arnold Trowell, although her feelings were not, for the most part, returned. Mansfield herself was an accomplished cellist, having received lessons from Trowell's father. Mansfield wrote in her journals of feeling isolated to some extent in New Zealand, and, in general terms of her interest in the Maori people (New Zealand's native people), who were often portrayed in a sympathetic light in her later stories, such as <em>How Pearl Button was Kidnapped</em>.</p>
+
+                <p>She moved to London in 1903, where she attended Queen's College, along with her two sisters. Mansfield recommenced playing the cello, an occupation that she believed, during her time at Queen's, she would take up professionally. She also began contributing to the college newspaper, with such a dedication to it that she eventually became its editor. She was particularly interested in the works of the French writers of this period and on the 19th-century British writer, Oscar Wilde, and she was appreciated amongst fellow students at Queen's for her lively and charismatic approach to life and work. She met fellow writer Ida Baker, a South African, at the college, and the pair became lifelong friends. Mansfield did not actively support the suffragette movement in the UK. Women in New Zealand had gained the right to vote in 1893.</p>
+
+                <p>Mansfield first began journeying into other parts of Europe in the period 1903–1906, mainly to Belgium and Germany. After finishing her schooling in England, she returned to her New Zealand home in 1906, only then beginning to write short stories in a serious way. She had several works published in Australia in a magazine called <em>Native Companion</em>, which was her first paid writing work, and by this time she had her mind set on becoming a professional writer. It was also the first occasion on which she used the pseudonym "K. Mansfield." Mansfield rapidly grew discontented with the provincial New Zealand lifestyle, and with her family. Two years later she headed again to London. Her father sent her an annual subsidy of £100 for the rest of her life. In later years, she would express both admiration and disdain for New Zealand in her journals.</p>
+
+                <p>In 1911, Mansfield met John Middleton Murry, the Oxford scholar and editor of the literary magazine <em>Rhythm</em>. They were later to marry in 1918. Mansfield became a co-editor of <em>Rhythm</em>, which was subsequently called <em>The Blue Review</em>, in which more of her works were published. She and Murry lived in various houses in England and briefly in Paris. <em>The Blue Review</em> failed to gain enough readers and was no longer published. Their attempt to set up as writers in Paris was cut short by Murry's bankruptcy, which resulted from the failure of this and other journals. Life back in England meant frequently changed addresses and very limited funds.</p>
+
+                <p>Between 1915 and 1918, Mansfield moved between England and Bandol, France. She and Murry developed close contact with other well-known writers of the time such as D.H. Lawrence, Bertrand Russell, and Aldous Huxley. By October 1918, Mansfield had become seriously ill; she had been diagnosed with tuberculosis and was advised to enter a sanatorium. She could no longer spend winters in London. In the autumn of 1918, she was so ill that she decided to go to Ospedale in Italy. It was the publication of <em>Bliss and Other Stories</em> in 1920 that was to solidify Mansfield's reputation as a writer. Mansfield also spent time in Menton, France, as the tenant of her father's cousin at The Villa Isola Bella. There she wrote what she pronounced to be "…the only story that satisfies me to any extent."</p>
+
+                <p>Mansfield produced a great deal of work in the final years of her life, and much of her prose and poetry remained unpublished at her death in 1923. After her death, her husband, Murry, took on the task of editing and publishing her works. His efforts resulted in two additional volumes of short stories: <em>The Doves' Nest</em> and <em>Something Childish</em>, published in 1923 and 1924 respectively, the publication of her <em>Poems</em> as well as a collection of critical writings (<em>Novels and Novelists</em>) and a number of editions of Mansfield's previously unpublished letters and journals.</p>
+            </div>
+        </div>
+
+        <div class="resizer" id="resizer"></div>
+
+        <!-- QUESTIONS -->
+        <div class="questions-panel" id="questions-panel">
+            <div class="questions-container">
+
+                <!-- Q1–6: True / False / Not Given -->
+                <div class="question" data-q-start="1" data-q-end="6">
+                    <div class="question-prompt">
+                        <p><strong>Questions 1–6</strong><br>
+                        Do the following statements agree with the information given in Reading Passage 1?<br>
+                        In boxes 1–6 on your answer sheet, write</p>
+                        <ul style="list-style:none;padding-left:0;">
+                            <li><strong>TRUE</strong> &nbsp;&nbsp;&nbsp;if the statement agrees with the information</li>
+                            <li><strong>FALSE</strong> &nbsp;&nbsp;if the statement contradicts the information</li>
+                            <li><strong>NOT GIVEN</strong> &nbsp;&nbsp;if there is no information on this</li>
+                        </ul>
+                    </div>
+
+                    <div class="tf-question" data-q-start="1" data-q-end="1">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number">1</span>
+                            <span class="tf-question-text">The name Katherine Mansfield, that appears on the writer's books, was exactly the same as her original name.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label class="tf-option"><input type="radio" name="q1" value="TRUE"> TRUE</label>
+                            <label class="tf-option"><input type="radio" name="q1" value="FALSE"> FALSE</label>
+                            <label class="tf-option"><input type="radio" name="q1" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="tf-question" data-q-start="2" data-q-end="2">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number">2</span>
+                            <span class="tf-question-text">Mansfield won a prize for a story she wrote for the High School Reporter.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label class="tf-option"><input type="radio" name="q2" value="TRUE"> TRUE</label>
+                            <label class="tf-option"><input type="radio" name="q2" value="FALSE"> FALSE</label>
+                            <label class="tf-option"><input type="radio" name="q2" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="tf-question" data-q-start="3" data-q-end="3">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number">3</span>
+                            <span class="tf-question-text">How Pearl Button Was Kidnapped portrayed Maori people in a favourable way.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label class="tf-option"><input type="radio" name="q3" value="TRUE"> TRUE</label>
+                            <label class="tf-option"><input type="radio" name="q3" value="FALSE"> FALSE</label>
+                            <label class="tf-option"><input type="radio" name="q3" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="tf-question" data-q-start="4" data-q-end="4">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number">4</span>
+                            <span class="tf-question-text">When Mansfield was at Queen's College, she planned to be a professional writer.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label class="tf-option"><input type="radio" name="q4" value="TRUE"> TRUE</label>
+                            <label class="tf-option"><input type="radio" name="q4" value="FALSE"> FALSE</label>
+                            <label class="tf-option"><input type="radio" name="q4" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="tf-question" data-q-start="5" data-q-end="5">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number">5</span>
+                            <span class="tf-question-text">Mansfield was unpopular with the other students at Queen's College.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label class="tf-option"><input type="radio" name="q5" value="TRUE"> TRUE</label>
+                            <label class="tf-option"><input type="radio" name="q5" value="FALSE"> FALSE</label>
+                            <label class="tf-option"><input type="radio" name="q5" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+
+                    <div class="tf-question" data-q-start="6" data-q-end="6">
+                        <div class="tf-question-line">
+                            <span class="tf-question-number">6</span>
+                            <span class="tf-question-text">In London, Mansfield showed little interest in politics.</span>
+                        </div>
+                        <div class="tf-options">
+                            <label class="tf-option"><input type="radio" name="q6" value="TRUE"> TRUE</label>
+                            <label class="tf-option"><input type="radio" name="q6" value="FALSE"> FALSE</label>
+                            <label class="tf-option"><input type="radio" name="q6" value="NOT GIVEN"> NOT GIVEN</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q7–13: Notes Completion -->
+                <div class="question" data-q-start="7" data-q-end="13">
+                    <div class="question-prompt">
+                        <p><strong>Questions 7–13</strong><br>
+                        Complete the notes below.<br>
+                        Choose <strong>ONE WORD AND/OR A NUMBER</strong> from the passage for each answer.<br>
+                        Write your answers in boxes 7–13 on your answer sheet.</p>
+                    </div>
+
+                    <div class="notes-section">
+                        <p style="font-weight:bold;font-size:16px;margin-bottom:12px;">Katherine Mansfield's adult years</p>
+
+                        <!-- 1906 block -->
+                        <div class="notes-year">
+                            <input type="text" class="answer-input" id="q7" placeholder="7" size="8">
+                        </div>
+                        <ul class="notes-list">
+                            <li>moved from England back to New Zealand</li>
+                            <li>first paid writing work was in a publication based in
+                                <input type="text" class="answer-input" id="q8" placeholder="8" size="12">
+                            </li>
+                            <li>her
+                                <input type="text" class="answer-input" id="q9" placeholder="9" size="12">
+                                and the New Zealand way of life made her feel dissatisfied
+                            </li>
+                        </ul>
+
+                        <!-- 1908 block -->
+                        <div class="notes-year">1908</div>
+                        <ul class="notes-list">
+                            <li>returned to London</li>
+                        </ul>
+
+                        <!-- 1911–1919 block -->
+                        <div class="notes-year">1911 – 1919</div>
+                        <ul class="notes-list">
+                            <li>Met John Middleton Murry in 1911</li>
+                            <li>
+                                <input type="text" class="answer-input" id="q10" placeholder="10" size="12">
+                                prevented Mansfield and Murry from staying together in Paris
+                            </li>
+                            <li>spent time with distinguished
+                                <input type="text" class="answer-input" id="q11" placeholder="11" size="12">
+                            </li>
+                            <li>from 1916, tuberculosis restricted the time she spent in London</li>
+                        </ul>
+
+                        <!-- 1920 block -->
+                        <div class="notes-year">1920</div>
+                        <ul class="notes-list">
+                            <li>her
+                                <input type="text" class="answer-input" id="q12" placeholder="12" size="12">
+                                was consolidated when <em>Bliss and Other Stories</em> was published
+                            </li>
+                            <li>wrote several stories at "Villa Isola Bella"</li>
+                        </ul>
+
+                        <!-- 1923–1924 block -->
+                        <div class="notes-year">1923 – 1924</div>
+                        <ul class="notes-list">
+                            <li>Mansfield's
+                                <input type="text" class="answer-input" id="q13" placeholder="13" size="12">
+                                published more of her works after her death
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Nav Arrows -->
+<div class="nav-arrows">
+    <button class="nav-arrow" id="prevBtn" onclick="previousQuestion()">&#8249;</button>
+    <button class="nav-arrow" id="nextBtn" onclick="nextQuestion()">&#8250;</button>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="nav-row" aria-label="Questions">
+    <div class="footer__questionWrapper" role="tablist">
+        <button role="tab" class="footer__questionNo">
+            <span>
+                <span class="section-prefix">Part </span>
+                <span class="sectionNr">1</span>
+                <span class="attemptedCount" id="attempted-count">0 of 13</span>
+            </span>
+        </button>
+        <div class="footer__subquestionWrapper" id="subq-wrapper">
+            <button class="subQuestion" onclick="goToQuestion(1)"  id="sq1">1</button>
+            <button class="subQuestion" onclick="goToQuestion(2)"  id="sq2">2</button>
+            <button class="subQuestion" onclick="goToQuestion(3)"  id="sq3">3</button>
+            <button class="subQuestion" onclick="goToQuestion(4)"  id="sq4">4</button>
+            <button class="subQuestion" onclick="goToQuestion(5)"  id="sq5">5</button>
+            <button class="subQuestion" onclick="goToQuestion(6)"  id="sq6">6</button>
+            <button class="subQuestion" onclick="goToQuestion(7)"  id="sq7">7</button>
+            <button class="subQuestion" onclick="goToQuestion(8)"  id="sq8">8</button>
+            <button class="subQuestion" onclick="goToQuestion(9)"  id="sq9">9</button>
+            <button class="subQuestion" onclick="goToQuestion(10)" id="sq10">10</button>
+            <button class="subQuestion" onclick="goToQuestion(11)" id="sq11">11</button>
+            <button class="subQuestion" onclick="goToQuestion(12)" id="sq12">12</button>
+            <button class="subQuestion" onclick="goToQuestion(13)" id="sq13">13</button>
+        </div>
+    </div>
+    <button id="deliver-button" class="footer__deliverButton">
+        <span>&#10003;</span>
+        <span>Check Answers</span>
+    </button>
+</nav>
+
+<!-- Context Menu -->
+<div id="contextMenu" class="context-menu">
+    <div id="menu-highlight" class="context-menu-item" onclick="highlightText()">Highlight</div>
+    <div id="menu-note"      class="context-menu-item" onclick="addNote()">Note</div>
+    <div id="menu-clear"     class="context-menu-item" onclick="clearHighlight()">Clear</div>
+    <div id="menu-clear-all" class="context-menu-item" onclick="clearAllHighlights()">Clear All</div>
+</div>
+
+<!-- Results Modal -->
+<div id="results-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <button class="modal-close-btn" onclick="closeResultsModal()">&times;</button>
+        <h2>Results</h2>
+        <div class="results-summary">
+            <p>Score: <span id="results-score"></span> / 13</p>
+            <p>Estimated IELTS Band: <span id="results-band"></span></p>
+        </div>
+        <div id="results-details" class="results-details-container"></div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // ── ANSWER KEY ──────────────────────────────────────────────────
+    // Q1–6: T/F/NG
+    // Q7–13: one word or number from passage
+    const correctAnswers = {
+        '1':  'FALSE',       // pen name ≠ birth name (Katherine Mansfield Beauchamp Murry)
+        '2':  'NOT GIVEN',   // no mention of prize
+        '3':  'TRUE',        // "sympathetic light" = favourable
+        '4':  'FALSE',       // at Queen's she planned to be a cellist, not a writer
+        '5':  'FALSE',       // she was "appreciated amongst fellow students"
+        '6':  'TRUE',        // "did not actively support the suffragette movement"
+        '7':  '1906',
+        '8':  'Australia',
+        '9':  'family',
+        '10': 'bankruptcy',
+        '11': 'writers',
+        '12': 'reputation',
+        '13': 'husband'
+    };
+
+    function getBand(score) {
+        if (score >= 12) return '8.5 – 9.0';
+        if (score >= 11) return '8.0';
+        if (score >= 10) return '7.5';
+        if (score >= 9)  return '7.0';
+        if (score >= 8)  return '6.5';
+        if (score >= 7)  return '6.0';
+        if (score >= 6)  return '5.5';
+        if (score >= 5)  return '5.0';
+        if (score >= 4)  return '4.5';
+        return '4.0';
+    }
+
+    // ── TIMER ────────────────────────────────────────────────────────
+    let timeInSeconds = 20 * 60;
+    let timerInterval = null;
+    const timerDisplay   = document.querySelector('.timer-display');
+    const timerToggleBtn = document.getElementById('timer-toggle-btn');
+    const timerResetBtn  = document.getElementById('timer-reset-btn');
+    const playIcon  = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8 5v14l11-7L8 5z"/></svg>';
+    const pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            timeInSeconds--;
+            const m = Math.floor(timeInSeconds / 60);
+            const s = timeInSeconds % 60;
+            timerDisplay.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            if (timeInSeconds <= 0) { clearInterval(timerInterval); timerDisplay.textContent = "Time's up!"; }
+        }, 1000);
+        timerToggleBtn.innerHTML = pauseIcon;
+    }
+    function pauseTimer() { clearInterval(timerInterval); timerToggleBtn.innerHTML = playIcon; }
+
+    timerToggleBtn.addEventListener('click', () => {
+        timerToggleBtn.innerHTML.includes('M6 19h4') ? pauseTimer() : startTimer();
+    });
+    timerResetBtn.addEventListener('click', () => {
+        pauseTimer();
+        timeInSeconds = 20 * 60;
+        timerDisplay.textContent = '20:00';
+        startTimer();
+    });
+    startTimer();
+
+    // ── NAVIGATION ───────────────────────────────────────────────────
+    let currentQuestion = 1;
+    const totalQuestions = 13;
+
+    window.goToQuestion = function(n) {
+        currentQuestion = n;
+        highlightActiveSubQ(n);
+        // For T/F/NG (1-6) scroll to the radio group; for text inputs scroll to the input
+        let target;
+        if (n <= 6) {
+            target = document.querySelector(`.tf-question[data-q-start="${n}"]`);
+        } else {
+            target = document.getElementById(`q${n}`);
+        }
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        updateNavArrows();
+    };
+
+    window.previousQuestion = () => { if (currentQuestion > 1) goToQuestion(currentQuestion - 1); };
+    window.nextQuestion     = () => { if (currentQuestion < totalQuestions) goToQuestion(currentQuestion + 1); };
+
+    function updateNavArrows() {
+        document.getElementById('prevBtn').disabled = currentQuestion <= 1;
+        document.getElementById('nextBtn').disabled = currentQuestion >= totalQuestions;
+    }
+    function highlightActiveSubQ(n) {
+        document.querySelectorAll('.subQuestion').forEach(b => b.classList.remove('active'));
+        const btn = document.getElementById(`sq${n}`);
+        if (btn) btn.classList.add('active');
+    }
+
+    // ── ANSWERED INDICATOR ───────────────────────────────────────────
+    function isAnswered(n) {
+        if (n <= 6) return !!document.querySelector(`input[name="q${n}"]:checked`);
+        const el = document.getElementById(`q${n}`);
+        return el && el.value.trim().length > 0;
+    }
+    function updateAllIndicators() {
+        let answered = 0;
+        for (let i = 1; i <= totalQuestions; i++) {
+            const btn = document.getElementById(`sq${i}`);
+            if (!btn) continue;
+            if (isAnswered(i)) {
+                if (!btn.classList.contains('correct') && !btn.classList.contains('incorrect'))
+                    btn.classList.add('answered');
+                answered++;
+            } else {
+                btn.classList.remove('answered');
+            }
+        }
+        document.getElementById('attempted-count').textContent = `${answered} of ${totalQuestions}`;
+    }
+    document.body.addEventListener('input',  updateAllIndicators);
+    document.body.addEventListener('change', updateAllIndicators);
+
+    // ── CHECK ANSWERS ─────────────────────────────────────────────────
+    document.getElementById('deliver-button').addEventListener('click', checkAnswers);
+
+    function normalise(str) { return str.trim().toLowerCase().replace(/\s+/g, ' '); }
+
+    function checkAnswers() {
+        clearInterval(timerInterval);
+        let score = 0;
+        const detailsEl = document.getElementById('results-details');
+        detailsEl.innerHTML = '';
+
+        // Clear previous markings
+        document.querySelectorAll('.tf-question').forEach(el => el.classList.remove('correct','incorrect'));
+        document.querySelectorAll('.correct-answer-display').forEach(el => el.remove());
+        document.querySelectorAll('.answer-input').forEach(el => el.classList.remove('correct','incorrect'));
+        document.querySelectorAll('.subQuestion').forEach(b => b.classList.remove('correct','incorrect','answered'));
+
+        for (let i = 1; i <= totalQuestions; i++) {
+            const correct = correctAnswers[String(i)];
+            let userAnswer = '', isCorrect = false;
+
+            if (i <= 6) {
+                const checked = document.querySelector(`input[name="q${i}"]:checked`);
+                userAnswer = checked ? checked.value : '(no answer)';
+                isCorrect  = userAnswer === correct;
+
+                const tfEl = document.querySelector(`.tf-question[data-q-start="${i}"]`);
+                if (tfEl) {
+                    tfEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+                    if (!isCorrect) {
+                        const line = tfEl.querySelector('.tf-question-line');
+                        if (line) {
+                            const span = document.createElement('span');
+                            span.className   = 'correct-answer-display';
+                            span.textContent = `✓ ${correct}`;
+                            line.appendChild(span);
+                        }
+                    }
+                }
+            } else {
+                const inputEl = document.getElementById(`q${i}`);
+                userAnswer = inputEl ? inputEl.value.trim() : '(no answer)';
+                // Accept any slash-separated alternative
+                const accepted = correct.split('/').map(normalise);
+                isCorrect = accepted.includes(normalise(userAnswer));
+
+                if (inputEl) {
+                    inputEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+                    if (!isCorrect) {
+                        // Remove old display if present
+                        const sib = inputEl.nextElementSibling;
+                        if (sib && sib.classList.contains('correct-answer-display')) sib.remove();
+                        const span = document.createElement('span');
+                        span.className   = 'correct-answer-display';
+                        span.textContent = `✓ ${correct}`;
+                        inputEl.insertAdjacentElement('afterend', span);
+                    }
+                }
+            }
+
+            if (isCorrect) score++;
+
+            const sqBtn = document.getElementById(`sq${i}`);
+            if (sqBtn) { sqBtn.classList.remove('answered'); sqBtn.classList.add(isCorrect ? 'correct' : 'incorrect'); }
+
+            const row = document.createElement('div');
+            row.className = `result-row ${isCorrect ? '' : 'incorrect'}`;
+            row.innerHTML = `<span class="q-num">${i}</span><span class="user-ans">${userAnswer}</span><span class="correct-ans">${correct}</span>`;
+            detailsEl.appendChild(row);
+        }
+
+        document.getElementById('results-score').textContent = score;
+        document.getElementById('results-band').textContent  = getBand(score);
+        document.getElementById('results-modal').classList.remove('hidden');
+    }
+
+    window.closeResultsModal = () => document.getElementById('results-modal').classList.add('hidden');
+
+    // ── RESIZER ───────────────────────────────────────────────────────
+    const resizer     = document.getElementById('resizer');
+    const passagePanel = document.getElementById('passage-panel');
+    resizer.addEventListener('mousedown', e => {
+        e.preventDefault();
+        const startX = e.clientX, startW = passagePanel.offsetWidth;
+        const doDrag   = e => { const nw = startW + e.clientX - startX; if (nw > 200 && (document.body.clientWidth - nw - 10) > 200) passagePanel.style.flex = `0 0 ${nw}px`; };
+        const stopDrag = () => { window.removeEventListener('mousemove', doDrag); window.removeEventListener('mouseup', stopDrag); };
+        window.addEventListener('mousemove', doDrag);
+        window.addEventListener('mouseup', stopDrag);
+    });
+
+    // ── CONTEXT MENU ──────────────────────────────────────────────────
+    const contextMenu  = document.getElementById('contextMenu');
+    const questionsPanel = document.getElementById('questions-panel');
+    const panels = [passagePanel, questionsPanel];
+    let selectedRange  = null;
+
+    document.addEventListener('selectionchange', () => {
+        const sel = window.getSelection();
+        if (sel && !sel.isCollapsed && sel.toString().trim()) {
+            const r = sel.getRangeAt(0);
+            if (panels.some(p => p.contains(r.commonAncestorContainer))) selectedRange = r;
+        }
+    });
+
+    panels.forEach(panel => panel.addEventListener('contextmenu', e => {
+        const onHL    = e.target.closest('.highlight,.comment-highlight');
+        const selActive = selectedRange && selectedRange.toString().trim();
+        let show = false;
+        if (onHL) {
+            ['menu-highlight','menu-note'].forEach(id => document.getElementById(id).style.display = 'none');
+            ['menu-clear','menu-clear-all'].forEach(id => document.getElementById(id).style.display = 'block');
+            contextMenu.targetEl = onHL; show = true;
+        } else if (selActive) {
+            ['menu-highlight','menu-note'].forEach(id => document.getElementById(id).style.display = 'flex');
+            document.getElementById('menu-clear').style.display = 'none';
+            document.getElementById('menu-clear-all').style.display = 'block';
+            show = true;
+        }
+        if (show) {
+            e.preventDefault();
+            let left = e.pageX, top = e.pageY - contextMenu.offsetHeight - 5;
+            if (left + 150 > window.innerWidth) left = window.innerWidth - 155;
+            contextMenu.style.cssText = `display:block;left:${left}px;top:${top}px`;
+        }
+    }));
+
+    document.addEventListener('click', e => {
+        if (contextMenu.style.display === 'block' && !contextMenu.contains(e.target)) {
+            contextMenu.style.display = 'none'; selectedRange = null;
+        }
+    });
+
+    function unwrap(el) { const p = el.parentNode; while (el.firstChild) p.insertBefore(el.firstChild, el); p.removeChild(el); p.normalize(); }
+
+    window.highlightText    = () => { if (selectedRange && !selectedRange.collapsed) { const s = document.createElement('span'); s.className = 'highlight'; s.appendChild(selectedRange.extractContents()); selectedRange.insertNode(s); } contextMenu.style.display='none'; window.getSelection().removeAllRanges(); };
+    window.addNote          = () => { const note = prompt('Enter your note:'); if (note && selectedRange && !selectedRange.collapsed) { const s = document.createElement('span'); s.className='comment-highlight'; const t=document.createElement('span'); t.className='comment-tooltip'; t.textContent=note; s.appendChild(selectedRange.extractContents()); s.appendChild(t); selectedRange.insertNode(s); } contextMenu.style.display='none'; window.getSelection().removeAllRanges(); };
+    window.clearHighlight   = () => { if (contextMenu.targetEl) unwrap(contextMenu.targetEl); contextMenu.style.display='none'; window.getSelection().removeAllRanges(); };
+    window.clearAllHighlights = () => { document.querySelectorAll('.highlight,.comment-highlight').forEach(unwrap); contextMenu.style.display='none'; window.getSelection().removeAllRanges(); };
+
+    // ── INIT ──────────────────────────────────────────────────────────
+    highlightActiveSubQ(1);
+    updateNavArrows();
+});
+</script>
+</body>
+</html>
