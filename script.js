@@ -150,26 +150,6 @@ function initChunkToggle(toggleId, sampleId) {
   });
 }
 
-// ---------- Scroll-spy for the leg nav ----------
-function initLegNavSpy() {
-  const nav = document.getElementById('leg-nav');
-  if (!nav) return;
-  const links = Array.from(nav.querySelectorAll('a'));
-  const sections = links
-    .map(l => document.querySelector(l.getAttribute('href')))
-    .filter(Boolean);
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const id = '#' + entry.target.id;
-      links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === id));
-    });
-  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
-
-  sections.forEach(s => observer.observe(s));
-}
-
 // ---------- Comprehension quiz (pass a containerId so reading and listening quizzes score independently) ----------
 function checkComprehension(containerId, scoreId) {
   const container = document.getElementById(containerId);
@@ -276,4 +256,251 @@ function checkAllAnswers(containerId, scoreId) {
 
   const scoreEl = document.getElementById(scoreId);
   if (scoreEl) scoreEl.textContent = `Score: ${correct} / ${total}`;
+}
+
+// ============================================
+// TASK FLOW ENGINE — one task visible at a time, dots + Previous/Next,
+// completion screen with confetti. Each day's HTML calls initTaskFlow(dayNumber, totalTasks).
+// A task is considered "complete" (Next enabled) if every input.text-answer,
+// select, and radio-group inside it has a value, OR — for link-out tasks —
+// its confirm checkbox is ticked. Tasks with nothing to fill in are always complete.
+// ============================================
+function initTaskFlow(dayNumber, totalTasks) {
+  const STATE_KEY = `marathon_day${dayNumber}_state`;
+  let current = 1;
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(STATE_KEY) || 'null');
+    if (saved && saved.current) current = saved.current;
+  } catch (e) {}
+
+  const dotsWrap = document.getElementById('dots');
+  for (let i = 1; i <= totalTasks; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.dataset.dot = i;
+    dotsWrap.appendChild(d);
+  }
+
+  const doneTasks = {};
+
+  function saveState() {
+    try { sessionStorage.setItem(STATE_KEY, JSON.stringify({ current, doneTasks })); } catch (e) {}
+  }
+
+  function isTaskComplete(n) {
+    const container = document.getElementById('task' + n);
+    if (!container) return true;
+    const confirmBox = container.querySelector('.confirm-row input[type="checkbox"]');
+    if (confirmBox) return confirmBox.checked;
+
+    const texts = container.querySelectorAll('input.text-answer, input[type="text"]:not(.no-check)');
+    for (const t of texts) { if (t.value.trim() === '') return false; }
+    const selects = container.querySelectorAll('select');
+    for (const s of selects) { if (s.value === '') return false; }
+    const radioNames = {};
+    container.querySelectorAll('input[type="radio"]').forEach(r => {
+      if (!(r.name in radioNames)) radioNames[r.name] = false;
+      if (r.checked) radioNames[r.name] = true;
+    });
+    for (const g in radioNames) { if (!radioNames[g]) return false; }
+    return true;
+  }
+
+  function refreshDots() {
+    document.querySelectorAll('.dot').forEach(d => {
+      const n = +d.dataset.dot;
+      d.classList.toggle('done', !!doneTasks[n]);
+      d.classList.toggle('current', n === current);
+    });
+  }
+
+  function refreshNextButton() {
+    const btn = document.getElementById('nextBtn');
+    if (btn) btn.disabled = !isTaskComplete(current);
+  }
+
+  function showTask(n) {
+    document.querySelectorAll('.task').forEach(t => t.classList.remove('active'));
+    document.getElementById('task' + n).classList.add('active');
+    document.getElementById('navInfo').textContent = `Task ${n} of ${totalTasks}`;
+    document.getElementById('prevBtn').disabled = (n === 1);
+    const nextBtn = document.getElementById('nextBtn');
+    nextBtn.textContent = (n === totalTasks) ? 'Finish →' : 'Next →';
+    refreshDots();
+    refreshNextButton();
+    window.scrollTo(0, 0);
+  }
+
+  function goPrev() {
+    if (current > 1) { current--; saveState(); showTask(current); }
+  }
+
+  function goNext() {
+    doneTasks[current] = true;
+    saveState();
+    refreshDots();
+    if (current < totalTasks) {
+      current++;
+      saveState();
+      showTask(current);
+    } else {
+      document.getElementById('completionScreen').classList.add('show');
+      fireConfetti();
+    }
+  }
+
+  function reviewDay() {
+    document.getElementById('completionScreen').classList.remove('show');
+    current = 1;
+    saveState();
+    showTask(1);
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', goPrev);
+  document.getElementById('nextBtn').addEventListener('click', goNext);
+  const reviewBtn = document.getElementById('reviewBtn');
+  if (reviewBtn) reviewBtn.addEventListener('click', reviewDay);
+
+  document.addEventListener('input', refreshNextButton);
+  document.addEventListener('change', refreshNextButton);
+
+  showTask(current);
+  initHighlightTool(dayNumber);
+}
+
+function fireConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const colors = ['#3457d5', '#1f9d55', '#d5490f', '#f4b731'];
+  const pieces = [];
+  for (let i = 0; i < 130; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * canvas.height * 0.5,
+      w: 6 + Math.random() * 6,
+      h: 8 + Math.random() * 8,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      speed: 2 + Math.random() * 3,
+      drift: -1.5 + Math.random() * 3,
+      rotation: Math.random() * 360,
+      spin: -6 + Math.random() * 12
+    });
+  }
+  const start = Date.now();
+  function frame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      p.y += p.speed; p.x += p.drift; p.rotation += p.spin;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation * Math.PI / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    if (Date.now() - start < 3000) requestAnimationFrame(frame);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  requestAnimationFrame(frame);
+}
+
+// ---------- Text-selection highlight tool (persists per day via localStorage) ----------
+function initHighlightTool(dayNumber) {
+  const tools = document.getElementById('hlTools');
+  const hlBtn = document.getElementById('hlBtn');
+  const hlClear = document.getElementById('hlClear');
+  if (!tools || !hlBtn || !hlClear) return;
+  const HL_KEY = `marathon_hl_day${dayNumber}`;
+
+  function save() {
+    const texts = [];
+    document.querySelectorAll('.hl').forEach(el => texts.push(el.textContent));
+    try { localStorage.setItem(HL_KEY, JSON.stringify(texts)); } catch (e) {}
+  }
+
+  function apply(t) {
+    if (!t.trim()) return;
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        let p = n.parentNode;
+        while (p) {
+          const tag = p.tagName || '';
+          if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'BUTTON' || p.className === 'hl') return NodeFilter.FILTER_REJECT;
+          p = p.parentNode;
+        }
+        return n.textContent.indexOf(t) >= 0 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+      }
+    });
+    let node, found = false;
+    while ((node = walker.nextNode()) && !found) {
+      const idx = node.textContent.indexOf(t);
+      if (idx >= 0) {
+        const r = document.createRange();
+        r.setStart(node, idx);
+        r.setEnd(node, idx + t.length);
+        try {
+          const sp = document.createElement('span');
+          sp.className = 'hl';
+          r.surroundContents(sp);
+          found = true;
+        } catch (e) {}
+      }
+    }
+  }
+
+  function restore() {
+    try { JSON.parse(localStorage.getItem(HL_KEY) || '[]').forEach(apply); } catch (e) {}
+  }
+
+  document.addEventListener('mouseup', (e) => {
+    if (tools.contains(e.target)) return;
+    setTimeout(() => {
+      const s = getSelection();
+      if (!s || s.isCollapsed) { tools.style.display = 'none'; return; }
+      const r = s.getRangeAt(0);
+      if (!r.toString().trim()) { tools.style.display = 'none'; return; }
+      const rc = r.getBoundingClientRect();
+      tools.style.display = 'flex';
+      tools.style.left = Math.max(8, rc.left + scrollX + rc.width / 2 - tools.offsetWidth / 2) + 'px';
+      tools.style.top = Math.max(8, rc.top + scrollY - tools.offsetHeight - 8) + 'px';
+    }, 1);
+  });
+  document.addEventListener('mousedown', (e) => {
+    if (!tools.contains(e.target)) tools.style.display = 'none';
+  });
+
+  hlBtn.onclick = function () {
+    const s = getSelection();
+    if (!s || !s.rangeCount) return;
+    const r = s.getRangeAt(0);
+    try {
+      const sp = document.createElement('span');
+      sp.className = 'hl';
+      r.surroundContents(sp);
+    } catch (e) {}
+    s.removeAllRanges();
+    tools.style.display = 'none';
+    save();
+  };
+  hlClear.onclick = function () {
+    const s = getSelection();
+    if (!s || !s.rangeCount) return;
+    const r = s.getRangeAt(0);
+    document.querySelectorAll('.hl').forEach(x => {
+      if (r.intersectsNode(x)) {
+        const p = x.parentNode;
+        while (x.firstChild) p.insertBefore(x.firstChild, x);
+        p.removeChild(x);
+        p.normalize();
+      }
+    });
+    s.removeAllRanges();
+    tools.style.display = 'none';
+    save();
+  };
+
+  restore();
 }
