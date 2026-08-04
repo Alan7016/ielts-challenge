@@ -18,8 +18,8 @@
       <label style="font-size:0.85rem; font-weight:600; color:var(--ink);">Full name
         <input type="text" id="full-name" required style="width:100%; margin-top:4px;">
       </label>
-      <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Username
-        <input type="text" id="username" required autocomplete="off" style="width:100%; margin-top:4px;">
+      <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Email
+        <input type="email" id="email" required autocomplete="off" style="width:100%; margin-top:4px;">
       </label>
       <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Password
         <input type="password" id="password" required minlength="6" style="width:100%; margin-top:4px;">
@@ -68,15 +68,11 @@
     successEl.style.display = 'none';
 
     const fullName = document.getElementById('full-name').value.trim();
-    const username = document.getElementById('username').value.trim().toLowerCase();
+    const email = document.getElementById('email').value.trim().toLowerCase();
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password-confirm').value;
     const groupId = document.getElementById('group-select').value;
 
-    if (!username.match(/^[a-z0-9_.]+$/)) {
-      errorEl.textContent = 'Username can only contain letters, numbers, dots, and underscores.';
-      return;
-    }
     if (password !== passwordConfirm) {
       errorEl.textContent = 'Passwords do not match.';
       return;
@@ -86,26 +82,21 @@
       return;
     }
 
-    // Supabase Auth needs an email — students only pick a username, so we
-    // derive a fake internal address from it. They never see or use this.
-    const fakeEmail = `${username}@ielts-marathon.local`;
-
     const { data, error } = await sb.auth.signUp({
-      email: fakeEmail,
+      email: email,
       password: password,
       options: {
         data: {
           full_name: fullName,
           role: 'student',
-          group_id: parseInt(groupId, 10),
-          username: username
+          group_id: parseInt(groupId, 10)
         }
       }
     });
 
     if (error) {
       if (error.message.includes('already registered')) {
-        errorEl.textContent = 'That username is already taken.';
+        errorEl.textContent = 'That email is already registered.';
       } else {
         errorEl.textContent = error.message;
       }
