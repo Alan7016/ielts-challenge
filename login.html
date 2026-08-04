@@ -45,12 +45,19 @@
       return;
     }
 
+    // Look up the account's role to send them to the right place.
     const { data: profile } = await sb.from('profiles').select('role').eq('id', data.user.id).single();
     const role = profile ? profile.role : 'student';
 
     const params = new URLSearchParams(window.location.search);
     const returnTo = params.get('returnTo');
-    window.location.href = returnTo ? decodeURIComponent(returnTo) : 'index.html';
+    if (returnTo) {
+      window.location.href = decodeURIComponent(returnTo);
+    } else if (role === 'teacher') {
+      window.location.href = 'teacher-dashboard.html';
+    } else {
+      window.location.href = 'index.html'; // students, and checkers until their dashboard exists
+    }
   });
 </script>
 </body>
