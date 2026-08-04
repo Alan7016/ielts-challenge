@@ -23,14 +23,14 @@
   <section class="hero" style="padding-top:64px; padding-bottom:8px;">
     <div class="wrap">
       <div class="eyebrow">Checker view</div>
-      <h1>Your Groups</h1>
-      <p class="tag">Full detail for every student in your groups — completion, scores, and answers.</p>
+      <h1 id="page-title">Pick a day</h1>
+      <p class="tag" id="page-sub">Choose a day, then one of your groups, to see full detail for every student.</p>
     </div>
   </section>
 
   <section>
     <div class="wrap" id="dashboard-root">
-      <p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading your groups…</p>
+      <p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>
     </div>
   </section>
 
@@ -43,6 +43,10 @@
   const OPEN_DAYS = [1]; // keep in sync with index.html's openDays as more days go live
   const TASKS_PER_DAY = 8;
 
+  let myGroups = [];
+  let selectedDay = null;
+  let selectedGroup = null;
+
   requireAuth(async function (profile, user) {
     if (profile.role !== 'checker') {
       window.location.href = 'index.html';
@@ -50,39 +54,112 @@
     }
 
     const sb = getSupabaseClient();
-    const root = document.getElementById('dashboard-root');
-
     const { data: assignments } = await sb.from('group_checkers').select('group_id').eq('checker_id', user.id);
     const groupIds = (assignments || []).map(a => a.group_id);
-    if (groupIds.length === 0) {
-      root.innerHTML = '<p style="color:var(--muted);">No groups assigned to your account yet.</p>';
-      return;
+    if (groupIds.length > 0) {
+      const { data: groups } = await sb.from('groups').select('id, name').in('id', groupIds).order('id');
+      myGroups = groups || [];
     }
 
-    const { data: groups } = await sb.from('groups').select('id, name').in('id', groupIds).order('id');
-    const { data: students } = await sb.from('profiles').select('id, full_name, group_id').in('group_id', groupIds).eq('role', 'student').order('full_name');
+    showDayPicker();
+  });
+
+  // ---------- Screen 1: day grid ----------
+  function showDayPicker() {
+    selectedDay = null;
+    selectedGroup = null;
+    document.getElementById('page-title').textContent = 'Pick a day';
+    document.getElementById('page-sub').textContent = 'Choose a day, then one of your groups, to see full detail for every student.';
+
+    let html = '<div class="track-grid">';
+    for (let d = 1; d <= 30; d++) {
+      const isOpen = OPEN_DAYS.includes(d);
+      if (isOpen) {
+        html += `<a href="#" class="day-chip staff open" data-day="${d}">
+          <span class="num">${String(d).padStart(2, '0')}</span>
+          <span class="lbl">Day ${d}</span>
+        </a>`;
+      } else {
+        html += `<div class="day-chip staff locked" title="Not live yet">
+          <span class="num">${String(d).padStart(2, '0')}</span>
+          <span class="lbl">Day ${d}</span>
+        </div>`;
+      }
+    }
+    html += '</div>';
+    document.getElementById('dashboard-root').innerHTML = html;
+
+    document.querySelectorAll('.day-chip.open[data-day]').forEach(chip => {
+      chip.addEventListener('click', (e) => {
+        e.preventDefault();
+        selectedDay = +chip.dataset.day;
+        showGroupPicker();
+      });
+    });
+  }
+
+  // ---------- Screen 2: group buttons ----------
+  function showGroupPicker() {
+    document.getElementById('page-title').textContent = `Day ${selectedDay} — pick a group`;
+    document.getElementById('page-sub').textContent = '';
+
+    if (myGroups.length === 0) {
+      document.getElementById('dashboard-root').innerHTML = `
+        <a href="#" class="back-link" id="back-to-days">← Back to days</a>
+        <p style="color:var(--muted);">No groups assigned to your account yet.</p>
+      `;
+    } else {
+      document.getElementById('dashboard-root').innerHTML = `
+        <a href="#" class="back-link" id="back-to-days">← Back to days</a>
+        <div class="group-btn-grid">
+          ${myGroups.map(g => `
+            <button class="group-btn" data-group="${g.id}">
+              <span class="g-name">${g.name}</span>
+              <span class="g-meta">View students →</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    document.getElementById('back-to-days').addEventListener('click', (e) => { e.preventDefault(); showDayPicker(); });
+    document.querySelectorAll('.group-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedGroup = myGroups.find(g => g.id === +btn.dataset.group);
+        showStudentList();
+      });
+    });
+  }
+
+  // ---------- Screen 3: full-detail student list for this day + group ----------
+  async function showStudentList() {
+    document.getElementById('page-title').textContent = `${selectedGroup.name} — Day ${selectedDay}`;
+    document.getElementById('page-sub').textContent = '';
+    const root = document.getElementById('dashboard-root');
+    root.innerHTML = `<a href="#" class="back-link" id="back-to-groups">← Back to groups</a><p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading students…</p>`;
+    document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
+
+    const sb = getSupabaseClient();
+    const { data: students } = await sb.from('profiles').select('id, full_name').eq('group_id', selectedGroup.id).eq('role', 'student').order('full_name');
 
     if (!students || students.length === 0) {
-      root.innerHTML = groups.map(g => `
-        <div class="dash-group"><h3>${g.name}</h3><p class="group-meta">No students registered in this group yet.</p></div>
-      `).join('');
+      root.innerHTML = `<a href="#" class="back-link" id="back-to-groups">← Back to groups</a><p style="color:var(--muted);">No students registered in this group yet.</p>`;
+      document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
       return;
     }
 
     const studentIds = students.map(s => s.id);
     const [{ data: progress }, { data: answers }] = await Promise.all([
-      sb.from('progress').select('student_id, day, task, completed').in('student_id', studentIds),
-      sb.from('answers').select('student_id, day, task, field_id, value, is_correct').in('student_id', studentIds)
+      sb.from('progress').select('student_id, task, completed').eq('day', selectedDay).in('student_id', studentIds),
+      sb.from('answers').select('student_id, task, field_id, value, is_correct').eq('day', selectedDay).in('student_id', studentIds)
     ]);
 
-    const progressByStudent = {};
+    const doneByStudent = {};
     (progress || []).forEach(p => {
-      progressByStudent[p.student_id] = progressByStudent[p.student_id] || {};
-      progressByStudent[p.student_id][p.day] = progressByStudent[p.student_id][p.day] || new Set();
-      if (p.completed) progressByStudent[p.student_id][p.day].add(p.task);
+      doneByStudent[p.student_id] = doneByStudent[p.student_id] || new Set();
+      if (p.completed) doneByStudent[p.student_id].add(p.task);
     });
 
-    // Group every answer by student -> task, so we can show a per-task breakdown
     const answersByStudent = {};
     (answers || []).forEach(a => {
       answersByStudent[a.student_id] = answersByStudent[a.student_id] || {};
@@ -91,13 +168,10 @@
     });
 
     function renderTicks(studentId) {
-      return OPEN_DAYS.map(day => {
-        const done = (progressByStudent[studentId] && progressByStudent[studentId][day]) || new Set();
-        const dots = Array.from({ length: TASKS_PER_DAY }, (_, i) =>
-          `<span class="tick ${done.has(i + 1) ? 'done' : ''}"></span>`
-        ).join('');
-        return `<div class="day-ticks"><span class="day-label">D${day}</span>${dots}</div>`;
-      }).join('');
+      const done = doneByStudent[studentId] || new Set();
+      return Array.from({ length: TASKS_PER_DAY }, (_, i) =>
+        `<span class="tick ${done.has(i + 1) ? 'done' : ''}"></span>`
+      ).join('');
     }
 
     function renderTaskDetail(studentId) {
@@ -131,29 +205,21 @@
       }).join('');
     }
 
-    root.innerHTML = groups.map(g => {
-      const groupStudents = students.filter(s => s.group_id === g.id);
-      return `
-        <div class="dash-group">
-          <h3>${g.name}</h3>
-          <p class="group-meta">${groupStudents.length} student${groupStudents.length === 1 ? '' : 's'}</p>
-          ${groupStudents.length === 0
-            ? '<p class="group-meta">No students registered yet.</p>'
-            : groupStudents.map(s => `
-                <div class="student-row">
-                  <div class="student-row-top">
-                    <span class="student-name">${s.full_name}</span>
-                    <div class="student-ticks">${renderTicks(s.id)}</div>
-                  </div>
-                  <button class="writing-toggle" data-target="detail-${s.id}">Show details ▾</button>
-                  <div class="writing-box" id="detail-${s.id}">${renderTaskDetail(s.id)}</div>
-                </div>
-              `).join('')
-          }
+    root.innerHTML = `
+      <a href="#" class="back-link" id="back-to-groups">← Back to groups</a>
+      ${students.map(s => `
+        <div class="student-row">
+          <div class="student-row-top">
+            <span class="student-name">${s.full_name}</span>
+            <div class="student-ticks"><div class="day-ticks">${renderTicks(s.id)}</div></div>
+          </div>
+          <button class="writing-toggle" data-target="detail-${s.id}">Show details ▾</button>
+          <div class="writing-box" id="detail-${s.id}">${renderTaskDetail(s.id)}</div>
         </div>
-      `;
-    }).join('');
+      `).join('')}
+    `;
 
+    document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
     root.querySelectorAll('.writing-toggle').forEach(btn => {
       btn.addEventListener('click', () => {
         const box = document.getElementById(btn.dataset.target);
@@ -161,7 +227,7 @@
         btn.textContent = btn.textContent.replace(nowShown ? '▾' : '▴', nowShown ? '▴' : '▾');
       });
     });
-  });
+  }
 </script>
 </body>
 </html>
