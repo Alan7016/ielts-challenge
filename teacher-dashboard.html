@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Dashboard — IELTS Marathon</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="content" style="display:none;">
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">IELTS <span>MARATHON</span></div>
+      <div style="display:flex; align-items:center; gap:14px; font-family:var(--mono); font-size:0.82rem; color:var(--muted);">
+        <span>Hi, <span id="user-greeting" style="color:var(--ink); font-weight:600;">…</span></span>
+        <button class="ghost" id="logout-btn" style="padding:7px 14px;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" style="padding-top:64px; padding-bottom:8px;">
+    <div class="wrap">
+      <div class="eyebrow">Teacher view</div>
+      <h1>Your Groups</h1>
+      <p class="tag">Task completion for each student in your groups, and their Task 1 writing submissions.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap" id="dashboard-root">
+      <p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading your groups…</p>
+    </div>
+  </section>
+
+</div>
+
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+<script>
+  const OPEN_DAYS = [1]; // keep in sync with index.html's openDays as more days go live
+  const TASKS_PER_DAY = 8;
+
+  requireAuth(async function (profile, user) {
+    if (profile.role !== 'teacher') {
+      window.location.href = 'index.html';
+      return;
+    }
+
+    const sb = getSupabaseClient();
+    const root = document.getElementById('dashboard-root');
+
+    const { data: groups } = await sb.from('groups').select('id, name').eq('teacher_id', user.id).order('id');
+    if (!groups || groups.length === 0) {
+      root.innerHTML = '<p style="color:var(--muted);">No groups assigned to your account yet.</p>';
+      return;
+    }
+
+    const groupIds = groups.map(g => g.id);
+    const { data: students } = await sb.from('profiles').select('id, full_name, group_id').in('group_id', groupIds).eq('role', 'student').order('full_name');
+
+    if (!students || students.length === 0) {
+      root.innerHTML = groups.map(g => `
+        <div class="dash-group">
+          <h3>${g.name}</h3>
+          <p class="group-meta">No students registered in this group yet.</p>
+        </div>
+      `).join('');
+      return;
+    }
+
+    const studentIds = students.map(s => s.id);
+    const [{ data: progress }, { data: writings }] = await Promise.all([
+      sb.from('progress').select('student_id, day, task, completed').in('student_id', studentIds),
+      sb.from('answers').select('student_id, day, value, updated_at').eq('field_id', 'task1-response').in('student_id', studentIds)
+    ]);
+
+    // Index progress by student -> day -> set of completed task numbers
+    const progressByStudent = {};
+    (progress || []).forEach(p => {
+      progressByStudent[p.student_id] = progressByStudent[p.student_id] || {};
+      progressByStudent[p.student_id][p.day] = progressByStudent[p.student_id][p.day] || new Set();
+      if (p.completed) progressByStudent[p.student_id][p.day].add(p.task);
+    });
+
+    const writingByStudent = {};
+    (writings || []).forEach(w => { writingByStudent[w.student_id] = w; });
+
+    function renderTicks(studentId) {
+      return OPEN_DAYS.map(day => {
+        const done = (progressByStudent[studentId] && progressByStudent[studentId][day]) || new Set();
+        const dots = Array.from({ length: TASKS_PER_DAY }, (_, i) =>
+          `<span class="tick ${done.has(i + 1) ? 'done' : ''}"></span>`
+        ).join('');
+        return `<div class="day-ticks"><span class="day-label">D${day}</span>${dots}</div>`;
+      }).join('');
+    }
+
+    function renderWriting(studentId) {
+      const w = writingByStudent[studentId];
+      if (!w || !w.value || !w.value.trim()) {
+        return '<p class="no-writing">No writing submitted yet.</p>';
+      }
+      const wordCount = w.value.trim().split(/\s+/).length;
+      return `
+        <button class="writing-toggle" data-target="writing-${studentId}">Show writing (${wordCount} words) ▾</button>
+        <div class="writing-box" id="writing-${studentId}">${w.value.replace(/</g, '&lt;')}</div>
+      `;
+    }
+
+    root.innerHTML = groups.map(g => {
+      const groupStudents = students.filter(s => s.group_id === g.id);
+      return `
+        <div class="dash-group">
+          <h3>${g.name}</h3>
+          <p class="group-meta">${groupStudents.length} student${groupStudents.length === 1 ? '' : 's'}</p>
+          ${groupStudents.length === 0
+            ? '<p class="group-meta">No students registered yet.</p>'
+            : groupStudents.map(s => `
+                <div class="student-row">
+                  <div class="student-row-top">
+                    <span class="student-name">${s.full_name}</span>
+                    <div class="student-ticks">${renderTicks(s.id)}</div>
+                  </div>
+                  ${renderWriting(s.id)}
+                </div>
+              `).join('')
+          }
+        </div>
+      `;
+    }).join('');
+
+    // Wire up the writing show/hide toggles
+    root.querySelectorAll('.writing-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const box = document.getElementById(btn.dataset.target);
+        const nowShown = box.classList.toggle('show');
+        btn.textContent = btn.textContent.replace(nowShown ? '▾' : '▴', nowShown ? '▴' : '▾');
+      });
+    });
+  });
+</script>
+</body>
+</html>
