@@ -265,12 +265,29 @@ function checkAllAnswers(containerId, scoreId) {
 // their account (not their browser) — so it follows them across devices and
 // survives closing the tab. 'progress' tracks which tasks are done and locked.
 // ============================================
-async function saveAnswer(userId, day, task, fieldId, value) {
+async function saveAnswer(userId, day, task, fieldId, value, isCorrect) {
   const sb = getSupabaseClient();
   await sb.from('answers').upsert(
-    { student_id: userId, day, task, field_id: fieldId, value: String(value), updated_at: new Date().toISOString() },
+    { student_id: userId, day, task, field_id: fieldId, value: String(value), is_correct: isCorrect, updated_at: new Date().toISOString() },
     { onConflict: 'student_id,day,field_id' }
   );
+}
+
+// Works out whether a filled-in field was correct, straight from the
+// grading data already on the element (data-answer / data-correct).
+// Returns null for ungraded fields (essays, confirm checkboxes, score entry).
+function computeIsCorrect(el) {
+  if (el.tagName === 'SELECT' && el.dataset.answer !== undefined) {
+    return el.value === el.dataset.answer;
+  }
+  if (el.type === 'radio') {
+    return el.dataset.correct === 'true';
+  }
+  if (el.classList.contains('text-answer')) {
+    const accepted = (el.dataset.correct || '').split('/').map(s => s.trim().toLowerCase());
+    return accepted.includes(el.value.trim().toLowerCase());
+  }
+  return null;
 }
 
 async function saveProgress(userId, day, task, completed, locked) {
@@ -454,8 +471,9 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
     const fieldId = fieldKeyFor(el);
     if (!fieldId) return;
     const value = el.type === 'checkbox' ? (el.checked ? 'true' : 'false') : el.value;
+    const isCorrect = computeIsCorrect(el);
     clearTimeout(debTimers[fieldId]);
-    debTimers[fieldId] = setTimeout(() => saveAnswer(userId, dayNumber, taskNum, fieldId, value), 500);
+    debTimers[fieldId] = setTimeout(() => saveAnswer(userId, dayNumber, taskNum, fieldId, value, isCorrect), 500);
     refreshNextButton();
   }
 
