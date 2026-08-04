@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — IELTS Marathon</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="gate">
+  <div class="gate-card">
+    <div class="eyebrow">Welcome back</div>
+    <h1>Log in</h1>
+    <p>Enter your username and password to continue.</p>
+
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Username" autocomplete="off" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Log in</button>
+      <div class="gate-error" id="form-error"></div>
+    </form>
+
+    <p style="margin-top:18px; font-size:0.88rem;">New here? <a href="register.html">Create an account</a></p>
+  </div>
+</div>
+
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = document.getElementById('form-error');
+    errorEl.textContent = '';
+
+    const username = document.getElementById('username').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+    const fakeEmail = `${username}@ielts-marathon.local`;
+
+    const { data, error } = await sb.auth.signInWithPassword({ email: fakeEmail, password });
+    if (error) {
+      errorEl.textContent = 'Incorrect username or password.';
+      return;
+    }
+
+    // Look up the account's role to send them to the right place.
+    const { data: profile } = await sb.from('profiles').select('role').eq('id', data.user.id).single();
+    const role = profile ? profile.role : 'student';
+
+    if (role === 'student') window.location.href = 'index.html';
+    else window.location.href = 'index.html'; // teacher/checker dashboards come in a later step
+  });
+</script>
+</body>
+</html>

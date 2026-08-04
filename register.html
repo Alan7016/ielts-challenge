@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — IELTS Marathon</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="gate">
+  <div class="gate-card" style="max-width:440px;">
+    <div class="eyebrow">Create your account</div>
+    <h1>Join the Marathon</h1>
+    <p>Pick a username, a password, and the group your teacher gave you.</p>
+
+    <form id="register-form" style="text-align:left;">
+      <label style="font-size:0.85rem; font-weight:600; color:var(--ink);">Full name
+        <input type="text" id="full-name" required style="width:100%; margin-top:4px;">
+      </label>
+      <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Username
+        <input type="text" id="username" required autocomplete="off" style="width:100%; margin-top:4px;">
+      </label>
+      <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Password
+        <input type="password" id="password" required minlength="6" style="width:100%; margin-top:4px;">
+      </label>
+      <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Confirm password
+        <input type="password" id="password-confirm" required minlength="6" style="width:100%; margin-top:4px;">
+      </label>
+      <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Your group
+        <select id="group-select" required style="width:100%; margin-top:4px;">
+          <option value="">— loading groups… —</option>
+        </select>
+      </label>
+
+      <button type="submit" style="width:100%; margin-top:20px;">Create account</button>
+      <div class="gate-error" id="form-error"></div>
+      <div id="form-success" style="display:none; color:var(--good); font-family:var(--mono); font-size:0.85rem; margin-top:8px;"></div>
+    </form>
+
+    <p style="margin-top:18px; font-size:0.88rem;">Already registered? <a href="login.html">Log in</a></p>
+  </div>
+</div>
+
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  // Populate the group dropdown from the groups table
+  async function loadGroups() {
+    const select = document.getElementById('group-select');
+    const { data, error } = await sb.from('groups').select('id, name').order('id');
+    if (error || !data) {
+      select.innerHTML = '<option value="">— couldn\'t load groups —</option>';
+      return;
+    }
+    select.innerHTML = '<option value="">— choose your group —</option>' +
+      data.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
+  }
+  loadGroups();
+
+  document.getElementById('register-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = document.getElementById('form-error');
+    const successEl = document.getElementById('form-success');
+    errorEl.textContent = '';
+    successEl.style.display = 'none';
+
+    const fullName = document.getElementById('full-name').value.trim();
+    const username = document.getElementById('username').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+    const groupId = document.getElementById('group-select').value;
+
+    if (!username.match(/^[a-z0-9_.]+$/)) {
+      errorEl.textContent = 'Username can only contain letters, numbers, dots, and underscores.';
+      return;
+    }
+    if (password !== passwordConfirm) {
+      errorEl.textContent = 'Passwords do not match.';
+      return;
+    }
+    if (!groupId) {
+      errorEl.textContent = 'Please choose your group.';
+      return;
+    }
+
+    // Supabase Auth needs an email — students only pick a username, so we
+    // derive a fake internal address from it. They never see or use this.
+    const fakeEmail = `${username}@ielts-marathon.local`;
+
+    const { data, error } = await sb.auth.signUp({
+      email: fakeEmail,
+      password: password,
+      options: {
+        data: {
+          full_name: fullName,
+          role: 'student',
+          group_id: parseInt(groupId, 10),
+          username: username
+        }
+      }
+    });
+
+    if (error) {
+      if (error.message.includes('already registered')) {
+        errorEl.textContent = 'That username is already taken.';
+      } else {
+        errorEl.textContent = error.message;
+      }
+      return;
+    }
+
+    successEl.textContent = 'Account created! Redirecting to login…';
+    successEl.style.display = 'block';
+    setTimeout(() => { window.location.href = 'login.html'; }, 1200);
+  });
+</script>
+</body>
+</html>
