@@ -40,16 +40,17 @@
 
     const { data, error } = await sb.auth.signInWithPassword({ email, password });
     if (error) {
-      errorEl.textContent = 'Incorrect email or password.';
+      console.error('Login error:', error);
+      errorEl.textContent = error.message || 'Login failed — check the console for details.';
       return;
     }
 
-    // Look up the account's role to send them to the right place.
     const { data: profile } = await sb.from('profiles').select('role').eq('id', data.user.id).single();
     const role = profile ? profile.role : 'student';
 
-    if (role === 'student') window.location.href = 'index.html';
-    else window.location.href = 'index.html'; // teacher/checker dashboards come in a later step
+    const params = new URLSearchParams(window.location.search);
+    const returnTo = params.get('returnTo');
+    window.location.href = returnTo ? decodeURIComponent(returnTo) : 'index.html';
   });
 </script>
 </body>
