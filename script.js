@@ -413,6 +413,7 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
     const btn = document.getElementById('nextBtn');
     if (btn) btn.disabled = !isTaskComplete(current);
   }
+  window.refreshTaskFlowNext = refreshNextButton;
 
   function showTask(n) {
     document.querySelectorAll('.task').forEach(t => t.classList.remove('active'));
@@ -642,6 +643,7 @@ async function initRecordControl(box, userId, day, task, fieldId) {
     statusEl.textContent = '✓ Recorded (locked — one attempt only)';
     statusEl.style.color = 'var(--good)';
     box.classList.add('recorded');
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
     if (signed) {
       playerWrap.innerHTML = `<audio controls src="${signed.signedUrl}" style="width:100%; margin-top:8px;"></audio>`;
     }
