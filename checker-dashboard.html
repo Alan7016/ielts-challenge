@@ -172,7 +172,8 @@
     const speakingPaths = (answers || []).filter(a => a.field_id.startsWith('speaking-')).map(a => a.value);
     const signedUrlByPath = {};
     await Promise.all(speakingPaths.map(async (path) => {
-      const { data } = await sb.storage.from('speaking-recordings').createSignedUrl(path, 3600);
+      const { data, error } = await sb.storage.from('speaking-recordings').createSignedUrl(path, 3600);
+      if (error) console.error('Signed URL failed for', path, error);
       if (data) signedUrlByPath[path] = data.signedUrl;
     }));
 
