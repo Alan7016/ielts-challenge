@@ -145,9 +145,10 @@
     }
 
     const studentIds = students.map(s => s.id);
-    const [{ data: progress }, { data: writings }] = await Promise.all([
+    const [{ data: progress }, { data: writings }, { data: speaking }] = await Promise.all([
       sb.from('progress').select('student_id, task, completed').eq('day', selectedDay).in('student_id', studentIds),
-      sb.from('answers').select('student_id, value').eq('day', selectedDay).eq('field_id', 'task1-response').in('student_id', studentIds)
+      sb.from('answers').select('student_id, value').eq('day', selectedDay).eq('field_id', 'task1-response').in('student_id', studentIds),
+      sb.from('answers').select('student_id, field_id, value').eq('day', selectedDay).like('field_id', 'speaking-%').in('student_id', studentIds)
     ]);
 
     const doneByStudent = {};
@@ -157,6 +158,17 @@
     });
     const writingByStudent = {};
     (writings || []).forEach(w => { writingByStudent[w.student_id] = w.value; });
+
+    const speakingByStudent = {};
+    (speaking || []).forEach(sp => {
+      speakingByStudent[sp.student_id] = speakingByStudent[sp.student_id] || [];
+      speakingByStudent[sp.student_id].push(sp);
+    });
+    const signedUrlByPath = {};
+    await Promise.all((speaking || []).map(async (sp) => {
+      const { data } = await sb.storage.from('speaking-recordings').createSignedUrl(sp.value, 3600);
+      if (data) signedUrlByPath[sp.value] = data.signedUrl;
+    }));
 
     function renderTicks(studentId) {
       const done = doneByStudent[studentId] || new Set();
@@ -175,6 +187,26 @@
       `;
     }
 
+    function renderSpeaking(studentId) {
+      const items = speakingByStudent[studentId] || [];
+      if (items.length === 0) {
+        return `<button class="writing-toggle" data-target="speak-${studentId}">Show speaking (0 recordings) ▾</button>
+          <div class="writing-box" id="speak-${studentId}"><p class="no-writing">No recordings yet.</p></div>`;
+      }
+      const recordings = items.map(i => {
+        const url = signedUrlByPath[i.value];
+        const label = i.field_id.replace('speaking-', '').replace(/-/g, ' ');
+        return `<div style="margin-bottom:10px;">
+          <span style="font-family:var(--mono); font-size:0.8rem; color:var(--muted); text-transform:capitalize;">${label}</span>
+          ${url ? `<audio controls src="${url}" style="width:100%; margin-top:4px;"></audio>` : '<p class="no-writing">Playback unavailable</p>'}
+        </div>`;
+      }).join('');
+      return `
+        <button class="writing-toggle" data-target="speak-${studentId}">Show speaking (${items.length} recording${items.length === 1 ? '' : 's'}) ▾</button>
+        <div class="writing-box" id="speak-${studentId}">${recordings}</div>
+      `;
+    }
+
     root.innerHTML = `
       <a href="#" class="back-link" id="back-to-groups">← Back to groups</a>
       ${students.map(s => `
@@ -184,6 +216,7 @@
             <div class="student-ticks"><div class="day-ticks">${renderTicks(s.id)}</div></div>
           </div>
           ${renderWriting(s.id)}
+          ${renderSpeaking(s.id)}
         </div>
       `).join('')}
     `;
