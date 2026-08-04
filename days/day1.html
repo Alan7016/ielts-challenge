@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Day 1 — IELTS Marathon</title>
+<title>Day 1 — IELTS Challenge</title>
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -14,28 +14,17 @@
   <button id="hlClear">Clear</button>
 </div>
 
-<!-- GATE -->
-<div id="gate" class="gate">
-  <div class="gate-card">
-    <div class="eyebrow">Entry check-in</div>
-    <h1>Day 1</h1>
-    <p>Enter your race code to start today's leg.</p>
-    <form id="gate-form">
-      <input type="password" id="gate-input" placeholder="Access code" autocomplete="off" required>
-      <button type="submit">Unlock day 1</button>
-      <div class="gate-error" id="gate-error"></div>
-    </form>
-  </div>
-</div>
-
-<!-- CONTENT -->
+<!-- CONTENT (hidden until requireAuth confirms a session) -->
 <div id="content" style="display:none;">
 
   <header class="day-header">
     <div class="day-header-inner">
       <a href="../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
       <div class="bib">Day 01 <small>of 30</small></div>
-      <div class="dots" id="dots"></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
     </div>
   </header>
 
@@ -470,17 +459,15 @@
   #sample-text.hide-chunks mark { background: transparent; color: inherit; }
 </style>
 
+<script src="../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../script.js"></script>
 <script>
-  initGate(function (code) {
+  requireAuth(function (profile) {
     initStopwatch('stopwatch', 'sw-start', 'sw-pause', 'sw-reset');
     initWordCounter('task1-response', 'word-count');
     initCopyButton('copy-btn', 'task1-response');
     initChunkToggle('chunk-toggle', 'sample-text');
-    const back = document.getElementById('back-home');
-    if (back) back.href = `../index.html?code=${encodeURIComponent(code)}`;
-    const home = document.getElementById('completion-home');
-    if (home) home.href = `../index.html?code=${encodeURIComponent(code)}`;
     initTaskFlow(1, 8);
   });
 </script>
