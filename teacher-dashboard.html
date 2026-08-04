@@ -166,7 +166,8 @@
     });
     const signedUrlByPath = {};
     await Promise.all((speaking || []).map(async (sp) => {
-      const { data } = await sb.storage.from('speaking-recordings').createSignedUrl(sp.value, 3600);
+      const { data, error } = await sb.storage.from('speaking-recordings').createSignedUrl(sp.value, 3600);
+      if (error) console.error('Signed URL failed for', sp.value, error);
       if (data) signedUrlByPath[sp.value] = data.signedUrl;
     }));
 
