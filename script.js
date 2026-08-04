@@ -1,51 +1,52 @@
 /* ============================================
    IELTS MARATHON — shared logic
-   Change ACCESS_CODE below to whatever code you give your students.
-   No server, no storage: the code just has to be typed once per link.
    ============================================ */
-const ACCESS_CODE = "MARATHON30";
 
-// ---------- Gate (used on every page) ----------
-// A page is unlocked if the URL has ?code=CORRECT_CODE.
-// index.html builds day links with the code baked in, so once someone
-// unlocks the marathon once, every day link they click stays unlocked.
-function getCodeFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get('code') || '';
+// ---------- Auth gate (used on every page that requires a login) ----------
+// Every protected page must load supabase-config.js and the Supabase JS CDN
+// script BEFORE this file. Call requireAuth(onReady) once the page loads;
+// onReady receives the logged-in user's profile row (full_name, role, group_id).
+let _sbClient = null;
+function getSupabaseClient() {
+  if (!_sbClient) _sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  return _sbClient;
 }
 
-function initGate(onUnlock) {
-  const gate = document.getElementById('gate');
-  const content = document.getElementById('content');
-  const submitted = getCodeFromURL();
+async function requireAuth(onReady) {
+  const sb = getSupabaseClient();
+  const { data: { session } } = await sb.auth.getSession();
 
-  if (submitted === ACCESS_CODE) {
-    if (gate) gate.style.display = 'none';
-    if (content) content.style.display = 'block';
-    if (onUnlock) onUnlock(ACCESS_CODE);
+  if (!session) {
+    const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
+    window.location.href = `${pathToRoot()}login.html?returnTo=${returnTo}`;
     return;
   }
 
-  if (gate) gate.style.display = 'flex';
-  if (content) content.style.display = 'none';
+  const { data: profile } = await sb.from('profiles').select('full_name, role, group_id').eq('id', session.user.id).single();
 
-  const form = document.getElementById('gate-form');
-  const input = document.getElementById('gate-input');
-  const error = document.getElementById('gate-error');
-  if (!form) return;
+  const gate = document.getElementById('gate');
+  const content = document.getElementById('content');
+  if (gate) gate.style.display = 'none';
+  if (content) content.style.display = 'block';
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const val = (input.value || '').trim();
-    if (val === ACCESS_CODE) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('code', val);
-      window.location.href = url.toString();
-    } else {
-      error.textContent = 'Wrong code — check with your teacher and try again.';
-      input.select();
-    }
-  });
+  const greeting = document.getElementById('user-greeting');
+  if (greeting && profile) greeting.textContent = profile.full_name;
+
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      await sb.auth.signOut();
+      window.location.href = `${pathToRoot()}login.html`;
+    });
+  }
+
+  if (onReady) onReady(profile, session.user);
+}
+
+// Figures out how many '../' are needed to reach the project root,
+// so the auth redirect works the same from index.html and from days/dayN.html.
+function pathToRoot() {
+  return window.location.pathname.includes('/days/') ? '../' : '';
 }
 
 // ---------- Stopwatch ----------
