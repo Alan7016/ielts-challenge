@@ -82,23 +82,33 @@
       return;
     }
 
-    const { data, error } = await sb.auth.signUp({
-      email: email,
-      password: password,
-      options: {
-        data: {
-          full_name: fullName,
-          role: 'student',
-          group_id: parseInt(groupId, 10)
+    let result;
+    try {
+      result = await sb.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            full_name: fullName,
+            role: 'student',
+            group_id: parseInt(groupId, 10)
+          }
         }
-      }
-    });
+      });
+    } catch (err) {
+      console.error('Signup threw an exception:', err);
+      errorEl.textContent = 'Network error — check your connection and try again.';
+      return;
+    }
+
+    const { data, error } = result;
 
     if (error) {
-      if (error.message.includes('already registered')) {
+      console.error('Signup returned an error:', error);
+      if (error.message && error.message.includes('already registered')) {
         errorEl.textContent = 'That email is already registered.';
       } else {
-        errorEl.textContent = error.message;
+        errorEl.textContent = error.message || `Registration failed (${error.status || 'unknown error'}). Check the browser console for details.`;
       }
       return;
     }
