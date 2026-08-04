@@ -382,6 +382,12 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
     const confirmBox = container.querySelector('.confirm-row input[type="checkbox"]');
     if (confirmBox) return confirmBox.checked;
 
+    const questionBoxes = container.querySelectorAll('.question-box[data-field]');
+    if (questionBoxes.length > 0) {
+      for (const qb of questionBoxes) { if (!qb.classList.contains('recorded')) return false; }
+      return true;
+    }
+
     const texts = container.querySelectorAll('input.text-answer, input[type="text"]:not(.no-check)');
     for (const t of texts) { if (t.value.trim() === '') return false; }
     const selects = container.querySelectorAll('select');
@@ -616,4 +622,99 @@ function initHighlightTool(dayNumber) {
   };
 
   restore();
+}
+
+// ============================================
+// SPEAKING RECORDER — one control per question. Records via the mic,
+// uploads once to private storage, then locks permanently (no re-record).
+// Call initRecordControl for each question box on page load.
+// ============================================
+async function initRecordControl(box, userId, day, task, fieldId) {
+  const sb = getSupabaseClient();
+  const path = `${day}/${userId}/${fieldId}.webm`;
+  const recordBtn = box.querySelector('.record-btn');
+  const statusEl = box.querySelector('.record-status');
+  const playerWrap = box.querySelector('.record-player');
+
+  async function showLocked() {
+    const { data: signed } = await sb.storage.from('speaking-recordings').createSignedUrl(path, 3600);
+    recordBtn.style.display = 'none';
+    statusEl.textContent = '✓ Recorded (locked — one attempt only)';
+    statusEl.style.color = 'var(--good)';
+    box.classList.add('recorded');
+    if (signed) {
+      playerWrap.innerHTML = `<audio controls src="${signed.signedUrl}" style="width:100%; margin-top:8px;"></audio>`;
+    }
+  }
+
+  // Already recorded in a previous session? Lock it immediately.
+  const { data: existing } = await sb.from('answers').select('value').eq('student_id', userId).eq('day', day).eq('field_id', fieldId).maybeSingle();
+  if (existing) {
+    await showLocked();
+    return;
+  }
+
+  let mediaRecorder = null;
+  let chunks = [];
+  let timerInterval = null;
+  let seconds = 0;
+
+  recordBtn.addEventListener('click', async () => {
+    if (recordBtn.dataset.state === 'idle') {
+      const confirmed = confirm('You only have ONE attempt to record this answer. Once you press Stop, it is submitted permanently and cannot be redone. Make sure you\'re ready before you start.');
+      if (!confirmed) return;
+
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      } catch (err) {
+        statusEl.textContent = 'Microphone access denied — check your browser permissions.';
+        statusEl.style.color = 'var(--warn)';
+        return;
+      }
+
+      chunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
+      mediaRecorder.start();
+
+      seconds = 0;
+      recordBtn.dataset.state = 'recording';
+      recordBtn.textContent = '⏹ Stop (00:00)';
+      recordBtn.classList.add('recording');
+      timerInterval = setInterval(() => {
+        seconds++;
+        const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+        const s = String(seconds % 60).padStart(2, '0');
+        recordBtn.textContent = `⏹ Stop (${m}:${s})`;
+      }, 1000);
+
+    } else if (recordBtn.dataset.state === 'recording') {
+      clearInterval(timerInterval);
+      recordBtn.disabled = true;
+      recordBtn.textContent = 'Uploading…';
+
+      mediaRecorder.stop();
+      mediaRecorder.stream.getTracks().forEach(t => t.stop());
+      await new Promise(resolve => { mediaRecorder.onstop = resolve; });
+
+      const blob = new Blob(chunks, { type: 'audio/webm' });
+      const { error: uploadError } = await sb.storage.from('speaking-recordings').upload(path, blob, { contentType: 'audio/webm' });
+
+      if (uploadError) {
+        statusEl.textContent = 'Upload failed — check your connection and reload to try again.';
+        statusEl.style.color = 'var(--warn)';
+        recordBtn.textContent = '⏹ Stop';
+        recordBtn.disabled = false;
+        return;
+      }
+
+      await sb.from('answers').upsert(
+        { student_id: userId, day, task, field_id: fieldId, value: path, updated_at: new Date().toISOString() },
+        { onConflict: 'student_id,day,field_id' }
+      );
+
+      await showLocked();
+    }
+  });
 }
