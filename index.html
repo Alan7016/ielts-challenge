@@ -8,26 +8,16 @@
 </head>
 <body>
 
-<!-- GATE -->
-<div id="gate" class="gate">
-  <div class="gate-card">
-    <div class="eyebrow">Entry check-in</div>
-    <h1>IELTS Marathon</h1>
-    <p>30 days, no rest days. Enter your access code to get on the board.</p>
-    <form id="gate-form">
-      <input type="password" id="gate-input" placeholder="Access code" autocomplete="off" required>
-      <button type="submit">Enter</button>
-      <div class="gate-error" id="gate-error"></div>
-    </form>
-  </div>
-</div>
-
-<!-- CONTENT -->
+<!-- CONTENT (hidden until requireAuth confirms a session) -->
 <div id="content" style="display:none;">
 
   <header class="topbar">
     <div class="topbar-inner">
       <div class="logo">IELTS <span>MARATHON</span></div>
+      <div style="display:flex; align-items:center; gap:14px; font-family:var(--mono); font-size:0.82rem; color:var(--muted);">
+        <span>Hi, <span id="user-greeting" style="color:var(--ink); font-weight:600;">…</span></span>
+        <button class="ghost" id="logout-btn" style="padding:7px 14px;">Log out</button>
+      </div>
     </div>
   </header>
 
@@ -35,7 +25,7 @@
     <div class="wrap">
       <div class="eyebrow">30-day training block</div>
       <h1>Your Marathon Board</h1>
-      <p class="tag">Eight stages a day, thirty days straight. Pick a day below and run the full leg: article, vocab, reading, writing, sample, video, questions.</p>
+      <p class="tag">Eight tasks a day, thirty days straight. Pick a day below and run the full leg: article, vocab, reading, writing, sample, video, questions.</p>
 
       <div class="progress-shell">
         <span class="label" id="progress-label">1 / 30 days live</span>
@@ -53,9 +43,11 @@
   <div class="finish-line">— day 30 is the finish line —</div>
 </div>
 
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 <script>
-  function buildGrid(code) {
+  function buildGrid() {
     const grid = document.getElementById('track-grid');
     const openDays = [1]; // add more numbers here as you build out each day, e.g. [1, 2, 3]
 
@@ -67,10 +59,10 @@
       const isOpen = openDays.includes(d);
       const isFinish = d === 30;
       if (isOpen) {
-        html += `<a class="day-chip open${isFinish ? ' finish' : ''}" href="days/day${d}.html?code=${encodeURIComponent(code)}">
+        html += `<a class="day-chip open${isFinish ? ' finish' : ''}" href="days/day${d}.html">
           <span class="num">${String(d).padStart(2, '0')}</span>
           <span class="lbl">Day ${d}</span>
-          <span class="meta">9 sections</span>
+          <span class="meta">8 tasks</span>
         </a>`;
       } else {
         html += `<div class="day-chip locked${isFinish ? ' finish' : ''}" title="Coming soon">
@@ -83,7 +75,9 @@
     grid.innerHTML = html;
   }
 
-  initGate(buildGrid);
+  requireAuth(function (profile) {
+    buildGrid();
+  });
 </script>
 </body>
 </html>
