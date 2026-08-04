@@ -260,19 +260,80 @@ function checkAllAnswers(containerId, scoreId) {
 }
 
 // ============================================
+// ANSWER + PROGRESS PERSISTENCE
+// Every field the student fills in is saved to the 'answers' table, tied to
+// their account (not their browser) — so it follows them across devices and
+// survives closing the tab. 'progress' tracks which tasks are done and locked.
+// ============================================
+async function saveAnswer(userId, day, task, fieldId, value) {
+  const sb = getSupabaseClient();
+  await sb.from('answers').upsert(
+    { student_id: userId, day, task, field_id: fieldId, value: String(value), updated_at: new Date().toISOString() },
+    { onConflict: 'student_id,day,field_id' }
+  );
+}
+
+async function saveProgress(userId, day, task, completed, locked) {
+  const sb = getSupabaseClient();
+  await sb.from('progress').upsert(
+    { student_id: userId, day, task, completed, locked, updated_at: new Date().toISOString() },
+    { onConflict: 'student_id,day,task' }
+  );
+}
+
+async function loadDayState(userId, day) {
+  const sb = getSupabaseClient();
+  const [{ data: answers }, { data: progress }] = await Promise.all([
+    sb.from('answers').select('field_id, value').eq('student_id', userId).eq('day', day),
+    sb.from('progress').select('task, completed, locked').eq('student_id', userId).eq('day', day)
+  ]);
+  const answerMap = {};
+  (answers || []).forEach(r => { answerMap[r.field_id] = r.value; });
+  const progressMap = {};
+  (progress || []).forEach(r => { progressMap[r.task] = { completed: r.completed, locked: r.locked }; });
+  return { answerMap, progressMap };
+}
+
+// Writes a saved value back into its input. Radio groups are keyed 'radio_<name>'
+// since individual radio inputs don't have unique ids.
+function restoreField(fieldId, value) {
+  if (fieldId.startsWith('radio_')) {
+    const name = fieldId.replace('radio_', '');
+    const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
+    if (el) el.checked = true;
+    return;
+  }
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  if (el.type === 'checkbox') el.checked = (value === 'true');
+  else el.value = value;
+}
+
+// Disables every interactive element in a task so a completed task can be
+// viewed but never edited. Runs the task's check function first (if it has
+// one) so correct/incorrect coloring is visible in the frozen state.
+function freezeTask(taskNum, checkFn) {
+  const container = document.getElementById('task' + taskNum);
+  if (!container) return;
+  if (checkFn) { try { checkFn(); } catch (e) {} }
+  container.querySelectorAll('input, select, textarea, button').forEach(el => { el.disabled = true; });
+}
+
+// ============================================
 // TASK FLOW ENGINE — one task visible at a time, dots + Previous/Next,
-// completion screen with confetti. Each day's HTML calls initTaskFlow(dayNumber, totalTasks).
+// completion screen with confetti. Each day's HTML calls:
+//   initTaskFlow(dayNumber, totalTasks, userId, checkFns)
+// checkFns is optional: { taskNumber: () => yourCheckFunction() } for any
+// task that has a "Check answers" button, so freezing it shows the graded state.
 // A task is considered "complete" (Next enabled) if every input.text-answer,
 // select, and radio-group inside it has a value, OR — for link-out tasks —
 // its confirm checkbox is ticked. Tasks with nothing to fill in are always complete.
 // ============================================
-function initTaskFlow(dayNumber, totalTasks) {
-  const STATE_KEY = `marathon_day${dayNumber}_state`;
+async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
+  checkFns = checkFns || {};
   let current = 1;
-  try {
-    const saved = JSON.parse(sessionStorage.getItem(STATE_KEY) || 'null');
-    if (saved && saved.current) current = saved.current;
-  } catch (e) {}
+  const doneTasks = {};
+  const lockedTasks = {};
 
   const dotsWrap = document.getElementById('dots');
   for (let i = 1; i <= totalTasks; i++) {
@@ -282,13 +343,23 @@ function initTaskFlow(dayNumber, totalTasks) {
     dotsWrap.appendChild(d);
   }
 
-  const doneTasks = {};
-
-  function saveState() {
-    try { sessionStorage.setItem(STATE_KEY, JSON.stringify({ current, doneTasks })); } catch (e) {}
+  // ---- Load everything saved so far, restore field values, freeze locked tasks ----
+  const { answerMap, progressMap } = await loadDayState(userId, dayNumber);
+  Object.keys(answerMap).forEach(fieldId => restoreField(fieldId, answerMap[fieldId]));
+  for (let i = 1; i <= totalTasks; i++) {
+    const p = progressMap[i];
+    if (p && p.completed) doneTasks[i] = true;
+    if (p && p.locked) {
+      lockedTasks[i] = true;
+      freezeTask(i, checkFns[i]);
+    }
   }
+  // Resume right after the last completed task, or at 1 if nothing's done yet.
+  current = 1;
+  for (let i = 1; i <= totalTasks; i++) { if (doneTasks[i]) current = Math.min(i + 1, totalTasks); }
 
   function isTaskComplete(n) {
+    if (lockedTasks[n]) return true;
     const container = document.getElementById('task' + n);
     if (!container) return true;
     const confirmBox = container.querySelector('.confirm-row input[type="checkbox"]');
@@ -333,16 +404,20 @@ function initTaskFlow(dayNumber, totalTasks) {
   }
 
   function goPrev() {
-    if (current > 1) { current--; saveState(); showTask(current); }
+    if (current > 1) { current--; showTask(current); }
   }
 
-  function goNext() {
-    doneTasks[current] = true;
-    saveState();
+  async function goNext() {
+    // Lock the task the student is leaving — from now on it's frozen.
+    if (!lockedTasks[current]) {
+      lockedTasks[current] = true;
+      doneTasks[current] = true;
+      await saveProgress(userId, dayNumber, current, true, true);
+      freezeTask(current, checkFns[current]);
+    }
     refreshDots();
     if (current < totalTasks) {
       current++;
-      saveState();
       showTask(current);
     } else {
       document.getElementById('completionScreen').classList.add('show');
@@ -353,7 +428,6 @@ function initTaskFlow(dayNumber, totalTasks) {
   function reviewDay() {
     document.getElementById('completionScreen').classList.remove('show');
     current = 1;
-    saveState();
     showTask(1);
   }
 
@@ -362,8 +436,28 @@ function initTaskFlow(dayNumber, totalTasks) {
   const reviewBtn = document.getElementById('reviewBtn');
   if (reviewBtn) reviewBtn.addEventListener('click', reviewDay);
 
-  document.addEventListener('input', refreshNextButton);
-  document.addEventListener('change', refreshNextButton);
+  // ---- Autosave: any field the student fills in gets written to Supabase ----
+  const debTimers = {};
+  function fieldKeyFor(el) {
+    if (el.type === 'radio') return 'radio_' + el.name;
+    return el.id || null;
+  }
+  document.getElementById('content').addEventListener('input', handleFieldChange);
+  document.getElementById('content').addEventListener('change', handleFieldChange);
+  function handleFieldChange(e) {
+    const el = e.target;
+    if (!['INPUT', 'SELECT', 'TEXTAREA'].includes(el.tagName)) return;
+    const taskEl = el.closest('.task');
+    if (!taskEl) return;
+    const taskNum = +taskEl.dataset.task;
+    if (lockedTasks[taskNum]) return; // frozen, ignore
+    const fieldId = fieldKeyFor(el);
+    if (!fieldId) return;
+    const value = el.type === 'checkbox' ? (el.checked ? 'true' : 'false') : el.value;
+    clearTimeout(debTimers[fieldId]);
+    debTimers[fieldId] = setTimeout(() => saveAnswer(userId, dayNumber, taskNum, fieldId, value), 500);
+    refreshNextButton();
+  }
 
   showTask(current);
   initHighlightTool(dayNumber);
