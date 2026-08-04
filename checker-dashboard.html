@@ -167,6 +167,15 @@
       answersByStudent[a.student_id][a.task].push(a);
     });
 
+    // Speaking answers store a storage path, not the actual audio — fetch a
+    // temporary playable URL for each one before rendering.
+    const speakingPaths = (answers || []).filter(a => a.field_id.startsWith('speaking-')).map(a => a.value);
+    const signedUrlByPath = {};
+    await Promise.all(speakingPaths.map(async (path) => {
+      const { data } = await sb.storage.from('speaking-recordings').createSignedUrl(path, 3600);
+      if (data) signedUrlByPath[path] = data.signedUrl;
+    }));
+
     function renderTicks(studentId) {
       const done = doneByStudent[studentId] || new Set();
       return Array.from({ length: TASKS_PER_DAY }, (_, i) =>
@@ -190,6 +199,19 @@
           const words = essay.value.trim() ? essay.value.trim().split(/\s+/).length : 0;
           return `<div style="margin-bottom:14px;"><strong>Task ${taskNum} (writing, ${words} words):</strong>
             <div class="writing-box show" style="margin-top:6px;">${essay.value.replace(/</g, '&lt;') || '<span class="no-writing">Empty</span>'}</div></div>`;
+        }
+
+        const speakingItems = items.filter(i => i.field_id.startsWith('speaking-'));
+        if (speakingItems.length > 0) {
+          const recordings = speakingItems.map(i => {
+            const url = signedUrlByPath[i.value];
+            const label = i.field_id.replace('speaking-', '').replace(/-/g, ' ');
+            return `<div style="margin-bottom:10px;">
+              <span style="font-family:var(--mono); font-size:0.8rem; color:var(--muted); text-transform:capitalize;">${label}</span>
+              ${url ? `<audio controls src="${url}" style="width:100%; margin-top:4px;"></audio>` : '<p class="no-writing">Playback unavailable</p>'}
+            </div>`;
+          }).join('');
+          return `<div style="margin-bottom:14px;"><strong>Task ${taskNum} (speaking, ${speakingItems.length} recordings):</strong><div style="margin-top:8px;">${recordings}</div></div>`;
         }
 
         const rows = items.map(i => {
