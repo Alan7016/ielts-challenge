@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Teacher Dashboard — IELTS Challenge</title>
+<title>Teacher Dashboard — IELTS Marathon</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
 
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="logo">IELTS <span>Challenge</span></div>
+      <div class="logo">IELTS <span>MARATHON</span></div>
       <div style="display:flex; align-items:center; gap:14px; font-family:var(--mono); font-size:0.82rem; color:var(--muted);">
         <span>Hi, <span id="user-greeting" style="color:var(--ink); font-weight:600;">…</span></span>
         <button class="ghost" id="logout-btn" style="padding:7px 14px;">Log out</button>
@@ -54,8 +54,14 @@
     }
 
     const sb = getSupabaseClient();
-    const { data: groups } = await sb.from('groups').select('id, name').eq('teacher_id', user.id).order('id');
-    myGroups = groups || [];
+    const { data: assignments } = await sb.from('group_teachers').select('group_id').eq('teacher_id', user.id);
+    const groupIds = (assignments || []).map(a => a.group_id);
+    let groups = [];
+    if (groupIds.length > 0) {
+      const { data } = await sb.from('groups').select('id, name').in('id', groupIds).order('id');
+      groups = data || [];
+    }
+    myGroups = groups;
 
     showDayPicker();
   });
@@ -196,9 +202,9 @@
       }
       const recordings = items.map(i => {
         const url = signedUrlByPath[i.value];
-        const label = i.field_id.replace('speaking-', '').replace(/-/g, ' ');
+        const label = speakingLabel(i.field_id);
         return `<div style="margin-bottom:10px;">
-          <span style="font-family:var(--mono); font-size:0.8rem; color:var(--muted); text-transform:capitalize;">${label}</span>
+          <span style="font-family:var(--mono); font-size:0.8rem; color:var(--muted);">${label}</span>
           ${url ? `<audio controls src="${url}" style="width:100%; margin-top:4px;"></audio>` : '<p class="no-writing">Playback unavailable</p>'}
         </div>`;
       }).join('');
