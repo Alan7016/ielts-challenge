@@ -31,6 +31,17 @@
         <input type="password" id="password-confirm" required minlength="6" style="width:100%; margin-top:4px;">
       </label>
 
+      <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">First group
+        <select id="group-1" required style="width:100%; margin-top:4px;">
+          <option value="">— loading groups… —</option>
+        </select>
+      </label>
+      <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Second group
+        <select id="group-2" required style="width:100%; margin-top:4px;">
+          <option value="">— loading groups… —</option>
+        </select>
+      </label>
+
       <button type="submit" style="width:100%; margin-top:20px;">Create teacher account</button>
       <div class="gate-error" id="form-error"></div>
       <div id="form-success" style="display:none; color:var(--good); font-family:var(--mono); font-size:0.85rem; margin-top:8px;"></div>
@@ -45,6 +56,21 @@
 <script>
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+  async function loadGroups() {
+    const { data, error } = await sb.from('groups').select('id, name').order('id');
+    const g1 = document.getElementById('group-1');
+    const g2 = document.getElementById('group-2');
+    if (error || !data) {
+      g1.innerHTML = '<option value="">— couldn\'t load groups —</option>';
+      g2.innerHTML = '<option value="">— couldn\'t load groups —</option>';
+      return;
+    }
+    const options = '<option value="">— choose —</option>' + data.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
+    g1.innerHTML = options;
+    g2.innerHTML = options;
+  }
+  loadGroups();
+
   document.getElementById('register-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const errorEl = document.getElementById('form-error');
@@ -57,9 +83,19 @@
     const email = document.getElementById('email').value.trim().toLowerCase();
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password-confirm').value;
+    const group1 = document.getElementById('group-1').value;
+    const group2 = document.getElementById('group-2').value;
 
     if (password !== passwordConfirm) {
       errorEl.textContent = 'Passwords do not match.';
+      return;
+    }
+    if (!group1 || !group2) {
+      errorEl.textContent = 'Please choose both groups.';
+      return;
+    }
+    if (group1 === group2) {
+      errorEl.textContent = 'Please choose two different groups.';
       return;
     }
 
@@ -93,9 +129,23 @@
       return;
     }
 
-    successEl.textContent = 'Teacher account created! Your admin will assign your groups shortly. Redirecting to login…';
+    successEl.textContent = 'Teacher account created! Redirecting to login…';
     successEl.style.display = 'block';
-    setTimeout(() => { window.location.href = 'login.html'; }, 1800);
+
+    // Attach to both chosen groups. Sharing a group with another teacher
+    // is completely fine now — this never overwrites anyone.
+    const { error: joinError } = await sb.from('group_teachers').insert([
+      { group_id: parseInt(group1, 10), teacher_id: data.user.id },
+      { group_id: parseInt(group2, 10), teacher_id: data.user.id }
+    ]);
+    if (joinError) {
+      console.error('Group assignment failed:', joinError);
+      errorEl.textContent = 'Account created, but assigning your groups failed — contact the admin.';
+      successEl.style.display = 'none';
+      return;
+    }
+
+    setTimeout(() => { window.location.href = 'login.html'; }, 1200);
   });
 </script>
 </body>
