@@ -31,17 +31,6 @@
         <input type="password" id="password-confirm" required minlength="6" style="width:100%; margin-top:4px;">
       </label>
 
-      <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">First group
-        <select id="group-1" required style="width:100%; margin-top:4px;">
-          <option value="">— loading available groups… —</option>
-        </select>
-      </label>
-      <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Second group
-        <select id="group-2" required style="width:100%; margin-top:4px;">
-          <option value="">— loading available groups… —</option>
-        </select>
-      </label>
-
       <button type="submit" style="width:100%; margin-top:20px;">Create teacher account</button>
       <div class="gate-error" id="form-error"></div>
       <div id="form-success" style="display:none; color:var(--good); font-family:var(--mono); font-size:0.85rem; margin-top:8px;"></div>
@@ -55,23 +44,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-  let availableGroups = [];
-
-  async function loadAvailableGroups() {
-    const { data, error } = await sb.from('groups').select('id, name, teacher_id').is('teacher_id', null).order('id');
-    const g1 = document.getElementById('group-1');
-    const g2 = document.getElementById('group-2');
-    if (error || !data || data.length === 0) {
-      g1.innerHTML = '<option value="">— no unassigned groups left —</option>';
-      g2.innerHTML = '<option value="">— no unassigned groups left —</option>';
-      return;
-    }
-    availableGroups = data;
-    const options = '<option value="">— choose —</option>' + data.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
-    g1.innerHTML = options;
-    g2.innerHTML = options;
-  }
-  loadAvailableGroups();
 
   document.getElementById('register-form').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -85,19 +57,9 @@
     const email = document.getElementById('email').value.trim().toLowerCase();
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password-confirm').value;
-    const group1 = document.getElementById('group-1').value;
-    const group2 = document.getElementById('group-2').value;
 
     if (password !== passwordConfirm) {
       errorEl.textContent = 'Passwords do not match.';
-      return;
-    }
-    if (!group1 || !group2) {
-      errorEl.textContent = 'Please choose both groups.';
-      return;
-    }
-    if (group1 === group2) {
-      errorEl.textContent = 'Please choose two different groups.';
       return;
     }
 
@@ -131,24 +93,9 @@
       return;
     }
 
-    // Claim the two chosen groups. If someone else grabbed one in the
-    // last few seconds, this affects 0 rows instead of erroring — we
-    // check for that explicitly.
-    const claim1 = await sb.from('groups').update({ teacher_id: data.user.id }).eq('id', group1).is('teacher_id', null).select();
-    const claim2 = await sb.from('groups').update({ teacher_id: data.user.id }).eq('id', group2).is('teacher_id', null).select();
-
-    const failedClaims = [];
-    if (!claim1.data || claim1.data.length === 0) failedClaims.push(group1);
-    if (!claim2.data || claim2.data.length === 0) failedClaims.push(group2);
-
-    if (failedClaims.length > 0) {
-      errorEl.textContent = `Your account was created, but a group you picked was just taken by someone else. Please log in and contact the admin to sort out your groups.`;
-      return;
-    }
-
-    successEl.textContent = 'Teacher account created! Redirecting to login…';
+    successEl.textContent = 'Teacher account created! Your admin will assign your groups shortly. Redirecting to login…';
     successEl.style.display = 'block';
-    setTimeout(() => { window.location.href = 'login.html'; }, 1200);
+    setTimeout(() => { window.location.href = 'login.html'; }, 1800);
   });
 </script>
 </body>
