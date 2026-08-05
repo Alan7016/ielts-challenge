@@ -626,10 +626,29 @@ function initHighlightTool(dayNumber) {
 }
 
 // ============================================
-// SPEAKING RECORDER — one control per question. Records via the mic,
-// uploads once to private storage, then locks permanently (no re-record).
-// Call initRecordControl for each question box on page load.
+// SPEAKING QUESTION TEXT — maps a field_id to its actual question,
+// so dashboards can show real text instead of a generic label.
 // ============================================
+const SPEAKING_QUESTIONS = {
+  'speaking-occupation-q1': 'Do you work or are you a student?',
+  'speaking-occupation-q2': 'What work do you do? / What subjects are you studying?',
+  'speaking-occupation-q3': 'Why did you choose that job/career?',
+  'speaking-occupation-q4': 'Why did you choose to study that subject?',
+  'speaking-occupation-q5': 'Do you like your job?',
+  'speaking-hometown-q1': 'Please describe your hometown a little.',
+  'speaking-hometown-q2': 'What is your town well-known for?',
+  'speaking-hometown-q3': 'Do you like your hometown?',
+  'speaking-hometown-q4': 'Is that a big city or a small place?',
+  'speaking-hometown-q5': 'How long have you been living there?',
+  'speaking-reading-q1': 'Do you like reading?',
+  'speaking-reading-q2': 'What books do you like to read?',
+  'speaking-reading-q3': 'What book did you read recently?',
+  'speaking-reading-q4': 'What did you learn from it?',
+  'speaking-reading-q5': 'Do you prefer to read on paper or on a screen?'
+};
+function speakingLabel(fieldId) {
+  return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
+}
 async function initRecordControl(box, userId, day, task, fieldId) {
   const sb = getSupabaseClient();
   const path = `${day}/${userId}/${fieldId}.webm`;
