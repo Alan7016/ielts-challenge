@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checker Dashboard — IELTS Challenge</title>
+<title>Checker Dashboard — IELTS Marathon</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -40,7 +40,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 <script>
-  const OPEN_DAYS = [1]; // keep in sync with index.html's openDays as more days go live
+  const OPEN_DAYS = [1, 2]; // keep in sync with index.html's openDays as more days go live
   const TASKS_PER_DAY = 8;
 
   let myGroups = [];
@@ -206,9 +206,9 @@
         if (speakingItems.length > 0) {
           const recordings = speakingItems.map(i => {
             const url = signedUrlByPath[i.value];
-            const label = i.field_id.replace('speaking-', '').replace(/-/g, ' ');
+            const label = speakingLabel(i.field_id);
             return `<div style="margin-bottom:10px;">
-              <span style="font-family:var(--mono); font-size:0.8rem; color:var(--muted); text-transform:capitalize;">${label}</span>
+              <span style="font-family:var(--mono); font-size:0.8rem; color:var(--muted);">${label}</span>
               ${url ? `<audio controls src="${url}" style="width:100%; margin-top:4px;"></audio>` : '<p class="no-writing">Playback unavailable</p>'}
             </div>`;
           }).join('');
