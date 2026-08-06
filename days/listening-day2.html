@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Listening Section 2 – Homework A B C D</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #fff; line-height: 1.5; font-size: 16px; }
+
+        .header {
+            background: #fff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            height: 60px;
+        }
+        .telegram-link {
+            color: #0088cc;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .telegram-link:hover { text-decoration: underline; }
+        .telegram-link::before {
+            content: '';
+            display: inline-block;
+            width: 20px; height: 20px;
+            background-color: currentColor;
+            -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23l7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3L3.64 12c-.88-.25-.89-1.37.2-1.64l16.56-6.4c.75-.29 1.4.22 1.2.94l-2.67 12.61c-.22.95-1.13 1.18-1.78.73l-4.5-3.32l-2.23 2.15c-.47.44-1.29.21-1.48-.37z"/></svg>');
+            mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23l7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3L3.64 12c-.88-.25-.89-1.37.2-1.64l16.56-6.4c.75-.29 1.4.22 1.2.94l-2.67 12.61c-.22.95-1.13 1.18-1.78.73l-4.5-3.32l-2.23 2.15c-.47.44-1.29.21-1.48-.37z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        .header-icons { display: flex; gap: 10px; align-items: center; }
+        #play-pause-btn { background: none; border: none; padding: 0; cursor: pointer; color: #333; }
+        #volume-slider {
+            -webkit-appearance: none; width: 80px; height: 4px;
+            background: #ddd; outline: none; border-radius: 2px; cursor: pointer;
+        }
+        #volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 14px; height: 14px;
+            border-radius: 50%; background: #333; cursor: pointer;
+        }
+
+        .main-container { margin-top: 60px; padding-bottom: 100px; }
+        .left-panel { width: 100%; padding: 20px; }
+
+        .question-part { display: none; }
+        .question-part.active { display: block; }
+
+        .part-header {
+            background: #f1f2ec;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+        .part-header p { margin: 0; }
+
+        .questions-container { max-width: 800px; }
+        .question { margin-bottom: 35px; }
+        .question-prompt { margin-bottom: 15px; }
+        .question-prompt p { margin-bottom: 6px; }
+
+        .answer-input {
+            border: 1px solid #888;
+            border-radius: 4px;
+            background: #fff;
+            padding: 2px 6px;
+            font-size: 16px;
+            margin: 0 4px;
+        }
+        .answer-input.correct { border-color: #28a745; background: #e9f7ef; }
+        .answer-input.incorrect { border-color: #dc3545; background: #f8d7da; color: #721c24; }
+
+        .section-box {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .section-box h3 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+        .bullet-list { list-style: none; padding: 0; }
+        .bullet-list li { margin-bottom: 10px; display: flex; align-items: baseline; gap: 6px; }
+        .bullet-list li::before { content: "•"; color: #333; flex-shrink: 0; }
+
+        /* MCQ */
+        .mcq-question { margin-bottom: 25px; }
+        .mcq-question .stem { margin-bottom: 10px; font-size: 16px; }
+        .mcq-options { list-style: none; padding-left: 20px; }
+        .mcq-options li { margin-bottom: 6px; }
+        .mcq-options li label { display: flex; align-items: baseline; gap: 8px; cursor: pointer; }
+        .mcq-options li.correct { color: #155724; font-weight: bold; }
+        .mcq-options li.incorrect { color: #721c24; }
+        .mcq-options li.correct::before { content: '✔ '; color: #28a745; }
+        .mcq-options li.incorrect::before { content: '✖ '; color: #dc3545; }
+
+        /* Map SVG */
+        .map-container { margin: 20px 0; display: flex; justify-content: center; }
+        .map-svg { border: 2px solid #333; background: white; max-width: 100%; }
+
+        /* Sentence completion numbered */
+        .sentence-item { margin-bottom: 14px; display: flex; gap: 10px; align-items: baseline; }
+        .sentence-num { font-weight: bold; min-width: 28px; }
+
+        /* Bottom Nav */
+        .nav-row {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: #fff; border-top: 1px solid #e0e0e0;
+            display: flex; align-items: center; height: 80px;
+            z-index: 100; padding: 0 10px;
+        }
+        .test-tab-wrapper { display: flex; align-items: center; margin-right: 16px; }
+        .test-tab-btn {
+            background: none; border: none;
+            padding: 10px 14px; font-size: 15px; font-weight: 600;
+            color: #333; cursor: pointer;
+            display: flex; align-items: center; gap: 5px;
+            transition: background 0.2s; border-radius: 4px;
+        }
+        .test-tab-btn:hover { background: #f8f9fa; }
+        .test-tab-btn.selected { color: #4a90e2; border-bottom: 3px solid #4a90e2; border-radius: 0; }
+        .sub-questions { display: none; gap: 2px; margin-left: 8px; }
+        .test-tab-wrapper.selected .sub-questions { display: flex; }
+        .subQuestion {
+            width: 32px; height: 32px;
+            border: 1px solid #ccc; background: white;
+            color: #333; font-size: 13px; font-weight: 500;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            border-radius: 2px; transition: all 0.2s;
+        }
+        .subQuestion:hover { background: #f0f0f0; }
+        .subQuestion.answered { background: #e9ecef; border-color: #ddd; }
+        .subQuestion.correct { background: #28a745; color: white; border-color: #28a745; }
+        .subQuestion.incorrect { background: #dc3545; color: white; border-color: #dc3545; }
+        .subQuestion.active { background: #4a90e2; color: white; border-color: #4a90e2; }
+        .deliver-btn {
+            margin-left: auto;
+            background: white; border: 1px solid #ccc;
+            padding: 10px 20px; border-radius: 4px;
+            font-size: 15px; font-weight: 600; cursor: pointer;
+        }
+        .deliver-btn:hover { background: #f0f0f0; }
+        .deliver-btn:disabled { background: #e9ecef; color: #999; cursor: not-allowed; }
+
+        /* Nav arrows */
+        .nav-arrows {
+            position: fixed; bottom: 90px; right: 20px;
+            display: flex; gap: 5px; z-index: 101;
+        }
+        .nav-arrow {
+            width: 50px; height: 50px; background: #333; color: white;
+            border: none; cursor: pointer; font-size: 22px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .nav-arrow:hover { background: #555; }
+        .nav-arrow:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 2000;
+            display: flex; justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-content {
+            background: white; padding: 25px; border-radius: 8px;
+            width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto;
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 20px;
+        }
+        .modal-header h2 { font-size: 22px; }
+        .modal-close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #888; }
+        #result-details table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        #result-details th, #result-details td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        #result-details th { background: #f8f9fa; font-weight: 600; }
+        .result-correct { color: #28a745; font-weight: bold; }
+        .result-incorrect { color: #dc3545; font-weight: bold; }
+        #score-summary { font-size: 18px; font-weight: bold; margin-bottom: 16px; }
+
+        /* Goto widget */
+        .goto-widget {
+            position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+            background: white; border: 1px solid #ccc; border-radius: 6px;
+            padding: 10px 14px; display: flex; gap: 8px; align-items: center;
+            z-index: 200; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .goto-widget.hidden { display: none; }
+        .goto-widget input {
+            width: 60px; border: 1px solid #ccc; border-radius: 4px;
+            padding: 4px 8px; font-size: 16px; text-align: center;
+        }
+        .goto-widget button {
+            background: #4a90e2; color: white; border: none;
+            padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;
+        }
+
+        .hidden { display: none; }
+        .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+        /* Map label options */
+        .map-label-options { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .map-label-options label {
+            display: flex; align-items: center; gap: 4px;
+            padding: 4px 10px; border: 1px solid #ccc; border-radius: 4px;
+            cursor: pointer; font-size: 15px;
+        }
+        .map-label-options label:hover { background: #f0f0f0; }
+
+        /* Attempt count */
+        .attempt-count { font-size: 13px; color: #666; font-weight: 400; margin-left: 4px; }
+        .test-tab-wrapper.selected .attempt-count { display: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="https://t.me/IELTS_sv" target="_blank" class="telegram-link">IELTS by AB</a>
+        <div class="header-icons">
+            <button id="play-pause-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+            </div>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="left-panel">
+
+            <!-- TEST A -->
+            <div id="test-A" class="question-part active">
+                <div class="part-header">
+                    <p><strong>Homework – Test A</strong> &nbsp;|&nbsp; Section 2 &nbsp;|&nbsp; Questions 11–20</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 11–20</strong><br>Complete the notes below.</p>
+                            <p>Write <strong>NO MORE THAN THREE WORDS AND/OR A NUMBER</strong> for each answer.</p>
+                        </div>
+                        <div class="section-box">
+                            <div style="text-align:center; font-weight:bold; font-size:17px; margin-bottom:16px;">The Pre-school Family Centre</div>
+
+                            <h3>Features of the Pre-school Family Centre</h3>
+                            <ul class="bullet-list">
+                                <li>for children from <input type="text" class="answer-input" id="q11" placeholder="11" style="width:120px"> to 5 years old</li>
+                                <li>run as a <input type="text" class="answer-input" id="q12" placeholder="12" style="width:140px"> by parents, who attend with their children</li>
+                                <li>parents receive special <input type="text" class="answer-input" id="q13" placeholder="13" style="width:130px"> from the centre</li>
+                                <li>children's activities organised in <input type="text" class="answer-input" id="q14" placeholder="14" style="width:110px"> age groups</li>
+                            </ul>
+
+                            <h3 style="margin-top:18px;">Facts about the Centre</h3>
+                            <ul class="bullet-list">
+                                <li>sessions from 9.30–12.30 each morning</li>
+                                <li>one afternoon session to help prepare older children for <input type="text" class="answer-input" id="q15" placeholder="15" style="width:140px"> at school</li>
+                                <li>parents must make several <input type="text" class="answer-input" id="q16" placeholder="16" style="width:130px"> before they enrol their child</li>
+                                <li>each centre is officially recognised and receives <input type="text" class="answer-input" id="q17" placeholder="17" style="width:120px"> funding</li>
+                            </ul>
+
+                            <h3 style="margin-top:18px;">Parents' Commitments</h3>
+                            <ul class="bullet-list">
+                                <li>take on responsibility for a special <input type="text" class="answer-input" id="q18" placeholder="18" style="width:140px"></li>
+                                <li>attend one <input type="text" class="answer-input" id="q19" placeholder="19" style="width:140px"></li>
+                            </ul>
+
+                            <h3 style="margin-top:18px;">Practical Advice</h3>
+                            <ul class="bullet-list">
+                                <li>attend regularly to help your child gain <input type="text" class="answer-input" id="q20" placeholder="20" style="width:130px"></li>
+                                <li>younger children may need to leave early</li>
+                                <li>provide a snack for your child</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEST B -->
+            <div id="test-B" class="question-part">
+                <div class="part-header">
+                    <p><strong>Homework – Test B</strong> &nbsp;|&nbsp; Section 2 &nbsp;|&nbsp; Questions 11–20</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 11–15</strong><br>Complete the sentences below.</p>
+                            <p>Write <strong>NO MORE THAN TWO WORDS AND/OR A NUMBER</strong> for each answer.</p>
+                        </div>
+                        <div class="section-item sentence-item"><span class="sentence-num">11</span><span>Special conditions may apply to <input type="text" class="answer-input" id="q11b" placeholder="11" style="width:150px"> students looking for a job.</span></div>
+                        <div class="section-item sentence-item"><span class="sentence-num">12</span><span>The university Job Centre is located on the <input type="text" class="answer-input" id="q12b" placeholder="12" style="width:140px"> Campus.</span></div>
+                        <div class="section-item sentence-item"><span class="sentence-num">13</span><span>The Job Centre remains open until <input type="text" class="answer-input" id="q13b" placeholder="13" style="width:120px"> every evening.</span></div>
+                        <div class="section-item sentence-item"><span class="sentence-num">14</span><span>The only day the employment lawyer is available is <input type="text" class="answer-input" id="q14b" placeholder="14" style="width:140px">.</span></div>
+                        <div class="section-item sentence-item" style="margin-bottom:30px;"><span class="sentence-num">15</span><span>The university <input type="text" class="answer-input" id="q15b" placeholder="15" style="width:160px"> regularly advertises new jobs.</span></div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 16–20</strong><br>Choose the correct letter, <strong>A, B or C</strong>.</p>
+                        </div>
+                        <div class="mcq-question">
+                            <div class="stem"><strong>16</strong> &nbsp;At present, the university is offering part-time work in</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q16b" value="A"> <strong>A</strong> its offices.</label></li>
+                                <li><label><input type="radio" name="q16b" value="B"> <strong>B</strong> the IT centre.</label></li>
+                                <li><label><input type="radio" name="q16b" value="C"> <strong>C</strong> the car parks.</label></li>
+                            </ul>
+                        </div>
+                        <div class="mcq-question">
+                            <div class="stem"><strong>17</strong> &nbsp;Local employers visit the university</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q17b" value="A"> <strong>A</strong> only in the first term.</label></li>
+                                <li><label><input type="radio" name="q17b" value="B"> <strong>B</strong> twice a term.</label></li>
+                                <li><label><input type="radio" name="q17b" value="C"> <strong>C</strong> throughout the year.</label></li>
+                            </ul>
+                        </div>
+                        <div class="mcq-question">
+                            <div class="stem"><strong>18</strong> &nbsp;According to the speaker, a part-time job can</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q18b" value="A"> <strong>A</strong> lead to a full-time job after graduation.</label></li>
+                                <li><label><input type="radio" name="q18b" value="B"> <strong>B</strong> provide a useful work record for the future.</label></li>
+                                <li><label><input type="radio" name="q18b" value="C"> <strong>C</strong> give the chance to develop team-work skills.</label></li>
+                            </ul>
+                        </div>
+                        <div class="mcq-question">
+                            <div class="stem"><strong>19</strong> &nbsp;Students who work part-time</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q19b" value="A"> <strong>A</strong> will be taxed.</label></li>
+                                <li><label><input type="radio" name="q19b" value="B"> <strong>B</strong> will be paid every week.</label></li>
+                                <li><label><input type="radio" name="q19b" value="C"> <strong>C</strong> will need private insurance.</label></li>
+                            </ul>
+                        </div>
+                        <div class="mcq-question">
+                            <div class="stem"><strong>20</strong> &nbsp;Part-time student workers are advised to</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q20b" value="A"> <strong>A</strong> give notice in writing.</label></li>
+                                <li><label><input type="radio" name="q20b" value="B"> <strong>B</strong> communicate by email.</label></li>
+                                <li><label><input type="radio" name="q20b" value="C"> <strong>C</strong> have a mobile phone.</label></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEST C -->
+            <div id="test-C" class="question-part">
+                <div class="part-header">
+                    <p><strong>Homework – Test C</strong> &nbsp;|&nbsp; Section 2 &nbsp;|&nbsp; Questions 11–20</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 11–14</strong><br>Choose the correct letter, <strong>A, B or C</strong>.</p>
+                            <p style="text-align:center; font-weight:bold; margin-top:10px;">Information for participants in the Albany fishing competition</p>
+                        </div>
+                        <div class="mcq-question">
+                            <div class="stem"><strong>11</strong> &nbsp;What do participants need to take to the registration desk?</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q11c" value="A"> <strong>A</strong> a form of identification</label></li>
+                                <li><label><input type="radio" name="q11c" value="B"> <strong>B</strong> a competitor number</label></li>
+                                <li><label><input type="radio" name="q11c" value="C"> <strong>C</strong> cash for the entrance fee</label></li>
+                            </ul>
+                        </div>
+                        <div class="mcq-question">
+                            <div class="stem"><strong>12</strong> &nbsp;What does the entrance fee to the competition include?</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q12c" value="A"> <strong>A</strong> equipment for fishing</label></li>
+                                <li><label><input type="radio" name="q12c" value="B"> <strong>B</strong> all food for both days</label></li>
+                                <li><label><input type="radio" name="q12c" value="C"> <strong>C</strong> fuel for the fishing</label></li>
+                            </ul>
+                        </div>
+                        <div class="mcq-question">
+                            <div class="stem"><strong>13</strong> &nbsp;Participants without a fishing license are recommended to apply for one</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q13c" value="A"> <strong>A</strong> at the registration desk.</label></li>
+                                <li><label><input type="radio" name="q13c" value="B"> <strong>B</strong> over the phone.</label></li>
+                                <li><label><input type="radio" name="q13c" value="C"> <strong>C</strong> on the internet.</label></li>
+                            </ul>
+                        </div>
+                        <div class="mcq-question" style="margin-bottom:30px;">
+                            <div class="stem"><strong>14</strong> &nbsp;What will happen at 6pm on Sunday?</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q14c" value="A"> <strong>A</strong> The time allocated for fishing will end.</label></li>
+                                <li><label><input type="radio" name="q14c" value="B"> <strong>B</strong> The fish caught will be judged.</label></li>
+                                <li><label><input type="radio" name="q14c" value="C"> <strong>C</strong> The prizes will be awarded to the winners.</label></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 15–20</strong><br>Label the map below.</p>
+                            <p>Write the correct letter, <strong>A–I</strong>, next to questions 15–20.</p>
+                            <p style="text-align:center; font-weight:bold; margin-top:8px;">Albany Fishing Competition Map</p>
+                        </div>
+                        <div class="map-container">
+                            <svg class="map-svg" viewBox="0 0 500 360" width="500" height="360" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Sea/Beach area background -->
+                                <rect x="0" y="0" width="500" height="100" fill="#b8d4e8" opacity="0.5"/>
+                                <text x="230" y="30" font-family="Arial" font-size="13" fill="#333" text-anchor="middle">Beach</text>
+                                <!-- Lighthouse -->
+                                <rect x="30" y="20" width="18" height="50" fill="#888"/>
+                                <polygon points="30,20 48,20 39,5" fill="#666"/>
+                                <text x="39" y="85" font-family="Arial" font-size="11" fill="#333" text-anchor="middle">Lighthouse</text>
+                                <!-- Compass -->
+                                <circle cx="450" cy="45" r="28" fill="white" stroke="#999" stroke-width="1"/>
+                                <text x="450" y="28" font-family="Arial" font-size="11" fill="#333" text-anchor="middle">N</text>
+                                <line x1="450" y1="22" x2="450" y2="68" stroke="#333" stroke-width="1"/>
+                                <line x1="424" y1="45" x2="476" y2="45" stroke="#333" stroke-width="1"/>
+                                <polygon points="450,22 445,38 455,38" fill="red"/>
+
+                                <!-- Roads -->
+                                <line x1="70" y1="100" x2="70" y2="300" stroke="#ccc" stroke-width="8"/>
+                                <line x1="70" y1="200" x2="250" y2="200" stroke="#ccc" stroke-width="8"/>
+                                <line x1="250" y1="200" x2="380" y2="200" stroke="#ccc" stroke-width="8"/>
+                                <line x1="250" y1="200" x2="250" y2="100" stroke="#ccc" stroke-width="8"/>
+                                <line x1="250" y1="200" x2="350" y2="130" stroke="#ccc" stroke-width="8"/>
+
+                                <!-- Roundabout -->
+                                <circle cx="250" cy="200" r="20" fill="white" stroke="#aaa" stroke-width="2"/>
+                                <text x="250" y="230" font-family="Arial" font-size="11" fill="#555" text-anchor="middle">Roundabout</text>
+
+                                <!-- Skate Park -->
+                                <ellipse cx="130" cy="155" rx="38" ry="25" fill="#e8e8e8" stroke="#aaa" stroke-width="1"/>
+                                <text x="130" y="151" font-family="Arial" font-size="11" fill="#333" text-anchor="middle">Skate</text>
+                                <text x="130" y="163" font-family="Arial" font-size="11" fill="#333" text-anchor="middle">park</text>
+
+                                <!-- Playground -->
+                                <ellipse cx="320" cy="155" rx="38" ry="22" fill="#e8e8e8" stroke="#aaa" stroke-width="1"/>
+                                <text x="320" y="158" font-family="Arial" font-size="11" fill="#333" text-anchor="middle">Playground</text>
+
+                                <!-- Barbecue area -->
+                                <rect x="370" y="190" width="70" height="40" fill="#f5f5dc" stroke="#aaa" stroke-width="1"/>
+                                <text x="405" y="205" font-family="Arial" font-size="10" fill="#333" text-anchor="middle">Barbecue</text>
+                                <text x="405" y="218" font-family="Arial" font-size="10" fill="#333" text-anchor="middle">area</text>
+
+                                <!-- Trees -->
+                                <circle cx="380" cy="270" r="10" fill="#90c090"/>
+                                <circle cx="400" cy="265" r="10" fill="#90c090"/>
+                                <circle cx="420" cy="272" r="10" fill="#90c090"/>
+                                <circle cx="360" cy="275" r="8" fill="#90c090"/>
+
+                                <!-- First Aid -->
+                                <rect x="145" y="248" width="45" height="35" fill="#fff0f0" stroke="#aaa" stroke-width="1"/>
+                                <text x="167" y="262" font-family="Arial" font-size="10" fill="#333" text-anchor="middle">First</text>
+                                <text x="167" y="274" font-family="Arial" font-size="10" fill="#333" text-anchor="middle">aid</text>
+
+                                <!-- Car Park -->
+                                <rect x="210" y="290" width="80" height="50" fill="#e8e8e8" stroke="#aaa" stroke-width="1"/>
+                                <text x="250" y="312" font-family="Arial" font-size="11" fill="#333" text-anchor="middle">Car</text>
+                                <text x="250" y="325" font-family="Arial" font-size="11" fill="#333" text-anchor="middle">park</text>
+
+                                <!-- Location Labels A–I -->
+                                <!-- A: top-left beach area -->
+                                <rect x="155" y="45" width="26" height="26" rx="3" fill="white" stroke="#333" stroke-width="1.5"/>
+                                <text x="168" y="63" font-family="Arial" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">A</text>
+                                <!-- B: top-center beach -->
+                                <rect x="248" y="55" width="26" height="26" rx="3" fill="white" stroke="#333" stroke-width="1.5"/>
+                                <text x="261" y="73" font-family="Arial" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">B</text>
+                                <!-- C: top-right -->
+                                <rect x="395" y="60" width="26" height="26" rx="3" fill="white" stroke="#333" stroke-width="1.5"/>
+                                <text x="408" y="78" font-family="Arial" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">C</text>
+                                <!-- D: left side -->
+                                <rect x="25" y="195" width="26" height="26" rx="3" fill="white" stroke="#333" stroke-width="1.5"/>
+                                <text x="38" y="213" font-family="Arial" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">D</text>
+                                <!-- E: near skate park -->
+                                <rect x="108" y="178" width="26" height="26" rx="3" fill="white" stroke="#333" stroke-width="1.5"/>
+                                <text x="121" y="196" font-family="Arial" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">E</text>
+                                <!-- F: right of roundabout -->
+                                <rect x="308" y="210" width="26" height="26" rx="3" fill="white" stroke="#333" stroke-width="1.5"/>
+                                <text x="321" y="228" font-family="Arial" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">F</text>
+                                <!-- G: near barbecue -->
+                                <rect x="368" y="158" width="26" height="26" rx="3" fill="white" stroke="#333" stroke-width="1.5"/>
+                                <text x="381" y="176" font-family="Arial" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">G</text>
+                                <!-- H: bottom-left -->
+                                <rect x="25" y="268" width="26" height="26" rx="3" fill="white" stroke="#333" stroke-width="1.5"/>
+                                <text x="38" y="286" font-family="Arial" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">H</text>
+                                <!-- I: below roundabout -->
+                                <rect x="220" y="248" width="26" height="26" rx="3" fill="white" stroke="#333" stroke-width="1.5"/>
+                                <text x="233" y="266" font-family="Arial" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">I</text>
+                            </svg>
+                        </div>
+
+                        <div style="margin-top:16px;">
+                            <div class="sentence-item"><span class="sentence-num">15</span><span>Registration area &nbsp;&nbsp;&nbsp;
+                                <select id="q15c" style="font-size:15px; padding:3px 8px; border:1px solid #888; border-radius:4px;">
+                                    <option value="">–</option>
+                                    <option>A</option><option>B</option><option>C</option><option>D</option>
+                                    <option>E</option><option>F</option><option>G</option><option>H</option><option>I</option>
+                                </select>
+                            </span></div>
+                            <div class="sentence-item"><span class="sentence-num">16</span><span>Shore fishing area &nbsp;&nbsp;&nbsp;
+                                <select id="q16c" style="font-size:15px; padding:3px 8px; border:1px solid #888; border-radius:4px;">
+                                    <option value="">–</option>
+                                    <option>A</option><option>B</option><option>C</option><option>D</option>
+                                    <option>E</option><option>F</option><option>G</option><option>H</option><option>I</option>
+                                </select>
+                            </span></div>
+                            <div class="sentence-item"><span class="sentence-num">17</span><span>Boat launching area &nbsp;&nbsp;&nbsp;
+                                <select id="q17c" style="font-size:15px; padding:3px 8px; border:1px solid #888; border-radius:4px;">
+                                    <option value="">–</option>
+                                    <option>A</option><option>B</option><option>C</option><option>D</option>
+                                    <option>E</option><option>F</option><option>G</option><option>H</option><option>I</option>
+                                </select>
+                            </span></div>
+                            <div class="sentence-item"><span class="sentence-num">18</span><span>Judging area &nbsp;&nbsp;&nbsp;
+                                <select id="q18c" style="font-size:15px; padding:3px 8px; border:1px solid #888; border-radius:4px;">
+                                    <option value="">–</option>
+                                    <option>A</option><option>B</option><option>C</option><option>D</option>
+                                    <option>E</option><option>F</option><option>G</option><option>H</option><option>I</option>
+                                </select>
+                            </span></div>
+                            <div class="sentence-item"><span class="sentence-num">19</span><span>Dining area &nbsp;&nbsp;&nbsp;
+                                <select id="q19c" style="font-size:15px; padding:3px 8px; border:1px solid #888; border-radius:4px;">
+                                    <option value="">–</option>
+                                    <option>A</option><option>B</option><option>C</option><option>D</option>
+                                    <option>E</option><option>F</option><option>G</option><option>H</option><option>I</option>
+                                </select>
+                            </span></div>
+                            <div class="sentence-item"><span class="sentence-num">20</span><span>Prize-giving area &nbsp;&nbsp;&nbsp;
+                                <select id="q20c" style="font-size:15px; padding:3px 8px; border:1px solid #888; border-radius:4px;">
+                                    <option value="">–</option>
+                                    <option>A</option><option>B</option><option>C</option><option>D</option>
+                                    <option>E</option><option>F</option><option>G</option><option>H</option><option>I</option>
+                                </select>
+                            </span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEST D -->
+            <div id="test-D" class="question-part">
+                <div class="part-header">
+                    <p><strong>Homework – Test D</strong> &nbsp;|&nbsp; Section 2 &nbsp;|&nbsp; Questions 11–20</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 11–15</strong><br>Choose the correct letter, <strong>A, B or C</strong>.</p>
+                        </div>
+                        <div class="mcq-question">
+                            <div class="stem"><strong>11</strong> &nbsp;What does Darren now think about the Latin name of the red squirrel?</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q11d" value="A"> <strong>A</strong> it is suitable for this species</label></li>
+                                <li><label><input type="radio" name="q11d" value="B"> <strong>B</strong> it is meaningless</label></li>
+                                <li><label><input type="radio" name="q11d" value="C"> <strong>C</strong> it is an amusing description</label></li>
+                            </ul>
+                        </div>
+                        <div class="mcq-question">
+                            <div class="stem"><strong>12</strong> &nbsp;The number of red squirrels is reduced due to</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q12d" value="A"> <strong>A</strong> the invasion of an exotic species</label></li>
+                                <li><label><input type="radio" name="q12d" value="B"> <strong>B</strong> a disease brought by the exotic species</label></li>
+                                <li><label><input type="radio" name="q12d" value="C"> <strong>C</strong> the declining food supply</label></li>
+                            </ul>
+                        </div>
+                        <div class="mcq-question">
+                            <div class="stem"><strong>13</strong> &nbsp;Darren differentiates red squirrels from rats by</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q13d" value="A"> <strong>A</strong> their food category</label></li>
+                                <li><label><input type="radio" name="q13d" value="B"> <strong>B</strong> how the food was eaten</label></li>
+                                <li><label><input type="radio" name="q13d" value="C"> <strong>C</strong> the way they stored food</label></li>
+                            </ul>
+                        </div>
+                        <div class="mcq-question">
+                            <div class="stem"><strong>14</strong> &nbsp;What was the restriction for Darren's photography?</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q14d" value="A"> <strong>A</strong> he could only take photos of one species at a time</label></li>
+                                <li><label><input type="radio" name="q14d" value="B"> <strong>B</strong> he could only use one camera</label></li>
+                                <li><label><input type="radio" name="q14d" value="C"> <strong>C</strong> he could only take photographs in a certain location</label></li>
+                            </ul>
+                        </div>
+                        <div class="mcq-question" style="margin-bottom:30px;">
+                            <div class="stem"><strong>15</strong> &nbsp;Why is Darren confident about his photographs?</div>
+                            <ul class="mcq-options">
+                                <li><label><input type="radio" name="q15d" value="A"> <strong>A</strong> he practiced a lot</label></li>
+                                <li><label><input type="radio" name="q15d" value="B"> <strong>B</strong> his teacher prepared him well</label></li>
+                                <li><label><input type="radio" name="q15d" value="C"> <strong>C</strong> he had high-quality equipment</label></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 16–20</strong><br>Complete the notes below.</p>
+                            <p>Write <strong>NO MORE THAN THREE WORDS</strong> for each answer.</p>
+                        </div>
+                        <div class="sentence-item"><span class="sentence-num">16</span><span>The photos will be exhibited in a <input type="text" class="answer-input" id="q16d" placeholder="16" style="width:150px"></span></div>
+                        <div class="sentence-item"><span class="sentence-num">17</span><span>Darren's photos once won a competition held by a <input type="text" class="answer-input" id="q17d" placeholder="17" style="width:150px"></span></div>
+                        <div style="margin: 14px 0 8px; font-weight:bold; color:#333;">Ways to improve photography skills:</div>
+                        <div class="sentence-item"><span class="sentence-num">18</span><span>Some pictures need a so-called <input type="text" class="answer-input" id="q18d" placeholder="18" style="width:140px"> in the scene</span></div>
+                        <div class="sentence-item"><span class="sentence-num">19</span><span>Darren thinks the lighting is best late in the <input type="text" class="answer-input" id="q19d" placeholder="19" style="width:140px"></span></div>
+                        <div class="sentence-item"><span class="sentence-num">20</span><span>To take better photos, photographers should make <input type="text" class="answer-input" id="q20d" placeholder="20" style="width:150px"></span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <audio id="global-audio-player" class="hidden"></audio>
+
+    <!-- Nav arrows -->
+    <div class="nav-arrows">
+        <button class="nav-arrow" id="prevBtn" onclick="previousTest()">&#8249;</button>
+        <button class="nav-arrow" id="nextBtn" onclick="nextTest()">&#8250;</button>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="nav-row" aria-label="Tests">
+        <div class="test-tab-wrapper selected" id="tab-A">
+            <button class="test-tab-btn selected" onclick="switchToTest('A')">
+                Test A <span class="attempt-count" id="count-A">0 of 10</span>
+            </button>
+            <div class="sub-questions" id="subs-A">
+                <button class="subQuestion scorable-item" id="sq-A-11" onclick="goToQuestion(11,'A')">11</button><button class="subQuestion scorable-item" id="sq-A-12" onclick="goToQuestion(12,'A')">12</button><button class="subQuestion scorable-item" id="sq-A-13" onclick="goToQuestion(13,'A')">13</button><button class="subQuestion scorable-item" id="sq-A-14" onclick="goToQuestion(14,'A')">14</button><button class="subQuestion scorable-item" id="sq-A-15" onclick="goToQuestion(15,'A')">15</button><button class="subQuestion scorable-item" id="sq-A-16" onclick="goToQuestion(16,'A')">16</button><button class="subQuestion scorable-item" id="sq-A-17" onclick="goToQuestion(17,'A')">17</button><button class="subQuestion scorable-item" id="sq-A-18" onclick="goToQuestion(18,'A')">18</button><button class="subQuestion scorable-item" id="sq-A-19" onclick="goToQuestion(19,'A')">19</button><button class="subQuestion scorable-item" id="sq-A-20" onclick="goToQuestion(20,'A')">20</button>
+            </div>
+        </div>
+        <div class="test-tab-wrapper" id="tab-B">
+            <button class="test-tab-btn" onclick="switchToTest('B')">
+                Test B <span class="attempt-count" id="count-B">0 of 10</span>
+            </button>
+            <div class="sub-questions" id="subs-B">
+                <button class="subQuestion scorable-item" id="sq-B-11" onclick="goToQuestion(11,'B')">11</button><button class="subQuestion scorable-item" id="sq-B-12" onclick="goToQuestion(12,'B')">12</button><button class="subQuestion scorable-item" id="sq-B-13" onclick="goToQuestion(13,'B')">13</button><button class="subQuestion scorable-item" id="sq-B-14" onclick="goToQuestion(14,'B')">14</button><button class="subQuestion scorable-item" id="sq-B-15" onclick="goToQuestion(15,'B')">15</button><button class="subQuestion scorable-item" id="sq-B-16" onclick="goToQuestion(16,'B')">16</button><button class="subQuestion scorable-item" id="sq-B-17" onclick="goToQuestion(17,'B')">17</button><button class="subQuestion scorable-item" id="sq-B-18" onclick="goToQuestion(18,'B')">18</button><button class="subQuestion scorable-item" id="sq-B-19" onclick="goToQuestion(19,'B')">19</button><button class="subQuestion scorable-item" id="sq-B-20" onclick="goToQuestion(20,'B')">20</button>
+            </div>
+        </div>
+        <div class="test-tab-wrapper" id="tab-C">
+            <button class="test-tab-btn" onclick="switchToTest('C')">
+                Test C <span class="attempt-count" id="count-C">0 of 10</span>
+            </button>
+            <div class="sub-questions" id="subs-C">
+                <button class="subQuestion scorable-item" id="sq-C-11" onclick="goToQuestion(11,'C')">11</button><button class="subQuestion scorable-item" id="sq-C-12" onclick="goToQuestion(12,'C')">12</button><button class="subQuestion scorable-item" id="sq-C-13" onclick="goToQuestion(13,'C')">13</button><button class="subQuestion scorable-item" id="sq-C-14" onclick="goToQuestion(14,'C')">14</button><button class="subQuestion scorable-item" id="sq-C-15" onclick="goToQuestion(15,'C')">15</button><button class="subQuestion scorable-item" id="sq-C-16" onclick="goToQuestion(16,'C')">16</button><button class="subQuestion scorable-item" id="sq-C-17" onclick="goToQuestion(17,'C')">17</button><button class="subQuestion scorable-item" id="sq-C-18" onclick="goToQuestion(18,'C')">18</button><button class="subQuestion scorable-item" id="sq-C-19" onclick="goToQuestion(19,'C')">19</button><button class="subQuestion scorable-item" id="sq-C-20" onclick="goToQuestion(20,'C')">20</button>
+            </div>
+        </div>
+        <div class="test-tab-wrapper" id="tab-D">
+            <button class="test-tab-btn" onclick="switchToTest('D')">
+                Test D <span class="attempt-count" id="count-D">0 of 10</span>
+            </button>
+            <div class="sub-questions" id="subs-D">
+                <button class="subQuestion scorable-item" id="sq-D-11" onclick="goToQuestion(11,'D')">11</button><button class="subQuestion scorable-item" id="sq-D-12" onclick="goToQuestion(12,'D')">12</button><button class="subQuestion scorable-item" id="sq-D-13" onclick="goToQuestion(13,'D')">13</button><button class="subQuestion scorable-item" id="sq-D-14" onclick="goToQuestion(14,'D')">14</button><button class="subQuestion scorable-item" id="sq-D-15" onclick="goToQuestion(15,'D')">15</button><button class="subQuestion scorable-item" id="sq-D-16" onclick="goToQuestion(16,'D')">16</button><button class="subQuestion scorable-item" id="sq-D-17" onclick="goToQuestion(17,'D')">17</button><button class="subQuestion scorable-item" id="sq-D-18" onclick="goToQuestion(18,'D')">18</button><button class="subQuestion scorable-item" id="sq-D-19" onclick="goToQuestion(19,'D')">19</button><button class="subQuestion scorable-item" id="sq-D-20" onclick="goToQuestion(20,'D')">20</button>
+            </div>
+        </div>
+        <button class="deliver-btn" id="deliver-button">&#10003; Check Answers</button>
+    </nav>
+
+    <!-- Goto Widget -->
+    <div class="goto-widget hidden" id="goto-widget">
+        <input type="text" id="goto-input" placeholder="Q#">
+        <button id="goto-btn">Go</button>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="result-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Results</h2>
+                <button id="modal-close-button" class="modal-close-btn">&times;</button>
+            </div>
+            <div>
+                <p id="score-summary"></p>
+                <div id="result-details"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === Audio ===
+        // Audio files are hosted separately (extracted from the original embedded base64 to keep this HTML file small enough for GitHub).
+        const blobUrls = {
+            A: 'listening-day2-A.mp3',
+            B: 'listening-day2-B.mp3',
+            C: 'listening-day2-C.mp3',
+            D: 'listening-day2-D.mp3'
+        };
+
+        const audioPlayer = document.getElementById('global-audio-player');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const volumeSlider = document.getElementById('volume-slider');
+
+        const tests = ['A','B','C','D'];
+        let currentTest = 'A';
+        let testStarted = false;
+
+        // === Correct Answers (to be filled in) ===
+        const correctAnswers = {
+            A: {
+                q11:'3 months', q12:'cooperative', q13:'training', q14:'mixed',
+                q15:'reading', q16:'visits', q17:'government', q18:'job',
+                q19:'meeting', q20:'confidence'
+            },
+            B: {
+                q11b:'overseas', q12b:'WOODSIDE', q13b:'8', q14b:'tuesday', q15b:'website',
+                q16b:'C', q17b:'C', q18b:'B', q19b:'A', q20b:'C'
+            },
+            C: {
+                q11c:'A', q12c:'B', q13c:'C', q14c:'B',
+                q15c:'G', q16c:'A', q17c:'C', q18c:'H', q19c:'D', q20c:'B'
+            },
+            D: {
+                q11d:'A', q12d:'C', q13d:'B', q14d:'C', q15d:'B',
+                q16d:'local museum', q17d:'national newspaper', q18d:'Secondary Object',
+                q19d:'afternoon', q20d:'detailed notes'
+            }
+        };
+
+        function switchToTest(t, andPlay=false) {
+            currentTest = t;
+            document.querySelectorAll('.question-part').forEach(p => p.classList.remove('active'));
+            document.getElementById('test-' + t).classList.add('active');
+
+            document.querySelectorAll('.test-tab-wrapper').forEach(w => w.classList.remove('selected'));
+            document.querySelectorAll('.test-tab-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('tab-' + t).classList.add('selected');
+            document.querySelector('#tab-' + t + ' .test-tab-btn').classList.add('selected');
+
+            audioPlayer.pause();
+            audioPlayer.src = blobUrls[t];
+            playPauseBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+
+            if (andPlay) audioPlayer.play();
+
+            const idx = tests.indexOf(t);
+            document.getElementById('prevBtn').disabled = idx === 0;
+            document.getElementById('nextBtn').disabled = idx === tests.length - 1;
+
+            updateAnsweredIndicators();
+        }
+
+        function previousTest() { const i = tests.indexOf(currentTest); if (i > 0) switchToTest(tests[i-1], true); }
+        function nextTest() { const i = tests.indexOf(currentTest); if (i < tests.length-1) switchToTest(tests[i+1], true); }
+
+        playPauseBtn.addEventListener('click', () => {
+            if (!testStarted) {
+                testStarted = true;
+                audioPlayer.src = blobUrls[currentTest];
+                audioPlayer.play();
+            } else {
+                audioPlayer.paused ? audioPlayer.play() : audioPlayer.pause();
+            }
+        });
+        audioPlayer.addEventListener('play', () => {
+            playPauseBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+        });
+        audioPlayer.addEventListener('pause', () => {
+            playPauseBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+        });
+        volumeSlider.addEventListener('input', e => audioPlayer.volume = e.target.value);
+
+        // === Go To Question ===
+        function goToQuestion(qNum, test) {
+            if (test && test !== currentTest) switchToTest(test);
+            const suffixMap = { A:'', B:'b', C:'c', D:'d' };
+            const sfx = suffixMap[currentTest];
+            const el = document.getElementById('q' + qNum + sfx) ||
+                       document.querySelector(`input[name="q${qNum}${sfx}"]`);
+            if (el) { el.scrollIntoView({behavior:'smooth', block:'center'}); el.focus && el.focus(); }
+
+            // Highlight active subQ
+            document.querySelectorAll('.subQuestion').forEach(b => b.classList.remove('active'));
+            const sqBtn = document.getElementById('sq-' + currentTest + '-' + qNum);
+            if (sqBtn) sqBtn.classList.add('active');
+        }
+
+        // === Answered Indicators ===
+        function getUserAnswer(qNum, test) {
+            const suffixMap = { A:'', B:'b', C:'c', D:'d' };
+            const sfx = suffixMap[test];
+            const textEl = document.getElementById('q' + qNum + sfx);
+            if (textEl) return textEl.value.trim();
+            const radioEl = document.querySelector(`input[name="q${qNum}${sfx}"]:checked`);
+            if (radioEl) return radioEl.value;
+            const selectEl = document.getElementById('q' + qNum + sfx);
+            if (selectEl && selectEl.tagName === 'SELECT') return selectEl.value;
+            return '';
+        }
+
+        function updateAnsweredIndicators() {
+            tests.forEach(t => {
+                let answered = 0;
+                for (let q = 11; q <= 20; q++) {
+                    const val = getUserAnswer(q, t);
+                    const btn = document.getElementById('sq-' + t + '-' + q);
+                    if (btn && !btn.classList.contains('correct') && !btn.classList.contains('incorrect')) {
+                        btn.classList.toggle('answered', val !== '');
+                    }
+                    if (val !== '') answered++;
+                }
+                document.getElementById('count-' + t).textContent = answered + ' of 10';
+            });
+        }
+
+        // Listen to all inputs
+        document.addEventListener('input', updateAnsweredIndicators);
+        document.addEventListener('change', updateAnsweredIndicators);
+
+        // === Check Answers ===
+        document.getElementById('deliver-button').addEventListener('click', checkAnswers);
+
+        function checkAnswers() {
+            let totalScore = 0;
+            let resultsData = [];
+
+            tests.forEach(t => {
+                const answers = correctAnswers[t];
+                Object.keys(answers).forEach(key => {
+                    const correctAns = answers[key];
+                    const qNum = parseInt(key.replace(/[^0-9]/g, ''));
+                    const btn = document.getElementById('sq-' + t + '-' + qNum);
+
+                    let userAns = '';
+                    const textEl = document.getElementById(key);
+                    const radioEl = document.querySelector(`input[name="${key}"]:checked`);
+                    const selectEl = (textEl && textEl.tagName === 'SELECT') ? textEl : null;
+
+                    if (selectEl) {
+                        userAns = selectEl.value;
+                    } else if (textEl) {
+                        userAns = textEl.value.trim();
+                        if (correctAns !== '') {
+                            const isCorrect = userAns.toLowerCase() === correctAns.toLowerCase();
+                            textEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+                        }
+                    } else if (radioEl) {
+                        userAns = radioEl.value;
+                        const li = radioEl.closest('li');
+                        if (correctAns !== '' && li) {
+                            li.classList.add(userAns === correctAns ? 'correct' : 'incorrect');
+                        }
+                    }
+
+                    const isCorrect = correctAns !== '' && userAns.toLowerCase() === correctAns.toLowerCase();
+                    if (isCorrect) totalScore++;
+
+                    if (btn) {
+                        btn.classList.remove('answered');
+                        if (correctAns !== '') btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+                    }
+
+                    resultsData.push({
+                        test: 'Test ' + t,
+                        question: qNum,
+                        userAnswer: userAns || 'No Answer',
+                        correctAnswer: correctAns || '(not set)',
+                        isCorrect
+                    });
+                });
+            });
+
+            // Disable inputs
+            document.querySelectorAll('.answer-input, input[type="radio"], select').forEach(el => el.disabled = true);
+            document.getElementById('deliver-button').innerHTML = `Score: ${totalScore} / 40`;
+            document.getElementById('deliver-button').disabled = true;
+
+            // Show modal
+            document.getElementById('score-summary').textContent = `You scored ${totalScore} out of 40.`;
+            let tableHTML = '<table><tr><th>Test</th><th>Q</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr>';
+            resultsData.forEach(r => {
+                tableHTML += `<tr>
+                    <td>${r.test}</td><td>${r.question}</td>
+                    <td>${r.userAnswer}</td><td>${r.correctAnswer}</td>
+                    <td class="${r.isCorrect ? 'result-correct' : 'result-incorrect'}">${r.isCorrect ? '✔ Correct' : '✖ Incorrect'}</td>
+                </tr>`;
+            });
+            tableHTML += '</table>';
+            document.getElementById('result-details').innerHTML = tableHTML;
+            document.getElementById('result-modal').style.display = 'flex';
+        }
+
+        // Modal close
+        document.getElementById('modal-close-button').addEventListener('click', () => {
+            document.getElementById('result-modal').style.display = 'none';
+        });
+        document.addEventListener('keyup', e => {
+            if (e.key === 'Escape') document.getElementById('result-modal').style.display = 'none';
+        });
+
+        // Goto widget keyboard
+        const gotoWidget = document.getElementById('goto-widget');
+        const gotoInput = document.getElementById('goto-input');
+        document.addEventListener('keydown', e => {
+            if (e.key >= '0' && e.key <= '9' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'SELECT') {
+                e.preventDefault();
+                gotoWidget.classList.remove('hidden');
+                gotoInput.focus();
+                gotoInput.value = e.key;
+            }
+            if (e.key === 'Enter' && document.activeElement === gotoInput) document.getElementById('goto-btn').click();
+            if (e.key === 'Escape') { gotoWidget.classList.add('hidden'); gotoInput.value = ''; }
+        });
+        document.getElementById('goto-btn').addEventListener('click', () => {
+            const q = parseInt(gotoInput.value);
+            if (q >= 11 && q <= 20) {
+                goToQuestion(q, currentTest);
+                gotoWidget.classList.add('hidden');
+                gotoInput.value = '';
+            } else {
+                alert('Please enter a question number between 11 and 20.');
+            }
+        });
+
+        // Init
+        switchToTest('A');
+        document.getElementById('prevBtn').disabled = true;
+    </script>
+</body>
+</html>
