@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Teacher Dashboard — IELTS Marathon</title>
+<title>IELTS Marathon</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<!-- CONTENT (hidden until requireAuth confirms a session) -->
 <div id="content" style="display:none;">
 
   <header class="topbar">
@@ -20,223 +21,63 @@
     </div>
   </header>
 
-  <section class="hero" style="padding-top:64px; padding-bottom:8px;">
+  <section class="hero">
     <div class="wrap">
-      <div class="eyebrow">Teacher view</div>
-      <h1 id="page-title">Pick a day</h1>
-      <p class="tag" id="page-sub">Choose a day, then one of your groups, to see how your students are doing.</p>
+      <div class="eyebrow">30-day training block</div>
+      <h1>Your Marathon Board</h1>
+      <p class="tag">Nine tasks a day, thirty days straight. Pick a day below and run the full leg: article, vocab, reading, writing, speaking, video, listening.</p>
+
+      <div class="progress-shell">
+        <span class="label" id="progress-label">1 / 30 days live</span>
+        <div class="bar-track"><div class="bar-fill" id="progress-fill" style="width:0%"></div></div>
+      </div>
     </div>
   </section>
 
-  <section>
-    <div class="wrap" id="dashboard-root">
-      <p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>
+  <section style="padding-top:0;">
+    <div class="wrap">
+      <div id="track-grid" class="track-grid"></div>
     </div>
   </section>
 
+  <div class="finish-line">— day 30 is the finish line —</div>
 </div>
 
 <script src="supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 <script>
-  const OPEN_DAYS = [1, 2, 3]; // keep in sync with index.html's openDays as more days go live
-  const TASKS_PER_DAY = 9;
+  function buildGrid() {
+    const grid = document.getElementById('track-grid');
+    const openDays = [1, 2, 3]; // add more numbers here as you build out each day
 
-  let myGroups = [];
-  let selectedDay = null;
-  let selectedGroup = null;
+    document.getElementById('progress-label').textContent = `${openDays.length} / 30 days live`;
+    document.getElementById('progress-fill').style.width = `${(openDays.length / 30) * 100}%`;
 
-  requireAuth(async function (profile, user) {
-    if (profile.role !== 'teacher') {
-      window.location.href = 'index.html';
-      return;
-    }
-
-    const sb = getSupabaseClient();
-    const { data: assignments } = await sb.from('group_teachers').select('group_id').eq('teacher_id', user.id);
-    const groupIds = (assignments || []).map(a => a.group_id);
-    let groups = [];
-    if (groupIds.length > 0) {
-      const { data } = await sb.from('groups').select('id, name').in('id', groupIds).order('id');
-      groups = data || [];
-    }
-    myGroups = groups;
-
-    showDayPicker();
-  });
-
-  // ---------- Screen 1: day grid ----------
-  function showDayPicker() {
-    selectedDay = null;
-    selectedGroup = null;
-    document.getElementById('page-title').textContent = 'Pick a day';
-    document.getElementById('page-sub').textContent = 'Choose a day, then one of your groups, to see how your students are doing.';
-
-    let html = '<div class="track-grid">';
+    let html = '';
     for (let d = 1; d <= 30; d++) {
-      const isOpen = OPEN_DAYS.includes(d);
+      const isOpen = openDays.includes(d);
+      const isFinish = d === 30;
       if (isOpen) {
-        html += `<a href="#" class="day-chip staff open" data-day="${d}">
+        html += `<a class="day-chip open${isFinish ? ' finish' : ''}" href="days/day${d}.html">
           <span class="num">${String(d).padStart(2, '0')}</span>
           <span class="lbl">Day ${d}</span>
+          <span class="meta">9 tasks</span>
         </a>`;
       } else {
-        html += `<div class="day-chip staff locked" title="Not live yet">
+        html += `<div class="day-chip locked${isFinish ? ' finish' : ''}" title="Coming soon">
           <span class="num">${String(d).padStart(2, '0')}</span>
           <span class="lbl">Day ${d}</span>
+          <span class="meta">${isFinish ? 'Finish' : 'Coming soon'}</span>
         </div>`;
       }
     }
-    html += '</div>';
-    document.getElementById('dashboard-root').innerHTML = html;
-
-    document.querySelectorAll('.day-chip.open[data-day]').forEach(chip => {
-      chip.addEventListener('click', (e) => {
-        e.preventDefault();
-        selectedDay = +chip.dataset.day;
-        showGroupPicker();
-      });
-    });
+    grid.innerHTML = html;
   }
 
-  // ---------- Screen 2: group buttons ----------
-  function showGroupPicker() {
-    document.getElementById('page-title').textContent = `Day ${selectedDay} — pick a group`;
-    document.getElementById('page-sub').textContent = '';
-
-    if (myGroups.length === 0) {
-      document.getElementById('dashboard-root').innerHTML = `
-        <a href="#" class="back-link" id="back-to-days">← Back to days</a>
-        <p style="color:var(--muted);">No groups assigned to your account yet.</p>
-      `;
-    } else {
-      document.getElementById('dashboard-root').innerHTML = `
-        <a href="#" class="back-link" id="back-to-days">← Back to days</a>
-        <div class="group-btn-grid">
-          ${myGroups.map(g => `
-            <button class="group-btn" data-group="${g.id}">
-              <span class="g-name">${g.name}</span>
-              <span class="g-meta">View students →</span>
-            </button>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    document.getElementById('back-to-days').addEventListener('click', (e) => { e.preventDefault(); showDayPicker(); });
-    document.querySelectorAll('.group-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        selectedGroup = myGroups.find(g => g.id === +btn.dataset.group);
-        showStudentList();
-      });
-    });
-  }
-
-  // ---------- Screen 3: student list for this day + group ----------
-  async function showStudentList() {
-    document.getElementById('page-title').textContent = `${selectedGroup.name} — Day ${selectedDay}`;
-    document.getElementById('page-sub').textContent = '';
-    const root = document.getElementById('dashboard-root');
-    root.innerHTML = `<a href="#" class="back-link" id="back-to-groups">← Back to groups</a><p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading students…</p>`;
-    document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
-
-    const sb = getSupabaseClient();
-    const { data: students } = await sb.from('profiles').select('id, full_name').eq('group_id', selectedGroup.id).eq('role', 'student').order('full_name');
-
-    if (!students || students.length === 0) {
-      root.innerHTML = `<a href="#" class="back-link" id="back-to-groups">← Back to groups</a><p style="color:var(--muted);">No students registered in this group yet.</p>`;
-      document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
-      return;
-    }
-
-    const studentIds = students.map(s => s.id);
-    const [{ data: progress }, { data: writings }, { data: speaking }] = await Promise.all([
-      sb.from('progress').select('student_id, task, completed').eq('day', selectedDay).in('student_id', studentIds),
-      sb.from('answers').select('student_id, value').eq('day', selectedDay).eq('field_id', 'task1-response').in('student_id', studentIds),
-      sb.from('answers').select('student_id, field_id, value').eq('day', selectedDay).like('field_id', 'speaking-%').in('student_id', studentIds)
-    ]);
-
-    const doneByStudent = {};
-    (progress || []).forEach(p => {
-      doneByStudent[p.student_id] = doneByStudent[p.student_id] || new Set();
-      if (p.completed) doneByStudent[p.student_id].add(p.task);
-    });
-    const writingByStudent = {};
-    (writings || []).forEach(w => { writingByStudent[w.student_id] = w.value; });
-
-    const speakingByStudent = {};
-    (speaking || []).forEach(sp => {
-      speakingByStudent[sp.student_id] = speakingByStudent[sp.student_id] || [];
-      speakingByStudent[sp.student_id].push(sp);
-    });
-    const signedUrlByPath = {};
-    await Promise.all((speaking || []).map(async (sp) => {
-      const { data, error } = await sb.storage.from('speaking-recordings').createSignedUrl(sp.value, 3600);
-      if (error) console.error('Signed URL failed for', sp.value, error);
-      if (data) signedUrlByPath[sp.value] = data.signedUrl;
-    }));
-
-    function renderTicks(studentId) {
-      const done = doneByStudent[studentId] || new Set();
-      return Array.from({ length: TASKS_PER_DAY }, (_, i) =>
-        `<span class="tick ${done.has(i + 1) ? 'done' : ''}"></span>`
-      ).join('');
-    }
-
-    function renderWriting(studentId) {
-      const value = writingByStudent[studentId];
-      if (!value || !value.trim()) return '<p class="no-writing">No writing submitted yet.</p>';
-      const wordCount = value.trim().split(/\s+/).length;
-      return `
-        <button class="writing-toggle" data-target="writing-${studentId}">Show writing (${wordCount} words) ▾</button>
-        <div class="writing-box" id="writing-${studentId}">${value.replace(/</g, '&lt;')}</div>
-      `;
-    }
-
-    function renderSpeaking(studentId) {
-      const items = speakingByStudent[studentId] || [];
-      if (items.length === 0) {
-        return `<button class="writing-toggle" data-target="speak-${studentId}">Show speaking (0 recordings) ▾</button>
-          <div class="writing-box" id="speak-${studentId}"><p class="no-writing">No recordings yet.</p></div>`;
-      }
-      const recordings = items.map(i => {
-        const url = signedUrlByPath[i.value];
-        const label = speakingLabel(i.field_id);
-        return `<div style="margin-bottom:10px;">
-          <span style="font-family:var(--mono); font-size:0.8rem; color:var(--muted);">${label}</span>
-          ${url ? `<audio controls src="${url}" style="width:100%; margin-top:4px;"></audio>` : '<p class="no-writing">Playback unavailable</p>'}
-        </div>`;
-      }).join('');
-      return `
-        <button class="writing-toggle" data-target="speak-${studentId}">Show speaking (${items.length} recording${items.length === 1 ? '' : 's'}) ▾</button>
-        <div class="writing-box" id="speak-${studentId}">${recordings}</div>
-      `;
-    }
-
-    root.innerHTML = `
-      <a href="#" class="back-link" id="back-to-groups">← Back to groups</a>
-      ${students.map(s => `
-        <div class="student-row">
-          <div class="student-row-top">
-            <span class="student-name">${s.full_name}</span>
-            <div class="student-ticks"><div class="day-ticks">${renderTicks(s.id)}</div></div>
-          </div>
-          ${renderWriting(s.id)}
-          ${renderSpeaking(s.id)}
-        </div>
-      `).join('')}
-    `;
-
-    document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
-    root.querySelectorAll('.writing-toggle').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const box = document.getElementById(btn.dataset.target);
-        const nowShown = box.classList.toggle('show');
-        btn.textContent = btn.textContent.replace(nowShown ? '▾' : '▴', nowShown ? '▴' : '▾');
-      });
-    });
-  }
+  requireAuth(function (profile) {
+    buildGrid();
+  });
 </script>
 </body>
 </html>
