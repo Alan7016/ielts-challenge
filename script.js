@@ -644,7 +644,24 @@ const SPEAKING_QUESTIONS = {
   'speaking-reading-q2': 'What books do you like to read?',
   'speaking-reading-q3': 'What book did you read recently?',
   'speaking-reading-q4': 'What did you learn from it?',
-  'speaking-reading-q5': 'Do you prefer to read on paper or on a screen?'
+  'speaking-reading-q5': 'Do you prefer to read on paper or on a screen?',
+  'speaking-city-part2': 'Part 2 — Describe a city you\'ve been to and want to visit again.',
+  'speaking-city-q1': 'What is the difference between living in the countryside and the city?',
+  'speaking-city-q2': 'Do you prefer to live in the city or in the countryside?',
+  'speaking-city-q3': 'Is it good for elderly people to live in large cities?',
+  'speaking-family-part2': 'Part 2 — Describe a family member that did something that made you feel proud.',
+  'speaking-family-q1': 'On what occasions would adults feel proud of themselves?',
+  'speaking-family-q2': 'Is it a good idea to reward children for doing homework or housework?',
+  'speaking-family-q3': 'What would children do to make their parents proud?',
+  'speaking-p1-q1': 'Part 1 — What kind of gifts are popular in your country?',
+  'speaking-p1-q2': 'Part 1 — What\'s the best gift you have ever received?',
+  'speaking-p1-q3': 'Part 1 — What do you give others as gifts?',
+  'speaking-p1-q4': 'Part 1 — What gift have you received recently?',
+  'speaking-p1-q5': 'Part 1 — How do we choose gifts?',
+  'speaking-p2-job': 'Part 2 — Describe your perfect job.',
+  'speaking-p3-q1': 'Part 3 — What kind of jobs do children like?',
+  'speaking-p3-q2': 'Part 3 — How can people find a perfect job?',
+  'speaking-p3-q3': 'Part 3 — What factors should people take into account when choosing a job?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
