@@ -661,7 +661,20 @@ const SPEAKING_QUESTIONS = {
   'speaking-p2-job': 'Part 2 — Describe your perfect job.',
   'speaking-p3-q1': 'Part 3 — What kind of jobs do children like?',
   'speaking-p3-q2': 'Part 3 — How can people find a perfect job?',
-  'speaking-p3-q3': 'Part 3 — What factors should people take into account when choosing a job?'
+  'speaking-p3-q3': 'Part 3 — What factors should people take into account when choosing a job?',
+  'speaking-morning-q1': 'Do you like to get up early?',
+  'speaking-morning-q2': 'What is your morning routine?',
+  'speaking-morning-q3': 'What do you usually do in the morning?',
+  'speaking-morning-q4': 'What did you do in the morning when you were little?',
+  'speaking-morning-q5': 'Do you spend your mornings doing the same things on both weekends and weekdays?',
+  'speaking-hobby-q1': 'Do you have any hobbies?',
+  'speaking-hobby-q2': 'Do you have the same hobbies as your family members?',
+  'speaking-hobby-q3': 'Did you have any hobbies when you were a child?',
+  'speaking-hobby-q4': 'Do you have a hobby that you\'ve had since childhood?',
+  'speaking-sports-q1': 'Have you ever been part of a sports team?',
+  'speaking-sports-q2': 'Are team sports popular in your culture?',
+  'speaking-sports-q3': 'Do you like watching team games?',
+  'speaking-sports-q4': 'What are the differences between team sports and individual sports?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
