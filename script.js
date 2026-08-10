@@ -674,7 +674,19 @@ const SPEAKING_QUESTIONS = {
   'speaking-sports-q1': 'Have you ever been part of a sports team?',
   'speaking-sports-q2': 'Are team sports popular in your culture?',
   'speaking-sports-q3': 'Do you like watching team games?',
-  'speaking-sports-q4': 'What are the differences between team sports and individual sports?'
+  'speaking-sports-q4': 'What are the differences between team sports and individual sports?',
+  'speaking-relax-part2': 'Part 2 — Describe a place in your home where you like to relax.',
+  'speaking-relax-q1': 'Part 3 — Why is it difficult for some people to relax?',
+  'speaking-relax-q2': 'Part 3 — Do you think there should be classes for training young people and children how to relax?',
+  'speaking-relax-q3': 'Part 3 — Which is more important, mental relaxation or physical relaxation?',
+  'speaking-relax-q4': 'Part 3 — Do people in your country exercise after work?',
+  'speaking-relax-q5': 'Part 3 — What are the benefits of doing exercise?',
+  'speaking-cantlive-part2': 'Part 2 — Describe something you can\'t live without (not a computer or phone).',
+  'speaking-cantlive-q1': 'Part 3 — Do you think that keeping old things in a family is a great way to connect with the past?',
+  'speaking-cantlive-q2': 'Part 3 — Why do grown-ups hate to throw away old things?',
+  'speaking-cantlive-q3': 'Part 3 — How have people\'s shopping habits changed in recent decades?',
+  'speaking-cantlive-q4': 'Part 3 — How has the way people buy things changed?',
+  'speaking-cantlive-q5': 'Part 3 — How do shops attract customers?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
