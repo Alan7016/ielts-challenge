@@ -710,6 +710,34 @@ async function initRecordControl(box, userId, day, task, fieldId) {
   let timerInterval = null;
   let seconds = 0;
 
+  async function attemptSubmit(blob) {
+    recordBtn.style.display = 'none';
+    statusEl.textContent = 'Uploading…';
+    statusEl.style.color = 'var(--muted)';
+
+    const { error: uploadError } = await sb.storage.from('speaking-recordings').upload(path, blob, { contentType: 'audio/webm' });
+
+    if (uploadError) {
+      statusEl.innerHTML = '';
+      statusEl.appendChild(document.createTextNode('Upload failed — check your connection, then '));
+      const retryBtn = document.createElement('button');
+      retryBtn.className = 'ghost';
+      retryBtn.textContent = '🔄 Retry upload';
+      retryBtn.style.marginLeft = '6px';
+      retryBtn.addEventListener('click', () => attemptSubmit(blob));
+      statusEl.appendChild(retryBtn);
+      statusEl.style.color = 'var(--warn)';
+      return;
+    }
+
+    await sb.from('answers').upsert(
+      { student_id: userId, day, task, field_id: fieldId, value: path, updated_at: new Date().toISOString() },
+      { onConflict: 'student_id,day,field_id' }
+    );
+
+    await showLocked();
+  }
+
   recordBtn.addEventListener('click', async () => {
     if (recordBtn.dataset.state === 'idle') {
       const confirmed = confirm('You only have ONE attempt to record this answer. Once you press Stop, it is submitted permanently and cannot be redone. Make sure you\'re ready before you start.');
@@ -750,22 +778,7 @@ async function initRecordControl(box, userId, day, task, fieldId) {
       await new Promise(resolve => { mediaRecorder.onstop = resolve; });
 
       const blob = new Blob(chunks, { type: 'audio/webm' });
-      const { error: uploadError } = await sb.storage.from('speaking-recordings').upload(path, blob, { contentType: 'audio/webm' });
-
-      if (uploadError) {
-        statusEl.textContent = 'Upload failed — check your connection and reload to try again.';
-        statusEl.style.color = 'var(--warn)';
-        recordBtn.textContent = '⏹ Stop';
-        recordBtn.disabled = false;
-        return;
-      }
-
-      await sb.from('answers').upsert(
-        { student_id: userId, day, task, field_id: fieldId, value: path, updated_at: new Date().toISOString() },
-        { onConflict: 'student_id,day,field_id' }
-      );
-
-      await showLocked();
+      await attemptSubmit(blob);
     }
   });
 }
