@@ -43,20 +43,21 @@
   <div class="finish-line">— day 30 is the finish line —</div>
 </div>
 
+<script src="days-config.js"></script>
 <script src="supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 <script>
   function buildGrid() {
     const grid = document.getElementById('track-grid');
-    const openDays = [1, 2, 3, 5]; // add more numbers here as you build out each day (4 comes later)
+    // openDays comes from days-config.js, loaded above
 
-    document.getElementById('progress-label').textContent = `${openDays.length} / 30 days live`;
-    document.getElementById('progress-fill').style.width = `${(openDays.length / 30) * 100}%`;
+    document.getElementById('progress-label').textContent = `${OPEN_DAYS.length} / 30 days live`;
+    document.getElementById('progress-fill').style.width = `${(OPEN_DAYS.length / 30) * 100}%`;
 
     let html = '';
     for (let d = 1; d <= 30; d++) {
-      const isOpen = openDays.includes(d);
+      const isOpen = OPEN_DAYS.includes(d);
       const isFinish = d === 30;
       if (isOpen) {
         html += `<a class="day-chip open${isFinish ? ' finish' : ''}" href="days/day${d}.html">
