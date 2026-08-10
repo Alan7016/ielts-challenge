@@ -715,7 +715,7 @@ async function initRecordControl(box, userId, day, task, fieldId) {
     statusEl.textContent = 'Uploading…';
     statusEl.style.color = 'var(--muted)';
 
-    const { error: uploadError } = await sb.storage.from('speaking-recordings').upload(path, blob, { contentType: 'audio/webm' });
+    const { error: uploadError } = await sb.storage.from('speaking-recordings').upload(path, blob, { contentType: 'audio/webm', upsert: true });
 
     if (uploadError) {
       statusEl.innerHTML = '';
