@@ -36,13 +36,12 @@
 
 </div>
 
-<script src="days-config.js"></script>
 <script src="supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 <script>
-  // OPEN_DAYS comes from days-config.js, loaded above
   const TASKS_PER_DAY = 9;
+  let liveDays = [];
 
   let myGroups = [];
   let selectedDay = null;
@@ -63,6 +62,7 @@
       groups = data || [];
     }
     myGroups = groups;
+    liveDays = await getLiveDays();
 
     showDayPicker();
   });
@@ -76,7 +76,7 @@
 
     let html = '<div class="track-grid">';
     for (let d = 1; d <= 30; d++) {
-      const isOpen = OPEN_DAYS.includes(d);
+      const isOpen = liveDays.includes(d);
       if (isOpen) {
         html += `<a href="#" class="day-chip staff open" data-day="${d}">
           <span class="num">${String(d).padStart(2, '0')}</span>
