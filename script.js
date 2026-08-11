@@ -686,7 +686,17 @@ const SPEAKING_QUESTIONS = {
   'speaking-cantlive-q2': 'Part 3 — Why do grown-ups hate to throw away old things?',
   'speaking-cantlive-q3': 'Part 3 — How have people\'s shopping habits changed in recent decades?',
   'speaking-cantlive-q4': 'Part 3 — How has the way people buy things changed?',
-  'speaking-cantlive-q5': 'Part 3 — How do shops attract customers?'
+  'speaking-cantlive-q5': 'Part 3 — How do shops attract customers?',
+  'speaking-typing-q1': 'Do you type on a desktop or laptop keyboard every day?',
+  'speaking-typing-q2': 'When did you learn how to type on a keyboard?',
+  'speaking-typing-q3': 'How do you improve your typing?',
+  'speaking-walking-q1': 'Do you walk a lot?',
+  'speaking-walking-q2': 'Did you often go outside to have a walk when you were a child?',
+  'speaking-walking-q3': 'Why do people like to walk in parks?',
+  'speaking-walking-q4': 'Where would you like to take a long walk if you had the chance?',
+  'speaking-walking-q5': 'Where have you gone for a walk lately?',
+  'speaking-buildings-q1': 'Do you take photos of buildings?',
+  'speaking-buildings-q2': 'Is there a building that you would like to visit?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
