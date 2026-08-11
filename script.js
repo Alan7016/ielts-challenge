@@ -804,3 +804,20 @@ async function initRecordControl(box, userId, day, task, fieldId) {
     }
   });
 }
+
+// ============================================
+// LIVE DAYS — checks which days/dayN.html files actually exist on the
+// server (1-30), instead of relying on a manually maintained list.
+// Uploading a day's file is what makes it live; nothing else to edit.
+// ============================================
+async function getLiveDays() {
+  const checks = await Promise.all(
+    Array.from({ length: 30 }, (_, i) => {
+      const day = i + 1;
+      return fetch(`days/day${day}.html`, { method: 'HEAD' })
+        .then(res => res.ok ? day : null)
+        .catch(() => null);
+    })
+  );
+  return checks.filter(d => d !== null);
+}
