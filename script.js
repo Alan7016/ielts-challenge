@@ -434,6 +434,15 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
   async function goNext() {
     // Lock the task the student is leaving — from now on it's frozen.
     if (!lockedTasks[current]) {
+      const container = document.getElementById('task' + current);
+      const freeTextBox = container.querySelector('textarea.no-check');
+      if (freeTextBox) {
+        const wordCount = freeTextBox.value.trim() ? freeTextBox.value.trim().split(/\s+/).length : 0;
+        const sure = confirm(
+          `You're about to submit your response (${wordCount} words). Once you continue, it will be locked and you won't be able to edit it again. Are you sure you're finished?`
+        );
+        if (!sure) return;
+      }
       lockedTasks[current] = true;
       doneTasks[current] = true;
       await saveProgress(userId, dayNumber, current, true, true);
@@ -742,12 +751,13 @@ async function initRecordControl(box, userId, day, task, fieldId) {
   let timerInterval = null;
   let seconds = 0;
 
-  async function attemptSubmit(blob) {
+  async function attemptSubmit(blob, mimeType) {
+    mimeType = mimeType || blob.type || 'audio/webm';
     recordBtn.style.display = 'none';
     statusEl.textContent = 'Uploading…';
     statusEl.style.color = 'var(--muted)';
 
-    const { error: uploadError } = await sb.storage.from('speaking-recordings').upload(path, blob, { contentType: 'audio/webm', upsert: true });
+    const { error: uploadError } = await sb.storage.from('speaking-recordings').upload(path, blob, { contentType: mimeType, upsert: true });
 
     if (uploadError) {
       statusEl.innerHTML = '';
@@ -756,22 +766,41 @@ async function initRecordControl(box, userId, day, task, fieldId) {
       retryBtn.className = 'ghost';
       retryBtn.textContent = '🔄 Retry upload';
       retryBtn.style.marginLeft = '6px';
-      retryBtn.addEventListener('click', () => attemptSubmit(blob));
+      retryBtn.addEventListener('click', () => attemptSubmit(blob, mimeType));
       statusEl.appendChild(retryBtn);
       statusEl.style.color = 'var(--warn)';
       return;
     }
 
-    await sb.from('answers').upsert(
+    const { error: saveError } = await sb.from('answers').upsert(
       { student_id: userId, day, task, field_id: fieldId, value: path, updated_at: new Date().toISOString() },
       { onConflict: 'student_id,day,field_id' }
     );
+
+    if (saveError) {
+      statusEl.innerHTML = '';
+      statusEl.appendChild(document.createTextNode('Recording uploaded, but saving it failed — '));
+      const retryBtn = document.createElement('button');
+      retryBtn.className = 'ghost';
+      retryBtn.textContent = '🔄 Retry saving';
+      retryBtn.style.marginLeft = '6px';
+      retryBtn.addEventListener('click', () => attemptSubmit(blob, mimeType));
+      statusEl.appendChild(retryBtn);
+      statusEl.style.color = 'var(--warn)';
+      return;
+    }
 
     await showLocked();
   }
 
   recordBtn.addEventListener('click', async () => {
     if (recordBtn.dataset.state === 'idle') {
+      if (typeof MediaRecorder === 'undefined') {
+        statusEl.textContent = 'Recording isn\'t supported in this browser — please try Chrome or Safari, updated to the latest version.';
+        statusEl.style.color = 'var(--warn)';
+        return;
+      }
+
       const confirmed = confirm('You only have ONE attempt to record this answer. Once you press Stop, it is submitted permanently and cannot be redone. Make sure you\'re ready before you start.');
       if (!confirmed) return;
 
@@ -784,8 +813,19 @@ async function initRecordControl(box, userId, day, task, fieldId) {
         return;
       }
 
+      // Safari/iPhone doesn't support audio/webm — fall back to whatever it does support.
+      const mimeCandidates = ['audio/webm', 'audio/mp4', 'audio/aac', 'audio/ogg'];
+      const supportedMime = mimeCandidates.find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t));
+
       chunks = [];
-      mediaRecorder = new MediaRecorder(stream);
+      try {
+        mediaRecorder = supportedMime ? new MediaRecorder(stream, { mimeType: supportedMime }) : new MediaRecorder(stream);
+      } catch (err) {
+        statusEl.textContent = 'Could not start recording on this device — please try a different browser.';
+        statusEl.style.color = 'var(--warn)';
+        stream.getTracks().forEach(t => t.stop());
+        return;
+      }
       mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
       mediaRecorder.start();
 
@@ -809,8 +849,9 @@ async function initRecordControl(box, userId, day, task, fieldId) {
       mediaRecorder.stream.getTracks().forEach(t => t.stop());
       await new Promise(resolve => { mediaRecorder.onstop = resolve; });
 
-      const blob = new Blob(chunks, { type: 'audio/webm' });
-      await attemptSubmit(blob);
+      const recordedMime = mediaRecorder.mimeType || 'audio/webm';
+      const blob = new Blob(chunks, { type: recordedMime });
+      await attemptSubmit(blob, recordedMime);
     }
   });
 }
