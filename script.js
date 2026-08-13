@@ -715,7 +715,17 @@ const SPEAKING_QUESTIONS = {
   'speaking-advice-q1': 'Part 3 — What problems can people face if they ask many different people for advice?',
   'speaking-advice-q2': 'Part 3 — Why do some people like to ask others for advice on almost everything?',
   'speaking-advice-q3': 'Part 3 — In general, what kind of person is most suitable for giving advice to others?',
-  'speaking-advice-q4': 'Part 3 — Should people prepare before giving advice?'
+  'speaking-advice-q4': 'Part 3 — Should people prepare before giving advice?',
+  'speaking-views-q1': 'Do you like taking pictures of different views?',
+  'speaking-views-q2': 'Do you prefer views in urban areas or rural areas?',
+  'speaking-views-q3': 'Do you prefer views in your own country or in other countries?',
+  'speaking-scenery-q1': 'Do you like to take pictures of good scenery?',
+  'speaking-scenery-q2': 'Do you look out the window at the scenery when travelling by bus or car?',
+  'speaking-scenery-q3': 'Do you prefer the mountains or the sea?',
+  'speaking-scenery-q4': 'What are the most beautiful sights you have seen while travelling?',
+  'speaking-childhood-q1': 'What did you enjoy doing as a child?',
+  'speaking-childhood-q2': 'Did you enjoy your childhood?',
+  'speaking-childhood-q3': 'Did you prefer to do activities alone or with a group of people when you were a child?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
