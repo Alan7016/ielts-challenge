@@ -696,7 +696,17 @@ const SPEAKING_QUESTIONS = {
   'speaking-walking-q4': 'Where would you like to take a long walk if you had the chance?',
   'speaking-walking-q5': 'Where have you gone for a walk lately?',
   'speaking-buildings-q1': 'Do you take photos of buildings?',
-  'speaking-buildings-q2': 'Is there a building that you would like to visit?'
+  'speaking-buildings-q2': 'Is there a building that you would like to visit?',
+  'speaking-smiling-part2': 'Part 2 — Describe an occasion when you saw a lot of people smiling.',
+  'speaking-smiling-q1': 'Part 3 — Do you think people who like to smile are more friendly?',
+  'speaking-smiling-q2': 'Part 3 — Why do most people smile in photographs?',
+  'speaking-smiling-q3': 'Part 3 — Do women smile more than men? Why?',
+  'speaking-smiling-q4': 'Part 3 — Do people smile more when they are younger or older?',
+  'speaking-advice-part2': 'Part 2 — Describe a time when you gave advice to others.',
+  'speaking-advice-q1': 'Part 3 — What problems can people face if they ask many different people for advice?',
+  'speaking-advice-q2': 'Part 3 — Why do some people like to ask others for advice on almost everything?',
+  'speaking-advice-q3': 'Part 3 — In general, what kind of person is most suitable for giving advice to others?',
+  'speaking-advice-q4': 'Part 3 — Should people prepare before giving advice?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
