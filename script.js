@@ -725,7 +725,19 @@ const SPEAKING_QUESTIONS = {
   'speaking-scenery-q4': 'What are the most beautiful sights you have seen while travelling?',
   'speaking-childhood-q1': 'What did you enjoy doing as a child?',
   'speaking-childhood-q2': 'Did you enjoy your childhood?',
-  'speaking-childhood-q3': 'Did you prefer to do activities alone or with a group of people when you were a child?'
+  'speaking-childhood-q3': 'Did you prefer to do activities alone or with a group of people when you were a child?',
+  'speaking-app-part2': 'Part 2 — Describe an app or program in your computer or phone.',
+  'speaking-app-q1': 'Part 3 — What are the drawbacks of having too many apps?',
+  'speaking-app-q2': 'Part 3 — Why do some people not like using apps?',
+  'speaking-app-q3': 'Part 3 — What are the most and the least popular apps in your country?',
+  'speaking-job-part2': 'Part 2 — Describe a country in which you would like to work or live for a short period of time.',
+  'speaking-job-q1': 'Part 3 — Why do people like travelling?',
+  'speaking-job-q2': 'Part 3 — What jobs can people do abroad for a short period of time?',
+  'speaking-job-q3': 'Part 3 — Is it good that now people have an opportunity to work abroad?',
+  'speaking-possession-part2': 'Part 2 — Describe an important old thing that your family has kept for a long time.',
+  'speaking-possession-q1': 'Part 3 — What are the differences between the things that people keep today and the things that people kept in the past?',
+  'speaking-possession-q2': 'Part 3 — As well as family photographs, what are some other things that people keep in their family for a long time?',
+  'speaking-possession-q3': 'Part 3 — In your culture, what sorts of things do people pass down from generation to generation?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
