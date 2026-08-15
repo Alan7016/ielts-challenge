@@ -231,6 +231,13 @@ section { padding: 52px 0; }
 .day-chip.finish .num { color: var(--good); }
 .day-chip.locked { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
 .day-chip.locked .num { color: var(--muted); }
+.day-chip.mock::before { background: var(--warn); }
+.day-chip.mock.open { border-color: var(--warn); background: var(--warn-soft); }
+.day-chip.mock.open:hover { border-color: var(--warn); box-shadow: 0 10px 22px #d5490f1a; }
+.day-chip.mock .num { color: var(--warn); }
+.day-chip.mock .lbl { color: var(--warn); font-weight: 700; }
+.day-chip.mock.locked { background: var(--surface); }
+.day-chip.mock.locked .lbl { color: var(--muted); }
 
 /* ---------- day page nav ---------- */
 .day-header {
@@ -461,6 +468,13 @@ textarea#task1-response { width: 100%; min-height: 260px; resize: vertical; }
 .day-chip.staff::before { background: var(--ink); }
 .day-chip.staff .num { color: var(--ink); }
 .day-chip.staff:hover { border-color: var(--ink); }
+.day-chip.staff.mock::before { background: var(--warn); }
+.day-chip.staff.mock .num { color: var(--warn); }
+.day-chip.staff.mock .lbl { color: var(--warn); font-weight: 700; }
+.day-chip.staff.mock.open { border-color: var(--warn); background: var(--warn-soft); }
+.day-chip.staff.mock:hover { border-color: var(--warn); }
+.day-chip.staff.mock.locked .num,
+.day-chip.staff.mock.locked .lbl { color: var(--muted); }
 .group-btn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 20px; }
 .group-btn {
   background: var(--surface);
@@ -476,6 +490,71 @@ textarea#task1-response { width: 100%; min-height: 260px; resize: vertical; }
 .group-btn .g-name { font-family: var(--display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: block; }
 .group-btn .g-meta { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); margin-top: 4px; display: block; }
 .back-link { font-family: var(--mono); font-size: 0.82rem; color: var(--accent); text-decoration: none; display: inline-block; margin-bottom: 14px; }
+
+/* ---------- speaking task ---------- */
+.speaking-set-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 20px; }
+.speaking-set-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 22px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.14s ease, border-color 0.14s ease;
+}
+.speaking-set-btn:hover { transform: translateY(-3px); border-color: var(--accent); }
+.speaking-set-btn .set-name { font-family: var(--display); font-size: 1.4rem; font-weight: 700; color: var(--ink); display: block; }
+.speaking-set-btn .set-meta { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); margin-top: 6px; display: block; }
+.speaking-set-btn.set-complete { border-color: var(--good); }
+.speaking-set-btn.set-complete .set-meta { color: var(--good); }
+
+.question-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.question-box .q-num { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; }
+.question-box .q-text { font-size: 1.05rem; font-weight: 600; color: var(--ink); margin: 6px 0 14px; }
+
+.phrase-toggle {
+  background: none; border: 1px solid var(--border); border-radius: 999px;
+  padding: 7px 14px; font-size: 0.82rem; font-family: var(--body); font-weight: 600;
+  color: var(--accent); cursor: pointer; margin-bottom: 12px;
+}
+.phrase-toggle:hover { border-color: var(--accent); }
+.phrase-box {
+  display: none;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.phrase-box.show { display: block; }
+.phrase-box ul { margin: 0; padding-left: 18px; }
+.phrase-box li { margin-bottom: 6px; }
+
+.record-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 11px 22px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+.record-btn:hover { background: #2a46b8; }
+.record-btn.recording { background: var(--warn); animation: pulse-rec 1.4s ease-in-out infinite; }
+@keyframes pulse-rec { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+.record-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.record-status { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin-top: 8px; }
 
 /* ============================================
    TASK STEPPER (Sprint-style: one task visible at a time)
