@@ -59,16 +59,17 @@
     for (let d = 1; d <= 30; d++) {
       const isOpen = liveDays.includes(d);
       const isFinish = d === 30;
+      const isMock = MOCK_DAYS.includes(d);
       if (isOpen) {
-        html += `<a class="day-chip open${isFinish ? ' finish' : ''}" href="days/day${d}.html">
+        html += `<a class="day-chip open${isFinish ? ' finish' : ''}${isMock ? ' mock' : ''}" href="days/day${d}.html">
           <span class="num">${String(d).padStart(2, '0')}</span>
-          <span class="lbl">Day ${d}</span>
-          <span class="meta">9 tasks</span>
+          <span class="lbl">${isMock ? '🎯 Mock Exam' : 'Day ' + d}</span>
+          <span class="meta">${isMock ? 'Full practice test' : '9 tasks'}</span>
         </a>`;
       } else {
-        html += `<div class="day-chip locked${isFinish ? ' finish' : ''}" title="Coming soon">
+        html += `<div class="day-chip locked${isFinish ? ' finish' : ''}${isMock ? ' mock' : ''}" title="Coming soon">
           <span class="num">${String(d).padStart(2, '0')}</span>
-          <span class="lbl">Day ${d}</span>
+          <span class="lbl">${isMock ? '🎯 Mock Exam' : 'Day ' + d}</span>
           <span class="meta">${isFinish ? 'Finish' : 'Coming soon'}</span>
         </div>`;
       }
