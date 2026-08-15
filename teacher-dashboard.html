@@ -77,15 +77,21 @@
     let html = '<div class="track-grid">';
     for (let d = 1; d <= 30; d++) {
       const isOpen = liveDays.includes(d);
-      if (isOpen) {
+      const isMock = MOCK_DAYS.includes(d);
+      if (isMock && isOpen) {
+        html += `<a href="mock-results.html?day=${d}" class="day-chip staff open mock">
+          <span class="num">${String(d).padStart(2, '0')}</span>
+          <span class="lbl">🎯 Mock Exam</span>
+        </a>`;
+      } else if (isOpen) {
         html += `<a href="#" class="day-chip staff open" data-day="${d}">
           <span class="num">${String(d).padStart(2, '0')}</span>
           <span class="lbl">Day ${d}</span>
         </a>`;
       } else {
-        html += `<div class="day-chip staff locked" title="Not live yet">
+        html += `<div class="day-chip staff locked${isMock ? ' mock' : ''}" title="Not live yet">
           <span class="num">${String(d).padStart(2, '0')}</span>
-          <span class="lbl">Day ${d}</span>
+          <span class="lbl">${isMock ? '🎯 Mock Exam' : 'Day ' + d}</span>
         </div>`;
       }
     }
