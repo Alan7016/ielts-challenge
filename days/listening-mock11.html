@@ -4444,5 +4444,69 @@ What I'd like you to consider is this. Is the planet Earth moving towards a one-
   },1000);
 })();
 </script>
+<style>
+  .hl { background: #ffe45c; border-radius: 2px; }
+  .hl-tools { position: fixed; z-index: 9999; display: none; gap: 2px; background: #14162b; border-radius: 8px; padding: 4px; box-shadow: 0 6px 18px #00000040; }
+  .hl-tools button { background: none; border: 0; color: #fff; cursor: pointer; font-size: 0.78rem; padding: 7px 11px; border-radius: 5px; font-weight: 600; }
+  .hl-tools button:hover { background: #ffffff22; }
+  .hl-sw { display: inline-block; width: 10px; height: 10px; background: #ffe45c; border-radius: 3px; margin-right: 5px; vertical-align: middle; }
+</style>
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+<script>
+(function(){
+  var tools = document.getElementById('hlTools');
+  var hlBtn = document.getElementById('hlBtn');
+  var hlClear = document.getElementById('hlClear');
+  if(!tools || !hlBtn || !hlClear) return;
+
+  document.addEventListener('mouseup', function(e){
+    if(tools.contains(e.target)) return;
+    setTimeout(function(){
+      var s = getSelection();
+      if(!s || s.isCollapsed){ tools.style.display='none'; return; }
+      var r = s.getRangeAt(0);
+      if(!r.toString().trim()){ tools.style.display='none'; return; }
+      var rc = r.getBoundingClientRect();
+      tools.style.display = 'flex';
+      tools.style.left = Math.max(8, rc.left + scrollX + rc.width/2 - tools.offsetWidth/2) + 'px';
+      tools.style.top = Math.max(8, rc.top + scrollY - tools.offsetHeight - 8) + 'px';
+    }, 1);
+  });
+  document.addEventListener('mousedown', function(e){
+    if(!tools.contains(e.target)) tools.style.display='none';
+  });
+
+  hlBtn.onclick = function(){
+    var s = getSelection();
+    if(!s || !s.rangeCount) return;
+    var r = s.getRangeAt(0);
+    try {
+      var sp = document.createElement('span');
+      sp.className = 'hl';
+      r.surroundContents(sp);
+    } catch(e){}
+    s.removeAllRanges();
+    tools.style.display = 'none';
+  };
+  hlClear.onclick = function(){
+    var s = getSelection();
+    if(!s || !s.rangeCount) return;
+    var r = s.getRangeAt(0);
+    document.querySelectorAll('.hl').forEach(function(x){
+      if(r.intersectsNode(x)){
+        var p = x.parentNode;
+        while(x.firstChild) p.insertBefore(x.firstChild, x);
+        p.removeChild(x);
+        p.normalize();
+      }
+    });
+    s.removeAllRanges();
+    tools.style.display = 'none';
+  };
+})();
+</script>
 </body>
 </html>
