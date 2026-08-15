@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mock Exam Results — IELTS Marathon</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { background: var(--bg); }
+  .mr-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+  .mr-brand { font-family: var(--display); font-weight: 700; font-size: 18px; }
+  .mr-brand span { color: var(--warn); }
+  .back-btn { color: var(--warn); text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid var(--warn); border-radius: var(--radius-sm); padding: 7px 14px; }
+
+  .mr-main { max-width: 1200px; margin: 0 auto; padding: 28px 24px; }
+  .mr-title { font-family: var(--display); font-size: 26px; margin-bottom: 6px; }
+  .mr-sub { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+  .mock-badge { font-size: 15px; font-weight: 700; color: var(--warn); background: var(--warn-soft); border-radius: 999px; padding: 4px 14px; margin-left: 10px; vertical-align: middle; }
+
+  .filter-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+  .filter-bar select, .filter-bar input { font: inherit; font-size: 14px; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); }
+  .count-badge { margin-left: auto; font-size: 13px; color: var(--muted); font-weight: 600; }
+
+  .student-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 16px; }
+  .student-card-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; cursor: pointer; }
+  .student-card-header:hover { background: var(--surface-2); }
+  .student-info { display: flex; align-items: center; gap: 14px; }
+  .student-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--warn), var(--accent)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .student-name { font-weight: 700; font-size: 16px; }
+  .student-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .score-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill { border-radius: 999px; padding: 5px 12px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .pill.listen { background: #3457d51a; color: var(--accent); }
+  .pill.read { background: var(--good-soft); color: var(--good); }
+  .pill.write { background: var(--warn-soft); color: var(--warn); }
+  .pill.pending { background: var(--surface-2); color: var(--muted); }
+  .expand-icon { font-size: 18px; color: var(--muted); transition: transform .2s; margin-left: 12px; }
+  .expand-icon.open { transform: rotate(180deg); }
+
+  .student-detail { display: none; border-top: 1px solid var(--border); padding: 20px; }
+  .student-detail.show { display: block; }
+  .detail-tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 2px solid var(--border); flex-wrap: wrap; }
+  .detail-tab { padding: 8px 16px; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; color: var(--muted); }
+  .detail-tab.active { color: var(--warn); border-bottom-color: var(--warn); }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  .score-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 12px; margin-bottom: 18px; }
+  .score-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; text-align: center; }
+  .score-box .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 6px; }
+  .score-box .value { font-size: 28px; font-weight: 800; color: var(--warn); }
+  .score-box .band { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  .answer-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .answer-table th { background: var(--surface-2); font-weight: 700; padding: 9px 12px; text-align: left; border-bottom: 2px solid var(--border); }
+  .answer-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  .correct-cell { color: var(--good); font-weight: 700; }
+  .wrong-cell { color: var(--warn); font-weight: 700; }
+  .no-key-notice { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 18px; color: var(--muted); font-size: 13.5px; margin-bottom: 14px; }
+
+  .essay-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 14.5px; line-height: 1.8; white-space: pre-wrap; max-height: 400px; overflow-y: auto; font-family: Georgia, serif; }
+  .feedback-label { font-size: 13px; font-weight: 700; color: var(--ink-soft); margin-bottom: 8px; display: block; margin-top: 16px; }
+  .feedback-textarea { width: 100%; font: inherit; font-size: 14px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; resize: vertical; min-height: 100px; line-height: 1.6; }
+  .feedback-textarea:focus { outline: none; border-color: var(--warn); }
+  .band-row { display: flex; gap: 12px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+  .band-select { font: inherit; font-size: 14px; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); }
+  .save-feedback-btn { background: var(--warn); color: #fff; border: none; border-radius: var(--radius-sm); padding: 9px 20px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .save-feedback-btn.saved { background: var(--good); }
+  .word-badge { display: inline-block; background: var(--warn-soft); color: var(--warn); border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 700; margin-bottom: 10px; }
+
+  .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+  .loading { text-align: center; padding: 40px; color: var(--muted); }
+  .error-box { background: var(--warn-soft); border: 1px solid #d5490f40; border-radius: 8px; padding: 14px 18px; color: var(--warn); font-size: 14px; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<div id="content" style="display:none;">
+
+<div class="mr-header">
+  <div class="mr-brand">IELTS <span>MARATHON</span> — Mock Results</div>
+  <div style="display:flex; align-items:center; gap:12px;">
+    <span id="user-greeting" style="font-size:14px; font-weight:700; color:var(--ink-soft);"></span>
+    <a href="#" id="back-btn" class="back-btn">← Dashboard</a>
+    <button id="logout-btn" class="ghost" style="padding:7px 14px; font-size:13px;">Log out</button>
+  </div>
+</div>
+
+<div class="mr-main">
+  <div class="mr-title">🎯 Mock Exam Results <span class="mock-badge" id="mockDayBadge"></span></div>
+  <div class="mr-sub" id="pageSubTitle">Loading students' mock exam results…</div>
+
+  <div id="errorBox" class="error-box" style="display:none;"></div>
+
+  <div class="filter-bar" id="filterBar" style="display:none;">
+    <label style="font-size:13px; font-weight:700; color:var(--ink-soft);">Group:</label>
+    <select id="groupFilter" onchange="applyFilters()"><option value="">All groups</option></select>
+    <input id="searchInput" placeholder="Search student name…" oninput="applyFilters()">
+    <span class="count-badge" id="countBadge"></span>
+  </div>
+
+  <div id="loadingState" class="loading">Loading results…</div>
+  <div id="studentsGrid"></div>
+  <div id="emptyState" class="empty" style="display:none;">
+    <h3 style="color:var(--ink-soft); margin-bottom:8px;">No mock exam results yet</h3>
+    <p>Results will appear here once students complete this mock exam.</p>
+  </div>
+</div>
+
+</div>
+
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+<script>
+(function(){
+"use strict";
+
+var mockDay = parseInt(new URLSearchParams(window.location.search).get('day'), 10) || 11;
+document.getElementById('mockDayBadge').textContent = 'Day ' + mockDay;
+
+var sb = null;
+var myProfile = null;
+var myUserId = null;
+var allExams = [];
+var allStudents = {};
+var myStudentIds = [];
+var groupMap = {};
+
+function checkIsCorrect(studentAns, correctAns){
+  if(studentAns === undefined || studentAns === null || String(studentAns).trim()==='') return null;
+  var sa = String(studentAns).trim().toLowerCase();
+  if(Array.isArray(correctAns)) return correctAns.some(function(c){ return String(c).trim().toLowerCase() === sa; });
+  return String(correctAns).trim().toLowerCase() === sa;
+}
+function esc(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+requireAuth(function(profile, user){
+  if(profile.role !== 'teacher' && profile.role !== 'checker'){
+    window.location.href = 'index.html';
+    return;
+  }
+  myProfile = profile;
+  myUserId = user.id;
+  sb = getSupabaseClient();
+  document.getElementById('back-btn').href = profile.role === 'teacher' ? 'teacher-dashboard.html' : 'checker-dashboard.html';
+  loadAll();
+});
+
+async function loadAll(){
+  try {
+    var myGroupIds = [];
+    var junctionTable = myProfile.role === 'teacher' ? 'group_teachers' : 'group_checkers';
+    var junctionCol = myProfile.role === 'teacher' ? 'teacher_id' : 'checker_id';
+    var jRes = await sb.from(junctionTable).select('group_id').eq(junctionCol, myUserId);
+    if(!jRes.error && jRes.data) myGroupIds = jRes.data.map(function(r){ return r.group_id; });
+
+    var grpRes = await sb.from('groups').select('id, name');
+    if(!grpRes.error && grpRes.data) grpRes.data.forEach(function(g){ groupMap[g.id] = g.name; });
+
+    var studQuery = sb.from('profiles').select('id, full_name, group_id').eq('role', 'student');
+    if(myGroupIds.length > 0) studQuery = studQuery.in('group_id', myGroupIds);
+    var studRes = await studQuery;
+    if(studRes.error) throw studRes.error;
+
+    (studRes.data || []).forEach(function(s){
+      allStudents[s.id] = { name: s.full_name || 'Student', group_id: s.group_id, group_name: groupMap[s.group_id] || 'Unassigned' };
+      myStudentIds.push(s.id);
+    });
+
+    if(myStudentIds.length === 0){
+      showEmpty('No students are assigned to your groups yet.');
+      return;
+    }
+
+    var examRes = await sb.from('mock_exams').select('*').eq('mock_day', mockDay).in('student_id', myStudentIds).order('submitted_at', {ascending:false});
+    if(examRes.error) throw examRes.error;
+    allExams = examRes.data || [];
+
+    populateGroupFilter();
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('filterBar').style.display = 'flex';
+    applyFilters();
+
+    document.getElementById('pageSubTitle').textContent =
+      allExams.length + ' result' + (allExams.length!==1?'s':'') + ' — ' +
+      Object.keys(allStudents).length + ' student' + (Object.keys(allStudents).length!==1?'s':'') + ' in your groups';
+  } catch(err){
+    console.error(err);
+    showError('Error loading results: ' + (err.message || JSON.stringify(err)));
+  }
+}
+
+function populateGroupFilter(){
+  var sel = document.getElementById('groupFilter');
+  var used = {};
+  Object.values(allStudents).forEach(function(s){ if(s.group_id && !used[s.group_id]) used[s.group_id] = s.group_name; });
+  Object.entries(used).forEach(function(kv){
+    var opt = document.createElement('option'); opt.value = kv[0]; opt.textContent = kv[1]; sel.appendChild(opt);
+  });
+}
+
+function applyFilters(){
+  var groupFilter = document.getElementById('groupFilter').value;
+  var search = document.getElementById('searchInput').value.toLowerCase().trim();
+
+  var byStudent = {};
+  allExams.forEach(function(exam){ if(!byStudent[exam.student_id]) byStudent[exam.student_id] = exam; });
+  myStudentIds.forEach(function(sid){ if(!(sid in byStudent)) byStudent[sid] = null; });
+
+  var filtered = Object.entries(byStudent).filter(function(kv){
+    var info = allStudents[kv[0]] || {};
+    if(groupFilter && info.group_id !== groupFilter) return false;
+    if(search && !(info.name||'').toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  filtered.sort(function(a,b){
+    var aHas = a[1]!==null ? 1:0, bHas = b[1]!==null ? 1:0;
+    if(bHas !== aHas) return bHas - aHas;
+    return ((allStudents[a[0]]||{}).name||'').localeCompare((allStudents[b[0]]||{}).name||'');
+  });
+
+  document.getElementById('countBadge').textContent = filtered.length + ' students';
+  var grid = document.getElementById('studentsGrid');
+  grid.innerHTML = '';
+  if(filtered.length === 0){ showEmpty(); return; }
+  document.getElementById('emptyState').style.display = 'none';
+  filtered.forEach(function(kv){
+    grid.appendChild(buildCard(kv[0], allStudents[kv[0]] || {name:'Student', group_name:''}, kv[1]));
+  });
+}
+
+function buildCard(sid, info, exam){
+  var el = document.createElement('div');
+  el.className = 'student-card';
+  el.dataset.sid = sid;
+  var initials = (info.name||'S').split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+  var examDate = exam ? (exam.exam_date || (exam.submitted_at||'').slice(0,10)) : '';
+
+  var pillsHtml;
+  if(exam){
+    var ls = exam.listening_score!==null ? exam.listening_score+'/40' : '?/40';
+    var lb = exam.listening_band ? ' B'+exam.listening_band : '';
+    var rs = exam.reading_score!==null ? exam.reading_score+'/40' : '?/40';
+    var rb = exam.reading_band ? ' B'+exam.reading_band : '';
+    var sentBadge = exam.results_published
+      ? '<span class="pill" style="background:var(--good-soft);color:var(--good);">✓ Sent</span>'
+      : '<span class="pill" style="background:var(--warn-soft);color:var(--warn);">⏳ Pending review</span>';
+    pillsHtml = '<div class="score-pills">'+
+      '<span class="pill listen">🎧 L: '+ls+lb+'</span>'+
+      '<span class="pill read">📖 R: '+rs+rb+'</span>'+
+      '<span class="pill write">✏️ W: T1:'+(exam.writing_t1_words||0)+'w T2:'+(exam.writing_t2_words||0)+'w</span>'+
+      sentBadge + '</div>';
+  } else {
+    pillsHtml = '<div class="score-pills"><span class="pill pending">Not submitted</span></div>';
+  }
+
+  el.innerHTML =
+    '<div class="student-card-header" onclick="toggleCard(\''+sid+'\')">'+
+      '<div class="student-info">'+
+        '<div class="student-avatar">'+initials+'</div>'+
+        '<div><div class="student-name">'+esc(info.name)+'</div>'+
+        '<div class="student-meta">'+esc(info.group_name)+(examDate?' &bull; Exam: '+examDate:' &bull; No exam yet')+'</div></div>'+
+      '</div>'+
+      pillsHtml+
+      '<div class="expand-icon" id="icon-'+sid+'">▼</div>'+
+    '</div>'+
+    '<div class="student-detail" id="detail-'+sid+'">'+
+      (exam ? buildDetail(sid, exam) : '<p style="color:var(--muted);padding:8px 0;">This student has not completed the mock exam yet.</p>')+
+    '</div>';
+  return el;
+}
+
+function buildDetail(sid, exam){
+  var liScore = exam.listening_score!==null ? exam.listening_score : '—';
+  var rScore = exam.reading_score!==null ? exam.reading_score : '—';
+
+  var overview = '<div class="score-overview">'+
+    '<div class="score-box"><div class="label">Listening</div><div class="value">'+liScore+'<small style="font-size:16px;">/40</small></div>'+
+    '<div class="band">'+(exam.listening_band?'Band '+exam.listening_band:'')+'</div></div>'+
+    '<div class="score-box"><div class="label">Reading</div><div class="value">'+rScore+'<small style="font-size:16px;">/40</small></div>'+
+    '<div class="band">'+(exam.reading_band?'Band '+exam.reading_band:'')+'</div></div>'+
+    '<div class="score-box"><div class="label">Writing T1</div><div class="value" style="font-size:18px;">'+(exam.writing_t1_words||0)+'</div><div class="band">words</div></div>'+
+    '<div class="score-box"><div class="label">Writing T2</div><div class="value" style="font-size:18px;">'+(exam.writing_t2_words||0)+'</div><div class="band">words</div></div>'+
+  '</div>';
+
+  var tabs = '<div class="detail-tabs">'+
+    '<div class="detail-tab active" onclick="switchTab(\''+sid+'\',\'listening\',this)">🎧 Listening Answers</div>'+
+    '<div class="detail-tab" onclick="switchTab(\''+sid+'\',\'reading\',this)">📖 Reading Answers</div>'+
+    '<div class="detail-tab" onclick="switchTab(\''+sid+'\',\'writing\',this)">✏️ Writing Essays</div>'+
+    '<div class="detail-tab" onclick="switchTab(\''+sid+'\',\'speaking\',this)">🎤 Speaking</div>'+
+  '</div>';
+
+  var liPane = '<div class="tab-pane active" id="pane-'+sid+'-listening">'+buildAnswerPane(exam.listening_answers, exam.listening_key_snapshot, exam.listening_total||40)+'</div>';
+  var rPane = '<div class="tab-pane" id="pane-'+sid+'-reading">'+buildAnswerPane(exam.reading_answers, exam.reading_key_snapshot, exam.reading_total||40)+'</div>';
+
+  var examId = exam.id;
+  var wPane = '<div class="tab-pane" id="pane-'+sid+'-writing">'+
+    '<h4 style="margin-bottom:8px;color:var(--warn);">Task 1 — Chart Description</h4>'+
+    '<span class="word-badge">'+(exam.writing_t1_words||0)+' words</span>'+
+    '<div class="essay-box">'+esc(exam.writing_t1_text || '(not submitted)')+'</div>'+
+    '<label class="feedback-label">Feedback for Task 1:</label>'+
+    '<textarea class="feedback-textarea" id="fb-t1-'+sid+'" placeholder="Write your feedback here…">'+esc(exam.t1_feedback||'')+'</textarea>'+
+    '<div class="band-row"><label style="font-size:13px;font-weight:700;">Band:</label>'+
+    '<select class="band-select" id="band-t1-'+sid+'">'+bandOptions(exam.t1_band)+'</select>'+
+    '<button class="save-feedback-btn" id="savebtn-t1-'+sid+'" onclick="saveFeedback(\''+examId+'\',\''+sid+'\',\'t1\')">Save Feedback</button></div>'+
+    '<hr style="border:none;border-top:1px solid var(--border);margin:22px 0;">'+
+    '<h4 style="margin-bottom:8px;color:var(--warn);">Task 2 — Essay</h4>'+
+    '<span class="word-badge">'+(exam.writing_t2_words||0)+' words</span>'+
+    '<div class="essay-box">'+esc(exam.writing_t2_text || '(not submitted)')+'</div>'+
+    '<label class="feedback-label">Feedback for Task 2:</label>'+
+    '<textarea class="feedback-textarea" id="fb-t2-'+sid+'" placeholder="Write your feedback here…">'+esc(exam.t2_feedback||'')+'</textarea>'+
+    '<div class="band-row"><label style="font-size:13px;font-weight:700;">Band:</label>'+
+    '<select class="band-select" id="band-t2-'+sid+'">'+bandOptions(exam.t2_band)+'</select>'+
+    '<button class="save-feedback-btn" id="savebtn-t2-'+sid+'" onclick="saveFeedback(\''+examId+'\',\''+sid+'\',\'t2\')">Save Feedback</button></div>'+
+  '</div>';
+
+  var sPane = '<div class="tab-pane" id="pane-'+sid+'-speaking">'+
+    '<div class="no-key-notice">ℹ️ Speaking isn\'t recorded for the mock exam. Run the speaking test separately with this student, then enter their band and feedback below.</div>'+
+    '<label class="feedback-label" style="margin-top:0;">Feedback for Speaking:</label>'+
+    '<textarea class="feedback-textarea" id="fb-speaking-'+sid+'" placeholder="Write your feedback here…">'+esc(exam.speaking_feedback||'')+'</textarea>'+
+    '<div class="band-row"><label style="font-size:13px;font-weight:700;">Band:</label>'+
+    '<select class="band-select" id="band-speaking-'+sid+'">'+bandOptions(exam.speaking_band)+'</select>'+
+    '<button class="save-feedback-btn" id="savebtn-speaking-'+sid+'" onclick="saveFeedback(\''+examId+'\',\''+sid+'\',\'speaking\')">Save Feedback</button></div>'+
+  '</div>';
+
+  var isPublished = !!exam.results_published;
+  var sendSection = '<div style="margin-top:24px;padding-top:20px;border-top:2px solid var(--border);">';
+  if(isPublished){
+    sendSection += '<div style="background:var(--good-soft);border:1px solid #1f9d5540;border-radius:8px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">'+
+      '<span style="color:var(--good);font-weight:700;font-size:14px;">✓ Results sent to student</span>'+
+      '<button class="save-feedback-btn" style="background:var(--surface);color:var(--warn);border:1px solid var(--warn);" onclick="sendResults(\''+examId+'\',\''+sid+'\')">Re-send / Update</button></div>';
+  } else {
+    sendSection += '<button class="save-feedback-btn" style="background:var(--good);padding:12px 24px;font-size:15px;" onclick="sendResults(\''+examId+'\',\''+sid+'\')">📤 Send Results to Student</button>'+
+      '<p style="font-size:12.5px;color:var(--muted);margin-top:8px;">The student will not see any scores or feedback until you click this.</p>';
+  }
+  sendSection += '</div>';
+
+  return overview + tabs + liPane + rPane + wPane + sPane + sendSection;
+}
+
+function buildAnswerPane(answersRaw, keyRaw, total){
+  var answers = answersRaw || {};
+  var key = keyRaw || {};
+  var hasKey = key && Object.keys(key).length > 0;
+  var notice = hasKey ? '' : '<div class="no-key-notice">ℹ️ No answer key was captured with this submission, so correct/incorrect marking isn\'t available — student answers are shown as-is.</div>';
+  var rows = '';
+  for(var i=1;i<=total;i++){
+    var k = String(i);
+    var raw = answers[k];
+    var hasAns = raw !== undefined && raw !== null && String(raw).trim() !== '';
+    var ans = hasAns ? String(raw) : 'N/A';
+    var correct = key[k];
+    var isCorrect = (hasAns && hasKey) ? checkIsCorrect(raw, correct) : null;
+    var cellClass = isCorrect===true ? 'correct-cell' : isCorrect===false ? 'wrong-cell' : '';
+    var correctDisplay = Array.isArray(correct) ? correct[0] : correct;
+    rows += '<tr><td style="color:var(--muted);font-weight:700;">'+i+'</td>'+
+      '<td class="'+cellClass+'">'+esc(ans)+(isCorrect===true?' ✓':isCorrect===false?' ✗':'')+'</td>'+
+      '<td style="color:var(--muted);font-size:12px;">'+(isCorrect===false && correctDisplay!==undefined?esc(String(correctDisplay)):'')+'</td></tr>';
+  }
+  return notice+'<table class="answer-table"><thead><tr><th>#</th><th>Student Answer</th><th>Correct Answer</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+
+function bandOptions(selected){
+  var bands = [''];
+  for(var i=1;i<=9;i+=0.5) bands.push(i.toFixed(1));
+  return bands.map(function(b){
+    return '<option value="'+b+'"'+(b===String(selected||'')?' selected':'')+'>'+(b||'— Select band')+'</option>';
+  }).join('');
+}
+
+function toggleCard(sid){
+  var detail = document.getElementById('detail-'+sid);
+  var icon = document.getElementById('icon-'+sid);
+  if(!detail||!icon) return;
+  var isOpen = detail.classList.contains('show');
+  detail.classList.toggle('show', !isOpen);
+  icon.classList.toggle('open', !isOpen);
+}
+window.toggleCard = toggleCard;
+
+function switchTab(sid, tabName, el){
+  var card = el.closest('.student-card');
+  card.querySelectorAll('.detail-tab').forEach(function(t){t.classList.remove('active');});
+  card.querySelectorAll('.tab-pane').forEach(function(p){p.classList.remove('active');});
+  el.classList.add('active');
+  var pane = document.getElementById('pane-'+sid+'-'+tabName);
+  if(pane) pane.classList.add('active');
+}
+window.switchTab = switchTab;
+
+async function saveFeedback(examId, sid, task){
+  var fbEl = document.getElementById('fb-'+task+'-'+sid);
+  var bandEl = document.getElementById('band-'+task+'-'+sid);
+  var btnEl = document.getElementById('savebtn-'+task+'-'+sid);
+  if(!fbEl||!bandEl||!btnEl) return;
+  var patch = {};
+  patch[task+'_feedback'] = fbEl.value;
+  patch[task+'_band'] = bandEl.value || null;
+  btnEl.textContent = 'Saving…'; btnEl.disabled = true;
+  try {
+    var res = await sb.from('mock_exams').update(patch).eq('id', examId);
+    if(res.error) throw res.error;
+    btnEl.textContent = 'Saved ✓'; btnEl.className = 'save-feedback-btn saved';
+    setTimeout(function(){ btnEl.textContent='Save Feedback'; btnEl.className='save-feedback-btn'; btnEl.disabled=false; }, 2500);
+  } catch(err){
+    alert('Save failed: ' + (err.message || JSON.stringify(err)));
+    btnEl.textContent = 'Save Feedback'; btnEl.disabled = false;
+  }
+}
+window.saveFeedback = saveFeedback;
+
+async function sendResults(examId, sid){
+  var info = allStudents[sid] || {};
+  if(!confirm('Send results to '+(info.name||'this student')+'? They will immediately be able to see their scores, essays, and your feedback.')) return;
+  try {
+    var res = await sb.from('mock_exams').update({ results_published: true, results_published_at: new Date().toISOString() }).eq('id', examId);
+    if(res.error) throw res.error;
+    var idx = allExams.findIndex(function(e){return e.id===examId;});
+    if(idx>=0) allExams[idx].results_published = true;
+    applyFilters();
+    setTimeout(function(){
+      var card = document.querySelector('.student-card[data-sid="'+sid+'"]');
+      if(card){ toggleCard(sid); card.scrollIntoView({behavior:'smooth', block:'center'}); }
+    }, 100);
+  } catch(err){
+    alert('Failed to send results: ' + (err.message || JSON.stringify(err)));
+  }
+}
+window.sendResults = sendResults;
+
+function showError(msg){
+  document.getElementById('loadingState').style.display = 'none';
+  var box = document.getElementById('errorBox');
+  box.textContent = msg; box.style.display = 'block';
+}
+function showEmpty(msg){
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('emptyState').style.display = 'block';
+  if(msg) document.getElementById('emptyState').querySelector('p').textContent = msg;
+}
+window.applyFilters = applyFilters;
+
+})();
+</script>
+</body>
+</html>
