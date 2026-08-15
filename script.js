@@ -883,6 +883,10 @@ async function initRecordControl(box, userId, day, task, fieldId) {
 // server (1-30), instead of relying on a manually maintained list.
 // Uploading a day's file is what makes it live; nothing else to edit.
 // ============================================
+// Days that are full mock exams rather than regular content days.
+// Add future mock days here — every dashboard reads from this one place.
+const MOCK_DAYS = [11];
+
 async function getLiveDays() {
   const checks = await Promise.all(
     Array.from({ length: 30 }, (_, i) => {
