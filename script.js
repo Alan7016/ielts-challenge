@@ -737,7 +737,21 @@ const SPEAKING_QUESTIONS = {
   'speaking-possession-part2': 'Part 2 — Describe an important old thing that your family has kept for a long time.',
   'speaking-possession-q1': 'Part 3 — What are the differences between the things that people keep today and the things that people kept in the past?',
   'speaking-possession-q2': 'Part 3 — As well as family photographs, what are some other things that people keep in their family for a long time?',
-  'speaking-possession-q3': 'Part 3 — In your culture, what sorts of things do people pass down from generation to generation?'
+  'speaking-possession-q3': 'Part 3 — In your culture, what sorts of things do people pass down from generation to generation?',
+  'speaking-stages-q1': 'How do people remember each stage of their lives?',
+  'speaking-stages-q2': 'At what age do you think people are the happiest?',
+  'speaking-stages-q3': 'Do you enjoy being the age you are now?',
+  'speaking-stages-q4': 'What did you often do with your friends in your childhood?',
+  'speaking-stages-q5': 'Do you have any plans for the next five years?',
+  'speaking-routine-q1': 'How do you organise your study time?',
+  'speaking-routine-q2': 'What is your daily study routine?',
+  'speaking-routine-q3': 'Do you ever change your plans?',
+  'speaking-routine-q4': 'Have you ever changed your routine?',
+  'speaking-routine-q5': "What's your favourite time of the day?",
+  'speaking-animals-q1': "What's your favourite animal?",
+  'speaking-animals-q2': 'Have you ever had a pet?',
+  'speaking-animals-q3': "What's the most popular animal in your country?",
+  'speaking-animals-q4': 'Where do you prefer to keep your pet, indoors or outdoors?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
