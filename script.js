@@ -751,7 +751,19 @@ const SPEAKING_QUESTIONS = {
   'speaking-animals-q1': "What's your favourite animal?",
   'speaking-animals-q2': 'Have you ever had a pet?',
   'speaking-animals-q3': "What's the most popular animal in your country?",
-  'speaking-animals-q4': 'Where do you prefer to keep your pet, indoors or outdoors?'
+  'speaking-animals-q4': 'Where do you prefer to keep your pet, indoors or outdoors?',
+  'speaking-cartrip-part2': 'Part 2 — Describe a long bike, motorbike, or car trip that you would like to take.',
+  'speaking-cartrip-q1': 'Part 3 — How are transportation systems in rural and urban areas different?',
+  'speaking-cartrip-q2': 'Part 3 — Which mode of transport is more popular in your country, a bicycle or car?',
+  'speaking-cartrip-q3': 'Part 3 — Do you think air pollution comes mostly from mobile vehicles?',
+  'speaking-shop-part2': 'Part 2 — Describe a shop you often visit.',
+  'speaking-shop-q1': "Part 3 — Do you think that people buy a lot of things that they don't need?",
+  'speaking-shop-q2': 'Part 3 — Do you often buy more than you expected?',
+  'speaking-imagination-part2': 'Part 2 — Describe a time you needed to use your imagination.',
+  'speaking-imagination-q1': 'Part 3 — What kind of jobs require imagination?',
+  'speaking-imagination-q2': 'Part 3 — Do scientists need imagination in their work?',
+  'speaking-imagination-q3': 'Part 3 — Do you think adults can have lots of imagination?',
+  'speaking-imagination-q4': "Part 3 — What subjects are helpful for children's imagination?"
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
