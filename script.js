@@ -265,12 +265,55 @@ function checkAllAnswers(containerId, scoreId) {
 // their account (not their browser) — so it follows them across devices and
 // survives closing the tab. 'progress' tracks which tasks are done and locked.
 // ============================================
+// ============================================
+// SAVE STATUS BANNER — a small fixed banner that appears only when a save
+// actually fails, so a student never loses work without knowing about it.
+// Injected on first use; no changes needed to any day's HTML.
+// ============================================
+function getSaveBanner() {
+  let el = document.getElementById('saveStatusBanner');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'saveStatusBanner';
+    el.style.cssText = 'position:fixed; bottom:16px; left:50%; transform:translateX(-50%); z-index:9999; padding:10px 20px; border-radius:10px; font:600 13.5px var(--body, sans-serif); box-shadow:0 6px 18px #00000030; display:none;';
+    document.body.appendChild(el);
+  }
+  return el;
+}
+function showSaveWarning() {
+  const el = getSaveBanner();
+  el.textContent = '⚠️ Connection issue — your last answer may not have saved. Retrying automatically…';
+  el.style.background = '#d5490f'; el.style.color = '#fff';
+  el.style.display = 'block';
+}
+function showSaveRecovered() {
+  const el = getSaveBanner();
+  if (el.style.display === 'none') return; // wasn't showing a warning, nothing to recover from
+  el.textContent = '✓ Saved';
+  el.style.background = '#1f9d55'; el.style.color = '#fff';
+  setTimeout(() => { el.style.display = 'none'; }, 2000);
+}
+
 async function saveAnswer(userId, day, task, fieldId, value, isCorrect) {
   const sb = getSupabaseClient();
-  await sb.from('answers').upsert(
+  const res = await sb.from('answers').upsert(
     { student_id: userId, day, task, field_id: fieldId, value: String(value), is_correct: isCorrect, updated_at: new Date().toISOString() },
     { onConflict: 'student_id,day,field_id' }
   );
+  if (res.error) {
+    console.error('Answer save failed:', res.error);
+    showSaveWarning();
+    // one silent retry after a short delay — covers a brief network blip without bothering the student
+    setTimeout(async () => {
+      const retry = await sb.from('answers').upsert(
+        { student_id: userId, day, task, field_id: fieldId, value: String(value), is_correct: isCorrect, updated_at: new Date().toISOString() },
+        { onConflict: 'student_id,day,field_id' }
+      );
+      if (!retry.error) showSaveRecovered();
+    }, 3000);
+  } else {
+    showSaveRecovered();
+  }
 }
 
 // Works out whether a filled-in field was correct, straight from the
@@ -292,18 +335,36 @@ function computeIsCorrect(el) {
 
 async function saveProgress(userId, day, task, completed, locked) {
   const sb = getSupabaseClient();
-  await sb.from('progress').upsert(
+  const res = await sb.from('progress').upsert(
     { student_id: userId, day, task, completed, locked, updated_at: new Date().toISOString() },
     { onConflict: 'student_id,day,task' }
   );
+  if (res.error) {
+    console.error('Progress save failed:', res.error);
+    showSaveWarning();
+    setTimeout(async () => {
+      const retry = await sb.from('progress').upsert(
+        { student_id: userId, day, task, completed, locked, updated_at: new Date().toISOString() },
+        { onConflict: 'student_id,day,task' }
+      );
+      if (!retry.error) showSaveRecovered();
+    }, 3000);
+  }
 }
 
 async function loadDayState(userId, day) {
   const sb = getSupabaseClient();
-  const [{ data: answers }, { data: progress }] = await Promise.all([
+  const [{ data: answers, error: aErr }, { data: progress, error: pErr }] = await Promise.all([
     sb.from('answers').select('field_id, value').eq('student_id', userId).eq('day', day),
     sb.from('progress').select('task, completed, locked').eq('student_id', userId).eq('day', day)
   ]);
+  if (aErr || pErr) {
+    console.error('Failed to load saved progress:', aErr || pErr);
+    const el = getSaveBanner();
+    el.textContent = "⚠️ Couldn't load your saved progress — if you've done this day before, please refresh rather than redoing it.";
+    el.style.background = '#d5490f'; el.style.color = '#fff';
+    el.style.display = 'block';
+  }
   const answerMap = {};
   (answers || []).forEach(r => { answerMap[r.field_id] = r.value; });
   const progressMap = {};
@@ -333,7 +394,11 @@ function freezeTask(taskNum, checkFn) {
   const container = document.getElementById('task' + taskNum);
   if (!container) return;
   if (checkFn) { try { checkFn(); } catch (e) {} }
-  container.querySelectorAll('input, select, textarea, button').forEach(el => { el.disabled = true; });
+  // speaking-set-btn is excluded so students can still browse back into a
+  // completed speaking task and relisten to their recordings for self-review
+  // — they just can't record again, since the record button itself is
+  // already permanently hidden once a recording locks in (see showLocked()).
+  container.querySelectorAll('input, select, textarea, button:not(.speaking-set-btn):not(.phrase-toggle)').forEach(el => { el.disabled = true; });
 }
 
 // ============================================
@@ -763,7 +828,19 @@ const SPEAKING_QUESTIONS = {
   'speaking-imagination-q1': 'Part 3 — What kind of jobs require imagination?',
   'speaking-imagination-q2': 'Part 3 — Do scientists need imagination in their work?',
   'speaking-imagination-q3': 'Part 3 — Do you think adults can have lots of imagination?',
-  'speaking-imagination-q4': "Part 3 — What subjects are helpful for children's imagination?"
+  'speaking-imagination-q4': "Part 3 — What subjects are helpful for children's imagination?",
+  'speaking-daysoff-q1': 'When was the last time you had a few days off?',
+  'speaking-daysoff-q2': 'What do you do when you have days off?',
+  'speaking-daysoff-q3': 'What would you like to do if you had a day off tomorrow?',
+  'speaking-daysoff-q4': 'Do you usually spend your days off with your parents or with your friends?',
+  'speaking-food-q1': 'What kinds of food do you particularly like?',
+  'speaking-food-q2': 'What kinds of food are most popular in your country?',
+  'speaking-food-q3': "Is there any food you don't like?",
+  'speaking-food-q4': 'What kind of food did you like when you were young?',
+  'speaking-keys-q1': 'Have you ever locked yourself out?',
+  'speaking-keys-q2': "Do you think it's a good idea to leave your keys with a neighbour?",
+  'speaking-keys-q3': 'Have you ever lost your keys?',
+  'speaking-keys-q4': 'Do you always bring a lot of keys with you?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
