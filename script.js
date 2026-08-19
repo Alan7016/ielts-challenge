@@ -840,7 +840,23 @@ const SPEAKING_QUESTIONS = {
   'speaking-keys-q1': 'Have you ever locked yourself out?',
   'speaking-keys-q2': "Do you think it's a good idea to leave your keys with a neighbour?",
   'speaking-keys-q3': 'Have you ever lost your keys?',
-  'speaking-keys-q4': 'Do you always bring a lot of keys with you?'
+  'speaking-keys-q4': 'Do you always bring a lot of keys with you?',
+  'speaking-film-part2': 'Part 2 — Describe a film you watched and enjoyed.',
+  'speaking-film-q1': 'Part 3 — What makes a movie a blockbuster?',
+  'speaking-film-q2': 'Part 3 — Are actors and actresses important to movies?',
+  'speaking-film-q3': 'Part 3 — Do you think films with famous actors or actresses are more likely to become successful films?',
+  'speaking-film-q4': 'Part 3 — What kinds of movies are successful in your country?',
+  'speaking-film-q5': 'Part 3 — Do people in your country still like to go to a cinema?',
+  'speaking-story-part2': 'Part 2 — Describe a story you read recently.',
+  'speaking-story-q1': 'Part 3 — Why do most children like listening to stories before bedtime?',
+  'speaking-story-q2': 'Part 3 — Is a good storyline important for a movie?',
+  'speaking-story-q3': 'Part 3 — Why do children like hearing the same bedtime story?',
+  'speaking-person-part2': 'Part 2 — Describe a person who solved a problem in a smart way.',
+  'speaking-person-q1': 'Part 3 — Are people born clever or need to learn to be clever?',
+  'speaking-person-q2': 'Part 3 — Why are some children more intelligent than others?',
+  'speaking-person-q3': 'Part 3 — Do you think society needs people with different types of intelligence?',
+  'speaking-person-q4': 'Part 3 — Does modern society need talents of all kinds?',
+  'speaking-person-q5': 'Part 3 — How do children become smart at school?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
