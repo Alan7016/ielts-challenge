@@ -1029,7 +1029,19 @@ const SPEAKING_QUESTIONS = {
   'speaking-person-q2': 'Part 3 — Why are some children more intelligent than others?',
   'speaking-person-q3': 'Part 3 — Do you think society needs people with different types of intelligence?',
   'speaking-person-q4': 'Part 3 — Does modern society need talents of all kinds?',
-  'speaking-person-q5': 'Part 3 — How do children become smart at school?'
+  'speaking-person-q5': 'Part 3 — How do children become smart at school?',
+  'speaking-memory-q1': 'How do you remember important things?',
+  'speaking-memory-q2': 'Are you good at memorising things?',
+  'speaking-memory-q3': 'Have you ever forgotten something important?',
+  'speaking-memory-q4': 'What do you need to remember in your daily life?',
+  'speaking-sparetime-q1': 'What free time activities are popular with people in your country?',
+  'speaking-sparetime-q2': 'What do you do when you have free time?',
+  'speaking-sparetime-q3': 'Who do you usually spend your spare time with?',
+  'speaking-crowded-q1': 'Do most people like crowded places?',
+  'speaking-crowded-q2': 'Do you like crowded places?',
+  'speaking-crowded-q3': 'When was the last time you were in a crowded place?',
+  'speaking-crowded-q4': 'Is the city where you live crowded?',
+  'speaking-crowded-q5': 'Is there a crowded place near where you live?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
