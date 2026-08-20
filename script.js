@@ -22,7 +22,7 @@ async function requireAuth(onReady) {
     return;
   }
 
-  const { data: profile } = await sb.from('profiles').select('full_name, role, group_id').eq('id', session.user.id).single();
+  const { data: profile } = await sb.from('profiles').select('full_name, role, group_id, avatar_url').eq('id', session.user.id).single();
 
   const gate = document.getElementById('gate');
   const content = document.getElementById('content');
@@ -43,7 +43,55 @@ async function requireAuth(onReady) {
   if (onReady) onReady(profile, session.user);
 }
 
-// Figures out how many '../' are needed to reach the project root,
+// ============================================
+// SHARED HELPERS — profile picture, week bounds, streaks
+// Used by profile.html and leaderboard.html.
+// ============================================
+
+// Uploads/replaces a student's avatar (stored as avatars/<user_id>.<ext>,
+// so re-upload naturally overwrites the old one) and updates profiles.avatar_url.
+async function uploadAvatar(userId, file) {
+  const sb = getSupabaseClient();
+  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+  const path = `${userId}.${ext}`;
+  const { error: uploadError } = await sb.storage.from('avatars').upload(path, file, { upsert: true, contentType: file.type });
+  if (uploadError) return { error: uploadError };
+  const { data: pub } = sb.storage.from('avatars').getPublicUrl(path);
+  // Cache-bust so the new picture shows immediately instead of the old cached one.
+  const url = `${pub.publicUrl}?v=${Date.now()}`;
+  const { error: profileError } = await sb.from('profiles').update({ avatar_url: url }).eq('id', userId);
+  if (profileError) return { error: profileError };
+  return { url };
+}
+
+// Weeks are day 1–7, 8–14, 15–21, etc. Returns [startDay, endDay] for
+// whichever week `day` falls in.
+function getWeekBounds(day) {
+  const weekIndex = Math.floor((day - 1) / 7);
+  return [weekIndex * 7 + 1, weekIndex * 7 + 7];
+}
+
+// Streak = consecutive day numbers (counting back from the highest day
+// the student has touched) with at least one completed task. Day-number
+// based rather than calendar-based, since that's how the program runs.
+function computeDayStreak(daysWithActivity) {
+  const uniqueDays = [...new Set(daysWithActivity)].sort((a, b) => b - a);
+  if (uniqueDays.length === 0) return 0;
+  let streak = 1;
+  for (let i = 1; i < uniqueDays.length; i++) {
+    if (uniqueDays[i] === uniqueDays[i - 1] - 1) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function initialsFor(fullName) {
+  if (!fullName) return '?';
+  const parts = fullName.trim().split(/\s+/);
+  return ((parts[0]?.[0] || '') + (parts[1]?.[0] || '')).toUpperCase();
+}
+
+
 // so the auth redirect works the same from index.html and from days/dayN.html.
 function pathToRoot() {
   return window.location.pathname.includes('/days/') ? '../' : '';
