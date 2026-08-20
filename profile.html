@@ -26,16 +26,22 @@
 
   <section class="hero" style="padding-top:48px; padding-bottom:8px;">
     <div class="wrap">
-      <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
-        <div class="avatar-upload-btn" style="width:76px; height:76px;">
-          <div class="avatar-circle" id="avatar-display" style="width:76px; height:76px; font-size:1.6rem;">…</div>
-          <input type="file" id="avatar-input" accept="image/png, image/jpeg, image/webp">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
+          <div class="profile-avatar-wrap">
+            <div class="avatar-circle" id="avatar-display" style="width:76px; height:76px; font-size:1.6rem;">…</div>
+            <label class="avatar-camera-badge" id="avatar-camera-badge" style="display:none;">
+              📷
+              <input type="file" id="avatar-input" accept="image/png, image/jpeg, image/webp">
+            </label>
+          </div>
+          <div>
+            <h1 id="profile-name" style="margin-bottom:4px;">…</h1>
+            <p class="tag" id="profile-meta" style="margin:0;">…</p>
+            <div id="badges" style="display:flex; gap:8px; margin-top:8px;"></div>
+          </div>
         </div>
-        <div>
-          <h1 id="profile-name" style="margin-bottom:4px;">…</h1>
-          <p class="tag" id="profile-meta" style="margin:0;">…</p>
-          <div id="badges" style="display:flex; gap:8px; margin-top:8px;"></div>
-        </div>
+        <button class="ghost" id="edit-profile-btn" style="padding:8px 18px;">Edit</button>
       </div>
       <p style="font-size:0.78rem; color:var(--muted); margin-top:10px;" id="avatar-status"></p>
     </div>
@@ -89,6 +95,14 @@
 
     renderAvatar(profile.avatar_url, profile.full_name);
     document.getElementById('avatar-input').addEventListener('change', handleAvatarUpload);
+    const editBtn = document.getElementById('edit-profile-btn');
+    const cameraBadge = document.getElementById('avatar-camera-badge');
+    let editing = false;
+    editBtn.addEventListener('click', () => {
+      editing = !editing;
+      cameraBadge.style.display = editing ? 'flex' : 'none';
+      editBtn.textContent = editing ? 'Done' : 'Edit';
+    });
 
     const sb = getSupabaseClient();
     let groupName = '—';
