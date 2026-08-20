@@ -101,6 +101,26 @@ function pathToRoot() {
   return window.location.pathname.includes('/days/') ? '../' : '';
 }
 
+// ============================================
+// FAVICON — injected here (rather than edited into every HTML file) so it
+// applies site-wide, including all days/dayN.html files, automatically.
+// ============================================
+(function setFavicon() {
+  const root = pathToRoot();
+  const icons = [
+    { rel: 'icon', type: 'image/x-icon', href: root + 'favicon.ico' },
+    { rel: 'icon', type: 'image/png', sizes: '32x32', href: root + 'favicon-32x32.png' },
+    { rel: 'icon', type: 'image/png', sizes: '16x16', href: root + 'favicon-16x16.png' },
+    { rel: 'icon', type: 'image/png', sizes: '192x192', href: root + 'favicon-192x192.png' },
+    { rel: 'apple-touch-icon', href: root + 'apple-touch-icon.png' }
+  ];
+  icons.forEach(attrs => {
+    const link = document.createElement('link');
+    Object.entries(attrs).forEach(([k, v]) => link.setAttribute(k, v));
+    document.head.appendChild(link);
+  });
+})();
+
 // ---------- Stopwatch ----------
 function initStopwatch(displayId, startBtnId, pauseBtnId, resetBtnId) {
   const display = document.getElementById(displayId);
