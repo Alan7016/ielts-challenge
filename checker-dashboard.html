@@ -147,7 +147,7 @@
     document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
 
     const sb = getSupabaseClient();
-    const { data: students } = await sb.from('profiles').select('id, full_name').eq('group_id', selectedGroup.id).eq('role', 'student').order('full_name');
+    const { data: students } = await sb.from('profiles').select('id, full_name, avatar_url').eq('group_id', selectedGroup.id).eq('role', 'student').order('full_name');
 
     if (!students || students.length === 0) {
       root.innerHTML = `<a href="#" class="back-link" id="back-to-groups">← Back to groups</a><p style="color:var(--muted);">No students registered in this group yet.</p>`;
@@ -276,7 +276,10 @@
       ${students.map(s => `
         <div class="student-row">
           <div class="student-row-top">
-            <span class="student-name">${s.full_name}</span>
+            <span class="student-name" style="display:flex; align-items:center; gap:10px;">
+              ${s.avatar_url ? `<span class="avatar-circle" style="width:28px;height:28px;font-size:0.72rem;"><img src="${s.avatar_url}" alt="" onerror="this.parentElement.textContent='${initialsFor(s.full_name)}'"></span>` : `<span class="avatar-circle" style="width:28px;height:28px;font-size:0.72rem;">${initialsFor(s.full_name)}</span>`}
+              ${s.full_name}
+            </span>
             <div class="student-ticks"><div class="day-ticks">${renderTicks(s.id)}</div></div>
           </div>
           <button class="writing-toggle" data-target="detail-${s.id}">Show details ▾</button>
