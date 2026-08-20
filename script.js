@@ -333,6 +333,101 @@ function computeIsCorrect(el) {
   return null;
 }
 
+// ============================================
+// POINTS ENGINE
+// Auto-awards points when a task is locked in (see goNext()).
+// Manual categories (writing, bonus_*) are entered by teachers/checkers
+// in their dashboards and never touched here.
+// ============================================
+const POINTS_MAX = {
+  article: 3, video: 3, speaking: 3, reading_listening: 5,
+  writing: 5, bonus_article: 2, bonus_video: 2, bonus_reading_listening: 3
+};
+
+function pctToPoints(pct) {
+  if (pct >= 90) return 3;
+  if (pct >= 70) return 2.5;
+  if (pct >= 40) return 1.5;
+  if (pct >= 10) return 0.5;
+  return 0;
+}
+
+// Scores every gradable field inside a task container (radios, selects,
+// text-answer gap fills) — works for both the article task (MCQ + vocab)
+// and the video task (MCQ + gap fill + vocab) without needing to know
+// which task number they landed on that day.
+function computeTaskAccuracy(container) {
+  let total = 0, correct = 0;
+  const seenGroups = new Set();
+  container.querySelectorAll('input[type="radio"][data-correct]').forEach(r => {
+    if (seenGroups.has(r.name)) return;
+    seenGroups.add(r.name);
+    total++;
+    const checked = container.querySelector(`input[name="${r.name}"]:checked`);
+    if (checked && checked.dataset.correct === 'true') correct++;
+  });
+  container.querySelectorAll('select[data-answer]').forEach(s => {
+    total++;
+    if (s.value === s.dataset.answer) correct++;
+  });
+  container.querySelectorAll('input.text-answer[data-correct]').forEach(t => {
+    total++;
+    const accepted = (t.dataset.correct || '').split('/').map(x => x.trim().toLowerCase());
+    if (accepted.includes(t.value.trim().toLowerCase())) correct++;
+  });
+  return { correct, total, pct: total ? (correct / total * 100) : 0 };
+}
+
+// Figures out which points category a task belongs to, purely from what's
+// inside its container — so this works across every day's layout without
+// needing to hardcode task numbers (they shift day to day).
+function detectTaskCategory(container) {
+  if (container.querySelector('.question-box[data-field^="speaking-"]')) return 'speaking';
+  if (container.querySelector('iframe[src*="youtube"]')) return 'video';
+  const linkOut = container.querySelector('a.link-out');
+  if (linkOut) {
+    const href = linkOut.getAttribute('href') || '';
+    if (href.includes('passage-') || href.includes('listening-')) return 'reading_listening';
+    return null; // e.g. the plain "read the article" confirm task — not scored on its own
+  }
+  if (container.querySelector('input[type="radio"][data-correct], select[data-answer]')) return 'article';
+  return null; // writing / sample-answer / task1-report — ungraded here, or manual
+}
+
+async function saveTaskPoints(userId, day, category, points, extra) {
+  extra = extra || {};
+  const sb = getSupabaseClient();
+  const payload = {
+    student_id: userId, day, category, points,
+    max_points: POINTS_MAX[category] || null,
+    percent: extra.percent != null ? extra.percent : null,
+    awarded_by: extra.awardedBy || 'system',
+    comment: extra.comment || null,
+    updated_at: new Date().toISOString()
+  };
+  const res = await sb.from('points').upsert(payload, { onConflict: 'student_id,day,category' });
+  if (res.error) console.error('Points save failed:', res.error);
+}
+
+// Called right after a task locks in (see goNext()). Silently does nothing
+// for task types that aren't auto-scored (writing, sample answer, etc.).
+async function autoAwardPoints(userId, day, taskContainer) {
+  const category = detectTaskCategory(taskContainer);
+  if (!category) return;
+
+  if (category === 'speaking') {
+    // isTaskComplete() already guarantees every set is fully recorded
+    // before Next unlocks, so reaching here means all-or-nothing = 3 pts.
+    await saveTaskPoints(userId, day, 'speaking', 3);
+  } else if (category === 'reading_listening') {
+    await saveTaskPoints(userId, day, 'reading_listening', 5);
+  } else if (category === 'article' || category === 'video') {
+    const { correct, total, pct } = computeTaskAccuracy(taskContainer);
+    const points = pctToPoints(pct);
+    await saveTaskPoints(userId, day, category, points, { percent: Math.round(pct) });
+  }
+}
+
 async function saveProgress(userId, day, task, completed, locked) {
   const sb = getSupabaseClient();
   const res = await sb.from('progress').upsert(
@@ -434,6 +529,11 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
     if (p && p.locked) {
       lockedTasks[i] = true;
       freezeTask(i, checkFns[i]);
+      // Backfills points for tasks completed before this feature existed,
+      // or simply re-affirms them on every load — upsert makes this safe
+      // to repeat, it just rewrites the same row.
+      const taskContainer = document.getElementById('task' + i);
+      if (taskContainer) autoAwardPoints(userId, dayNumber, taskContainer);
     }
   }
   // Resume right after the last completed task, or at 1 if nothing's done yet.
@@ -511,6 +611,7 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
       lockedTasks[current] = true;
       doneTasks[current] = true;
       await saveProgress(userId, dayNumber, current, true, true);
+      await autoAwardPoints(userId, dayNumber, container);
       freezeTask(current, checkFns[current]);
     }
     refreshDots();
