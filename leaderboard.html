@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard — IELTS Marathon</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="content" style="display:none;">
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">IELTS <span>MARATHON</span></div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="nav-links">
+          <a href="index.html">Board</a>
+          <a href="leaderboard.html" class="active">Leaderboard</a>
+          <a href="profile.html">Profile</a>
+        </div>
+        <button class="ghost" id="logout-btn" style="padding:7px 14px;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" style="padding-top:48px; padding-bottom:8px;">
+    <div class="wrap">
+      <div class="eyebrow">Leaderboard</div>
+      <h1 id="page-title">See where you stand</h1>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:18px;">
+        <div class="tab-toggle" id="scope-toggle">
+          <button data-scope="group" class="active">My group</button>
+          <button data-scope="overall">Overall</button>
+        </div>
+        <div class="tab-toggle" id="period-toggle">
+          <button data-period="today" class="active">Today</button>
+          <button data-period="week">This week</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap" id="board-root">
+      <p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>
+    </div>
+  </section>
+
+</div>
+
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+<script>
+  let me = null;
+  let myProfile = null;
+  let scope = 'group';
+  let period = 'today';
+  let currentDay = null;
+
+  requireAuth(async function (profile, user) {
+    me = user;
+    myProfile = profile;
+    currentDay = await getMostRecentLiveDay();
+    document.getElementById('scope-toggle').addEventListener('click', (e) => {
+      const btn = e.target.closest('button'); if (!btn) return;
+      scope = btn.dataset.scope;
+      document.querySelectorAll('#scope-toggle button').forEach(b => b.classList.toggle('active', b === btn));
+      render();
+    });
+    document.getElementById('period-toggle').addEventListener('click', (e) => {
+      const btn = e.target.closest('button'); if (!btn) return;
+      period = btn.dataset.period;
+      document.querySelectorAll('#period-toggle button').forEach(b => b.classList.toggle('active', b === btn));
+      render();
+    });
+    render();
+  });
+
+  async function getMostRecentLiveDay() {
+    const liveDays = await getLiveDays();
+    return liveDays.length ? Math.max(...liveDays) : 1;
+  }
+
+  async function render() {
+    const root = document.getElementById('board-root');
+    root.innerHTML = '<p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>';
+
+    const sb = getSupabaseClient();
+    let dayFrom, dayTo;
+    if (period === 'today') { dayFrom = currentDay; dayTo = currentDay; }
+    else { [dayFrom, dayTo] = getWeekBounds(currentDay); }
+
+    let studentIds = null;
+    if (scope === 'group' && myProfile.group_id) {
+      const { data: groupStudents } = await sb.from('profiles').select('id').eq('group_id', myProfile.group_id).eq('role', 'student');
+      studentIds = (groupStudents || []).map(s => s.id);
+    }
+
+    let query = sb.from('points').select('student_id, points').gte('day', dayFrom).lte('day', dayTo);
+    if (studentIds) query = query.in('student_id', studentIds);
+    const { data: pointsRows, error } = await query;
+
+    if (error) {
+      root.innerHTML = '<p style="color:var(--warn);">Could not load the leaderboard right now — please refresh.</p>';
+      console.error(error);
+      return;
+    }
+
+    const totals = {};
+    (pointsRows || []).forEach(r => { totals[r.student_id] = (totals[r.student_id] || 0) + Number(r.points); });
+
+    const ids = Object.keys(totals);
+    if (ids.length === 0) {
+      root.innerHTML = '<p style="color:var(--muted);">No points recorded for this period yet.</p>';
+      return;
+    }
+
+    const { data: profiles } = await sb.from('profiles').select('id, full_name, avatar_url').in('id', ids);
+    const profileById = {};
+    (profiles || []).forEach(p => { profileById[p.id] = p; });
+
+    const ranked = ids
+      .map(id => ({ id, points: Math.round(totals[id] * 10) / 10, profile: profileById[id] }))
+      .filter(r => r.profile)
+      .sort((a, b) => b.points - a.points);
+
+    root.innerHTML = renderPodium(ranked) + renderList(ranked);
+  }
+
+  function avatarHtml(p, style) {
+    style = style || '';
+    if (p.avatar_url) return `<div class="avatar-circle" style="${style}"><img src="${p.avatar_url}" alt=""></div>`;
+    return `<div class="avatar-circle" style="${style}">${initialsFor(p.full_name)}</div>`;
+  }
+
+  function renderPodium(ranked) {
+    const top3 = ranked.slice(0, 3);
+    if (top3.length === 0) return '';
+    // Display order: 2nd, 1st, 3rd (classic podium shape)
+    const order = [top3[1], top3[0], top3[2]].filter(Boolean);
+    const slots = order.map(r => {
+      const rank = top3.indexOf(r) + 1;
+      return `
+        <div class="podium-slot rank-${rank}">
+          ${avatarHtml(r.profile)}
+          <div class="p-name">${r.profile.full_name}</div>
+          <div class="podium-bar">
+            <div class="p-pts">${r.points}</div>
+            <div class="p-rank">${rank === 1 ? '1st' : rank === 2 ? '2nd' : '3rd'}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    return `<div class="podium-wrap">${slots}</div>`;
+  }
+
+  function renderList(ranked) {
+    const rows = ranked.map((r, i) => {
+      const isYou = r.id === me.id;
+      return `
+        <div class="rank-row ${isYou ? 'is-you' : ''}">
+          <div class="r-num">${i + 1}</div>
+          ${avatarHtml(r.profile, 'width:32px;height:32px;font-size:0.78rem;')}
+          <div class="r-name">${isYou ? 'You' : r.profile.full_name}</div>
+          <div class="r-pts">${r.points}</div>
+        </div>
+      `;
+    }).join('');
+    return `<div class="rank-list">${rows}</div>`;
+  }
+</script>
+</body>
+</html>

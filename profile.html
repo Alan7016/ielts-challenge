@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile — IELTS Marathon</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="content" style="display:none;">
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">IELTS <span>MARATHON</span></div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="nav-links">
+          <a href="index.html">Board</a>
+          <a href="leaderboard.html">Leaderboard</a>
+          <a href="profile.html" class="active">Profile</a>
+        </div>
+        <button class="ghost" id="logout-btn" style="padding:7px 14px;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" style="padding-top:48px; padding-bottom:8px;">
+    <div class="wrap">
+      <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
+        <div class="avatar-upload-btn" style="width:76px; height:76px;">
+          <div class="avatar-circle" id="avatar-display" style="width:76px; height:76px; font-size:1.6rem;">…</div>
+          <input type="file" id="avatar-input" accept="image/png, image/jpeg, image/webp">
+        </div>
+        <div>
+          <h1 id="profile-name" style="margin-bottom:4px;">…</h1>
+          <p class="tag" id="profile-meta" style="margin:0;">…</p>
+          <div id="badges" style="display:flex; gap:8px; margin-top:8px;"></div>
+        </div>
+      </div>
+      <p style="font-size:0.78rem; color:var(--muted); margin-top:10px;" id="avatar-status"></p>
+    </div>
+  </section>
+
+  <section style="padding-top:8px;">
+    <div class="wrap">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:28px;">
+        <div class="stat-card"><div class="stat-num" id="stat-total">…</div><div class="stat-label">Total points</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-week">…</div><div class="stat-label">This week</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-today">…</div><div class="stat-label">Today</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-day">…</div><div class="stat-label">Current day</div></div>
+      </div>
+
+      <h2 style="margin-bottom:14px;">Today's breakdown</h2>
+      <div class="card" id="breakdown-card">
+        <p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>
+      </div>
+
+      <h2 style="margin:32px 0 14px;">Day-by-day history</h2>
+      <div class="card" id="history-card">
+        <p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+<script>
+  const CATEGORY_LABELS = {
+    article: 'Article', video: 'Video', speaking: 'Speaking',
+    reading_listening: 'Reading / Listening', writing: 'Writing (teacher)',
+    bonus_article: 'Bonus — Article analysis', bonus_video: 'Bonus — Video analysis',
+    bonus_reading_listening: 'Bonus — Reading/Listening analysis'
+  };
+  const CATEGORY_DOT = {
+    article: 'var(--accent)', video: 'var(--accent)', speaking: 'var(--accent)',
+    reading_listening: 'var(--accent)', writing: 'var(--good)',
+    bonus_article: 'var(--warn)', bonus_video: 'var(--warn)', bonus_reading_listening: 'var(--warn)'
+  };
+
+  let me, myProfile;
+
+  requireAuth(async function (profile, user) {
+    me = user;
+    myProfile = profile;
+    document.getElementById('profile-name').textContent = profile.full_name;
+
+    renderAvatar(profile.avatar_url, profile.full_name);
+    document.getElementById('avatar-input').addEventListener('change', handleAvatarUpload);
+
+    const sb = getSupabaseClient();
+    let groupName = '—';
+    if (profile.group_id) {
+      const { data: g } = await sb.from('groups').select('name').eq('id', profile.group_id).single();
+      if (g) groupName = g.name;
+    }
+    document.getElementById('profile-meta').textContent = `${groupName} · ${profile.role[0].toUpperCase()}${profile.role.slice(1)}`;
+
+    await loadStats();
+  });
+
+  function renderAvatar(url, fullName) {
+    const el = document.getElementById('avatar-display');
+    if (url) el.innerHTML = `<img src="${url}" alt="">`;
+    else el.textContent = initialsFor(fullName);
+  }
+
+  async function handleAvatarUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const status = document.getElementById('avatar-status');
+    if (file.size > 3 * 1024 * 1024) {
+      status.textContent = 'That image is over 3MB — please pick a smaller one.';
+      status.style.color = 'var(--warn)';
+      return;
+    }
+    status.textContent = 'Uploading…';
+    status.style.color = 'var(--muted)';
+    const { url, error } = await uploadAvatar(me.id, file);
+    if (error) {
+      status.textContent = '⚠️ Upload failed — please try again.';
+      status.style.color = 'var(--warn)';
+      console.error(error);
+      return;
+    }
+    renderAvatar(url, myProfile.full_name);
+    status.textContent = '✓ Profile picture updated';
+    status.style.color = 'var(--good)';
+  }
+
+  async function loadStats() {
+    const sb = getSupabaseClient();
+    const liveDays = await getLiveDays();
+    const currentDay = liveDays.length ? Math.max(...liveDays) : 1;
+    const [weekFrom, weekTo] = getWeekBounds(currentDay);
+
+    document.getElementById('stat-day').textContent = 'Day ' + currentDay;
+
+    const [{ data: allPoints }, { data: progressRows }] = await Promise.all([
+      sb.from('points').select('day, category, points, max_points').eq('student_id', me.id),
+      sb.from('progress').select('day, completed').eq('student_id', me.id).eq('completed', true)
+    ]);
+
+    const points = allPoints || [];
+    const total = points.reduce((sum, p) => sum + Number(p.points), 0);
+    const weekTotal = points.filter(p => p.day >= weekFrom && p.day <= weekTo).reduce((sum, p) => sum + Number(p.points), 0);
+    const todayRows = points.filter(p => p.day === currentDay);
+    const todayTotal = todayRows.reduce((sum, p) => sum + Number(p.points), 0);
+    const todayMax = todayRows.reduce((sum, p) => sum + Number(p.max_points || 0), 0);
+
+    document.getElementById('stat-total').textContent = round1(total);
+    document.getElementById('stat-week').textContent = round1(weekTotal);
+    document.getElementById('stat-today').textContent = round1(todayTotal);
+
+    const activeDays = (progressRows || []).map(r => r.day);
+    const streak = computeDayStreak(activeDays);
+    const badges = document.getElementById('badges');
+    let badgeHtml = '';
+    if (streak >= 2) badgeHtml += `<span class="badge-pill badge-good">${streak}-day streak</span>`;
+    badges.innerHTML = badgeHtml;
+
+    renderBreakdown(todayRows, todayTotal, todayMax);
+    renderHistory(points, liveDays);
+  }
+
+  function round1(n) { return Math.round(n * 10) / 10; }
+
+  function renderBreakdown(todayRows, todayTotal, todayMax) {
+    const card = document.getElementById('breakdown-card');
+    if (todayRows.length === 0) {
+      card.innerHTML = '<p style="color:var(--muted);">No points recorded for today yet — complete a task to see it here.</p>';
+      return;
+    }
+    const order = ['article', 'video', 'speaking', 'reading_listening', 'writing', 'bonus_article', 'bonus_video', 'bonus_reading_listening'];
+    const byCategory = {};
+    todayRows.forEach(r => { byCategory[r.category] = r; });
+    const rows = order.filter(c => byCategory[c]).map(c => {
+      const r = byCategory[c];
+      return `
+        <div class="points-breakdown-row">
+          <div class="dot" style="background:${CATEGORY_DOT[c]};"></div>
+          <div class="cat-name">${CATEGORY_LABELS[c]}</div>
+          <div class="cat-val">${round1(r.points)} / ${r.max_points}</div>
+        </div>
+      `;
+    }).join('');
+    card.innerHTML = `
+      ${rows}
+      <div style="border-top:1px dashed var(--border); margin-top:12px; padding-top:10px; display:flex; justify-content:space-between;">
+        <span style="font-weight:700; color:var(--ink);">Total today</span>
+        <span style="font-family:var(--mono); font-weight:700; color:var(--accent);">${round1(todayTotal)} / ${todayMax}</span>
+      </div>
+    `;
+  }
+
+  function renderHistory(points, liveDays) {
+    const card = document.getElementById('history-card');
+    const byDay = {};
+    points.forEach(p => { byDay[p.day] = (byDay[p.day] || 0) + Number(p.points); });
+    const days = liveDays.slice().sort((a, b) => b - a).filter(d => byDay[d] !== undefined);
+    if (days.length === 0) {
+      card.innerHTML = '<p style="color:var(--muted);">No history yet.</p>';
+      return;
+    }
+    card.innerHTML = days.map(d => `
+      <div class="points-breakdown-row">
+        <div class="cat-name">Day ${d}</div>
+        <div class="cat-val">${round1(byDay[d])} pts</div>
+      </div>
+    `).join('');
+  }
+</script>
+</body>
+</html>
