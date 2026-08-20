@@ -156,10 +156,18 @@
     }
 
     const studentIds = students.map(s => s.id);
-    const [{ data: progress }, { data: answers }] = await Promise.all([
+    const [{ data: progress }, { data: answers }, { data: pointsRows }] = await Promise.all([
       sb.from('progress').select('student_id, task, completed').eq('day', selectedDay).in('student_id', studentIds),
-      sb.from('answers').select('student_id, task, field_id, value, is_correct').eq('day', selectedDay).in('student_id', studentIds)
+      sb.from('answers').select('student_id, task, field_id, value, is_correct').eq('day', selectedDay).in('student_id', studentIds),
+      sb.from('points').select('student_id, category, points, comment').eq('day', selectedDay).in('student_id', studentIds)
     ]);
+
+    const bonusByStudent = {};
+    (pointsRows || []).forEach(pt => {
+      if (!pt.category.startsWith('bonus_')) return;
+      bonusByStudent[pt.student_id] = bonusByStudent[pt.student_id] || {};
+      bonusByStudent[pt.student_id][pt.category] = { points: pt.points, comment: pt.comment };
+    });
 
     const doneByStudent = {};
     (progress || []).forEach(p => {
@@ -235,6 +243,34 @@
       }).join('');
     }
 
+    const bonusFields = [
+      { category: 'bonus_article', label: 'Article analysis', max: 2 },
+      { category: 'bonus_video', label: 'Video analysis', max: 2 },
+      { category: 'bonus_reading_listening', label: 'Reading/Listening analysis', max: 3 }
+    ];
+
+    function renderBonusPoints(studentId) {
+      const saved = bonusByStudent[studentId] || {};
+      const rows = bonusFields.map(f => {
+        const s = saved[f.category] || {};
+        return `
+          <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:8px; flex-wrap:wrap;">
+            <label style="font-size:0.82rem; font-weight:600; min-width:180px;">${f.label} (0–${f.max}):</label>
+            <input type="number" class="bonus-score-input" data-category="${f.category}" data-max="${f.max}" min="0" max="${f.max}" step="0.5" value="${s.points !== undefined ? s.points : ''}" style="width:60px;">
+            <input type="text" class="bonus-comment-input" data-category="${f.category}" placeholder="Quick comment (optional)" value="${(s.comment || '').replace(/"/g, '&quot;')}" style="flex:1; min-width:160px; padding:4px 8px; border:1px solid var(--border); border-radius:6px;">
+          </div>
+        `;
+      }).join('');
+      return `
+        <div class="points-row" data-student="${studentId}" style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);">
+          <p style="font-size:0.82rem; font-weight:600; margin:0 0 8px;">Bonus points (from Telegram summaries)</p>
+          ${rows}
+          <button class="ghost save-bonus-points" style="padding:4px 12px; font-size:0.8rem;">Save bonus points</button>
+          <span class="save-status" style="font-size:0.8rem; color:var(--muted); margin-left:8px;"></span>
+        </div>
+      `;
+    }
+
     root.innerHTML = `
       <a href="#" class="back-link" id="back-to-groups">← Back to groups</a>
       ${students.map(s => `
@@ -245,6 +281,7 @@
           </div>
           <button class="writing-toggle" data-target="detail-${s.id}">Show details ▾</button>
           <div class="writing-box" id="detail-${s.id}">${renderTaskDetail(s.id)}</div>
+          ${renderBonusPoints(s.id)}
         </div>
       `).join('')}
     `;
@@ -255,6 +292,33 @@
         const box = document.getElementById(btn.dataset.target);
         const nowShown = box.classList.toggle('show');
         btn.textContent = btn.textContent.replace(nowShown ? '▾' : '▴', nowShown ? '▴' : '▾');
+      });
+    });
+
+    root.querySelectorAll('.points-row').forEach(row => {
+      row.querySelector('.save-bonus-points').addEventListener('click', async () => {
+        const studentId = row.dataset.student;
+        const status = row.querySelector('.save-status');
+        status.textContent = 'Saving…';
+        const scoreInputs = row.querySelectorAll('.bonus-score-input');
+        const commentInputs = {};
+        row.querySelectorAll('.bonus-comment-input').forEach(c => { commentInputs[c.dataset.category] = c.value.trim(); });
+
+        const upserts = Array.from(scoreInputs).map(inp => {
+          const max = parseFloat(inp.dataset.max);
+          let val = parseFloat(inp.value);
+          if (isNaN(val)) val = 0;
+          val = Math.max(0, Math.min(max, val));
+          return {
+            student_id: studentId, day: selectedDay, category: inp.dataset.category,
+            points: val, max_points: max, comment: commentInputs[inp.dataset.category] || null,
+            awarded_by: 'checker', updated_at: new Date().toISOString()
+          };
+        });
+
+        const res = await sb.from('points').upsert(upserts, { onConflict: 'student_id,day,category' });
+        status.textContent = res.error ? '⚠️ Failed to save' : '✓ Saved';
+        if (res.error) console.error(res.error);
       });
     });
   }
