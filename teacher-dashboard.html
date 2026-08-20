@@ -158,11 +158,17 @@
     }
 
     const studentIds = students.map(s => s.id);
-    const [{ data: progress }, { data: writings }, { data: speaking }] = await Promise.all([
+    const [{ data: progress }, { data: writings }, { data: speaking }, { data: points }] = await Promise.all([
       sb.from('progress').select('student_id, task, completed').eq('day', selectedDay).in('student_id', studentIds),
       sb.from('answers').select('student_id, value').eq('day', selectedDay).eq('field_id', 'task1-response').in('student_id', studentIds),
-      sb.from('answers').select('student_id, field_id, value').eq('day', selectedDay).like('field_id', 'speaking-%').in('student_id', studentIds)
+      sb.from('answers').select('student_id, field_id, value').eq('day', selectedDay).like('field_id', 'speaking-%').in('student_id', studentIds),
+      sb.from('points').select('student_id, category, points, comment').eq('day', selectedDay).in('student_id', studentIds)
     ]);
+
+    const writingScoreByStudent = {};
+    (points || []).forEach(pt => {
+      if (pt.category === 'writing') writingScoreByStudent[pt.student_id] = pt.points;
+    });
 
     const doneByStudent = {};
     (progress || []).forEach(p => {
@@ -221,6 +227,19 @@
       `;
     }
 
+    function renderWritingScore(studentId) {
+      const saved = writingScoreByStudent[studentId];
+      return `
+        <div class="points-row" data-student="${studentId}" style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);">
+          <label style="font-size:0.82rem; font-weight:600;">Writing score (0–5):</label>
+          <input type="number" class="writing-score-input" min="0" max="5" step="0.5" value="${saved !== undefined ? saved : ''}" style="width:70px; margin:0 10px;">
+          <label style="font-size:0.82rem;"><input type="checkbox" class="writing-ai-flag"> AI-generated (forces 0)</label>
+          <button class="ghost save-writing-score" style="margin-left:12px; padding:4px 12px; font-size:0.8rem;">Save</button>
+          <span class="save-status" style="font-size:0.8rem; color:var(--muted); margin-left:8px;"></span>
+        </div>
+      `;
+    }
+
     root.innerHTML = `
       <a href="#" class="back-link" id="back-to-groups">← Back to groups</a>
       ${students.map(s => `
@@ -231,6 +250,7 @@
           </div>
           ${renderWriting(s.id)}
           ${renderSpeaking(s.id)}
+          ${renderWritingScore(s.id)}
         </div>
       `).join('')}
     `;
@@ -241,6 +261,29 @@
         const box = document.getElementById(btn.dataset.target);
         const nowShown = box.classList.toggle('show');
         btn.textContent = btn.textContent.replace(nowShown ? '▾' : '▴', nowShown ? '▴' : '▾');
+      });
+    });
+
+    root.querySelectorAll('.points-row').forEach(row => {
+      const scoreInput = row.querySelector('.writing-score-input');
+      const aiFlag = row.querySelector('.writing-ai-flag');
+      aiFlag.addEventListener('change', () => {
+        if (aiFlag.checked) { scoreInput.value = '0'; scoreInput.disabled = true; }
+        else { scoreInput.disabled = false; }
+      });
+      row.querySelector('.save-writing-score').addEventListener('click', async () => {
+        const studentId = row.dataset.student;
+        let val = parseFloat(scoreInput.value);
+        if (isNaN(val)) val = 0;
+        val = Math.max(0, Math.min(5, val));
+        const status = row.querySelector('.save-status');
+        status.textContent = 'Saving…';
+        const res = await sb.from('points').upsert({
+          student_id: studentId, day: selectedDay, category: 'writing',
+          points: val, max_points: 5, awarded_by: 'teacher', updated_at: new Date().toISOString()
+        }, { onConflict: 'student_id,day,category' });
+        status.textContent = res.error ? '⚠️ Failed to save' : '✓ Saved';
+        if (res.error) console.error(res.error);
       });
     });
   }
