@@ -48,12 +48,13 @@ async function requireAuth(onReady) {
 // Used by profile.html and leaderboard.html.
 // ============================================
 
-// Uploads/replaces a student's avatar (stored as avatars/<user_id>.<ext>,
-// so re-upload naturally overwrites the old one) and updates profiles.avatar_url.
+// Uploads/replaces a student's avatar (stored as avatars/<user_id>/avatar.<ext>
+// — the storage RLS policy checks the folder, so the path must match it —
+// re-upload naturally overwrites the old one) and updates profiles.avatar_url.
 async function uploadAvatar(userId, file) {
   const sb = getSupabaseClient();
   const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
-  const path = `${userId}.${ext}`;
+  const path = `${userId}/avatar.${ext}`;
   const { error: uploadError } = await sb.storage.from('avatars').upload(path, file, { upsert: true, contentType: file.type });
   if (uploadError) return { error: uploadError };
   const { data: pub } = sb.storage.from('avatars').getPublicUrl(path);
