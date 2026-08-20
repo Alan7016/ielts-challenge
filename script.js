@@ -60,7 +60,10 @@ async function uploadAvatar(userId, file) {
   const { data: pub } = sb.storage.from('avatars').getPublicUrl(path);
   // Cache-bust so the new picture shows immediately instead of the old cached one.
   const url = `${pub.publicUrl}?v=${Date.now()}`;
-  const { error: profileError } = await sb.from('profiles').update({ avatar_url: url }).eq('id', userId);
+  // Goes through a security-definer RPC rather than a direct table update,
+  // since students don't (and shouldn't) have a broad UPDATE policy on
+  // profiles — this function can only ever touch your own avatar_url.
+  const { error: profileError } = await sb.rpc('update_own_avatar', { new_avatar_url: url });
   if (profileError) return { error: profileError };
   return { url };
 }
