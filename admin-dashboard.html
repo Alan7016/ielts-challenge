@@ -27,6 +27,7 @@
       <div class="tab-toggle" id="top-tabs" style="margin-top:18px;">
         <button data-tab="overview" class="active">Overview</button>
         <button data-tab="groups">Groups</button>
+        <button data-tab="days">Days</button>
       </div>
     </div>
   </section>
@@ -71,7 +72,8 @@
       const btn = e.target.closest('button'); if (!btn) return;
       document.querySelectorAll('#top-tabs button').forEach(b => b.classList.toggle('active', b === btn));
       if (btn.dataset.tab === 'overview') showOverview();
-      else showGroupPicker();
+      else if (btn.dataset.tab === 'groups') showGroupPicker();
+      else showDaysTab();
     });
 
     showOverview();
@@ -275,6 +277,38 @@
     } else {
       document.getElementById('groupChart').replaceWith(Object.assign(document.createElement('p'), { textContent: 'No groups yet.', style: 'color:var(--muted);' }));
     }
+  }
+
+  // ---------- TAB 3: Days (open any day directly, full access, no locking) ----------
+  function showDaysTab() {
+    document.getElementById('page-title').textContent = 'Days';
+    if (dayChart) { dayChart.destroy(); dayChart = null; }
+    if (groupChart) { groupChart.destroy(); groupChart = null; }
+
+    const nonMockDays = liveDays.filter(d => !MOCK_DAYS.includes(d));
+    let html = `<p style="color:var(--muted); font-size:0.85rem; margin:0 0 20px;">Opens the real day page with full access — every task unlocked, nothing you do here gets saved.</p><div class="track-grid">`;
+    for (let d = 1; d <= 30; d++) {
+      const isOpen = liveDays.includes(d);
+      const isMock = MOCK_DAYS.includes(d);
+      if (isMock && isOpen) {
+        html += `<a href="mock-results.html?day=${d}" class="day-chip staff open mock">
+          <span class="num">${String(d).padStart(2, '0')}</span>
+          <span class="lbl">🎯 Mock Exam</span>
+        </a>`;
+      } else if (isOpen) {
+        html += `<a href="days/day${d}.html" class="day-chip staff open">
+          <span class="num">${String(d).padStart(2, '0')}</span>
+          <span class="lbl">Day ${d}</span>
+        </a>`;
+      } else {
+        html += `<div class="day-chip staff locked${isMock ? ' mock' : ''}" title="Not live yet">
+          <span class="num">${String(d).padStart(2, '0')}</span>
+          <span class="lbl">${isMock ? '🎯 Mock Exam' : 'Day ' + d}</span>
+        </div>`;
+      }
+    }
+    html += '</div>';
+    document.getElementById('dashboard-root').innerHTML = html;
   }
 
   // ---------- TAB 2: Groups (no day pre-selection needed) ----------
