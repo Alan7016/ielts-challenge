@@ -402,6 +402,7 @@ function setupListeningTimer(frame){
     attempts++;
     try {
       var win = frame.contentWindow;
+      hideStudentSubmitControls(win.document, '#deliver-button{display:none !important;}');
       var audio = win.document.getElementById('global-audio-player');
       if(!audio){
         if(attempts < 20){ setTimeout(attemptFind, 1000); return; }
@@ -432,6 +433,19 @@ function setupListeningTimer(frame){
     }
   }
   attemptFind();
+}
+
+// Injects a tiny CSS rule into a test iframe to hide its own self-check
+// button. This only runs from the mock orchestrator — the same test files
+// are used for regular practice days, where students SHOULD be able to
+// check their own answers, so nothing here touches the test files
+// themselves. Safe to call repeatedly; only ever adds the style once.
+function hideStudentSubmitControls(doc, css){
+  if(doc.getElementById('__mockHideStyle')) return;
+  var style = doc.createElement('style');
+  style.id = '__mockHideStyle';
+  style.textContent = css;
+  (doc.head || doc.documentElement).appendChild(style);
 }
 
 function beginListeningCountdown(seconds){
@@ -496,7 +510,16 @@ function goToReading(){
   showScreen('reading');
   updateProgress(2);
   document.getElementById('headerLabel').textContent = 'Section 2 of 3 — Reading';
-  document.getElementById('readingFrame').src = 'reading-mock18.html';
+  var frame = document.getElementById('readingFrame');
+  frame.onload = function(){
+    try {
+      // Hides the "OK" button that opens the submit-test overlay — our own
+      // forced grading calls __mockForceGrade() directly and doesn't need
+      // this button at all, so hiding it only blocks early self-checking.
+      hideStudentSubmitControls(frame.contentWindow.document, '#review{display:none !important;}');
+    } catch(e){}
+  };
+  frame.src = 'reading-mock18.html';
   startTimer(60 * 60, finishReading);
 }
 
