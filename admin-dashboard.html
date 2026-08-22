@@ -76,7 +76,12 @@
       else showDaysTab();
     });
 
-    showOverview();
+    if (location.hash === '#days') {
+      document.querySelectorAll('#top-tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === 'days'));
+      showDaysTab();
+    } else {
+      showOverview();
+    }
   });
 
   // ---------- TAB 1: Overview ----------
@@ -291,7 +296,7 @@
       const isOpen = liveDays.includes(d);
       const isMock = MOCK_DAYS.includes(d);
       if (isMock && isOpen) {
-        html += `<a href="mock-results.html?day=${d}" class="day-chip staff open mock">
+        html += `<a href="days/day${d}.html" class="day-chip staff open mock">
           <span class="num">${String(d).padStart(2, '0')}</span>
           <span class="lbl">🎯 Mock Exam</span>
         </a>`;
