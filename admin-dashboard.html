@@ -107,11 +107,29 @@
     const nonMockDays = liveDays.filter(d => !MOCK_DAYS.includes(d)).sort((a, b) => a - b);
     const mockDaysLive = liveDays.filter(d => MOCK_DAYS.includes(d));
 
-    const [{ data: students }, { data: progressRows }, { data: staff }, { data: pointsRows }, { count: speakingCount }, { count: writingCount }] = await Promise.all([
+    // Supabase caps a single response at 1000 rows — with 16+ days of
+    // progress rows across every student, that limit gets hit easily, and
+    // silently truncates to whichever rows happened to come back first
+    // (which looked like "only Day 1 has any data"). Page through in full.
+    async function fetchAllRows(buildQuery) {
+      const pageSize = 1000;
+      let from = 0;
+      let all = [];
+      while (true) {
+        const { data, error } = await buildQuery().range(from, from + pageSize - 1);
+        if (error) { console.error(error); break; }
+        all = all.concat(data || []);
+        if (!data || data.length < pageSize) break;
+        from += pageSize;
+      }
+      return all;
+    }
+
+    const [{ data: students }, progressRows, { data: staff }, { data: pointsRows }, { count: speakingCount }, { count: writingCount }] = await Promise.all([
       sb.from('profiles').select('id, group_id').eq('role', 'student'),
       nonMockDays.length > 0
-        ? sb.from('progress').select('day, task, student_id').eq('completed', true).in('day', nonMockDays)
-        : Promise.resolve({ data: [] }),
+        ? fetchAllRows(() => sb.from('progress').select('day, task, student_id').eq('completed', true).in('day', nonMockDays))
+        : Promise.resolve([]),
       sb.from('profiles').select('role').in('role', ['teacher', 'checker']),
       sb.from('points').select('points'),
       sb.from('answers').select('*', { count: 'exact', head: true }).like('field_id', 'speaking-%'),
