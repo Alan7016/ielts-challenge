@@ -51,7 +51,12 @@
 
     const params = new URLSearchParams(window.location.search);
     const returnTo = params.get('returnTo');
-    if (role === 'teacher') {
+    if (role === 'admin') {
+      // Admin often lands here via a day page's session-expiry redirect —
+      // honor returnTo so they land back on what they were viewing,
+      // otherwise default to the admin dashboard.
+      window.location.href = returnTo ? decodeURIComponent(returnTo) : 'admin-dashboard.html';
+    } else if (role === 'teacher') {
       window.location.href = 'teacher-dashboard.html';
     } else if (role === 'checker') {
       window.location.href = 'checker-dashboard.html';
