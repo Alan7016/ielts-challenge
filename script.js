@@ -1063,7 +1063,22 @@ const SPEAKING_QUESTIONS = {
   'speaking-crowded-q2': 'Do you like crowded places?',
   'speaking-crowded-q3': 'When was the last time you were in a crowded place?',
   'speaking-crowded-q4': 'Is the city where you live crowded?',
-  'speaking-crowded-q5': 'Is there a crowded place near where you live?'
+  'speaking-crowded-q5': 'Is there a crowded place near where you live?',
+  'speaking-nature-part2': 'Part 2 — Describe a person who encouraged you to protect the nature.',
+  'speaking-nature-q1': 'Part 3 — How can parents teach their children to protect nature?',
+  'speaking-nature-q2': 'Part 3 — Should schools teach children to get close to nature?',
+  'speaking-nature-q3': 'Part 3 — Do you think there should be laws to protect nature?',
+  'speaking-paidmore-part2': 'Part 2 — Describe an occasion when you paid more than expected.',
+  'speaking-paidmore-q1': 'Part 3 — What do young people spend money on?',
+  'speaking-paidmore-q2': 'Part 3 — Is it good and necessary to teach children to save money?',
+  'speaking-paidmore-q3': 'Part 3 — Do you think it is important to save money?',
+  'speaking-paidmore-q4': "Part 3 — Do you think that people buy a lot of things that they don't need?",
+  'speaking-helps-part2': 'Part 2 — Describe a person who often helps others.',
+  'speaking-helps-q1': 'Part 3 — What can children help parents with?',
+  'speaking-helps-q2': 'Part 3 — In your view, should children be taught to help others?',
+  'speaking-helps-q3': 'Part 3 — Should children help their parents with household chores?',
+  'speaking-helps-q4': 'Part 3 — What kind of help do people need when looking for a new job?',
+  'speaking-helps-q5': 'Part 3 — Who should people ask for help, colleagues or family members?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
