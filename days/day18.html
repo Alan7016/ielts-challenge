@@ -184,7 +184,7 @@
 <!-- SCREEN: LISTENING -->
 <div class="screen" id="screen-listening">
   <div class="iframe-wrap">
-    <div class="loading-overlay" id="listenLoading"><div class="spinner"></div><div>Loading audio…</div></div>
+    <div class="loading-overlay" id="listenLoading"><div class="spinner"></div><div>Loading audio…</div><button id="listenSkipBtn" class="ghost" style="display:none; margin-top:14px; padding:6px 16px; font-size:13px;">Taking too long? Click to continue →</button></div>
     <iframe id="listeningFrame" src="" title="Listening test" allow="autoplay"></iframe>
   </div>
   <div class="section-footer">
@@ -360,45 +360,78 @@ function startExam(){
   document.getElementById('timerDisplay').style.display = 'none';
 
   var frame = document.getElementById('listeningFrame');
-  frame.src = 'listening-mock18.html';
-  frame.onload = function(){
+  var initialized = false;
+  function tryInit(){
+    if(initialized) return;
+    initialized = true;
     setupListeningTimer(frame);
-  };
+  }
+  frame.onload = tryInit;
+  frame.src = 'listening-mock18.html';
+  // This file is ~26MB (mostly the embedded audio) — its "load" event can
+  // take a long time, or in rare cases not fire reliably at all. This
+  // watchdog guarantees the section starts moving regardless, instead of
+  // getting stuck on the loading screen forever.
+  setTimeout(tryInit, 12000);
 }
 window.startExam = startExam;
 
 // Reads the real audio length out of the iframe so the listening timer
-// matches it exactly, instead of guessing a fixed 30 minutes. Falls back
-// to 30 minutes if anything about the audio element isn't reachable.
+// matches it exactly, instead of guessing a fixed 30 minutes. Retries for
+// a while in case the huge file is still parsing, then falls back to 30
+// minutes if the audio element genuinely never becomes reachable.
 function setupListeningTimer(frame){
   var loading = document.getElementById('listenLoading');
+  var settled = false;
   var fallback = function(){
+    if(settled) return;
+    settled = true;
     loading.style.display = 'none';
     beginListeningCountdown(30 * 60);
   };
-  try {
-    var win = frame.contentWindow;
-    var audio = win.document.getElementById('global-audio-player');
-    if(!audio){ fallback(); return; }
 
-    var started = false;
-    function goWithDuration(){
-      if(started) return;
-      if(!audio.duration || isNaN(audio.duration) || !isFinite(audio.duration)) return;
-      started = true;
-      loading.style.display = 'none';
-      beginListeningCountdown(Math.ceil(audio.duration));
-      // Try to start playback automatically — if the browser blocks it,
-      // the test's own play button is still right there for the student.
-      audio.play().catch(function(){});
+  // Last-resort manual escape hatch — only ever appears if the automatic
+  // path (below) hasn't resolved within 20 seconds of the exam starting.
+  var skipBtn = document.getElementById('listenSkipBtn');
+  skipBtn.onclick = function(){ skipBtn.style.display = 'none'; fallback(); };
+  setTimeout(function(){ if(!settled) skipBtn.style.display = 'inline-block'; }, 20000);
+
+  var attempts = 0;
+  function attemptFind(){
+    if(settled) return;
+    attempts++;
+    try {
+      var win = frame.contentWindow;
+      var audio = win.document.getElementById('global-audio-player');
+      if(!audio){
+        if(attempts < 20){ setTimeout(attemptFind, 1000); return; }
+        fallback();
+        return;
+      }
+
+      var started = false;
+      function goWithDuration(){
+        if(started || settled) return;
+        if(!audio.duration || isNaN(audio.duration) || !isFinite(audio.duration)) return;
+        started = true;
+        settled = true;
+        skipBtn.style.display = 'none';
+        loading.style.display = 'none';
+        beginListeningCountdown(Math.ceil(audio.duration));
+        // Try to start playback automatically — if the browser blocks it,
+        // the test's own play button is still right there for the student.
+        audio.play().catch(function(){});
+      }
+      if(audio.readyState >= 1 && audio.duration) goWithDuration();
+      audio.addEventListener('loadedmetadata', goWithDuration);
+      // Generous safety net in case metadata never fires for some reason.
+      setTimeout(function(){ if(!started) fallback(); }, 15000);
+    } catch(e){
+      if(attempts < 20){ setTimeout(attemptFind, 1000); return; }
+      fallback();
     }
-    if(audio.readyState >= 1 && audio.duration) goWithDuration();
-    audio.addEventListener('loadedmetadata', goWithDuration);
-    // Safety net in case metadata never fires for some reason.
-    setTimeout(function(){ if(!started) fallback(); }, 8000);
-  } catch(e){
-    fallback();
   }
+  attemptFind();
 }
 
 function beginListeningCountdown(seconds){
