@@ -20,11 +20,14 @@
     </div>
   </header>
 
-  <section class="hero" style="padding-top:64px; padding-bottom:8px;">
+  <section class="hero" style="padding-top:48px; padding-bottom:8px;">
     <div class="wrap">
       <div class="eyebrow">Admin view</div>
-      <h1 id="page-title">Pick a day</h1>
-      <p class="tag" id="page-sub">Every group, every student — pick a day to start.</p>
+      <h1 id="page-title">Overview</h1>
+      <div class="tab-toggle" id="top-tabs" style="margin-top:18px;">
+        <button data-tab="overview" class="active">Overview</button>
+        <button data-tab="groups">Groups</button>
+      </div>
     </div>
   </section>
 
@@ -42,10 +45,15 @@
 <script>
   const TASKS_PER_DAY = 9;
   let liveDays = [];
-
   let allGroups = [];
   let selectedDay = null;
   let selectedGroup = null;
+
+  // Actual total-task count per day, read from the live files — some days
+  // drop reading or listening, so this isn't a flat constant. Falls back to
+  // 9 for any day not listed here (new days built after this was written).
+  const DAY_TOTAL_TASKS = { 1: 9, 2: 9, 3: 9, 5: 9, 6: 9, 7: 9, 8: 8, 9: 8, 10: 8, 12: 8, 13: 8, 14: 8, 15: 8, 16: 8 };
+  function totalTasksFor(day) { return DAY_TOTAL_TASKS[day] || 9; }
 
   requireAuth(async function (profile, user) {
     if (profile.role !== 'admin') {
@@ -54,102 +62,160 @@
     }
 
     const sb = getSupabaseClient();
-    // Unlike teacher/checker dashboards, admin isn't scoped to assigned
-    // groups — every group in the platform is visible.
     const { data: groups } = await sb.from('groups').select('id, name').order('id');
     allGroups = groups || [];
     liveDays = await getLiveDays();
 
-    showDayPicker();
+    document.getElementById('top-tabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('button'); if (!btn) return;
+      document.querySelectorAll('#top-tabs button').forEach(b => b.classList.toggle('active', b === btn));
+      if (btn.dataset.tab === 'overview') showOverview();
+      else showGroupPicker();
+    });
+
+    showOverview();
   });
 
-  // ---------- Screen 1: day grid ----------
-  function showDayPicker() {
-    selectedDay = null;
-    selectedGroup = null;
-    document.getElementById('page-title').textContent = 'Pick a day';
-    document.getElementById('page-sub').textContent = 'Every group, every student — pick a day to start.';
+  // ---------- TAB 1: Overview ----------
+  async function showOverview() {
+    document.getElementById('page-title').textContent = 'Overview';
+    const root = document.getElementById('dashboard-root');
+    root.innerHTML = `<p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>`;
 
-    let html = '<div class="track-grid">';
-    for (let d = 1; d <= 30; d++) {
-      const isOpen = liveDays.includes(d);
-      const isMock = MOCK_DAYS.includes(d);
-      if (isMock && isOpen) {
-        html += `<a href="mock-results.html?day=${d}" class="day-chip staff open mock">
-          <span class="num">${String(d).padStart(2, '0')}</span>
-          <span class="lbl">🎯 Mock Exam</span>
-        </a>`;
-      } else if (isOpen) {
-        html += `<a href="#" class="day-chip staff open" data-day="${d}">
-          <span class="num">${String(d).padStart(2, '0')}</span>
-          <span class="lbl">Day ${d}</span>
-        </a>`;
-      } else {
-        html += `<div class="day-chip staff locked${isMock ? ' mock' : ''}" title="Not live yet">
-          <span class="num">${String(d).padStart(2, '0')}</span>
-          <span class="lbl">${isMock ? '🎯 Mock Exam' : 'Day ' + d}</span>
-        </div>`;
-      }
-    }
-    html += '</div>';
-    document.getElementById('dashboard-root').innerHTML = html;
+    const sb = getSupabaseClient();
+    const nonMockDays = liveDays.filter(d => !MOCK_DAYS.includes(d));
+    const mockDaysLive = liveDays.filter(d => MOCK_DAYS.includes(d));
 
-    document.querySelectorAll('.day-chip.open[data-day]').forEach(chip => {
-      chip.addEventListener('click', (e) => {
-        e.preventDefault();
-        selectedDay = +chip.dataset.day;
-        showGroupPicker();
-      });
+    const [{ data: students }, { data: progressRows }] = await Promise.all([
+      sb.from('profiles').select('id, group_id').eq('role', 'student'),
+      nonMockDays.length > 0
+        ? sb.from('progress').select('day, task, student_id').eq('completed', true).in('day', nonMockDays)
+        : Promise.resolve({ data: [] })
+    ]);
+
+    const totalStudents = (students || []).length;
+    const studentsByGroup = {};
+    (students || []).forEach(s => {
+      if (!s.group_id) return;
+      studentsByGroup[s.group_id] = (studentsByGroup[s.group_id] || 0) + 1;
     });
-  }
 
-  // ---------- Screen 2: group buttons (every group on the platform) ----------
-  function showGroupPicker() {
-    document.getElementById('page-title').textContent = `Day ${selectedDay} — pick a group`;
-    document.getElementById('page-sub').textContent = '';
+    // completedCountByDay[day][studentId] = number of tasks that student completed that day
+    const completedCountByDay = {};
+    (progressRows || []).forEach(p => {
+      completedCountByDay[p.day] = completedCountByDay[p.day] || {};
+      completedCountByDay[p.day][p.student_id] = (completedCountByDay[p.day][p.student_id] || 0) + 1;
+    });
 
-    if (allGroups.length === 0) {
-      document.getElementById('dashboard-root').innerHTML = `
-        <a href="#" class="back-link" id="back-to-days">← Back to days</a>
-        <p style="color:var(--muted);">No groups exist yet.</p>
-      `;
-    } else {
-      document.getElementById('dashboard-root').innerHTML = `
-        <a href="#" class="back-link" id="back-to-days">← Back to days</a>
-        <div class="group-btn-grid">
-          ${allGroups.map(g => `
-            <button class="group-btn" data-group="${g.id}">
-              <span class="g-name">${g.name}</span>
-              <span class="g-meta">View students →</span>
-            </button>
-          `).join('')}
+    let dayRows = '';
+    let sumPct = 0, pctCount = 0;
+    nonMockDays.sort((a, b) => a - b).forEach(day => {
+      const need = totalTasksFor(day);
+      const perStudent = completedCountByDay[day] || {};
+      const finishedCount = Object.values(perStudent).filter(c => c >= need).length;
+      const attemptedCount = Object.keys(perStudent).length;
+      const pct = totalStudents > 0 ? Math.round((finishedCount / totalStudents) * 100) : 0;
+      sumPct += pct; pctCount++;
+      dayRows += `
+        <div style="display:flex; align-items:center; gap:14px; padding:10px 0; border-bottom:1px solid var(--surface-2);">
+          <span style="font-family:var(--mono); font-size:0.85rem; font-weight:600; width:60px;">Day ${day}</span>
+          <div style="flex:1; background:var(--surface-2); border-radius:6px; height:10px; overflow:hidden;">
+            <div style="width:${pct}%; background:var(--accent); height:100%;"></div>
+          </div>
+          <span style="font-family:var(--mono); font-size:0.82rem; color:var(--muted); width:150px; text-align:right;">${finishedCount}/${totalStudents} finished (${pct}%)</span>
+          <span style="font-family:var(--mono); font-size:0.78rem; color:var(--muted); width:110px; text-align:right;">${attemptedCount} attempted</span>
         </div>
       `;
+    });
+    const avgCompletion = pctCount > 0 ? Math.round(sumPct / pctCount) : 0;
+
+    let mockRow = '';
+    if (mockDaysLive.length > 0) {
+      mockRow = `<p style="margin-top:16px;"><a href="mock-results.html?day=${mockDaysLive[0]}" class="ghost" style="display:inline-block; padding:8px 16px; border-radius:8px; text-decoration:none;">🎯 View Mock Exam results (Day ${mockDaysLive.join(', ')}) →</a></p>`;
     }
 
-    document.getElementById('back-to-days').addEventListener('click', (e) => { e.preventDefault(); showDayPicker(); });
+    root.innerHTML = `
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:32px;">
+        <div class="stat-card"><div class="stat-num">${totalStudents}</div><div class="stat-label">Total students</div></div>
+        <div class="stat-card"><div class="stat-num">${allGroups.length}</div><div class="stat-label">Groups</div></div>
+        <div class="stat-card"><div class="stat-num">${nonMockDays.length}</div><div class="stat-label">Live days</div></div>
+        <div class="stat-card"><div class="stat-num">${avgCompletion}%</div><div class="stat-label">Avg. completion</div></div>
+      </div>
+
+      <h2 style="margin-bottom:6px;">Completion by day</h2>
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:0;">"Finished" means every task for that day is complete. "Attempted" means at least one task was started.</p>
+      <div class="card">${dayRows || '<p style="color:var(--muted);">No days live yet.</p>'}</div>
+      ${mockRow}
+
+      <h2 style="margin:32px 0 6px;">Students per group</h2>
+      <div class="card">
+        ${allGroups.map(g => `
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--surface-2); font-size:0.88rem;">
+            <span>${g.name}</span>
+            <span style="font-family:var(--mono); color:var(--muted);">${studentsByGroup[g.id] || 0} students</span>
+          </div>
+        `).join('') || '<p style="color:var(--muted);">No groups yet.</p>'}
+      </div>
+    `;
+  }
+
+  // ---------- TAB 2: Groups (no day pre-selection needed) ----------
+  function showGroupPicker() {
+    document.getElementById('page-title').textContent = 'Groups';
+    selectedGroup = null;
+
+    if (allGroups.length === 0) {
+      document.getElementById('dashboard-root').innerHTML = `<p style="color:var(--muted);">No groups exist yet.</p>`;
+      return;
+    }
+    document.getElementById('dashboard-root').innerHTML = `
+      <div class="group-btn-grid">
+        ${allGroups.map(g => `
+          <button class="group-btn" data-group="${g.id}">
+            <span class="g-name">${g.name}</span>
+            <span class="g-meta">View students →</span>
+          </button>
+        `).join('')}
+      </div>
+    `;
     document.querySelectorAll('.group-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         selectedGroup = allGroups.find(g => g.id === +btn.dataset.group);
+        selectedDay = liveDays.filter(d => !MOCK_DAYS.includes(d)).sort((a, b) => b - a)[0] || null;
         showStudentList();
       });
     });
   }
 
-  // ---------- Screen 3: full-detail student list, with both writing + bonus grading ----------
+  function dayDropdownHtml() {
+    const options = liveDays.filter(d => !MOCK_DAYS.includes(d)).sort((a, b) => b - a)
+      .map(d => `<option value="${d}" ${d === selectedDay ? 'selected' : ''}>Day ${d}</option>`).join('');
+    return `<select id="day-select" style="padding:6px 10px; border:1px solid var(--border); border-radius:8px; font-family:var(--mono); font-size:0.85rem;">${options}</select>`;
+  }
+
+  // ---------- Screen: full-detail student list for selected group + day ----------
   async function showStudentList() {
-    document.getElementById('page-title').textContent = `${selectedGroup.name} — Day ${selectedDay}`;
-    document.getElementById('page-sub').textContent = '';
+    document.getElementById('page-title').textContent = selectedGroup.name;
     const root = document.getElementById('dashboard-root');
-    root.innerHTML = `<a href="#" class="back-link" id="back-to-groups">← Back to groups</a><p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading students…</p>`;
+    root.innerHTML = `
+      <a href="#" class="back-link" id="back-to-groups">← Back to groups</a>
+      <div style="display:flex; align-items:center; gap:10px; margin:12px 0 20px;">
+        <label style="font-size:0.85rem; font-weight:600;">Viewing:</label>
+        ${dayDropdownHtml()}
+      </div>
+      <p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading students…</p>
+    `;
     document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
+    document.getElementById('day-select').addEventListener('change', (e) => {
+      selectedDay = +e.target.value;
+      showStudentList();
+    });
 
     const sb = getSupabaseClient();
     const { data: students } = await sb.from('profiles').select('id, full_name, avatar_url').eq('group_id', selectedGroup.id).eq('role', 'student').order('full_name');
 
     if (!students || students.length === 0) {
-      root.innerHTML = `<a href="#" class="back-link" id="back-to-groups">← Back to groups</a><p style="color:var(--muted);">No students registered in this group yet.</p>`;
-      document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
+      root.insertAdjacentHTML('beforeend', `<p style="color:var(--muted);">No students registered in this group yet.</p>`);
       return;
     }
 
@@ -279,8 +345,7 @@
       `;
     }
 
-    root.innerHTML = `
-      <a href="#" class="back-link" id="back-to-groups">← Back to groups</a>
+    const listHtml = `
       ${students.map(s => `
         <div class="student-row">
           <div class="student-row-top">
@@ -296,6 +361,9 @@
         </div>
       `).join('')}
     `;
+    // Replace only the "Loading students…" line, keep the back-link + day dropdown above it intact.
+    root.querySelector('p').outerHTML = listHtml;
+
 
     document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
     root.querySelectorAll('.writing-toggle').forEach(btn => {
