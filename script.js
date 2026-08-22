@@ -30,6 +30,14 @@ async function requireAuth(onReady) {
   const { data: profile } = await sb.from('profiles').select('full_name, role, group_id, avatar_url').eq('id', session.user.id).single();
   currentUserRole = profile ? profile.role : null;
 
+  // Day pages hardcode "← Board" to point at the student board — for admin,
+  // that link should return to the admin dashboard instead. Fixed here
+  // rather than in all 18 day files individually.
+  if (currentUserRole === 'admin') {
+    const backHome = document.getElementById('back-home');
+    if (backHome) backHome.href = pathToRoot() + 'admin-dashboard.html#days';
+  }
+
   const gate = document.getElementById('gate');
   const content = document.getElementById('content');
   if (gate) gate.style.display = 'none';
