@@ -86,31 +86,57 @@
     bonus_article: 'var(--warn)', bonus_video: 'var(--warn)', bonus_reading_listening: 'var(--warn)'
   };
 
-  let me, myProfile;
+  let me, myProfile, targetId, canEdit;
 
   requireAuth(async function (profile, user) {
     me = user;
     myProfile = profile;
-    document.getElementById('profile-name').textContent = profile.full_name;
-
-    renderAvatar(profile.avatar_url, profile.full_name);
-    document.getElementById('avatar-input').addEventListener('change', handleAvatarUpload);
-    const editBtn = document.getElementById('edit-profile-btn');
-    const cameraBadge = document.getElementById('avatar-camera-badge');
-    let editing = false;
-    editBtn.addEventListener('click', () => {
-      editing = !editing;
-      cameraBadge.style.display = editing ? 'flex' : 'none';
-      editBtn.textContent = editing ? 'Done' : 'Edit';
-    });
-
     const sb = getSupabaseClient();
+
+    const requestedId = new URLSearchParams(location.search).get('student');
+    const isStaffViewing = requestedId && requestedId !== user.id && (profile.role === 'teacher' || profile.role === 'checker' || profile.role === 'admin');
+    targetId = isStaffViewing ? requestedId : user.id;
+    canEdit = !isStaffViewing;
+
+    let targetProfile = profile;
+    if (isStaffViewing) {
+      const { data } = await sb.from('profiles').select('full_name, role, group_id, avatar_url').eq('id', targetId).single();
+      if (!data) {
+        document.getElementById('profile-name').textContent = 'Student not found';
+        document.getElementById('content').style.display = 'block';
+        return;
+      }
+      targetProfile = data;
+
+      // Read-only banner + back link, and hide every edit control.
+      const banner = document.createElement('div');
+      banner.className = 'wrap';
+      banner.style.cssText = 'padding-top:20px;';
+      banner.innerHTML = `<a href="#" onclick="history.back(); return false;" class="back-link">← Back to dashboard</a>
+        <p style="font-family:var(--mono); font-size:0.78rem; color:var(--accent); margin-top:8px;">👁 Viewing as ${profile.role} — read only</p>`;
+      document.querySelector('header.topbar').insertAdjacentElement('afterend', banner);
+      document.getElementById('edit-profile-btn').style.display = 'none';
+    } else {
+      document.getElementById('avatar-input').addEventListener('change', handleAvatarUpload);
+      const editBtn = document.getElementById('edit-profile-btn');
+      const cameraBadge = document.getElementById('avatar-camera-badge');
+      let editing = false;
+      editBtn.addEventListener('click', () => {
+        editing = !editing;
+        cameraBadge.style.display = editing ? 'flex' : 'none';
+        editBtn.textContent = editing ? 'Done' : 'Edit';
+      });
+    }
+
+    document.getElementById('profile-name').textContent = targetProfile.full_name;
+    renderAvatar(targetProfile.avatar_url, targetProfile.full_name);
+
     let groupName = '—';
-    if (profile.group_id) {
-      const { data: g } = await sb.from('groups').select('name').eq('id', profile.group_id).single();
+    if (targetProfile.group_id) {
+      const { data: g } = await sb.from('groups').select('name').eq('id', targetProfile.group_id).single();
       if (g) groupName = g.name;
     }
-    document.getElementById('profile-meta').textContent = `${groupName} · ${profile.role[0].toUpperCase()}${profile.role.slice(1)}`;
+    document.getElementById('profile-meta').textContent = `${groupName} · ${targetProfile.role[0].toUpperCase()}${targetProfile.role.slice(1)}`;
 
     await loadStats();
   });
@@ -153,8 +179,8 @@
     document.getElementById('stat-day').textContent = 'Day ' + currentDay;
 
     const [{ data: allPoints }, { data: progressRows }] = await Promise.all([
-      sb.from('points').select('day, category, points, max_points').eq('student_id', me.id),
-      sb.from('progress').select('day, completed').eq('student_id', me.id).eq('completed', true)
+      sb.from('points').select('day, category, points, max_points').eq('student_id', targetId),
+      sb.from('progress').select('day, completed').eq('student_id', targetId).eq('completed', true)
     ]);
 
     const points = allPoints || [];

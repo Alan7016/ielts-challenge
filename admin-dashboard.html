@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard — IELTS Marathon</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="content" style="display:none;">
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">IELTS <span>MARATHON</span></div>
+      <div style="display:flex; align-items:center; gap:14px; font-family:var(--mono); font-size:0.82rem; color:var(--muted);">
+        <span>Hi, <span id="user-greeting" style="color:var(--ink); font-weight:600;">…</span></span>
+        <button class="ghost" id="logout-btn" style="padding:7px 14px;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" style="padding-top:64px; padding-bottom:8px;">
+    <div class="wrap">
+      <div class="eyebrow">Admin view</div>
+      <h1 id="page-title">Pick a day</h1>
+      <p class="tag" id="page-sub">Every group, every student — pick a day to start.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap" id="dashboard-root">
+      <p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>
+    </div>
+  </section>
+
+</div>
+
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+<script>
+  const TASKS_PER_DAY = 9;
+  let liveDays = [];
+
+  let allGroups = [];
+  let selectedDay = null;
+  let selectedGroup = null;
+
+  requireAuth(async function (profile, user) {
+    if (profile.role !== 'admin') {
+      window.location.href = 'index.html';
+      return;
+    }
+
+    const sb = getSupabaseClient();
+    // Unlike teacher/checker dashboards, admin isn't scoped to assigned
+    // groups — every group in the platform is visible.
+    const { data: groups } = await sb.from('groups').select('id, name').order('id');
+    allGroups = groups || [];
+    liveDays = await getLiveDays();
+
+    showDayPicker();
+  });
+
+  // ---------- Screen 1: day grid ----------
+  function showDayPicker() {
+    selectedDay = null;
+    selectedGroup = null;
+    document.getElementById('page-title').textContent = 'Pick a day';
+    document.getElementById('page-sub').textContent = 'Every group, every student — pick a day to start.';
+
+    let html = '<div class="track-grid">';
+    for (let d = 1; d <= 30; d++) {
+      const isOpen = liveDays.includes(d);
+      const isMock = MOCK_DAYS.includes(d);
+      if (isMock && isOpen) {
+        html += `<a href="mock-results.html?day=${d}" class="day-chip staff open mock">
+          <span class="num">${String(d).padStart(2, '0')}</span>
+          <span class="lbl">🎯 Mock Exam</span>
+        </a>`;
+      } else if (isOpen) {
+        html += `<a href="#" class="day-chip staff open" data-day="${d}">
+          <span class="num">${String(d).padStart(2, '0')}</span>
+          <span class="lbl">Day ${d}</span>
+        </a>`;
+      } else {
+        html += `<div class="day-chip staff locked${isMock ? ' mock' : ''}" title="Not live yet">
+          <span class="num">${String(d).padStart(2, '0')}</span>
+          <span class="lbl">${isMock ? '🎯 Mock Exam' : 'Day ' + d}</span>
+        </div>`;
+      }
+    }
+    html += '</div>';
+    document.getElementById('dashboard-root').innerHTML = html;
+
+    document.querySelectorAll('.day-chip.open[data-day]').forEach(chip => {
+      chip.addEventListener('click', (e) => {
+        e.preventDefault();
+        selectedDay = +chip.dataset.day;
+        showGroupPicker();
+      });
+    });
+  }
+
+  // ---------- Screen 2: group buttons (every group on the platform) ----------
+  function showGroupPicker() {
+    document.getElementById('page-title').textContent = `Day ${selectedDay} — pick a group`;
+    document.getElementById('page-sub').textContent = '';
+
+    if (allGroups.length === 0) {
+      document.getElementById('dashboard-root').innerHTML = `
+        <a href="#" class="back-link" id="back-to-days">← Back to days</a>
+        <p style="color:var(--muted);">No groups exist yet.</p>
+      `;
+    } else {
+      document.getElementById('dashboard-root').innerHTML = `
+        <a href="#" class="back-link" id="back-to-days">← Back to days</a>
+        <div class="group-btn-grid">
+          ${allGroups.map(g => `
+            <button class="group-btn" data-group="${g.id}">
+              <span class="g-name">${g.name}</span>
+              <span class="g-meta">View students →</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    document.getElementById('back-to-days').addEventListener('click', (e) => { e.preventDefault(); showDayPicker(); });
+    document.querySelectorAll('.group-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedGroup = allGroups.find(g => g.id === +btn.dataset.group);
+        showStudentList();
+      });
+    });
+  }
+
+  // ---------- Screen 3: full-detail student list, with both writing + bonus grading ----------
+  async function showStudentList() {
+    document.getElementById('page-title').textContent = `${selectedGroup.name} — Day ${selectedDay}`;
+    document.getElementById('page-sub').textContent = '';
+    const root = document.getElementById('dashboard-root');
+    root.innerHTML = `<a href="#" class="back-link" id="back-to-groups">← Back to groups</a><p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading students…</p>`;
+    document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
+
+    const sb = getSupabaseClient();
+    const { data: students } = await sb.from('profiles').select('id, full_name, avatar_url').eq('group_id', selectedGroup.id).eq('role', 'student').order('full_name');
+
+    if (!students || students.length === 0) {
+      root.innerHTML = `<a href="#" class="back-link" id="back-to-groups">← Back to groups</a><p style="color:var(--muted);">No students registered in this group yet.</p>`;
+      document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
+      return;
+    }
+
+    const studentIds = students.map(s => s.id);
+    const [{ data: progress }, { data: answers }, { data: pointsRows }] = await Promise.all([
+      sb.from('progress').select('student_id, task, completed').eq('day', selectedDay).in('student_id', studentIds),
+      sb.from('answers').select('student_id, task, field_id, value, is_correct').eq('day', selectedDay).in('student_id', studentIds),
+      sb.from('points').select('student_id, category, points, comment').eq('day', selectedDay).in('student_id', studentIds)
+    ]);
+
+    const writingScoreByStudent = {};
+    const bonusByStudent = {};
+    (pointsRows || []).forEach(pt => {
+      if (pt.category === 'writing') writingScoreByStudent[pt.student_id] = pt.points;
+      if (pt.category.startsWith('bonus_')) {
+        bonusByStudent[pt.student_id] = bonusByStudent[pt.student_id] || {};
+        bonusByStudent[pt.student_id][pt.category] = { points: pt.points, comment: pt.comment };
+      }
+    });
+
+    const doneByStudent = {};
+    (progress || []).forEach(p => {
+      doneByStudent[p.student_id] = doneByStudent[p.student_id] || new Set();
+      if (p.completed) doneByStudent[p.student_id].add(p.task);
+    });
+
+    const answersByStudent = {};
+    (answers || []).forEach(a => {
+      answersByStudent[a.student_id] = answersByStudent[a.student_id] || {};
+      answersByStudent[a.student_id][a.task] = answersByStudent[a.student_id][a.task] || [];
+      answersByStudent[a.student_id][a.task].push(a);
+    });
+
+    // Speaking answers store a storage path, not the actual audio — fetch a
+    // temporary playable URL for each one before rendering.
+    const speakingPaths = (answers || []).filter(a => a.field_id.startsWith('speaking-')).map(a => a.value);
+    const signedUrlByPath = {};
+    await Promise.all(speakingPaths.map(async (path) => {
+      const { data, error } = await sb.storage.from('speaking-recordings').createSignedUrl(path, 3600);
+      if (error) console.error('Signed URL failed for', path, error);
+      if (data) signedUrlByPath[path] = data.signedUrl;
+    }));
+
+    function renderTicks(studentId) {
+      const done = doneByStudent[studentId] || new Set();
+      return Array.from({ length: TASKS_PER_DAY }, (_, i) =>
+        `<span class="tick ${done.has(i + 1) ? 'done' : ''}"></span>`
+      ).join('');
+    }
+
+    function renderTaskDetail(studentId) {
+      const byTask = answersByStudent[studentId] || {};
+      const taskNums = Object.keys(byTask).map(Number).sort((a, b) => a - b);
+      if (taskNums.length === 0) return '<p class="no-writing">No answers submitted yet.</p>';
+
+      return taskNums.map(taskNum => {
+        const items = byTask[taskNum];
+        const graded = items.filter(i => i.is_correct !== null);
+        const correctCount = graded.filter(i => i.is_correct === true).length;
+        const scoreLabel = graded.length > 0 ? ` — ${correctCount}/${graded.length} correct` : '';
+
+        const essay = items.find(i => i.field_id === 'task1-response');
+        if (essay) {
+          const words = essay.value.trim() ? essay.value.trim().split(/\s+/).length : 0;
+          return `<div style="margin-bottom:14px;"><strong>Task ${taskNum} (writing, ${words} words):</strong>
+            <div class="writing-box show" style="margin-top:6px;">${essay.value.replace(/</g, '&lt;') || '<span class="no-writing">Empty</span>'}</div></div>`;
+        }
+
+        const speakingItems = items.filter(i => i.field_id.startsWith('speaking-'));
+        if (speakingItems.length > 0) {
+          const recordings = speakingItems.map(i => {
+            const url = signedUrlByPath[i.value];
+            const label = speakingLabel(i.field_id);
+            return `<div style="margin-bottom:10px;">
+              <span style="font-family:var(--mono); font-size:0.8rem; color:var(--muted);">${label}</span>
+              ${url ? `<audio controls src="${url}" style="width:100%; margin-top:4px;"></audio>` : '<p class="no-writing">Playback unavailable</p>'}
+            </div>`;
+          }).join('');
+          return `<div style="margin-bottom:14px;"><strong>Task ${taskNum} (speaking, ${speakingItems.length} recordings):</strong><div style="margin-top:8px;">${recordings}</div></div>`;
+        }
+
+        const rows = items.map(i => {
+          const mark = i.is_correct === true ? '✓' : i.is_correct === false ? '✗' : '';
+          const color = i.is_correct === true ? 'var(--good)' : i.is_correct === false ? 'var(--warn)' : 'var(--muted)';
+          return `<div style="display:flex; justify-content:space-between; gap:10px; padding:3px 0; font-size:0.85rem;">
+            <span style="color:var(--muted); font-family:var(--mono);">${i.field_id}</span>
+            <span style="color:var(--ink);">${i.value} <span style="color:${color}; font-weight:700;">${mark}</span></span>
+          </div>`;
+        }).join('');
+
+        return `<div style="margin-bottom:14px;"><strong>Task ${taskNum}${scoreLabel}:</strong><div style="margin-top:4px;">${rows}</div></div>`;
+      }).join('');
+    }
+
+    const bonusFields = [
+      { category: 'bonus_article', label: 'Article analysis', max: 2 },
+      { category: 'bonus_video', label: 'Video analysis', max: 2 },
+      { category: 'bonus_reading_listening', label: 'Reading/Listening analysis', max: 3 }
+    ];
+
+    function renderGrading(studentId) {
+      const savedWriting = writingScoreByStudent[studentId];
+      const savedBonus = bonusByStudent[studentId] || {};
+      const bonusRows = bonusFields.map(f => {
+        const s = savedBonus[f.category] || {};
+        return `
+          <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:8px; flex-wrap:wrap;">
+            <label style="font-size:0.82rem; font-weight:600; min-width:180px;">${f.label} (0–${f.max}):</label>
+            <input type="number" class="bonus-score-input" data-category="${f.category}" data-max="${f.max}" min="0" max="${f.max}" step="0.5" value="${s.points !== undefined ? s.points : ''}" style="width:60px;">
+            <input type="text" class="bonus-comment-input" data-category="${f.category}" placeholder="Quick comment (optional)" value="${(s.comment || '').replace(/"/g, '&quot;')}" style="flex:1; min-width:160px; padding:4px 8px; border:1px solid var(--border); border-radius:6px;">
+          </div>
+        `;
+      }).join('');
+      return `
+        <div class="points-row" data-student="${studentId}" style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);">
+          <label style="font-size:0.82rem; font-weight:600;">Writing score (0–5):</label>
+          <input type="number" class="writing-score-input" min="0" max="5" step="0.5" value="${savedWriting !== undefined ? savedWriting : ''}" style="width:70px; margin:0 10px;">
+          <label style="font-size:0.82rem;"><input type="checkbox" class="writing-ai-flag"> AI-generated (forces 0)</label>
+          <button class="ghost save-writing-score" style="margin-left:12px; padding:4px 12px; font-size:0.8rem;">Save writing</button>
+          <span class="save-status-writing" style="font-size:0.8rem; color:var(--muted); margin-left:8px;"></span>
+
+          <p style="font-size:0.82rem; font-weight:600; margin:14px 0 8px;">Bonus points</p>
+          ${bonusRows}
+          <button class="ghost save-bonus-points" style="padding:4px 12px; font-size:0.8rem;">Save bonus points</button>
+          <span class="save-status-bonus" style="font-size:0.8rem; color:var(--muted); margin-left:8px;"></span>
+        </div>
+      `;
+    }
+
+    root.innerHTML = `
+      <a href="#" class="back-link" id="back-to-groups">← Back to groups</a>
+      ${students.map(s => `
+        <div class="student-row">
+          <div class="student-row-top">
+            <a href="profile.html?student=${s.id}" target="_blank" class="student-name" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit;">
+              ${s.avatar_url ? `<span class="avatar-circle" style="width:28px;height:28px;font-size:0.72rem;"><img src="${s.avatar_url}" alt="" onerror="this.parentElement.textContent='${initialsFor(s.full_name)}'"></span>` : `<span class="avatar-circle" style="width:28px;height:28px;font-size:0.72rem;">${initialsFor(s.full_name)}</span>`}
+              ${s.full_name}
+            </a>
+            <div class="student-ticks"><div class="day-ticks">${renderTicks(s.id)}</div></div>
+          </div>
+          <button class="writing-toggle" data-target="detail-${s.id}">Show details ▾</button>
+          <div class="writing-box" id="detail-${s.id}">${renderTaskDetail(s.id)}</div>
+          ${renderGrading(s.id)}
+        </div>
+      `).join('')}
+    `;
+
+    document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
+    root.querySelectorAll('.writing-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const box = document.getElementById(btn.dataset.target);
+        const nowShown = box.classList.toggle('show');
+        btn.textContent = btn.textContent.replace(nowShown ? '▾' : '▴', nowShown ? '▴' : '▾');
+      });
+    });
+
+    root.querySelectorAll('.points-row').forEach(row => {
+      const studentId = row.dataset.student;
+      const scoreInput = row.querySelector('.writing-score-input');
+      const aiFlag = row.querySelector('.writing-ai-flag');
+      aiFlag.addEventListener('change', () => {
+        if (aiFlag.checked) { scoreInput.value = '0'; scoreInput.disabled = true; }
+        else { scoreInput.disabled = false; }
+      });
+      row.querySelector('.save-writing-score').addEventListener('click', async () => {
+        let val = parseFloat(scoreInput.value);
+        if (isNaN(val)) val = 0;
+        val = Math.max(0, Math.min(5, val));
+        const status = row.querySelector('.save-status-writing');
+        status.textContent = 'Saving…';
+        const res = await sb.from('points').upsert({
+          student_id: studentId, day: selectedDay, category: 'writing',
+          points: val, max_points: 5, awarded_by: 'teacher', updated_at: new Date().toISOString()
+        }, { onConflict: 'student_id,day,category' });
+        status.textContent = res.error ? '⚠️ Failed to save' : '✓ Saved';
+        if (res.error) console.error(res.error);
+      });
+
+      row.querySelector('.save-bonus-points').addEventListener('click', async () => {
+        const status = row.querySelector('.save-status-bonus');
+        status.textContent = 'Saving…';
+        const scoreInputs = row.querySelectorAll('.bonus-score-input');
+        const commentInputs = {};
+        row.querySelectorAll('.bonus-comment-input').forEach(c => { commentInputs[c.dataset.category] = c.value.trim(); });
+
+        const upserts = Array.from(scoreInputs).map(inp => {
+          const max = parseFloat(inp.dataset.max);
+          let val = parseFloat(inp.value);
+          if (isNaN(val)) val = 0;
+          val = Math.max(0, Math.min(max, val));
+          return {
+            student_id: studentId, day: selectedDay, category: inp.dataset.category,
+            points: val, max_points: max, comment: commentInputs[inp.dataset.category] || null,
+            awarded_by: 'checker', updated_at: new Date().toISOString()
+          };
+        });
+
+        const res = await sb.from('points').upsert(upserts, { onConflict: 'student_id,day,category' });
+        status.textContent = res.error ? '⚠️ Failed to save' : '✓ Saved';
+        if (res.error) console.error(res.error);
+      });
+    });
+  }
+</script>
+</body>
+</html>
