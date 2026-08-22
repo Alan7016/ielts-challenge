@@ -136,14 +136,14 @@ function checkIsCorrect(studentAns, correctAns){
 function esc(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 requireAuth(function(profile, user){
-  if(profile.role !== 'teacher' && profile.role !== 'checker'){
+  if(profile.role !== 'teacher' && profile.role !== 'checker' && profile.role !== 'admin'){
     window.location.href = 'index.html';
     return;
   }
   myProfile = profile;
   myUserId = user.id;
   sb = getSupabaseClient();
-  document.getElementById('back-btn').href = profile.role === 'teacher' ? 'teacher-dashboard.html' : 'checker-dashboard.html';
+  document.getElementById('back-btn').href = profile.role === 'teacher' ? 'teacher-dashboard.html' : profile.role === 'checker' ? 'checker-dashboard.html' : 'admin-dashboard.html';
   loadAll();
 });
 
