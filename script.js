@@ -12,6 +12,11 @@ function getSupabaseClient() {
   return _sbClient;
 }
 
+// Tracks the logged-in user's role for this page load, set by requireAuth.
+// initTaskFlow and initRecordControl read this to bypass locking for admins
+// without needing every single day file to be edited individually.
+let currentUserRole = null;
+
 async function requireAuth(onReady) {
   const sb = getSupabaseClient();
   const { data: { session } } = await sb.auth.getSession();
@@ -23,6 +28,7 @@ async function requireAuth(onReady) {
   }
 
   const { data: profile } = await sb.from('profiles').select('full_name, role, group_id, avatar_url').eq('id', session.user.id).single();
+  currentUserRole = profile ? profile.role : null;
 
   const gate = document.getElementById('gate');
   const content = document.getElementById('content');
@@ -580,9 +586,18 @@ function freezeTask(taskNum, checkFn) {
 // ============================================
 async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
   checkFns = checkFns || {};
+  const isAdmin = currentUserRole === 'admin';
   let current = 1;
   const doneTasks = {};
   const lockedTasks = {};
+
+  if (isAdmin) {
+    const banner = document.createElement('div');
+    banner.className = 'wrap';
+    banner.style.cssText = 'padding-top:16px;';
+    banner.innerHTML = `<p style="font-family:var(--mono); font-size:0.78rem; color:var(--accent); background:var(--accent-soft); display:inline-block; padding:6px 14px; border-radius:8px;">🔑 Admin preview — nothing on this page is saved, and every task is unlocked</p>`;
+    document.querySelector('header.day-header').insertAdjacentElement('afterend', banner);
+  }
 
   const dotsWrap = document.getElementById('dots');
   for (let i = 1; i <= totalTasks; i++) {
@@ -592,20 +607,24 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
     dotsWrap.appendChild(d);
   }
 
-  // ---- Load everything saved so far, restore field values, freeze locked tasks ----
-  const { answerMap, progressMap } = await loadDayState(userId, dayNumber);
-  Object.keys(answerMap).forEach(fieldId => restoreField(fieldId, answerMap[fieldId]));
-  for (let i = 1; i <= totalTasks; i++) {
-    const p = progressMap[i];
-    if (p && p.completed) doneTasks[i] = true;
-    if (p && p.locked) {
-      lockedTasks[i] = true;
-      freezeTask(i, checkFns[i]);
-      // Backfills points for tasks completed before this feature existed,
-      // or simply re-affirms them on every load — upsert makes this safe
-      // to repeat, it just rewrites the same row.
-      const taskContainer = document.getElementById('task' + i);
-      if (taskContainer) autoAwardPoints(userId, dayNumber, taskContainer);
+  // Admins get a blank, read-through page — no saved state to restore, no
+  // locked tasks to freeze (they have no progress rows, and shouldn't gain any).
+  if (!isAdmin) {
+    // ---- Load everything saved so far, restore field values, freeze locked tasks ----
+    const { answerMap, progressMap } = await loadDayState(userId, dayNumber);
+    Object.keys(answerMap).forEach(fieldId => restoreField(fieldId, answerMap[fieldId]));
+    for (let i = 1; i <= totalTasks; i++) {
+      const p = progressMap[i];
+      if (p && p.completed) doneTasks[i] = true;
+      if (p && p.locked) {
+        lockedTasks[i] = true;
+        freezeTask(i, checkFns[i]);
+        // Backfills points for tasks completed before this feature existed,
+        // or simply re-affirms them on every load — upsert makes this safe
+        // to repeat, it just rewrites the same row.
+        const taskContainer = document.getElementById('task' + i);
+        if (taskContainer) autoAwardPoints(userId, dayNumber, taskContainer);
+      }
     }
   }
   // Resume right after the last completed task, or at 1 if nothing's done yet.
@@ -613,6 +632,7 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
   for (let i = 1; i <= totalTasks; i++) { if (doneTasks[i]) current = Math.min(i + 1, totalTasks); }
 
   function isTaskComplete(n) {
+    if (isAdmin) return true;
     if (lockedTasks[n]) return true;
     const container = document.getElementById('task' + n);
     if (!container) return true;
@@ -670,7 +690,8 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
 
   async function goNext() {
     // Lock the task the student is leaving — from now on it's frozen.
-    if (!lockedTasks[current]) {
+    // Admins skip all of this: no confirm dialog, no lock, no save, no points.
+    if (!isAdmin && !lockedTasks[current]) {
       const container = document.getElementById('task' + current);
       const freeTextBox = container.querySelector('textarea.no-check');
       if (freeTextBox) {
@@ -716,6 +737,7 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
   document.getElementById('content').addEventListener('input', handleFieldChange);
   document.getElementById('content').addEventListener('change', handleFieldChange);
   function handleFieldChange(e) {
+    if (isAdmin) return; // admin preview never writes to the database
     const el = e.target;
     if (!['INPUT', 'SELECT', 'TEXTAREA'].includes(el.tagName)) return;
     const taskEl = el.closest('.task');
@@ -1047,6 +1069,13 @@ function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
 }
 async function initRecordControl(box, userId, day, task, fieldId) {
+  if (currentUserRole === 'admin') {
+    const recordBtn = box.querySelector('.record-btn');
+    const statusEl = box.querySelector('.record-status');
+    if (recordBtn) { recordBtn.disabled = true; recordBtn.textContent = '● Recording disabled in admin preview'; }
+    if (statusEl) { statusEl.textContent = ''; }
+    return;
+  }
   const sb = getSupabaseClient();
   const path = `${day}/${userId}/${fieldId}.webm`;
   const recordBtn = box.querySelector('.record-btn');
