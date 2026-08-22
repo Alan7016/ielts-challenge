@@ -1233,7 +1233,7 @@ async function initRecordControl(box, userId, day, task, fieldId) {
 // ============================================
 // Days that are full mock exams rather than regular content days.
 // Add future mock days here — every dashboard reads from this one place.
-const MOCK_DAYS = [11];
+const MOCK_DAYS = [11, 18];
 
 async function getLiveDays() {
   const checks = await Promise.all(
