@@ -155,13 +155,81 @@ var allStudents = {};
 var myStudentIds = [];
 var groupMap = {};
 
+// ── LENIENT ANSWER MATCHING ─────────────────────────────────────────────────
+// IELTS accepts several equivalent ways of writing the same answer — dates
+// ("30 November" / "November 30th" / "30 Nov"), times ("10:30" / "10.30" /
+// "10 am"), and numbers with or without thousands commas or ordinal suffixes
+// ("1,200" / "1200", "15th" / "15"). A strict string comparison marks all of
+// these wrong even though a real examiner would accept them, so both sides
+// go through the same normalizer before comparing.
+var MONTH_ABBR = {
+  january:'jan', february:'feb', march:'mar', april:'apr', may:'may', june:'jun',
+  july:'jul', august:'aug', september:'sep', october:'oct', november:'nov', december:'dec'
+};
+function monthKey(word){
+  word = word.toLowerCase();
+  if(MONTH_ABBR[word]) return MONTH_ABBR[word];
+  return word.slice(0, 3);
+}
+function normalizeDate(s){
+  var months = Object.keys(MONTH_ABBR).concat(Object.keys(MONTH_ABBR).map(monthKey)).join('|');
+  var day = '(\\d{1,2})';
+  var m = s.match(new RegExp('^(' + months + ')\\s+' + day + '$', 'i'));
+  if(m) return monthKey(m[1]) + '-' + parseInt(m[2], 10);
+  m = s.match(new RegExp('^' + day + '\\s+(' + months + ')$', 'i'));
+  if(m) return monthKey(m[2]) + '-' + parseInt(m[1], 10);
+  return null;
+}
+function normalizeTime(s){
+  var m = s.match(/^(\d{1,2})[:.\s]?(\d{2})?\s*(am|pm)?$/i);
+  if(!m) return null;
+  var hour = parseInt(m[1], 10);
+  var minute = m[2] ? parseInt(m[2], 10) : 0;
+  var ampm = m[3] ? m[3].toLowerCase() : null;
+  if(ampm === 'pm' && hour < 12) hour += 12;
+  if(ampm === 'am' && hour === 12) hour = 0;
+  return hour + ':' + minute;
+}
+function normalizeAnswer(raw){
+  var s = String(raw).trim().toLowerCase();
+  s = s.replace(/^[\s,.'"]+|[\s,.'"]+$/g, '');
+  s = s.replace(/(\d),(\d{3})/g, '$1$2');              // "1,200" -> "1200"
+  s = s.replace(/\b(\d+)(st|nd|rd|th)\b/g, '$1');       // "15th" -> "15"
+  s = s.replace(/\s+/g, ' ').trim();
+  var d = normalizeDate(s);
+  if(d) return 'DATE:' + d;
+  var t = normalizeTime(s);
+  if(t) return 'TIME:' + t;
+  return s;
+}
 function checkIsCorrect(studentAns, correctAns){
   if(studentAns === undefined || studentAns === null || String(studentAns).trim()==='') return null;
-  var sa = String(studentAns).trim().toLowerCase();
-  if(Array.isArray(correctAns)) return correctAns.some(function(c){ return String(c).trim().toLowerCase() === sa; });
-  return String(correctAns).trim().toLowerCase() === sa;
+  var accepted = Array.isArray(correctAns) ? correctAns : [correctAns];
+  var sa = normalizeAnswer(studentAns);
+  return accepted.some(function(c){ return normalizeAnswer(c) === sa; });
 }
 function esc(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// Standard 40-question raw-score-to-band conversion table.
+function scoreToBand(r){
+  if(r >= 39) return 9; if(r >= 37) return 8.5; if(r >= 35) return 8; if(r >= 32) return 7.5;
+  if(r >= 30) return 7; if(r >= 26) return 6.5; if(r >= 23) return 6; if(r >= 18) return 5.5;
+  if(r >= 16) return 5; if(r >= 13) return 4.5; if(r >= 10) return 4; if(r >= 8) return 3.5;
+  if(r >= 6) return 3; if(r >= 4) return 2.5; if(r >= 2) return 2; if(r === 1) return 1.5; return 0;
+}
+// Recounts correct answers using the lenient matcher above, rather than
+// trusting the score recorded at submission time — so a listening/reading
+// score always agrees with what the answer-by-answer table on screen shows.
+function recomputeScoreAndBand(answers, key, total){
+  answers = answers || {}; key = key || {};
+  var keys = Object.keys(key);
+  if(keys.length === 0) return { score: null, band: null };
+  var correct = 0;
+  keys.forEach(function(k){
+    if(checkIsCorrect(answers[k], key[k]) === true) correct++;
+  });
+  return { score: correct, band: scoreToBand(correct) };
+}
 
 // Standard IELTS rounding: below .25 rounds down to the whole band,
 // .25–.74 rounds to the half band, .75+ rounds up to the next whole band.
@@ -186,13 +254,15 @@ function writingBandFor(exam){
 // student who skips Reading entirely shouldn't end up with the same
 // Overall as someone who scored well across all four skills.
 function computeBands(exam){
-  var l = exam.listening_band ? parseFloat(exam.listening_band) : null;
-  var r = exam.reading_band ? parseFloat(exam.reading_band) : null;
+  var lr = recomputeScoreAndBand(exam.listening_answers, exam.listening_key_snapshot, exam.listening_total || 40);
+  var rr = recomputeScoreAndBand(exam.reading_answers, exam.reading_key_snapshot, exam.reading_total || 40);
+  var l = lr.band;
+  var r = rr.band;
   var w = writingBandFor(exam);
   var s = exam.speaking_band ? parseFloat(exam.speaking_band) : null;
   var sum = (l || 0) + (r || 0) + (w || 0) + (s || 0);
   var o = roundToIELTSBand(sum / 4);
-  return { l: l, r: r, w: w, s: s, o: o };
+  return { l: l, r: r, w: w, s: s, o: o, listeningScore: lr.score, readingScore: rr.score };
 }
 function fmtBand(b){ return (b===null || b===undefined || isNaN(b)) ? 'NA' : Number(b).toFixed(1); }
 
@@ -383,9 +453,9 @@ function buildCard(sid, info, exam){
 }
 
 function buildDetail(sid, exam){
-  var liScore = exam.listening_score!==null ? exam.listening_score : '—';
-  var rScore = exam.reading_score!==null ? exam.reading_score : '—';
   var bands = computeBands(exam);
+  var liScore = bands.listeningScore !== null ? bands.listeningScore : '—';
+  var rScore = bands.readingScore !== null ? bands.readingScore : '—';
 
   var overview = '<div class="score-overview">'+
     '<div class="score-box"><div class="label">Listening</div><div class="value">'+fmtBand(bands.l)+'</div>'+
