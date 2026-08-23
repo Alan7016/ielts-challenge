@@ -189,7 +189,8 @@
 
     let mockRow = '';
     if (mockDaysLive.length > 0) {
-      mockRow = `<p style="margin-top:16px;"><a href="mock-results.html?day=${mockDaysLive[0]}" class="ghost" style="display:inline-block; padding:8px 16px; border-radius:8px; text-decoration:none;">🎯 View Mock Exam results (Day ${mockDaysLive.join(', ')}) →</a></p>`;
+      const links = mockDaysLive.map(d => `<a href="mock-results.html?day=${d}" class="ghost" style="display:inline-block; padding:8px 16px; border-radius:8px; text-decoration:none;">🎯 View Mock Exam results (Day ${d}) →</a>`).join(' ');
+      mockRow = `<p style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">${links}</p>`;
     }
 
     root.innerHTML = `
