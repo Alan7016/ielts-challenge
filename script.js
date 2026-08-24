@@ -1086,7 +1086,26 @@ const SPEAKING_QUESTIONS = {
   'speaking-helps-q2': 'Part 3 — In your view, should children be taught to help others?',
   'speaking-helps-q3': 'Part 3 — Should children help their parents with household chores?',
   'speaking-helps-q4': 'Part 3 — What kind of help do people need when looking for a new job?',
-  'speaking-helps-q5': 'Part 3 — Who should people ask for help, colleagues or family members?'
+  'speaking-helps-q5': 'Part 3 — Who should people ask for help, colleagues or family members?',
+  'speaking-teachers-q1': 'Would you like to be a teacher?',
+  'speaking-teachers-q2': 'Do you think you could be a teacher?',
+  'speaking-teachers-q3': 'Did (Do) you have a favourite teacher?',
+  'speaking-teachers-q4': 'How does this teacher help you?',
+  'speaking-teachers-q5': 'How has your favourite teacher helped you?',
+  'speaking-social-q1': 'Do you think you spend too much time on social media?',
+  'speaking-social-q2': 'What do people often do on social media?',
+  'speaking-dreams-q1': 'What was your dream when you were a child?',
+  'speaking-dreams-q2': 'Are you the kind of person who sticks to dreams?',
+  'speaking-dreams-q3': 'Do you think you are an ambitious person?',
+  'speaking-dreams-q4': 'Are you an ambitious person?',
+  'speaking-dreams-q5': 'What is your dream job?',
+  'speaking-mirrors-q1': 'Would you use mirrors to decorate your room?',
+  'speaking-mirrors-q2': 'Do you usually take a mirror with you?',
+  'speaking-mirrors-q3': 'How often do you use a mirror?',
+  'speaking-mirrors-q4': 'Do you like looking at yourself in a mirror?',
+  'speaking-mirrors-q5': 'Have you ever bought a mirror?',
+  'speaking-music-q1': 'Do you prefer sad or happy music?',
+  'speaking-music-q2': 'Does happy music make you feel more excited?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
