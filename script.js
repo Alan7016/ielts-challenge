@@ -1123,7 +1123,29 @@ const SPEAKING_QUESTIONS = {
   'speaking-learned-q2': 'Part 3 — Do you think learning many subjects is beneficial to your work?',
   'speaking-learned-q3': 'Part 3 — Do you think all teachers should have entertaining teaching styles?',
   'speaking-learned-q4': 'Part 3 — Should teachers make lessons fun?',
-  'speaking-learned-q5': 'Part 3 — Is it important for people to learn new skills all life long?'
+  'speaking-learned-q5': 'Part 3 — Is it important for people to learn new skills all life long?',
+  'speaking-tidiness-q1': 'Would you say you are a tidy person?',
+  'speaking-tidiness-q2': 'Do you like to keep things tidy?',
+  'speaking-tidiness-q3': 'How do you keep things tidy?',
+  'speaking-tidiness-q4': 'Do you think it is possible for people to be tidy all the time?',
+  'speaking-tidiness-q5': 'Did you use to keep your room tidy as a child?',
+  'speaking-websites-q1': 'What kinds of websites do you often visit?',
+  'speaking-websites-q2': 'What kinds of websites are popular in your country?',
+  'speaking-websites-q3': 'What is your favourite website?',
+  'speaking-websites-q4': 'Are there any changes to the websites you often visit?',
+  'speaking-watches-q1': 'Do you like to wear watches?',
+  'speaking-watches-q2': 'Do you think a watch is important for you?',
+  'speaking-watches-q3': 'Have you ever received a watch as a gift?',
+  'speaking-watches-q4': 'Why do people like expensive watches?',
+  'speaking-shopping-q1': 'Do you like shopping?',
+  'speaking-shopping-q2': 'How often do you go shopping?',
+  'speaking-shopping-q3': 'Do you compare prices when you shop?',
+  'speaking-shopping-q4': 'Is it difficult for you to make choices when you shop?',
+  'speaking-cars-q1': 'What type of car do you like?',
+  'speaking-cars-q2': 'What colour car would you choose to buy?',
+  'speaking-cars-q3': 'Do you think car colours are important?',
+  'speaking-cars-q4': "What do you usually do when there's a traffic jam?",
+  'speaking-cars-q5': 'Do you prefer to be a driver or a passenger?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
