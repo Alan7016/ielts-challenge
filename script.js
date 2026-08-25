@@ -1163,7 +1163,28 @@ const SPEAKING_QUESTIONS = {
   'speaking-quiet-q2': 'Part 3 — Can people bring children to these noise-free places?',
   'speaking-quiet-q3': 'Part 3 — What places should be noise-free?',
   'speaking-quiet-q4': 'Part 3 — Are there many quiet places in your city?',
-  'speaking-quiet-q5': 'Part 3 — Why do people sometimes prefer to be alone?'
+  'speaking-quiet-q5': 'Part 3 — Why do people sometimes prefer to be alone?',
+  'speaking-parks-q1': 'Do you like to go to parks?',
+  'speaking-parks-q2': 'When was the last time you went to the park?',
+  'speaking-parks-q3': 'Do people in your country often go to parks?',
+  'speaking-science-q1': 'Do you like science?',
+  'speaking-science-q2': 'Did you like science classes when you were young?',
+  'speaking-space-q1': 'Do you want to travel in the outer space?',
+  'speaking-space-q2': 'What would you do if you had an opportunity?',
+  'speaking-space-q3': "Do you think it's necessary to see other planets?",
+  'speaking-space-q4': 'Are you interested in films about outer space and stars?',
+  'speaking-space-q5': 'Do you like science fiction movies?',
+  'speaking-space-q6': 'Have you ever taken a course about stars?',
+  'speaking-space-q7': 'Is it important to study stars?',
+  'speaking-space-q8': 'Do you want to know more about outer space?',
+  'speaking-headphones-q1': 'Do you use headphones?',
+  'speaking-headphones-q2': 'In what situations would you use headphones?',
+  'speaking-headphones-q3': 'What type of headphones do you use?',
+  'speaking-headphones-q4': 'In what situations would you NOT use headphones?',
+  'speaking-art-q1': 'Do you like modern art or traditional art?',
+  'speaking-art-q2': 'Do you like art?',
+  'speaking-art-q3': 'Have you ever visited an art gallery?',
+  'speaking-art-q4': 'Do you think it would be interesting for you to be an artist?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
