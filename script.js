@@ -1184,7 +1184,25 @@ const SPEAKING_QUESTIONS = {
   'speaking-art-q1': 'Do you like modern art or traditional art?',
   'speaking-art-q2': 'Do you like art?',
   'speaking-art-q3': 'Have you ever visited an art gallery?',
-  'speaking-art-q4': 'Do you think it would be interesting for you to be an artist?'
+  'speaking-art-q4': 'Do you think it would be interesting for you to be an artist?',
+  'speaking-tvprogram-part2': 'Part 2 — Describe a program you like to watch.',
+  'speaking-tvprogram-q1': 'Part 3 — What shows do old people and young people watch?',
+  'speaking-tvprogram-q2': 'Part 3 — What other programs do you like to watch?',
+  'speaking-tvprogram-q3': 'Part 3 — What TV programs are popular in your country?',
+  'speaking-tvprogram-q4': 'Part 3 — Do people in your country like to watch foreign TV programs?',
+  'speaking-tvprogram-q5': 'Part 3 — Do you think watching talk shows is a waste of time?',
+  'speaking-building-part2': "Part 2 — Describe an unusual building you'd like to visit.",
+  'speaking-building-q1': 'Part 3 — Is the appearance of a public building as important as its functionality?',
+  'speaking-building-q2': 'Part 3 — Is it worth spending a lot of money on the appearance of a building?',
+  'speaking-building-q3': 'Part 3 — Is it more important for a building to look good on the outside or on the inside?',
+  'speaking-building-q4': 'Part 3 — Why do people like to visit historical places?',
+  'speaking-building-q5': 'Part 3 — What types of buildings are popular in your country?',
+  'speaking-tvseries-part2': 'Part 2 — Describe a TV series that you like.',
+  'speaking-tvseries-q1': 'Part 3 — Do you think parents should limit their children from watching television?',
+  'speaking-tvseries-q2': 'Part 3 — Would your family watch TV together?',
+  'speaking-tvseries-q3': 'Part 3 — What are the differences in television viewing habits between the elderly and the young?',
+  'speaking-tvseries-q4': 'Part 3 — How has technology changed the way people watch television?',
+  'speaking-tvseries-q5': 'Part 3 — What do you think about ads in TV series?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
