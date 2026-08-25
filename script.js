@@ -1105,7 +1105,25 @@ const SPEAKING_QUESTIONS = {
   'speaking-mirrors-q4': 'Do you like looking at yourself in a mirror?',
   'speaking-mirrors-q5': 'Have you ever bought a mirror?',
   'speaking-music-q1': 'Do you prefer sad or happy music?',
-  'speaking-music-q2': 'Does happy music make you feel more excited?'
+  'speaking-music-q2': 'Does happy music make you feel more excited?',
+  'speaking-own-part2': 'Part 2 — Describe something you would like to own (but do not currently have).',
+  'speaking-own-q1': 'Part 3 — What are the differences between talking with friends online and face-to-face?',
+  'speaking-own-q2': 'Part 3 — What technology do people currently use?',
+  'speaking-own-q3': 'Part 3 — Does technological development have a negative impact on communication among people?',
+  'speaking-own-q4': 'Part 3 — Do you think technology unites or separates people?',
+  'speaking-own-q5': "Part 3 — What effects does technology have on people's relationships?",
+  'speaking-encourage-part2': "Part 2 — Describe a time when you encouraged someone to do something that they didn't want to do.",
+  'speaking-encourage-q1': 'Part 3 — Is the role of a leader important in a group?',
+  'speaking-encourage-q2': 'Part 3 — How can leaders encourage employees?',
+  'speaking-encourage-q3': 'Part 3 — When should parents encourage their children?',
+  'speaking-encourage-q4': 'Part 3 — Do you think some people are better than others at persuading?',
+  'speaking-encourage-q5': 'Part 3 — What kind of encouragement should parents give?',
+  'speaking-learned-part2': 'Part 2 — Describe one of your friends who learned something new (not from a teacher).',
+  'speaking-learned-q1': 'Part 3 — Do you think learning many subjects at one time is better or learning one subject is better?',
+  'speaking-learned-q2': 'Part 3 — Do you think learning many subjects is beneficial to your work?',
+  'speaking-learned-q3': 'Part 3 — Do you think all teachers should have entertaining teaching styles?',
+  'speaking-learned-q4': 'Part 3 — Should teachers make lessons fun?',
+  'speaking-learned-q5': 'Part 3 — Is it important for people to learn new skills all life long?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
