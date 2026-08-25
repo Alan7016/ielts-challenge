@@ -1145,7 +1145,25 @@ const SPEAKING_QUESTIONS = {
   'speaking-cars-q2': 'What colour car would you choose to buy?',
   'speaking-cars-q3': 'Do you think car colours are important?',
   'speaking-cars-q4': "What do you usually do when there's a traffic jam?",
-  'speaking-cars-q5': 'Do you prefer to be a driver or a passenger?'
+  'speaking-cars-q5': 'Do you prefer to be a driver or a passenger?',
+  'speaking-planning-part2': 'Part 2 — Describe a person who makes plans a lot and is good at planning.',
+  'speaking-planning-q1': 'Part 3 — In general, do you think planning is important?',
+  'speaking-planning-q2': 'Part 3 — Do you think everyone in your country makes everyday plans?',
+  'speaking-planning-q3': 'Part 3 — Do you think children should plan their future careers?',
+  'speaking-planning-q4': 'Part 3 — Should children ask their teachers or parents for advice when making plans?',
+  'speaking-planning-q5': 'Part 3 — What activities do we need to plan ahead?',
+  'speaking-drawing-part2': 'Part 2 — Describe a child who loves drawing or painting.',
+  'speaking-drawing-q1': 'Part 3 — What is the right age for a child to learn drawing?',
+  'speaking-drawing-q2': 'Part 3 — Why do most children draw more often than adults do?',
+  'speaking-drawing-q3': 'Part 3 — Why do some people visit galleries or museums instead of viewing artworks online?',
+  'speaking-drawing-q4': 'Part 3 — Do you think galleries and museums should be free of charge?',
+  'speaking-drawing-q5': 'Part 3 — How do artworks inspire people?',
+  'speaking-quiet-part2': 'Part 2 — Describe a quiet place that you like to go to.',
+  'speaking-quiet-q1': 'Part 3 — Is it hard to find quiet places in cities?',
+  'speaking-quiet-q2': 'Part 3 — Can people bring children to these noise-free places?',
+  'speaking-quiet-q3': 'Part 3 — What places should be noise-free?',
+  'speaking-quiet-q4': 'Part 3 — Are there many quiet places in your city?',
+  'speaking-quiet-q5': 'Part 3 — Why do people sometimes prefer to be alone?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
