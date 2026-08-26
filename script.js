@@ -1221,7 +1221,21 @@ const SPEAKING_QUESTIONS = {
   'speaking-oldbuildings-q1': 'Are there many old buildings in your city?',
   'speaking-oldbuildings-q2': 'Do you think old buildings should be preserved or replaced with modern ones?',
   'speaking-oldbuildings-q3': 'Have you ever visited a famous old building?',
-  'speaking-oldbuildings-q4': 'Why do people like visiting historical buildings?'
+  'speaking-oldbuildings-q4': 'Why do people like visiting historical buildings?',
+  'speaking-place-part2': "Part 2 — Describe a place you'd like to visit in your free time.",
+  'speaking-place-q1': 'Part 3 — Why do some people prefer to travel in their own country rather than going abroad?',
+  'speaking-place-q2': "Part 3 — Some people don't like to travel abroad. Why?",
+  'speaking-place-q3': 'Part 3 — Why do people choose to travel or live abroad?',
+  'speaking-cake-part2': 'Part 2 — Describe a special cake you received.',
+  'speaking-cake-q1': 'Part 3 — What food do people in your country eat on special occasions?',
+  'speaking-cake-q2': 'Part 3 — What is the difference between special food in your country and other countries?',
+  'speaking-cake-q3': 'Part 3 — Why do many people like to spend a lot of money on food on special days?',
+  'speaking-cake-q4': 'Part 3 — What do you think of people using their mobile phones during a meal?',
+  'speaking-cake-q5': "Part 3 — Do you think it's good to communicate when eating with your family?",
+  'speaking-buildinglike-part2': 'Part 2 — Describe a building you like or dislike.',
+  'speaking-buildinglike-q1': 'Part 3 — What do you think buildings will be like in the future?',
+  'speaking-buildinglike-q2': 'Part 3 — Which do most people prefer, living in a bungalow or in a tall building?',
+  'speaking-buildinglike-q3': 'Part 3 — Why are taller and taller buildings being constructed nowadays?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
