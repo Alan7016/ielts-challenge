@@ -1202,7 +1202,26 @@ const SPEAKING_QUESTIONS = {
   'speaking-tvseries-q2': 'Part 3 — Would your family watch TV together?',
   'speaking-tvseries-q3': 'Part 3 — What are the differences in television viewing habits between the elderly and the young?',
   'speaking-tvseries-q4': 'Part 3 — How has technology changed the way people watch television?',
-  'speaking-tvseries-q5': 'Part 3 — What do you think about ads in TV series?'
+  'speaking-tvseries-q5': 'Part 3 — What do you think about ads in TV series?',
+  'speaking-clothes-q1': 'Do you usually wear T-shirts?',
+  'speaking-clothes-q2': 'Do you like wearing T-shirts?',
+  'speaking-clothes-q3': 'Do you like T-shirts with pictures and prints?',
+  'speaking-clothes-q4': 'What colour clothes do you like to wear?',
+  'speaking-clothes-q5': "What are the differences between men and women's preference in colour?",
+  'speaking-jokes-q1': 'Are you good at telling jokes?',
+  'speaking-jokes-q2': 'Do your friends like to tell jokes?',
+  'speaking-jokes-q3': 'Do you like to watch comedies?',
+  'speaking-morning-q1': 'What is your morning routine?',
+  'speaking-morning-q2': 'Do you spend your mornings doing the same things on both weekends and weekdays?',
+  'speaking-morning-q3': 'Is breakfast important?',
+  'speaking-morning-q4': 'Do you like to get up early?',
+  'speaking-history-q1': 'Do you think history is important?',
+  'speaking-history-q2': 'Do you like to learn about history?',
+  'speaking-history-q3': 'Do you think the internet is a good place to learn about history?',
+  'speaking-oldbuildings-q1': 'Are there many old buildings in your city?',
+  'speaking-oldbuildings-q2': 'Do you think old buildings should be preserved or replaced with modern ones?',
+  'speaking-oldbuildings-q3': 'Have you ever visited a famous old building?',
+  'speaking-oldbuildings-q4': 'Why do people like visiting historical buildings?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
@@ -1357,7 +1376,7 @@ async function initRecordControl(box, userId, day, task, fieldId) {
 // ============================================
 // Days that are full mock exams rather than regular content days.
 // Add future mock days here — every dashboard reads from this one place.
-const MOCK_DAYS = [11, 18];
+const MOCK_DAYS = [11, 18, 25];
 
 async function getLiveDays() {
   const checks = await Promise.all(
