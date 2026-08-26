@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 25 — Mock Exam — IELTS Marathon</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+  body { background: var(--bg); }
+  .mock-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .mock-brand { font-family: var(--display); font-weight: 700; font-size: 18px; }
+  .mock-brand span { color: var(--warn); }
+  .section-label { font-size: 13px; font-weight: 600; color: var(--muted); }
+  .timer-display { font-family: var(--mono); font-size: 18px; font-weight: 700; color: var(--warn); background: var(--warn-soft); border-radius: 8px; padding: 6px 14px; min-width: 90px; text-align: center; display: none; }
+  .timer-display.danger { background: #d5490f22; animation: pulse .6s infinite; }
+  .timer-display.review { color: var(--accent); background: var(--accent-soft); }
+  @keyframes pulse { 50% { opacity: .5; } }
+
+  .progress-strip { background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; gap: 8px; align-items: center; }
+  .prog-step { height: 6px; flex: 1; border-radius: 999px; background: var(--border); transition: background .3s; }
+  .prog-step.done { background: var(--good); }
+  .prog-step.active { background: var(--warn); }
+
+  .screen { display: none; flex-direction: column; min-height: calc(100vh - 100px); }
+  .screen.active { display: flex; }
+
+  .intro-wrap { max-width: 680px; margin: auto; padding: 40px 24px; text-align: center; }
+  .intro-badge { display: inline-block; background: var(--warn-soft); color: var(--warn); border-radius: 999px; padding: 6px 16px; font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 20px; }
+  .intro-wrap h1 { font-family: var(--display); font-size: 32px; margin-bottom: 10px; }
+  .intro-wrap p { color: var(--muted); font-size: 15.5px; line-height: 1.7; margin-bottom: 24px; }
+  .section-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px 0; text-align: left; margin-bottom: 24px; }
+  .section-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 20px; border-bottom: 1px solid var(--border); font-size: 14.5px; }
+  .section-row:last-child { border-bottom: none; }
+  .section-row .time { color: var(--warn); font-weight: 700; font-size: 13px; }
+  .warn-box { background: var(--warn-soft); border: 1px solid #d5490f40; border-radius: var(--radius-sm); padding: 14px 18px; color: var(--warn); font-size: 14px; line-height: 1.6; margin-bottom: 24px; text-align: left; }
+  .start-btn { background: var(--warn); color: #fff; border: none; border-radius: 10px; padding: 14px 36px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; max-width: 320px; }
+  .start-btn:hover { opacity: .9; }
+
+  .iframe-wrap { flex: 1; display: flex; flex-direction: column; position: relative; }
+  .iframe-wrap iframe { flex: 1; border: none; width: 100%; min-height: 500px; }
+  .section-footer { background: var(--surface); border-top: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: center; }
+  .section-status { font-size: 14px; color: var(--muted); font-weight: 600; text-align: center; }
+  .review-banner { background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 14px; padding: 10px 20px; text-align: center; }
+
+  .loading-overlay { position: absolute; inset: 0; background: var(--surface); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; z-index: 5; }
+  .loading-overlay .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--warn); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .transition-wrap { max-width: 560px; margin: auto; padding: 40px 24px; text-align: center; }
+  .transition-wrap .big-num { font-family: var(--mono); font-size: 56px; font-weight: 800; color: var(--warn); margin: 20px 0; }
+  .transition-wrap h1 { font-family: var(--display); font-size: 26px; margin-bottom: 10px; }
+  .transition-wrap p { color: var(--muted); font-size: 15px; }
+
+  .writing-wrap { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+  .writing-inner { max-width: 860px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 20px; }
+  .writing-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; }
+  .writing-card h3 { font-family: var(--display); font-size: 15px; color: var(--warn); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .writing-card p { color: var(--ink-soft); font-size: 15px; line-height: 1.7; }
+  .writing-area { width: 100%; min-height: 220px; background: var(--surface-2); border: 2px solid var(--border); border-radius: var(--radius-sm); padding: 14px; font: 15.5px/1.75 Georgia, serif; color: var(--ink); resize: vertical; }
+  .writing-area:focus { outline: none; border-color: var(--warn); }
+  .writing-area:disabled { opacity: 0.7; background: var(--surface); }
+  .writing-meta { display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--muted); margin-top: 8px; }
+  .word-count { font-weight: 700; color: var(--warn); }
+  .word-count.ok { color: var(--good); }
+
+  .complete-wrap { max-width: 580px; margin: auto; padding: 40px 24px; text-align: center; }
+  .complete-icon { font-size: 60px; margin-bottom: 18px; }
+  .complete-wrap h1 { font-family: var(--display); font-size: 30px; margin-bottom: 10px; }
+  .complete-wrap p { color: var(--muted); font-size: 15.5px; margin-bottom: 24px; }
+  .next-steps { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: left; margin-bottom: 20px; }
+  .next-steps .label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; }
+  .next-step-row { display: flex; align-items: center; gap: 10px; font-size: 14.5px; color: var(--ink-soft); margin-bottom: 10px; }
+  .wc-row { background: var(--warn-soft); border-radius: 10px; padding: 12px 20px; display: flex; gap: 28px; justify-content: center; font-size: 14px; color: var(--muted); margin-bottom: 20px; flex-wrap: wrap; }
+  .wc-row strong { color: var(--warn); }
+  .saving-notice { background: var(--good-soft); border: 1px solid #1f9d5540; border-radius: 8px; padding: 10px 16px; color: var(--good); font-size: 13px; font-weight: 700; margin-bottom: 16px; display: none; }
+  .saving-notice.show { display: block; }
+  .save-error-box { background: #d5490f14; border: 1px solid #d5490f40; border-radius: 8px; padding: 12px 16px; color: var(--warn); font-size: 13px; margin-bottom: 16px; display: none; }
+  .dashboard-btn { background: var(--warn); color: #fff; border: none; border-radius: 10px; padding: 13px 28px; font-size: 15px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; }
+
+  .summary-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 10px; text-align: center; }
+  .summary-card .sc-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; color: var(--muted); margin-bottom: 6px; }
+  .summary-card .sc-value { font-size: 22px; font-weight: 800; color: var(--warn); }
+  .summary-card.overall { background: var(--warn-soft); border-color: var(--warn); }
+  .rtab { padding: 9px 16px; font-size: 13.5px; font-weight: 700; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+  .rtab.active { color: var(--warn); border-bottom-color: var(--warn); }
+  .ans-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .ans-table th { background: var(--surface-2); padding: 8px 10px; text-align: left; font-weight: 700; border-bottom: 2px solid var(--border); }
+  .ans-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+  .ans-correct { color: var(--good); font-weight: 700; }
+  .ans-wrong { color: var(--warn); font-weight: 700; }
+  .essay-view { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-family: Georgia, serif; font-size: 14.5px; line-height: 1.8; white-space: pre-wrap; max-height: 340px; overflow-y: auto; margin-bottom: 14px; }
+  .feedback-view { background: var(--warn-soft); border: 1px solid #d5490f30; border-radius: 8px; padding: 14px 16px; font-size: 14px; line-height: 1.7; }
+  .feedback-view .fv-label { font-size: 12px; font-weight: 700; color: var(--warn); text-transform: uppercase; letter-spacing: .3px; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<div id="content" style="display:none;">
+
+<header class="mock-header">
+  <div class="mock-brand">IELTS <span>MARATHON</span> — Mock Exam</div>
+  <div class="section-label" id="headerLabel">Introduction</div>
+  <div class="timer-display" id="timerDisplay">00:00</div>
+</header>
+
+<div class="progress-strip">
+  <div class="prog-step active" id="prog1"></div>
+  <div class="prog-step" id="prog2"></div>
+  <div class="prog-step" id="prog3"></div>
+  <div class="prog-step" id="prog4"></div>
+</div>
+
+<!-- SCREEN: RESULTS READY -->
+<div class="screen" id="screen-ready">
+  <div class="intro-wrap">
+    <div style="font-size:60px; margin-bottom:18px;">🎉</div>
+    <h1 style="color:var(--good);">Great! Your results are ready</h1>
+    <p>Your teacher has finished reviewing your mock exam. You can now see your scores, band estimates, and detailed feedback.</p>
+    <div id="readySubmittedDate" style="font-size:13px; color:var(--muted); margin-bottom:28px;"></div>
+    <button class="start-btn" onclick="showResultsDetail()">See My Results →</button>
+  </div>
+</div>
+
+<!-- SCREEN: RESULTS DETAIL -->
+<div class="screen" id="screen-results">
+  <div class="writing-wrap">
+    <div class="writing-inner">
+      <div class="writing-card">
+        <h3>Overall summary</h3>
+        <div id="summaryCards" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:12px; margin-top:6px;"></div>
+      </div>
+      <div class="writing-card">
+        <div id="resultsTabs" style="display:flex; gap:4px; border-bottom:2px solid var(--border); margin-bottom:16px; flex-wrap:wrap;">
+          <div class="rtab active" data-tab="listening" onclick="switchResultsTab('listening',this)">🎧 Listening</div>
+          <div class="rtab" data-tab="reading" onclick="switchResultsTab('reading',this)">📖 Reading</div>
+          <div class="rtab" data-tab="writing1" onclick="switchResultsTab('writing1',this)">✏️ Writing T1</div>
+          <div class="rtab" data-tab="writing2" onclick="switchResultsTab('writing2',this)">✏️ Writing T2</div>
+          <div class="rtab" data-tab="speaking" onclick="switchResultsTab('speaking',this)">🎤 Speaking</div>
+        </div>
+        <div id="resultsTabContent"></div>
+      </div>
+      <div style="text-align:center; padding:10px 0 30px;">
+        <a href="../index.html" class="dashboard-btn">← Back to the board</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: ALREADY SUBMITTED -->
+<div class="screen" id="screen-done">
+  <div class="intro-wrap">
+    <div style="font-size:60px; margin-bottom:18px;">✓</div>
+    <h1 style="color:var(--good);">Mock Exam Submitted</h1>
+    <p style="margin-bottom:24px;">You have already completed and submitted your mock exam. Your teacher is reviewing your results and will provide feedback on your writing shortly.</p>
+    <div class="next-steps" style="margin-bottom:24px;">
+      <div class="label">What happens next</div>
+      <div class="next-step-row">📝 Your teacher will review your writing essays</div>
+      <div class="next-step-row">🌟 Band scores will be added to your profile</div>
+      <div class="next-step-row">⏳ Check back in a day or two for feedback</div>
+    </div>
+    <div id="submittedDate" style="font-size:13px; color:var(--muted); margin-bottom:24px;"></div>
+    <a href="../index.html" class="dashboard-btn">← Back to the board</a>
+  </div>
+</div>
+
+<!-- SCREEN: INTRO -->
+<div class="screen active" id="screen-intro">
+  <div class="intro-wrap">
+    <div class="intro-badge">🎯 Official Mock Exam</div>
+    <h1>IELTS Academic<br>Full Practice Test</h1>
+    <p>This is a timed, full-length IELTS Academic practice exam. Every section runs on its own clock and moves on automatically — there's nothing to click to advance. Your results will be automatically sent to your teacher.</p>
+    <div class="section-list">
+      <div class="section-row"><span class="name">🎧 Section 1 — Listening</span><span class="time">audio length + 2 min review</span></div>
+      <div class="section-row"><span class="name">📖 Section 2 — Reading</span><span class="time">60 min</span></div>
+      <div class="section-row"><span class="name">✏️ Section 3 — Writing (Task 1 &amp; 2)</span><span class="time">60 min</span></div>
+    </div>
+    <div class="warn-box">
+      ⚠️ <strong>Important:</strong> Each section ends automatically when its time is up — there's no "Next" button, so don't step away. You must complete all sections in one sitting; closing or refreshing this tab loses your progress. Make sure you have at least <strong>2.5 hours</strong> of uninterrupted time before starting.
+    </div>
+    <button class="start-btn" onclick="startExam()">I'm ready — Start Exam →</button>
+  </div>
+</div>
+
+<!-- SCREEN: LISTENING -->
+<div class="screen" id="screen-listening">
+  <div class="iframe-wrap">
+    <div class="loading-overlay" id="listenLoading"><div class="spinner"></div><div>Loading audio…</div><button id="listenSkipBtn" class="ghost" style="display:none; margin-top:14px; padding:6px 16px; font-size:13px;">Taking too long? Click to continue →</button></div>
+    <iframe id="listeningFrame" src="" title="Listening test" allow="autoplay"></iframe>
+  </div>
+  <div class="section-footer">
+    <div class="section-status" id="listenStatus">🎧 Listen carefully — this section ends automatically when the audio finishes.</div>
+  </div>
+</div>
+
+<!-- SCREEN: READING -->
+<div class="screen" id="screen-reading">
+  <div class="iframe-wrap">
+    <iframe id="readingFrame" src="" title="Reading test"></iframe>
+  </div>
+  <div class="section-footer">
+    <div class="section-status">📖 You have 60 minutes for this section — it moves on automatically.</div>
+  </div>
+</div>
+
+<!-- SCREEN: TRANSITION -->
+<div class="screen" id="screen-transition">
+  <div class="transition-wrap">
+    <div class="intro-badge" id="transitionBadge">Get ready</div>
+    <h1 id="transitionTitle">Next section starting…</h1>
+    <div class="big-num" id="transitionCount">10</div>
+    <p id="transitionSub">Take a breath — the next section will begin automatically.</p>
+  </div>
+</div>
+
+<!-- SCREEN: WRITING (Task 1 & 2 together, one continuous section) -->
+<div class="screen" id="screen-writing">
+  <div class="writing-wrap">
+    <div class="writing-inner">
+      <div class="writing-card">
+        <h3>Writing Task 1 — Academic Report</h3>
+        <p><strong>Suggested time: about 20 minutes.</strong></p>
+        <p style="margin-top:10px;" id="t1PromptText">The chart shows the percentage of people in one country, by age group, who visited one or more museums in 2006, 2011 and 2016.</p>
+        <p style="margin-top:8px; color:var(--muted); font-size:14px;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p style="margin-top:8px; color:var(--warn); font-size:13px; font-weight:700;">Write at least 150 words.</p>
+        <img id="chartImg" src="mock25-t1-chart.png" alt="Bar chart showing the percentage of people who visited at least one museum, by age group, in 2006, 2011, and 2016" style="max-width:100%; border-radius:8px; border:1px solid var(--border); display:block; margin-top:12px;">
+      </div>
+      <div class="writing-card">
+        <h3>Your Task 1 response</h3>
+        <textarea class="writing-area" id="wt1-text" placeholder="Write your Task 1 response here..." oninput="updateWordCount('wt1')"></textarea>
+        <div class="writing-meta">
+          <div>Minimum: 150 words</div>
+          <div class="word-count" id="wt1-count">0 words</div>
+        </div>
+      </div>
+
+      <div class="writing-card">
+        <h3>Writing Task 2 — Essay</h3>
+        <p><strong>Suggested time: about 40 minutes.</strong></p>
+        <p style="margin-top:10px;" id="t2PromptText">Most people think that governments should invest money in improving the quality of life on Earth rather than exploring space. To what extent do you agree or disagree with this opinion?</p>
+        <p style="margin-top:8px; color:var(--warn); font-size:13px; font-weight:700;">Write at least 250 words. Give reasons for your answer and include any relevant examples from your own knowledge or experience.</p>
+      </div>
+      <div class="writing-card">
+        <h3>Your Task 2 response</h3>
+        <textarea class="writing-area" id="wt2-text" placeholder="Write your Task 2 essay here..." oninput="updateWordCount('wt2')"></textarea>
+        <div class="writing-meta">
+          <div>Minimum: 250 words</div>
+          <div class="word-count" id="wt2-count">0 words</div>
+        </div>
+      </div>
+      <p style="text-align:center; color:var(--muted); font-size:13px;">Both tasks are on one continuous 60-minute clock — move between them however you like. The section ends automatically when the time is up.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: COMPLETE -->
+<div class="screen" id="screen-complete">
+  <div class="complete-wrap">
+    <div class="complete-icon">🎉</div>
+    <h1>Well done!</h1>
+    <p>You have completed the IELTS mock exam. Your responses have been submitted to your teacher for review.</p>
+    <div class="next-steps">
+      <div class="label">What happens next</div>
+      <div class="next-step-row">✅ Your writing essays have been saved and sent to your teacher</div>
+      <div class="next-step-row">📝 Your teacher will read both essays and provide written feedback</div>
+      <div class="next-step-row">🌟 Band scores for Writing Tasks 1 and 2 will be added to your profile</div>
+      <div class="next-step-row">⏳ Check back in a day or two for your results</div>
+    </div>
+    <div id="writingWordCounts" class="wc-row">
+      <span>Writing T1: <strong id="wc1">—</strong> words</span>
+      <span>Writing T2: <strong id="wc2">—</strong> words</span>
+    </div>
+    <div class="saving-notice" id="savingNotice">✓ Results saved to your teacher's dashboard.</div>
+    <div id="saveError" class="save-error-box">⚠ Results could not be saved automatically. Please take a screenshot and send it to your teacher.</div>
+    <a href="../index.html" class="dashboard-btn">← Back to the board</a>
+  </div>
+</div>
+
+</div>
+
+<script src="../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../script.js"></script>
+<script>
+(function(){
+"use strict";
+
+var MOCK_DAY = 25;
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+var examData = {
+  listening_score: null, listening_total: 40, listening_band: null, listening_answers: {}, listening_key_snapshot: {},
+  reading_score:   null, reading_total:   40, reading_band:   null, reading_answers:   {}, reading_key_snapshot: {},
+  writing_t1_text: '', writing_t1_words: 0,
+  writing_t2_text: '', writing_t2_words: 0,
+  completed_sections: [],
+  exam_date: new Date().toISOString().slice(0,10)
+};
+var currentSection = 'intro';
+var timerInterval = null;
+var timerSeconds = 0;
+var loadedExamRecord = null;
+var studentSession = null;
+var studentProfile = null;
+var sb = null;
+
+// ── CHECKPOINTING (survives Chrome discarding this tab mid-exam) ───────────
+// The old flow only lived in JS variables, so if the browser reclaimed this
+// background tab during the long, mostly-idle listening section (Chrome's
+// Memory Saver does exactly this) and reloaded it, everything reset to the
+// intro screen. sessionStorage survives that kind of reload, so a checkpoint
+// written at the start of every timed phase lets a reload resume roughly
+// where it left off instead of restarting the whole exam.
+function checkpointKey(){
+  return 'mockCheckpoint_' + MOCK_DAY + '_' + (studentSession ? studentSession.id : 'anon');
+}
+function saveCheckpoint(section, endAt){
+  try {
+    sessionStorage.setItem(checkpointKey(), JSON.stringify({ section: section, endAt: endAt, examData: examData }));
+  } catch(e){}
+}
+function loadCheckpoint(){
+  try {
+    var raw = sessionStorage.getItem(checkpointKey());
+    return raw ? JSON.parse(raw) : null;
+  } catch(e){ return null; }
+}
+function clearCheckpoint(){
+  try { sessionStorage.removeItem(checkpointKey()); } catch(e){}
+}
+
+function bandNum(b){ var n = parseFloat(b); return isNaN(n) ? null : n; }
+function roundToIELTSBand(avg){
+  var whole = Math.floor(avg);
+  var frac = avg - whole;
+  if(frac < 0.25) return whole;
+  if(frac < 0.75) return whole + 0.5;
+  return whole + 1;
+}
+// Standard 40-question raw-score-to-band conversion, same table the
+// listening test itself already uses — applied here too so a reading
+// band exists even though this reading test only reports a raw score.
+function scoreToBand(r){
+  if (r >= 39) return 9; if (r >= 37) return 8.5; if (r >= 35) return 8; if (r >= 32) return 7.5;
+  if (r >= 30) return 7; if (r >= 26) return 6.5; if (r >= 23) return 6; if (r >= 18) return 5.5;
+  if (r >= 16) return 5; if (r >= 13) return 4.5; if (r >= 10) return 4; if (r >= 8) return 3.5;
+  if (r >= 6) return 3; if (r >= 4) return 2.5; if (r >= 2) return 2; if (r === 1) return 1.5; return 0;
+}
+function calcWritingBand(t1, t2){
+  if(t1===null && t2===null) return null;
+  if(t1!==null && t2!==null) return (t1 + 2*t2)/3; // T2 counts double, per IELTS convention
+  return t2!==null ? t2 : t1;
+}
+function calcOverallBand(rec){
+  var l = bandNum(rec.listening_band);
+  var r = bandNum(rec.reading_band);
+  var w = calcWritingBand(bandNum(rec.t1_band), bandNum(rec.t2_band));
+  var s = bandNum(rec.speaking_band);
+  var parts = [l, r, w, s].filter(function(x){ return x !== null; });
+  if(parts.length === 0) return null;
+  var avg = parts.reduce(function(a,b){return a+b;}, 0) / parts.length;
+  return roundToIELTSBand(avg);
+}
+function checkIsCorrect(studentAns, correctAns){
+  if(studentAns === undefined || studentAns === null || String(studentAns).trim()==='') return null;
+  var sa = String(studentAns).trim().toLowerCase();
+  if(Array.isArray(correctAns)) return correctAns.some(function(c){ return String(c).trim().toLowerCase() === sa; });
+  return String(correctAns).trim().toLowerCase() === sa;
+}
+function esc(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── WARN ON UNLOAD ──────────────────────────────────────────────────────────
+window.addEventListener('beforeunload', function(e){
+  if(currentSection !== 'intro' && currentSection !== 'complete' && currentSection !== 'results' && currentSection !== 'done' && currentSection !== 'ready'){
+    e.preventDefault(); e.returnValue='';
+  }
+});
+
+// ── SECTION FLOW ────────────────────────────────────────────────────────────
+function startExam(){
+  currentSection = 'listening';
+  showScreen('listening');
+  updateProgress(1);
+  document.getElementById('headerLabel').textContent = 'Section 1 of 3 — Listening';
+  document.getElementById('listenLoading').style.display = 'flex';
+  document.getElementById('timerDisplay').style.display = 'none';
+
+  var frame = document.getElementById('listeningFrame');
+  var initialized = false;
+  function tryInit(){
+    if(initialized) return;
+    initialized = true;
+    setupListeningTimer(frame);
+  }
+  frame.onload = tryInit;
+  frame.src = 'listening-mock25.html';
+  // This file is ~26MB (mostly the embedded audio) — its "load" event can
+  // take a long time, or in rare cases not fire reliably at all. This
+  // watchdog guarantees the section starts moving regardless, instead of
+  // getting stuck on the loading screen forever.
+  setTimeout(tryInit, 12000);
+}
+window.startExam = startExam;
+
+// Reads the real audio length out of the iframe so the listening timer
+// matches it exactly, instead of guessing a fixed 30 minutes. Retries for
+// a while in case the huge file is still parsing, then falls back to 30
+// minutes if the audio element genuinely never becomes reachable.
+function setupListeningTimer(frame){
+  var loading = document.getElementById('listenLoading');
+  var settled = false;
+  var fallback = function(){
+    if(settled) return;
+    settled = true;
+    loading.style.display = 'none';
+    beginListeningCountdown(30 * 60);
+  };
+
+  // Last-resort manual escape hatch — only ever appears if the automatic
+  // path (below) hasn't resolved within 20 seconds of the exam starting.
+  var skipBtn = document.getElementById('listenSkipBtn');
+  skipBtn.onclick = function(){ skipBtn.style.display = 'none'; fallback(); };
+  setTimeout(function(){ if(!settled) skipBtn.style.display = 'inline-block'; }, 20000);
+
+  var attempts = 0;
+  function attemptFind(){
+    if(settled) return;
+    attempts++;
+    try {
+      var win = frame.contentWindow;
+      hideStudentSubmitControls(win.document, '#deliver-button{display:none !important;}');
+      var audio = win.document.getElementById('global-audio-player');
+      if(!audio){
+        if(attempts < 20){ setTimeout(attemptFind, 1000); return; }
+        fallback();
+        return;
+      }
+
+      var started = false;
+      function goWithDuration(){
+        if(started || settled) return;
+        if(!audio.duration || isNaN(audio.duration) || !isFinite(audio.duration)) return;
+        started = true;
+        settled = true;
+        skipBtn.style.display = 'none';
+        loading.style.display = 'none';
+        beginListeningCountdown(Math.ceil(audio.duration));
+        // Try to start playback automatically — if the browser blocks it,
+        // the test's own play button is still right there for the student.
+        audio.play().catch(function(){});
+      }
+      if(audio.readyState >= 1 && audio.duration) goWithDuration();
+      audio.addEventListener('loadedmetadata', goWithDuration);
+      // Generous safety net in case metadata never fires for some reason.
+      setTimeout(function(){ if(!started) fallback(); }, 15000);
+    } catch(e){
+      if(attempts < 20){ setTimeout(attemptFind, 1000); return; }
+      fallback();
+    }
+  }
+  attemptFind();
+}
+
+// Injects a tiny CSS rule into a test iframe to hide its own self-check
+// button. This only runs from the mock orchestrator — the same test files
+// are used for regular practice days, where students SHOULD be able to
+// check their own answers, so nothing here touches the test files
+// themselves. Safe to call repeatedly; only ever adds the style once.
+function hideStudentSubmitControls(doc, css){
+  if(doc.getElementById('__mockHideStyle')) return;
+  var style = doc.createElement('style');
+  style.id = '__mockHideStyle';
+  style.textContent = css;
+  (doc.head || doc.documentElement).appendChild(style);
+}
+
+function beginListeningCountdown(seconds){
+  startTimer(seconds, function(){
+    finishListening();
+  }, 'listening');
+}
+
+// Called the moment the listening clock hits zero. Force-submits the test
+// (clicking its own Deliver/Check-Answers button — works even if the
+// student never touched it) and scrapes the resulting score/band table
+// out of its DOM, since this test has no way to message the parent page
+// directly.
+function finishListening(){
+  var frame = document.getElementById('listeningFrame');
+  try {
+    var doc = frame.contentWindow.document;
+    var audio = doc.getElementById('global-audio-player');
+    if(audio) audio.pause();
+    var deliverBtn = doc.getElementById('deliver-button');
+    if(deliverBtn && !deliverBtn.classList.contains('success')) deliverBtn.click();
+
+    var summary = doc.getElementById('score-summary');
+    var m = summary ? summary.textContent.match(/scored (\d+) out of (\d+) \(Band ([\d.]+)\)/) : null;
+    if(m){
+      examData.listening_score = parseInt(m[1], 10);
+      examData.listening_total = parseInt(m[2], 10);
+      examData.listening_band = parseFloat(m[3]);
+    }
+    var answers = {}, key = {};
+    doc.querySelectorAll('#result-details table tbody tr').forEach(function(tr){
+      var tds = tr.querySelectorAll('td');
+      if(tds.length < 3) return;
+      var q = tds[0].textContent.trim();
+      answers[q] = tds[1].textContent.trim();
+      key[q] = tds[2].textContent.trim() || tds[1].textContent.trim();
+    });
+    examData.listening_answers = answers;
+    examData.listening_key_snapshot = key;
+    if(examData.completed_sections.indexOf('listening') < 0) examData.completed_sections.push('listening');
+  } catch(e){
+    console.warn('Could not auto-grade listening:', e);
+  }
+  startReviewTime();
+}
+
+// 2-minute review period, matching real IELTS transfer time — audio has
+// stopped, but the student can still click between Parts 1–4 to check
+// their answers. No button to skip ahead; it just runs out.
+function startReviewTime(resumeSeconds){
+  document.getElementById('listenStatus').innerHTML = '<span class="review-banner" style="display:inline-block;">📝 Review time — check your answers across all parts. Moving on automatically.</span>';
+  var display = document.getElementById('timerDisplay');
+  display.classList.add('review');
+  startTimer(resumeSeconds || 2 * 60, function(){
+    display.classList.remove('review');
+    runTransition('reading', '📖 Section 2', 'Reading starts in a moment…', 'Get your eyes ready — 60 minutes on the clock once it begins.', 10, goToReading);
+  }, 'review');
+}
+
+function goToReading(resumeSeconds){
+  currentSection = 'reading';
+  showScreen('reading');
+  updateProgress(2);
+  document.getElementById('headerLabel').textContent = 'Section 2 of 3 — Reading';
+  var frame = document.getElementById('readingFrame');
+  frame.onload = function(){
+    try {
+      // Hides the "OK" button that opens the submit-test overlay — our own
+      // forced grading calls __mockForceGrade() directly and doesn't need
+      // this button at all, so hiding it only blocks early self-checking.
+      hideStudentSubmitControls(frame.contentWindow.document, '#review{display:none !important;}');
+    } catch(e){}
+  };
+  frame.src = 'reading-mock25.html';
+  startTimer(resumeSeconds || 60 * 60, finishReading, 'reading');
+}
+
+// Same idea as listening: force-grade via the bridge functions added to
+// reading-mock25.html, then read the result straight from its return value
+// (this test exposes state properly since it isn't a closed IIFE... well,
+// it is, but we added an explicit bridge for exactly this purpose).
+function finishReading(){
+  var frame = document.getElementById('readingFrame');
+  try {
+    var win = frame.contentWindow;
+    if(typeof win.__mockForceGrade === 'function') win.__mockForceGrade();
+    var result = typeof win.__mockGetResult === 'function' ? win.__mockGetResult() : null;
+    if(result){
+      examData.reading_score = result.score;
+      examData.reading_total = result.total;
+      examData.reading_band = scoreToBand(result.score);
+      examData.reading_answers = result.answers;
+      examData.reading_key_snapshot = result.key;
+    }
+    if(examData.completed_sections.indexOf('reading') < 0) examData.completed_sections.push('reading');
+  } catch(e){
+    console.warn('Could not auto-grade reading:', e);
+  }
+  runTransition('writing', '✏️ Section 3', 'Writing starts in a moment…', 'Both Task 1 and Task 2 will be on screen together — 60 minutes total.', 10, goToWriting);
+}
+
+function goToWriting(resumeSeconds){
+  currentSection = 'writing';
+  showScreen('writing');
+  updateProgress(3);
+  document.getElementById('headerLabel').textContent = 'Section 3 of 3 — Writing';
+  // Restore any draft text from a checkpoint (e.g. after a reload mid-section).
+  if(examData.writing_t1_text) document.getElementById('wt1-text').value = examData.writing_t1_text;
+  if(examData.writing_t2_text) document.getElementById('wt2-text').value = examData.writing_t2_text;
+  updateWordCount('wt1');
+  updateWordCount('wt2');
+  startTimer(resumeSeconds || 60 * 60, finishWriting, 'writing');
+}
+
+function finishWriting(){
+  examData.writing_t1_text = document.getElementById('wt1-text').value;
+  examData.writing_t1_words = countWords(examData.writing_t1_text);
+  examData.writing_t2_text = document.getElementById('wt2-text').value;
+  examData.writing_t2_words = countWords(examData.writing_t2_text);
+  document.getElementById('wt1-text').disabled = true;
+  document.getElementById('wt2-text').disabled = true;
+  if(examData.completed_sections.indexOf('writing') < 0) examData.completed_sections.push('writing');
+
+  currentSection = 'complete';
+  showScreen('complete');
+  updateProgress(4);
+  document.getElementById('headerLabel').textContent = 'Exam Complete';
+  document.getElementById('timerDisplay').style.display = 'none';
+  document.getElementById('wc1').textContent = examData.writing_t1_words;
+  document.getElementById('wc2').textContent = examData.writing_t2_words;
+  clearCheckpoint();
+  saveToSupabase();
+}
+
+function countWords(text){
+  var t = (text || '').trim();
+  return t ? t.split(/\s+/).length : 0;
+}
+
+var draftSaveTimer = null;
+function updateWordCount(which){
+  var text = document.getElementById(which + '-text').value;
+  var count = countWords(text);
+  var el = document.getElementById(which + '-count');
+  var min = which === 'wt1' ? 150 : 250;
+  el.textContent = count + ' words';
+  el.classList.toggle('ok', count >= min);
+
+  // Debounced draft autosave — this is the part that actually matters: if
+  // the tab gets reloaded mid-writing, the student's essay text survives.
+  if(which === 'wt1') examData.writing_t1_text = text;
+  if(which === 'wt2') examData.writing_t2_text = text;
+  clearTimeout(draftSaveTimer);
+  draftSaveTimer = setTimeout(function(){
+    if(currentSection === 'writing') saveCheckpoint('writing', Date.now() + timerSeconds * 1000);
+  }, 1500);
+}
+window.updateWordCount = updateWordCount;
+
+// A short, calm "next section is about to start" screen — this is what
+// replaces the old "click Next" button entirely.
+function runTransition(nextKey, badge, title, sub, seconds, onDone){
+  stopTimer();
+  showScreen('transition');
+  document.getElementById('timerDisplay').style.display = 'none';
+  document.getElementById('transitionBadge').textContent = badge;
+  document.getElementById('transitionTitle').textContent = title;
+  document.getElementById('transitionSub').textContent = sub;
+  var countEl = document.getElementById('transitionCount');
+  var remaining = seconds;
+  countEl.textContent = remaining;
+  var iv = setInterval(function(){
+    remaining--;
+    countEl.textContent = Math.max(remaining, 0);
+    if(remaining <= 0){
+      clearInterval(iv);
+      onDone();
+    }
+  }, 1000);
+}
+
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  var el = document.getElementById('screen-'+name);
+  if(el) el.classList.add('active');
+}
+
+function updateProgress(step){
+  for(var i=1;i<=4;i++){
+    var el = document.getElementById('prog'+i);
+    if(!el) continue;
+    el.className = 'prog-step';
+    if(i < step) el.classList.add('done');
+    else if(i === step) el.classList.add('active');
+  }
+}
+
+// ── TIMER ───────────────────────────────────────────────────────────────────
+// A single countdown drives everything — when it hits zero it calls
+// whatever "what happens next" function it was given, with no student
+// action required at any point.
+function startTimer(seconds, onZero, sectionName){
+  stopTimer();
+  timerSeconds = seconds;
+  if(sectionName) saveCheckpoint(sectionName, Date.now() + seconds * 1000);
+  var display = document.getElementById('timerDisplay');
+  display.style.display = 'block';
+  display.className = 'timer-display';
+  updateTimerDisplay();
+  timerInterval = setInterval(function(){
+    timerSeconds--;
+    updateTimerDisplay();
+    if(timerSeconds <= 60) display.classList.add('danger');
+    if(timerSeconds <= 0){
+      stopTimer();
+      display.textContent = '00:00';
+      if(onZero) onZero();
+    }
+  }, 1000);
+}
+function stopTimer(){ if(timerInterval) clearInterval(timerInterval); timerInterval = null; }
+function updateTimerDisplay(){
+  var m = Math.floor(Math.max(0,timerSeconds)/60);
+  var s = Math.max(0,timerSeconds)%60;
+  document.getElementById('timerDisplay').textContent = (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+}
+
+// ── SAVE TO SUPABASE ─────────────────────────────────────────────────────────
+async function saveToSupabase(){
+  var savingNotice = document.getElementById('savingNotice');
+  var saveError = document.getElementById('saveError');
+  try {
+    var payload = {
+      student_id: studentSession.id,
+      mock_day: MOCK_DAY,
+      exam_date: examData.exam_date,
+      listening_score: examData.listening_score,
+      listening_total: examData.listening_total,
+      listening_band: examData.listening_band,
+      listening_answers: examData.listening_answers,
+      listening_key_snapshot: examData.listening_key_snapshot,
+      reading_score: examData.reading_score,
+      reading_total: examData.reading_total,
+      reading_band: examData.reading_band,
+      reading_answers: examData.reading_answers,
+      reading_key_snapshot: examData.reading_key_snapshot,
+      writing_t1_text: examData.writing_t1_text,
+      writing_t1_words: examData.writing_t1_words,
+      writing_t2_text: examData.writing_t2_text,
+      writing_t2_words: examData.writing_t2_words,
+      completed_sections: examData.completed_sections,
+      submitted_at: new Date().toISOString()
+    };
+    var res = await sb.from('mock_exams').insert(payload);
+    if(res.error) throw res.error;
+    savingNotice.classList.add('show');
+  } catch(e){
+    console.error('Save failed:', e);
+    saveError.style.display = 'block';
+  }
+}
+
+// ── RESULTS VIEWING (unchanged from the original mock system) ──────────────
+function showResultsDetail(){
+  currentSection = 'results';
+  showScreen('results');
+  document.getElementById('headerLabel').textContent = 'Mock Exam — Results';
+  if(loadedExamRecord){
+    renderSummaryCards(loadedExamRecord);
+    switchResultsTab('listening', document.querySelector('.rtab[data-tab="listening"]'));
+  }
+}
+window.showResultsDetail = showResultsDetail;
+
+function renderSummaryCards(rec){
+  var overall = calcOverallBand(rec);
+  var wBand = calcWritingBand(bandNum(rec.t1_band), bandNum(rec.t2_band));
+  wBand = wBand !== null ? roundToIELTSBand(wBand) : null;
+  var cards = [
+    {label:'Listening', val: (rec.listening_score!==null&&rec.listening_score!==undefined) ? rec.listening_score+'/40' : '—', sub: rec.listening_band?'Band '+rec.listening_band:''},
+    {label:'Reading', val: (rec.reading_score!==null&&rec.reading_score!==undefined) ? rec.reading_score+'/40' : '—', sub: rec.reading_band?'Band '+rec.reading_band:''},
+    {label:'Writing', val: wBand!==null ? 'Band '+wBand : '—', sub: ''},
+    {label:'Speaking', val: rec.speaking_band ? 'Band '+rec.speaking_band : '—', sub: ''}
+  ];
+  var html = cards.map(function(c){
+    return '<div class="summary-card"><div class="sc-label">'+c.label+'</div><div class="sc-value">'+c.val+'</div>'+(c.sub?'<div style="font-size:12px;color:var(--muted);margin-top:2px;">'+c.sub+'</div>':'')+'</div>';
+  }).join('');
+  html += '<div class="summary-card overall"><div class="sc-label">Overall</div><div class="sc-value">'+(overall!==null?overall:'—')+'</div></div>';
+  document.getElementById('summaryCards').innerHTML = html;
+}
+
+function switchResultsTab(tab, el){
+  document.querySelectorAll('.rtab').forEach(function(t){ t.classList.remove('active'); });
+  if(el) el.classList.add('active');
+  var rec = loadedExamRecord;
+  var content = document.getElementById('resultsTabContent');
+  if(!rec){ content.innerHTML=''; return; }
+
+  if(tab === 'listening'){
+    content.innerHTML = buildAnswerTable(rec.listening_answers || {}, rec.listening_key_snapshot || {}, rec.listening_total || 40);
+  } else if(tab === 'reading'){
+    content.innerHTML = buildAnswerTable(rec.reading_answers || {}, rec.reading_key_snapshot || {}, rec.reading_total || 40);
+  } else if(tab === 'writing1'){
+    content.innerHTML = buildEssayView(rec.writing_t1_text, rec.writing_t1_words, rec.t1_feedback, rec.t1_band);
+  } else if(tab === 'writing2'){
+    content.innerHTML = buildEssayView(rec.writing_t2_text, rec.writing_t2_words, rec.t2_feedback, rec.t2_band);
+  } else if(tab === 'speaking'){
+    content.innerHTML = buildSpeakingView(rec.speaking_feedback, rec.speaking_band);
+  }
+}
+window.switchResultsTab = switchResultsTab;
+
+function buildAnswerTable(answers, key, total){
+  var rows = '';
+  for(var i=1; i<=total; i++){
+    var k = String(i);
+    var raw = answers[k];
+    var hasAns = raw !== undefined && raw !== null && String(raw).trim() !== '';
+    var studentVal = hasAns ? String(raw) : 'N/A';
+    var correct = key[k];
+    var isCorrect = (hasAns && correct !== undefined) ? checkIsCorrect(raw, correct) : null;
+    var cellClass = isCorrect === true ? 'ans-correct' : isCorrect === false ? 'ans-wrong' : '';
+    var correctDisplay = Array.isArray(correct) ? correct[0] : correct;
+    rows += '<tr><td style="color:var(--muted);font-weight:700;">'+i+'</td>'+
+      '<td class="'+cellClass+'">'+esc(studentVal)+(isCorrect===true?' ✓':isCorrect===false?' ✗':'')+'</td>'+
+      '<td style="color:var(--muted);">'+(isCorrect===false && correctDisplay!==undefined ?esc(String(correctDisplay)):'')+'</td></tr>';
+  }
+  return '<table class="ans-table"><thead><tr><th>#</th><th>Your Answer</th><th>Correct Answer</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+
+function buildEssayView(text, words, feedback, band){
+  var html = '<div style="margin-bottom:10px;font-size:13px;color:var(--muted);font-weight:700;">'+(words||0)+' words</div>';
+  html += '<div class="essay-view">'+esc(text || '(not submitted)')+'</div>';
+  if(feedback || band){
+    html += '<div class="feedback-view"><div class="fv-label">Teacher Feedback'+(band?' — Band '+band:'')+'</div><div>'+esc(feedback || 'No written feedback provided.')+'</div></div>';
+  } else {
+    html += '<div style="color:var(--muted);font-size:13px;font-style:italic;">Your teacher has not left feedback for this task yet.</div>';
+  }
+  return html;
+}
+
+function buildSpeakingView(feedback, band){
+  if(!feedback && !band) return '<div style="color:var(--muted);font-size:14px;">Your teacher has not recorded speaking feedback yet.</div>';
+  return '<div class="feedback-view"><div class="fv-label">Teacher Feedback'+(band?' — Band '+band:'')+'</div><div>'+esc(feedback || 'No written feedback provided.')+'</div></div>';
+}
+
+// ── CHECK EXISTING SUBMISSION ─────────────────────────────────────────────────
+async function checkAlreadySubmitted(){
+  if(!studentSession) return;
+  try {
+    var res = await sb.from('mock_exams').select('*')
+      .eq('student_id', studentSession.id)
+      .eq('mock_day', MOCK_DAY)
+      .not('submitted_at', 'is', null)
+      .order('submitted_at', {ascending:false})
+      .limit(1);
+    if(res.data && res.data.length > 0){
+      var rec = res.data[0];
+      loadedExamRecord = rec;
+      var dateStr = rec.submitted_at ? new Date(rec.submitted_at).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : (rec.exam_date || '');
+
+      document.getElementById('timerDisplay').style.display = 'none';
+
+      if(rec.results_published){
+        currentSection = 'ready';
+        var dateEl2 = document.getElementById('readySubmittedDate');
+        if(dateEl2 && dateStr) dateEl2.textContent = 'Submitted: ' + dateStr;
+        showScreen('ready');
+        document.getElementById('headerLabel').textContent = 'Mock Exam — Results Ready';
+      } else {
+        currentSection = 'done';
+        var dateEl = document.getElementById('submittedDate');
+        if(dateEl && dateStr) dateEl.textContent = 'Submitted: ' + dateStr;
+        showScreen('done');
+        document.getElementById('headerLabel').textContent = 'Mock Exam — Submitted';
+      }
+    }
+  } catch(e){ console.warn('Could not check submission status:', e); }
+}
+
+// If a checkpoint from an in-progress attempt exists, resumes into the
+// right section with the correct remaining time instead of restarting from
+// the intro. If the section's time had already run out while the tab was
+// away, moves straight on to the next section rather than trying to fake a
+// timer that's already expired.
+function tryResumeFromCheckpoint(){
+  var cp = loadCheckpoint();
+  if(!cp) return false;
+
+  examData = Object.assign(examData, cp.examData || {});
+  var remaining = Math.ceil((cp.endAt - Date.now()) / 1000);
+
+  if(cp.section === 'listening'){
+    currentSection = 'listening';
+    showScreen('listening');
+    updateProgress(1);
+    document.getElementById('headerLabel').textContent = 'Section 1 of 3 — Listening';
+    if(remaining <= 0){
+      // Time was already up while away — we have no live iframe to grab a
+      // score from, so move on with whatever listening data we already had.
+      startReviewTime();
+      return true;
+    }
+    document.getElementById('listenLoading').style.display = 'none';
+    var lFrame = document.getElementById('listeningFrame');
+    lFrame.onload = function(){
+      try {
+        hideStudentSubmitControls(lFrame.contentWindow.document, '#deliver-button{display:none !important;}');
+        var audio = lFrame.contentWindow.document.getElementById('global-audio-player');
+        if(audio) audio.play().catch(function(){});
+      } catch(e){}
+    };
+    lFrame.src = 'listening-mock25.html';
+    beginListeningCountdown(remaining);
+  } else if(cp.section === 'review'){
+    currentSection = 'listening';
+    showScreen('listening');
+    updateProgress(1);
+    document.getElementById('headerLabel').textContent = 'Section 1 of 3 — Listening';
+    document.getElementById('listenLoading').style.display = 'none';
+    startReviewTime(Math.max(remaining, 1));
+  } else if(cp.section === 'reading'){
+    if(remaining <= 0){
+      runTransition('writing', '✏️ Section 3', 'Writing starts in a moment…', 'Both Task 1 and Task 2 will be on screen together — 60 minutes total.', 10, goToWriting);
+    } else {
+      goToReading(remaining);
+    }
+  } else if(cp.section === 'writing'){
+    if(remaining <= 0){
+      goToWriting(1);
+      finishWriting();
+    } else {
+      goToWriting(remaining);
+    }
+  } else {
+    return false;
+  }
+  return true;
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+requireAuth(function(profile, user){
+  studentProfile = profile;
+  studentSession = user;
+  sb = getSupabaseClient();
+  checkAlreadySubmitted().then(function(){
+    if(currentSection === 'intro') tryResumeFromCheckpoint();
+  });
+});
+
+})();
+</script>
+</body>
+</html>
