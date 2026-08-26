@@ -270,7 +270,13 @@
       <span>Writing T2: <strong id="wc2">—</strong> words</span>
     </div>
     <div class="saving-notice" id="savingNotice">✓ Results saved to your teacher's dashboard.</div>
-    <div id="saveError" class="save-error-box">⚠ Results could not be saved automatically. Please take a screenshot and send it to your teacher.</div>
+    <div id="saveError" class="save-error-box">
+      ⚠ Results could not be saved automatically — but nothing is lost. Your answers are still on this page.
+      <div style="margin-top:10px;">
+        <button class="ghost" id="retrySaveBtn" style="padding:6px 16px; font-size:13px;">Try saving again</button>
+      </div>
+      <div id="saveErrorDetail" style="margin-top:8px; font-family:var(--mono); font-size:11px; color:var(--muted); word-break:break-word;"></div>
+    </div>
     <a href="../index.html" class="dashboard-btn">← Back to the board</a>
   </div>
 </div>
@@ -601,7 +607,10 @@ function finishWriting(){
   document.getElementById('timerDisplay').style.display = 'none';
   document.getElementById('wc1').textContent = examData.writing_t1_words;
   document.getElementById('wc2').textContent = examData.writing_t2_words;
-  clearCheckpoint();
+  // Checkpoint is intentionally kept until the save actually succeeds — if
+  // it were cleared here and the save then failed, the essays would be
+  // unrecoverable except by manual screenshot (which doesn't even capture
+  // the essay text, just word counts).
   saveToSupabase();
 }
 
@@ -702,35 +711,60 @@ function updateTimerDisplay(){
 async function saveToSupabase(){
   var savingNotice = document.getElementById('savingNotice');
   var saveError = document.getElementById('saveError');
-  try {
-    var payload = {
-      student_id: studentSession.id,
-      mock_day: MOCK_DAY,
-      exam_date: examData.exam_date,
-      listening_score: examData.listening_score,
-      listening_total: examData.listening_total,
-      listening_band: examData.listening_band,
-      listening_answers: examData.listening_answers,
-      listening_key_snapshot: examData.listening_key_snapshot,
-      reading_score: examData.reading_score,
-      reading_total: examData.reading_total,
-      reading_band: examData.reading_band,
-      reading_answers: examData.reading_answers,
-      reading_key_snapshot: examData.reading_key_snapshot,
-      writing_t1_text: examData.writing_t1_text,
-      writing_t1_words: examData.writing_t1_words,
-      writing_t2_text: examData.writing_t2_text,
-      writing_t2_words: examData.writing_t2_words,
-      completed_sections: examData.completed_sections,
-      submitted_at: new Date().toISOString()
-    };
-    var res = await sb.from('mock_exams').insert(payload);
-    if(res.error) throw res.error;
-    savingNotice.classList.add('show');
-  } catch(e){
-    console.error('Save failed:', e);
-    saveError.style.display = 'block';
+  saveError.style.display = 'none';
+
+  var payload = {
+    student_id: studentSession.id,
+    mock_day: MOCK_DAY,
+    exam_date: examData.exam_date,
+    listening_score: examData.listening_score,
+    listening_total: examData.listening_total,
+    listening_band: examData.listening_band,
+    listening_answers: examData.listening_answers,
+    listening_key_snapshot: examData.listening_key_snapshot,
+    reading_score: examData.reading_score,
+    reading_total: examData.reading_total,
+    reading_band: examData.reading_band,
+    reading_answers: examData.reading_answers,
+    reading_key_snapshot: examData.reading_key_snapshot,
+    writing_t1_text: examData.writing_t1_text,
+    writing_t1_words: examData.writing_t1_words,
+    writing_t2_text: examData.writing_t2_text,
+    writing_t2_words: examData.writing_t2_words,
+    completed_sections: examData.completed_sections,
+    submitted_at: new Date().toISOString()
+  };
+
+  // A 2.5-hour exam can easily outlast an auth token's lifetime, especially
+  // if the tab was backgrounded and its background refresh timer got
+  // throttled — refreshing right before the save that actually matters
+  // avoids failing on an expired session at the worst possible moment.
+  try { await sb.auth.refreshSession(); } catch(e){ /* fall through and let the save attempt itself surface any real auth problem */ }
+
+  var lastError = null;
+  for(var attempt = 1; attempt <= 3; attempt++){
+    try {
+      // upsert rather than insert: if a resumed session or a retry causes
+      // this to run twice for the same student+day, it safely overwrites
+      // the same row instead of failing on a duplicate-key error and
+      // masking the fact that the first save actually worked.
+      var res = await sb.from('mock_exams').upsert(payload, { onConflict: 'student_id,mock_day' });
+      if(res.error) throw res.error;
+      savingNotice.classList.add('show');
+      clearCheckpoint();
+      return;
+    } catch(e){
+      lastError = e;
+      console.error('Save attempt ' + attempt + ' failed:', e);
+      if(attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 1500); });
+    }
   }
+
+  // All attempts failed — show the error, but keep the checkpoint intact
+  // and offer a real retry instead of just asking for a screenshot.
+  saveError.style.display = 'block';
+  var detail = document.getElementById('saveErrorDetail');
+  if(detail) detail.textContent = lastError ? (lastError.message || String(lastError)) : '';
 }
 
 // ── RESULTS VIEWING (unchanged from the original mock system) ──────────────
@@ -916,6 +950,19 @@ requireAuth(function(profile, user){
   studentProfile = profile;
   studentSession = user;
   sb = getSupabaseClient();
+
+  var retryBtn = document.getElementById('retrySaveBtn');
+  if(retryBtn){
+    retryBtn.addEventListener('click', function(){
+      retryBtn.disabled = true;
+      retryBtn.textContent = 'Saving…';
+      saveToSupabase().finally(function(){
+        retryBtn.disabled = false;
+        retryBtn.textContent = 'Try saving again';
+      });
+    });
+  }
+
   checkAlreadySubmitted().then(function(){
     if(currentSection === 'intro') tryResumeFromCheckpoint();
   });
