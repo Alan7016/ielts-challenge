@@ -1251,7 +1251,25 @@ const SPEAKING_QUESTIONS = {
   'speaking-gifts-q1': 'Do you think you are good at choosing gifts?',
   'speaking-gifts-q2': 'Have you ever sent handmade gifts to others?',
   'speaking-gifts-q3': 'What kind of gifts are popular in your country?',
-  'speaking-gifts-q4': 'What is the best gift you have ever received?'
+  'speaking-gifts-q4': 'What is the best gift you have ever received?',
+  'speaking-early-part2': 'Part 2 — Describe an occasion when you got up extremely early.',
+  'speaking-early-q1': 'Part 3 — Why do people get up early?',
+  'speaking-early-q2': "Part 3 — Are there any situations when it's not good to arrive early?",
+  'speaking-early-q3': 'Part 3 — Is it good to arrive early in any situation?',
+  'speaking-early-q4': 'Part 3 — Why do some people stay up late at night?',
+  'speaking-early-q5': 'Part 3 — Is it easy to get up early?',
+  'speaking-law-part2': 'Part 2 — Describe a new law you would like to introduce in your country.',
+  'speaking-law-q1': 'Part 3 — Do people in your country usually obey the law?',
+  'speaking-law-q2': 'Part 3 — What are some rules that exist in schools or workplaces in your country?',
+  'speaking-law-q3': 'Part 3 — What kind of behaviour is considered good behaviour?',
+  'speaking-law-q4': 'Part 3 — How can parents teach children to obey rules?',
+  'speaking-law-q5': 'Part 3 — What are the benefits of obeying rules?',
+  'speaking-plants-part2': 'Part 2 — Describe a person you know who loves to grow plants (vegetables, fruits, flowers).',
+  'speaking-plants-q1': 'Part 3 — Do people in your country like to grow plants?',
+  'speaking-plants-q2': 'Part 3 — What are the advantages of growing plants at home?',
+  'speaking-plants-q3': 'Part 3 — Do people like to grow vegetables in your country?',
+  'speaking-plants-q4': 'Part 3 — What are the advantages of growing vegetables at home?',
+  'speaking-plants-q5': 'Part 3 — How do people feel when they eat vegetables that they grew on their own?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
@@ -1406,7 +1424,7 @@ async function initRecordControl(box, userId, day, task, fieldId) {
 // ============================================
 // Days that are full mock exams rather than regular content days.
 // Add future mock days here — every dashboard reads from this one place.
-const MOCK_DAYS = [11, 18, 25];
+const MOCK_DAYS = [11, 18, 25, 30];
 
 async function getLiveDays() {
   const checks = await Promise.all(
