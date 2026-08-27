@@ -27,6 +27,20 @@
       <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Confirm password
         <input type="password" id="password-confirm" required minlength="6" style="width:100%; margin-top:4px;">
       </label>
+      <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Which challenge?
+        <select id="challenge-select" required style="width:100%; margin-top:4px;">
+          <option value="1.0">Challenge 1.0</option>
+          <option value="2.0">Challenge 2.0</option>
+        </select>
+      </label>
+      <label id="level-row" style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:none;">Your level
+        <select id="level-select" style="width:100%; margin-top:4px;">
+          <option value="standard">Standard (band 4.5–5.0)</option>
+          <option value="advanced">Advanced (band 5.5–6.0)</option>
+          <option value="expert">Expert (band 6.5–7.0+)</option>
+        </select>
+        <span style="font-weight:400; color:var(--muted); font-size:0.78rem; display:block; margin-top:4px;">Not sure? Pick your closest current band — your teacher can adjust this later if needed.</span>
+      </label>
       <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Your group
         <select id="group-select" required style="width:100%; margin-top:4px;">
           <option value="">— loading groups… —</option>
@@ -47,17 +61,39 @@
 <script>
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // Populate the group dropdown from the groups table
+  const challengeSelect = document.getElementById('challenge-select');
+  const levelRow = document.getElementById('level-row');
+  const levelSelect = document.getElementById('level-select');
+
+  function currentChallenge() { return challengeSelect.value; }
+  function currentLevel() { return currentChallenge() === '2.0' ? levelSelect.value : null; }
+
+  // Groups are scoped to a challenge (and, for 2.0, a level) — the dropdown
+  // only ever shows groups that actually match what the student picked
+  // above, so there's no way to end up in a group from the wrong track.
   async function loadGroups() {
     const select = document.getElementById('group-select');
-    const { data, error } = await sb.from('groups').select('id, name').order('id');
+    select.innerHTML = '<option value="">— loading groups… —</option>';
+    let query = sb.from('groups').select('id, name').eq('challenge', currentChallenge()).order('id');
+    if (currentChallenge() === '2.0') query = query.eq('level', currentLevel());
+    const { data, error } = await query;
     if (error || !data) {
       select.innerHTML = '<option value="">— couldn\'t load groups —</option>';
+      return;
+    }
+    if (data.length === 0) {
+      select.innerHTML = '<option value="">— no groups open yet for this level —</option>';
       return;
     }
     select.innerHTML = '<option value="">— choose your group —</option>' +
       data.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
   }
+
+  challengeSelect.addEventListener('change', () => {
+    levelRow.style.display = currentChallenge() === '2.0' ? 'block' : 'none';
+    loadGroups();
+  });
+  levelSelect.addEventListener('change', loadGroups);
   loadGroups();
 
   document.getElementById('register-form').addEventListener('submit', async (e) => {
@@ -72,6 +108,8 @@
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password-confirm').value;
     const groupId = document.getElementById('group-select').value;
+    const challenge = currentChallenge();
+    const level = currentLevel();
 
     if (password !== passwordConfirm) {
       errorEl.textContent = 'Passwords do not match.';
@@ -111,6 +149,18 @@
         errorEl.textContent = error.message || `Registration failed (${error.status || 'unknown error'}). Check the browser console for details.`;
       }
       return;
+    }
+
+    // The account-creation trigger doesn't know about challenge/level yet,
+    // so this sets it separately right after signup, while the student has
+    // an active session. If this doesn't go through for any reason, the
+    // account still works — a mentor or admin can set it manually later.
+    if (data && data.session) {
+      try {
+        await sb.rpc('set_own_challenge_level', { new_challenge: challenge, new_level: level });
+      } catch (rpcErr) {
+        console.warn('Could not set challenge/level automatically:', rpcErr);
+      }
     }
 
     successEl.textContent = 'Account created! Redirecting to login…';
