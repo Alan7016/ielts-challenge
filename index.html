@@ -28,9 +28,9 @@
 
   <section class="hero">
     <div class="wrap">
-      <div class="eyebrow">30-day training block</div>
-      <h1>Your Marathon Board</h1>
-      <p class="tag">Nine tasks a day, thirty days straight. Pick a day below and run the full leg: article, vocab, reading, writing, speaking, video, listening.</p>
+      <div class="eyebrow" id="page-eyebrow">30-day training block</div>
+      <h1 id="page-title">Your Marathon Board</h1>
+      <p class="tag" id="page-tag">Nine tasks a day, thirty days straight. Pick a day below and run the full leg: article, vocab, reading, writing, speaking, video, listening.</p>
 
       <div class="progress-shell">
         <span class="label" id="progress-label">1 / 30 days live</span>
@@ -45,28 +45,65 @@
     </div>
   </section>
 
-  <div class="finish-line">— day 30 is the finish line —</div>
+  <div class="finish-line" id="finish-line">— day 30 is the finish line —</div>
 </div>
 
 <script src="supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 <script>
-  async function buildGrid() {
+  // Which folder and how many days a student sees depends entirely on their
+  // challenge + level — Challenge 1.0 is untouched (folder "days", 30 days),
+  // while each Challenge 2.0 level gets its own folder and a 45-day run.
+  function trackConfigFor(profile) {
+    if (profile.challenge === '2.0') {
+      const level = profile.level || 'standard';
+      const levelLabel = level.charAt(0).toUpperCase() + level.slice(1);
+      return {
+        folder: `days-c2-${level}`,
+        totalDays: 45,
+        eyebrow: `Challenge 2.0 — ${levelLabel}`,
+        title: `Your ${levelLabel} Board`,
+        tag: `Six weeks, one goal: a stronger band score. Pick a day below and run the full leg.`,
+        finishLine: '— day 45 is the finish line —',
+        // Mock exam days for Challenge 2.0 haven't been built yet — this
+        // stays empty until they exist, rather than reusing Challenge 1.0's
+        // mock day numbers, which would be meaningless in a different track.
+        mockDays: []
+      };
+    }
+    return {
+      folder: 'days',
+      totalDays: 30,
+      eyebrow: '30-day training block',
+      title: 'Your Marathon Board',
+      tag: 'Nine tasks a day, thirty days straight. Pick a day below and run the full leg: article, vocab, reading, writing, speaking, video, listening.',
+      finishLine: '— day 30 is the finish line —',
+      mockDays: MOCK_DAYS
+    };
+  }
+
+  async function buildGrid(profile) {
+    const cfg = trackConfigFor(profile);
+    document.getElementById('page-eyebrow').textContent = cfg.eyebrow;
+    document.getElementById('page-title').textContent = cfg.title;
+    document.getElementById('page-tag').textContent = cfg.tag;
+    document.getElementById('finish-line').textContent = cfg.finishLine;
+
     const grid = document.getElementById('track-grid');
     grid.innerHTML = '<p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading days…</p>';
-    const liveDays = await getLiveDays();
+    const liveDays = await getLiveDays(cfg.folder, cfg.totalDays);
 
-    document.getElementById('progress-label').textContent = `${liveDays.length} / 30 days live`;
-    document.getElementById('progress-fill').style.width = `${(liveDays.length / 30) * 100}%`;
+    document.getElementById('progress-label').textContent = `${liveDays.length} / ${cfg.totalDays} days live`;
+    document.getElementById('progress-fill').style.width = `${(liveDays.length / cfg.totalDays) * 100}%`;
 
     let html = '';
-    for (let d = 1; d <= 30; d++) {
+    for (let d = 1; d <= cfg.totalDays; d++) {
       const isOpen = liveDays.includes(d);
-      const isFinish = d === 30;
-      const isMock = MOCK_DAYS.includes(d);
+      const isFinish = d === cfg.totalDays;
+      const isMock = cfg.mockDays.includes(d);
       if (isOpen) {
-        html += `<a class="day-chip open${isFinish ? ' finish' : ''}${isMock ? ' mock' : ''}" href="days/day${d}.html">
+        html += `<a class="day-chip open${isFinish ? ' finish' : ''}${isMock ? ' mock' : ''}" href="${cfg.folder}/day${d}.html">
           <span class="num">${String(d).padStart(2, '0')}</span>
           <span class="lbl">${isMock ? '🎯 Mock Exam' : 'Day ' + d}</span>
           <span class="meta">${isMock ? 'Full practice test' : '9 tasks'}</span>
@@ -83,7 +120,7 @@
   }
 
   requireAuth(function (profile) {
-    buildGrid();
+    buildGrid(profile);
   });
 </script>
 </body>
