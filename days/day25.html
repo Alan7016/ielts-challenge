@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Day 25 — Mock Exam — IELTS Marathon</title>
+<title>Day 18 — Mock Exam — IELTS Marathon</title>
 <link rel="stylesheet" href="../style.css">
 <style>
   body { background: var(--bg); }
@@ -219,10 +219,10 @@
       <div class="writing-card">
         <h3>Writing Task 1 — Academic Report</h3>
         <p><strong>Suggested time: about 20 minutes.</strong></p>
-        <p style="margin-top:10px;" id="t1PromptText">The chart shows the percentage of people in one country, by age group, who visited one or more museums in 2006, 2011 and 2016.</p>
+        <p style="margin-top:10px;" id="t1PromptText">The table below gives information on the salaries of secondary teachers in five countries in 2009.</p>
         <p style="margin-top:8px; color:var(--muted); font-size:14px;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
         <p style="margin-top:8px; color:var(--warn); font-size:13px; font-weight:700;">Write at least 150 words.</p>
-        <img id="chartImg" src="mock25-t1-chart.png" alt="Bar chart showing the percentage of people who visited at least one museum, by age group, in 2006, 2011, and 2016" style="max-width:100%; border-radius:8px; border:1px solid var(--border); display:block; margin-top:12px;">
+        <img id="chartImg" src="mock18-t1-chart.png" alt="Table showing starting, after-15-years, and maximum secondary teacher salaries, plus years taken to reach top salary, for Australia, Denmark, Luxembourg, Korea, and Japan" style="max-width:100%; border-radius:8px; border:1px solid var(--border); display:block; margin-top:12px;">
       </div>
       <div class="writing-card">
         <h3>Your Task 1 response</h3>
@@ -236,7 +236,7 @@
       <div class="writing-card">
         <h3>Writing Task 2 — Essay</h3>
         <p><strong>Suggested time: about 40 minutes.</strong></p>
-        <p style="margin-top:10px;" id="t2PromptText">Most people think that governments should invest money in improving the quality of life on Earth rather than exploring space. To what extent do you agree or disagree with this opinion?</p>
+        <p style="margin-top:10px;" id="t2PromptText">In many parts of the world, people throw away broken items instead of repairing them, while others believe these items should be repaired and reused. What are the reasons for this trend? What solutions can you suggest?</p>
         <p style="margin-top:8px; color:var(--warn); font-size:13px; font-weight:700;">Write at least 250 words. Give reasons for your answer and include any relevant examples from your own knowledge or experience.</p>
       </div>
       <div class="writing-card">
@@ -290,7 +290,7 @@
 (function(){
 "use strict";
 
-var MOCK_DAY = 25;
+var MOCK_DAY = 18;
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 var examData = {
@@ -398,7 +398,7 @@ function startExam(){
     setupListeningTimer(frame);
   }
   frame.onload = tryInit;
-  frame.src = 'listening-mock25.html';
+  frame.src = 'listening-mock18.html';
   // This file is ~26MB (mostly the embedded audio) — its "load" event can
   // take a long time, or in rare cases not fire reliably at all. This
   // watchdog guarantees the section starts moving regardless, instead of
@@ -550,12 +550,12 @@ function goToReading(resumeSeconds){
       hideStudentSubmitControls(frame.contentWindow.document, '#review{display:none !important;}');
     } catch(e){}
   };
-  frame.src = 'reading-mock25.html';
+  frame.src = 'reading-mock18.html';
   startTimer(resumeSeconds || 60 * 60, finishReading, 'reading');
 }
 
 // Same idea as listening: force-grade via the bridge functions added to
-// reading-mock25.html, then read the result straight from its return value
+// reading-mock18.html, then read the result straight from its return value
 // (this test exposes state properly since it isn't a closed IIFE... well,
 // it is, but we added an explicit bridge for exactly this purpose).
 function finishReading(){
@@ -917,7 +917,7 @@ function tryResumeFromCheckpoint(){
         if(audio) audio.play().catch(function(){});
       } catch(e){}
     };
-    lFrame.src = 'listening-mock25.html';
+    lFrame.src = 'listening-mock18.html';
     beginListeningCountdown(remaining);
   } else if(cp.section === 'review'){
     currentSection = 'listening';
