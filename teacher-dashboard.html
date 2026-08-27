@@ -58,7 +58,7 @@
     const groupIds = (assignments || []).map(a => a.group_id);
     let groups = [];
     if (groupIds.length > 0) {
-      const { data } = await sb.from('groups').select('id, name').in('id', groupIds).order('id');
+      const { data } = await sb.from('groups').select('id, name, challenge, level').in('id', groupIds).order('id');
       groups = data || [];
     }
     myGroups = groups;
@@ -120,14 +120,12 @@
     } else {
       document.getElementById('dashboard-root').innerHTML = `
         <a href="#" class="back-link" id="back-to-days">← Back to days</a>
-        <div class="group-btn-grid">
-          ${myGroups.map(g => `
-            <button class="group-btn" data-group="${g.id}">
-              <span class="g-name">${g.name}</span>
-              <span class="g-meta">View students →</span>
-            </button>
-          `).join('')}
-        </div>
+        ${renderGroupSections(myGroups, g => `
+          <button class="group-btn" data-group="${g.id}">
+            <span class="g-name">${g.name}</span>
+            <span class="g-meta">View students →</span>
+          </button>
+        `)}
       `;
     }
 
