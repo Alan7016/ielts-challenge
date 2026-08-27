@@ -27,7 +27,7 @@ async function requireAuth(onReady) {
     return;
   }
 
-  const { data: profile } = await sb.from('profiles').select('full_name, role, group_id, avatar_url').eq('id', session.user.id).single();
+  const { data: profile } = await sb.from('profiles').select('full_name, role, group_id, avatar_url, challenge, level').eq('id', session.user.id).single();
   currentUserRole = profile ? profile.role : null;
 
   // Day pages hardcode "← Board" to point at the student board — for admin,
