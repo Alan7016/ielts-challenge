@@ -1426,6 +1426,54 @@ async function initRecordControl(box, userId, day, task, fieldId) {
 // Add future mock days here — every dashboard reads from this one place.
 const MOCK_DAYS = [11, 18, 25, 30];
 
+// The single source of truth for "which folder, how many days, which of
+// them are mocks" for a given student. Challenge 1.0 is unchanged; each
+// Challenge 2.0 level gets its own folder and day count. Used anywhere
+// that needs to know "today" or "how many days total" for a specific
+// student — index.html, leaderboard.html, profile.html.
+function trackConfigFor(profile) {
+  if (profile && profile.challenge === '2.0') {
+    const level = profile.level || 'standard';
+    return {
+      folder: `days-c2-${level}`,
+      totalDays: 45,
+      // Mock exam days for Challenge 2.0 haven't been built yet — left
+      // empty rather than reusing Challenge 1.0's mock day numbers, which
+      // would be meaningless in a different track's day sequence.
+      mockDays: []
+    };
+  }
+  return { folder: 'days', totalDays: 30, mockDays: MOCK_DAYS };
+}
+
+// Groups a flat list of groups (each needs .challenge and .level) into
+// labeled sections, in a fixed, sensible order — used by every dashboard's
+// group picker so Challenge 1.0 and each Challenge 2.0 level are visually
+// separated instead of sitting in one undifferentiated grid.
+function groupSectionLabel(g) {
+  if (g.challenge === '2.0') {
+    const level = g.level || 'standard';
+    return `Challenge 2.0 — ${level.charAt(0).toUpperCase() + level.slice(1)}`;
+  }
+  return 'Challenge 1.0';
+}
+
+function renderGroupSections(groups, buttonHtmlFn) {
+  const order = ['Challenge 1.0', 'Challenge 2.0 — Standard', 'Challenge 2.0 — Advanced', 'Challenge 2.0 — Expert'];
+  const sections = {};
+  groups.forEach(g => {
+    const label = groupSectionLabel(g);
+    sections[label] = sections[label] || [];
+    sections[label].push(g);
+  });
+  return order.filter(label => sections[label] && sections[label].length > 0).map(label => `
+    <div class="group-section">
+      <h3 class="group-section-title">${label}</h3>
+      <div class="group-btn-grid">${sections[label].map(buttonHtmlFn).join('')}</div>
+    </div>
+  `).join('');
+}
+
 async function getLiveDays(folder, maxDays) {
   folder = folder || 'days';
   maxDays = maxDays || 30;
