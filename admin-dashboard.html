@@ -64,7 +64,7 @@
     }
 
     const sb = getSupabaseClient();
-    const { data: groups } = await sb.from('groups').select('id, name').order('id');
+    const { data: groups } = await sb.from('groups').select('id, name, challenge, level').order('id');
     allGroups = groups || [];
     liveDays = await getLiveDays();
 
@@ -286,35 +286,62 @@
   }
 
   // ---------- TAB 3: Days (open any day directly, full access, no locking) ----------
-  function showDaysTab() {
+  const DAY_TRACKS = [
+    { key: '1.0', label: 'Challenge 1.0', folder: 'days', totalDays: 30, mockDays: MOCK_DAYS },
+    { key: '2.0-standard', label: 'C2 — Standard', folder: 'days-c2-standard', totalDays: 45, mockDays: [] },
+    { key: '2.0-advanced', label: 'C2 — Advanced', folder: 'days-c2-advanced', totalDays: 45, mockDays: [] },
+    { key: '2.0-expert', label: 'C2 — Expert', folder: 'days-c2-expert', totalDays: 45, mockDays: [] }
+  ];
+  let selectedTrackKey = '1.0';
+  const liveDaysByTrack = {};
+
+  async function showDaysTab() {
     document.getElementById('page-title').textContent = 'Days';
     if (dayChart) { dayChart.destroy(); dayChart = null; }
     if (groupChart) { groupChart.destroy(); groupChart = null; }
 
-    const nonMockDays = liveDays.filter(d => !MOCK_DAYS.includes(d));
-    let html = `<p style="color:var(--muted); font-size:0.85rem; margin:0 0 20px;">Opens the real day page with full access — every task unlocked, nothing you do here gets saved.</p><div class="track-grid">`;
-    for (let d = 1; d <= 30; d++) {
-      const isOpen = liveDays.includes(d);
-      const isMock = MOCK_DAYS.includes(d);
+    const root = document.getElementById('dashboard-root');
+    const tabsHtml = `
+      <div class="tab-toggle" id="track-tabs" style="margin-bottom:20px;">
+        ${DAY_TRACKS.map(t => `<button data-track="${t.key}" class="${t.key === selectedTrackKey ? 'active' : ''}">${t.label}</button>`).join('')}
+      </div>
+    `;
+    root.innerHTML = tabsHtml + `<p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>`;
+
+    const track = DAY_TRACKS.find(t => t.key === selectedTrackKey);
+    if (!(track.key in liveDaysByTrack)) {
+      liveDaysByTrack[track.key] = track.key === '1.0' ? liveDays : await getLiveDays(track.folder, track.totalDays);
+    }
+    const trackLiveDays = liveDaysByTrack[track.key];
+
+    let gridHtml = `<p style="color:var(--muted); font-size:0.85rem; margin:0 0 20px;">Opens the real day page with full access — every task unlocked, nothing you do here gets saved.</p><div class="track-grid">`;
+    for (let d = 1; d <= track.totalDays; d++) {
+      const isOpen = trackLiveDays.includes(d);
+      const isMock = track.mockDays.includes(d);
       if (isMock && isOpen) {
-        html += `<a href="days/day${d}.html" class="day-chip staff open mock">
+        gridHtml += `<a href="${track.folder}/day${d}.html" class="day-chip staff open mock">
           <span class="num">${String(d).padStart(2, '0')}</span>
           <span class="lbl">🎯 Mock Exam</span>
         </a>`;
       } else if (isOpen) {
-        html += `<a href="days/day${d}.html" class="day-chip staff open">
+        gridHtml += `<a href="${track.folder}/day${d}.html" class="day-chip staff open">
           <span class="num">${String(d).padStart(2, '0')}</span>
           <span class="lbl">Day ${d}</span>
         </a>`;
       } else {
-        html += `<div class="day-chip staff locked${isMock ? ' mock' : ''}" title="Not live yet">
+        gridHtml += `<div class="day-chip staff locked${isMock ? ' mock' : ''}" title="Not live yet">
           <span class="num">${String(d).padStart(2, '0')}</span>
           <span class="lbl">${isMock ? '🎯 Mock Exam' : 'Day ' + d}</span>
         </div>`;
       }
     }
-    html += '</div>';
-    document.getElementById('dashboard-root').innerHTML = html;
+    gridHtml += '</div>';
+    root.innerHTML = tabsHtml + gridHtml;
+    document.getElementById('track-tabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('button'); if (!btn) return;
+      selectedTrackKey = btn.dataset.track;
+      showDaysTab();
+    });
   }
 
   // ---------- TAB 2: Groups (no day pre-selection needed) ----------
@@ -326,16 +353,12 @@
       document.getElementById('dashboard-root').innerHTML = `<p style="color:var(--muted);">No groups exist yet.</p>`;
       return;
     }
-    document.getElementById('dashboard-root').innerHTML = `
-      <div class="group-btn-grid">
-        ${allGroups.map(g => `
-          <button class="group-btn" data-group="${g.id}">
-            <span class="g-name">${g.name}</span>
-            <span class="g-meta">View students →</span>
-          </button>
-        `).join('')}
-      </div>
-    `;
+    document.getElementById('dashboard-root').innerHTML = renderGroupSections(allGroups, g => `
+      <button class="group-btn" data-group="${g.id}">
+        <span class="g-name">${g.name}</span>
+        <span class="g-meta">View students →</span>
+      </button>
+    `);
     document.querySelectorAll('.group-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         selectedGroup = allGroups.find(g => g.id === +btn.dataset.group);
