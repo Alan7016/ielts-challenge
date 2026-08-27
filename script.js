@@ -1426,11 +1426,13 @@ async function initRecordControl(box, userId, day, task, fieldId) {
 // Add future mock days here — every dashboard reads from this one place.
 const MOCK_DAYS = [11, 18, 25, 30];
 
-async function getLiveDays() {
+async function getLiveDays(folder, maxDays) {
+  folder = folder || 'days';
+  maxDays = maxDays || 30;
   const checks = await Promise.all(
-    Array.from({ length: 30 }, (_, i) => {
+    Array.from({ length: maxDays }, (_, i) => {
       const day = i + 1;
-      return fetch(`days/day${day}.html`, { method: 'HEAD' })
+      return fetch(`${folder}/day${day}.html`, { method: 'HEAD' })
         .then(res => res.ok ? day : null)
         .catch(() => null);
     })
