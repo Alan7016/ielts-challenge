@@ -149,7 +149,7 @@
     document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
 
     const sb = getSupabaseClient();
-    const { data: students } = await sb.from('profiles').select('id, full_name, avatar_url').eq('group_id', selectedGroup.id).eq('role', 'student').order('full_name');
+    const { data: students } = await sb.from('profiles').select('id, full_name, avatar_url, challenge, level').eq('group_id', selectedGroup.id).eq('role', 'student').order('full_name');
 
     if (!students || students.length === 0) {
       root.innerHTML = `<a href="#" class="back-link" id="back-to-groups">← Back to groups</a><p style="color:var(--muted);">No students registered in this group yet.</p>`;
@@ -227,6 +227,26 @@
       `;
     }
 
+    function renderTrackLabel(s) {
+      const isC2 = s.challenge === '2.0';
+      return `
+        <div class="track-row" data-student="${s.id}" style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--border); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <label style="font-size:0.82rem; font-weight:600;">Track:</label>
+          <select class="track-challenge-select" style="padding:4px 8px; border:1px solid var(--border); border-radius:6px;">
+            <option value="1.0" ${!isC2 ? 'selected' : ''}>Challenge 1.0</option>
+            <option value="2.0" ${isC2 ? 'selected' : ''}>Challenge 2.0</option>
+          </select>
+          <select class="track-level-select" style="padding:4px 8px; border:1px solid var(--border); border-radius:6px; ${isC2 ? '' : 'display:none;'}">
+            <option value="standard" ${s.level === 'standard' ? 'selected' : ''}>Standard</option>
+            <option value="advanced" ${s.level === 'advanced' ? 'selected' : ''}>Advanced</option>
+            <option value="expert" ${s.level === 'expert' ? 'selected' : ''}>Expert</option>
+          </select>
+          <button class="ghost save-track" style="padding:4px 12px; font-size:0.8rem;">Save</button>
+          <span class="save-status-track" style="font-size:0.8rem; color:var(--muted);"></span>
+        </div>
+      `;
+    }
+
     function renderWritingScore(studentId) {
       const saved = writingScoreByStudent[studentId];
       return `
@@ -253,12 +273,32 @@
           </div>
           ${renderWriting(s.id)}
           ${renderSpeaking(s.id)}
+          ${renderTrackLabel(s)}
           ${renderWritingScore(s.id)}
         </div>
       `).join('')}
     `;
 
     document.getElementById('back-to-groups').addEventListener('click', (e) => { e.preventDefault(); showGroupPicker(); });
+    root.querySelectorAll('.track-row').forEach(row => {
+      const studentId = row.dataset.student;
+      const challengeSel = row.querySelector('.track-challenge-select');
+      const levelSel = row.querySelector('.track-level-select');
+      challengeSel.addEventListener('change', () => {
+        levelSel.style.display = challengeSel.value === '2.0' ? 'inline-block' : 'none';
+      });
+      row.querySelector('.save-track').addEventListener('click', async () => {
+        const status = row.querySelector('.save-status-track');
+        status.textContent = 'Saving…';
+        const newChallenge = challengeSel.value;
+        const newLevel = newChallenge === '2.0' ? levelSel.value : null;
+        const res = await sb.rpc('set_student_challenge_level', {
+          target_student: studentId, new_challenge: newChallenge, new_level: newLevel
+        });
+        status.textContent = res.error ? '⚠️ Failed to save' : '✓ Saved';
+        if (res.error) console.error(res.error);
+      });
+    });
     root.querySelectorAll('.writing-toggle').forEach(btn => {
       btn.addEventListener('click', () => {
         const box = document.getElementById(btn.dataset.target);
