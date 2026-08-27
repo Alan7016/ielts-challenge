@@ -96,6 +96,14 @@
     if (scope === 'group' && myProfile.group_id) {
       const { data: groupStudents } = await sb.from('profiles').select('id').eq('group_id', myProfile.group_id).eq('role', 'student');
       studentIds = (groupStudents || []).map(s => s.id);
+    } else if (scope === 'overall') {
+      // "Overall" means everyone on the same track as you — not literally
+      // everyone. A Challenge 1.0 student never competes against Challenge
+      // 2.0, and within 2.0, Standard/Advanced/Expert never mix.
+      let overallQuery = sb.from('profiles').select('id').eq('role', 'student').eq('challenge', myProfile.challenge || '1.0');
+      if (myProfile.challenge === '2.0') overallQuery = overallQuery.eq('level', myProfile.level);
+      const { data: trackStudents } = await overallQuery;
+      studentIds = (trackStudents || []).map(s => s.id);
     }
 
     let query = sb.from('points').select('student_id, points').gte('day', dayFrom).lte('day', dayTo);
