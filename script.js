@@ -383,6 +383,54 @@ function initFlipCards() {
 }
 
 
+// ---------- Paraphrase hunt (Challenge 2.0) ----------
+// Student clicks a question-phrase chip, then clicks the matching phrase
+// inside the passage. Correct matches lock in; wrong attempts just shake
+// and reset, without ever revealing which one was right.
+function initParaphraseMatch() {
+  let selected = null;
+  const items = document.querySelectorAll('.para-question-item');
+  const targets = document.querySelectorAll('.para-target');
+  const status = document.getElementById('uf-paraphrase-status');
+
+  function updateStatus() {
+    if (!status) return;
+    const total = items.length;
+    const done = document.querySelectorAll('.para-question-item.matched').length;
+    status.textContent = `${done}/${total} matched`;
+  }
+
+  items.forEach((item) => {
+    item.addEventListener('click', () => {
+      if (item.classList.contains('matched')) return;
+      items.forEach(i => i.classList.remove('selected'));
+      selected = item;
+      item.classList.add('selected');
+    });
+  });
+
+  targets.forEach((target) => {
+    target.addEventListener('click', () => {
+      if (target.classList.contains('matched') || !selected) return;
+      if (target.dataset.match === selected.dataset.match) {
+        target.classList.add('matched');
+        selected.classList.add('matched');
+        selected.classList.remove('selected');
+        selected = null;
+        updateStatus();
+      } else {
+        target.classList.add('shake');
+        setTimeout(() => target.classList.remove('shake'), 400);
+        if (selected) selected.classList.remove('selected');
+        selected = null;
+      }
+    });
+  });
+
+  updateStatus();
+}
+
+
 // ---------- Chunk toggle on sample answer ----------
 function initChunkToggle(toggleId, sampleId) {
   const toggle = document.getElementById(toggleId);
