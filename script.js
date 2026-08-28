@@ -112,7 +112,10 @@ function initialsFor(fullName) {
 
 // so the auth redirect works the same from index.html and from days/dayN.html.
 function pathToRoot() {
-  return window.location.pathname.includes('/days/') ? '../' : '';
+  const path = window.location.pathname;
+  if (path.includes('/challenge2/')) return '../../'; // e.g. /challenge2/standard/day1.html — two levels deep
+  if (path.includes('/days/')) return '../';           // Challenge 1.0 day pages — one level deep
+  return '';
 }
 
 // ============================================
@@ -360,6 +363,25 @@ function checkCheckboxGroup(className, resultId) {
   const resultEl = document.getElementById(resultId);
   if (resultEl) resultEl.textContent = `${correctCount}/${items.length} correct`;
 }
+
+// ---------- Flip cards (city photo matching, Challenge 2.0) ----------
+function initFlipCards() {
+  document.querySelectorAll('.flip-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      if (card.classList.contains('locked')) return;
+      const select = document.getElementById(card.dataset.select);
+      if (!select.value) {
+        select.style.borderColor = 'var(--warn)';
+        select.focus();
+        return;
+      }
+      const isCorrect = select.value === select.dataset.answer;
+      card.classList.add('flipped', 'locked', isCorrect ? 'correct' : 'incorrect');
+      select.disabled = true;
+    });
+  });
+}
+
 
 // ---------- Chunk toggle on sample answer ----------
 function initChunkToggle(toggleId, sampleId) {
@@ -1004,8 +1026,13 @@ function initHighlightTool(dayNumber) {
       if (!r.toString().trim()) { tools.style.display = 'none'; return; }
       const rc = r.getBoundingClientRect();
       tools.style.display = 'flex';
-      tools.style.left = Math.max(8, rc.left + scrollX + rc.width / 2 - tools.offsetWidth / 2) + 'px';
-      tools.style.top = Math.max(8, rc.top + scrollY - tools.offsetHeight - 8) + 'px';
+      // .hl-tools is `position: fixed`, so getBoundingClientRect()'s
+      // viewport-relative values are already correct as-is — adding
+      // scrollX/scrollY here double-counted the scroll offset, so the
+      // further down the page you'd scrolled, the further off the toolbar
+      // would land.
+      tools.style.left = Math.max(8, rc.left + rc.width / 2 - tools.offsetWidth / 2) + 'px';
+      tools.style.top = Math.max(8, rc.top - tools.offsetHeight - 8) + 'px';
     }, 1);
   });
   document.addEventListener('mousedown', (e) => {
