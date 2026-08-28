@@ -62,7 +62,7 @@
   requireAuth(async function (profile, user) {
     me = user;
     myProfile = profile;
-    currentDay = await getMostRecentLiveDay();
+    currentDay = await getMostRecentLiveDay(myProfile);
     document.getElementById('scope-toggle').addEventListener('click', (e) => {
       const btn = e.target.closest('button'); if (!btn) return;
       scope = btn.dataset.scope;
@@ -77,11 +77,6 @@
     });
     render();
   });
-
-  async function getMostRecentLiveDay() {
-    const liveDays = await getLiveDays();
-    return liveDays.length ? Math.max(...liveDays) : 1;
-  }
 
   async function render() {
     const root = document.getElementById('board-root');
