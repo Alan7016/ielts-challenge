@@ -198,13 +198,64 @@ function escapeHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// Free, instant, no-network check: pulls every number/percentage that
+// appears in this day's model sample answer, and flags any that don't
+// show up anywhere in the student's own writing — a rough but genuinely
+// useful proxy for "did you cover the same key data points as the model
+// answer," without needing an AI model to judge it properly.
+function extractDataPoints(text) {
+  const normalized = text.replace(/per\s*cent/gi, '%').replace(/percent/gi, '%');
+  const matches = normalized.match(/\$?\d[\d,]*(?:\.\d+)?%?/g) || [];
+  return [...new Set(matches)];
+}
+
+function normalizeToken(token) {
+  return token.replace(/,/g, '');
+}
+
+function buildDataCoverageHtml(studentText) {
+  const sampleEl = document.getElementById('sample-text');
+  if (!sampleEl) return '';
+  const sampleNumbers = extractDataPoints(sampleEl.textContent || '');
+  if (sampleNumbers.length === 0) return '';
+
+  const studentNormalized = studentText.replace(/per\s*cent/gi, '%').replace(/percent/gi, '%').replace(/,/g, '');
+  const missing = sampleNumbers.filter(num => !studentNormalized.includes(normalizeToken(num)));
+  if (missing.length === 0) return '';
+
+  return '<p class="data-coverage-note"><em>You may have missed mentioning some figures covered in the model answer: ' +
+    missing.map(escapeHtml).join(', ') +
+    '. Worth double-checking you\'ve covered every key data point.</em></p>';
+}
+
 async function runGrammarCheck(textarea) {
   const text = textarea.value;
   if (!text.trim()) return;
 
   const resultBox = document.createElement('div');
   resultBox.className = 'grammar-review';
-  resultBox.innerHTML = '<div class="grammar-review-label">📝 Spelling &amp; grammar review</div><p class="grammar-review-loading">Checking your writing…</p>';
+
+  const labelDiv = document.createElement('div');
+  labelDiv.className = 'grammar-review-label';
+  labelDiv.textContent = '📝 Spelling & grammar review';
+  resultBox.appendChild(labelDiv);
+
+  const loadingP = document.createElement('p');
+  loadingP.className = 'grammar-review-loading';
+  loadingP.textContent = 'Checking your writing…';
+  resultBox.appendChild(loadingP);
+
+  // Coverage note is instant (no network needed) and always sits at the
+  // end of the box, per how this was asked for — appended now, so its
+  // position doesn't depend on whether the grammar check above it
+  // resolves quickly or slowly.
+  const coverageHtml = buildDataCoverageHtml(text);
+  if (coverageHtml) {
+    const coverageWrap = document.createElement('div');
+    coverageWrap.innerHTML = coverageHtml;
+    resultBox.appendChild(coverageWrap);
+  }
+
   textarea.insertAdjacentElement('afterend', resultBox);
 
   try {
@@ -218,7 +269,7 @@ async function runGrammarCheck(textarea) {
     const matches = (data.matches || []).slice().sort((a, b) => a.offset - b.offset);
 
     if (matches.length === 0) {
-      resultBox.innerHTML = '<div class="grammar-review-label">📝 Spelling &amp; grammar review</div><p class="grammar-review-clean">✓ No issues spotted — nice and clean!</p>';
+      loadingP.outerHTML = '<p class="grammar-review-clean">✓ No issues spotted — nice and clean!</p>';
       return;
     }
 
@@ -237,13 +288,12 @@ async function runGrammarCheck(textarea) {
     });
     html += escapeHtml(text.slice(cursor));
 
-    resultBox.innerHTML =
-      '<div class="grammar-review-label">📝 Spelling &amp; grammar review</div>' +
+    loadingP.outerHTML =
       '<p class="grammar-review-note">Unofficial — for your own reference only, doesn\'t affect your score.</p>' +
       '<div class="grammar-review-text">' + html + '</div>';
   } catch (e) {
     console.warn('Grammar check unavailable:', e);
-    resultBox.innerHTML = '<div class="grammar-review-label">📝 Spelling &amp; grammar review</div><p class="grammar-review-note">Check unavailable right now — this doesn\'t affect your submission.</p>';
+    loadingP.outerHTML = '<p class="grammar-review-note">Check unavailable right now — this doesn\'t affect your submission.</p>';
   }
 }
 
