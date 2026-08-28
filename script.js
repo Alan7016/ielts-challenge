@@ -188,6 +188,65 @@ function initWordCounter(textareaId, countId) {
   update();
 }
 
+// ---------- Spelling & grammar review ----------
+// Runs once, right when a writing task locks in — not on every keystroke.
+// Uses LanguageTool's free public API (checks both spelling and basic
+// grammar in one pass). This is a study aid shown to the student after
+// submission, not part of grading — if the check fails or is unavailable
+// for any reason, it fails silently rather than blocking anything.
+function escapeHtml(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+async function runGrammarCheck(textarea) {
+  const text = textarea.value;
+  if (!text.trim()) return;
+
+  const resultBox = document.createElement('div');
+  resultBox.className = 'grammar-review';
+  resultBox.innerHTML = '<div class="grammar-review-label">📝 Spelling &amp; grammar review</div><p class="grammar-review-loading">Checking your writing…</p>';
+  textarea.insertAdjacentElement('afterend', resultBox);
+
+  try {
+    const res = await fetch('https://api.languagetool.org/v2/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'text=' + encodeURIComponent(text) + '&language=en-US'
+    });
+    if (!res.ok) throw new Error('LanguageTool request failed: ' + res.status);
+    const data = await res.json();
+    const matches = (data.matches || []).slice().sort((a, b) => a.offset - b.offset);
+
+    if (matches.length === 0) {
+      resultBox.innerHTML = '<div class="grammar-review-label">📝 Spelling &amp; grammar review</div><p class="grammar-review-clean">✓ No issues spotted — nice and clean!</p>';
+      return;
+    }
+
+    let html = '';
+    let cursor = 0;
+    matches.forEach(m => {
+      if (m.offset < cursor) return; // overlapping match, skip to avoid broken markup
+      html += escapeHtml(text.slice(cursor, m.offset));
+      const flagged = text.slice(m.offset, m.offset + m.length);
+      html += '<span class="gr-error">' + escapeHtml(flagged) + '</span>';
+      if (m.replacements && m.replacements.length > 0) {
+        const suggestion = m.replacements.slice(0, 2).map(r => r.value).join(' / ');
+        html += '<span class="gr-suggestion">(' + escapeHtml(suggestion) + ')</span>';
+      }
+      cursor = m.offset + m.length;
+    });
+    html += escapeHtml(text.slice(cursor));
+
+    resultBox.innerHTML =
+      '<div class="grammar-review-label">📝 Spelling &amp; grammar review</div>' +
+      '<p class="grammar-review-note">Unofficial — for your own reference only, doesn\'t affect your score.</p>' +
+      '<div class="grammar-review-text">' + html + '</div>';
+  } catch (e) {
+    console.warn('Grammar check unavailable:', e);
+    resultBox.innerHTML = '<div class="grammar-review-label">📝 Spelling &amp; grammar review</div><p class="grammar-review-note">Check unavailable right now — this doesn\'t affect your submission.</p>';
+  }
+}
+
 // ---------- Copy button ----------
 function initCopyButton(buttonId, textareaId) {
   const btn = document.getElementById(buttonId);
@@ -714,6 +773,13 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
       await saveProgress(userId, dayNumber, current, true, true);
       await autoAwardPoints(userId, dayNumber, container);
       freezeTask(current, checkFns[current]);
+      // Spelling/grammar review — regular days only (24+), never on mock
+      // exam days, since those are meant to simulate the real, unassisted
+      // test. dayNumber is already known at the call site, so no need to
+      // touch every individual day file to enforce this.
+      if (freeTextBox && dayNumber >= 24 && !MOCK_DAYS.includes(dayNumber)) {
+        runGrammarCheck(freeTextBox);
+      }
     }
     refreshDots();
     if (current < totalTasks) {
