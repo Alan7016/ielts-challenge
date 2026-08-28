@@ -1578,7 +1578,7 @@ function trackConfigFor(profile) {
   if (profile && profile.challenge === '2.0') {
     const level = profile.level || 'standard';
     return {
-      folder: `days-c2-${level}`,
+      folder: `challenge2/${level}`,
       totalDays: 45,
       // Mock exam days for Challenge 2.0 haven't been built yet — left
       // empty rather than reusing Challenge 1.0's mock day numbers, which
