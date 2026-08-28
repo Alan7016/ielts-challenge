@@ -205,7 +205,12 @@ function escapeHtml(str) {
 // answer," without needing an AI model to judge it properly.
 function extractDataPoints(text) {
   const normalized = text.replace(/per\s*cent/gi, '%').replace(/percent/gi, '%');
-  const matches = normalized.match(/\$?\d[\d,]*(?:\.\d+)?%?/g) || [];
+  // Matches a properly comma-grouped number (comma only counts when followed
+  // by exactly 3 digits, e.g. "38,849") before falling back to a plain
+  // digit run. The old version allowed a comma anywhere in the middle,
+  // which meant an ordinary sentence comma right after a number — like
+  // "2010, and 2016" — got swallowed into the match as "2010,".
+  const matches = normalized.match(/\$?\d{1,3}(?:,\d{3})+(?:\.\d+)?%?|\$?\d+(?:\.\d+)?%?/g) || [];
   return [...new Set(matches)];
 }
 
@@ -262,7 +267,10 @@ async function runGrammarCheck(textarea) {
     const res = await fetch('https://api.languagetool.org/v2/check', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: 'text=' + encodeURIComponent(text) + '&language=en-US'
+      // "picky" mode catches noticeably more real grammar issues (subject-
+      // verb agreement, article/countable-noun errors) than the default
+      // mode, which is tuned conservative to avoid false positives.
+      body: 'text=' + encodeURIComponent(text) + '&language=en-US&level=picky'
     });
     if (!res.ok) throw new Error('LanguageTool request failed: ' + res.status);
     const data = await res.json();
