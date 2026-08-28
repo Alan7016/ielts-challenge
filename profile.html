@@ -86,7 +86,7 @@
     bonus_article: 'var(--warn)', bonus_video: 'var(--warn)', bonus_reading_listening: 'var(--warn)'
   };
 
-  let me, myProfile, targetId, canEdit;
+  let me, myProfile, targetId, targetProfile, canEdit;
 
   requireAuth(async function (profile, user) {
     me = user;
@@ -98,7 +98,7 @@
     targetId = isStaffViewing ? requestedId : user.id;
     canEdit = !isStaffViewing;
 
-    let targetProfile = profile;
+    targetProfile = profile;
     if (isStaffViewing) {
       const { data } = await sb.from('profiles').select('full_name, role, group_id, avatar_url').eq('id', targetId).single();
       if (!data) {
@@ -172,8 +172,7 @@
 
   async function loadStats() {
     const sb = getSupabaseClient();
-    const liveDays = await getLiveDays();
-    const currentDay = liveDays.length ? Math.max(...liveDays) : 1;
+    const currentDay = await getMostRecentLiveDay(targetProfile);
     const [weekFrom, weekTo] = getWeekBounds(currentDay);
 
     document.getElementById('stat-day').textContent = 'Day ' + currentDay;
