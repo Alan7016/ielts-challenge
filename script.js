@@ -1412,7 +1412,17 @@ const SPEAKING_QUESTIONS = {
   'speaking-plants-q2': 'Part 3 — What are the advantages of growing plants at home?',
   'speaking-plants-q3': 'Part 3 — Do people like to grow vegetables in your country?',
   'speaking-plants-q4': 'Part 3 — What are the advantages of growing vegetables at home?',
-  'speaking-plants-q5': 'Part 3 — How do people feel when they eat vegetables that they grew on their own?'
+  'speaking-plants-q5': 'Part 3 — How do people feel when they eat vegetables that they grew on their own?',
+  'speaking-town-q1': 'What is your hometown like?',
+  'speaking-town-q2': 'How long have you lived there?',
+  'speaking-town-q3': 'What do you like about your hometown?',
+  'speaking-town-q4': "Is there anything you don't like about it?",
+  'speaking-town-q5': "What's the most interesting part of your town?",
+  'speaking-town-q6': 'Do you think your town has changed a lot?',
+  'speaking-town-q7': 'Would you like to continue living there in the future?',
+  'speaking-town-q8': 'Is your hometown a popular place for tourists?',
+  'speaking-town-q9': "What's the transport like in your town?",
+  'speaking-town-q10': 'How do you think your town will change in the future?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
