@@ -342,6 +342,25 @@ function checkVocab() {
   });
 }
 
+// ---------- Checkbox-group checker (e.g. "which of these were mentioned?") ----------
+function checkCheckboxGroup(className, resultId) {
+  const items = document.querySelectorAll('.' + className);
+  let correctCount = 0;
+  items.forEach((box) => {
+    const shouldBeChecked = box.dataset.correct === 'true';
+    const label = box.closest('label');
+    if (box.checked === shouldBeChecked) {
+      correctCount++;
+      if (label) { label.style.color = 'var(--good)'; label.style.fontWeight = '600'; }
+    } else if (label) {
+      label.style.color = 'var(--warn)';
+      label.style.fontWeight = '600';
+    }
+  });
+  const resultEl = document.getElementById(resultId);
+  if (resultEl) resultEl.textContent = `${correctCount}/${items.length} correct`;
+}
+
 // ---------- Chunk toggle on sample answer ----------
 function initChunkToggle(toggleId, sampleId) {
   const toggle = document.getElementById(toggleId);
