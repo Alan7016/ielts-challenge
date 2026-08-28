@@ -384,45 +384,75 @@ function initFlipCards() {
 
 
 // ---------- Paraphrase hunt (Challenge 2.0) ----------
-// Student clicks a question-phrase chip, then clicks the matching phrase
-// inside the passage. Correct matches lock in; wrong attempts just shake
-// and reset, without ever revealing which one was right.
+// Student clicks a question-phrase chip (arming it), then clicks through
+// the matching word(s) in the passage one at a time, in order. Some
+// answers are one word, others a short phrase — the running selection is
+// checked against the target after every click: still a valid prefix,
+// keep going; a genuine mismatch flashes red-bold and resets so they can
+// retry, without ever revealing the actual answer.
 function initParaphraseMatch() {
-  let selected = null;
+  let armed = null;
+  let buffer = []; // array of { span, word } for the current attempt
+
   const items = document.querySelectorAll('.para-question-item');
-  const targets = document.querySelectorAll('.para-target');
+  const words = document.querySelectorAll('.word-token');
   const status = document.getElementById('uf-paraphrase-status');
 
   function updateStatus() {
     if (!status) return;
-    const total = items.length;
     const done = document.querySelectorAll('.para-question-item.matched').length;
-    status.textContent = `${done}/${total} matched`;
+    status.textContent = `${done}/${items.length} matched`;
+  }
+
+  function clearBuffer() {
+    buffer.forEach(b => b.span.classList.remove('pending'));
+    buffer = [];
+  }
+
+  function flashWrong(span) {
+    span.classList.add('wrong');
+    setTimeout(() => span.classList.remove('wrong'), 500);
   }
 
   items.forEach((item) => {
     item.addEventListener('click', () => {
       if (item.classList.contains('matched')) return;
       items.forEach(i => i.classList.remove('selected'));
-      selected = item;
+      clearBuffer();
+      armed = item;
       item.classList.add('selected');
     });
   });
 
-  targets.forEach((target) => {
-    target.addEventListener('click', () => {
-      if (target.classList.contains('matched') || !selected) return;
-      if (target.dataset.match === selected.dataset.match) {
-        target.classList.add('matched');
-        selected.classList.add('matched');
-        selected.classList.remove('selected');
-        selected = null;
+  words.forEach((span) => {
+    span.addEventListener('click', () => {
+      if (!armed || span.classList.contains('matched')) return;
+
+      // Clicking a word already in the current attempt again undoes the
+      // whole attempt so far — a simple, discoverable "start over" gesture.
+      if (buffer.some(b => b.span === span)) {
+        clearBuffer();
+        return;
+      }
+
+      const target = armed.dataset.answer.toLowerCase();
+      const candidate = buffer.map(b => b.word).concat(span.dataset.word).join(' ');
+
+      if (candidate === target) {
+        buffer.forEach(b => b.span.classList.remove('pending'));
+        buffer.forEach(b => b.span.classList.add('matched'));
+        span.classList.add('matched');
+        armed.classList.add('matched');
+        armed.classList.remove('selected');
+        armed = null;
+        buffer = [];
         updateStatus();
+      } else if (target.startsWith(candidate)) {
+        span.classList.add('pending');
+        buffer.push({ span, word: span.dataset.word });
       } else {
-        target.classList.add('shake');
-        setTimeout(() => target.classList.remove('shake'), 400);
-        if (selected) selected.classList.remove('selected');
-        selected = null;
+        flashWrong(span);
+        clearBuffer();
       }
     });
   });
