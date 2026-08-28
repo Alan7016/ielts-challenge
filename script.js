@@ -84,14 +84,54 @@ async function uploadAvatar(userId, file) {
 
 // Weeks are day 1–7, 8–14, 15–21, etc. Returns [startDay, endDay] for
 // whichever week `day` falls in.
+// A "week" is whatever stretch of days sits between two mocks — not a
+// fixed 7-day block. With mocks at days 11/18/25/30, week 3 is 19–24,
+// exactly as it should be.
 function getWeekBounds(day) {
-  const weekIndex = Math.floor((day - 1) / 7);
-  return [weekIndex * 7 + 1, weekIndex * 7 + 7];
+  const mocks = MOCK_DAYS.slice().sort((a, b) => a - b);
+  let start = 1;
+  for (const mockDay of mocks) {
+    const end = mockDay - 1;
+    if (day <= end) return [start, end];
+    start = mockDay + 1;
+  }
+  return [start, Math.max(start, day)];
 }
 
 // Streak = consecutive day numbers (counting back from the highest day
 // the student has touched) with at least one completed task. Day-number
 // based rather than calendar-based, since that's how the program runs.
+// "Today" (for the leaderboard and profile stats) means the day the class
+// has actually reached — not simply the highest day file that happens to
+// exist in the repo. Days often get built well ahead of when the class
+// gets there, so file-existence alone would jump straight to a brand-new,
+// empty day the moment it's uploaded. Real submitted points are a much
+// more honest signal of where the class actually is.
+async function getMostRecentLiveDay(profile) {
+  const sb = getSupabaseClient();
+  const cfg = trackConfigFor(profile);
+
+  let trackIds = null;
+  try {
+    let studentQuery = sb.from('profiles').select('id').eq('role', 'student').eq('challenge', profile.challenge || '1.0');
+    if (profile.challenge === '2.0') studentQuery = studentQuery.eq('level', profile.level);
+    const { data: trackStudents } = await studentQuery;
+    trackIds = (trackStudents || []).map(s => s.id);
+  } catch (e) { trackIds = null; }
+
+  try {
+    let pointsQuery = sb.from('points').select('day').order('day', { ascending: false }).limit(1);
+    if (trackIds && trackIds.length > 0) pointsQuery = pointsQuery.in('student_id', trackIds);
+    const { data } = await pointsQuery;
+    if (data && data.length > 0) return data[0].day;
+  } catch (e) { /* fall through to the file-existence fallback below */ }
+
+  // Fallback for a brand-new track with no points recorded yet at all —
+  // the best available guess is simply the first day that's open.
+  const liveDays = await getLiveDays(cfg.folder, cfg.totalDays);
+  return liveDays.length ? Math.min(...liveDays) : 1;
+}
+
 function computeDayStreak(daysWithActivity) {
   const uniqueDays = [...new Set(daysWithActivity)].sort((a, b) => b - a);
   if (uniqueDays.length === 0) return 0;
