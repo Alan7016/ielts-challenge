@@ -12,6 +12,23 @@ function getSupabaseClient() {
   return _sbClient;
 }
 
+// Supabase caps a single request at 1,000 rows by default — this pages
+// through in 1,000-row batches so a query on a large table (points,
+// progress, profiles once enrollment grows) never gets silently truncated.
+async function fetchAllRows(buildQuery) {
+  const pageSize = 1000;
+  let from = 0;
+  let all = [];
+  while (true) {
+    const { data, error } = await buildQuery().range(from, from + pageSize - 1);
+    if (error) { console.error(error); break; }
+    all = all.concat(data || []);
+    if (!data || data.length < pageSize) break;
+    from += pageSize;
+  }
+  return all;
+}
+
 // Tracks the logged-in user's role for this page load, set by requireAuth.
 // initTaskFlow and initRecordControl read this to bypass locking for admins
 // without needing every single day file to be edited individually.
@@ -111,18 +128,15 @@ async function getMostRecentLiveDay(profile) {
   const sb = getSupabaseClient();
   const cfg = trackConfigFor(profile);
 
-  let trackIds = null;
   try {
-    let studentQuery = sb.from('profiles').select('id').eq('role', 'student').eq('challenge', profile.challenge || '1.0');
-    if (profile.challenge === '2.0') studentQuery = studentQuery.eq('level', profile.level);
-    const { data: trackStudents } = await studentQuery;
-    trackIds = (trackStudents || []).map(s => s.id);
-  } catch (e) { trackIds = null; }
-
-  try {
-    let pointsQuery = sb.from('points').select('day').order('day', { ascending: false }).limit(1);
-    if (trackIds && trackIds.length > 0) pointsQuery = pointsQuery.in('student_id', trackIds);
-    const { data } = await pointsQuery;
+    // A simple, unfiltered "what's the highest day with any points"
+    // lookup — deliberately not scoped per-track here, since that would
+    // require listing every student's ID in the query, which is exactly
+    // the URL-length trap that broke this before. Challenge 2.0 has no
+    // real point data yet, so this is accurate in practice; if it ever
+    // needs to be split precisely per track, that's a job for a small
+    // database view computing this server-side, not a client-side list.
+    const { data } = await sb.from('points').select('day').order('day', { ascending: false }).limit(1);
     if (data && data.length > 0) return data[0].day;
   } catch (e) { /* fall through to the file-existence fallback below */ }
 
@@ -1567,7 +1581,17 @@ const SPEAKING_QUESTIONS = {
   'speaking-town-q7': 'Would you like to continue living there in the future?',
   'speaking-town-q8': 'Is your hometown a popular place for tourists?',
   'speaking-town-q9': "What's the transport like in your town?",
-  'speaking-town-q10': 'How do you think your town will change in the future?'
+  'speaking-town-q10': 'How do you think your town will change in the future?',
+  'speaking-stayed-1': 'Describe a place you have stayed at.',
+  'speaking-livelocation-1': 'Talk about where you live, and where you would prefer to live, and why.',
+  'speaking-town2-q1': 'Can you tell me what you do? Do you work, or are you a student?',
+  'speaking-town2-q2': 'Where do you come from?',
+  'speaking-town2-q3': 'Can you describe your town or city to me?',
+  'speaking-town2-q4': 'What do you like about the area where you live?',
+  'speaking-town2-q5': 'What things in your town or city do you not like?',
+  'speaking-town2-q6': 'How is the area changing?',
+  'speaking-town2-q7': 'What do people in your area do in their free time?',
+  'speaking-town2-q8': 'What do you think visitors to your town or region should see? Why?'
 };
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
