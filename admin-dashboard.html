@@ -23,8 +23,13 @@
   <section class="hero" style="padding-top:48px; padding-bottom:8px;">
     <div class="wrap">
       <div class="eyebrow">Admin view</div>
-      <h1 id="page-title">Overview</h1>
-      <div class="tab-toggle" id="top-tabs" style="margin-top:18px;">
+      <h1 id="page-title">Choose a challenge</h1>
+      <div class="track-breadcrumb" id="track-breadcrumb" style="display:none;">
+        <span>Viewing</span>
+        <span class="pill" id="track-breadcrumb-label"></span>
+        <a href="#" id="change-track-link">Change track ↺</a>
+      </div>
+      <div class="tab-toggle" id="top-tabs" style="margin-top:18px; display:none;">
         <button data-tab="overview" class="active">Overview</button>
         <button data-tab="groups">Groups</button>
         <button data-tab="days">Days</button>
@@ -45,17 +50,130 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 <script>
-  const TASKS_PER_DAY = 9;
   let liveDays = [];
   let allGroups = [];
   let selectedDay = null;
   let selectedGroup = null;
+  let selectedChallenge = null;   // '1.0' | '2.0'
+  let selectedLevel = null;       // 'standard' | 'advanced' | 'expert' — only set when selectedChallenge === '2.0'
+  const liveDaysByTrack = {};
+
+  // ---------- Track tracks (challenge + level) ----------
+  const DAY_TRACKS = [
+    { key: '1.0', label: 'Challenge 1.0', folder: 'days', totalDays: 30, mockDays: MOCK_DAYS },
+    { key: '2.0-standard', label: 'Challenge 2.0 — Standard', folder: 'challenge2/standard', totalDays: 45, mockDays: [] },
+    { key: '2.0-advanced', label: 'Challenge 2.0 — Advanced', folder: 'challenge2/advanced', totalDays: 45, mockDays: [] },
+    { key: '2.0-expert', label: 'Challenge 2.0 — Expert', folder: 'challenge2/expert', totalDays: 45, mockDays: [] }
+  ];
 
   // Actual total-task count per day, read from the live files — some days
   // drop reading or listening, so this isn't a flat constant. Falls back to
   // 9 for any day not listed here (new days built after this was written).
-  const DAY_TOTAL_TASKS = { 1: 9, 2: 9, 3: 9, 5: 9, 6: 9, 7: 9, 8: 8, 9: 8, 10: 8, 12: 8, 13: 8, 14: 8, 15: 8, 16: 8 };
-  function totalTasksFor(day) { return DAY_TOTAL_TASKS[day] || 9; }
+  const TRACK_DAY_TOTAL_TASKS = {
+    '1.0': { 1: 9, 2: 9, 3: 9, 5: 9, 6: 9, 7: 9, 8: 8, 9: 8, 10: 8, 12: 8, 13: 8, 14: 8, 15: 8, 16: 8 },
+    '2.0-standard': { 1: 11, 2: 8, 3: 10, 4: 5, 5: 7, 6: 7 }
+    // '2.0-advanced' / '2.0-expert': no days built yet — falls back to 9 below, which is harmless until real days exist.
+  };
+
+  function currentTrackKey() { return selectedChallenge === '1.0' ? '1.0' : `2.0-${selectedLevel}`; }
+  function currentTrack() { return DAY_TRACKS.find(t => t.key === currentTrackKey()); }
+  function currentTrackLiveDays() { return liveDaysByTrack[currentTrackKey()] || []; }
+  function totalTasksForTrack(trackKey, day) { return (TRACK_DAY_TOTAL_TASKS[trackKey] || {})[day] || 9; }
+  function trackLabelFor(challenge, level) { return challenge === '1.0' ? 'Challenge 1.0' : `Challenge 2.0 — ${level.charAt(0).toUpperCase()}${level.slice(1)}`; }
+
+  function groupMatchesTrack(g) {
+    if (selectedChallenge === '1.0') return g.challenge !== '2.0';
+    return g.challenge === '2.0' && (g.level || 'standard') === selectedLevel;
+  }
+  function profileMatchesTrack(p) {
+    if (selectedChallenge === '1.0') return p.challenge !== '2.0';
+    return p.challenge === '2.0' && (p.level || 'standard') === selectedLevel;
+  }
+
+  async function ensureTrackLiveDays(trackKey) {
+    if (trackKey in liveDaysByTrack) return;
+    const track = DAY_TRACKS.find(t => t.key === trackKey);
+    liveDaysByTrack[trackKey] = trackKey === '1.0' ? liveDays : await getLiveDays(track.folder, track.totalDays);
+  }
+
+  // ---------- Screen 0: pick Challenge 1.0 or Challenge 2.0 ----------
+  function renderChallengeSelect() {
+    selectedChallenge = null;
+    selectedLevel = null;
+    document.getElementById('top-tabs').style.display = 'none';
+    document.getElementById('track-breadcrumb').style.display = 'none';
+    document.getElementById('page-title').textContent = 'Choose a challenge';
+    if (dayChart) { dayChart.destroy(); dayChart = null; }
+    if (groupChart) { groupChart.destroy(); groupChart = null; }
+
+    const c1Groups = allGroups.filter(g => g.challenge !== '2.0').length;
+    const c2Groups = allGroups.filter(g => g.challenge === '2.0').length;
+
+    document.getElementById('dashboard-root').innerHTML = `
+      <div class="track-select-grid">
+        <button class="track-select-box track-c1" data-challenge="1.0">
+          <span class="track-select-icon">🏁</span>
+          <span class="track-select-name">Challenge 1.0</span>
+          <span class="track-select-meta">30-day sprint · original track</span>
+          <span class="track-select-stat">${c1Groups} group${c1Groups === 1 ? '' : 's'}</span>
+        </button>
+        <button class="track-select-box track-c2" data-challenge="2.0">
+          <span class="track-select-icon">🚀</span>
+          <span class="track-select-name">Challenge 2.0</span>
+          <span class="track-select-meta">45-day marathon · Standard / Advanced / Expert</span>
+          <span class="track-select-stat">${c2Groups} group${c2Groups === 1 ? '' : 's'}</span>
+        </button>
+      </div>
+    `;
+    document.querySelectorAll('.track-select-box[data-challenge]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.challenge === '1.0') { selectedChallenge = '1.0'; enterTrack(); }
+        else renderLevelSelect();
+      });
+    });
+  }
+
+  // ---------- Screen 0b: pick Standard / Advanced / Expert (Challenge 2.0 only) ----------
+  function renderLevelSelect() {
+    document.getElementById('page-title').textContent = 'Challenge 2.0 — choose a level';
+    const levels = [
+      { key: 'standard', icon: '🌱', cls: 'level-standard' },
+      { key: 'advanced', icon: '⚡', cls: 'level-advanced' },
+      { key: 'expert', icon: '🎯', cls: 'level-expert' }
+    ];
+    document.getElementById('dashboard-root').innerHTML = `
+      <a href="#" class="back-link" id="back-to-challenge">← Back</a>
+      <div class="track-select-grid level-select-grid">
+        ${levels.map(l => {
+          const count = allGroups.filter(g => g.challenge === '2.0' && (g.level || 'standard') === l.key).length;
+          const label = l.key.charAt(0).toUpperCase() + l.key.slice(1);
+          return `<button class="track-select-box ${l.cls}" data-level="${l.key}">
+            <span class="track-select-icon">${l.icon}</span>
+            <span class="track-select-name">${label}</span>
+            <span class="track-select-stat">${count} group${count === 1 ? '' : 's'}</span>
+          </button>`;
+        }).join('')}
+      </div>
+    `;
+    document.getElementById('back-to-challenge').addEventListener('click', (e) => { e.preventDefault(); renderChallengeSelect(); });
+    document.querySelectorAll('.track-select-box[data-level]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedChallenge = '2.0';
+        selectedLevel = btn.dataset.level;
+        enterTrack();
+      });
+    });
+  }
+
+  // ---------- Entering a track: unlock the Overview/Groups/Days tabs ----------
+  async function enterTrack() {
+    await ensureTrackLiveDays(currentTrackKey());
+    document.getElementById('top-tabs').style.display = 'inline-flex';
+    document.getElementById('track-breadcrumb').style.display = 'flex';
+    document.getElementById('track-breadcrumb-label').textContent = trackLabelFor(selectedChallenge, selectedLevel);
+    document.querySelectorAll('#top-tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === 'overview'));
+    showOverview();
+  }
 
   requireAuth(async function (profile, user) {
     if (profile.role !== 'admin') {
@@ -67,6 +185,7 @@
     const { data: groups } = await sb.from('groups').select('id, name, challenge, level').order('id');
     allGroups = groups || [];
     liveDays = await getLiveDays();
+    liveDaysByTrack['1.0'] = liveDays;
 
     document.getElementById('top-tabs').addEventListener('click', (e) => {
       const btn = e.target.closest('button'); if (!btn) return;
@@ -76,12 +195,12 @@
       else showDaysTab();
     });
 
-    if (location.hash === '#days') {
-      document.querySelectorAll('#top-tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === 'days'));
-      showDaysTab();
-    } else {
-      showOverview();
-    }
+    document.getElementById('change-track-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      renderChallengeSelect();
+    });
+
+    renderChallengeSelect();
   });
 
   // ---------- TAB 1: Overview ----------
@@ -111,8 +230,13 @@
     if (groupChart) { groupChart.destroy(); groupChart = null; }
 
     const sb = getSupabaseClient();
-    const nonMockDays = liveDays.filter(d => !MOCK_DAYS.includes(d)).sort((a, b) => a - b);
-    const mockDaysLive = liveDays.filter(d => MOCK_DAYS.includes(d));
+    const trackKey = currentTrackKey();
+    const track = currentTrack();
+    await ensureTrackLiveDays(trackKey);
+    const trackLiveDays = currentTrackLiveDays();
+    const trackGroups = allGroups.filter(groupMatchesTrack);
+    const nonMockDays = trackLiveDays.filter(d => !track.mockDays.includes(d)).sort((a, b) => a - b);
+    const mockDaysLive = trackLiveDays.filter(d => track.mockDays.includes(d));
 
     // Supabase caps a single response at 1000 rows — with 16+ days of
     // progress rows across every student, that limit gets hit easily, and
@@ -132,18 +256,23 @@
       return all;
     }
 
-    const [{ data: students }, progressRows, { data: staff }, { data: pointsRows }, { count: speakingCount }, { count: writingCount }] = await Promise.all([
-      sb.from('profiles').select('id, group_id').eq('role', 'student'),
-      nonMockDays.length > 0
-        ? fetchAllRows(() => sb.from('progress').select('day, task, student_id').eq('completed', true).in('day', nonMockDays))
-        : Promise.resolve([]),
-      sb.from('profiles').select('role').in('role', ['teacher', 'checker']),
-      sb.from('points').select('points'),
-      sb.from('answers').select('*', { count: 'exact', head: true }).like('field_id', 'speaking-%'),
-      sb.from('answers').select('*', { count: 'exact', head: true }).eq('field_id', 'task1-response')
+    const [{ data: allStudentsRaw }, { data: staff }] = await Promise.all([
+      sb.from('profiles').select('id, group_id, challenge, level').eq('role', 'student'),
+      sb.from('profiles').select('role').in('role', ['teacher', 'checker'])
     ]);
+    const students = (allStudentsRaw || []).filter(profileMatchesTrack);
+    const studentIds = students.map(s => s.id);
 
-    const totalStudents = (students || []).length;
+    const [progressRows, { data: pointsRows }, { count: speakingCount }, { count: writingCount }] = studentIds.length > 0 ? await Promise.all([
+      nonMockDays.length > 0
+        ? fetchAllRows(() => sb.from('progress').select('day, task, student_id').eq('completed', true).in('day', nonMockDays).in('student_id', studentIds))
+        : Promise.resolve([]),
+      sb.from('points').select('points').in('student_id', studentIds),
+      sb.from('answers').select('*', { count: 'exact', head: true }).like('field_id', 'speaking-%').in('student_id', studentIds),
+      sb.from('answers').select('*', { count: 'exact', head: true }).eq('field_id', 'task1-response').in('student_id', studentIds)
+    ]) : [[], { data: [] }, { count: 0 }, { count: 0 }];
+
+    const totalStudents = students.length;
     const studentsByGroup = {};
     (students || []).forEach(s => {
       if (!s.group_id) return;
@@ -163,7 +292,7 @@
 
     const dayPct = [];
     nonMockDays.forEach(day => {
-      const need = totalTasksFor(day);
+      const need = totalTasksForTrack(trackKey, day);
       const perStudent = completedCountByDay[day] || {};
       const finishedCount = Object.values(perStudent).filter(c => c >= need).length;
       const pct = totalStudents > 0 ? Math.round((finishedCount / totalStudents) * 100) : 0;
@@ -177,7 +306,7 @@
       (students || []).forEach(s => {
         const allDone = nonMockDays.every(day => {
           const c = (completedCountByDay[day] || {})[s.id] || 0;
-          return c >= totalTasksFor(day);
+          return c >= totalTasksForTrack(trackKey, day);
         });
         if (allDone) perfectStudents++;
       });
@@ -226,7 +355,7 @@
 
     // ---- Animated counters ----
     animateCount(document.getElementById('c-students'), totalStudents);
-    animateCount(document.getElementById('c-groups'), allGroups.length);
+    animateCount(document.getElementById('c-groups'), trackGroups.length);
     animateCount(document.getElementById('c-days'), nonMockDays.length);
     animateCount(document.getElementById('c-perfect'), perfectPct, { suffix: '%', decimals: 0 });
     animateCount(document.getElementById('c-points'), totalPoints, { decimals: 0 });
@@ -261,15 +390,15 @@
     }
 
     // ---- Doughnut chart: students per group ----
-    if (allGroups.length > 0) {
+    if (trackGroups.length > 0) {
       const palette = ['#3457d5', '#f2a623', '#1f9d55', '#d5490f', '#7c5cff', '#0aa3a3', '#e0457b', '#9a7b4f'];
       groupChart = new Chart(document.getElementById('groupChart'), {
         type: 'doughnut',
         data: {
-          labels: allGroups.map(g => g.name),
+          labels: trackGroups.map(g => g.name),
           datasets: [{
-            data: allGroups.map(g => studentsByGroup[g.id] || 0),
-            backgroundColor: allGroups.map((g, i) => palette[i % palette.length]),
+            data: trackGroups.map(g => studentsByGroup[g.id] || 0),
+            backgroundColor: trackGroups.map((g, i) => palette[i % palette.length]),
             borderWidth: 2,
             borderColor: getComputedStyle(document.documentElement).getPropertyValue('--surface').trim() || '#fff'
           }]
@@ -286,33 +415,17 @@
   }
 
   // ---------- TAB 3: Days (open any day directly, full access, no locking) ----------
-  const DAY_TRACKS = [
-    { key: '1.0', label: 'Challenge 1.0', folder: 'days', totalDays: 30, mockDays: MOCK_DAYS },
-    { key: '2.0-standard', label: 'C2 — Standard', folder: 'challenge2/standard', totalDays: 45, mockDays: [] },
-    { key: '2.0-advanced', label: 'C2 — Advanced', folder: 'challenge2/advanced', totalDays: 45, mockDays: [] },
-    { key: '2.0-expert', label: 'C2 — Expert', folder: 'challenge2/expert', totalDays: 45, mockDays: [] }
-  ];
-  let selectedTrackKey = '1.0';
-  const liveDaysByTrack = {};
-
   async function showDaysTab() {
     document.getElementById('page-title').textContent = 'Days';
     if (dayChart) { dayChart.destroy(); dayChart = null; }
     if (groupChart) { groupChart.destroy(); groupChart = null; }
 
     const root = document.getElementById('dashboard-root');
-    const tabsHtml = `
-      <div class="tab-toggle" id="track-tabs" style="margin-bottom:20px;">
-        ${DAY_TRACKS.map(t => `<button data-track="${t.key}" class="${t.key === selectedTrackKey ? 'active' : ''}">${t.label}</button>`).join('')}
-      </div>
-    `;
-    root.innerHTML = tabsHtml + `<p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>`;
+    root.innerHTML = `<p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>`;
 
-    const track = DAY_TRACKS.find(t => t.key === selectedTrackKey);
-    if (!(track.key in liveDaysByTrack)) {
-      liveDaysByTrack[track.key] = track.key === '1.0' ? liveDays : await getLiveDays(track.folder, track.totalDays);
-    }
-    const trackLiveDays = liveDaysByTrack[track.key];
+    const track = currentTrack();
+    await ensureTrackLiveDays(track.key);
+    const trackLiveDays = currentTrackLiveDays();
 
     let gridHtml = `<p style="color:var(--muted); font-size:0.85rem; margin:0 0 20px;">Opens the real day page with full access — every task unlocked, nothing you do here gets saved.</p><div class="track-grid">`;
     for (let d = 1; d <= track.totalDays; d++) {
@@ -336,24 +449,20 @@
       }
     }
     gridHtml += '</div>';
-    root.innerHTML = tabsHtml + gridHtml;
-    document.getElementById('track-tabs').addEventListener('click', (e) => {
-      const btn = e.target.closest('button'); if (!btn) return;
-      selectedTrackKey = btn.dataset.track;
-      showDaysTab();
-    });
+    root.innerHTML = gridHtml;
   }
 
   // ---------- TAB 2: Groups (no day pre-selection needed) ----------
   function showGroupPicker() {
     document.getElementById('page-title').textContent = 'Groups';
     selectedGroup = null;
+    const trackGroups = allGroups.filter(groupMatchesTrack);
 
-    if (allGroups.length === 0) {
-      document.getElementById('dashboard-root').innerHTML = `<p style="color:var(--muted);">No groups exist yet.</p>`;
+    if (trackGroups.length === 0) {
+      document.getElementById('dashboard-root').innerHTML = `<p style="color:var(--muted);">No groups exist yet for this track.</p>`;
       return;
     }
-    document.getElementById('dashboard-root').innerHTML = renderGroupSections(allGroups, g => `
+    document.getElementById('dashboard-root').innerHTML = renderGroupSections(trackGroups, g => `
       <button class="group-btn" data-group="${g.id}">
         <span class="g-name">${g.name}</span>
         <span class="g-meta">View students →</span>
@@ -361,15 +470,17 @@
     `);
     document.querySelectorAll('.group-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        selectedGroup = allGroups.find(g => g.id === +btn.dataset.group);
-        selectedDay = liveDays.filter(d => !MOCK_DAYS.includes(d)).sort((a, b) => b - a)[0] || null;
+        selectedGroup = trackGroups.find(g => g.id === +btn.dataset.group);
+        const track = currentTrack();
+        selectedDay = currentTrackLiveDays().filter(d => !track.mockDays.includes(d)).sort((a, b) => b - a)[0] || null;
         showStudentList();
       });
     });
   }
 
   function dayDropdownHtml() {
-    const options = liveDays.filter(d => !MOCK_DAYS.includes(d)).sort((a, b) => b - a)
+    const track = currentTrack();
+    const options = currentTrackLiveDays().filter(d => !track.mockDays.includes(d)).sort((a, b) => b - a)
       .map(d => `<option value="${d}" ${d === selectedDay ? 'selected' : ''}>Day ${d}</option>`).join('');
     return `<select id="day-select" style="padding:6px 10px; border:1px solid var(--border); border-radius:8px; font-family:var(--mono); font-size:0.85rem;">${options}</select>`;
   }
@@ -442,7 +553,8 @@
 
     function renderTicks(studentId) {
       const done = doneByStudent[studentId] || new Set();
-      return Array.from({ length: TASKS_PER_DAY }, (_, i) =>
+      const need = totalTasksForTrack(currentTrackKey(), selectedDay);
+      return Array.from({ length: need }, (_, i) =>
         `<span class="tick ${done.has(i + 1) ? 'done' : ''}"></span>`
       ).join('');
     }
