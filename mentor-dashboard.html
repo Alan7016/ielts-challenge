@@ -56,6 +56,7 @@
   let myUserId = null;
   let liveDays = [];
   let selectedDay = null;
+  let allC2Groups = [];
 
   requireAuth(async function (profile, user) {
     if (profile.role !== 'mentor') {
@@ -75,6 +76,9 @@
 
     const { data: group } = await sb.from('groups').select('id, name, challenge, level').eq('id', assignment.group_id).single();
     myGroup = group;
+
+    const { data: c2Groups } = await sb.from('groups').select('id, name, level').eq('challenge', '2.0').order('level').order('id');
+    allC2Groups = c2Groups || [];
 
     const level = myGroup.level || 'standard';
     const cfg = trackConfigFor(myGroup); // shared helper from script.js — reads .challenge/.level
@@ -111,7 +115,7 @@
     const level = myGroup.level || 'standard';
     const need = totalTasksForDay(level, selectedDay);
 
-    const { data: students } = await sb.from('profiles').select('id, full_name, avatar_url').eq('group_id', myGroup.id).eq('role', 'student').order('full_name');
+    const { data: students } = await sb.from('profiles').select('id, full_name, avatar_url, approval_status').eq('group_id', myGroup.id).eq('role', 'student').eq('challenge', '2.0').eq('level', level).order('full_name');
 
     if (!students || students.length === 0) {
       root.innerHTML = `<p style="color:var(--muted);">No students registered in this group yet.</p>`;
@@ -220,14 +224,37 @@
       }).join('');
     }
 
+    function groupMoveOptionsHtml(currentGroupId) {
+      return allC2Groups.map(g => {
+        const label = `${g.level.charAt(0).toUpperCase()}${g.level.slice(1)} — ${g.name}`;
+        return `<option value="${g.id}" ${g.id === currentGroupId ? 'selected' : ''}>${label}</option>`;
+      }).join('');
+    }
+
+    function statusBadgeHtml(status) {
+      const s = status || 'pending';
+      const colors = { pending: 'var(--warn)', approved: 'var(--good)', rejected: 'var(--muted)' };
+      const labels = { pending: 'Pending', approved: 'Approved', rejected: 'Rejected' };
+      return `<span style="font-family:var(--mono); font-size:0.72rem; font-weight:700; color:${colors[s]}; border:1px solid ${colors[s]}; border-radius:20px; padding:2px 10px;">${labels[s]}</span>`;
+    }
+
     root.innerHTML = students.map(s => `
       <div class="student-row">
         <div class="student-row-top">
           <span class="student-name" style="display:flex; align-items:center; gap:10px;">
             ${s.avatar_url ? `<span class="avatar-circle" style="width:28px;height:28px;font-size:0.72rem;"><img src="${s.avatar_url}" alt="" onerror="this.parentElement.textContent='${initialsFor(s.full_name)}'"></span>` : `<span class="avatar-circle" style="width:28px;height:28px;font-size:0.72rem;">${initialsFor(s.full_name)}</span>`}
             ${s.full_name}
+            ${statusBadgeHtml(s.approval_status)}
           </span>
           <div class="student-ticks"><div class="day-ticks">${renderTicks(s.id)}</div></div>
+        </div>
+        <div class="student-admin-row" data-student="${s.id}" style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);">
+          ${s.approval_status !== 'approved' ? `<button class="ghost approve-student" style="padding:4px 12px; font-size:0.78rem;">✓ Approve</button>` : ''}
+          ${s.approval_status !== 'rejected' ? `<button class="ghost reject-student" style="padding:4px 12px; font-size:0.78rem; color:var(--warn); border-color:var(--warn);">✗ Reject &amp; remove from group</button>` : ''}
+          <span style="font-size:0.78rem; color:var(--muted);">Move to:</span>
+          <select class="move-group-select" style="padding:4px 8px; border:1px solid var(--border); border-radius:8px; font-size:0.78rem;">${groupMoveOptionsHtml(myGroup.id)}</select>
+          <button class="ghost move-student" style="padding:4px 12px; font-size:0.78rem;">Move</button>
+          <span class="admin-status" style="font-size:0.78rem; color:var(--muted);"></span>
         </div>
         <button class="writing-toggle" data-target="detail-${s.id}">Show details ▾</button>
         <div class="writing-box" id="detail-${s.id}">${renderTaskDetail(s.id)}</div>
@@ -239,6 +266,42 @@
         const box = document.getElementById(btn.dataset.target);
         const nowShown = box.classList.toggle('show');
         btn.textContent = btn.textContent.replace(nowShown ? '▾' : '▴', nowShown ? '▴' : '▾');
+      });
+    });
+
+    root.querySelectorAll('.approve-student').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const row = btn.closest('.student-admin-row');
+        const status = row.querySelector('.admin-status');
+        status.textContent = 'Saving…';
+        const res = await sb.from('profiles').update({ approval_status: 'approved' }).eq('id', row.dataset.student);
+        status.textContent = res.error ? '⚠️ Failed' : '✓ Approved';
+        if (!res.error) setTimeout(showStudentList, 500);
+      });
+    });
+
+    root.querySelectorAll('.reject-student').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('This removes the student from this group entirely. They will need to be reassigned to a group before they can be seen again. Continue?')) return;
+        const row = btn.closest('.student-admin-row');
+        const status = row.querySelector('.admin-status');
+        status.textContent = 'Saving…';
+        const res = await sb.from('profiles').update({ approval_status: 'rejected', group_id: null }).eq('id', row.dataset.student);
+        status.textContent = res.error ? '⚠️ Failed' : '✓ Removed';
+        if (!res.error) setTimeout(showStudentList, 500);
+      });
+    });
+
+    root.querySelectorAll('.move-student').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const row = btn.closest('.student-admin-row');
+        const status = row.querySelector('.admin-status');
+        const newGroupId = +row.querySelector('.move-group-select').value;
+        if (newGroupId === myGroup.id) { status.textContent = 'Already in this group'; return; }
+        status.textContent = 'Moving…';
+        const res = await sb.from('profiles').update({ group_id: newGroupId }).eq('id', row.dataset.student);
+        status.textContent = res.error ? '⚠️ Failed' : '✓ Moved';
+        if (!res.error) setTimeout(showStudentList, 500);
       });
     });
 
