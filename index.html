@@ -121,6 +121,10 @@
   }
 
   requireAuth(function (profile) {
+    if (profile.role === 'admin') { window.location.href = 'admin-dashboard.html'; return; }
+    if (profile.role === 'teacher') { window.location.href = 'teacher-dashboard.html'; return; }
+    if (profile.role === 'checker') { window.location.href = 'checker-dashboard.html'; return; }
+    if (profile.role === 'mentor') { window.location.href = 'mentor-dashboard.html'; return; }
     buildGrid(profile);
     if (profile.challenge === '2.0' && profile.group_id) {
       document.getElementById('chat-nav-link').style.display = '';
