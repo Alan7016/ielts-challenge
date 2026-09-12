@@ -10,9 +10,9 @@
 
 <div class="gate">
   <div class="gate-card" style="max-width:440px;">
-    <div class="eyebrow">Create your account</div>
+    <div class="eyebrow">Create your account — Challenge 2.0</div>
     <h1>Join the Marathon</h1>
-    <p>Pick a username, a password, and the group your teacher gave you.</p>
+    <p>Pick a username, a password, and your level below.</p>
 
     <form id="register-form" style="text-align:left;">
       <label style="font-size:0.85rem; font-weight:600; color:var(--ink);">Full name
@@ -27,19 +27,13 @@
       <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Confirm password
         <input type="password" id="password-confirm" required minlength="6" style="width:100%; margin-top:4px;">
       </label>
-      <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Which challenge?
-        <select id="challenge-select" required style="width:100%; margin-top:4px;">
-          <option value="1.0">Challenge 1.0</option>
-          <option value="2.0">Challenge 2.0</option>
-        </select>
-      </label>
-      <label id="level-row" style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:none;">Your level
+      <label id="level-row" style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Your level
         <select id="level-select" style="width:100%; margin-top:4px;">
           <option value="standard">Standard (band 4.5–5.0)</option>
           <option value="advanced">Advanced (band 5.5–6.0)</option>
           <option value="expert">Expert (band 6.5–7.0+)</option>
         </select>
-        <span style="font-weight:400; color:var(--muted); font-size:0.78rem; display:block; margin-top:4px;">Not sure? Pick your closest current band — your teacher can adjust this later if needed.</span>
+        <span style="font-weight:400; color:var(--muted); font-size:0.78rem; display:block; margin-top:4px;">Not sure? Pick your closest current band — your mentor can adjust this later if needed.</span>
       </label>
       <label style="font-size:0.85rem; font-weight:600; color:var(--ink); margin-top:12px; display:block;">Your group
         <select id="group-select" required style="width:100%; margin-top:4px;">
@@ -61,12 +55,14 @@
 <script>
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  const challengeSelect = document.getElementById('challenge-select');
   const levelRow = document.getElementById('level-row');
   const levelSelect = document.getElementById('level-select');
 
-  function currentChallenge() { return challengeSelect.value; }
-  function currentLevel() { return currentChallenge() === '2.0' ? levelSelect.value : null; }
+  // New registrations are Challenge 2.0 only — Challenge 1.0 signup has
+  // been retired from this page (the challenge/level picker used to be
+  // shown here; now it's fixed).
+  function currentChallenge() { return '2.0'; }
+  function currentLevel() { return levelSelect.value; }
 
   // Groups are scoped to a challenge (and, for 2.0, a level) — the dropdown
   // only ever shows groups that actually match what the student picked
@@ -74,8 +70,7 @@
   async function loadGroups() {
     const select = document.getElementById('group-select');
     select.innerHTML = '<option value="">— loading groups… —</option>';
-    let query = sb.from('groups').select('id, name').eq('challenge', currentChallenge()).order('id');
-    if (currentChallenge() === '2.0') query = query.eq('level', currentLevel());
+    let query = sb.from('groups').select('id, name').eq('challenge', currentChallenge()).eq('level', currentLevel()).order('id');
     const { data, error } = await query;
     if (error || !data) {
       select.innerHTML = '<option value="">— couldn\'t load groups —</option>';
@@ -89,10 +84,6 @@
       data.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
   }
 
-  challengeSelect.addEventListener('change', () => {
-    levelRow.style.display = currentChallenge() === '2.0' ? 'block' : 'none';
-    loadGroups();
-  });
   levelSelect.addEventListener('change', loadGroups);
   loadGroups();
 
