@@ -3,70 +3,260 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Log in — IELTS Marathon</title>
+<title>Profile — IELTS Marathon</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="gate">
-  <div class="gate-card">
-    <div class="eyebrow">Welcome back</div>
-    <h1>Log in</h1>
-    <p>Enter your username and password to continue.</p>
+<div id="content" style="display:none;">
 
-    <form id="login-form">
-      <input type="email" id="email" placeholder="Email" autocomplete="off" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button type="submit">Log in</button>
-      <div class="gate-error" id="form-error"></div>
-    </form>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">IELTS <span>MARATHON</span></div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="nav-links">
+          <a href="index.html">Board</a>
+          <a href="leaderboard.html">Leaderboard</a>
+          <a href="profile.html" class="active">Profile</a>
+        </div>
+        <button class="ghost" id="logout-btn" style="padding:7px 14px;">Log out</button>
+      </div>
+    </div>
+  </header>
 
-    <p style="margin-top:18px; font-size:0.88rem;">New here? <a href="register.html">Create an account</a></p>
-  </div>
+  <section class="hero" style="padding-top:48px; padding-bottom:8px;">
+    <div class="wrap">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
+          <div class="profile-avatar-wrap">
+            <div class="avatar-circle" id="avatar-display" style="width:76px; height:76px; font-size:1.6rem;">…</div>
+            <label class="avatar-camera-badge" id="avatar-camera-badge" style="display:none;">
+              📷
+              <input type="file" id="avatar-input" accept="image/png, image/jpeg, image/webp">
+            </label>
+          </div>
+          <div>
+            <h1 id="profile-name" style="margin-bottom:4px;">…</h1>
+            <p class="tag" id="profile-meta" style="margin:0;">…</p>
+            <div id="badges" style="display:flex; gap:8px; margin-top:8px;"></div>
+          </div>
+        </div>
+        <button class="ghost" id="edit-profile-btn" style="padding:8px 18px;">Edit</button>
+      </div>
+      <p style="font-size:0.78rem; color:var(--muted); margin-top:10px;" id="avatar-status"></p>
+    </div>
+  </section>
+
+  <section style="padding-top:8px;">
+    <div class="wrap">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:28px;">
+        <div class="stat-card"><div class="stat-num" id="stat-total">…</div><div class="stat-label">Total points</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-week">…</div><div class="stat-label">This week</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-today">…</div><div class="stat-label">Today</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-day">…</div><div class="stat-label">Current day</div></div>
+      </div>
+
+      <h2 style="margin-bottom:14px;">Today's breakdown</h2>
+      <div class="card" id="breakdown-card">
+        <p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>
+      </div>
+
+      <h2 style="margin:32px 0 14px;">Day-by-day history</h2>
+      <div class="card" id="history-card">
+        <p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <script src="supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
 <script>
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  const CATEGORY_LABELS = {
+    article: 'Article', video: 'Video', speaking: 'Speaking',
+    reading_listening: 'Reading / Listening', writing: 'Writing (teacher)',
+    bonus_article: 'Bonus — Article analysis', bonus_video: 'Bonus — Video analysis',
+    bonus_reading_listening: 'Bonus — Reading/Listening analysis'
+  };
+  const CATEGORY_DOT = {
+    article: 'var(--accent)', video: 'var(--accent)', speaking: 'var(--accent)',
+    reading_listening: 'var(--accent)', writing: 'var(--good)',
+    bonus_article: 'var(--warn)', bonus_video: 'var(--warn)', bonus_reading_listening: 'var(--warn)'
+  };
 
-  document.getElementById('login-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const errorEl = document.getElementById('form-error');
-    errorEl.textContent = '';
+  let me, myProfile, targetId, targetProfile, canEdit;
 
-    const email = document.getElementById('email').value.trim().toLowerCase();
-    const password = document.getElementById('password').value;
+  requireAuth(async function (profile, user) {
+    const hasStudentParam = new URLSearchParams(location.search).has('student');
+    if (!hasStudentParam) {
+      if (profile.role === 'admin') { window.location.href = 'admin-dashboard.html'; return; }
+      if (profile.role === 'teacher') { window.location.href = 'teacher-dashboard.html'; return; }
+      if (profile.role === 'checker') { window.location.href = 'checker-dashboard.html'; return; }
+      if (profile.role === 'mentor') { window.location.href = 'mentor-dashboard.html'; return; }
+    }
+    me = user;
+    myProfile = profile;
+    const sb = getSupabaseClient();
 
-    const { data, error } = await sb.auth.signInWithPassword({ email, password });
-    if (error) {
-      console.error('Login error:', error);
-      errorEl.textContent = error.message || 'Login failed — check the console for details.';
+    const requestedId = new URLSearchParams(location.search).get('student');
+    const isStaffViewing = requestedId && requestedId !== user.id && (profile.role === 'teacher' || profile.role === 'checker' || profile.role === 'admin');
+    targetId = isStaffViewing ? requestedId : user.id;
+    canEdit = !isStaffViewing;
+
+    targetProfile = profile;
+    if (isStaffViewing) {
+      const { data } = await sb.from('profiles').select('full_name, role, group_id, avatar_url').eq('id', targetId).single();
+      if (!data) {
+        document.getElementById('profile-name').textContent = 'Student not found';
+        document.getElementById('content').style.display = 'block';
+        return;
+      }
+      targetProfile = data;
+
+      // Read-only banner + back link, and hide every edit control.
+      const banner = document.createElement('div');
+      banner.className = 'wrap';
+      banner.style.cssText = 'padding-top:20px;';
+      banner.innerHTML = `<a href="#" onclick="history.back(); return false;" class="back-link">← Back to dashboard</a>
+        <p style="font-family:var(--mono); font-size:0.78rem; color:var(--accent); margin-top:8px;">👁 Viewing as ${profile.role} — read only</p>`;
+      document.querySelector('header.topbar').insertAdjacentElement('afterend', banner);
+      document.getElementById('edit-profile-btn').style.display = 'none';
+    } else {
+      document.getElementById('avatar-input').addEventListener('change', handleAvatarUpload);
+      const editBtn = document.getElementById('edit-profile-btn');
+      const cameraBadge = document.getElementById('avatar-camera-badge');
+      let editing = false;
+      editBtn.addEventListener('click', () => {
+        editing = !editing;
+        cameraBadge.style.display = editing ? 'flex' : 'none';
+        editBtn.textContent = editing ? 'Done' : 'Edit';
+      });
+    }
+
+    document.getElementById('profile-name').textContent = targetProfile.full_name;
+    renderAvatar(targetProfile.avatar_url, targetProfile.full_name);
+
+    let groupName = '—';
+    if (targetProfile.group_id) {
+      const { data: g } = await sb.from('groups').select('name').eq('id', targetProfile.group_id).single();
+      if (g) groupName = g.name;
+    }
+    document.getElementById('profile-meta').textContent = `${groupName} · ${targetProfile.role[0].toUpperCase()}${targetProfile.role.slice(1)}`;
+
+    await loadStats();
+  });
+
+  function renderAvatar(url, fullName) {
+    const el = document.getElementById('avatar-display');
+    if (url) el.innerHTML = `<img src="${url}" alt="">`;
+    else el.textContent = initialsFor(fullName);
+  }
+
+  async function handleAvatarUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const status = document.getElementById('avatar-status');
+    if (file.size > 3 * 1024 * 1024) {
+      status.textContent = 'That image is over 3MB — please pick a smaller one.';
+      status.style.color = 'var(--warn)';
       return;
     }
-    // Look up the account's role to send them to the right place.
-    const { data: profile } = await sb.from('profiles').select('role').eq('id', data.user.id).single();
-    const role = profile ? profile.role : 'student';
-
-    const params = new URLSearchParams(window.location.search);
-    const returnTo = params.get('returnTo');
-    if (role === 'admin') {
-      // Admin often lands here via a day page's session-expiry redirect —
-      // honor returnTo so they land back on what they were viewing,
-      // otherwise default to the admin dashboard.
-      window.location.href = returnTo ? decodeURIComponent(returnTo) : 'admin-dashboard.html';
-    } else if (role === 'teacher') {
-      window.location.href = 'teacher-dashboard.html';
-    } else if (role === 'checker') {
-      window.location.href = 'checker-dashboard.html';
-    } else if (role === 'mentor') {
-      window.location.href = 'mentor-dashboard.html';
-    } else if (returnTo) {
-      window.location.href = decodeURIComponent(returnTo);
-    } else {
-      window.location.href = 'index.html'; // students
+    status.textContent = 'Uploading…';
+    status.style.color = 'var(--muted)';
+    const { url, error } = await uploadAvatar(me.id, file);
+    if (error) {
+      status.textContent = '⚠️ Upload failed — please try again.';
+      status.style.color = 'var(--warn)';
+      console.error(error);
+      return;
     }
-  });
+    renderAvatar(url, myProfile.full_name);
+    status.textContent = '✓ Profile picture updated';
+    status.style.color = 'var(--good)';
+  }
+
+  async function loadStats() {
+    const sb = getSupabaseClient();
+    const currentDay = await getMostRecentLiveDay(targetProfile);
+    const [weekFrom, weekTo] = getWeekBounds(currentDay);
+
+    document.getElementById('stat-day').textContent = 'Day ' + currentDay;
+
+    const [{ data: allPoints }, { data: progressRows }] = await Promise.all([
+      sb.from('points').select('day, category, points, max_points').eq('student_id', targetId),
+      sb.from('progress').select('day, completed').eq('student_id', targetId).eq('completed', true)
+    ]);
+
+    const points = allPoints || [];
+    const total = points.reduce((sum, p) => sum + Number(p.points), 0);
+    const weekTotal = points.filter(p => p.day >= weekFrom && p.day <= weekTo).reduce((sum, p) => sum + Number(p.points), 0);
+    const todayRows = points.filter(p => p.day === currentDay);
+    const todayTotal = todayRows.reduce((sum, p) => sum + Number(p.points), 0);
+    const todayMax = todayRows.reduce((sum, p) => sum + Number(p.max_points || 0), 0);
+
+    document.getElementById('stat-total').textContent = round1(total);
+    document.getElementById('stat-week').textContent = round1(weekTotal);
+    document.getElementById('stat-today').textContent = round1(todayTotal);
+
+    const activeDays = (progressRows || []).map(r => r.day);
+    const streak = computeDayStreak(activeDays);
+    const badges = document.getElementById('badges');
+    let badgeHtml = '';
+    if (streak >= 2) badgeHtml += `<span class="badge-pill badge-good">${streak}-day streak</span>`;
+    badges.innerHTML = badgeHtml;
+
+    renderBreakdown(todayRows, todayTotal, todayMax);
+    renderHistory(points, liveDays);
+  }
+
+  function round1(n) { return Math.round(n * 10) / 10; }
+
+  function renderBreakdown(todayRows, todayTotal, todayMax) {
+    const card = document.getElementById('breakdown-card');
+    if (todayRows.length === 0) {
+      card.innerHTML = '<p style="color:var(--muted);">No points recorded for today yet — complete a task to see it here.</p>';
+      return;
+    }
+    const order = ['article', 'video', 'speaking', 'reading_listening', 'writing', 'bonus_article', 'bonus_video', 'bonus_reading_listening'];
+    const byCategory = {};
+    todayRows.forEach(r => { byCategory[r.category] = r; });
+    const rows = order.filter(c => byCategory[c]).map(c => {
+      const r = byCategory[c];
+      return `
+        <div class="points-breakdown-row">
+          <div class="dot" style="background:${CATEGORY_DOT[c]};"></div>
+          <div class="cat-name">${CATEGORY_LABELS[c]}</div>
+          <div class="cat-val">${round1(r.points)} / ${r.max_points}</div>
+        </div>
+      `;
+    }).join('');
+    card.innerHTML = `
+      ${rows}
+      <div style="border-top:1px dashed var(--border); margin-top:12px; padding-top:10px; display:flex; justify-content:space-between;">
+        <span style="font-weight:700; color:var(--ink);">Total today</span>
+        <span style="font-family:var(--mono); font-weight:700; color:var(--accent);">${round1(todayTotal)} / ${todayMax}</span>
+      </div>
+    `;
+  }
+
+  function renderHistory(points, liveDays) {
+    const card = document.getElementById('history-card');
+    const byDay = {};
+    points.forEach(p => { byDay[p.day] = (byDay[p.day] || 0) + Number(p.points); });
+    const days = liveDays.slice().sort((a, b) => b - a).filter(d => byDay[d] !== undefined);
+    if (days.length === 0) {
+      card.innerHTML = '<p style="color:var(--muted);">No history yet.</p>';
+      return;
+    }
+    card.innerHTML = days.map(d => `
+      <div class="points-breakdown-row">
+        <div class="cat-name">Day ${d}</div>
+        <div class="cat-val">${round1(byDay[d])} pts</div>
+      </div>
+    `).join('');
+  }
 </script>
 </body>
 </html>
