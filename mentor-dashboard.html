@@ -13,12 +13,24 @@
   <header class="topbar">
     <div class="topbar-inner">
       <div class="logo">IELTS <span>MARATHON</span></div>
-      <div style="display:flex; align-items:center; gap:14px; font-family:var(--mono); font-size:0.82rem; color:var(--muted);">
-        <span>Hi, <span id="user-greeting" style="color:var(--ink); font-weight:600;">…</span></span>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <a href="group-chat.html" class="ghost" style="padding:7px 14px; font-size:0.82rem; text-decoration:none;">💬 Group Chat</a>
+        <div class="profile-avatar-wrap" style="width:34px; height:34px;">
+          <div class="avatar-circle" id="avatar-display" style="width:34px; height:34px; font-size:0.8rem; cursor:pointer;" title="Click to change your picture">…</div>
+          <label class="avatar-camera-badge" id="avatar-camera-badge" style="width:16px; height:16px; font-size:0.6rem;">
+            📷
+            <input type="file" id="avatar-input" accept="image/png, image/jpeg, image/webp">
+          </label>
+        </div>
+        <span style="font-family:var(--mono); font-size:0.82rem; color:var(--muted); display:flex; align-items:center; gap:6px;">
+          Hi, <span id="user-greeting" style="color:var(--ink); font-weight:600;">…</span>
+          <button class="ghost" id="edit-name-btn" style="padding:2px 8px; font-size:0.7rem;">Edit</button>
+        </span>
         <button class="ghost" id="logout-btn" style="padding:7px 14px;">Log out</button>
       </div>
     </div>
   </header>
+  <div class="wrap"><p id="avatar-status" style="font-size:0.78rem; color:var(--muted); margin:4px 0 0; text-align:right;"></p></div>
 
   <section class="hero" style="padding-top:56px; padding-bottom:8px;">
     <div class="wrap">
@@ -52,6 +64,12 @@
   };
   function totalTasksForDay(level, day) { return (MENTOR_DAY_TOTAL_TASKS[level] || {})[day] || 9; }
 
+  function renderAvatar(url, fullName) {
+    const el = document.getElementById('avatar-display');
+    if (url) el.innerHTML = `<img src="${url}" alt="">`;
+    else el.textContent = initialsFor(fullName);
+  }
+
   let myGroup = null;
   let myUserId = null;
   let liveDays = [];
@@ -64,6 +82,42 @@
       return;
     }
     myUserId = user.id;
+    let myFullName = profile.full_name;
+
+    renderAvatar(profile.avatar_url, myFullName);
+    document.getElementById('avatar-input').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const status = document.getElementById('avatar-status');
+      if (file.size > 3 * 1024 * 1024) {
+        status.textContent = 'That image is over 3MB — please pick a smaller one.';
+        status.style.color = 'var(--warn)';
+        return;
+      }
+      status.textContent = 'Uploading…';
+      status.style.color = 'var(--muted)';
+      const { url, error } = await uploadAvatar(myUserId, file);
+      if (error) {
+        status.textContent = '⚠️ Upload failed — please try again.';
+        status.style.color = 'var(--warn)';
+        console.error(error);
+        return;
+      }
+      renderAvatar(url, myFullName);
+      status.textContent = '✓ Profile picture updated';
+      status.style.color = 'var(--good)';
+    });
+
+    document.getElementById('edit-name-btn').addEventListener('click', async () => {
+      const newName = prompt('What should students see as your name?', myFullName === 'Unnamed' ? '' : myFullName);
+      if (!newName || !newName.trim()) return;
+      const sb2 = getSupabaseClient();
+      const { error } = await sb2.rpc('update_own_full_name', { new_name: newName.trim() });
+      if (error) { alert('Failed to update name — please try again.'); console.error(error); return; }
+      myFullName = newName.trim();
+      document.getElementById('user-greeting').textContent = myFullName;
+      renderAvatar(profile.avatar_url, myFullName);
+    });
 
     const sb = getSupabaseClient();
     const { data: assignment } = await sb.from('group_mentors').select('group_id').eq('mentor_id', user.id).limit(1).maybeSingle();
