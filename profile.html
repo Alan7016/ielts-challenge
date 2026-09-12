@@ -89,6 +89,13 @@
   let me, myProfile, targetId, targetProfile, canEdit;
 
   requireAuth(async function (profile, user) {
+    const hasStudentParam = new URLSearchParams(location.search).has('student');
+    if (!hasStudentParam) {
+      if (profile.role === 'admin') { window.location.href = 'admin-dashboard.html'; return; }
+      if (profile.role === 'teacher') { window.location.href = 'teacher-dashboard.html'; return; }
+      if (profile.role === 'checker') { window.location.href = 'checker-dashboard.html'; return; }
+      if (profile.role === 'mentor') { window.location.href = 'mentor-dashboard.html'; return; }
+    }
     me = user;
     myProfile = profile;
     const sb = getSupabaseClient();
