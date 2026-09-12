@@ -39,7 +39,16 @@ async function requireAuth(onReady) {
   const { data: { session } } = await sb.auth.getSession();
 
   if (!session) {
-    const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
+    // Never redirect to login from login itself, and always strip any
+    // returnTo already in the URL before building a new one — otherwise a
+    // second bounce nests the previous returnTo inside the new one, and
+    // the URL grows forever (this was a real bug, now fixed here once,
+    // for every page that calls requireAuth).
+    if (window.location.pathname.endsWith('login.html')) return;
+    const cleanParams = new URLSearchParams(window.location.search);
+    cleanParams.delete('returnTo');
+    const cleanSearch = cleanParams.toString();
+    const returnTo = encodeURIComponent(window.location.pathname + (cleanSearch ? '?' + cleanSearch : ''));
     window.location.href = `${pathToRoot()}login.html?returnTo=${returnTo}`;
     return;
   }
