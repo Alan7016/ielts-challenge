@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentor Dashboard — IELTS Marathon</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="content" style="display:none;">
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">IELTS <span>MARATHON</span></div>
+      <div style="display:flex; align-items:center; gap:14px; font-family:var(--mono); font-size:0.82rem; color:var(--muted);">
+        <span>Hi, <span id="user-greeting" style="color:var(--ink); font-weight:600;">…</span></span>
+        <button class="ghost" id="logout-btn" style="padding:7px 14px;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" style="padding-top:56px; padding-bottom:8px;">
+    <div class="wrap">
+      <div class="eyebrow" id="page-eyebrow">Mentor view</div>
+      <h1 id="page-title">Loading…</h1>
+      <div id="day-picker-row" style="display:none; align-items:center; gap:10px; margin-top:16px;">
+        <label style="font-size:0.85rem; font-weight:600;">Viewing:</label>
+        <select id="day-select" style="padding:6px 10px; border:1px solid var(--border); border-radius:8px; font-family:var(--mono); font-size:0.85rem;"></select>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap" id="dashboard-root">
+      <p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>
+    </div>
+  </section>
+
+</div>
+
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+<script>
+  // Mentors only ever work with Challenge 2.0 groups — one mentor, one
+  // group, full detail view. Total-tasks-per-day mirrors what's actually
+  // been built for each level; falls back to 9 for any day not listed yet.
+  const MENTOR_DAY_TOTAL_TASKS = {
+    standard: { 1: 11, 2: 8, 3: 10, 4: 5, 5: 7, 6: 7 }
+    // advanced / expert: no days built yet — falls back to 9 below, harmless until real days exist.
+  };
+  function totalTasksForDay(level, day) { return (MENTOR_DAY_TOTAL_TASKS[level] || {})[day] || 9; }
+
+  let myGroup = null;
+  let myUserId = null;
+  let liveDays = [];
+  let selectedDay = null;
+
+  requireAuth(async function (profile, user) {
+    if (profile.role !== 'mentor') {
+      window.location.href = 'index.html';
+      return;
+    }
+    myUserId = user.id;
+
+    const sb = getSupabaseClient();
+    const { data: assignment } = await sb.from('group_mentors').select('group_id').eq('mentor_id', user.id).limit(1).maybeSingle();
+
+    if (!assignment) {
+      document.getElementById('page-title').textContent = 'No group assigned yet';
+      document.getElementById('dashboard-root').innerHTML = `<p style="color:var(--muted);">Your account isn't linked to a group yet — ask the admin to assign one.</p>`;
+      return;
+    }
+
+    const { data: group } = await sb.from('groups').select('id, name, challenge, level').eq('id', assignment.group_id).single();
+    myGroup = group;
+
+    const level = myGroup.level || 'standard';
+    const cfg = trackConfigFor(myGroup); // shared helper from script.js — reads .challenge/.level
+    liveDays = await getLiveDays(cfg.folder, cfg.totalDays);
+
+    document.getElementById('page-eyebrow').textContent = `Mentor view — Challenge 2.0 · ${level.charAt(0).toUpperCase() + level.slice(1)}`;
+    document.getElementById('page-title').textContent = myGroup.name;
+
+    const nonMockDays = liveDays.filter(d => !cfg.mockDays.includes(d)).sort((a, b) => b - a);
+    if (nonMockDays.length === 0) {
+      document.getElementById('dashboard-root').innerHTML = `<p style="color:var(--muted);">No days are live for this group yet.</p>`;
+      return;
+    }
+    selectedDay = nonMockDays[0];
+
+    const dayRow = document.getElementById('day-picker-row');
+    const daySelect = document.getElementById('day-select');
+    dayRow.style.display = 'flex';
+    daySelect.innerHTML = nonMockDays.map(d => `<option value="${d}" ${d === selectedDay ? 'selected' : ''}>Day ${d}</option>`).join('');
+    daySelect.addEventListener('change', (e) => {
+      selectedDay = +e.target.value;
+      showStudentList();
+    });
+
+    showStudentList();
+  });
+
+  // ---------- Full-detail student list for the mentor's one group + selected day ----------
+  async function showStudentList() {
+    const root = document.getElementById('dashboard-root');
+    root.innerHTML = `<p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading students…</p>`;
+
+    const sb = getSupabaseClient();
+    const level = myGroup.level || 'standard';
+    const need = totalTasksForDay(level, selectedDay);
+
+    const { data: students } = await sb.from('profiles').select('id, full_name, avatar_url').eq('group_id', myGroup.id).eq('role', 'student').order('full_name');
+
+    if (!students || students.length === 0) {
+      root.innerHTML = `<p style="color:var(--muted);">No students registered in this group yet.</p>`;
+      return;
+    }
+
+    const studentIds = students.map(s => s.id);
+    const [{ data: progress }, { data: answers }, { data: commentRows }] = await Promise.all([
+      sb.from('progress').select('student_id, task, completed').eq('day', selectedDay).in('student_id', studentIds),
+      sb.from('answers').select('student_id, task, field_id, value, is_correct').eq('day', selectedDay).in('student_id', studentIds),
+      sb.from('mentor_comments').select('student_id, task, field_id, comment').eq('day', selectedDay).in('student_id', studentIds)
+    ]);
+
+    const commentByField = {};
+    (commentRows || []).forEach(c => {
+      commentByField[c.student_id] = commentByField[c.student_id] || {};
+      commentByField[c.student_id][c.field_id] = c.comment || '';
+    });
+
+    const doneByStudent = {};
+    (progress || []).forEach(p => {
+      doneByStudent[p.student_id] = doneByStudent[p.student_id] || new Set();
+      if (p.completed) doneByStudent[p.student_id].add(p.task);
+    });
+
+    const answersByStudent = {};
+    (answers || []).forEach(a => {
+      answersByStudent[a.student_id] = answersByStudent[a.student_id] || {};
+      answersByStudent[a.student_id][a.task] = answersByStudent[a.student_id][a.task] || [];
+      answersByStudent[a.student_id][a.task].push(a);
+    });
+
+    // Speaking answers store a storage path, not the actual audio — fetch a
+    // temporary playable URL for each one before rendering.
+    const speakingPaths = (answers || []).filter(a => a.field_id.startsWith('speaking-')).map(a => a.value);
+    const signedUrlByPath = {};
+    await Promise.all(speakingPaths.map(async (path) => {
+      const { data, error } = await sb.storage.from('speaking-recordings').createSignedUrl(path, 3600);
+      if (error) console.error('Signed URL failed for', path, error);
+      if (data) signedUrlByPath[path] = data.signedUrl;
+    }));
+
+    function renderTicks(studentId) {
+      const done = doneByStudent[studentId] || new Set();
+      return Array.from({ length: need }, (_, i) =>
+        `<span class="tick ${done.has(i + 1) ? 'done' : ''}"></span>`
+      ).join('');
+    }
+
+    function commentRowHtml(studentId, task, fieldId) {
+      const saved = (commentByField[studentId] || {})[fieldId] || '';
+      return `
+        <div class="mentor-comment-row" data-student="${studentId}" data-task="${task}" data-field="${fieldId}" style="margin-top:8px; padding-top:8px;">
+          <textarea class="mentor-comment-input no-check" placeholder="Leave a comment for the student..." style="width:100%; min-height:50px; padding:8px 10px; border:1px solid var(--border); border-radius:8px; font-family:var(--body); font-size:0.85rem;">${saved.replace(/</g, '&lt;')}</textarea>
+          <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
+            <button class="ghost save-mentor-comment" style="padding:4px 12px; font-size:0.78rem;">Save comment</button>
+            <span class="save-status" style="font-size:0.78rem; color:var(--muted);"></span>
+          </div>
+        </div>`;
+    }
+
+    function renderTaskDetail(studentId) {
+      const byTask = answersByStudent[studentId] || {};
+      const taskNums = Object.keys(byTask).map(Number).sort((a, b) => a - b);
+      if (taskNums.length === 0) return '<p class="no-writing">No answers submitted yet.</p>';
+
+      return taskNums.map(taskNum => {
+        const items = byTask[taskNum];
+
+        const essay = items.find(i => i.field_id === 'task1-response' || i.field_id === 'task2-response');
+        if (essay) {
+          const words = essay.value.trim() ? essay.value.trim().split(/\s+/).length : 0;
+          return `<div style="margin-bottom:16px;"><strong>Task ${taskNum} (writing, ${words} words):</strong>
+            <div class="writing-box show" style="margin-top:6px;">${essay.value.replace(/</g, '&lt;') || '<span class="no-writing">Empty</span>'}</div>
+            ${commentRowHtml(studentId, taskNum, essay.field_id)}
+          </div>`;
+        }
+
+        const speakingItems = items.filter(i => i.field_id.startsWith('speaking-'));
+        if (speakingItems.length > 0) {
+          const recordings = speakingItems.map(i => {
+            const url = signedUrlByPath[i.value];
+            const label = speakingLabel(i.field_id);
+            return `<div style="margin-bottom:14px; padding-bottom:10px; border-bottom:1px dashed var(--border);">
+              <span style="font-family:var(--mono); font-size:0.8rem; color:var(--muted);">${label}</span>
+              ${url ? `<audio controls src="${url}" style="width:100%; margin-top:4px;"></audio>` : '<p class="no-writing">Playback unavailable</p>'}
+              ${commentRowHtml(studentId, taskNum, i.field_id)}
+            </div>`;
+          }).join('');
+          return `<div style="margin-bottom:16px;"><strong>Task ${taskNum} (speaking, ${speakingItems.length} recordings):</strong><div style="margin-top:8px;">${recordings}</div></div>`;
+        }
+
+        // Objective / auto-graded tasks — unchanged, tick summary only, no comment box.
+        const graded = items.filter(i => i.is_correct !== null);
+        const correctCount = graded.filter(i => i.is_correct === true).length;
+        const scoreLabel = graded.length > 0 ? ` — ${correctCount}/${graded.length} correct` : '';
+        const rows = items.map(i => {
+          const mark = i.is_correct === true ? '✓' : i.is_correct === false ? '✗' : '';
+          const color = i.is_correct === true ? 'var(--good)' : i.is_correct === false ? 'var(--warn)' : 'var(--muted)';
+          return `<div style="display:flex; justify-content:space-between; gap:10px; padding:3px 0; font-size:0.85rem;">
+            <span style="color:var(--muted); font-family:var(--mono);">${i.field_id}</span>
+            <span style="color:var(--ink);">${i.value} <span style="color:${color}; font-weight:700;">${mark}</span></span>
+          </div>`;
+        }).join('');
+        return `<div style="margin-bottom:16px;"><strong>Task ${taskNum}${scoreLabel}:</strong><div style="margin-top:4px;">${rows}</div></div>`;
+      }).join('');
+    }
+
+    root.innerHTML = students.map(s => `
+      <div class="student-row">
+        <div class="student-row-top">
+          <span class="student-name" style="display:flex; align-items:center; gap:10px;">
+            ${s.avatar_url ? `<span class="avatar-circle" style="width:28px;height:28px;font-size:0.72rem;"><img src="${s.avatar_url}" alt="" onerror="this.parentElement.textContent='${initialsFor(s.full_name)}'"></span>` : `<span class="avatar-circle" style="width:28px;height:28px;font-size:0.72rem;">${initialsFor(s.full_name)}</span>`}
+            ${s.full_name}
+          </span>
+          <div class="student-ticks"><div class="day-ticks">${renderTicks(s.id)}</div></div>
+        </div>
+        <button class="writing-toggle" data-target="detail-${s.id}">Show details ▾</button>
+        <div class="writing-box" id="detail-${s.id}">${renderTaskDetail(s.id)}</div>
+      </div>
+    `).join('');
+
+    root.querySelectorAll('.writing-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const box = document.getElementById(btn.dataset.target);
+        const nowShown = box.classList.toggle('show');
+        btn.textContent = btn.textContent.replace(nowShown ? '▾' : '▴', nowShown ? '▴' : '▾');
+      });
+    });
+
+    root.querySelectorAll('.save-mentor-comment').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const row = btn.closest('.mentor-comment-row');
+        const status = row.querySelector('.save-status');
+        status.textContent = 'Saving…';
+        const res = await sb.from('mentor_comments').upsert({
+          student_id: row.dataset.student,
+          day: selectedDay,
+          task: +row.dataset.task,
+          field_id: row.dataset.field,
+          comment: row.querySelector('.mentor-comment-input').value.trim(),
+          updated_by: myUserId,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'student_id,day,task,field_id' });
+        status.textContent = res.error ? '⚠️ Failed to save' : '✓ Saved';
+        if (res.error) console.error(res.error);
+      });
+    });
+  }
+</script>
+</body>
+</html>
