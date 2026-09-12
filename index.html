@@ -19,6 +19,7 @@
           <a href="index.html" class="active">Board</a>
           <a href="leaderboard.html">Leaderboard</a>
           <a href="profile.html">Profile</a>
+          <a href="group-chat.html" id="chat-nav-link" style="display:none;">💬 Chat</a>
         </div>
         <span style="font-family:var(--mono); font-size:0.82rem; color:var(--muted);">Hi, <span id="user-greeting" style="color:var(--ink); font-weight:600;">…</span></span>
         <button class="ghost" id="logout-btn" style="padding:7px 14px;">Log out</button>
@@ -121,6 +122,9 @@
 
   requireAuth(function (profile) {
     buildGrid(profile);
+    if (profile.challenge === '2.0' && profile.group_id) {
+      document.getElementById('chat-nav-link').style.display = '';
+    }
   });
 </script>
 </body>
