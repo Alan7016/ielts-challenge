@@ -44,7 +44,6 @@
       errorEl.textContent = error.message || 'Login failed — check the console for details.';
       return;
     }
-
     // Look up the account's role to send them to the right place.
     const { data: profile } = await sb.from('profiles').select('role').eq('id', data.user.id).single();
     const role = profile ? profile.role : 'student';
