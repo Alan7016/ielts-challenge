@@ -39,16 +39,7 @@ async function requireAuth(onReady) {
   const { data: { session } } = await sb.auth.getSession();
 
   if (!session) {
-    // Never redirect to login from login itself, and always strip any
-    // returnTo already in the URL before building a new one — otherwise a
-    // second bounce nests the previous returnTo inside the new one, and
-    // the URL grows forever (this was a real bug, now fixed here once,
-    // for every page that calls requireAuth).
-    if (window.location.pathname.endsWith('login.html')) return;
-    const cleanParams = new URLSearchParams(window.location.search);
-    cleanParams.delete('returnTo');
-    const cleanSearch = cleanParams.toString();
-    const returnTo = encodeURIComponent(window.location.pathname + (cleanSearch ? '?' + cleanSearch : ''));
+    const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
     window.location.href = `${pathToRoot()}login.html?returnTo=${returnTo}`;
     return;
   }
@@ -865,6 +856,32 @@ function restoreField(fieldId, value) {
   if (!el) return;
   if (el.type === 'checkbox') el.checked = (value === 'true');
   else el.value = value;
+}
+
+// ============================================
+// COMPUTER-DELIVERED (CDI) READING TOOL CAPTURE
+// The self-contained reading-test tool (used via <iframe>) lives in its own
+// document and can't call saveAnswer/saveTaskPoints directly. When a student
+// clicks Submit inside it, it posts its results to the parent window via
+// postMessage; this listens for that message from ONE specific iframe (so
+// multiple reading passages on the same day never get mixed up) and saves
+// the results into the exact same answers/points/progress tables every
+// other task type uses — so mentors and the admin dashboard see it exactly
+// like any other graded task.
+// ============================================
+function initCdiReadingCapture(userId, day, taskNumber, iframeEl) {
+  if (!iframeEl) return;
+  window.addEventListener('message', async (event) => {
+    if (event.source !== iframeEl.contentWindow) return;
+    const data = event.data;
+    if (!data || data.type !== 'cdi-reading-result') return;
+    for (const item of (data.items || [])) {
+      await saveAnswer(userId, day, taskNumber, 'reading-q' + item.n, item.value, item.correct);
+    }
+    const pct = data.max ? (data.score / data.max * 100) : 0;
+    await saveTaskPoints(userId, day, 'reading_listening', pctToPoints(pct), { percent: Math.round(pct) });
+    await saveProgress(userId, day, taskNumber, true, false);
+  });
 }
 
 // Disables every interactive element in a task so a completed task can be
