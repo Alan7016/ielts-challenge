@@ -22,6 +22,11 @@
           <a href="group-chat.html" id="chat-nav-link" style="display:none;">💬 Chat</a>
         </div>
         <span style="font-family:var(--mono); font-size:0.82rem; color:var(--muted);">Hi, <span id="user-greeting" style="color:var(--ink); font-weight:600;">…</span></span>
+        <div class="notif-bell-wrap" id="notif-bell">
+          <span class="notif-bell-icon" style="font-size:1.2rem;">🔔</span>
+          <span class="notif-badge" id="notif-badge"></span>
+          <div class="notif-dropdown" id="notif-dropdown"></div>
+        </div>
         <button class="ghost" id="logout-btn" style="padding:7px 14px;">Log out</button>
       </div>
     </div>
@@ -84,7 +89,7 @@
     };
   }
 
-  async function buildGrid(profile) {
+  async function buildGrid(profile, userId) {
     const cfg = trackConfigFor(profile);
     document.getElementById('page-eyebrow').textContent = cfg.eyebrow;
     document.getElementById('page-title').textContent = cfg.title;
@@ -94,13 +99,17 @@
     const grid = document.getElementById('track-grid');
     grid.innerHTML = '<p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading days…</p>';
     const liveDays = await getLiveDays(cfg.folder, cfg.totalDays);
+    const trackKey = profile.challenge === '2.0' ? `2.0-${profile.level || 'standard'}` : '1.0';
+    const completedDays = await getCompletedDaysForStudent(userId, trackKey, cfg.totalDays);
 
     document.getElementById('progress-label').textContent = `${liveDays.length} / ${cfg.totalDays} days live`;
     document.getElementById('progress-fill').style.width = `${(liveDays.length / cfg.totalDays) * 100}%`;
 
     let html = '';
     for (let d = 1; d <= cfg.totalDays; d++) {
-      const isOpen = liveDays.includes(d);
+      const isPublished = liveDays.includes(d);
+      const isEarned = d === 1 || completedDays.has(d - 1);
+      const isOpen = isPublished && isEarned;
       const isFinish = d === cfg.totalDays;
       const isMock = cfg.mockDays.includes(d);
       if (isOpen) {
@@ -110,24 +119,27 @@
           <span class="meta">${isMock ? 'Full practice test' : '9 tasks'}</span>
         </a>`;
       } else {
-        html += `<div class="day-chip locked${isFinish ? ' finish' : ''}${isMock ? ' mock' : ''}" title="Coming soon">
+        const reason = !isPublished ? 'Coming soon' : `Finish Day ${d - 1} first`;
+        html += `<div class="day-chip locked${isFinish ? ' finish' : ''}${isMock ? ' mock' : ''}" title="${reason}">
           <span class="num">${String(d).padStart(2, '0')}</span>
           <span class="lbl">${isMock ? '🎯 Mock Exam' : 'Day ' + d}</span>
-          <span class="meta">${isFinish ? 'Finish' : 'Coming soon'}</span>
+          <span class="meta">${isFinish ? 'Finish' : reason}</span>
         </div>`;
       }
     }
     grid.innerHTML = html;
   }
-  requireAuth(function (profile) {
+
+  requireAuth(function (profile, user) {
     if (profile.role === 'admin') { window.location.href = 'admin-dashboard.html'; return; }
     if (profile.role === 'teacher') { window.location.href = 'teacher-dashboard.html'; return; }
     if (profile.role === 'checker') { window.location.href = 'checker-dashboard.html'; return; }
     if (profile.role === 'mentor') { window.location.href = 'mentor-dashboard.html'; return; }
-    buildGrid(profile);
+    buildGrid(profile, user.id);
     if (profile.challenge === '2.0' && profile.group_id) {
       document.getElementById('chat-nav-link').style.display = '';
     }
+    initNotificationBell(user.id, trackConfigFor(profile).folder);
   });
 </script>
 </body>
