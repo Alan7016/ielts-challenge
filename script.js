@@ -1875,6 +1875,92 @@ function renderGroupSections(groups, buttonHtmlFn) {
   `).join('');
 }
 
+// ---------- Shared task-count config, used by admin, mentor, and the student board ----------
+// Single source of truth for "how many tasks does day N of track X have" —
+// previously duplicated per-file, which let it silently drift out of date.
+const TRACK_DAY_TOTAL_TASKS = {
+  '1.0': { 1: 9, 2: 9, 3: 9, 5: 9, 6: 9, 7: 9, 8: 8, 9: 8, 10: 8, 12: 8, 13: 8, 14: 8, 15: 8, 16: 8 },
+  '2.0-standard': { 1: 8, 2: 8, 3: 10, 4: 5, 5: 7, 6: 7 },
+  '2.0-advanced': { 1: 6, 2: 7, 3: 9, 4: 7 },
+  '2.0-expert': { 1: 6, 2: 7, 3: 8 }
+};
+function totalTasksForTrack(trackKey, day) { return (TRACK_DAY_TOTAL_TASKS[trackKey] || {})[day] || 9; }
+
+// ---------- Which days has this student actually finished, for a given track? ----------
+// A day counts as complete only once every one of its tasks is marked
+// completed in the progress table — used to sequentially lock the board so
+// a student can't skip ahead to a day they haven't earned yet.
+async function getCompletedDaysForStudent(userId, trackKey, maxDay) {
+  const sb = getSupabaseClient();
+  const { data } = await sb.from('progress').select('day, task').eq('student_id', userId).eq('completed', true);
+  const doneTasksByDay = {};
+  (data || []).forEach(row => {
+    if (!doneTasksByDay[row.day]) doneTasksByDay[row.day] = new Set();
+    doneTasksByDay[row.day].add(row.task);
+  });
+  const completedDays = new Set();
+  for (let d = 1; d <= maxDay; d++) {
+    const total = totalTasksForTrack(trackKey, d);
+    const doneCount = doneTasksByDay[d] ? doneTasksByDay[d].size : 0;
+    if (doneCount >= total) completedDays.add(d);
+  }
+  return completedDays;
+}
+
+// ---------- Notification bell — shows unseen mentor feedback ----------
+// One shared function, called on any page that has the bell markup (the
+// student board first; can be added to day pages the same way later).
+// Blinks and shows a red unread count until the student opens the dropdown,
+// clicking an item marks it seen and takes them to that day.
+async function initNotificationBell(userId, folder) {
+  const sb = getSupabaseClient();
+  const bell = document.getElementById('notif-bell');
+  const badge = document.getElementById('notif-badge');
+  const dropdown = document.getElementById('notif-dropdown');
+  if (!bell || !badge || !dropdown) return;
+
+  async function loadUnseen() {
+    const { data } = await sb.from('mentor_comments')
+      .select('id, day, task, field_id, comment, updated_at')
+      .eq('student_id', userId)
+      .is('seen_at', null)
+      .order('updated_at', { ascending: false });
+    const items = (data || []).filter(it => it.comment && it.comment.trim());
+
+    if (items.length > 0) {
+      badge.textContent = items.length > 9 ? '9+' : String(items.length);
+      badge.style.display = 'flex';
+      bell.classList.add('has-unread');
+    } else {
+      badge.style.display = 'none';
+      bell.classList.remove('has-unread');
+    }
+
+    dropdown.innerHTML = items.length === 0
+      ? '<p class="notif-empty">No new feedback</p>'
+      : items.map(it => `<a href="${folder}/day${it.day}.html" class="notif-item" data-id="${it.id}">
+          <span class="notif-day">Day ${it.day} · Task ${it.task}</span>
+          <span class="notif-snippet">${it.comment.slice(0, 70).replace(/</g, '&lt;')}${it.comment.length > 70 ? '…' : ''}</span>
+        </a>`).join('');
+
+    dropdown.querySelectorAll('.notif-item').forEach(a => {
+      a.addEventListener('click', async () => {
+        await sb.from('mentor_comments').update({ seen_at: new Date().toISOString() }).eq('id', a.dataset.id);
+      });
+    });
+  }
+
+  bell.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle('show');
+  });
+  document.addEventListener('click', (e) => {
+    if (!bell.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('show');
+  });
+
+  await loadUnseen();
+}
+
 async function getLiveDays(folder, maxDays) {
   folder = folder || 'days';
   maxDays = maxDays || 30;
