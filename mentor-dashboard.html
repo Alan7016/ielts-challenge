@@ -242,10 +242,13 @@
         const essay = items.find(i => i.field_id === 'task1-response' || i.field_id === 'task2-response');
         if (essay) {
           const words = essay.value.trim() ? essay.value.trim().split(/\s+/).length : 0;
-          return `<div style="margin-bottom:16px;"><strong>Task ${taskNum} (writing, ${words} words):</strong>
-            <div class="writing-box show" style="margin-top:6px;">${essay.value.replace(/</g, '&lt;') || '<span class="no-writing">Empty</span>'}</div>
-            ${commentRowHtml(studentId, taskNum, essay.field_id)}
-          </div>`;
+          return `<details class="task-detail-block">
+            <summary><span class="task-detail-badge writing">✍️ Writing</span> Task ${taskNum} <span class="task-detail-meta">${words} words</span></summary>
+            <div class="task-detail-body">
+              <div class="writing-box show">${essay.value.replace(/</g, '&lt;') || '<span class="no-writing">Empty</span>'}</div>
+              ${commentRowHtml(studentId, taskNum, essay.field_id)}
+            </div>
+          </details>`;
         }
 
         const speakingItems = items.filter(i => i.field_id.startsWith('speaking-'));
@@ -253,28 +256,34 @@
           const recordings = speakingItems.map(i => {
             const url = signedUrlByPath[i.value];
             const label = speakingLabel(i.field_id);
-            return `<div style="margin-bottom:14px; padding-bottom:10px; border-bottom:1px dashed var(--border);">
-              <span style="font-family:var(--mono); font-size:0.8rem; color:var(--muted);">${label}</span>
-              ${url ? `<audio controls src="${url}" style="width:100%; margin-top:4px;"></audio>` : '<p class="no-writing">Playback unavailable</p>'}
+            return `<div class="recording-card">
+              <span class="recording-label">${label}</span>
+              ${url ? `<audio controls src="${url}"></audio>` : '<p class="no-writing">Playback unavailable</p>'}
               ${commentRowHtml(studentId, taskNum, i.field_id)}
             </div>`;
           }).join('');
-          return `<div style="margin-bottom:16px;"><strong>Task ${taskNum} (speaking, ${speakingItems.length} recordings):</strong><div style="margin-top:8px;">${recordings}</div></div>`;
+          return `<details class="task-detail-block">
+            <summary><span class="task-detail-badge speaking">🎙️ Speaking</span> Task ${taskNum} <span class="task-detail-meta">${speakingItems.length} recordings</span></summary>
+            <div class="task-detail-body recording-grid">${recordings}</div>
+          </details>`;
         }
 
         // Objective / auto-graded tasks — unchanged, tick summary only, no comment box.
         const graded = items.filter(i => i.is_correct !== null);
         const correctCount = graded.filter(i => i.is_correct === true).length;
-        const scoreLabel = graded.length > 0 ? ` — ${correctCount}/${graded.length} correct` : '';
+        const scoreLabel = graded.length > 0 ? `${correctCount}/${graded.length} correct` : '';
         const rows = items.map(i => {
           const mark = i.is_correct === true ? '✓' : i.is_correct === false ? '✗' : '';
           const color = i.is_correct === true ? 'var(--good)' : i.is_correct === false ? 'var(--warn)' : 'var(--muted)';
-          return `<div style="display:flex; justify-content:space-between; gap:10px; padding:3px 0; font-size:0.85rem;">
-            <span style="color:var(--muted); font-family:var(--mono);">${i.field_id}</span>
-            <span style="color:var(--ink);">${i.value} <span style="color:${color}; font-weight:700;">${mark}</span></span>
+          return `<div class="graded-row">
+            <span class="graded-field">${i.field_id}</span>
+            <span>${i.value} <span style="color:${color}; font-weight:700;">${mark}</span></span>
           </div>`;
         }).join('');
-        return `<div style="margin-bottom:16px;"><strong>Task ${taskNum}${scoreLabel}:</strong><div style="margin-top:4px;">${rows}</div></div>`;
+        return `<details class="task-detail-block">
+          <summary><span class="task-detail-badge graded">✓ Auto-graded</span> Task ${taskNum} <span class="task-detail-meta">${scoreLabel}</span></summary>
+          <div class="task-detail-body">${rows}</div>
+        </details>`;
       }).join('');
     }
 
