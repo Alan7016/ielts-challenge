@@ -572,12 +572,42 @@ function checkComprehension(containerId, scoreId) {
 function initCollapseToggle(buttonId, targetId, showLabel, hideLabel) {
   const btn = document.getElementById(buttonId);
   const target = document.getElementById(targetId);
-  target.classList.add('collapsed');
+  target.style.display = 'none';
   btn.textContent = showLabel;
   btn.addEventListener('click', () => {
-    const nowCollapsed = target.classList.toggle('collapsed');
-    btn.textContent = nowCollapsed ? showLabel : hideLabel;
+    const isCurrentlyVisible = target.style.display !== 'none';
+    target.style.display = isCurrentlyVisible ? 'none' : 'block';
+    btn.textContent = isCurrentlyVisible ? showLabel : hideLabel;
   });
+}
+
+// ---------- Gated answer reveal for "find and correct the mistake" exercises ----------
+// The reveal button stays disabled until every textarea matched by
+// textareaSelector has something written in it. Once the student clicks
+// reveal, their textareas are locked read-only so they can't quietly edit
+// their attempt after seeing the answer — a genuine self-check, not a
+// look-then-fix.
+function initGatedMistakeReveal(buttonId, answerBoxId, textareaSelector) {
+  const btn = document.getElementById(buttonId);
+  const box = document.getElementById(answerBoxId);
+  const textareas = Array.from(document.querySelectorAll(textareaSelector));
+  if (!btn || !box || textareas.length === 0) return;
+  box.style.display = 'none';
+  btn.disabled = true;
+
+  function refresh() {
+    const allFilled = textareas.every(t => t.value.trim().length > 0);
+    btn.disabled = !allFilled;
+  }
+  textareas.forEach(t => t.addEventListener('input', refresh));
+  refresh();
+
+  btn.addEventListener('click', () => {
+    box.style.display = 'block';
+    textareas.forEach(t => { t.readOnly = true; });
+    btn.disabled = true;
+    btn.textContent = 'Answers revealed';
+  }, { once: true });
 }
 
 // ---------- Combined checker: radio-based q-items AND free-text note-completion inputs ----------
