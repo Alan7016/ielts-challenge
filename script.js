@@ -962,7 +962,7 @@ async function initMentorComments(userId, dayNumber) {
 async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
 
   checkFns = checkFns || {};
-  const isAdmin = currentUserRole === 'admin';
+  const isAdmin = currentUserRole === 'admin' || currentUserRole === 'mentor';
   let current = 1;
   const doneTasks = {};
   const lockedTasks = {};
@@ -971,7 +971,7 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
     const banner = document.createElement('div');
     banner.className = 'wrap';
     banner.style.cssText = 'padding-top:16px;';
-    banner.innerHTML = `<p style="font-family:var(--mono); font-size:0.78rem; color:var(--accent); background:var(--accent-soft); display:inline-block; padding:6px 14px; border-radius:8px;">🔑 Admin preview — nothing on this page is saved, and every task is unlocked</p>`;
+    banner.innerHTML = `<p style="font-family:var(--mono); font-size:0.78rem; color:var(--accent); background:var(--accent-soft); display:inline-block; padding:6px 14px; border-radius:8px;">🔑 Staff preview — nothing on this page is saved, and every task is unlocked</p>`;
     document.querySelector('header.day-header').insertAdjacentElement('afterend', banner);
   }
 
