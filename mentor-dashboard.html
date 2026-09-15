@@ -239,19 +239,27 @@
       return taskNums.map(taskNum => {
         const items = byTask[taskNum];
 
-        const essay = items.find(i => i.field_id === 'task1-response' || i.field_id === 'task2-response');
-        if (essay) {
-          const words = essay.value.trim() ? essay.value.trim().split(/\s+/).length : 0;
-          return `<details class="task-detail-block">
-            <summary><span class="task-detail-badge writing">✍️ Writing</span> Task ${taskNum} <span class="task-detail-meta">${words} words</span></summary>
-            <div class="task-detail-body">
-              <div class="writing-box show">${essay.value.replace(/</g, '&lt;') || '<span class="no-writing">Empty</span>'}</div>
-              ${commentRowHtml(studentId, taskNum, essay.field_id)}
-            </div>
-          </details>`;
+        // Any open-ended (ungraded) text field gets its own comment box — not
+        // just the two big "main essay" fields. is_correct is null for every
+        // .no-check field, which is exactly what marks it as free-text writing
+        // rather than an auto-graded answer.
+        const speakingItems = items.filter(i => i.field_id.startsWith('speaking-'));
+        const writingItems = items.filter(i => !i.field_id.startsWith('speaking-') && i.is_correct === null);
+        const gradedItems = items.filter(i => i.is_correct !== null);
+        const sections = [];
+
+        if (writingItems.length > 0) {
+          const blocks = writingItems.map(i => {
+            const words = i.value.trim() ? i.value.trim().split(/\s+/).length : 0;
+            return `<div style="margin-bottom:14px;">
+              <span class="recording-label">${i.field_id} — ${words} word${words === 1 ? '' : 's'}</span>
+              <div class="writing-box show" style="margin-top:4px;">${i.value.replace(/</g, '&lt;') || '<span class="no-writing">Empty</span>'}</div>
+              ${commentRowHtml(studentId, taskNum, i.field_id)}
+            </div>`;
+          }).join('');
+          sections.push(`<div class="task-detail-body">${blocks}</div>`);
         }
 
-        const speakingItems = items.filter(i => i.field_id.startsWith('speaking-'));
         if (speakingItems.length > 0) {
           const recordings = speakingItems.map(i => {
             const url = signedUrlByPath[i.value];
@@ -262,27 +270,36 @@
               ${commentRowHtml(studentId, taskNum, i.field_id)}
             </div>`;
           }).join('');
-          return `<details class="task-detail-block">
-            <summary><span class="task-detail-badge speaking">🎙️ Speaking</span> Task ${taskNum} <span class="task-detail-meta">${speakingItems.length} recordings</span></summary>
-            <div class="task-detail-body recording-grid">${recordings}</div>
-          </details>`;
+          sections.push(`<div class="task-detail-body recording-grid">${recordings}</div>`);
         }
 
-        // Objective / auto-graded tasks — unchanged, tick summary only, no comment box.
-        const graded = items.filter(i => i.is_correct !== null);
-        const correctCount = graded.filter(i => i.is_correct === true).length;
-        const scoreLabel = graded.length > 0 ? `${correctCount}/${graded.length} correct` : '';
-        const rows = items.map(i => {
-          const mark = i.is_correct === true ? '✓' : i.is_correct === false ? '✗' : '';
-          const color = i.is_correct === true ? 'var(--good)' : i.is_correct === false ? 'var(--warn)' : 'var(--muted)';
-          return `<div class="graded-row">
-            <span class="graded-field">${i.field_id}</span>
-            <span>${i.value} <span style="color:${color}; font-weight:700;">${mark}</span></span>
-          </div>`;
-        }).join('');
+        if (gradedItems.length > 0) {
+          const correctCount = gradedItems.filter(i => i.is_correct === true).length;
+          const rows = gradedItems.map(i => {
+            const mark = i.is_correct === true ? '✓' : '✗';
+            const color = i.is_correct === true ? 'var(--good)' : 'var(--warn)';
+            return `<div class="graded-row">
+              <span class="graded-field">${i.field_id}</span>
+              <span>${i.value} <span style="color:${color}; font-weight:700;">${mark}</span></span>
+            </div>`;
+          }).join('');
+          sections.push(`<div class="task-detail-body"><p style="margin:0 0 6px; font-family:var(--mono); font-size:0.78rem; color:var(--muted);">${correctCount}/${gradedItems.length} correct</p>${rows}</div>`);
+        }
+
+        let badge;
+        if (writingItems.length > 0) badge = '<span class="task-detail-badge writing">✍️ Writing</span>';
+        else if (speakingItems.length > 0) badge = '<span class="task-detail-badge speaking">🎙️ Speaking</span>';
+        else badge = '<span class="task-detail-badge graded">✓ Auto-graded</span>';
+
+        const metaParts = [
+          writingItems.length > 0 ? `${writingItems.length} response${writingItems.length === 1 ? '' : 's'}` : '',
+          speakingItems.length > 0 ? `${speakingItems.length} recording${speakingItems.length === 1 ? '' : 's'}` : '',
+          gradedItems.length > 0 ? `${gradedItems.filter(i => i.is_correct === true).length}/${gradedItems.length} correct` : ''
+        ].filter(Boolean).join(' · ');
+
         return `<details class="task-detail-block">
-          <summary><span class="task-detail-badge graded">✓ Auto-graded</span> Task ${taskNum} <span class="task-detail-meta">${scoreLabel}</span></summary>
-          <div class="task-detail-body">${rows}</div>
+          <summary>${badge} Task ${taskNum} <span class="task-detail-meta">${metaParts}</span></summary>
+          ${sections.join('')}
         </details>`;
       }).join('');
     }
