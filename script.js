@@ -938,7 +938,29 @@ function freezeTask(taskNum, checkFn) {
 // select, and radio-group inside it has a value, OR — for link-out tasks —
 // its confirm checkbox is ticked. Tasks with nothing to fill in are always complete.
 // ============================================
+// ---------- Mentor comments — shown to the student on their own work ----------
+// Runs automatically for every real student on every day page (wired into
+// initTaskFlow, not something each day file needs to call itself). Finds the
+// exact field a comment was left on — a writing box by its id, or a speaking
+// question by its data-field — and drops a visually distinct feedback box
+// right after it, matching mentor_comments to what the mentor dashboard saves.
+async function initMentorComments(userId, dayNumber) {
+  const sb = getSupabaseClient();
+  const { data: comments } = await sb.from('mentor_comments').select('field_id, comment').eq('student_id', userId).eq('day', dayNumber);
+  (comments || []).forEach(c => {
+    if (!c.comment || !c.comment.trim()) return;
+    const anchor = document.getElementById(c.field_id) || document.querySelector('[data-field="' + c.field_id + '"]');
+    if (!anchor) return;
+    if (anchor.parentElement.querySelector(':scope > .mentor-feedback-box')) return; // don't duplicate on re-run
+    const box = document.createElement('div');
+    box.className = 'mentor-feedback-box';
+    box.innerHTML = '<span class="mentor-feedback-label">💬 Mentor feedback</span>' + c.comment.replace(/</g, '&lt;');
+    anchor.insertAdjacentElement('afterend', box);
+  });
+}
+
 async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
+
   checkFns = checkFns || {};
   const isAdmin = currentUserRole === 'admin';
   let current = 1;
@@ -980,6 +1002,7 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
         if (taskContainer) autoAwardPoints(userId, dayNumber, taskContainer);
       }
     }
+    initMentorComments(userId, dayNumber);
   }
   // Resume right after the last completed task, or at 1 if nothing's done yet.
   current = 1;
