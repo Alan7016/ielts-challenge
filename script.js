@@ -872,7 +872,14 @@ async function saveTaskPoints(userId, day, category, points, extra) {
     updated_at: new Date().toISOString()
   };
   const res = await sb.from('points').upsert(payload, { onConflict: 'student_id,day,category' });
-  if (res.error) console.error('Points save failed:', res.error);
+  if (res.error) {
+    console.error('Points save failed:', res.error);
+    showSaveWarning();
+    setTimeout(async () => {
+      const retry = await sb.from('points').upsert(payload, { onConflict: 'student_id,day,category' });
+      if (!retry.error) showSaveRecovered();
+    }, 3000);
+  }
 }
 
 // Called right after a task locks in (see goNext()). Silently does nothing
