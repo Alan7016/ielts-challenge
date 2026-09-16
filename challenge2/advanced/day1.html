@@ -6,7 +6,7 @@
 <title>Day 1 — Advanced — IELTS Marathon 2.0</title>
 <link rel="stylesheet" href="../../style.css">
 </head>
-<body>
+<body class="wide-layout">
 
 <div class="hl-tools" id="hlTools">
   <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
@@ -172,11 +172,11 @@
       <p style="margin-top:26px;"><strong>Answer in your own words.</strong></p>
       <div class="card">
         <p>1. In your own words, explain what happens during the second stage of culture shock described in the article.</p>
-        <textarea class="no-check" placeholder="Write your answer here..." style="min-height:60px;"></textarea>
+        <textarea id="written-answer-1" class="no-check" placeholder="Write your answer here..." style="min-height:60px;"></textarea>
         <p style="margin-top:14px;">2. Why might someone feel irritable during this period, according to the article?</p>
-        <textarea class="no-check" placeholder="Write your answer here..." style="min-height:60px;"></textarea>
+        <textarea id="written-answer-2" class="no-check" placeholder="Write your answer here..." style="min-height:60px;"></textarea>
         <p style="margin-top:14px;">3. What advice does the article suggest for people going through culture shock?</p>
-        <textarea class="no-check" placeholder="Write your answer here..." style="min-height:60px;"></textarea>
+        <textarea id="written-answer-3" class="no-check" placeholder="Write your answer here..." style="min-height:60px;"></textarea>
       </div>
 
       <p style="margin-top:26px;"><strong>Write a short summary of the article in your own words. Write at least 150 words.</strong></p>
@@ -192,7 +192,7 @@
       <h2>Reading — Australian culture and culture shock</h2>
       <p class="task-sub">Work through the passage and questions below, just like a real computer-delivered IELTS reading test.</p>
       <div class="full-bleed" style="overflow:hidden;">
-        <iframe src="reading-culture-shock.html" style="width:100%; height:840px; border:none; display:block;" title="Reading: Australian culture and culture shock"></iframe>
+        <iframe id="reading-iframe-3" src="reading-culture-shock.html" style="width:100%; height:840px; border:none; display:block;" title="Reading: Australian culture and culture shock"></iframe>
       </div>
     </section>
 
@@ -374,7 +374,7 @@
       <h2>Reading — Third Culture Kids</h2>
       <p class="task-sub">Work through the passage and questions below.</p>
       <div class="full-bleed" style="overflow:hidden;">
-        <iframe src="reading-third-culture-kids.html" style="width:100%; height:840px; border:none; display:block;" title="Reading: Third Culture Kids"></iframe>
+        <iframe id="reading-iframe-6" src="reading-third-culture-kids.html" style="width:100%; height:840px; border:none; display:block;" title="Reading: Third Culture Kids"></iframe>
       </div>
     </section>
 
@@ -413,6 +413,8 @@
   requireAuth(function (profile, user) {
     initWordCounter('summary-response', 'summary-count');
     initCollapseToggle('stress-toggle', 'stress-answer', 'Show a possible answer', 'Hide possible answer');
+    initCdiReadingCapture(user.id, 1, 3, document.getElementById('reading-iframe-3'));
+    initCdiReadingCapture(user.id, 1, 6, document.getElementById('reading-iframe-6'));
 
     document.querySelectorAll('#task4 .phrase-toggle').forEach(btn => {
       btn.addEventListener('click', () => {
