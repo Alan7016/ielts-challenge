@@ -528,9 +528,64 @@ function initChunkToggle(toggleId, sampleId) {
 }
 
 // ---------- Comprehension quiz (pass a containerId so reading and listening quizzes score independently) ----------
+// ---------- Shared completion-gating for "Check answers" buttons ----------
+// Used by both checkAllAnswers and checkComprehension so every existing
+// "Check answers" button site-wide gets this behavior automatically, with
+// zero changes needed to any individual day file's HTML.
+function getCompletionStatus(container) {
+  const fields = [];
+  container.querySelectorAll('.q-item').forEach(item => {
+    fields.push({ el: item, filled: !!item.querySelector('input[type="radio"]:checked') });
+  });
+  container.querySelectorAll('.text-answer').forEach(input => {
+    fields.push({ el: input, filled: input.value.trim() !== '' });
+  });
+  const total = fields.length;
+  const answeredCount = fields.filter(f => f.filled).length;
+  const firstUnanswered = fields.find(f => !f.filled);
+  return { allFilled: answeredCount === total, firstUnanswered: firstUnanswered ? firstUnanswered.el : null, total, answeredCount };
+}
+
+function findCheckButton(containerId) {
+  return document.querySelector(`button[onclick*="'${containerId}'"]`);
+}
+
+function rejectIncompleteCheck(containerId, scoreId, status) {
+  const btn = findCheckButton(containerId);
+  if (btn) {
+    btn.classList.remove('shake-invalid');
+    void btn.offsetWidth;
+    btn.classList.add('shake-invalid');
+    setTimeout(() => btn.classList.remove('shake-invalid'), 600);
+  }
+  const scoreEl = document.getElementById(scoreId);
+  if (scoreEl) {
+    scoreEl.textContent = `⚠ Please answer every question first (${status.answeredCount}/${status.total} done)`;
+    scoreEl.style.color = '#dc2626';
+  }
+  if (status.firstUnanswered) {
+    status.firstUnanswered.classList.remove('shake-invalid-field');
+    void status.firstUnanswered.offsetWidth;
+    status.firstUnanswered.classList.add('shake-invalid-field');
+    setTimeout(() => status.firstUnanswered.classList.remove('shake-invalid-field'), 900);
+    status.firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function lockContainer(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.querySelectorAll('.text-answer').forEach(el => { el.disabled = true; });
+  container.querySelectorAll('input[type="radio"]').forEach(el => { el.disabled = true; });
+  const btn = findCheckButton(containerId);
+  if (btn) { btn.disabled = true; btn.textContent = '✓ Checked — locked'; }
+}
+
 function checkComprehension(containerId, scoreId) {
   const container = document.getElementById(containerId);
   if (!container) return;
+  const status = getCompletionStatus(container);
+  if (!status.allFilled) { rejectIncompleteCheck(containerId, scoreId, status); return; }
   const scope = container.querySelectorAll('.q-item');
 
   scope.forEach((item) => {
@@ -565,7 +620,9 @@ function checkComprehension(containerId, scoreId) {
     const total = scope.length;
     const correct = container.querySelectorAll('.q-item.correct').length;
     scoreEl.textContent = `Score: ${correct} / ${total}`;
+    scoreEl.style.color = '';
   }
+  lockContainer(containerId);
 }
 
 // ---------- Show/hide toggle (used for the listening transcript) ----------
@@ -614,6 +671,8 @@ function initGatedMistakeReveal(buttonId, answerBoxId, textareaSelector) {
 function checkAllAnswers(containerId, scoreId) {
   const container = document.getElementById(containerId);
   if (!container) return;
+  const status = getCompletionStatus(container);
+  if (!status.allFilled) { rejectIncompleteCheck(containerId, scoreId, status); return; }
   let total = 0;
   let correct = 0;
 
@@ -662,7 +721,8 @@ function checkAllAnswers(containerId, scoreId) {
   });
 
   const scoreEl = document.getElementById(scoreId);
-  if (scoreEl) scoreEl.textContent = `Score: ${correct} / ${total}`;
+  if (scoreEl) { scoreEl.textContent = `Score: ${correct} / ${total}`; scoreEl.style.color = ''; }
+  lockContainer(containerId);
 }
 
 // ============================================
@@ -1676,15 +1736,23 @@ function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
 }
 async function initRecordControl(box, userId, day, task, fieldId) {
-  if (currentUserRole === 'admin') {
+  if (currentUserRole === 'admin' || currentUserRole === 'mentor') {
     const recordBtn = box.querySelector('.record-btn');
     const statusEl = box.querySelector('.record-status');
-    if (recordBtn) { recordBtn.disabled = true; recordBtn.textContent = '● Recording disabled in admin preview'; }
+    if (recordBtn) { recordBtn.disabled = true; recordBtn.textContent = '● Recording disabled in staff preview'; }
     if (statusEl) { statusEl.textContent = ''; }
     return;
   }
   const sb = getSupabaseClient();
   const path = `${day}/${userId}/${fieldId}.webm`;
+
+  // Some apps' built-in browsers (Telegram, Instagram, etc.) block
+  // microphone access entirely — the Record button would otherwise just
+  // look dead with no explanation. Warn upfront rather than after a
+  // confusing silent failure.
+  if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== 'function') {
+    box.insertAdjacentHTML('afterbegin', `<p style="background:#fff3cd; color:#7c5a12; border-left:4px solid #d97706; padding:8px 12px; border-radius:6px; font-size:0.85rem; margin-bottom:10px;">⚠️ Recording may not work in this browser. If you opened this page inside Telegram, Instagram, or another app, tap the "···" or share icon and choose <strong>"Open in Safari"</strong> or <strong>"Open in Chrome"</strong> first.</p>`);
+  }
   const recordBtn = box.querySelector('.record-btn');
   const statusEl = box.querySelector('.record-status');
   const playerWrap = box.querySelector('.record-player');
@@ -1770,8 +1838,9 @@ async function initRecordControl(box, userId, day, task, fieldId) {
       try {
         stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       } catch (err) {
-        statusEl.textContent = 'Microphone access denied — check your browser permissions.';
+        statusEl.innerHTML = '⚠️ Microphone access was blocked. If you opened this page inside Telegram, Instagram, or another app, try opening it in Safari or Chrome directly instead — otherwise check your browser\'s microphone permissions for this site.';
         statusEl.style.color = 'var(--warn)';
+        statusEl.style.fontWeight = '600';
         return;
       }
 
