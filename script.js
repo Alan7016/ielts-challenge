@@ -966,8 +966,29 @@ function restoreField(fieldId, value) {
 // other task type uses — so mentors and the admin dashboard see it exactly
 // like any other graded task.
 // ============================================
-function initCdiReadingCapture(userId, day, taskNumber, iframeEl) {
+async function initCdiReadingCapture(userId, day, taskNumber, iframeEl) {
   if (!iframeEl) return;
+  if (currentUserRole === 'admin' || currentUserRole === 'mentor') return; // staff preview never writes or restricts
+
+  const sb = getSupabaseClient();
+
+  // Already completed in a previous session? Replace the live test with a
+  // locked summary instead of letting a refresh hand out a fresh attempt.
+  const { data: existing } = await sb.from('answers')
+    .select('is_correct')
+    .eq('student_id', userId).eq('day', day).eq('task', taskNumber)
+    .like('field_id', 'reading-q%');
+  if (existing && existing.length > 0) {
+    const correctCount = existing.filter(e => e.is_correct === true).length;
+    const total = existing.length;
+    const wrapper = iframeEl.closest('.full-bleed') || iframeEl.parentElement;
+    wrapper.innerHTML = `<div class="card" style="text-align:center; padding:40px 20px;">
+      <p style="font-size:1.1rem; font-weight:700; margin:0 0 8px;">✓ Reading completed</p>
+      <p style="color:var(--muted); margin:0;">You scored ${correctCount} / ${total}. This reading test can only be attempted once, so your original answers have been locked in.</p>
+    </div>`;
+    return;
+  }
+
   window.addEventListener('message', async (event) => {
     if (event.source !== iframeEl.contentWindow) return;
     const data = event.data;
