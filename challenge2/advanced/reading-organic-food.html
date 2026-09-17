@@ -28,9 +28,10 @@ function restore(){for(var n=1;n<=40;n++){if(!state[n])continue;if(multiGroups[n
 function answered(n){return !!state[n]||!!val(n)}
 function count(p){var r=ranges[p],c=0;for(var i=r[0];i<=r[1];i++)if(answered(i))c++;return c}
 function drawFooter(){save();var h='';[1].forEach(p=>{var r=ranges[p];h+='<div class="partnav"><button class="partlabel" data-part="'+p+'" disabled>Reading Passage 1</button>';if(p===active){h+='<div class="tiles">';for(var n=r[0];n<=r[1];n++)h+='<button class="tile '+(answered(n)?'answered':'')+'" data-q="'+n+'">'+n+'</button>';h+='</div>'}else h+='<span class="count">'+count(p)+' of '+(r[1]-r[0]+1)+'</span>';h+='</div>'});h+='<button class="review" id="review">OK</button>';footer.innerHTML=h}
-var progressTimer=null;
-function postProgress(){clearTimeout(progressTimer);progressTimer=setTimeout(function(){if(graded)return;var items=[];for(var n=1;n<=40;n++)if(state[n])items.push({n:n,value:state[n]});try{window.parent.postMessage({type:'cdi-reading-progress',items:items,active:active},'*')}catch(e){}},800)}
-document.addEventListener('change',()=>{save();drawFooter();postProgress()});document.addEventListener('input',()=>{save();drawFooter();postProgress()});
+function postProgress(){if(graded)return;var items=[];for(var n=1;n<=40;n++)if(state[n])items.push({n:n,value:state[n]});try{window.parent.postMessage({type:'cdi-reading-progress',items:items,active:active},'*')}catch(e){}}
+document.addEventListener('change',()=>{save();drawFooter();postProgress()});
+document.addEventListener('pagehide',()=>{save();postProgress()});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){save();postProgress()}});
 window.addEventListener('message',function(e){var d=e.data;if(!d||d.type!=='cdi-reading-restore')return;(d.items||[]).forEach(function(it){if(it.value)state[it.n]=it.value});active=d.active||1;if(d.graded){graded=true;var sc=0;for(var n=1;n<=13;n++)if(correct(n,state[n]||''))sc++;lastScore=sc}renderActive()});
 var lastScore=null;
 function renderActive(){left.innerHTML=passages[active];right.innerHTML=qhtml(active);restore();if(graded){regradeCurrent();right.insertAdjacentHTML('afterbegin','<div class="score">Your score: <b>'+lastScore+' / 13</b></div><p style="margin:-8px 0 18px;color:#555">Explanations with the exact location in the passage are shown below each answer.</p>')}drawFooter();left.scrollTop=right.scrollTop=0}
