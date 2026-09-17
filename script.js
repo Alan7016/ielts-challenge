@@ -1007,6 +1007,12 @@ async function initCdiReadingCapture(userId, day, taskNumber, iframeEl) {
     }
   }
 
+  // isTaskComplete() (in initTaskFlow) reads this to decide whether Next is
+  // enabled — it can't see inside the iframe's own document, so this flag
+  // is the only signal it has that the reading test is actually done.
+  iframeEl.dataset.cdiReadingDone = isCompleted ? 'true' : 'false';
+  if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+
   window.addEventListener('message', async (event) => {
     if (event.source !== iframeEl.contentWindow) return;
     const data = event.data;
@@ -1030,6 +1036,8 @@ async function initCdiReadingCapture(userId, day, taskNumber, iframeEl) {
     const pct = data.max ? (data.score / data.max * 100) : 0;
     await saveTaskPoints(userId, day, 'reading_listening', pctToPoints(pct), { percent: Math.round(pct) });
     await saveProgress(userId, day, taskNumber, true, false);
+    iframeEl.dataset.cdiReadingDone = 'true';
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
   });
 }
 
@@ -1134,6 +1142,14 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
     if (!container) return true;
     const confirmBox = container.querySelector('.confirm-row input[type="checkbox"]');
     if (confirmBox) return confirmBox.checked;
+
+    // CDI reading tests live inside an iframe, invisible to the plain-DOM
+    // checks below — without this they'd fall through as "nothing to fill
+    // in" and Next would be active before the student has even opened it.
+    // initCdiReadingCapture sets this dataset flag once a saved/completed
+    // result is confirmed (on load) or a fresh submission comes in.
+    const readingFrame = container.querySelector('iframe[id^="reading-iframe"]');
+    if (readingFrame) return readingFrame.dataset.cdiReadingDone === 'true';
 
     const questionBoxes = container.querySelectorAll('.question-box[data-field]');
     if (questionBoxes.length > 0) {
