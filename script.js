@@ -972,27 +972,58 @@ async function initCdiReadingCapture(userId, day, taskNumber, iframeEl) {
 
   const sb = getSupabaseClient();
 
-  // Already completed in a previous session? Replace the live test with a
-  // locked summary instead of letting a refresh hand out a fresh attempt.
+  // "Completed" means the task itself was marked done (i.e. the student
+  // clicked Submit inside the tool) — NOT just that some answer rows exist,
+  // since in-progress drafts are now saved as ungraded answer rows too.
+  const { data: prog } = await sb.from('progress')
+    .select('completed')
+    .eq('student_id', userId).eq('day', day).eq('task', taskNumber).eq('completed', true);
+  const isCompleted = !!(prog && prog.length > 0);
+
+  // Whatever's been saved so far — a finished attempt (with is_correct set)
+  // or an in-progress draft (is_correct null) — gets fed back into the tool
+  // once it loads, instead of showing a dead-end summary or a blank page.
   const { data: existing } = await sb.from('answers')
-    .select('is_correct')
+    .select('field_id, value, is_correct')
     .eq('student_id', userId).eq('day', day).eq('task', taskNumber)
     .like('field_id', 'reading-q%');
-  if (existing && existing.length > 0) {
-    const correctCount = existing.filter(e => e.is_correct === true).length;
-    const total = existing.length;
-    const wrapper = iframeEl.closest('.full-bleed') || iframeEl.parentElement;
-    wrapper.innerHTML = `<div class="card" style="text-align:center; padding:40px 20px;">
-      <p style="font-size:1.1rem; font-weight:700; margin:0 0 8px;">✓ Reading completed</p>
-      <p style="color:var(--muted); margin:0;">You scored ${correctCount} / ${total}. This reading test can only be attempted once, so your original answers have been locked in.</p>
-    </div>`;
-    return;
+
+  const restoreItems = (existing || [])
+    .map(row => ({ n: parseInt(row.field_id.replace('reading-q', ''), 10), value: row.value, correct: row.is_correct }))
+    .filter(it => !isNaN(it.n));
+
+  if (restoreItems.length > 0) {
+    const sendRestore = () => {
+      try { iframeEl.contentWindow.postMessage({ type: 'cdi-reading-restore', items: restoreItems, graded: isCompleted }, '*'); } catch (e) {}
+    };
+    let ready = false;
+    try { ready = iframeEl.contentDocument && iframeEl.contentDocument.readyState === 'complete'; } catch (e) {}
+    if (ready) sendRestore(); else iframeEl.addEventListener('load', sendRestore, { once: true });
+
+    if (isCompleted) {
+      const correctCount = restoreItems.filter(it => it.correct === true).length;
+      const wrapper = iframeEl.closest('.full-bleed') || iframeEl.parentElement;
+      wrapper.insertAdjacentHTML('beforebegin', `<p style="color:var(--muted); margin:0 0 10px;">✓ Completed — you scored ${correctCount} / ${restoreItems.length}. Reviewing your answers below (read-only).</p>`);
+    }
   }
 
   window.addEventListener('message', async (event) => {
     if (event.source !== iframeEl.contentWindow) return;
     const data = event.data;
-    if (!data || data.type !== 'cdi-reading-result') return;
+    if (!data) return;
+
+    // In-progress draft, saved silently so a refresh or a later session
+    // picks back up where the student left off. Skipped once the task is
+    // genuinely completed, since nothing should overwrite a locked result.
+    if (data.type === 'cdi-reading-progress') {
+      if (isCompleted) return;
+      for (const item of (data.items || [])) {
+        await saveAnswer(userId, day, taskNumber, 'reading-q' + item.n, item.value, null);
+      }
+      return;
+    }
+
+    if (data.type !== 'cdi-reading-result') return;
     for (const item of (data.items || [])) {
       await saveAnswer(userId, day, taskNumber, 'reading-q' + item.n, item.value, item.correct);
     }
