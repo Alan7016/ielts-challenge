@@ -1023,9 +1023,9 @@ async function initCdiReadingCapture(userId, day, taskNumber, iframeEl) {
     // genuinely completed, since nothing should overwrite a locked result.
     if (data.type === 'cdi-reading-progress') {
       if (isCompleted) return;
-      for (const item of (data.items || [])) {
-        await saveAnswer(userId, day, taskNumber, 'reading-q' + item.n, item.value, null);
-      }
+      await Promise.all((data.items || []).map(item =>
+        saveAnswer(userId, day, taskNumber, 'reading-q' + item.n, item.value, null)
+      ));
       return;
     }
 
