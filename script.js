@@ -1022,7 +1022,10 @@ async function initCdiReadingCapture(userId, day, taskNumber, iframeEl) {
     const { data: prog } = await sb.from('progress')
       .select('completed')
       .eq('student_id', userId).eq('day', day).eq('task', taskNumber).eq('completed', true);
-    isCompleted = !!(prog && prog.length > 0);
+    // Never downgrade back to false — if a live submission already flipped
+    // this true (via the message listener above) while this query was
+    // still in flight, that result stands. Only ever moves false -> true here.
+    if (prog && prog.length > 0) isCompleted = true;
 
     // Whatever's been saved so far — a finished attempt (with is_correct set)
     // or an in-progress draft (is_correct null) — gets fed back into the tool
