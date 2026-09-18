@@ -1012,9 +1012,9 @@ async function initCdiReadingCapture(userId, day, taskNumber, iframeEl) {
 
     if (data.type !== 'cdi-reading-result') return;
     try {
-      for (const item of (data.items || [])) {
-        await saveAnswer(userId, day, taskNumber, 'reading-q' + item.n, item.value, item.correct);
-      }
+      await Promise.all((data.items || []).map(item =>
+        saveAnswer(userId, day, taskNumber, 'reading-q' + item.n, item.value, item.correct)
+      ));
       const pct = data.max ? (data.score / data.max * 100) : 0;
       await saveTaskPoints(userId, day, 'reading_listening', pctToPoints(pct), { percent: Math.round(pct) });
       await saveProgress(userId, day, taskNumber, true, false);
