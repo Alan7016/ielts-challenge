@@ -33,7 +33,7 @@ function postProgress(){if(graded)return;var items=[];for(var n=1;n<=40;n++)if(s
 function postProgressSoon(){clearTimeout(inputTimer);inputTimer=setTimeout(postProgress,500)}
 function checkAutoGrade(){if(graded)return;for(var n=1;n<=13;n++){if(!state[n])return;}grade();}
 document.addEventListener('change',()=>{save();drawFooter();checkAutoGrade();postProgress()});
-document.addEventListener('input',()=>{save();drawFooter();checkAutoGrade();postProgressSoon()});
+document.addEventListener('input',()=>{save();drawFooter();postProgressSoon()});
 document.addEventListener('pagehide',()=>{clearTimeout(inputTimer);save();postProgress()});
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){clearTimeout(inputTimer);save();postProgress()}});
 window.addEventListener('message',function(e){var d=e.data;if(!d||d.type!=='cdi-reading-restore')return;(d.items||[]).forEach(function(it){if(it.value)state[it.n]=it.value});active=d.active||1;if(d.graded){graded=true;var sc=0;for(var n=1;n<=13;n++)if(correct(n,state[n]||''))sc++;lastScore=sc}renderActive()});
