@@ -1199,7 +1199,12 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
     // These were never required before, which is exactly the bug: a task
     // made entirely of "write your answer" textareas had nothing here to
     // check and fell through as "nothing to fill in".
-    const texts = container.querySelectorAll('input.text-answer, input[type="text"]:not(.no-check), textarea.text-answer, textarea.no-check:not(.notes-box)');
+    // Every field meant to hold a written answer — regardless of whether
+    // it's a single-line input or a textarea. .no-check inputs were
+    // previously excluded here (only .no-check textareas were fixed
+    // earlier), which is exactly the inconsistency that let ungraded
+    // listening-form inputs slip through with Next already active.
+    const texts = container.querySelectorAll('input.text-answer, input[type="text"]:not(.notes-box), textarea.text-answer, textarea.no-check:not(.notes-box)');
     for (const t of texts) { if (t.value.trim() === '') return false; }
     const selects = container.querySelectorAll('select');
     for (const s of selects) { if (s.value === '') return false; }
