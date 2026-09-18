@@ -660,6 +660,7 @@ function initGatedMistakeReveal(buttonId, answerBoxId, textareaSelector) {
   refresh();
 
   btn.addEventListener('click', () => {
+    if (window.__flushAllPendingSaves) window.__flushAllPendingSaves();
     box.style.display = 'block';
     textareas.forEach(t => { t.readOnly = true; });
     btn.disabled = true;
@@ -1244,6 +1245,11 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
         );
         if (!sure) return;
       }
+      // Guarantee whatever was just typed is actually saved before the
+      // fields get disabled below — without this, a save still sitting in
+      // its debounce window could lose the race against freezeTask, leaving
+      // a field that's both empty AND locked with no way to fix it.
+      await flushPendingSaves(current);
       lockedTasks[current] = true;
       doneTasks[current] = true;
       await saveProgress(userId, dayNumber, current, true, true);
@@ -1280,9 +1286,37 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
 
   // ---- Autosave: any field the student fills in gets written to Supabase ----
   const debTimers = {};
+  const pendingSaves = {}; // fieldId -> the save call waiting on its debounce timer
   function fieldKeyFor(el) {
     if (el.type === 'radio') return 'radio_' + el.name;
     return el.id || null;
+  }
+  // Called right before a task gets locked (Next/Finish), so a save that's
+  // still sitting in its 500ms debounce window doesn't get raced by the
+  // freeze that follows — otherwise the field can end up both disabled AND
+  // never actually saved, which looks like the answer was silently deleted.
+  async function flushPendingSaves(taskNum) {
+    const container = document.getElementById('task' + taskNum);
+    if (!container) return;
+    const flushes = [];
+    container.querySelectorAll('input, select, textarea').forEach(el => {
+      const fieldId = fieldKeyFor(el);
+      if (fieldId && pendingSaves[fieldId]) {
+        clearTimeout(debTimers[fieldId]);
+        flushes.push(pendingSaves[fieldId]());
+      }
+    });
+    // Radio groups: fieldKeyFor above only catches whichever radio the
+    // listener last fired on, so also flush by name in case a different
+    // one in the same group is what's actually pending.
+    container.querySelectorAll('input[type="radio"][name]').forEach(el => {
+      const fieldId = 'radio_' + el.name;
+      if (pendingSaves[fieldId]) {
+        clearTimeout(debTimers[fieldId]);
+        flushes.push(pendingSaves[fieldId]());
+      }
+    });
+    await Promise.all(flushes);
   }
   document.getElementById('content').addEventListener('input', handleFieldChange);
   document.getElementById('content').addEventListener('change', handleFieldChange);
@@ -1299,9 +1333,29 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
     const value = el.type === 'checkbox' ? (el.checked ? 'true' : 'false') : el.value;
     const isCorrect = computeIsCorrect(el);
     clearTimeout(debTimers[fieldId]);
-    debTimers[fieldId] = setTimeout(() => saveAnswer(userId, dayNumber, taskNum, fieldId, value, isCorrect), 500);
+    const doSave = () => {
+      delete pendingSaves[fieldId];
+      return saveAnswer(userId, dayNumber, taskNum, fieldId, value, isCorrect);
+    };
+    pendingSaves[fieldId] = doSave;
+    debTimers[fieldId] = setTimeout(doSave, 500);
     refreshNextButton();
   }
+
+  // Same protection as flushPendingSaves above, but for a plain refresh or
+  // tab close with no Next click at all — the debounce window is the same
+  // vulnerability either way.
+  function flushAllPendingSaves() {
+    Object.keys(pendingSaves).forEach(fieldId => {
+      clearTimeout(debTimers[fieldId]);
+      pendingSaves[fieldId]();
+    });
+  }
+  window.addEventListener('pagehide', flushAllPendingSaves);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushAllPendingSaves(); });
+  // initGatedMistakeReveal (outside this closure) locks its own textareas
+  // read-only independently of Next/freezeTask — this lets it flush too.
+  window.__flushAllPendingSaves = flushAllPendingSaves;
 
   showTask(current);
   initHighlightTool(dayNumber);
