@@ -970,49 +970,17 @@ async function initCdiReadingCapture(userId, day, taskNumber, iframeEl) {
   if (!iframeEl) return;
   if (currentUserRole === 'admin' || currentUserRole === 'mentor') return; // staff preview never writes or restricts
 
-  const sb = getSupabaseClient();
+  // Safe default: never block Next on this check. It only gets switched to
+  // 'false' below once we've positively confirmed (no errors) that this is
+  // a genuinely fresh, unsubmitted attempt. If the lookup below is slow,
+  // fails, or errors out for any reason, Next stays exactly as permissive
+  // as it always was rather than getting stuck disabled forever.
+  iframeEl.dataset.cdiReadingDone = 'true';
 
-  // "Completed" means the task itself was marked done (i.e. the student
-  // clicked Submit inside the tool) — NOT just that some answer rows exist,
-  // since in-progress drafts are now saved as ungraded answer rows too.
-  const { data: prog } = await sb.from('progress')
-    .select('completed')
-    .eq('student_id', userId).eq('day', day).eq('task', taskNumber).eq('completed', true);
-  const isCompleted = !!(prog && prog.length > 0);
-
-  // Whatever's been saved so far — a finished attempt (with is_correct set)
-  // or an in-progress draft (is_correct null) — gets fed back into the tool
-  // once it loads, instead of showing a dead-end summary or a blank page.
-  const { data: existing } = await sb.from('answers')
-    .select('field_id, value, is_correct')
-    .eq('student_id', userId).eq('day', day).eq('task', taskNumber)
-    .like('field_id', 'reading-q%');
-
-  const restoreItems = (existing || [])
-    .map(row => ({ n: parseInt(row.field_id.replace('reading-q', ''), 10), value: row.value, correct: row.is_correct }))
-    .filter(it => !isNaN(it.n));
-
-  if (restoreItems.length > 0) {
-    const sendRestore = () => {
-      try { iframeEl.contentWindow.postMessage({ type: 'cdi-reading-restore', items: restoreItems, graded: isCompleted }, '*'); } catch (e) {}
-    };
-    let ready = false;
-    try { ready = iframeEl.contentDocument && iframeEl.contentDocument.readyState === 'complete'; } catch (e) {}
-    if (ready) sendRestore(); else iframeEl.addEventListener('load', sendRestore, { once: true });
-
-    if (isCompleted) {
-      const correctCount = restoreItems.filter(it => it.correct === true).length;
-      const wrapper = iframeEl.closest('.full-bleed') || iframeEl.parentElement;
-      wrapper.insertAdjacentHTML('beforebegin', `<p style="color:var(--muted); margin:0 0 10px;">✓ Completed — you scored ${correctCount} / ${restoreItems.length}. Reviewing your answers below (read-only).</p>`);
-    }
-  }
-
-  // isTaskComplete() (in initTaskFlow) reads this to decide whether Next is
-  // enabled — it can't see inside the iframe's own document, so this flag
-  // is the only signal it has that the reading test is actually done.
-  iframeEl.dataset.cdiReadingDone = isCompleted ? 'true' : 'false';
-  if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
-
+  // The message listener is registered unconditionally, up front, so a
+  // live submission is always captured even if the completion check below
+  // never finishes or throws.
+  let isCompleted = false;
   window.addEventListener('message', async (event) => {
     if (event.source !== iframeEl.contentWindow) return;
     const data = event.data;
@@ -1023,22 +991,76 @@ async function initCdiReadingCapture(userId, day, taskNumber, iframeEl) {
     // genuinely completed, since nothing should overwrite a locked result.
     if (data.type === 'cdi-reading-progress') {
       if (isCompleted) return;
-      await Promise.all((data.items || []).map(item =>
-        saveAnswer(userId, day, taskNumber, 'reading-q' + item.n, item.value, null)
-      ));
+      try {
+        await Promise.all((data.items || []).map(item =>
+          saveAnswer(userId, day, taskNumber, 'reading-q' + item.n, item.value, null)
+        ));
+      } catch (e) {}
       return;
     }
 
     if (data.type !== 'cdi-reading-result') return;
-    for (const item of (data.items || [])) {
-      await saveAnswer(userId, day, taskNumber, 'reading-q' + item.n, item.value, item.correct);
-    }
-    const pct = data.max ? (data.score / data.max * 100) : 0;
-    await saveTaskPoints(userId, day, 'reading_listening', pctToPoints(pct), { percent: Math.round(pct) });
-    await saveProgress(userId, day, taskNumber, true, false);
+    try {
+      for (const item of (data.items || [])) {
+        await saveAnswer(userId, day, taskNumber, 'reading-q' + item.n, item.value, item.correct);
+      }
+      const pct = data.max ? (data.score / data.max * 100) : 0;
+      await saveTaskPoints(userId, day, 'reading_listening', pctToPoints(pct), { percent: Math.round(pct) });
+      await saveProgress(userId, day, taskNumber, true, false);
+    } catch (e) {}
+    isCompleted = true;
     iframeEl.dataset.cdiReadingDone = 'true';
     if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
   });
+
+  try {
+    const sb = getSupabaseClient();
+
+    // "Completed" means the task itself was marked done (i.e. the student
+    // clicked Submit inside the tool) — NOT just that some answer rows exist,
+    // since in-progress drafts are now saved as ungraded answer rows too.
+    const { data: prog } = await sb.from('progress')
+      .select('completed')
+      .eq('student_id', userId).eq('day', day).eq('task', taskNumber).eq('completed', true);
+    isCompleted = !!(prog && prog.length > 0);
+
+    // Whatever's been saved so far — a finished attempt (with is_correct set)
+    // or an in-progress draft (is_correct null) — gets fed back into the tool
+    // once it loads, instead of showing a dead-end summary or a blank page.
+    const { data: existing } = await sb.from('answers')
+      .select('field_id, value, is_correct')
+      .eq('student_id', userId).eq('day', day).eq('task', taskNumber)
+      .like('field_id', 'reading-q%');
+
+    const restoreItems = (existing || [])
+      .map(row => ({ n: parseInt(row.field_id.replace('reading-q', ''), 10), value: row.value, correct: row.is_correct }))
+      .filter(it => !isNaN(it.n));
+
+    if (restoreItems.length > 0) {
+      const sendRestore = () => {
+        try { iframeEl.contentWindow.postMessage({ type: 'cdi-reading-restore', items: restoreItems, graded: isCompleted }, '*'); } catch (e) {}
+      };
+      let ready = false;
+      try { ready = iframeEl.contentDocument && iframeEl.contentDocument.readyState === 'complete'; } catch (e) {}
+      if (ready) sendRestore(); else iframeEl.addEventListener('load', sendRestore, { once: true });
+
+      if (isCompleted) {
+        const correctCount = restoreItems.filter(it => it.correct === true).length;
+        const wrapper = iframeEl.closest('.full-bleed') || iframeEl.parentElement;
+        wrapper.insertAdjacentHTML('beforebegin', `<p style="color:var(--muted); margin:0 0 10px;">✓ Completed — you scored ${correctCount} / ${restoreItems.length}. Reviewing your answers below (read-only).</p>`);
+      }
+    }
+
+    // Only now, having positively confirmed there's no completed attempt on
+    // record, do we actually gate Next. Any error above skips this line
+    // entirely and the safe default from the top of the function stands.
+    iframeEl.dataset.cdiReadingDone = isCompleted ? 'true' : 'false';
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  } catch (e) {
+    // DB lookup failed — leave the safe default (Next enabled) in place
+    // rather than stranding the student on a task they may have already
+    // finished in a previous session.
+  }
 }
 
 // Disables every interactive element in a task so a completed task can be
