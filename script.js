@@ -1179,7 +1179,13 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
       return true;
     }
 
-    const texts = container.querySelectorAll('input.text-answer, input[type="text"]:not(.no-check)');
+    // Plain <input> text fields, PLUS free-answer textareas — every
+    // .no-check textarea except .notes-box (which is an optional scratch
+    // pad for jotting ideas before recording speech, never a real answer).
+    // These were never required before, which is exactly the bug: a task
+    // made entirely of "write your answer" textareas had nothing here to
+    // check and fell through as "nothing to fill in".
+    const texts = container.querySelectorAll('input.text-answer, input[type="text"]:not(.no-check), textarea.text-answer, textarea.no-check:not(.notes-box)');
     for (const t of texts) { if (t.value.trim() === '') return false; }
     const selects = container.querySelectorAll('select');
     for (const s of selects) { if (s.value === '') return false; }
