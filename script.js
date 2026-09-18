@@ -8,7 +8,17 @@
 // onReady receives the logged-in user's profile row (full_name, role, group_id).
 let _sbClient = null;
 function getSupabaseClient() {
-  if (!_sbClient) _sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  // keepalive: true tells the browser this request must be allowed to
+  // finish even if the page is being unloaded right now (a refresh, a tab
+  // close). Without it, a save that's correctly in flight can still be
+  // killed mid-request by the very refresh that triggered it — the fix in
+  // goNext()/flushPendingSaves gets the save started in time, but only this
+  // makes the browser actually let it land.
+  if (!_sbClient) {
+    _sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+      global: { fetch: (url, options = {}) => fetch(url, { ...options, keepalive: true }) }
+    });
+  }
   return _sbClient;
 }
 
