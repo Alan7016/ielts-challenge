@@ -2013,7 +2013,18 @@ async function initRecordControl(box, userId, day, task, fieldId) {
       try {
         stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       } catch (err) {
-        statusEl.innerHTML = '⚠️ Microphone access was blocked. If you opened this page inside Telegram, Instagram, or another app, try opening it in Safari or Chrome directly instead — otherwise check your browser\'s microphone permissions for this site.';
+        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+          // This is the case a plain refresh can never fix: once a site's
+          // mic permission has been explicitly denied, the browser won't
+          // even show the prompt again until the student resets it manually.
+          statusEl.innerHTML = '⚠️ This browser has microphone access blocked for this site — refreshing the page will <u>not</u> fix this on its own. On a phone: tap the padlock/site-info icon next to the address bar → Permissions (or Site settings) → turn Microphone <strong>on</strong> → then reload the page. If you opened this link inside Telegram, Instagram, or another app, tap the "···" or share icon and choose <strong>"Open in Safari"</strong> or <strong>"Open in Chrome"</strong> instead — in-app browsers often block the microphone permanently and can\'t be fixed from inside the app.';
+        } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+          statusEl.innerHTML = '⚠️ No microphone was found on this device. If you\'re using a laptop with an external mic, make sure it\'s plugged in and try again.';
+        } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+          statusEl.innerHTML = '⚠️ Your microphone seems to be in use by another app (a call, another tab, etc.). Close anything else that might be using it and try again.';
+        } else {
+          statusEl.innerHTML = '⚠️ Microphone access was blocked. If you opened this page inside Telegram, Instagram, or another app, try opening it in Safari or Chrome directly instead — otherwise check your browser\'s microphone permissions for this site.';
+        }
         statusEl.style.color = 'var(--warn)';
         statusEl.style.fontWeight = '600';
         return;
