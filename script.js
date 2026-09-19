@@ -2044,7 +2044,31 @@ async function initRecordControl(box, userId, day, task, fieldId) {
         return;
       }
       mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
-      mediaRecorder.start();
+      // Runtime errors after start() (hardware dropped, etc.) — without this,
+      // the button just silently stays stuck on "Record" with no explanation.
+      mediaRecorder.onerror = (e) => {
+        clearInterval(timerInterval);
+        statusEl.textContent = 'Recording stopped unexpectedly — please try again. If this keeps happening, try a different browser.';
+        statusEl.style.color = 'var(--warn)';
+        recordBtn.disabled = false;
+        recordBtn.dataset.state = 'idle';
+        recordBtn.textContent = '● Record';
+        recordBtn.classList.remove('recording');
+        stream.getTracks().forEach(t => t.stop());
+      };
+      // start() itself was previously unguarded — on some devices/browsers
+      // this throws even though permission was granted and the recorder
+      // constructed fine, and with no catch here the button never updates
+      // at all: permission genuinely granted, then total silent failure.
+      try {
+        mediaRecorder.start();
+      } catch (err) {
+        statusEl.textContent = 'Could not start recording on this device — please try a different browser, or update your current one to the latest version.';
+        statusEl.style.color = 'var(--warn)';
+        statusEl.style.fontWeight = '600';
+        stream.getTracks().forEach(t => t.stop());
+        return;
+      }
 
       seconds = 0;
       recordBtn.dataset.state = 'recording';
@@ -2062,12 +2086,37 @@ async function initRecordControl(box, userId, day, task, fieldId) {
       recordBtn.disabled = true;
       recordBtn.textContent = 'Uploading…';
 
-      mediaRecorder.stop();
+      try {
+        mediaRecorder.stop();
+      } catch (err) {
+        statusEl.textContent = 'Something went wrong finishing the recording — please refresh and try again.';
+        statusEl.style.color = 'var(--warn)';
+        recordBtn.disabled = false;
+        recordBtn.dataset.state = 'idle';
+        recordBtn.textContent = '● Record';
+        recordBtn.classList.remove('recording');
+        mediaRecorder.stream.getTracks().forEach(t => t.stop());
+        return;
+      }
       mediaRecorder.stream.getTracks().forEach(t => t.stop());
-      await new Promise(resolve => { mediaRecorder.onstop = resolve; });
+      // onstop should always fire, but if it somehow doesn't, this stops the
+      // button from being stuck on "Uploading…" forever with no way out.
+      await Promise.race([
+        new Promise(resolve => { mediaRecorder.onstop = resolve; }),
+        new Promise(resolve => setTimeout(resolve, 5000))
+      ]);
 
       const recordedMime = mediaRecorder.mimeType || 'audio/webm';
       const blob = new Blob(chunks, { type: recordedMime });
+      if (blob.size === 0) {
+        statusEl.textContent = 'The recording came out empty — please try again.';
+        statusEl.style.color = 'var(--warn)';
+        recordBtn.disabled = false;
+        recordBtn.dataset.state = 'idle';
+        recordBtn.textContent = '● Record';
+        recordBtn.classList.remove('recording');
+        return;
+      }
       await attemptSubmit(blob, recordedMime);
     }
   });
