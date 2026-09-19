@@ -14,9 +14,22 @@ function getSupabaseClient() {
   // killed mid-request by the very refresh that triggered it — the fix in
   // goNext()/flushPendingSaves gets the save started in time, but only this
   // makes the browser actually let it land.
+  //
+  // IMPORTANT: browsers cap the total body size of a keepalive request at
+  // ~64KB. That's plenty for a text answer, but a speaking recording longer
+  // than a couple of seconds blows straight past it — with keepalive on,
+  // the browser just kills the upload outright, which looked like "upload
+  // failed" for any recording longer than 2-3 seconds. So keepalive is only
+  // applied to the small table writes (answers/progress/points), never to
+  // storage uploads (audio files, or anything else in Supabase Storage).
   if (!_sbClient) {
     _sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-      global: { fetch: (url, options = {}) => fetch(url, { ...options, keepalive: true }) }
+      global: {
+        fetch: (url, options = {}) => {
+          const isStorageUpload = typeof url === 'string' && url.includes('/storage/v1/object/');
+          return fetch(url, isStorageUpload ? options : { ...options, keepalive: true });
+        }
+      }
     });
   }
   return _sbClient;
