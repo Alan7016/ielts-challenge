@@ -420,40 +420,39 @@ function setupListeningTimer(frame){
       }
 
       var started = false;
-      function startWithTotal(totalSeconds){
-        if(started || settled) return;
-        started = true;
-        settled = true;
-        skipBtn.style.display = 'none';
-        loading.style.display = 'none';
-        beginListeningCountdown(Math.ceil(totalSeconds));
-        // Try to start playback automatically — if the browser blocks it,
-        // the test's own play button is still right there for the student.
-        audio.play().catch(function(){});
-      }
-
-      // Prefer the bridge that reports the TRUE total across every audio
-      // part — audio.duration alone only ever reflects whichever single
-      // part is currently loaded, which would set the timer to a fraction
-      // of the real listening length and cut the section short well
-      // before the student has heard everything. Fall back to the old
-      // single-file behavior only if that bridge isn't present.
-      if(typeof win.__mockGetTotalDuration === 'function'){
-        win.__mockGetTotalDuration().then(function(total){
-          if(total && isFinite(total) && total > 0) startWithTotal(total);
-          else if(audio.duration) startWithTotal(audio.duration);
-        }).catch(function(){
-          if(audio.duration) startWithTotal(audio.duration);
-        });
-      } else {
-        function goWithDuration(){
-          if(started || settled) return;
-          if(!audio.duration || isNaN(audio.duration) || !isFinite(audio.duration)) return;
-          startWithTotal(audio.duration);
+      // The listening test's audio is usually split across several files
+      // (real sections, or files split purely for upload-size limits).
+      // Pre-measuring every part's total length up front meant repeatedly
+      // reassigning the SAME element's source in a tight burst — which
+      // turned out to be unreliable in practice: sometimes the browser
+      // aborted a student's play() click because a reassignment landed a
+      // moment later, and on other runs the element just stopped firing
+      // events entirely with no error at all. So this no longer
+      // pre-measures anything: the timer starts with just the first
+      // part's own real duration and extends itself by each next part's
+      // duration exactly when that part naturally loads for real playback
+      // (the content file's own 'ended' handler advances audio.src when
+      // one part finishes) — nothing here ever touches audio.src itself,
+      // so there's no reassignment burst and no race to lose.
+      var lastHandledSrc = null;
+      function onMetadata(){
+        if(audio.src === lastHandledSrc) return; // browsers can fire this twice for one load
+        lastHandledSrc = audio.src;
+        if(!started){
+          started = true;
+          settled = true;
+          skipBtn.style.display = 'none';
+          loading.style.display = 'none';
+          beginListeningCountdown(Math.ceil(audio.duration));
+          // Try to start playback automatically — if the browser blocks it,
+          // the test's own play button is still right there for the student.
+          audio.play().catch(function(){});
+        } else {
+          extendTimer(audio.duration);
         }
-        if(audio.readyState >= 1 && audio.duration) goWithDuration();
-        audio.addEventListener('loadedmetadata', goWithDuration);
       }
+      audio.addEventListener('loadedmetadata', onMetadata);
+      if(audio.readyState >= 1 && audio.duration) onMetadata();
       // Generous safety net in case nothing above ever resolves.
       setTimeout(function(){ if(!started) fallback(); }, 15000);
     } catch(e){
@@ -703,6 +702,13 @@ function startTimer(seconds, onZero, sectionName){
   }, 1000);
 }
 function stopTimer(){ if(timerInterval) clearInterval(timerInterval); timerInterval = null; }
+function extendTimer(additionalSeconds){
+  // Just adds to the plain counter setInterval is already decrementing —
+  // no need to stop/restart anything, the running countdown picks up the
+  // extra time on its very next tick.
+  timerSeconds += Math.ceil(additionalSeconds);
+  updateTimerDisplay();
+}
 function updateTimerDisplay(){
   var m = Math.floor(Math.max(0,timerSeconds)/60);
   var s = Math.max(0,timerSeconds)%60;
