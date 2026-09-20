@@ -110,10 +110,14 @@
     let html = '';
     for (let d = 1; d <= cfg.totalDays; d++) {
       const isPublished = liveDays.includes(d);
-      const isEarned = d === 1 || completedDays.has(d - 1);
+      const isMock = cfg.mockDays.includes(d);
+      // Mock days are intentionally open regardless of the previous day's
+      // completion — this first mock in particular has no such dependency.
+      // A later mock could be made to depend on a specific day by adding
+      // that logic here, but the default is open, not gated.
+      const isEarned = isMock || d === 1 || completedDays.has(d - 1);
       const isOpen = isPublished && isEarned;
       const isFinish = d === cfg.totalDays;
-      const isMock = cfg.mockDays.includes(d);
       if (isOpen) {
         html += `<a class="day-chip open${isFinish ? ' finish' : ''}${isMock ? ' mock' : ''}" href="${cfg.folder}/day${d}.html">
           <span class="num">${String(d).padStart(2, '0')}</span>
