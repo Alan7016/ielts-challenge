@@ -420,21 +420,41 @@ function setupListeningTimer(frame){
       }
 
       var started = false;
-      function goWithDuration(){
+      function startWithTotal(totalSeconds){
         if(started || settled) return;
-        if(!audio.duration || isNaN(audio.duration) || !isFinite(audio.duration)) return;
         started = true;
         settled = true;
         skipBtn.style.display = 'none';
         loading.style.display = 'none';
-        beginListeningCountdown(Math.ceil(audio.duration));
+        beginListeningCountdown(Math.ceil(totalSeconds));
         // Try to start playback automatically — if the browser blocks it,
         // the test's own play button is still right there for the student.
         audio.play().catch(function(){});
       }
-      if(audio.readyState >= 1 && audio.duration) goWithDuration();
-      audio.addEventListener('loadedmetadata', goWithDuration);
-      // Generous safety net in case metadata never fires for some reason.
+
+      // Prefer the bridge that reports the TRUE total across every audio
+      // part — audio.duration alone only ever reflects whichever single
+      // part is currently loaded, which would set the timer to a fraction
+      // of the real listening length and cut the section short well
+      // before the student has heard everything. Fall back to the old
+      // single-file behavior only if that bridge isn't present.
+      if(typeof win.__mockGetTotalDuration === 'function'){
+        win.__mockGetTotalDuration().then(function(total){
+          if(total && isFinite(total) && total > 0) startWithTotal(total);
+          else if(audio.duration) startWithTotal(audio.duration);
+        }).catch(function(){
+          if(audio.duration) startWithTotal(audio.duration);
+        });
+      } else {
+        function goWithDuration(){
+          if(started || settled) return;
+          if(!audio.duration || isNaN(audio.duration) || !isFinite(audio.duration)) return;
+          startWithTotal(audio.duration);
+        }
+        if(audio.readyState >= 1 && audio.duration) goWithDuration();
+        audio.addEventListener('loadedmetadata', goWithDuration);
+      }
+      // Generous safety net in case nothing above ever resolves.
       setTimeout(function(){ if(!started) fallback(); }, 15000);
     } catch(e){
       if(attempts < 20){ setTimeout(attemptFind, 1000); return; }
@@ -474,8 +494,16 @@ function finishListening(){
     var doc = frame.contentWindow.document;
     var audio = doc.getElementById('global-audio-player');
     if(audio) audio.pause();
-    var deliverBtn = doc.getElementById('deliver-button');
-    if(deliverBtn && !deliverBtn.classList.contains('success')) deliverBtn.click();
+    // Prefer the silent-grade bridge (grades and records everything without
+    // ever showing the results modal). Falls back to the old click-based
+    // approach only if that bridge isn't present for some reason — that
+    // fallback DOES reveal answers, so it's a last resort, not the norm.
+    if(typeof frame.contentWindow.__mockSilentGrade === 'function'){
+      frame.contentWindow.__mockSilentGrade();
+    } else {
+      var deliverBtn = doc.getElementById('deliver-button');
+      if(deliverBtn && !deliverBtn.classList.contains('success')) deliverBtn.click();
+    }
 
     var summary = doc.getElementById('score-summary');
     var m = summary ? summary.textContent.match(/scored (\d+) out of (\d+) \(Band ([\d.]+)\)/) : null;
