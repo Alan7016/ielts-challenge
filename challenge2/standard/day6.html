@@ -134,6 +134,7 @@
           <div class="rtab active" data-tab="listening" onclick="switchResultsTab('listening',this)">🎧 Listening</div>
           <div class="rtab" data-tab="reading" onclick="switchResultsTab('reading',this)">📖 Reading</div>
           <div class="rtab" data-tab="writing" onclick="switchResultsTab('writing',this)">✏️ Writing</div>
+          <div class="rtab" data-tab="speaking" onclick="switchResultsTab('speaking',this)">🎤 Speaking</div>
         </div>
         <div id="resultsTabContent"></div>
       </div>
@@ -337,7 +338,8 @@ function calcOverallBand(rec){
   var l = bandNum(rec.listening_band);
   var r = bandNum(rec.reading_band);
   var w = bandNum(rec.essay_band);
-  var parts = [l, r, w].filter(function(x){ return x !== null; });
+  var s = bandNum(rec.speaking_band);
+  var parts = [l, r, w, s].filter(function(x){ return x !== null; });
   if(parts.length === 0) return null;
   var avg = parts.reduce(function(a,b){return a+b;}, 0) / parts.length;
   return roundToIELTSBand(avg);
@@ -755,7 +757,8 @@ function renderSummaryCards(rec){
   var cards = [
     {label:'Listening', val: (rec.listening_score!==null&&rec.listening_score!==undefined) ? rec.listening_score+'/'+(rec.listening_total||20) : '—', sub: rec.listening_band?'Band '+rec.listening_band:''},
     {label:'Reading', val: (rec.reading_score!==null&&rec.reading_score!==undefined) ? rec.reading_score+'/'+(rec.reading_total||13) : '—', sub: rec.reading_band?'Band '+rec.reading_band:''},
-    {label:'Writing', val: rec.essay_band ? 'Band '+rec.essay_band : '—', sub: ''}
+    {label:'Writing', val: rec.essay_band ? 'Band '+rec.essay_band : '—', sub: ''},
+    {label:'Speaking', val: rec.speaking_band ? 'Band '+rec.speaking_band : '—', sub: ''}
   ];
   var html = cards.map(function(c){
     return '<div class="summary-card"><div class="sc-label">'+c.label+'</div><div class="sc-value">'+c.val+'</div>'+(c.sub?'<div style="font-size:12px;color:var(--muted);margin-top:2px;">'+c.sub+'</div>':'')+'</div>';
@@ -777,6 +780,8 @@ function switchResultsTab(tab, el){
     content.innerHTML = buildAnswerTable(rec.reading_answers || {}, rec.reading_key_snapshot || {}, rec.reading_total || 13);
   } else if(tab === 'writing'){
     content.innerHTML = buildEssayView(rec.essay_text, rec.essay_words, rec.essay_feedback, rec.essay_band);
+  } else if(tab === 'speaking'){
+    content.innerHTML = buildSpeakingView(rec.speaking_feedback, rec.speaking_band);
   }
 }
 window.switchResultsTab = switchResultsTab;
