@@ -1477,6 +1477,35 @@
             switchToPart(1);
             goToQuestion(1);
         });
+
+        // Reports the TRUE total listening duration (sum of every audio
+        // part) to the mock exam orchestrator. The visible audio element's
+        // own .duration only ever reflects whichever single part is
+        // currently loaded — using that alone for the exam's countdown
+        // would cut the section short by however long the remaining parts
+        // run, well before the student has heard everything.
+        window.__mockGetTotalDuration = function () {
+            return new Promise(function (resolve) {
+                var parts = Object.keys(partAudioSources).map(Number).sort(function (a, b) { return a - b; });
+                var total = 0, i = 0;
+                function next() {
+                    if (i >= parts.length) { resolve(total); return; }
+                    var probe = new Audio();
+                    probe.addEventListener('loadedmetadata', function () {
+                        total += probe.duration;
+                        i++;
+                        next();
+                    });
+                    probe.addEventListener('error', function () {
+                        // Skip a part that fails to probe rather than hang forever.
+                        i++;
+                        next();
+                    });
+                    probe.src = partAudioSources[parts[i]];
+                }
+                next();
+            });
+        };
     </script>
 </body>
 
