@@ -1167,6 +1167,13 @@
         const volumeSlider = document.getElementById('new-volume-slider');
 
         audioPlayer.src = partAudioSources[1];
+        // True only while the mock orchestrator's __mockGetTotalDuration is
+        // actively cycling the player through every part to measure their
+        // durations. A manual click during that window would call play()
+        // on an element that's about to have its .src reassigned again a
+        // moment later, which the browser aborts outright — so clicks are
+        // simply ignored until probing has fully settled.
+        var probingInProgress = false;
 
         function formatTime(s) {
             const m = Math.floor(s / 60), sec = Math.floor(s % 60);
@@ -1178,8 +1185,26 @@
         // pause mid-test. Once playback has genuinely begun, the button is
         // disabled so there's no way to stop the audio from the UI.
         playPauseBtn.addEventListener('click', () => {
-            if (audioPlayer.paused) audioPlayer.play();
+            if (probingInProgress) return;
+            if (audioPlayer.paused) audioPlayer.play().catch(function(){});
         });
+        (function watchProbing(){
+            // Purely cosmetic: while the mock orchestrator is measuring
+            // durations, show the button as briefly disabled/loading rather
+            // than letting a click during that window appear to do nothing.
+            var wasDisabled = false;
+            setInterval(function(){
+                if (probingInProgress && !wasDisabled) {
+                    wasDisabled = true;
+                    playPauseBtn.disabled = true;
+                    playPauseBtn.style.opacity = '0.5';
+                } else if (!probingInProgress && wasDisabled) {
+                    wasDisabled = false;
+                    playPauseBtn.disabled = false;
+                    playPauseBtn.style.opacity = '';
+                }
+            }, 100);
+        })();
         audioPlayer.addEventListener('play', () => {
             playPauseBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
             playPauseBtn.disabled = true;
@@ -1485,6 +1510,7 @@
         // would cut the section short by however long the remaining parts
         // run, well before the student has heard everything.
         window.__mockGetTotalDuration = function () {
+            probingInProgress = true;
             return new Promise(function (resolve) {
                 var parts = Object.keys(partAudioSources).map(Number).sort(function (a, b) { return a - b; });
                 var total = 0, i = 0;
@@ -1512,9 +1538,23 @@
                 function next() {
                     if (i >= parts.length) {
                         // Hand the player back exactly as the orchestrator
-                        // expects it: loaded on Part 1, ready to play.
+                        // expects it: loaded on Part 1, ready to play. We
+                        // wait for THIS load to actually settle before
+                        // resolving — calling play() (as the orchestrator
+                        // does immediately after) while a load triggered by
+                        // reassigning .src is still in flight makes the
+                        // browser abort the play() attempt outright
+                        // ("AbortError: interrupted by a new load request"),
+                        // which is exactly what was happening before this.
+                        function onReady(){
+                            audioPlayer.removeEventListener('loadedmetadata', onReady);
+                            audioPlayer.removeEventListener('error', onReady);
+                            probingInProgress = false;
+                            resolve(total);
+                        }
+                        audioPlayer.addEventListener('loadedmetadata', onReady);
+                        audioPlayer.addEventListener('error', onReady);
                         audioPlayer.src = partAudioSources[parts[0]];
-                        resolve(total);
                         return;
                     }
                     audioPlayer.addEventListener('loadedmetadata', onMeta);
