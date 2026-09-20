@@ -2161,7 +2161,7 @@ function trackConfigFor(profile) {
     // Mock exam days for Challenge 2.0 are being added track by track —
     // Standard's Day 6 mini mock is live; Advanced and Expert stay empty
     // until their own mocks exist.
-    const mockDaysByLevel = { standard: [6], advanced: [], expert: [] };
+    const mockDaysByLevel = { standard: [6], advanced: [6], expert: [] };
     return {
       folder: `challenge2/${level}`,
       totalDays: 45,
