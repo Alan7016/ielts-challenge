@@ -142,8 +142,19 @@
     document.getElementById('page-title').textContent = myGroup.name;
 
     const nonMockDays = liveDays.filter(d => !cfg.mockDays.includes(d)).sort((a, b) => b - a);
+    const mockDaysLive = liveDays.filter(d => cfg.mockDays.includes(d));
+    if (mockDaysLive.length > 0) {
+      const resultsPage = myGroup.challenge === '1.0'
+        ? 'mock-results.html'
+        : `c2-mock-results.html?track=2.0-${level}`;
+      const sep = resultsPage.includes('?') ? '&' : '?';
+      const mockLinksHtml = mockDaysLive.map(d =>
+        `<a href="${resultsPage}${sep}day=${d}" class="ghost" style="display:inline-block; padding:8px 16px; border-radius:8px; text-decoration:none; margin:0 8px 8px 0;">🎯 View Mock Exam results (Day ${d}) →</a>`
+      ).join(' ');
+      document.getElementById('day-picker-row').insertAdjacentHTML('beforebegin', `<div style="margin-bottom:16px;">${mockLinksHtml}</div>`);
+    }
     if (nonMockDays.length === 0) {
-      document.getElementById('dashboard-root').innerHTML = `<p style="color:var(--muted);">No days are live for this group yet.</p>`;
+      document.getElementById('dashboard-root').innerHTML = `<p style="color:var(--muted);">No non-mock days are live for this group yet.</p>`;
       return;
     }
     selectedDay = nonMockDays[0];
