@@ -65,6 +65,11 @@
     if (profile.challenge === '2.0') {
       const level = profile.level || 'standard';
       const levelLabel = level.charAt(0).toUpperCase() + level.slice(1);
+      // Mock exam days for Challenge 2.0 are being added track by track —
+      // Standard's Day 6 mini mock is live; Advanced and Expert stay empty
+      // until their own mocks exist, rather than reusing a day number that
+      // would be meaningless for a track that has no mock built yet.
+      const mockDaysByLevel = { standard: [6], advanced: [], expert: [] };
       return {
         folder: `challenge2/${level}`,
         totalDays: 45,
@@ -72,10 +77,7 @@
         title: `Your ${levelLabel} Board`,
         tag: `Six weeks, one goal: a stronger band score. Pick a day below and run the full leg.`,
         finishLine: '— day 45 is the finish line —',
-        // Mock exam days for Challenge 2.0 haven't been built yet — this
-        // stays empty until they exist, rather than reusing Challenge 1.0's
-        // mock day numbers, which would be meaningless in a different track.
-        mockDays: []
+        mockDays: mockDaysByLevel[level] || []
       };
     }
     return {
