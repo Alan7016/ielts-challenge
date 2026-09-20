@@ -277,7 +277,9 @@
 
     let mockRow = '';
     if (mockDaysLive.length > 0) {
-      const links = mockDaysLive.map(d => `<a href="mock-results.html?day=${d}" class="ghost" style="display:inline-block; padding:8px 16px; border-radius:8px; text-decoration:none;">🎯 View Mock Exam results (Day ${d}) →</a>`).join(' ');
+      const resultsPage = trackKey === '1.0' ? 'mock-results.html' : `c2-mock-results.html?track=${trackKey}`;
+      const sep = resultsPage.includes('?') ? '&' : '?';
+      const links = mockDaysLive.map(d => `<a href="${resultsPage}${sep}day=${d}" class="ghost" style="display:inline-block; padding:8px 16px; border-radius:8px; text-decoration:none;">🎯 View Mock Exam results (Day ${d}) →</a>`).join(' ');
       mockRow = `<p style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">${links}</p>`;
     }
 
