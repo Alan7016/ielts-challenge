@@ -140,11 +140,24 @@ function roundToIELTSBand(avg){
 // rather than quietly averaging it away. This is the mentor's in-progress
 // review view; the student never sees this — they only see their result
 // once everything is graded and results_published is set.
+// Writing band: Expert's full mock grades Task 1 and Task 2 separately
+// (T2 counted twice as heavily, matching real IELTS weighting) — Standard
+// and Advanced only ever have a single essay, so that's just used directly.
+function writingBandFor(exam){
+  if(TRACK_KEY === '2.0-expert'){
+    var t1 = (exam.t1_band!==null && exam.t1_band!==undefined && exam.t1_band!=='') ? parseFloat(exam.t1_band) : null;
+    var t2 = (exam.t2_band!==null && exam.t2_band!==undefined && exam.t2_band!=='') ? parseFloat(exam.t2_band) : null;
+    if(t1===null && t2===null) return null;
+    if(t1!==null && t2!==null) return roundToIELTSBand((t1 + 2*t2)/3);
+    return t2!==null ? t2 : t1;
+  }
+  return (exam.essay_band!==null && exam.essay_band!==undefined && exam.essay_band!=='') ? parseFloat(exam.essay_band) : null;
+}
 function computeBands(exam){
   var lr = recomputeScoreAndBand(exam.listening_answers, exam.listening_key_snapshot, exam.listening_total || 20);
   var rr = recomputeScoreAndBand(exam.reading_answers, exam.reading_key_snapshot, exam.reading_total || 13);
   var l = lr.band, r = rr.band;
-  var w = (exam.essay_band!==null && exam.essay_band!==undefined && exam.essay_band!=='') ? parseFloat(exam.essay_band) : null;
+  var w = writingBandFor(exam);
   var s = exam.speaking_band ? parseFloat(exam.speaking_band) : null;
   var sum = (l||0) + (r||0) + (w||0) + (s||0);
   var o = roundToIELTSBand(sum/4);
@@ -337,6 +350,7 @@ function buildDetail(sid, exam){
   var bands = computeBands(exam);
   var liScore = bands.listeningScore !== null ? bands.listeningScore : '—';
   var rScore = bands.readingScore !== null ? bands.readingScore : '—';
+  var isFullMock = TRACK_KEY === '2.0-expert';
 
   var overview = '<div class="score-overview">'+
     '<div class="score-box"><div class="label">Listening</div><div class="value">'+fmtBand(bands.l)+'</div>'+
@@ -344,17 +358,21 @@ function buildDetail(sid, exam){
     '<div class="score-box"><div class="label">Reading</div><div class="value">'+fmtBand(bands.r)+'</div>'+
     '<div class="band">'+(rScore!=='—' ? rScore+'/'+(exam.reading_total||13) : 'not scored')+'</div></div>'+
     '<div class="score-box"><div class="label">Writing</div><div class="value">'+fmtBand(bands.w)+'</div>'+
-    '<div class="band">'+(exam.essay_words||0)+' words</div></div>'+
+    '<div class="band">'+(isFullMock ? ('T1: '+(exam.writing_t1_words||0)+'w &bull; T2: '+(exam.writing_t2_words||0)+'w') : ((exam.essay_words||0)+' words'))+'</div></div>'+
     '<div class="score-box"><div class="label">Speaking</div><div class="value">'+fmtBand(bands.s)+'</div>'+
     '<div class="band">'+(bands.s===null ? 'not graded yet' : '&nbsp;')+'</div></div>'+
     '<div class="score-box" style="border-color:var(--warn);"><div class="label" style="color:var(--warn);">Overall</div><div class="value" style="color:var(--warn);">'+fmtBand(bands.o)+'</div>'+
     '<div class="band">&nbsp;</div></div>'+
   '</div>';
 
+  var writingTabsHtml = isFullMock
+    ? '<div class="detail-tab" onclick="switchTab(\''+sid+'\',\'writing1\',this)">✏️ Writing T1</div>'+
+      '<div class="detail-tab" onclick="switchTab(\''+sid+'\',\'writing2\',this)">✏️ Writing T2</div>'
+    : '<div class="detail-tab" onclick="switchTab(\''+sid+'\',\'writing\',this)">✏️ Writing</div>';
   var tabs = '<div class="detail-tabs">'+
     '<div class="detail-tab active" onclick="switchTab(\''+sid+'\',\'listening\',this)">🎧 Listening</div>'+
     '<div class="detail-tab" onclick="switchTab(\''+sid+'\',\'reading\',this)">📖 Reading</div>'+
-    '<div class="detail-tab" onclick="switchTab(\''+sid+'\',\'writing\',this)">✏️ Writing</div>'+
+    writingTabsHtml+
     '<div class="detail-tab" onclick="switchTab(\''+sid+'\',\'speaking\',this)">🎤 Speaking</div>'+
   '</div>';
 
@@ -362,18 +380,40 @@ function buildDetail(sid, exam){
   var rPane = '<div class="tab-pane" id="pane-'+sid+'-reading">'+buildAnswerPane(exam.reading_answers, exam.reading_key_snapshot, exam.reading_total||13)+'</div>';
 
   var examId = exam.id;
-  var wPane = '<div class="tab-pane" id="pane-'+sid+'-writing">'+
-    '<span class="word-badge">'+(exam.essay_words||0)+' words</span>'+
-    '<div class="essay-box">'+esc(exam.essay_text || '(not submitted)')+'</div>'+
-    '<label class="feedback-label">Feedback:</label>'+
-    '<textarea class="feedback-textarea" id="fb-essay-'+sid+'" placeholder="Write your feedback here…">'+esc(exam.essay_feedback||'')+'</textarea>'+
-    '<div class="band-row"><label style="font-size:13px;font-weight:700;">Band:</label>'+
-    '<select class="band-select" id="band-essay-'+sid+'">'+bandOptions(exam.essay_band)+'</select>'+
-    '<button class="save-feedback-btn" id="savebtn-essay-'+sid+'" onclick="saveFeedback(\''+examId+'\',\''+sid+'\',\'essay\')">Save Feedback</button></div>'+
-  '</div>';
+  var wPane;
+  if(isFullMock){
+    wPane = '<div class="tab-pane" id="pane-'+sid+'-writing1">'+
+      '<span class="word-badge">'+(exam.writing_t1_words||0)+' words</span>'+
+      '<div class="essay-box">'+esc(exam.writing_t1_text || '(not submitted)')+'</div>'+
+      '<label class="feedback-label">Feedback for Task 1:</label>'+
+      '<textarea class="feedback-textarea" id="fb-t1-'+sid+'" placeholder="Write your feedback here…">'+esc(exam.t1_feedback||'')+'</textarea>'+
+      '<div class="band-row"><label style="font-size:13px;font-weight:700;">Band:</label>'+
+      '<select class="band-select" id="band-t1-'+sid+'">'+bandOptions(exam.t1_band)+'</select>'+
+      '<button class="save-feedback-btn" id="savebtn-t1-'+sid+'" onclick="saveFeedback(\''+examId+'\',\''+sid+'\',\'t1\')">Save Feedback</button></div>'+
+    '</div>'+
+    '<div class="tab-pane" id="pane-'+sid+'-writing2">'+
+      '<span class="word-badge">'+(exam.writing_t2_words||0)+' words</span>'+
+      '<div class="essay-box">'+esc(exam.writing_t2_text || '(not submitted)')+'</div>'+
+      '<label class="feedback-label">Feedback for Task 2:</label>'+
+      '<textarea class="feedback-textarea" id="fb-t2-'+sid+'" placeholder="Write your feedback here…">'+esc(exam.t2_feedback||'')+'</textarea>'+
+      '<div class="band-row"><label style="font-size:13px;font-weight:700;">Band:</label>'+
+      '<select class="band-select" id="band-t2-'+sid+'">'+bandOptions(exam.t2_band)+'</select>'+
+      '<button class="save-feedback-btn" id="savebtn-t2-'+sid+'" onclick="saveFeedback(\''+examId+'\',\''+sid+'\',\'t2\')">Save Feedback</button></div>'+
+    '</div>';
+  } else {
+    wPane = '<div class="tab-pane" id="pane-'+sid+'-writing">'+
+      '<span class="word-badge">'+(exam.essay_words||0)+' words</span>'+
+      '<div class="essay-box">'+esc(exam.essay_text || '(not submitted)')+'</div>'+
+      '<label class="feedback-label">Feedback:</label>'+
+      '<textarea class="feedback-textarea" id="fb-essay-'+sid+'" placeholder="Write your feedback here…">'+esc(exam.essay_feedback||'')+'</textarea>'+
+      '<div class="band-row"><label style="font-size:13px;font-weight:700;">Band:</label>'+
+      '<select class="band-select" id="band-essay-'+sid+'">'+bandOptions(exam.essay_band)+'</select>'+
+      '<button class="save-feedback-btn" id="savebtn-essay-'+sid+'" onclick="saveFeedback(\''+examId+'\',\''+sid+'\',\'essay\')">Save Feedback</button></div>'+
+    '</div>';
+  }
 
   var sPane = '<div class="tab-pane" id="pane-'+sid+'-speaking">'+
-    '<div class="no-key-notice">ℹ️ Speaking isn\'t part of this mini mock test. Run the speaking test separately with this student, then enter their band and feedback below.</div>'+
+    '<div class="no-key-notice">ℹ️ Speaking isn\'t part of this mock test. Run the speaking test separately with this student, then enter their band and feedback below.</div>'+
     '<label class="feedback-label" style="margin-top:0;">Feedback for Speaking:</label>'+
     '<textarea class="feedback-textarea" id="fb-speaking-'+sid+'" placeholder="Write your feedback here…">'+esc(exam.speaking_feedback||'')+'</textarea>'+
     '<div class="band-row"><label style="font-size:13px;font-weight:700;">Band:</label>'+
