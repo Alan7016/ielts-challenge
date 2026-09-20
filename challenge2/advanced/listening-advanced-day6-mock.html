@@ -1191,6 +1191,23 @@
         progressBar.addEventListener('input', () => { audioPlayer.currentTime = progressBar.value; });
         volumeSlider.addEventListener('input', (e) => { audioPlayer.volume = e.target.value; });
 
+        // Quietly fetch the NEXT part's audio in the background while the
+        // current one is still playing, so it's already sitting in the
+        // browser's cache by the time it's actually needed. Without this,
+        // the next part only starts downloading the instant the current
+        // one ends — for a ~19MB file, that's a real, noticeable gap in
+        // playback while it fetches, not a bug in the chaining logic itself.
+        var preloadedPart = null;
+        function preloadNextPart(afterPart){
+            var nextPart = afterPart + 1;
+            if (!partAudioSources[nextPart] || preloadedPart === nextPart) return;
+            preloadedPart = nextPart;
+            var preloader = new Audio();
+            preloader.preload = 'auto';
+            preloader.src = partAudioSources[nextPart];
+        }
+        audioPlayer.addEventListener('play', () => { preloadNextPart(audioPartIndex); });
+
         // Audio must keep playing straight through Sections 1→2→3→4 on its
         // own fixed schedule, completely independent of which section's
         // questions the student happens to be looking at — switchToPart()
