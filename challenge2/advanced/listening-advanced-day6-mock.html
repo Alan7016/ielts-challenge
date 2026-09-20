@@ -996,7 +996,7 @@
         <div data-part="4"><p style="color:#888;font-style:italic;">Transcript not available for this recording.</p></div>
     </div>
 
-    <audio id="global-audio-player" class="hidden"></audio>
+    <audio id="global-audio-player" class="hidden" preload="metadata"></audio>
 
     <!-- Nav Arrows -->
     <div class="nav-arrows">
@@ -1488,20 +1488,38 @@
             return new Promise(function (resolve) {
                 var parts = Object.keys(partAudioSources).map(Number).sort(function (a, b) { return a - b; });
                 var total = 0, i = 0;
+                // Reuse the SAME visible player to probe each part's
+                // duration, rather than spinning up separate temporary
+                // Audio objects. Separate objects meant the browser was
+                // downloading the same file twice at once — once for the
+                // real player's own preload, once for the probe — fighting
+                // over the same bandwidth right at the start and causing
+                // a stall-then-recover pattern in playback.
+                function onMeta(){
+                    audioPlayer.removeEventListener('loadedmetadata', onMeta);
+                    audioPlayer.removeEventListener('error', onError);
+                    total += audioPlayer.duration;
+                    i++;
+                    next();
+                }
+                function onError(){
+                    audioPlayer.removeEventListener('loadedmetadata', onMeta);
+                    audioPlayer.removeEventListener('error', onError);
+                    // Skip a part that fails to probe rather than hang forever.
+                    i++;
+                    next();
+                }
                 function next() {
-                    if (i >= parts.length) { resolve(total); return; }
-                    var probe = new Audio();
-                    probe.addEventListener('loadedmetadata', function () {
-                        total += probe.duration;
-                        i++;
-                        next();
-                    });
-                    probe.addEventListener('error', function () {
-                        // Skip a part that fails to probe rather than hang forever.
-                        i++;
-                        next();
-                    });
-                    probe.src = partAudioSources[parts[i]];
+                    if (i >= parts.length) {
+                        // Hand the player back exactly as the orchestrator
+                        // expects it: loaded on Part 1, ready to play.
+                        audioPlayer.src = partAudioSources[parts[0]];
+                        resolve(total);
+                        return;
+                    }
+                    audioPlayer.addEventListener('loadedmetadata', onMeta);
+                    audioPlayer.addEventListener('error', onError);
+                    audioPlayer.src = partAudioSources[parts[i]];
                 }
                 next();
             });
