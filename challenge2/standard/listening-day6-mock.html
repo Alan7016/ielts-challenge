@@ -1006,7 +1006,7 @@
         // pause mid-test. Once playback has genuinely begun, the button is
         // disabled so there's no way to stop the audio from the UI.
         playPauseBtn.addEventListener('click', () => {
-            if (audioPlayer.paused) audioPlayer.play();
+            if (audioPlayer.paused) audioPlayer.play().catch(function(){});
         });
         audioPlayer.addEventListener('play', () => {
             playPauseBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
@@ -1311,52 +1311,6 @@
             goToQuestion(1);
         });
 
-        // Reports the TRUE total listening duration (sum of every audio
-        // part) to the mock exam orchestrator. The visible audio element's
-        // own .duration only ever reflects whichever single part is
-        // currently loaded — using that alone for the exam's countdown
-        // would cut the section short by however long the remaining parts
-        // run, well before the student has heard everything.
-        window.__mockGetTotalDuration = function () {
-            return new Promise(function (resolve) {
-                var parts = Object.keys(partAudioSources).map(Number).sort(function (a, b) { return a - b; });
-                var total = 0, i = 0;
-                // Reuse the SAME visible player to probe each part's
-                // duration, rather than spinning up separate temporary
-                // Audio objects. Separate objects meant the browser was
-                // downloading the same file twice at once — once for the
-                // real player's own preload, once for the probe — fighting
-                // over the same bandwidth right at the start and causing
-                // exactly the stall-then-recover pattern seen in testing.
-                function onMeta(){
-                    audioPlayer.removeEventListener('loadedmetadata', onMeta);
-                    audioPlayer.removeEventListener('error', onError);
-                    total += audioPlayer.duration;
-                    i++;
-                    next();
-                }
-                function onError(){
-                    audioPlayer.removeEventListener('loadedmetadata', onMeta);
-                    audioPlayer.removeEventListener('error', onError);
-                    // Skip a part that fails to probe rather than hang forever.
-                    i++;
-                    next();
-                }
-                function next() {
-                    if (i >= parts.length) {
-                        // Hand the player back exactly as the orchestrator
-                        // expects it: loaded on Part 1, ready to play.
-                        audioPlayer.src = partAudioSources[parts[0]];
-                        resolve(total);
-                        return;
-                    }
-                    audioPlayer.addEventListener('loadedmetadata', onMeta);
-                    audioPlayer.addEventListener('error', onError);
-                    audioPlayer.src = partAudioSources[parts[i]];
-                }
-                next();
-            });
-        };
     </script>
 </body>
 
