@@ -784,26 +784,49 @@ function showSaveRecovered() {
   setTimeout(() => { el.style.display = 'none'; }, 2000);
 }
 
-async function saveAnswer(userId, day, task, fieldId, value, isCorrect) {
+// Shared by saveAnswer/saveProgress/saveTaskPoints. Handles BOTH failure
+// shapes a Supabase call can produce: a graceful {error} response, and a
+// genuinely thrown exception (the network is actually unreachable for a
+// moment, not just slow — a real, common case on a weak mobile signal).
+// Previously only the first shape was caught, so a real disconnection blip
+// threw an unhandled promise rejection with zero visible warning and no
+// retry — the student's typed text stayed on screen looking perfectly
+// fine, while nothing ever reached the database. This is very likely why
+// some students' answers "were right there" on their own screen but were
+// simply absent when checked from anywhere else.
+async function upsertWithRetry(table, payload, onConflict) {
   const sb = getSupabaseClient();
-  const res = await sb.from('answers').upsert(
-    { student_id: userId, day, task, field_id: fieldId, value: String(value), is_correct: isCorrect, updated_at: new Date().toISOString() },
-    { onConflict: 'student_id,day,field_id' }
-  );
-  if (res.error) {
-    console.error('Answer save failed:', res.error);
-    showSaveWarning();
-    // one silent retry after a short delay — covers a brief network blip without bothering the student
-    setTimeout(async () => {
-      const retry = await sb.from('answers').upsert(
-        { student_id: userId, day, task, field_id: fieldId, value: String(value), is_correct: isCorrect, updated_at: new Date().toISOString() },
-        { onConflict: 'student_id,day,field_id' }
-      );
-      if (!retry.error) showSaveRecovered();
-    }, 3000);
-  } else {
+  try {
+    const res = await sb.from(table).upsert(payload, { onConflict });
+    if (res.error) throw res.error;
     showSaveRecovered();
+    return true;
+  } catch (err) {
+    console.error(table + ' save failed:', err);
+    showSaveWarning();
+    // one silent retry after a short delay — covers a brief network blip
+    // without bothering the student
+    setTimeout(async () => {
+      try {
+        const retry = await sb.from(table).upsert(payload, { onConflict });
+        if (retry.error) throw retry.error;
+        showSaveRecovered();
+      } catch (err2) {
+        console.error(table + ' retry also failed:', err2);
+        // Leave the warning banner up rather than retry again — if the
+        // connection is genuinely still down, another silent attempt would
+        // just repeat the same failure with no benefit.
+      }
+    }, 3000);
+    return false;
   }
+}
+
+async function saveAnswer(userId, day, task, fieldId, value, isCorrect) {
+  await upsertWithRetry('answers',
+    { student_id: userId, day, task, field_id: fieldId, value: String(value), is_correct: isCorrect, updated_at: new Date().toISOString() },
+    'student_id,day,field_id'
+  );
 }
 
 // Works out whether a filled-in field was correct, straight from the
@@ -886,7 +909,6 @@ function detectTaskCategory(container) {
 
 async function saveTaskPoints(userId, day, category, points, extra) {
   extra = extra || {};
-  const sb = getSupabaseClient();
   const payload = {
     student_id: userId, day, category, points,
     max_points: POINTS_MAX[category] || null,
@@ -895,15 +917,7 @@ async function saveTaskPoints(userId, day, category, points, extra) {
     comment: extra.comment || null,
     updated_at: new Date().toISOString()
   };
-  const res = await sb.from('points').upsert(payload, { onConflict: 'student_id,day,category' });
-  if (res.error) {
-    console.error('Points save failed:', res.error);
-    showSaveWarning();
-    setTimeout(async () => {
-      const retry = await sb.from('points').upsert(payload, { onConflict: 'student_id,day,category' });
-      if (!retry.error) showSaveRecovered();
-    }, 3000);
-  }
+  await upsertWithRetry('points', payload, 'student_id,day,category');
 }
 
 // Called right after a task locks in (see goNext()). Silently does nothing
@@ -926,22 +940,10 @@ async function autoAwardPoints(userId, day, taskContainer) {
 }
 
 async function saveProgress(userId, day, task, completed, locked) {
-  const sb = getSupabaseClient();
-  const res = await sb.from('progress').upsert(
+  await upsertWithRetry('progress',
     { student_id: userId, day, task, completed, locked, updated_at: new Date().toISOString() },
-    { onConflict: 'student_id,day,task' }
+    'student_id,day,task'
   );
-  if (res.error) {
-    console.error('Progress save failed:', res.error);
-    showSaveWarning();
-    setTimeout(async () => {
-      const retry = await sb.from('progress').upsert(
-        { student_id: userId, day, task, completed, locked, updated_at: new Date().toISOString() },
-        { onConflict: 'student_id,day,task' }
-      );
-      if (!retry.error) showSaveRecovered();
-    }, 3000);
-  }
 }
 
 async function loadDayState(userId, day) {
@@ -1975,36 +1977,40 @@ async function initRecordControl(box, userId, day, task, fieldId) {
     statusEl.textContent = 'Uploading…';
     statusEl.style.color = 'var(--muted)';
 
-    const { error: uploadError } = await sb.storage.from('speaking-recordings').upload(path, blob, { contentType: mimeType, upsert: true });
-
-    if (uploadError) {
+    function showRetry(message, label) {
       statusEl.innerHTML = '';
-      statusEl.appendChild(document.createTextNode('Upload failed — check your connection, then '));
+      statusEl.appendChild(document.createTextNode(message + ' '));
       const retryBtn = document.createElement('button');
       retryBtn.className = 'ghost';
-      retryBtn.textContent = '🔄 Retry upload';
+      retryBtn.textContent = label;
       retryBtn.style.marginLeft = '6px';
       retryBtn.addEventListener('click', () => attemptSubmit(blob, mimeType));
       statusEl.appendChild(retryBtn);
       statusEl.style.color = 'var(--warn)';
+    }
+
+    let uploadError;
+    try {
+      ({ error: uploadError } = await sb.storage.from('speaking-recordings').upload(path, blob, { contentType: mimeType, upsert: true }));
+    } catch (err) {
+      uploadError = err;
+    }
+    if (uploadError) {
+      showRetry('Upload failed — check your connection, then', '🔄 Retry upload');
       return;
     }
 
-    const { error: saveError } = await sb.from('answers').upsert(
-      { student_id: userId, day, task, field_id: fieldId, value: path, updated_at: new Date().toISOString() },
-      { onConflict: 'student_id,day,field_id' }
-    );
-
+    let saveError;
+    try {
+      ({ error: saveError } = await sb.from('answers').upsert(
+        { student_id: userId, day, task, field_id: fieldId, value: path, updated_at: new Date().toISOString() },
+        { onConflict: 'student_id,day,field_id' }
+      ));
+    } catch (err) {
+      saveError = err;
+    }
     if (saveError) {
-      statusEl.innerHTML = '';
-      statusEl.appendChild(document.createTextNode('Recording uploaded, but saving it failed — '));
-      const retryBtn = document.createElement('button');
-      retryBtn.className = 'ghost';
-      retryBtn.textContent = '🔄 Retry saving';
-      retryBtn.style.marginLeft = '6px';
-      retryBtn.addEventListener('click', () => attemptSubmit(blob, mimeType));
-      statusEl.appendChild(retryBtn);
-      statusEl.style.color = 'var(--warn)';
+      showRetry('Recording uploaded, but saving it failed —', '🔄 Retry saving');
       return;
     }
 
@@ -2152,13 +2158,14 @@ const MOCK_DAYS = [11, 18, 25, 30];
 function trackConfigFor(profile) {
   if (profile && profile.challenge === '2.0') {
     const level = profile.level || 'standard';
+    // Mock exam days for Challenge 2.0 are being added track by track —
+    // Standard's Day 6 mini mock is live; Advanced and Expert stay empty
+    // until their own mocks exist.
+    const mockDaysByLevel = { standard: [6], advanced: [], expert: [] };
     return {
       folder: `challenge2/${level}`,
       totalDays: 45,
-      // Mock exam days for Challenge 2.0 haven't been built yet — left
-      // empty rather than reusing Challenge 1.0's mock day numbers, which
-      // would be meaningless in a different track's day sequence.
-      mockDays: []
+      mockDays: mockDaysByLevel[level] || []
     };
   }
   return { folder: 'days', totalDays: 30, mockDays: MOCK_DAYS };
