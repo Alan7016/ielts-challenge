@@ -419,41 +419,22 @@ function setupListeningTimer(frame){
       }
 
       var started = false;
-      // The listening test's audio is usually split across several files
-      // (real sections, or files split purely for upload-size limits).
-      // Pre-measuring every part's total length up front meant repeatedly
-      // reassigning the SAME element's source in a tight burst — which
-      // turned out to be unreliable in practice: sometimes the browser
-      // aborted a student's play() click because a reassignment landed a
-      // moment later, and on other runs the element just stopped firing
-      // events entirely with no error at all. So this no longer
-      // pre-measures anything: the timer starts with just the first
-      // part's own real duration and extends itself by each next part's
-      // duration exactly when that part naturally loads for real playback
-      // (the content file's own 'ended' handler advances audio.src when
-      // one part finishes) — nothing here ever touches audio.src itself,
-      // so there's no reassignment burst and no race to lose.
-      var lastHandledSrc = null;
-      function onMetadata(){
-        if(audio.src === lastHandledSrc) return; // browsers can fire this twice for one load
-        lastHandledSrc = audio.src;
-        if(!started){
-          started = true;
-          settled = true;
-          skipBtn.style.display = 'none';
-          loading.style.display = 'none';
-          beginListeningCountdown(Math.ceil(audio.duration));
-          // Try to start playback automatically — if the browser blocks it,
-          // the test's own play button is still right there for the student.
-          audio.play().catch(function(){});
-        } else {
-          extendTimer(audio.duration);
-        }
+      // The full listening test is always exactly 30 minutes in the real
+      // exam — that's a fixed, known fact, not something to detect from
+      // the audio file. Trying to derive it dynamically (measuring parts
+      // up front, then extending as each one loaded) kept running into
+      // real, different failure modes depending on browser timing. Just
+      // using the actual known duration sidesteps all of that entirely.
+      if(!started){
+        started = true;
+        settled = true;
+        skipBtn.style.display = 'none';
+        loading.style.display = 'none';
+        beginListeningCountdown(30 * 60);
+        // Try to start playback automatically — if the browser blocks it,
+        // the test's own play button is still right there for the student.
+        audio.play().catch(function(){});
       }
-      audio.addEventListener('loadedmetadata', onMetadata);
-      if(audio.readyState >= 1 && audio.duration) onMetadata();
-      // Generous safety net in case nothing above ever resolves.
-      setTimeout(function(){ if(!started) fallback(); }, 15000);
     } catch(e){
       if(attempts < 20){ setTimeout(attemptFind, 1000); return; }
       fallback();
