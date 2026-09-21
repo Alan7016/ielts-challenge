@@ -791,6 +791,35 @@ function showSaveRecovered() {
   setTimeout(() => { el.style.display = 'none'; }, 2000);
 }
 
+// A big, centered, briefly-shown warning — used for the recording-too-
+// short case specifically, where the small bottom save banner isn't
+// attention-grabbing enough. Lazily created once, then reused, matching
+// the same pattern as getSaveBanner above.
+function showBigWarning(message) {
+  let el = document.getElementById('bigWarningBanner');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'bigWarningBanner';
+    el.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0.9); z-index:10000; padding:28px 40px; border-radius:16px; font:800 1.4rem var(--body, sans-serif); text-align:center; max-width:90vw; box-shadow:0 12px 40px #00000050; background:#dc2626; color:#fff; opacity:0; transition:opacity 0.2s ease, transform 0.2s ease; pointer-events:none;';
+    document.body.appendChild(el);
+  }
+  el.textContent = message;
+  // Restart the transition cleanly even if a previous one is still fading.
+  el.style.transition = 'none';
+  el.style.opacity = '0';
+  el.style.transform = 'translate(-50%, -50%) scale(0.9)';
+  requestAnimationFrame(() => {
+    el.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+    el.style.opacity = '1';
+    el.style.transform = 'translate(-50%, -50%) scale(1)';
+  });
+  clearTimeout(el._hideTimer);
+  el._hideTimer = setTimeout(() => {
+    el.style.opacity = '0';
+    el.style.transform = 'translate(-50%, -50%) scale(0.9)';
+  }, 2600);
+}
+
 // Shared by saveAnswer/saveProgress/saveTaskPoints. Handles BOTH failure
 // shapes a Supabase call can produce: a graceful {error} response, and a
 // genuinely thrown exception (the network is actually unreachable for a
@@ -2118,6 +2147,13 @@ async function initRecordControl(box, userId, day, task, fieldId, minSeconds) {
         recordBtn.dataset.state = 'idle';
         recordBtn.textContent = '● Record';
         recordBtn.classList.remove('recording');
+        showBigWarning(`⏱ Too short! Only ${seconds}s — needs to be at least ${mins} minute${mins > 1 ? 's' : ''}.`);
+        // Remove and re-add the shake class so it can re-trigger on a
+        // second short attempt in a row, not just the first.
+        recordBtn.classList.remove('shake-invalid');
+        void recordBtn.offsetWidth; // force a reflow so the animation restarts
+        recordBtn.classList.add('shake-invalid');
+        setTimeout(() => recordBtn.classList.remove('shake-invalid'), 600);
         return;
       }
 
