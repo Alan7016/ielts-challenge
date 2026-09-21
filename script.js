@@ -127,8 +127,8 @@ async function uploadAvatar(userId, file) {
 // A "week" is whatever stretch of days sits between two mocks — not a
 // fixed 7-day block. With mocks at days 11/18/25/30, week 3 is 19–24,
 // exactly as it should be.
-function getWeekBounds(day) {
-  const mocks = MOCK_DAYS.slice().sort((a, b) => a - b);
+function getWeekBounds(day, mockDaysForTrack) {
+  const mocks = (mockDaysForTrack || MOCK_DAYS).slice().sort((a, b) => a - b);
   let start = 1;
   for (const mockDay of mocks) {
     const end = mockDay - 1;
@@ -148,6 +148,15 @@ function getWeekBounds(day) {
 // empty day the moment it's uploaded. Real submitted points are a much
 // more honest signal of where the class actually is.
 async function getMostRecentLiveDay(profile) {
+  // Challenge 2.0 runs on a fixed calendar schedule — "today" is a known
+  // calculation, not something to guess from who has submitted data so
+  // far. This also sidesteps the chicken-and-egg problem the old
+  // points-guessing approach had at the start of each new day, before
+  // anyone had submitted anything yet for it.
+  if (profile && profile.challenge === '2.0') {
+    return getCurrentDayNumberC2();
+  }
+
   const sb = getSupabaseClient();
   const cfg = trackConfigFor(profile);
 
@@ -155,10 +164,8 @@ async function getMostRecentLiveDay(profile) {
     // A simple, unfiltered "what's the highest day with any points"
     // lookup — deliberately not scoped per-track here, since that would
     // require listing every student's ID in the query, which is exactly
-    // the URL-length trap that broke this before. Challenge 2.0 has no
-    // real point data yet, so this is accurate in practice; if it ever
-    // needs to be split precisely per track, that's a job for a small
-    // database view computing this server-side, not a client-side list.
+    // the URL-length trap that broke this before. This path is only used
+    // for Challenge 1.0 now, which has no other reliable "today" signal.
     const { data } = await sb.from('points').select('day').order('day', { ascending: false }).limit(1);
     if (data && data.length > 0) return data[0].day;
   } catch (e) { /* fall through to the file-existence fallback below */ }
@@ -853,22 +860,12 @@ function computeIsCorrect(el) {
 // in their dashboards and never touched here.
 // ============================================
 const POINTS_MAX = {
-  article: 3, video: 3, speaking: 3, reading_listening: 5,
-  writing: 5, bonus_article: 2, bonus_video: 2, bonus_reading_listening: 3
+  'writing-mini': 2, speaking: 2, 'writing-big': 5
 };
 
-function pctToPoints(pct) {
-  if (pct >= 90) return 3;
-  if (pct >= 70) return 2.5;
-  if (pct >= 40) return 1.5;
-  if (pct >= 10) return 0.5;
-  return 0;
-}
-
 // Scores every gradable field inside a task container (radios, selects,
-// text-answer gap fills) — works for both the article task (MCQ + vocab)
-// and the video task (MCQ + gap fill + vocab) without needing to know
-// which task number they landed on that day.
+// text-answer gap fills) — works across any task layout without needing
+// to know which task number they landed on that day.
 function computeTaskAccuracy(container) {
   let total = 0, correct = 0;
   const seenGroups = new Set();
@@ -891,22 +888,6 @@ function computeTaskAccuracy(container) {
   return { correct, total, pct: total ? (correct / total * 100) : 0 };
 }
 
-// Figures out which points category a task belongs to, purely from what's
-// inside its container — so this works across every day's layout without
-// needing to hardcode task numbers (they shift day to day).
-function detectTaskCategory(container) {
-  if (container.querySelector('.question-box[data-field^="speaking-"]')) return 'speaking';
-  if (container.querySelector('iframe[src*="youtube"]')) return 'video';
-  const linkOut = container.querySelector('a.link-out');
-  if (linkOut) {
-    const href = linkOut.getAttribute('href') || '';
-    if (href.includes('passage-') || href.includes('listening-')) return 'reading_listening';
-    return null; // e.g. the plain "read the article" confirm task — not scored on its own
-  }
-  if (container.querySelector('input[type="radio"][data-correct], select[data-answer]')) return 'article';
-  return null; // writing / sample-answer / task1-report — ungraded here, or manual
-}
-
 async function saveTaskPoints(userId, day, category, points, extra) {
   extra = extra || {};
   const payload = {
@@ -922,21 +903,17 @@ async function saveTaskPoints(userId, day, category, points, extra) {
 
 // Called right after a task locks in (see goNext()). Silently does nothing
 // for task types that aren't auto-scored (writing, sample answer, etc.).
+// Mechanical fields (radio, select, text-answer gap fills) earn 1 point
+// per correct answer, counted directly — not a flat per-task amount, not
+// a percentage. Speaking and writing (mini and big) are no longer
+// auto-scored at all here — those are entirely mentor-assigned, per
+// question, from the mentor dashboard.
 async function autoAwardPoints(userId, day, taskContainer) {
-  const category = detectTaskCategory(taskContainer);
-  if (!category) return;
-
-  if (category === 'speaking') {
-    // isTaskComplete() already guarantees every set is fully recorded
-    // before Next unlocks, so reaching here means all-or-nothing = 3 pts.
-    await saveTaskPoints(userId, day, 'speaking', 3);
-  } else if (category === 'reading_listening') {
-    await saveTaskPoints(userId, day, 'reading_listening', 5);
-  } else if (category === 'article' || category === 'video') {
-    const { correct, total, pct } = computeTaskAccuracy(taskContainer);
-    const points = pctToPoints(pct);
-    await saveTaskPoints(userId, day, category, points, { percent: Math.round(pct) });
-  }
+  const hasGradable = taskContainer.querySelector('input[type="radio"][data-correct], select[data-answer], input.text-answer[data-correct]');
+  if (!hasGradable) return; // speaking / writing / ungraded — mentor-only, nothing to auto-award
+  const { correct } = computeTaskAccuracy(taskContainer);
+  const taskEl = taskContainer.id || ('task-' + day);
+  await saveTaskPoints(userId, day, 'mech-' + taskEl, correct);
 }
 
 async function saveProgress(userId, day, task, completed, locked) {
@@ -1030,8 +1007,9 @@ async function initCdiReadingCapture(userId, day, taskNumber, iframeEl) {
       await Promise.all((data.items || []).map(item =>
         saveAnswer(userId, day, taskNumber, 'reading-q' + item.n, item.value, item.correct)
       ));
-      const pct = data.max ? (data.score / data.max * 100) : 0;
-      await saveTaskPoints(userId, day, 'reading_listening', pctToPoints(pct), { percent: Math.round(pct) });
+      // 1 point per correct answer, same universal rule as every other
+      // mechanical question type — data.score is already that raw count.
+      await saveTaskPoints(userId, day, 'mech-task' + taskNumber, data.score || 0);
       await saveProgress(userId, day, taskNumber, true, false);
     } catch (e) {}
     isCompleted = true;
@@ -1925,7 +1903,8 @@ const SPEAKING_QUESTIONS = {
 function speakingLabel(fieldId) {
   return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
 }
-async function initRecordControl(box, userId, day, task, fieldId) {
+async function initRecordControl(box, userId, day, task, fieldId, minSeconds) {
+  minSeconds = minSeconds || 0;
   if (currentUserRole === 'admin' || currentUserRole === 'mentor') {
     const recordBtn = box.querySelector('.record-btn');
     const statusEl = box.querySelector('.record-status');
@@ -2025,7 +2004,8 @@ async function initRecordControl(box, userId, day, task, fieldId) {
         return;
       }
 
-      const confirmed = confirm('You only have ONE attempt to record this answer. Once you press Stop, it is submitted permanently and cannot be redone. Make sure you\'re ready before you start.');
+      const minWarning = minSeconds > 0 ? ` Your recording must be at least ${Math.ceil(minSeconds/60)} minute${minSeconds > 60 ? 's' : ''} long, or you'll be asked to record it again.` : '';
+      const confirmed = confirm('You only have ONE attempt to record this answer. Once you press Stop, it is submitted permanently and cannot be redone.' + minWarning + ' Make sure you\'re ready before you start.');
       if (!confirmed) return;
 
       let stream;
@@ -2125,6 +2105,22 @@ async function initRecordControl(box, userId, day, task, fieldId) {
         new Promise(resolve => setTimeout(resolve, 5000))
       ]);
 
+      if (minSeconds > 0 && seconds < minSeconds) {
+        // Doesn't count as the one permitted attempt — a student stopping
+        // early by mistake shouldn't be permanently locked out of ever
+        // completing this task. Reset to idle exactly like the empty-
+        // recording case just below, so they can simply try again.
+        const mins = Math.ceil(minSeconds / 60);
+        statusEl.textContent = `That recording was only ${seconds}s — it needs to be at least ${mins} minute${mins > 1 ? 's' : ''} long. Please record it again.`;
+        statusEl.style.color = 'var(--warn)';
+        recordBtn.style.display = '';
+        recordBtn.disabled = false;
+        recordBtn.dataset.state = 'idle';
+        recordBtn.textContent = '● Record';
+        recordBtn.classList.remove('recording');
+        return;
+      }
+
       const recordedMime = mediaRecorder.mimeType || 'audio/webm';
       const blob = new Blob(chunks, { type: recordedMime });
       if (blob.size === 0) {
@@ -2150,6 +2146,31 @@ async function initRecordControl(box, userId, day, task, fieldId) {
 // Add future mock days here — every dashboard reads from this one place.
 const MOCK_DAYS = [11, 18, 25, 30];
 
+// Challenge 2.0's "what day is it" is a fixed calendar schedule, not
+// something to guess from submitted data — Day 1 was Tuesday, September
+// 15, 2026 (Tashkent time, UTC+5, no DST in Uzbekistan so this offset
+// never changes). Every day since is just a calendar offset from that
+// anchor. This is what the points/leaderboard system relies on to know
+// which day "today" is, independent of whether anyone has submitted
+// anything yet.
+const C2_DAY1_DATE = '2026-09-15';
+function getCurrentDayNumberC2() {
+  const TASHKENT_OFFSET_MS = 5 * 60 * 60 * 1000;
+  const nowTashkent = new Date(Date.now() + TASHKENT_OFFSET_MS);
+  const todayDateStr = nowTashkent.toISOString().slice(0, 10);
+  const day1 = new Date(C2_DAY1_DATE + 'T00:00:00Z');
+  const today = new Date(todayDateStr + 'T00:00:00Z');
+  const diffDays = Math.round((today - day1) / 86400000);
+  return diffDays + 1;
+}
+// Every 7th day is a mock, recurring for the whole 45-day course (Day 6,
+// 13, 20, 27, 34, 41) — the same pattern for every Challenge 2.0 level.
+function mockDaysForC2(totalDays) {
+  const days = [];
+  for (let d = 6; d <= totalDays; d += 7) days.push(d);
+  return days;
+}
+
 // The single source of truth for "which folder, how many days, which of
 // them are mocks" for a given student. Challenge 1.0 is unchanged; each
 // Challenge 2.0 level gets its own folder and day count. Used anywhere
@@ -2158,14 +2179,11 @@ const MOCK_DAYS = [11, 18, 25, 30];
 function trackConfigFor(profile) {
   if (profile && profile.challenge === '2.0') {
     const level = profile.level || 'standard';
-    // Mock exam days for Challenge 2.0 are being added track by track —
-    // Standard's Day 6 mini mock is live; Advanced and Expert stay empty
-    // until their own mocks exist.
-    const mockDaysByLevel = { standard: [6], advanced: [6], expert: [6] };
+    const totalDays = 45;
     return {
       folder: `challenge2/${level}`,
-      totalDays: 45,
-      mockDays: mockDaysByLevel[level] || []
+      totalDays: totalDays,
+      mockDays: mockDaysForC2(totalDays)
     };
   }
   return { folder: 'days', totalDays: 30, mockDays: MOCK_DAYS };
@@ -2205,7 +2223,7 @@ function renderGroupSections(groups, buttonHtmlFn) {
 const TRACK_DAY_TOTAL_TASKS = {
   '1.0': { 1: 9, 2: 9, 3: 9, 5: 9, 6: 9, 7: 9, 8: 8, 9: 8, 10: 8, 12: 8, 13: 8, 14: 8, 15: 8, 16: 8 },
   '2.0-standard': { 1: 8, 2: 8, 3: 10, 4: 5, 5: 7, 6: 7 },
-  '2.0-advanced': { 1: 6, 2: 7, 3: 9, 4: 7, 5: 4 },
+  '2.0-advanced': { 1: 6, 2: 7, 3: 9, 4: 7, 5: 4, 7: 7 },
   '2.0-expert': { 1: 6, 2: 7, 3: 9, 4: 8, 5: 4 }
 };
 function totalTasksForTrack(trackKey, day) { return (TRACK_DAY_TOTAL_TASKS[trackKey] || {})[day] || 9; }
