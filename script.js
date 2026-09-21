@@ -138,6 +138,23 @@ function getWeekBounds(day, mockDaysForTrack) {
   return [start, Math.max(start, day)];
 }
 
+// For the leaderboard's "This week" view specifically — a week's results
+// only become visible once that week is genuinely over, not while it's
+// still in progress. Returns [start, end] of the most recent week that has
+// fully finished (i.e. its mock day has passed), or null if none has
+// finished yet. The very first mock day is the boundary before points
+// tracking even started, not a real week under this system, so it's
+// skipped as a candidate end-of-week — the first real week is the one
+// ending at the second mock day.
+function getMostRecentCompletedWeek(currentDay, mockDaysForTrack) {
+  const mocks = (mockDaysForTrack || MOCK_DAYS).slice().sort((a, b) => a - b);
+  let mostRecent = null;
+  for (let i = 1; i < mocks.length; i++) {
+    if (mocks[i] < currentDay) mostRecent = [mocks[i - 1] + 1, mocks[i]];
+  }
+  return mostRecent;
+}
+
 // Streak = consecutive day numbers (counting back from the highest day
 // the student has touched) with at least one completed task. Day-number
 // based rather than calendar-based, since that's how the program runs.
