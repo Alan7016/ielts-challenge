@@ -65,19 +65,19 @@
     if (profile.challenge === '2.0') {
       const level = profile.level || 'standard';
       const levelLabel = level.charAt(0).toUpperCase() + level.slice(1);
-      // Mock exam days for Challenge 2.0 are being added track by track —
-      // Standard's Day 6 mini mock is live; Advanced and Expert stay empty
-      // until their own mocks exist, rather than reusing a day number that
-      // would be meaningless for a track that has no mock built yet.
-      const mockDaysByLevel = { standard: [6], advanced: [6], expert: [6] };
+      const totalDays = 45;
+      // Every 7th day is a mock, recurring for the whole course (Day 6,
+      // 13, 20, 27, 34, 41) — same pattern for every level.
+      const mockDays = [];
+      for (let d = 6; d <= totalDays; d += 7) mockDays.push(d);
       return {
         folder: `challenge2/${level}`,
-        totalDays: 45,
+        totalDays: totalDays,
         eyebrow: `Challenge 2.0 — ${levelLabel}`,
         title: `Your ${levelLabel} Board`,
         tag: `Six weeks, one goal: a stronger band score. Pick a day below and run the full leg.`,
         finishLine: '— day 45 is the finish line —',
-        mockDays: mockDaysByLevel[level] || []
+        mockDays: mockDays
       };
     }
     return {
@@ -115,7 +115,12 @@
       // completion — this first mock in particular has no such dependency.
       // A later mock could be made to depend on a specific day by adding
       // that logic here, but the default is open, not gated.
-      const isEarned = isMock || d === 1 || completedDays.has(d - 1);
+      // A day right after a mock is also never gated on that mock being
+      // "complete" — mock exams save their own completion to a separate
+      // table entirely, not the regular progress table completedDays is
+      // built from, so that check would never actually pass and would
+      // permanently lock the day after every mock for everyone.
+      const isEarned = isMock || d === 1 || cfg.mockDays.includes(d - 1) || completedDays.has(d - 1);
       const isOpen = isPublished && isEarned;
       const isFinish = d === cfg.totalDays;
       if (isOpen) {
