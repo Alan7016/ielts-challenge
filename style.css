@@ -1129,3 +1129,22 @@ button.shake-invalid {
   .lm-svg { display: none; } /* stacked columns make straight connecting lines meaningless on narrow screens */
   .lm-item.lm-linked::after { content: " →"; color: var(--accent); font-weight: 700; }
 }
+
+/* ---------- Drag-to-reorder list (sentence/paragraph ordering exercises) ---------- */
+/* Pointer Events (not native HTML5 drag-and-drop) so this works identically
+   with touch on phones — most students open the platform on mobile, and
+   native HTML5 drag-and-drop has no touch support at all. */
+.dnd-list { display: flex; flex-direction: column; gap: 10px; }
+.dnd-item {
+  display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px;
+  background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  cursor: grab; user-select: none; touch-action: none;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+.dnd-item .dnd-handle { font-size: 1.1rem; color: var(--muted); flex-shrink: 0; line-height: 1.5; }
+.dnd-item .dnd-text { flex: 1; }
+.dnd-item.dnd-dragging { opacity: 0.4; }
+.dnd-item.dnd-placeholder { border-style: dashed; border-color: var(--accent); background: var(--accent-soft); }
+.dnd-item.dnd-correct { border-color: var(--good) !important; background: var(--good-soft); cursor: default; }
+.dnd-item.dnd-incorrect { border-color: var(--warn) !important; background: var(--warn-soft); cursor: default; }
+.dnd-item.dnd-locked { cursor: default; }
