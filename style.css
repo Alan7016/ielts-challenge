@@ -1105,3 +1105,27 @@ button.shake-invalid {
   outline-offset: 2px;
   border-radius: 6px;
 }
+
+/* ---------- Line-matching widget: click a word, click its pair, a line connects them ---------- */
+.line-match { position: relative; display: flex; gap: 40px; }
+.lm-side { flex: 1; display: flex; flex-direction: column; gap: 10px; z-index: 2; position: relative; }
+.lm-item {
+  display: block; width: 100%; text-align: left; font: inherit; font-size: 0.92rem;
+  background: var(--surface); border: 1.5px solid var(--border); border-radius: 9px;
+  padding: 10px 14px; cursor: pointer; color: var(--ink); transition: border-color 0.15s, background 0.15s;
+}
+.lm-item:hover:not(:disabled) { border-color: var(--accent); }
+.lm-item.lm-selected { border-color: var(--accent); background: var(--accent-soft); }
+.lm-item.lm-linked { border-color: var(--accent-line); }
+.lm-item:disabled { cursor: default; opacity: 0.85; }
+.lm-item.lm-correct { border-color: var(--good) !important; background: var(--good-soft); }
+.lm-item.lm-incorrect { border-color: var(--warn) !important; background: var(--warn-soft); }
+.lm-svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+.lm-line { stroke: var(--accent); stroke-width: 2; }
+.lm-line-correct { stroke: var(--good); }
+.lm-line-incorrect { stroke: var(--warn); }
+@media (max-width: 640px) {
+  .line-match { flex-direction: column; gap: 20px; }
+  .lm-svg { display: none; } /* stacked columns make straight connecting lines meaningless on narrow screens */
+  .lm-item.lm-linked::after { content: " →"; color: var(--accent); font-weight: 700; }
+}
