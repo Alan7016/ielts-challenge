@@ -624,8 +624,155 @@ function lockContainer(containerId) {
   if (!container) return;
   container.querySelectorAll('.text-answer').forEach(el => { el.disabled = true; });
   container.querySelectorAll('input[type="radio"]').forEach(el => { el.disabled = true; });
+  container.querySelectorAll('select[data-answer]').forEach(el => { el.disabled = true; });
   const btn = findCheckButton(containerId);
   if (btn) { btn.disabled = true; btn.textContent = '✓ Checked — locked'; }
+}
+
+// ============================================
+// LINE-MATCHING WIDGET — click a word on the left, then its pair on the
+// right, and a line connects them (the classic "draw a line between the
+// matching pair" textbook exercise, instead of a dropdown).
+//
+// Deliberately built on top of the existing dropdown infrastructure rather
+// than replacing it: each left-hand item has a hidden <select
+// data-answer="..."> behind the scenes, and clicking a pair just sets that
+// select's value and fires a 'change' event. That means saving, restoring
+// on reload, checkAllAnswers grading, the score display, and mechanical
+// points all keep working completely unchanged — this only adds a nicer
+// visual layer on top.
+//
+// Expected markup:
+// <div class="line-match" id="...">
+//   <div class="lm-side lm-left">
+//     <button type="button" class="lm-item" data-key="1">1. word</button>
+//     ...
+//   </div>
+//   <svg class="lm-svg"></svg>
+//   <div class="lm-side lm-right">
+//     <button type="button" class="lm-item" data-key="A">A. definition</button>
+//     ...
+//   </div>
+//   <!-- one hidden select per left item, holding every possible right key
+//        as an <option> so .value can be set to any of them -->
+//   <select class="lm-hidden-select" id="..." data-lm-key="1" data-answer="A" hidden>
+//     <option value="A">A</option><option value="B">B</option>...
+//   </select>
+// </div>
+// ============================================
+function initLineMatch(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const svg = container.querySelector('.lm-svg');
+  const leftItems = [...container.querySelectorAll('.lm-left .lm-item')];
+  const rightItems = [...container.querySelectorAll('.lm-right .lm-item')];
+  const hiddenSelects = [...container.querySelectorAll('.lm-hidden-select')];
+  const connections = {}; // leftKey -> rightKey
+  let selectedLeft = null;
+
+  function hiddenFor(leftKey) {
+    return hiddenSelects.find(s => s.dataset.lmKey === leftKey);
+  }
+
+  function redraw() {
+    if (!svg) return;
+    svg.innerHTML = '';
+    const svgRect = svg.getBoundingClientRect();
+    if (svgRect.width === 0) return; // not laid out yet — a later call (resize, rAF) will redraw
+    Object.keys(connections).forEach(leftKey => {
+      const rightKey = connections[leftKey];
+      const leftEl = leftItems.find(i => i.dataset.key === leftKey);
+      const rightEl = rightItems.find(i => i.dataset.key === rightKey);
+      if (!leftEl || !rightEl) return;
+      const lr = leftEl.getBoundingClientRect();
+      const rr = rightEl.getBoundingClientRect();
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', lr.right - svgRect.left);
+      line.setAttribute('y1', lr.top + lr.height / 2 - svgRect.top);
+      line.setAttribute('x2', rr.left - svgRect.left);
+      line.setAttribute('y2', rr.top + rr.height / 2 - svgRect.top);
+      line.setAttribute('class', 'lm-line');
+      const hidden = hiddenFor(leftKey);
+      if (hidden && hidden.classList.contains('correct')) line.classList.add('lm-line-correct');
+      if (hidden && hidden.classList.contains('incorrect')) line.classList.add('lm-line-incorrect');
+      svg.appendChild(line);
+    });
+  }
+
+  function refreshItemClasses() {
+    leftItems.forEach(item => {
+      const key = item.dataset.key;
+      item.classList.toggle('lm-linked', !!connections[key]);
+      const hidden = hiddenFor(key);
+      item.classList.toggle('lm-correct', !!(hidden && hidden.classList.contains('correct')));
+      item.classList.toggle('lm-incorrect', !!(hidden && hidden.classList.contains('incorrect')));
+    });
+    rightItems.forEach(item => {
+      const key = item.dataset.key;
+      const linkedLeftKey = Object.keys(connections).find(lk => connections[lk] === key);
+      item.classList.toggle('lm-linked', !!linkedLeftKey);
+      const hidden = linkedLeftKey ? hiddenFor(linkedLeftKey) : null;
+      item.classList.toggle('lm-correct', !!(hidden && hidden.classList.contains('correct')));
+      item.classList.toggle('lm-incorrect', !!(hidden && hidden.classList.contains('incorrect')));
+    });
+  }
+
+  function connect(leftKey, rightKey) {
+    connections[leftKey] = rightKey;
+    const hidden = hiddenFor(leftKey);
+    if (hidden) {
+      hidden.value = rightKey;
+      hidden.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+    refreshItemClasses();
+    redraw();
+  }
+
+  leftItems.forEach(item => {
+    item.addEventListener('click', () => {
+      if (item.disabled) return;
+      leftItems.forEach(i => i.classList.remove('lm-selected'));
+      selectedLeft = (selectedLeft === item.dataset.key) ? null : item.dataset.key;
+      if (selectedLeft) item.classList.add('lm-selected');
+    });
+  });
+
+  rightItems.forEach(item => {
+    item.addEventListener('click', () => {
+      if (item.disabled || !selectedLeft) return;
+      connect(selectedLeft, item.dataset.key);
+      leftItems.forEach(i => i.classList.remove('lm-selected'));
+      selectedLeft = null;
+    });
+  });
+
+  // Restore any connection already saved (e.g. after reloading the page).
+  hiddenSelects.forEach(sel => {
+    if (sel.value) connections[sel.dataset.lmKey] = sel.value;
+  });
+  refreshItemClasses();
+  requestAnimationFrame(redraw); // wait one frame so layout is settled before measuring positions
+  window.addEventListener('resize', redraw);
+
+  // After "Check answers" runs and locks the hidden selects, disable the
+  // visible blocks too and repaint the lines in their correct/incorrect
+  // colors. checkAllAnswers's onclick already calls this by name — see
+  // markLineMatchResult below — so no observer is needed here.
+  container._lmRefresh = () => {
+    leftItems.forEach(i => { i.disabled = true; });
+    rightItems.forEach(i => { i.disabled = true; });
+    refreshItemClasses();
+    redraw();
+  };
+}
+
+// Called right after checkAllAnswers grades a container that holds a
+// line-match widget — repaints the connecting lines and blocks in their
+// correct/incorrect colors, and locks further clicks. Safe to call on a
+// container with no line-match widget in it; it just does nothing.
+function markLineMatchResult(containerId) {
+  const container = document.getElementById(containerId);
+  if (container && container._lmRefresh) container._lmRefresh();
 }
 
 function checkComprehension(containerId, scoreId) {
@@ -765,6 +912,24 @@ function checkAllAnswers(containerId, scoreId) {
       input.classList.add('incorrect');
       input.style.borderColor = 'var(--warn)';
       input.title = `Correct answer: ${input.dataset.correct}`;
+    }
+  });
+
+  // Dropdown matching questions — the same data-answer pattern as
+  // computeTaskAccuracy uses for mechanical points, but this function
+  // never had matching support added, so every select-based matching
+  // task was silently scoring 0/0 until now.
+  container.querySelectorAll('select[data-answer]').forEach((sel) => {
+    total++;
+    sel.classList.remove('correct', 'incorrect');
+    if (sel.value === sel.dataset.answer) {
+      correct++;
+      sel.classList.add('correct');
+      sel.style.borderColor = 'var(--good)';
+    } else {
+      sel.classList.add('incorrect');
+      sel.style.borderColor = 'var(--warn)';
+      sel.title = `Correct answer: ${sel.dataset.answer}`;
     }
   });
 
