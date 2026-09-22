@@ -587,6 +587,9 @@ function getCompletionStatus(container) {
   container.querySelectorAll('.text-answer').forEach(input => {
     fields.push({ el: input, filled: input.value.trim() !== '' });
   });
+  container.querySelectorAll('select[data-answer]').forEach(sel => {
+    fields.push({ el: sel, filled: sel.value.trim() !== '' });
+  });
   const total = fields.length;
   const answeredCount = fields.filter(f => f.filled).length;
   const firstUnanswered = fields.find(f => !f.filled);
