@@ -787,6 +787,107 @@ function markLineMatchResult(containerId) {
   if (container && container._lmRefresh) container._lmRefresh();
 }
 
+// ---------- Drag-to-reorder list (sentence/paragraph sequencing exercises) ----------
+// Pointer Events, not native HTML5 drag-and-drop — most students open the
+// platform on a phone, and native HTML5 DnD has no touch support at all.
+// containerId wraps a .dnd-list of .dnd-item[data-key][data-sync-select]
+// elements (shuffled order) plus one hidden <select data-answer="N"> per
+// item, where N is that item's correct 1-based position — the same
+// hidden-select trick initLineMatch and the paraphrase-match sync-select
+// use, so a reorder task plugs into the existing getCompletionStatus /
+// checkAllAnswers / computeTaskAccuracy pipeline with zero changes there.
+function initDragReorder(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const list = container.querySelector('.dnd-list');
+  if (!list) return;
+
+  function syncHiddenSelects() {
+    [...list.querySelectorAll('.dnd-item')].forEach((item, i) => {
+      const sel = document.getElementById(item.dataset.syncSelect);
+      // dispatch 'change' (bubbles) so this actually gets picked up and
+      // saved — the same thing initLineMatch's connect() does for its own
+      // hidden selects. Without this, a reordered answer looks saved but
+      // silently never persists.
+      if (sel) { sel.value = String(i + 1); sel.dispatchEvent(new Event('change', { bubbles: true })); }
+    });
+  }
+
+  let dragEl = null, placeholder = null, pointerId = null;
+
+  function onPointerMove(e) {
+    if (!dragEl) return;
+    e.preventDefault();
+    const y = e.clientY;
+    dragEl.style.transform = `translateY(${y - dragEl._startY}px)`;
+    const items = [...list.querySelectorAll('.dnd-item:not(.dnd-dragging)')].filter(i => i !== placeholder);
+    let closest = null, closestOffset = Number.NEGATIVE_INFINITY;
+    items.forEach(item => {
+      const box = item.getBoundingClientRect();
+      const offset = y - (box.top + box.height / 2);
+      if (offset < 0 && offset > closestOffset) { closestOffset = offset; closest = item; }
+    });
+    if (closest) list.insertBefore(placeholder, closest);
+    else list.appendChild(placeholder);
+  }
+
+  function onPointerUp() {
+    if (!dragEl) return;
+    try { dragEl.releasePointerCapture(pointerId); } catch (e) {}
+    dragEl.classList.remove('dnd-dragging');
+    dragEl.style.transform = '';
+    list.insertBefore(dragEl, placeholder);
+    if (placeholder) placeholder.remove();
+    placeholder = null;
+    dragEl = null;
+    document.removeEventListener('pointermove', onPointerMove);
+    document.removeEventListener('pointerup', onPointerUp);
+    syncHiddenSelects();
+  }
+
+  list.querySelectorAll('.dnd-item').forEach(item => {
+    item.addEventListener('pointerdown', (e) => {
+      if (item.classList.contains('dnd-locked')) return;
+      dragEl = item;
+      dragEl._startY = e.clientY;
+      pointerId = e.pointerId;
+      try { item.setPointerCapture(pointerId); } catch (err) {}
+      placeholder = document.createElement('div');
+      placeholder.className = 'dnd-item dnd-placeholder';
+      placeholder.style.height = item.getBoundingClientRect().height + 'px';
+      list.insertBefore(placeholder, item.nextSibling);
+      item.classList.add('dnd-dragging');
+      document.addEventListener('pointermove', onPointerMove);
+      document.addEventListener('pointerup', onPointerUp);
+    });
+  });
+
+  // No initial syncHiddenSelects() call here, deliberately: restoreField
+  // (which writes a returning student's saved order into these same hidden
+  // selects) runs later, inside initTaskFlow, than this function does — so
+  // an unconditional sync here would win the race and silently overwrite
+  // real saved progress with the freshly-shuffled starting order on every
+  // reload. Each hidden select's shuffled starting position is instead
+  // baked into the HTML itself (the pre-selected <option>), so a brand-new
+  // student's "Check" button still works before they've dragged anything,
+  // and a returning student's restored value simply isn't touched here.
+}
+
+// Called after checkAllAnswers has run on a drag-reorder container — colors
+// each item green/red by whether it landed in its correct position, and
+// stops further dragging (mirrors markLineMatchResult's role for line-match).
+function markDragReorderResult(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.querySelectorAll('.dnd-item').forEach(item => {
+    item.classList.add('dnd-locked');
+    const sel = document.getElementById(item.dataset.syncSelect);
+    if (!sel) return;
+    item.classList.toggle('dnd-correct', sel.classList.contains('correct'));
+    item.classList.toggle('dnd-incorrect', sel.classList.contains('incorrect'));
+  });
+}
+
 function checkComprehension(containerId, scoreId) {
   const container = document.getElementById(containerId);
   if (!container) return;
