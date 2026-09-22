@@ -2440,7 +2440,7 @@ function renderGroupSections(groups, buttonHtmlFn) {
 // previously duplicated per-file, which let it silently drift out of date.
 const TRACK_DAY_TOTAL_TASKS = {
   '1.0': { 1: 9, 2: 9, 3: 9, 5: 9, 6: 9, 7: 9, 8: 8, 9: 8, 10: 8, 12: 8, 13: 8, 14: 8, 15: 8, 16: 8 },
-  '2.0-standard': { 1: 8, 2: 8, 3: 10, 4: 5, 5: 7, 6: 7 },
+  '2.0-standard': { 1: 8, 2: 8, 3: 10, 4: 5, 5: 7, 6: 7, 7: 7 },
   '2.0-advanced': { 1: 6, 2: 7, 3: 9, 4: 7, 5: 4, 7: 7 },
   '2.0-expert': { 1: 6, 2: 7, 3: 9, 4: 8, 5: 4, 7: 8 }
 };
