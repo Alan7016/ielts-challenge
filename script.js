@@ -641,6 +641,48 @@ function lockContainer(containerId) {
   if (btn) { btn.disabled = true; btn.textContent = '✓ Checked — locked'; }
 }
 
+// ---------- Disable every "Check answers" button until its fields are filled ----------
+// checkAllAnswers/checkComprehension already refuse to grade (and shake +
+// show "X/Y done") on an incomplete attempt rather than hard-locking it —
+// but that only helps if the button gets clicked and the function actually
+// runs. This goes one step further and disables the button itself the
+// moment its container isn't fully filled, so an empty or partial attempt
+// can never be clicked into a 0/N lock in the first place — the exact
+// failure mode that leaves a student stuck with no way back in except a
+// manual database fix.
+//
+// Finds every check-answers button on the page itself, from its onclick
+// attribute, so no individual day file needs to change or opt in — calling
+// this once (from the end of initTaskFlow, after restore has run) covers
+// every task on every day automatically, past and future.
+function initCheckButtonGating() {
+  const content = document.getElementById('content');
+  if (!content) return;
+  const wired = [];
+  content.querySelectorAll('button[onclick]').forEach(btn => {
+    const onclick = btn.getAttribute('onclick') || '';
+    const m = onclick.match(/(?:checkAllAnswers|checkComprehension)\(\s*'([^']+)'/);
+    if (!m) return;
+    const container = document.getElementById(m[1]);
+    if (!container) return;
+    wired.push({ btn, container });
+  });
+  if (!wired.length) return;
+
+  function refresh() {
+    wired.forEach(({ btn, container }) => {
+      // Already checked and locked — leave it exactly as lockContainer set it.
+      if (btn.textContent.includes('locked')) return;
+      const status = getCompletionStatus(container);
+      btn.disabled = !status.allFilled;
+    });
+  }
+
+  content.addEventListener('input', refresh);
+  content.addEventListener('change', refresh);
+  refresh(); // reflects any answers restoreField already filled in on load
+}
+
 // ============================================
 // LINE-MATCHING WIDGET — click a word on the left, then its pair on the
 // right, and a line connects them (the classic "draw a line between the
@@ -1691,6 +1733,7 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
 
   showTask(current);
   initHighlightTool(dayNumber);
+  initCheckButtonGating();
 }
 
 function fireConfetti() {
