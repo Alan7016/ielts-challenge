@@ -1481,8 +1481,70 @@ async function initMentorComments(userId, dayNumber) {
   });
 }
 
+// ---------- PERMANENT SAFETY NET: no field can ever silently fail to save again ----------
+// Every "answers are disappearing" bug we've hit so far — on every level,
+// found reactively, one file at a time — has traced back to the exact same
+// root cause: the autosave system keys every field by its id (or, for
+// radios, by its name+value), and silently does nothing if that identity is
+// missing. A missing id or a missing radio value doesn't error, doesn't
+// warn, doesn't show up in any test unless someone reloads the page and
+// checks — it just quietly never saves, while looking completely normal to
+// the student typing into it.
+//
+// Auditing every existing file by hand and patching each one found the bug
+// on Standard Day 8 (and earlier, on the new Day 9s) — but that only fixes
+// the files someone happened to check. It does nothing for a file nobody's
+// looked at yet, or a future day that repeats the same slip. That's the
+// actual problem: this bug class can only ever be found reactively, after
+// students have already lost work, for as long as fixing it means manually
+// auditing HTML.
+//
+// So instead of relying on every future file being built perfectly, this
+// runs automatically on every single day page, for every student, right
+// before anything is restored or wired up, and guarantees the two specific
+// conditions that have caused every incident so far can no longer exist:
+//   1. Every radio button gets a real value="" attribute if it's missing
+//      one, numbered by its position within its own name-group — exactly
+//      the convention already used everywhere this was fixed by hand.
+//      Without this, a restored answer can never be found again on reload,
+//      because restoring a radio works by searching for a matching value.
+//   2. Every field the autosave system would otherwise key by id — a
+//      text-answer input, a plain text input, a required textarea, or any
+//      select — gets one automatically if it's missing, derived from its
+//      task number and position so it stays stable across reloads for that
+//      same page.
+// A field that already has what it needs is left completely untouched.
+// This makes the entire bug class structurally impossible from here on,
+// for every existing day and every day still to be built, without
+// depending on anyone remembering to check for it ever again.
+function ensureFieldIdentitySafety() {
+  const content = document.getElementById('content');
+  if (!content) return;
+
+  const radioGroupCounters = {};
+  content.querySelectorAll('input[type="radio"]').forEach(r => {
+    if (r.hasAttribute('value') && r.getAttribute('value') !== '') return;
+    const name = r.name || '';
+    const idx = radioGroupCounters[name] || 0;
+    radioGroupCounters[name] = idx + 1;
+    r.setAttribute('value', String(idx));
+    console.warn('[auto-fix] radio was missing value= — assigned automatically so it can be saved/restored:', r.outerHTML.slice(0, 100));
+  });
+
+  let autoIdCounter = 0;
+  content.querySelectorAll('input.text-answer, input[type="text"]:not(.notes-box), textarea.text-answer, textarea.no-check:not(.notes-box), select').forEach(el => {
+    if (el.id) return;
+    const taskEl = el.closest('.task');
+    const taskNum = taskEl ? taskEl.dataset.task : 'x';
+    autoIdCounter += 1;
+    el.id = `autoid-task${taskNum}-${autoIdCounter}`;
+    console.warn('[auto-fix] field was missing id= — assigned automatically so it can be saved/restored:', el.outerHTML.slice(0, 100));
+  });
+}
+
 async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
 
+  ensureFieldIdentitySafety();
   checkFns = checkFns || {};
   const isAdmin = currentUserRole === 'admin' || currentUserRole === 'mentor';
   let current = 1;
