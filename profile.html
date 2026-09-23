@@ -107,7 +107,7 @@
 
     targetProfile = profile;
     if (isStaffViewing) {
-      const { data } = await sb.from('profiles').select('full_name, role, group_id, avatar_url').eq('id', targetId).single();
+      const { data } = await sb.from('profiles').select('full_name, role, group_id, avatar_url, challenge').eq('id', targetId).single();
       if (!data) {
         document.getElementById('profile-name').textContent = 'Student not found';
         document.getElementById('content').style.display = 'block';
@@ -120,7 +120,8 @@
       banner.className = 'wrap';
       banner.style.cssText = 'padding-top:20px;';
       banner.innerHTML = `<a href="#" onclick="history.back(); return false;" class="back-link">← Back to dashboard</a>
-        <p style="font-family:var(--mono); font-size:0.78rem; color:var(--accent); margin-top:8px;">👁 Viewing as ${profile.role} — read only</p>`;
+        <p style="font-family:var(--mono); font-size:0.78rem; color:var(--accent); margin-top:8px;">👁 Viewing as ${profile.role} — read only</p>
+        ${targetProfile.challenge === '2.0' ? '<p style="font-family:var(--mono); font-size:0.76rem; color:var(--muted); margin-top:4px;">Showing every day, including before Day 7 — the student\'s own view and the leaderboard only count Day 7 onward.</p>' : ''}`;
       document.querySelector('header.topbar').insertAdjacentElement('afterend', banner);
       document.getElementById('edit-profile-btn').style.display = 'none';
     } else {
@@ -189,7 +190,23 @@
       sb.from('progress').select('day, completed').eq('student_id', targetId).eq('completed', true)
     ]);
 
-    const points = allPoints || [];
+    // Match the leaderboard's own rule exactly: for Challenge 2.0, only Day
+    // 7 onward ever counts competitively (the pre-mock period before this
+    // points system existed is deliberately excluded there). This profile
+    // page used to sum every day with no exclusion at all, so a Challenge
+    // 2.0 student's own "Total points" could be well above what the same
+    // points system credits them on the leaderboard — confusing, and not
+    // actually a different number, just an inconsistently-scoped one.
+    //
+    // That exclusion only applies to what a student sees about themselves.
+    // A staff member viewing a student's profile (canEdit is false in that
+    // case) sees the full, unfiltered history instead — including the
+    // pre-Day-7 points that don't count toward rank — specifically so a
+    // "why don't my numbers match" question can be answered by looking,
+    // rather than guessing.
+    const allRows = allPoints || [];
+    const excludeEarlyDays = targetProfile.challenge === '2.0' && canEdit;
+    const points = excludeEarlyDays ? allRows.filter(p => p.day >= 7) : allRows;
     const total = points.reduce((sum, p) => sum + Number(p.points), 0);
     const weekTotal = points.filter(p => p.day >= weekFrom && p.day <= weekTo).reduce((sum, p) => sum + Number(p.points), 0);
     const todayRows = points.filter(p => p.day === currentDay);
