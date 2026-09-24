@@ -56,13 +56,14 @@
 <script src="script.js"></script>
 <script>
   // Mentors only ever work with Challenge 2.0 groups — one mentor, one
-  // group, full detail view. Total-tasks-per-day mirrors what's actually
-  // been built for each level; falls back to 9 for any day not listed yet.
-  const MENTOR_DAY_TOTAL_TASKS = {
-    standard: { 1: 11, 2: 8, 3: 10, 4: 5, 5: 7, 6: 7 }
-    // advanced / expert: no days built yet — falls back to 9 below, harmless until real days exist.
-  };
-  function totalTasksForDay(level, day) { return (MENTOR_DAY_TOTAL_TASKS[level] || {})[day] || 9; }
+  // Total-tasks-per-day: delegates to the same shared TRACK_DAY_TOTAL_TASKS /
+  // totalTasksForTrack in script.js that every other dashboard and the
+  // student board itself already use — this used to be its own separate,
+  // unmaintained copy (with no advanced/expert entries at all, silently
+  // falling back to 9 for every single advanced/expert day), which made
+  // fully-completed days look partially done here specifically. Now there's
+  // exactly one place this number is ever defined.
+  function totalTasksForDay(level, day) { return totalTasksForTrack('2.0-' + level, day); }
 
   function renderAvatar(url, fullName) {
     const el = document.getElementById('avatar-display');
