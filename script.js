@@ -1177,21 +1177,26 @@ async function upsertWithRetry(table, payload, onConflict) {
   } catch (err) {
     console.error(table + ' save failed:', err);
     showSaveWarning();
-    // one silent retry after a short delay — covers a brief network blip
-    // without bothering the student
-    setTimeout(async () => {
-      try {
-        const retry = await sb.from(table).upsert(payload, { onConflict });
-        if (retry.error) throw retry.error;
-        showSaveRecovered();
-      } catch (err2) {
-        console.error(table + ' retry also failed:', err2);
-        // Leave the warning banner up rather than retry again — if the
-        // connection is genuinely still down, another silent attempt would
-        // just repeat the same failure with no benefit.
-      }
-    }, 3000);
-    return false;
+    // One retry after a short delay — covers a brief network blip. This is
+    // now properly awaited end-to-end (it previously fired in a detached
+    // setTimeout and returned false immediately, before the retry even
+    // ran) — so a caller that genuinely needs to know whether the data is
+    // safe, like goNext deciding whether a student can move on to the next
+    // task, gets a trustworthy final answer instead of a premature "false"
+    // that might have turned true three seconds later with nobody aware.
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    try {
+      const retry = await sb.from(table).upsert(payload, { onConflict });
+      if (retry.error) throw retry.error;
+      showSaveRecovered();
+      return true;
+    } catch (err2) {
+      console.error(table + ' retry also failed:', err2);
+      // Leave the warning banner up rather than retry again — if the
+      // connection is genuinely still down, another silent attempt would
+      // just repeat the same failure with no benefit.
+      return false;
+    }
   }
 }
 
@@ -1283,7 +1288,7 @@ async function autoAwardPoints(userId, day, taskContainer) {
 }
 
 async function saveProgress(userId, day, task, completed, locked) {
-  await upsertWithRetry('progress',
+  return await upsertWithRetry('progress',
     { student_id: userId, day, task, completed, locked, updated_at: new Date().toISOString() },
     'student_id,day,task'
   );
@@ -1686,9 +1691,19 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
       // its debounce window could lose the race against freezeTask, leaving
       // a field that's both empty AND locked with no way to fix it.
       await flushPendingSaves(current);
+      const saved = await saveProgress(userId, dayNumber, current, true, true);
+      if (!saved) {
+        // Don't silently let the student move on — their local state would
+        // say "done" while the server has no record of it at all, which is
+        // exactly the failure that leaves a task looking untouched to a
+        // mentor days later with zero trace of what actually happened. The
+        // fields are still unlocked and everything already typed is still
+        // there — this just stops here instead of pretending it worked.
+        alert("Your progress couldn't be saved just now — please check your internet connection and press Next again. Nothing you've written has been lost.");
+        return;
+      }
       lockedTasks[current] = true;
       doneTasks[current] = true;
-      await saveProgress(userId, dayNumber, current, true, true);
       await autoAwardPoints(userId, dayNumber, container);
       freezeTask(current, checkFns[current]);
       // Spelling/grammar review — regular days only (24+), never on mock
