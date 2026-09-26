@@ -85,7 +85,11 @@
             background: #ddd;
             outline: none;
             border-radius: 3px;
-            cursor: pointer;
+            /* Display-only — this is a real exam, not a scrubbable player.
+               pointer-events:none blocks drag/click/keyboard seeking even if
+               some browser still lets a range input receive focus. */
+            cursor: default;
+            pointer-events: none;
         }
 
         #progress-bar::-webkit-slider-thumb {
@@ -533,60 +537,35 @@
             background-color: #ffff00;
         }
 
-        .comment-highlight {
-            background-color: #90EE90;
-            position: relative;
-            cursor: help;
-        }
-
-        .comment-tooltip {
+        /* Floating highlight toolbar — replaces the old desktop-only
+           right-click menu with something that works the same on a phone:
+           select text (or tap an existing highlight) and a single button
+           appears right above it. */
+        .highlight-toolbar {
             position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 14px;
-            white-space: nowrap;
             z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
+            transform: translate(-50%, calc(-100% - 10px));
         }
 
-        .comment-highlight:hover .comment-tooltip {
-            opacity: 1;
-        }
-
-        .context-menu {
-            position: absolute;
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
+        .highlight-toolbar.hidden {
             display: none;
-            min-width: 140px;
         }
 
-        .context-menu-item {
-            padding: 12px 16px;
+        .highlight-toolbar button {
+            background: #222;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 9px 16px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 16px;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+            white-space: nowrap;
         }
 
-        .context-menu-item:hover {
-            background-color: #f8f9fa;
-        }
-
-        .context-menu-item:last-child {
-            border-bottom: none;
+        .highlight-toolbar button:active {
+            background: #444;
         }
 
         .modal-overlay {
@@ -747,17 +726,6 @@
                     </svg>
                 </button>
                 <input type="range" id="new-volume-slider" min="0" max="1" step="0.01" value="1">
-            </div>
-            <div class="speed-container">
-                <button id="speed-btn" class="player-btn">1x</button>
-                <div id="speed-options" class="hidden">
-                    <div data-speed="0.5">0.5x</div>
-                    <div data-speed="0.75">0.75x</div>
-                    <div data-speed="1">1x</div>
-                    <div data-speed="1.25">1.25x</div>
-                    <div data-speed="1.5">1.5x</div>
-                    <div data-speed="2">2x</div>
-                </div>
             </div>
         </div>
     </div>
@@ -947,7 +915,7 @@
         <div data-part="3"><p style="color:#888;font-style:italic;">Transcript not available for this recording.</p></div>
     </div>
 
-    <audio id="global-audio-player" class="hidden" preload="metadata"></audio>
+    <audio id="global-audio-player" class="hidden" preload="auto"></audio>
 
     <!-- Nav Arrows -->
     <div class="nav-arrows">
@@ -1024,12 +992,10 @@
         <button id="deliver-button" class="footer__deliverButton___3FM07"><span>Check Answers</span></button>
     </nav>
 
-    <!-- Context Menu -->
-    <div id="contextMenu" class="context-menu">
-        <div class="context-menu-item" onclick="highlightText()">Highlight</div>
-        <div class="context-menu-item" onclick="addComment()">Comment</div>
-        <div class="context-menu-item" id="clear-item" onclick="clearHighlight()" style="display:none;">Clear</div>
-        <div class="context-menu-item" onclick="clearAllHighlights()">Clear All</div>
+    <!-- Floating highlight toolbar: select text, or tap an existing
+         highlight, and this one button appears right above it. -->
+    <div id="highlightToolbar" class="highlight-toolbar hidden">
+        <button type="button" id="highlightToolbarBtn"></button>
     </div>
 
     <!-- Result Modal -->
@@ -1070,9 +1036,9 @@
         };
 
         const partAudioSources = {
-            1: 'audio/day13-mock-part1.mp3',
-            2: 'audio/day13-mock-part2.mp3',
-            3: 'audio/day13-mock-part3.mp3'
+            1: 'day13-mock-part1.mp3',
+            2: 'day13-mock-part2.mp3',
+            3: 'day13-mock-part3.mp3'
         };
         // Exposed explicitly on window: a top-level `const` does NOT become
         // a window property the way `var` does, and the mock orchestrator
@@ -1088,16 +1054,12 @@
         // listener below, and the stripped-down switchToPart()).
         let audioPartIndex = 1;
         let currentQuestion = 1;
-        let selectedRange = null;
-        let contextElement = null;
 
         const audioPlayer = document.getElementById('global-audio-player');
         const playPauseBtn = document.getElementById('play-pause-btn');
         const progressBar = document.getElementById('progress-bar');
         const currentTimeEl = document.getElementById('current-time');
         const totalDurationEl = document.getElementById('total-duration');
-        const speedBtn = document.getElementById('speed-btn');
-        const speedOptions = document.getElementById('speed-options');
         const volumeSlider = document.getElementById('new-volume-slider');
 
         audioPlayer.src = partAudioSources[1];
@@ -1122,7 +1084,8 @@
         });
         audioPlayer.addEventListener('loadedmetadata', () => { progressBar.max = audioPlayer.duration; totalDurationEl.textContent = formatTime(audioPlayer.duration); });
         audioPlayer.addEventListener('timeupdate', () => { progressBar.value = audioPlayer.currentTime; currentTimeEl.textContent = formatTime(audioPlayer.currentTime); });
-        progressBar.addEventListener('input', () => { audioPlayer.currentTime = progressBar.value; });
+        // No seek listener on progressBar — it's display-only (see its CSS,
+        // pointer-events:none) so there's no drag-to-skip-ahead/rewind.
         volumeSlider.addEventListener('input', (e) => { audioPlayer.volume = e.target.value; });
         // Section audio must keep playing straight through to the next
         // part on its own fixed schedule, completely independent of which
@@ -1139,11 +1102,50 @@
                 audioPlayer.play().catch(function(){});
             }
         });
-        speedBtn.addEventListener('click', (e) => { e.stopPropagation(); speedOptions.classList.toggle('hidden'); });
-        speedOptions.addEventListener('click', (e) => {
-            if (e.target.dataset.speed) { audioPlayer.playbackRate = parseFloat(e.target.dataset.speed); speedBtn.textContent = e.target.dataset.speed + 'x'; speedOptions.classList.add('hidden'); }
+        // No pausing, once genuinely started — not from the on-page button
+        // (already disabled the moment playback begins, see above), and not
+        // from a hardware/Bluetooth media key or the OS's lock-screen media
+        // controls either. If anything manages to pause it mid-test anyway,
+        // resume immediately rather than letting the test sit paused.
+        let listeningStarted = false;
+        audioPlayer.addEventListener('play', () => { listeningStarted = true; });
+        audioPlayer.addEventListener('pause', () => {
+            if (listeningStarted && !audioPlayer.ended) audioPlayer.play().catch(function(){});
         });
-        document.addEventListener('click', () => speedOptions.classList.add('hidden'));
+        // Same idea for the OS-level media controls a real <audio> element
+        // can expose (lock screen, Bluetooth headset, earbuds) — without
+        // this, some browsers offer working pause/seek buttons there even
+        // though there's no on-page way to reach them.
+        if ('mediaSession' in navigator) {
+            ['pause', 'seekbackward', 'seekforward', 'seekto', 'previoustrack', 'nexttrack'].forEach(action => {
+                try { navigator.mediaSession.setActionHandler(action, () => {}); } catch (e) {}
+            });
+        }
+
+        // ---- Stall recovery ----
+        // A genuine network stall leaves the element "playing" (not paused)
+        // but currentTime stops advancing, with no error and no pause event
+        // — the auto-resume above never sees it, so without this the
+        // student is just stuck staring at frozen audio with no way to
+        // recover themselves. If no progress has been made for 8s while it
+        // should be playing, force a fresh fetch of the current part from
+        // the same position and resume.
+        let lastProgressAt = 0, stallRecoveryInFlight = false;
+        audioPlayer.addEventListener('play', () => { lastProgressAt = Date.now(); });
+        audioPlayer.addEventListener('timeupdate', () => { lastProgressAt = Date.now(); });
+        setInterval(() => {
+            if (!listeningStarted || audioPlayer.ended || audioPlayer.paused || stallRecoveryInFlight) return;
+            if (Date.now() - lastProgressAt > 8000) {
+                stallRecoveryInFlight = true;
+                const resumeAt = audioPlayer.currentTime;
+                audioPlayer.src = partAudioSources[audioPartIndex];
+                audioPlayer.load();
+                audioPlayer.currentTime = resumeAt;
+                audioPlayer.play().catch(function(){});
+                lastProgressAt = Date.now();
+                setTimeout(() => { stallRecoveryInFlight = false; }, 5000);
+            }
+        }, 4000);
 
         function switchToPart(partNumber) {
             currentPart = partNumber;
@@ -1374,57 +1376,100 @@
         document.getElementById('deliver-button').addEventListener('click', () => checkAnswers(false));
         document.getElementById('modal-close-button').addEventListener('click', () => { document.getElementById('result-modal').style.display = 'none'; });
 
-        document.addEventListener('selectionchange', () => {
-            const sel = window.getSelection();
-            if (sel && sel.rangeCount > 0 && !sel.isCollapsed) selectedRange = sel.getRangeAt(0);
-        });
-        document.body.addEventListener('contextmenu', function (e) {
-            const text = window.getSelection().toString();
-            if (!text) return;
-            e.preventDefault();
-            const menu = document.getElementById('contextMenu');
-            menu.style.left = e.pageX + 'px';
-            menu.style.top = e.pageY + 'px';
-            menu.style.display = 'block';
-            contextElement = e.target.closest('.highlight, .comment-highlight');
-            document.getElementById('clear-item').style.display = contextElement ? 'block' : 'none';
-        });
-        document.body.addEventListener('click', function (e) {
-            if (!e.target.closest('.context-menu')) document.getElementById('contextMenu').style.display = 'none';
-        });
-        function highlightText() {
-            if (!selectedRange || selectedRange.collapsed) return;
-            try { const span = document.createElement('span'); span.className = 'highlight'; selectedRange.surroundContents(span); } catch (e) { }
-            window.getSelection().removeAllRanges();
-            document.getElementById('contextMenu').style.display = 'none';
+        // ---------- Highlighting (touch- and mouse-friendly) ----------
+        // Select some text (drag on desktop, long-press-and-drag on a
+        // phone) and a single "Highlight" button appears right above the
+        // selection. Tap it to highlight; tap an existing highlight to get
+        // a "Remove highlight" button instead. No right-click required, so
+        // this actually works on mobile, which is where most students will
+        // be sitting this test.
+        const highlightToolbar = document.getElementById('highlightToolbar');
+        const highlightToolbarBtn = document.getElementById('highlightToolbarBtn');
+        let pendingRange = null;
+        let pendingHighlightEl = null;
+
+        function hideHighlightToolbar() {
+            highlightToolbar.classList.add('hidden');
+            pendingRange = null;
+            pendingHighlightEl = null;
         }
-        function addComment() {
-            const t = prompt('Enter your comment:');
-            if (!t || !selectedRange) return;
+
+        function showHighlightToolbar(rect, label, onActivate) {
+            highlightToolbarBtn.textContent = label;
+            highlightToolbarBtn.onclick = function (e) {
+                e.stopPropagation();
+                onActivate();
+            };
+            highlightToolbar.style.left = (rect.left + rect.width / 2 + window.scrollX) + 'px';
+            highlightToolbar.style.top = (rect.top + window.scrollY) + 'px';
+            highlightToolbar.classList.remove('hidden');
+        }
+
+        function wrapRangeAsHighlight(range) {
+            const span = document.createElement('span');
+            span.className = 'highlight';
             try {
-                const span = document.createElement('span'); span.className = 'comment-highlight';
-                const tip = document.createElement('span'); tip.className = 'comment-tooltip'; tip.textContent = t;
-                span.appendChild(tip); selectedRange.surroundContents(span);
-            } catch (e) { }
-            window.getSelection().removeAllRanges();
-            document.getElementById('contextMenu').style.display = 'none';
-        }
-        function clearHighlight() {
-            if (contextElement) {
-                const parent = contextElement.parentNode;
-                while (contextElement.firstChild) parent.insertBefore(contextElement.firstChild, contextElement);
-                parent.removeChild(contextElement); parent.normalize();
+                range.surroundContents(span);
+            } catch (e) {
+                // surroundContents throws if the selection crosses element
+                // boundaries (e.g. spans two <li> items) — extract and
+                // re-wrap instead, which handles that case too.
+                try {
+                    span.appendChild(range.extractContents());
+                    range.insertNode(span);
+                } catch (e2) { /* give up quietly rather than break the page */ }
             }
-            document.getElementById('contextMenu').style.display = 'none';
         }
-        function clearAllHighlights() {
-            document.querySelectorAll('.highlight, .comment-highlight').forEach(el => {
-                const parent = el.parentNode;
-                while (el.firstChild) parent.insertBefore(el.firstChild, el);
-                parent.removeChild(el); parent.normalize();
+
+        function unwrapHighlight(el) {
+            const parent = el.parentNode;
+            if (!parent) return;
+            while (el.firstChild) parent.insertBefore(el.firstChild, el);
+            parent.removeChild(el);
+            parent.normalize();
+        }
+
+        // Only offer highlighting over the actual exam content — never the
+        // audio player, footer nav, or results modal.
+        function withinHighlightableArea(node) {
+            const el = node.nodeType === 1 ? node : node.parentElement;
+            return !!(el && el.closest('.left-panel'));
+        }
+
+        function handleSelectionEnd() {
+            const sel = window.getSelection();
+            if (!sel || sel.rangeCount === 0 || sel.isCollapsed) return;
+            const range = sel.getRangeAt(0);
+            if (!withinHighlightableArea(range.commonAncestorContainer)) return;
+            const rect = range.getBoundingClientRect();
+            if (rect.width === 0 && rect.height === 0) return;
+            pendingRange = range;
+            showHighlightToolbar(rect, 'Highlight', function () {
+                if (pendingRange) wrapRangeAsHighlight(pendingRange);
+                sel.removeAllRanges();
+                hideHighlightToolbar();
             });
-            document.getElementById('contextMenu').style.display = 'none';
         }
+        document.addEventListener('mouseup', handleSelectionEnd);
+        document.addEventListener('touchend', function () { setTimeout(handleSelectionEnd, 10); });
+
+        // Tapping an existing highlight (with no fresh drag-selection) offers
+        // to remove it instead.
+        document.querySelector('.left-panel').addEventListener('click', function (e) {
+            const hit = e.target.closest('.highlight');
+            if (!hit) return;
+            const sel = window.getSelection();
+            if (sel && !sel.isCollapsed) return; // a real selection just happened — let handleSelectionEnd own this tap
+            pendingHighlightEl = hit;
+            showHighlightToolbar(hit.getBoundingClientRect(), 'Remove highlight', function () {
+                if (pendingHighlightEl) unwrapHighlight(pendingHighlightEl);
+                hideHighlightToolbar();
+            });
+        });
+
+        document.addEventListener('mousedown', function (e) { if (!e.target.closest('.highlight-toolbar')) hideHighlightToolbar(); });
+        document.addEventListener('touchstart', function (e) { if (!e.target.closest('.highlight-toolbar') && !e.target.closest('.highlight')) hideHighlightToolbar(); }, { passive: true });
+
 
         document.addEventListener('DOMContentLoaded', () => {
             switchToPart(1);
