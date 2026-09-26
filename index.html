@@ -8,6 +8,74 @@
 </head>
 <body>
 
+<!-- MANDATORY STUDENT SURVEY — a full-page overlay shown once per student,
+     entirely independent of the #content div below (it exists whether or
+     not the dashboard itself has loaded), so it can never be skipped by a
+     race between the two. See initMandatorySurvey() near the bottom of this
+     file for the logic that decides whether to show it, and script.js's
+     upsertWithRetry (already used everywhere else on the platform for this
+     exact reason) for how the actual save is made reliable — the survey
+     does not disappear until that save is genuinely confirmed to have
+     succeeded, never just optimistically. -->
+<div id="survey-overlay" style="display:none; position:fixed; inset:0; z-index:9999; background:var(--bg); overflow-y:auto;">
+  <div style="max-width:640px; margin:0 auto; padding:60px 20px 80px;">
+
+    <div id="survey-intro" style="text-align:center;">
+      <div style="font-size:3rem; margin-bottom:10px;">🎉</div>
+      <h1 style="margin-bottom:14px;">Please take a quick survey — help us grow! 🙂</h1>
+      <p style="color:var(--muted); font-size:1.05rem; margin-bottom:30px;">It's been two weeks since the course started, and your honest feedback will directly shape how we improve it. This will only take a few minutes.</p>
+      <button id="survey-start-btn" style="padding:14px 32px; font-size:1.05rem;">Let's go →</button>
+    </div>
+
+    <div id="survey-form" style="display:none;">
+      <h2 style="text-align:center; margin-bottom:8px;">IELTS CHALLENGE 2.0 — So'rovnoma</h2>
+      <p style="text-align:center; color:var(--muted); margin-bottom:34px;">Assalomu alaykum! IELTS CHALLENGE 2.0 kursining ushbu bosqichiga yetib kelganingiz bilan tabriklaymiz 🎉 Biz doimo ta'lim sifatini yaxshilashga harakat qilamiz, shuning uchun sizdan bir necha daqiqangizni ajratib, quyidagi savollarga halol va batafsil javob berishingizni so'raymiz. Fikringiz biz uchun juda muhim — aynan sizning izohlaringiz asosida IELTS CHALLENGE 2.0 ni yanada yaxshilaymiz.</p>
+
+      <div class="card" style="margin-bottom:22px;">
+        <p style="font-weight:700; margin-top:0;">1. Vazifalar va platforma haqida</p>
+        <p style="color:var(--ink-soft);">IELTS CHALLENGE 2.0 vazifalari tushunarli va qulay formatda berilganmi? Platformadan foydalanish qanchalik oson bo'ldi? Vazifalar kam yoki ko'p emasmi?</p>
+        <div class="survey-scale" data-q="1"></div>
+        <p style="font-weight:600; margin-top:16px; margin-bottom:6px;">Batafsil izoh: Nima yoqdi, nimani yaxshilash kerak deb o'ylaysiz?</p>
+        <textarea id="survey-q1-comment" class="survey-comment" placeholder="Javobingizni shu yerga yozing..." style="min-height:90px;"></textarea>
+      </div>
+
+      <div class="card" style="margin-bottom:22px;">
+        <p style="font-weight:700; margin-top:0;">2. Mentorlar haqida</p>
+        <p style="color:var(--ink-soft);">Mentoringiz sizga qanchalik vaqtida va sifatli yordam berdi? Savollaringizga javoblar tushunarli bo'ldimi?</p>
+        <div class="survey-scale" data-q="2"></div>
+        <p style="font-weight:600; margin-top:16px; margin-bottom:6px;">Batafsil izoh: Mentoringiz haqida nima deysiz — kuchli va zaif tomonlari?</p>
+        <textarea id="survey-q2-comment" class="survey-comment" placeholder="Javobingizni shu yerga yozing..." style="min-height:90px;"></textarea>
+      </div>
+
+      <div class="card" style="margin-bottom:22px;">
+        <p style="font-weight:700; margin-top:0;">3. Darslarim haqida (video darslar)</p>
+        <p style="color:var(--ink-soft);">G'anisher Otaboyev darslari tushunarli, qiziqarli va foydali bo'ldimi? Qaysi mavzular sizga eng ko'p yordam berdi, qaysilari yetishmadi deb o'ylaysiz?</p>
+        <div class="survey-scale" data-q="3"></div>
+        <p style="font-weight:600; margin-top:16px; margin-bottom:6px;">Batafsil izoh:</p>
+        <textarea id="survey-q3-comment" class="survey-comment" placeholder="Javobingizni shu yerga yozing..." style="min-height:90px;"></textarea>
+      </div>
+
+      <div class="card" style="margin-bottom:22px;">
+        <p style="font-weight:700; margin-top:0;">4. Umumiy taklif va fikr</p>
+        <p style="color:var(--ink-soft);">IELTS CHALLENGE 2.0 ni do'stingizga tavsiya qilasizmi? Nimani o'zgartirishimizni, qo'shishimizni yoki olib tashlashimizni istardingiz?</p>
+        <div class="survey-scale" data-q="4"></div>
+        <p style="font-weight:600; margin-top:16px; margin-bottom:6px;">Ochiq izoh:</p>
+        <textarea id="survey-q4-comment" class="survey-comment" placeholder="Javobingizni shu yerga yozing..." style="min-height:90px;"></textarea>
+      </div>
+
+      <div style="text-align:center; margin-top:10px;">
+        <button id="survey-submit-btn" disabled style="padding:14px 40px; font-size:1.05rem;">Yuborish (Submit)</button>
+        <p id="survey-status" style="margin-top:14px; font-family:var(--mono); font-size:0.85rem; min-height:1.2em;"></p>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="text-align:center; padding-bottom:30px;">
+    <a href="#" id="survey-logout-link" style="font-family:var(--mono); font-size:0.78rem; color:var(--muted);">Log out and finish this later</a>
+  </div>
+</div>
+
 <!-- CONTENT (hidden until requireAuth confirms a session) -->
 <div id="content" style="display:none;">
 
@@ -186,6 +254,120 @@
     grid.innerHTML = html;
   }
 
+  // ---------- Mandatory student survey ----------
+  // Renders a 1-10 rating scale as a row of clickable buttons backed by a
+  // hidden radio group (so it plugs into the exact same completion-checking
+  // idiom used everywhere else on the platform, rather than inventing a new
+  // one) into every .survey-scale container on the page.
+  function renderSurveyScales() {
+    document.querySelectorAll('.survey-scale').forEach(el => {
+      const q = el.dataset.q;
+      let html = '<div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px;">';
+      for (let i = 1; i <= 10; i++) {
+        html += `<label style="cursor:pointer;">
+          <input type="radio" name="survey-q${q}-rating" value="${i}" style="display:none;">
+          <span class="survey-scale-btn" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1.5px solid var(--border); border-radius:8px; font-family:var(--mono); font-weight:600; font-size:0.85rem;">${i}</span>
+        </label>`;
+      }
+      html += '</div>';
+      el.innerHTML = html;
+    });
+    // Clicking a number visually marks it (and only it) selected within its
+    // own question — plain CSS :checked can't reach the sibling <span>, so
+    // this does it directly on click instead.
+    document.querySelectorAll('.survey-scale').forEach(el => {
+      el.addEventListener('change', (e) => {
+        if (e.target.type !== 'radio') return;
+        el.querySelectorAll('.survey-scale-btn').forEach(b => {
+          b.style.background = ''; b.style.color = ''; b.style.borderColor = 'var(--border)';
+        });
+        const span = e.target.nextElementSibling;
+        span.style.background = 'var(--accent)'; span.style.color = '#fff'; span.style.borderColor = 'var(--accent)';
+        refreshSurveySubmitState();
+      });
+    });
+  }
+
+  // The submit button only ever enables once every one of the 8 required
+  // fields (4 ratings + 4 comments) is genuinely filled — matching the same
+  // "don't let an incomplete attempt through" rule every check-answers
+  // button on the platform already follows, so a student can't accidentally
+  // submit a mostly-empty response and never be asked again.
+  function surveyIsComplete() {
+    for (let q = 1; q <= 4; q++) {
+      if (!document.querySelector(`input[name="survey-q${q}-rating"]:checked`)) return false;
+      const comment = document.getElementById(`survey-q${q}-comment`).value.trim();
+      if (!comment) return false;
+    }
+    return true;
+  }
+  function refreshSurveySubmitState() {
+    document.getElementById('survey-submit-btn').disabled = !surveyIsComplete();
+  }
+
+  async function submitSurvey(userId) {
+    const btn = document.getElementById('survey-submit-btn');
+    const status = document.getElementById('survey-status');
+    btn.disabled = true;
+    status.textContent = 'Saving...';
+    status.style.color = 'var(--muted)';
+
+    const payload = { student_id: userId, submitted_at: new Date().toISOString() };
+    for (let q = 1; q <= 4; q++) {
+      payload[`q${q}_rating`] = Number(document.querySelector(`input[name="survey-q${q}-rating"]:checked`).value);
+      payload[`q${q}_comment`] = document.getElementById(`survey-q${q}-comment`).value.trim();
+    }
+
+    // upsertWithRetry (script.js) — the same save-with-retry function used
+    // for every answer on the platform, now fixed so it only reports success
+    // once the data is genuinely confirmed saved, retry included. This
+    // means a student can never see the survey vanish while secretly having
+    // failed to save, and can never get stuck submitting a good response
+    // that simply hit a bad moment on the network — a real failure here
+    // just says so, clearly, and lets them press the button again.
+    const saved = await upsertWithRetry('student_survey', payload, 'student_id');
+    if (!saved) {
+      status.textContent = "⚠ Couldn't save your response — please check your connection and press Submit again. Nothing you've written has been lost.";
+      status.style.color = 'var(--warn)';
+      btn.disabled = false;
+      return;
+    }
+    document.getElementById('survey-overlay').style.display = 'none';
+  }
+
+  // Decides whether to show the survey at all. Fails OPEN on any error
+  // reading the student's own prior response — if we can't reliably tell
+  // whether they've already submitted, the safe choice is to let them
+  // through rather than risk trapping an already-completed student behind
+  // a blocking screen because of a transient read error.
+  async function initMandatorySurvey(userId) {
+    try {
+      const sb = getSupabaseClient();
+      const { data, error } = await sb.from('student_survey').select('student_id').eq('student_id', userId).maybeSingle();
+      if (error) { console.error('Survey check failed, letting the student through:', error); return; }
+      if (data) return; // already submitted
+    } catch (err) {
+      console.error('Survey check failed, letting the student through:', err);
+      return;
+    }
+
+    const overlay = document.getElementById('survey-overlay');
+    overlay.style.display = 'block';
+    renderSurveyScales();
+    document.getElementById('survey-start-btn').addEventListener('click', () => {
+      document.getElementById('survey-intro').style.display = 'none';
+      document.getElementById('survey-form').style.display = 'block';
+      window.scrollTo(0, 0);
+    });
+    document.querySelectorAll('.survey-comment').forEach(box => box.addEventListener('input', refreshSurveySubmitState));
+    document.getElementById('survey-submit-btn').addEventListener('click', () => submitSurvey(userId));
+    document.getElementById('survey-logout-link').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await getSupabaseClient().auth.signOut();
+      window.location.href = 'login.html';
+    });
+  }
+
   requireAuth(function (profile, user) {
     if (profile.role === 'admin') { window.location.href = 'admin-dashboard.html'; return; }
     if (profile.role === 'teacher') { window.location.href = 'teacher-dashboard.html'; return; }
@@ -197,6 +379,7 @@
       document.getElementById('chat-nav-link').style.display = '';
     }
     initNotificationBell(user.id, trackConfigFor(profile).folder);
+    initMandatorySurvey(user.id);
   });
 </script>
 </body>
