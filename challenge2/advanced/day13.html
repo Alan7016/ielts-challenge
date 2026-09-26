@@ -463,21 +463,40 @@ function setupListeningTimer(frame){
     beginListeningCountdown(LISTENING_DURATION_S);
   }
 
-  function showManualStart(){
+  function showManualStart(audio){
     if(countdownStarted) return;
     loading.style.display = 'flex';
-    skipBtn.textContent = '▶ Tap to start listening audio';
+    // Surface whatever real reason the browser gives, if any, instead of
+    // a generic message every time — this is what actually tells us
+    // (network error vs. something else) if it keeps failing.
+    var reason = '';
+    try {
+      if(audio && audio.error){
+        var codes = {1:'aborted',2:'network error',3:'decode error',4:'source not supported'};
+        reason = ' (' + (codes[audio.error.code] || ('error ' + audio.error.code)) + ')';
+      }
+    } catch(e){}
+    skipBtn.textContent = '▶ Tap to start listening audio' + reason;
     skipBtn.style.display = 'inline-block';
     skipBtn.disabled = false;
     skipBtn.onclick = function(){
       skipBtn.disabled = true;
       skipBtn.textContent = 'Starting…';
-      attemptPlay();
+      if(audioEl){ playFoundAudio(audioEl, true); }
+      else { attemptPlay(); }
     };
   }
 
-  function playFoundAudio(audio){
+  function playFoundAudio(audio, isRetry){
     var settled = false;
+    // A first attempt that failed can leave the element itself in an error
+    // state (a real network/decode failure, not just an autoplay block) —
+    // simply calling play() again on that same element won't retry the
+    // fetch. A manual retry forces a fresh load so it isn't just repeating
+    // a doomed attempt.
+    if(isRetry){
+      try { audio.load(); } catch(e){}
+    }
     function onPlaying(){
       if(settled) return;
       settled = true;
@@ -495,18 +514,20 @@ function setupListeningTimer(frame){
       if(!settled){
         settled = true;
         audio.removeEventListener('playing', onPlaying);
-        showManualStart();
+        showManualStart(audio);
       }
     });
     // Safety net in case neither the promise nor the 'playing' event ever
-    // resolves (rare, but this must never be a silent, permanent hang).
+    // resolves. Generous, since this file can be large — this must never
+    // be a silent, permanent hang, but it also shouldn't give up on a
+    // merely-slow connection before a real chance to buffer.
     setTimeout(function(){
       if(!settled){
         settled = true;
         audio.removeEventListener('playing', onPlaying);
-        showManualStart();
+        showManualStart(audio);
       }
-    }, 6000);
+    }, 12000);
   }
 
   var findAttempts = 0;
