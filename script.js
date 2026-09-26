@@ -2622,6 +2622,62 @@ function mockDaysForC2(totalDays) {
   return days;
 }
 
+// ---------- Temporary mock-day access code ----------
+// Blocks a mock exam's entry page entirely — nothing on the page runs or
+// renders, not even the intro screen or a resumed-session checkpoint —
+// until the right code is typed in. This is for letting staff/test
+// accounts run through a mock before its real scheduled day without
+// opening it to every student who happens to click the (normally-open)
+// mock tile on their dashboard.
+//
+// To gate a day: add "dayNumber: 'the-code'" below.
+// To lift a gate: delete that day's line. That's the whole rollback — the
+// day's own HTML file never needs to be touched or re-uploaded, since it
+// only ever calls requireMockUnlockCode(dayNumber, ...) and this config is
+// read fresh on every page load.
+const MOCK_UNLOCK_CODES = {
+  13: 'mock13-s'
+};
+function requireMockUnlockCode(dayNumber, onUnlocked) {
+  const requiredCode = MOCK_UNLOCK_CODES[dayNumber];
+  if (!requiredCode) { onUnlocked(); return; } // no gate configured — open as normal
+
+  const storageKey = 'mockUnlockCode_' + dayNumber;
+  if (localStorage.getItem(storageKey) === requiredCode) { onUnlocked(); return; }
+
+  const gate = document.createElement('div');
+  gate.style.cssText = 'position:fixed;inset:0;background:#fff;z-index:999999;display:flex;align-items:center;justify-content:center;padding:24px;font-family:inherit;';
+  gate.innerHTML =
+    '<div style="max-width:360px;width:100%;text-align:center;">' +
+    '<p style="font-weight:700;font-size:19px;margin-bottom:10px;">This mock isn\'t open yet</p>' +
+    '<p style="color:#666;font-size:14px;margin-bottom:18px;">Enter the access code to continue.</p>' +
+    '<input id="mockGateInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" ' +
+    'style="width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #ccc;border-radius:8px;font-size:15px;text-align:center;margin-bottom:12px;">' +
+    '<button id="mockGateBtn" style="width:100%;padding:11px 12px;border:none;border-radius:8px;background:#2c6bed;color:#fff;font-weight:600;font-size:15px;cursor:pointer;">Unlock</button>' +
+    '<p id="mockGateError" style="color:#dc3545;font-size:13px;margin-top:10px;display:none;">Wrong code — try again.</p>' +
+    '</div>';
+  document.body.appendChild(gate);
+  document.documentElement.style.overflow = 'hidden';
+
+  function attempt() {
+    const input = document.getElementById('mockGateInput');
+    const val = input.value.trim();
+    if (val === requiredCode) {
+      localStorage.setItem(storageKey, requiredCode);
+      gate.remove();
+      document.documentElement.style.overflow = '';
+      onUnlocked();
+    } else {
+      document.getElementById('mockGateError').style.display = 'block';
+      input.focus();
+      input.select();
+    }
+  }
+  document.getElementById('mockGateBtn').addEventListener('click', attempt);
+  document.getElementById('mockGateInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') attempt(); });
+  setTimeout(function () { var el = document.getElementById('mockGateInput'); if (el) el.focus(); }, 50);
+}
+
 // The single source of truth for "which folder, how many days, which of
 // them are mocks" for a given student. Challenge 1.0 is unchanged; each
 // Challenge 2.0 level gets its own folder and day count. Used anywhere
