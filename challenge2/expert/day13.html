@@ -384,11 +384,13 @@ window.addEventListener('beforeunload', function(e){
 
 // ── SECTION FLOW ────────────────────────────────────────────────────────────
 var LISTENING_FILE = 'listening-expert-day13-mock.html';
-// Measured directly off the real audio file (1702.03s) plus a small buffer.
-// Hardcoding this — instead of detecting audio.duration live off the iframe
-// — removes the single biggest source of "audio starts late": the countdown
-// (and the attempt to call play()) never wait on that detection succeeding.
-var LISTENING_DURATION_S = 1707;
+// Measured directly off the real audio file (1702.03s), plus the same
+// ~2-minute transfer/review allowance the real test gives at the end of
+// Listening. Hardcoding this — instead of detecting audio.duration live off
+// the iframe — removes the single biggest source of "audio starts late":
+// the countdown (and the attempt to call play()) never wait on that
+// detection succeeding.
+var LISTENING_DURATION_S = 1827;
 var listeningPreloaded = false;
 
 // Loads the listening test's iframe quietly in the background as soon as
@@ -434,34 +436,92 @@ function startExam(){
 }
 window.startExam = startExam;
 
-// The countdown always runs on the real, pre-measured duration
-// (LISTENING_DURATION_S) rather than waiting to detect it live off the
-// iframe's audio element — that live detection was the actual root cause of
-// the "starts a minute late" reports. Finding the audio element below is
-// only ever to call play() on it (with retries in case the file is still
-// parsing), never a precondition for the clock to start.
+// The countdown length itself is the real, pre-measured duration
+// (LISTENING_DURATION_S) rather than something detected live off the
+// iframe's audio element — that live DURATION detection was the root cause
+// of the old "starts a minute late" reports. But the clock is only ever
+// STARTED once playback is actually confirmed running — never blindly on a
+// timer, and never on a play() call that might have silently failed (wrong
+// file, blocked autoplay, network error). If it can't be confirmed within a
+// few seconds, a real, visible "tap to start" button is shown instead of
+// letting the section run silently with nothing audible.
 function setupListeningTimer(frame){
-  document.getElementById('listenLoading').style.display = 'none';
-  beginListeningCountdown(LISTENING_DURATION_S);
+  var loading = document.getElementById('listenLoading');
+  var skipBtn = document.getElementById('listenSkipBtn');
+  var countdownStarted = false;
+  var audioEl = null;
+  // Visible feedback from the first instant — even on the fast, preloaded
+  // path this only shows for a moment before startCountdownOnce() hides it
+  // again, but it means there is never a silent gap while playback is
+  // being confirmed.
+  loading.style.display = 'flex';
 
-  var attempts = 0, started = false;
+  function startCountdownOnce(){
+    if(countdownStarted) return;
+    countdownStarted = true;
+    loading.style.display = 'none';
+    beginListeningCountdown(LISTENING_DURATION_S);
+  }
+
+  function showManualStart(){
+    if(countdownStarted) return;
+    loading.style.display = 'flex';
+    skipBtn.textContent = '▶ Tap to start listening audio';
+    skipBtn.style.display = 'inline-block';
+    skipBtn.disabled = false;
+    skipBtn.onclick = function(){
+      skipBtn.disabled = true;
+      skipBtn.textContent = 'Starting…';
+      attemptPlay();
+    };
+  }
+
+  function playFoundAudio(audio){
+    var settled = false;
+    function onPlaying(){
+      if(settled) return;
+      settled = true;
+      audio.removeEventListener('playing', onPlaying);
+      startCountdownOnce();
+    }
+    audio.addEventListener('playing', onPlaying);
+    audio.play().then(function(){
+      if(!settled && (!audio.paused || audio.currentTime > 0)){
+        settled = true;
+        audio.removeEventListener('playing', onPlaying);
+        startCountdownOnce();
+      }
+    }).catch(function(){
+      if(!settled){
+        settled = true;
+        audio.removeEventListener('playing', onPlaying);
+        showManualStart();
+      }
+    });
+    // Safety net in case neither the promise nor the 'playing' event ever
+    // resolves (rare, but this must never be a silent, permanent hang).
+    setTimeout(function(){
+      if(!settled){
+        settled = true;
+        audio.removeEventListener('playing', onPlaying);
+        showManualStart();
+      }
+    }, 6000);
+  }
+
+  var findAttempts = 0;
   function attemptPlay(){
-    if(started) return;
-    attempts++;
+    if(countdownStarted) return;
+    if(audioEl){ playFoundAudio(audioEl); return; }
+    findAttempts++;
     try {
       var win = frame.contentWindow;
       hideStudentSubmitControls(win.document, '#deliver-button{display:none !important;}');
       var audio = win.document.getElementById('global-audio-player');
-      if(!audio){
-        if(attempts < 20){ setTimeout(attemptPlay, 500); return; }
-        return;
-      }
-      started = true;
-      // If autoplay is blocked, the test's own play button is right there.
-      audio.play().catch(function(){});
-    } catch(e){
-      if(attempts < 20){ setTimeout(attemptPlay, 500); return; }
-    }
+      if(audio){ audioEl = audio; playFoundAudio(audio); return; }
+    } catch(e){}
+    if(findAttempts < 20){ setTimeout(attemptPlay, 500); }
+    else { showManualStart(); }
   }
   attemptPlay();
 }
