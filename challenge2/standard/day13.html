@@ -360,145 +360,89 @@ window.addEventListener('beforeunload', function(e){
 });
 
 // ── SECTION FLOW ────────────────────────────────────────────────────────────
+var LISTENING_FILE = 'listening-day13-mock.html';
+// Measured directly off the three real audio parts
+// (443.51s + 481.04s + 480.63s = 1405.18s) plus a small buffer. Hardcoding
+// this — instead of the old approach of spinning up redundant probe Audio()
+// objects to sum each part's duration live — removes the single biggest
+// source of "audio starts late": the countdown (and the attempt to call
+// play()) never wait on that detection succeeding.
+var LISTENING_DURATION_S = 1410;
+var listeningPreloaded = false;
+
+// Loads the listening test's iframe quietly in the background as soon as
+// the student reaches the intro screen — well before the "Start Test"
+// click. Its first audio part then has the whole time the student spends
+// reading the intro to finish loading and start buffering, so by the time
+// they click Start there's nothing left to wait on, just play() to call.
+function preloadListening(){
+  if(listeningPreloaded) return;
+  listeningPreloaded = true;
+  document.getElementById('listeningFrame').src = LISTENING_FILE;
+}
+
 function startExam(){
   currentSection = 'listening';
   showScreen('listening');
   updateProgress(1);
   document.getElementById('headerLabel').textContent = 'Section 1 of 3 — Listening';
-  document.getElementById('listenLoading').style.display = 'flex';
   document.getElementById('timerDisplay').style.display = 'none';
 
   var frame = document.getElementById('listeningFrame');
-  var initialized = false;
-  function tryInit(){
-    if(initialized) return;
-    initialized = true;
+  if(listeningPreloaded && frame.getAttribute('src')){
+    // Already loading (or fully loaded) in the background — nothing left
+    // to wait on, so start the countdown and reach for play() immediately,
+    // right inside this click handler, which is exactly when browsers are
+    // most willing to allow audio playback to begin.
     setupListeningTimer(frame);
+  } else {
+    document.getElementById('listenLoading').style.display = 'flex';
+    listeningPreloaded = true;
+    var initialized = false;
+    function tryInit(){
+      if(initialized) return;
+      initialized = true;
+      setupListeningTimer(frame);
+    }
+    frame.onload = tryInit;
+    frame.src = LISTENING_FILE;
+    // Guarantees the section starts moving even if "load" never fires.
+    setTimeout(tryInit, 12000);
   }
-  frame.onload = tryInit;
-  frame.src = 'listening-day13-mock.html';
-  // The test's audio now lives in separate external mp3 files (not embedded
-  // in this page), so the iframe itself is small and loads fast — but this
-  // watchdog stays as a safety net in case "load" is ever slow or doesn't
-  // fire, so the section always starts moving instead of getting stuck on
-  // the loading screen forever.
-  setTimeout(tryInit, 12000);
 }
 window.startExam = startExam;
 
-// Reads the real audio length out of the iframe so the listening timer
-// matches it exactly, instead of guessing a fixed 30 minutes. Retries for
-// a while in case the audio metadata is still loading, then falls back to
-// 30 minutes if the audio element genuinely never becomes reachable.
+// The countdown always runs on the real, pre-measured duration
+// (LISTENING_DURATION_S) rather than waiting to detect it live off the
+// iframe — that live detection (summing several redundant probe Audio()
+// objects) was the actual root cause of the "starts a minute late" reports.
+// Finding the audio element below is only ever to call play() on it (with
+// retries in case the file is still parsing), never a precondition for the
+// clock to start.
 function setupListeningTimer(frame){
-  var loading = document.getElementById('listenLoading');
-  var settled = false;
-  var fallback = function(){
-    if(settled) return;
-    settled = true;
-    loading.style.display = 'none';
-    beginListeningCountdown(30 * 60);
-  };
+  document.getElementById('listenLoading').style.display = 'none';
+  beginListeningCountdown(LISTENING_DURATION_S);
 
-  // Last-resort manual escape hatch — only ever appears if the automatic
-  // path (below) hasn't resolved within 20 seconds of the exam starting.
-  var skipBtn = document.getElementById('listenSkipBtn');
-  skipBtn.onclick = function(){ skipBtn.style.display = 'none'; fallback(); };
-  setTimeout(function(){ if(!settled) skipBtn.style.display = 'inline-block'; }, 20000);
-
-  var attempts = 0;
-  function attemptFind(){
-    if(settled) return;
+  var attempts = 0, started = false;
+  function attemptPlay(){
+    if(started) return;
     attempts++;
     try {
       var win = frame.contentWindow;
       hideStudentSubmitControls(win.document, '#deliver-button{display:none !important;}');
       var audio = win.document.getElementById('global-audio-player');
       if(!audio){
-        if(attempts < 20){ setTimeout(attemptFind, 1000); return; }
-        fallback();
+        if(attempts < 20){ setTimeout(attemptPlay, 500); return; }
         return;
       }
-
-      // Reads every part's real duration directly from the test's own
-      // partAudioSources object (a plain global the test file exposes),
-      // then sums them, instead of trying to detect the total dynamically
-      // as playback moves from one part's audio to the next. That
-      // part-by-part approach turned out to be unreliable in practice —
-      // the extension didn't always fire, so the timer could get stuck at
-      // just the first part's length — and a hardcoded fallback number
-      // goes stale the moment the underlying audio changes. Measuring the
-      // real thing, every time, is the only version of this that can't
-      // drift out of sync with the file. Reading partAudioSources directly
-      // also means this works the same whether it points at base64 data
-      // URIs or, as now, plain external audio file paths — no parsing of
-      // the page's own HTML/JS source required at all.
-      var sourcesMap = win.partAudioSources;
-      var sources = [];
-      if (sourcesMap && typeof sourcesMap === 'object') {
-        Object.keys(sourcesMap).forEach(function(k){
-          try { sources.push(new URL(sourcesMap[k], win.location.href).href); } catch(e){}
-        });
-      }
-
-      if(sources.length === 0){
-        // No per-part structure found in this test's source — fall back to
-        // whatever duration the single loaded audio element already reports.
-        if(audio.duration && isFinite(audio.duration) && audio.duration > 0){
-          settled = true;
-          skipBtn.style.display = 'none';
-          loading.style.display = 'none';
-          beginListeningCountdown(Math.ceil(audio.duration));
-          audio.play().catch(function(){});
-        } else if(attempts < 20){
-          setTimeout(attemptFind, 1000);
-        } else {
-          fallback();
-        }
-        return;
-      }
-
-      var total = 0;
-      var remaining = sources.length;
-      sources.forEach(function(src){
-        var probe = new Audio();
-        probe.preload = 'metadata';
-        probe.onloadedmetadata = function(){
-          total += probe.duration;
-          remaining--;
-          if(remaining === 0 && !settled){
-            settled = true;
-            skipBtn.style.display = 'none';
-            loading.style.display = 'none';
-            // Small buffer on top of the measured total, covering the brief
-            // gap while the test's own script swaps the audio element's
-            // src between parts.
-            beginListeningCountdown(Math.ceil(total) + 5);
-            audio.play().catch(function(){});
-          }
-        };
-        probe.onerror = function(){
-          remaining--;
-          if(remaining === 0 && !settled){
-            if(total > 0){
-              settled = true;
-              skipBtn.style.display = 'none';
-              loading.style.display = 'none';
-              beginListeningCountdown(Math.ceil(total) + 5);
-              audio.play().catch(function(){});
-            } else {
-              fallback();
-            }
-          }
-        };
-        probe.src = src;
-      });
+      started = true;
+      // If autoplay is blocked, the test's own play button is right there.
+      audio.play().catch(function(){});
     } catch(e){
-      if(attempts < 20){ setTimeout(attemptFind, 1000); return; }
-      fallback();
+      if(attempts < 20){ setTimeout(attemptPlay, 500); return; }
     }
   }
-  attemptFind();
+  attemptPlay();
 }
 
 // Injects a tiny CSS rule into a test iframe to hide its own self-check
@@ -1012,7 +956,10 @@ requireAuth(function(profile, user){
     }
 
     checkAlreadySubmitted().then(function(){
-      if(currentSection === 'intro') tryResumeFromCheckpoint();
+      if(currentSection === 'intro'){
+        var resumed = tryResumeFromCheckpoint();
+        if(!resumed) preloadListening();
+      }
     });
   });
 });
