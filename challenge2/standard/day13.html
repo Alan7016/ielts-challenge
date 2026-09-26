@@ -377,18 +377,19 @@ function startExam(){
   }
   frame.onload = tryInit;
   frame.src = 'listening-day13-mock.html';
-  // This file is ~26MB (mostly the embedded audio) — its "load" event can
-  // take a long time, or in rare cases not fire reliably at all. This
-  // watchdog guarantees the section starts moving regardless, instead of
-  // getting stuck on the loading screen forever.
+  // The test's audio now lives in separate external mp3 files (not embedded
+  // in this page), so the iframe itself is small and loads fast — but this
+  // watchdog stays as a safety net in case "load" is ever slow or doesn't
+  // fire, so the section always starts moving instead of getting stuck on
+  // the loading screen forever.
   setTimeout(tryInit, 12000);
 }
 window.startExam = startExam;
 
 // Reads the real audio length out of the iframe so the listening timer
 // matches it exactly, instead of guessing a fixed 30 minutes. Retries for
-// a while in case the huge file is still parsing, then falls back to 30
-// minutes if the audio element genuinely never becomes reachable.
+// a while in case the audio metadata is still loading, then falls back to
+// 30 minutes if the audio element genuinely never becomes reachable.
 function setupListeningTimer(frame){
   var loading = document.getElementById('listenLoading');
   var settled = false;
@@ -419,22 +420,26 @@ function setupListeningTimer(frame){
         return;
       }
 
-      // Reads every part's real duration directly out of the iframe's own
-      // source, then sums them, instead of trying to detect the total
-      // dynamically as playback moves from one part's audio to the next.
-      // That part-by-part approach turned out to be unreliable in practice
-      // — the extension didn't always fire, so the timer could get stuck at
-      // just the first part's length — and a hardcoded fallback number goes
-      // stale the moment the underlying audio file changes (as it just did:
-      // the previous three-part file ran ~23 minutes total, not the 18 the
-      // timer was set to, which would have cut the last few minutes of
-      // audio off entirely). Measuring the real thing, every time, is the
-      // only version of this that can't drift out of sync with the file.
-      var html = win.document.documentElement.outerHTML;
-      var re = /\d+:\s*'data:audio\/mpeg;base64,([A-Za-z0-9+\/=]+)'/g;
+      // Reads every part's real duration directly from the test's own
+      // partAudioSources object (a plain global the test file exposes),
+      // then sums them, instead of trying to detect the total dynamically
+      // as playback moves from one part's audio to the next. That
+      // part-by-part approach turned out to be unreliable in practice —
+      // the extension didn't always fire, so the timer could get stuck at
+      // just the first part's length — and a hardcoded fallback number
+      // goes stale the moment the underlying audio changes. Measuring the
+      // real thing, every time, is the only version of this that can't
+      // drift out of sync with the file. Reading partAudioSources directly
+      // also means this works the same whether it points at base64 data
+      // URIs or, as now, plain external audio file paths — no parsing of
+      // the page's own HTML/JS source required at all.
+      var sourcesMap = win.partAudioSources;
       var sources = [];
-      var m;
-      while((m = re.exec(html)) !== null){ sources.push('data:audio/mpeg;base64,' + m[1]); }
+      if (sourcesMap && typeof sourcesMap === 'object') {
+        Object.keys(sourcesMap).forEach(function(k){
+          try { sources.push(new URL(sourcesMap[k], win.location.href).href); } catch(e){}
+        });
+      }
 
       if(sources.length === 0){
         // No per-part structure found in this test's source — fall back to
@@ -984,24 +989,31 @@ function tryResumeFromCheckpoint(){
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 requireAuth(function(profile, user){
-  studentProfile = profile;
-  studentSession = user;
-  sb = getSupabaseClient();
+  // Temporary access-code gate — see MOCK_UNLOCK_CODES in script.js. While
+  // Day 13 has an entry there, nothing below this line runs (not even the
+  // intro screen) until the code is entered. Once that entry is removed,
+  // requireMockUnlockCode calls onUnlocked() immediately and this is a
+  // no-op, so nothing here needs to change when the gate comes off.
+  requireMockUnlockCode(13, function(){
+    studentProfile = profile;
+    studentSession = user;
+    sb = getSupabaseClient();
 
-  var retryBtn = document.getElementById('retrySaveBtn');
-  if(retryBtn){
-    retryBtn.addEventListener('click', function(){
-      retryBtn.disabled = true;
-      retryBtn.textContent = 'Saving…';
-      saveToSupabase().finally(function(){
-        retryBtn.disabled = false;
-        retryBtn.textContent = 'Try saving again';
+    var retryBtn = document.getElementById('retrySaveBtn');
+    if(retryBtn){
+      retryBtn.addEventListener('click', function(){
+        retryBtn.disabled = true;
+        retryBtn.textContent = 'Saving…';
+        saveToSupabase().finally(function(){
+          retryBtn.disabled = false;
+          retryBtn.textContent = 'Try saving again';
+        });
       });
-    });
-  }
+    }
 
-  checkAlreadySubmitted().then(function(){
-    if(currentSection === 'intro') tryResumeFromCheckpoint();
+    checkAlreadySubmitted().then(function(){
+      if(currentSection === 'intro') tryResumeFromCheckpoint();
+    });
   });
 });
 
