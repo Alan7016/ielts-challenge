@@ -958,7 +958,7 @@
         <div data-part="4"><p style="color:#888;font-style:italic;">Transcript not available for this recording.</p></div>
     </div>
 
-    <audio id="global-audio-player" class="hidden"></audio>
+    <audio id="global-audio-player" class="hidden" preload="auto"></audio>
 
     <!-- Nav Arrows -->
     <div class="nav-arrows">
@@ -1102,7 +1102,7 @@
         let currentPart = 1;
         let currentQuestion = 1;
 
-        const audioSource = 'audio/listening-advanced-day13-mock.mp3';
+        const audioSource = 'listening-advanced-day13-mock.mp3';
         const audioPlayer = document.getElementById('global-audio-player');
         const playPauseBtn = document.getElementById('play-pause-btn');
         const progressBar = document.getElementById('progress-bar');
@@ -1144,6 +1144,31 @@
                 try { navigator.mediaSession.setActionHandler(action, () => { }); } catch (e) { }
             });
         }
+
+        // ---- Stall recovery ----
+        // A genuine network stall leaves the element "playing" (not paused)
+        // but currentTime stops advancing, with no error and no pause event
+        // — the anti-cheat auto-resume above never sees it, so without this
+        // the student is just stuck staring at frozen audio with no way to
+        // recover (they can't seek or restart it themselves). If no
+        // progress has been made for 8s while it should be playing, force a
+        // fresh fetch of the same file from the same position and resume.
+        let lastProgressAt = 0, stallRecoveryInFlight = false;
+        audioPlayer.addEventListener('play', () => { lastProgressAt = Date.now(); });
+        audioPlayer.addEventListener('timeupdate', () => { lastProgressAt = Date.now(); });
+        setInterval(() => {
+            if (!listeningStarted || audioPlayer.ended || audioPlayer.paused || stallRecoveryInFlight) return;
+            if (Date.now() - lastProgressAt > 8000) {
+                stallRecoveryInFlight = true;
+                const resumeAt = audioPlayer.currentTime;
+                audioPlayer.src = audioSource;
+                audioPlayer.load();
+                audioPlayer.currentTime = resumeAt;
+                audioPlayer.play().catch(function () { });
+                lastProgressAt = Date.now();
+                setTimeout(() => { stallRecoveryInFlight = false; }, 5000);
+            }
+        }, 4000);
 
         function switchToPart(partNumber) {
             currentPart = partNumber;
