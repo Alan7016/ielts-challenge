@@ -12,8 +12,20 @@
 .lb-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; padding: 40px 0 0; }
 .lb-head .eyebrow { margin-bottom: 6px; }
 .lb-head h1 { margin: 0; font-size: clamp(2.2rem, 5vw, 3.2rem); letter-spacing: -0.03em; }
-.replay { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--ink-soft); font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: border-color .2s, color .2s; }
-.replay:hover { border-color: var(--ink); color: var(--ink); }
+.watch { position: relative; display: inline-flex; align-items: center; gap: 10px; padding: 7px 16px 7px 8px; border-radius: 999px; text-decoration: none; color: #14162b; font-weight: 700; font-size: 0.82rem; letter-spacing: .01em; overflow: hidden; isolation: isolate;
+  background: linear-gradient(120deg, #eef0f4 0%, #d6dbe3 22%, #fbfcfd 45%, #cfd5dd 62%, #f4f6f9 82%, #d9dee5 100%); background-size: 220% 220%;
+  border: 1px solid #c3c9d2; box-shadow: inset 0 1px 0 #fff, 0 8px 18px -10px rgba(20,22,43,.45);
+  animation: wIn .7s cubic-bezier(.2,.9,.25,1) both, wShift 8s ease-in-out 1s infinite; transition: transform .2s, box-shadow .2s; }
+.watch::before { content: ''; position: absolute; top: -60%; bottom: -60%; width: 30%; left: -45%; z-index: -1; background: linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,.95), rgba(190,210,255,.35), rgba(255,255,255,0)); transform: skewX(-20deg); animation: wSheen 4.2s ease-in-out 1s infinite; }
+.watch:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 #fff, 0 12px 22px -10px rgba(20,22,43,.5); }
+.watch .play { width: 28px; height: 28px; border-radius: 50%; background: #14162b; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 0 3px rgba(255,255,255,.7); }
+.watch .play svg { width: 11px; height: 11px; margin-left: 2px; fill: #e7b54a; }
+.watch .em { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 17px; animation: wFloat 3s ease-in-out infinite; }
+.watch .em img { width: 100%; height: 100%; }
+@keyframes wIn { from { opacity: 0; transform: translateY(-6px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes wShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+@keyframes wSheen { 0% { left: -45%; } 40%, 100% { left: 130%; } }
+@keyframes wFloat { 0%,100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-3px) rotate(6deg); } }
 .controls { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0 0; }
 .seg { position: relative; display: inline-flex; padding: 3px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); }
 .seg button { position: relative; z-index: 1; background: none; border: 0; box-shadow: none; color: var(--muted); font-size: 0.85rem; font-weight: 600; padding: 8px 15px; border-radius: 9px; transition: color .25s; }
@@ -128,7 +140,11 @@
         <div class="eyebrow" id="eyebrow">Leaderboard</div>
         <h1>Leaderboard</h1>
       </div>
-      <a class="replay" id="replay" href="ceremony.html?replay" hidden>↺ Replay the ceremony</a>
+      <a class="watch" id="replay" href="ceremony.html?replay" hidden>
+        <span class="play"><svg viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0 L10 6 L0 12 Z"/></svg></span>
+        <span id="watch-label">Watch the Week 2 ceremony</span>
+        <span class="em"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f3c6/512.webp" alt="" onerror="this.parentNode.textContent='🏆'"></span>
+      </a>
     </div>
     <div class="controls" id="controls">
       <div class="seg" id="scope-toggle" role="group" aria-label="Who to compare with">
@@ -160,16 +176,16 @@
     me = user; myProfile = profile || {};
     const isC2Student = myProfile.role === 'student' && myProfile.challenge === '2.0';
 
-    // Closed until the weekly ceremony; afterwards, a student who hasn't
-    // watched it yet is taken there first (once per device).
+    // Closed only on ceremony day, in the hours before it starts. After the
+    // start the board always opens normally; the ceremony stays one tap
+    // away via the "Watch the ceremony" chip, never a forced redirect.
     if (isC2Student) {
       const now = await serverNow();
-      if (now < ceremonyLobbyMs()) { showClosed(); return; }
-      if (!ceremonySeen(user.id)) { window.location.href = 'ceremony.html'; return; }
+      if (now >= ceremonyStartMs() - 24 * 3600000 && now < ceremonyLobbyMs()) { showClosed(); return; }
     }
     if (myProfile.challenge === '2.0' || myProfile.role !== 'student') {
       const now = await serverNow();
-      if (now >= ceremonyStartMs()) document.getElementById('replay').hidden = false;
+      if (now >= ceremonyStartMs()) { document.getElementById('watch-label').textContent = `Watch the Week ${CEREMONY.week} ceremony`; document.getElementById('replay').hidden = false; }
     }
 
     currentDay = await getMostRecentLiveDay(myProfile);
