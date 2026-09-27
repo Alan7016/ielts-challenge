@@ -120,9 +120,19 @@
       studentIds = (trackStudents || []).map(s => s.id);
     }
 
-    let query = sb.from('points').select('student_id, points').gte('day', dayFrom).lte('day', dayTo);
-    if (studentIds) query = query.in('student_id', studentIds);
-    const { data: pointsRows, error } = await query;
+    // Summed in the database (leaderboard_totals RPC), not pulled as raw
+    // rows and added up here — a wide window (e.g. "Overall" once several
+    // weeks have passed) can easily be thousands of individual points
+    // rows, which silently hits Supabase's default 1000-row API cap on a
+    // plain select. Aggregating server-side always returns one row per
+    // student, so it can never be truncated.
+    if (!studentIds) {
+      const { data: allIds } = await sb.from('profiles').select('id').eq('role', 'student');
+      studentIds = (allIds || []).map(s => s.id);
+    }
+    const { data: totalsRows, error } = await sb.rpc('leaderboard_totals', {
+      day_from: dayFrom, day_to: dayTo, ids: studentIds
+    });
 
     if (error) {
       root.innerHTML = '<p style="color:var(--warn);">Could not load the leaderboard right now — please refresh.</p>';
@@ -131,7 +141,7 @@
     }
 
     const totals = {};
-    (pointsRows || []).forEach(r => { totals[r.student_id] = (totals[r.student_id] || 0) + Number(r.points); });
+    (totalsRows || []).forEach(r => { totals[r.student_id] = Number(r.total); });
 
     const ids = Object.keys(totals);
     if (ids.length === 0) {
