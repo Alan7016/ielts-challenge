@@ -160,48 +160,73 @@
     };
   }
 
+  // The level's champion for the most recent ceremony week, on a platinum
+  // card at the top of the board. Appears the moment the ceremony starts
+  // (server clock) and stays until the next week's ceremony replaces it.
+  // Config lives in script.js (CEREMONY).
   async function renderWeeklyWinnerBanner(profile) {
     const el = document.getElementById('weekly-winner-banner');
-    // This showcase only makes sense for Challenge 2.0's weekly points
-    // system — Challenge 1.0 has no equivalent and no group_id/level to
-    // scope a winner to.
-    if (profile.challenge !== '2.0' || !profile.level) return;
-
-    const sb = getSupabaseClient();
-    const currentDay = await getCurrentDayNumberC2();
-    const cfg = trackConfigFor(profile);
-    const completed = getMostRecentCompletedWeek(currentDay, cfg.mockDays);
-    if (!completed) return; // no week has finished yet — nothing to show
-
-    const [dayFrom, dayTo] = completed;
-    const { data: levelStudents } = await sb.from('profiles').select('id')
-      .eq('role', 'student').eq('challenge', '2.0').eq('level', profile.level);
-    const studentIds = (levelStudents || []).map(s => s.id);
-    if (studentIds.length === 0) return;
-
-    const { data: pointsRows } = await sb.from('points').select('student_id, points')
-      .gte('day', dayFrom).lte('day', dayTo).in('student_id', studentIds);
-    if (!pointsRows || pointsRows.length === 0) return;
-
-    const totals = {};
-    pointsRows.forEach(r => { totals[r.student_id] = (totals[r.student_id] || 0) + Number(r.points); });
-    const winnerId = Object.keys(totals).sort((a, b) => totals[b] - totals[a])[0];
-    const winnerPoints = Math.round(totals[winnerId] * 10) / 10;
-
-    const { data: winnerProfile } = await sb.from('profiles').select('full_name').eq('id', winnerId).maybeSingle();
-    if (!winnerProfile) return;
-
-    const weekNum = Math.floor((dayFrom - 7) / 7) + 2; // Day 7-13 is week 2, per the fixed schedule
-    el.innerHTML = `
-      <div class="weekly-winner-banner">
-        <span class="wwb-emoji">😎</span>
-        <div class="wwb-text">
-          <div class="wwb-title">🏆 Week ${weekNum} Champion</div>
-          <div class="wwb-name">${winnerProfile.full_name}</div>
-          <div class="wwb-points">${winnerPoints} points</div>
-        </div>
-      </div>
-    `;
+    if (!el || profile.challenge !== '2.0' || !profile.level) return;
+    try {
+      if (await serverNow() < ceremonyStartMs()) return;
+      const ranked = await fetchLevelStandings(profile.level, CEREMONY.dayFrom, CEREMONY.dayTo);
+      if (!ranked.length) return;
+      const champs = ranked.filter(r => r.r === 1);
+      const second = ranked.find(r => r.r === 2), third = ranked.find(r => r.r === 3);
+      const me = getSupabaseClient().auth && (await getSupabaseClient().auth.getSession()).data.session;
+      const myId = me && me.user ? me.user.id : null;
+      const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      const level = profile.level.charAt(0).toUpperCase() + profile.level.slice(1);
+      const names = champs.map(c => esc(c.n)).join(' & ');
+      const isMe = champs.some(c => c.id === myId);
+      const av = c => c.a ? `<img src="${esc(c.a)}" alt="" onerror="this.parentNode.textContent='${esc(initialsFor(c.n))}'">` : esc(initialsFor(c.n));
+      if (!document.getElementById('champ-card-css')) {
+        const st = document.createElement('style'); st.id = 'champ-card-css';
+        st.textContent = `
+.champ-card { position: relative; display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 20px; align-items: center; margin: 0 0 22px; padding: 20px 24px; border-radius: 20px; text-decoration: none; color: #14162b; overflow: hidden; isolation: isolate;
+  background: linear-gradient(120deg, #eef0f4 0%, #d6dbe3 20%, #fbfcfd 42%, #cfd5dd 60%, #f4f6f9 80%, #d9dee5 100%); background-size: 220% 220%;
+  border: 1px solid #c3c9d2; box-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 rgba(20,22,43,.08), 0 18px 36px -20px rgba(20,22,43,.45);
+  animation: ccIn .9s cubic-bezier(.2,.9,.25,1) both, ccShift 9s ease-in-out 1s infinite; transform-origin: 50% 0; }
+@keyframes ccIn { from { opacity: 0; transform: perspective(900px) rotateX(-18deg) translateY(-10px); } to { opacity: 1; transform: none; } }
+@keyframes ccShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+.champ-card::before { content: ''; position: absolute; top: -60%; bottom: -60%; width: 28%; left: -40%; z-index: -1; background: linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,.95), rgba(190,210,255,.35), rgba(255,255,255,0)); transform: skewX(-20deg); animation: ccSheen 4.8s ease-in-out 1.2s infinite; }
+@keyframes ccSheen { 0% { left: -40%; } 40%, 100% { left: 130%; } }
+.champ-card::after { content: ''; position: absolute; inset: 6px; border-radius: 15px; border: 1px solid rgba(255,255,255,.7); pointer-events: none; }
+.champ-card:hover { box-shadow: inset 0 1px 0 #fff, 0 22px 44px -18px rgba(20,22,43,.5); }
+.cc-emoji { width: 76px; height: 76px; animation: ccFloat 3.2s ease-in-out infinite; filter: drop-shadow(0 8px 10px rgba(20,22,43,.25)); display: flex; align-items: center; justify-content: center; font-size: 58px; line-height: 1; }
+@keyframes ccFloat { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-7px) rotate(4deg); } }
+.cc-k { font-family: var(--mono); font-size: .68rem; font-weight: 600; letter-spacing: .2em; color: #5b6272; }
+.cc-name { font-family: var(--display); font-weight: 700; font-size: clamp(1.4rem, 3.6vw, 2rem); line-height: 1.1; margin: 4px 0 3px; letter-spacing: -.02em; overflow-wrap: anywhere; }
+.cc-sub { font-size: .85rem; color: #4b4e5c; }
+.cc-sub b { font-family: var(--mono); color: #14162b; }
+.cc-me { display: inline-block; margin-left: 8px; padding: 2px 9px; border-radius: 999px; background: #14162b; color: #e7b54a; font-family: var(--mono); font-size: .66rem; letter-spacing: .12em; vertical-align: 3px; }
+.cc-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.cc-av { width: 58px; height: 58px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; background: linear-gradient(145deg, #3457d5, #14162b); color: #fff; font-family: var(--display); font-weight: 700; font-size: 1.1rem; box-shadow: 0 0 0 3px #fff, 0 0 0 5px #b9c1cc; }
+.cc-av img { width: 100%; height: 100%; object-fit: cover; }
+.cc-runners { font-family: var(--mono); font-size: .68rem; color: #5b6272; text-align: right; line-height: 1.5; }
+.cc-star { position: absolute; width: 10px; height: 10px; pointer-events: none; animation: ccTw 2.6s ease-in-out infinite; }
+.cc-star path { fill: #fff; }
+@keyframes ccTw { 0%,100% { opacity: 0; transform: scale(.3) rotate(0); } 50% { opacity: 1; transform: scale(1) rotate(45deg); } }
+@media (max-width: 640px) { .champ-card { grid-template-columns: auto minmax(0,1fr); padding: 16px 18px; gap: 14px; } .cc-side { display: none; } .cc-emoji { width: 58px; height: 58px; font-size: 44px; } }
+@media (prefers-reduced-motion: reduce) { .champ-card, .champ-card::before, .cc-emoji, .cc-star { animation: none !important; } }`;
+        document.head.appendChild(st);
+      }
+      const star = (css, d) => `<svg class="cc-star" viewBox="0 0 20 20" style="${css};animation-delay:${d}s" aria-hidden="true"><path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z"/></svg>`;
+      el.innerHTML = `
+        <a class="champ-card" href="leaderboard.html" aria-label="Week ${CEREMONY.week} champion: ${names}. Open the leaderboard">
+          ${star('top:14px;left:38%', 0)}${star('bottom:16px;left:62%', 1.1)}${star('top:22px;right:18%', 1.9)}
+          <div class="cc-emoji"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60e/512.webp" alt="" width="76" height="76" style="width:100%;height:100%" onerror="this.parentNode.textContent='😎'"></div>
+          <div style="min-width:0">
+            <div class="cc-k">WEEK ${CEREMONY.week} CHAMPION · ${esc(level.toUpperCase())} TRACK</div>
+            <div class="cc-name">${names}${isMe ? '<span class="cc-me">THAT’S YOU</span>' : ''}</div>
+            <div class="cc-sub"><b>${champs[0].p.toLocaleString('en-US')}</b> points${champs[0].g ? ' · ' + esc(champs[0].g) : ''}</div>
+          </div>
+          <div class="cc-side">
+            <div class="cc-av">${av(champs[0])}</div>
+            <div class="cc-runners">${second ? `2nd ${esc(second.n)}` : ''}${third ? `<br>3rd ${esc(third.n)}` : ''}</div>
+          </div>
+        </a>`;
+    } catch (e) { console.error('champion card', e); }
   }
 
   async function buildGrid(profile, userId) {
