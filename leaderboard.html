@@ -5,11 +5,109 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Leaderboard — IELTS Marathon</title>
 <link rel="stylesheet" href="style.css">
+<style>
+[hidden] { display: none !important; }
+/* Leaderboard — calm board in the site's own palette; motion does the work. */
+.lb { --gold: #e7b54a; --gold-ink: #6b4a06; --silver: #c3c8d2; --bronze: #c98a5e; --line: #f1eee6; }
+.lb-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; padding: 40px 0 0; }
+.lb-head .eyebrow { margin-bottom: 6px; }
+.lb-head h1 { margin: 0; font-size: clamp(2.2rem, 5vw, 3.2rem); letter-spacing: -0.03em; }
+.replay { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--ink-soft); font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: border-color .2s, color .2s; }
+.replay:hover { border-color: var(--ink); color: var(--ink); }
+.controls { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0 0; }
+.seg { position: relative; display: inline-flex; padding: 3px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); }
+.seg button { position: relative; z-index: 1; background: none; border: 0; box-shadow: none; color: var(--muted); font-size: 0.85rem; font-weight: 600; padding: 8px 15px; border-radius: 9px; transition: color .25s; }
+.seg button:hover { background: none; color: var(--ink); box-shadow: none; transform: none; }
+.seg button.active { color: #fff; }
+.seg .glider { position: absolute; top: 3px; bottom: 3px; left: 0; width: 0; border-radius: 9px; background: var(--ink); transition: transform .4s cubic-bezier(.2,.9,.25,1.05), width .4s cubic-bezier(.2,.9,.25,1.05); z-index: 0; }
+
+#board-root { transition: opacity .2s ease; min-height: 380px; padding-bottom: 60px; }
+#board-root.fading { opacity: 0; }
+
+/* top three */
+.top3 { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr) minmax(0,1fr); gap: 12px; align-items: end; margin-top: 26px; }
+.t3 { display: flex; align-items: center; gap: 14px; padding: 18px; border-radius: 18px; background: var(--surface); border: 1px solid var(--border); min-width: 0; opacity: 0; transform: translateY(18px); animation: up .7s cubic-bezier(.2,.9,.25,1) forwards; }
+.t3.r2 { animation-delay: .12s; } .t3.r1 { animation-delay: .28s; } .t3.r3 { animation-delay: .02s; }
+.t3.r1 { position: relative; overflow: hidden; padding: 22px; background: var(--ink); border-color: var(--ink); color: #fff; }
+.t3.r1::after { content: ''; position: absolute; top: -40%; bottom: -40%; width: 30%; left: -50%; background: linear-gradient(100deg, rgba(255,255,255,0), rgba(231,181,74,.28), rgba(255,255,255,0)); transform: skewX(-18deg); animation: sheen 4.5s ease-in-out 1.2s infinite; }
+@keyframes sheen { 0% { left: -50%; } 35%, 100% { left: 130%; } }
+.t3 .who { flex: 1; min-width: 0; }
+.t3 .lbl { font-family: var(--mono); font-size: 0.68rem; letter-spacing: .14em; color: var(--muted); }
+.t3.r1 .lbl { color: var(--gold); }
+.t3 .nm { font-weight: 700; font-size: 0.95rem; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t3.r1 .nm { color: #fff; font-family: var(--display); font-size: 1.2rem; }
+.t3 .grp { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); }
+.t3 .pts { font-family: var(--mono); font-weight: 600; font-size: 1.05rem; color: var(--ink); }
+.t3.r1 .pts { color: var(--gold); font-size: 1.35rem; }
+.t3.r2 .av { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--silver); }
+.t3.r3 .av { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--bronze); }
+.t3.r1 .av { width: 60px; height: 60px; font-size: 1.1rem; box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--gold); }
+@keyframes up { to { opacity: 1; transform: none; } }
+
+.av { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; color: #fff; font-family: var(--display); font-weight: 700; font-size: 0.95rem; }
+.av img { width: 100%; height: 100%; object-fit: cover; }
+
+/* rows */
+.me { display: grid; grid-template-columns: 40px 44px minmax(0,1fr) minmax(80px, 220px) 72px; gap: 16px; align-items: center; margin-top: 14px; padding: 14px 20px; border-radius: 16px; background: var(--accent); color: #fff; opacity: 0; transform: translateY(12px); animation: up .6s cubic-bezier(.2,.9,.25,1) .45s forwards; }
+.me .rk, .me .pt { font-family: var(--mono); font-weight: 600; font-size: 1.05rem; }
+.me .rk { text-align: center; } .me .pt { text-align: right; }
+.me .t { font-weight: 700; font-size: 0.95rem; } .me .s { font-size: 0.78rem; color: rgba(255,255,255,.8); }
+.me .av { width: 40px; height: 40px; background: #fff !important; color: var(--accent); }
+.me .bar { background: rgba(255,255,255,.22); } .me .bar i { background: #fff; }
+.me.none { grid-template-columns: 1fr; background: var(--surface); color: var(--ink-soft); border: 1px dashed var(--border); font-size: 0.9rem; }
+
+.list { margin-top: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+.row { display: grid; grid-template-columns: 40px 44px minmax(0,1fr) minmax(80px, 220px) 72px; gap: 16px; align-items: center; padding: 12px 20px; border-bottom: 1px solid var(--line); opacity: 0; transform: translateX(-14px); transition: opacity .5s ease, transform .6s cubic-bezier(.2,.9,.25,1), background .2s; }
+.row:last-child { border-bottom: 0; }
+.row.in { opacity: 1; transform: none; }
+.row:hover { background: var(--surface-2); }
+.row .rk { font-family: var(--mono); font-weight: 600; font-size: 0.9rem; text-align: center; color: var(--ink-soft); }
+.row .av { width: 36px; height: 36px; font-size: 0.78rem; }
+.row .nm { font-weight: 600; font-size: 0.9rem; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .nm small { margin-left: 8px; font-family: var(--mono); font-size: 0.68rem; font-weight: 500; color: var(--muted); }
+.row .pt { font-family: var(--mono); font-weight: 600; font-size: 0.9rem; text-align: right; color: var(--ink); }
+.row.is-you { background: var(--accent-soft); }
+.row.is-you .rk, .row.is-you .pt { color: var(--accent); }
+.row.flash { animation: flash 1.4s ease 2; }
+@keyframes flash { 50% { background: rgba(52,87,213,.22); } }
+.tag-you { margin-left: 6px; padding: 1px 7px; border-radius: 999px; background: var(--accent); color: #fff; font-family: var(--mono); font-size: 0.6rem; letter-spacing: .12em; vertical-align: 1px; }
+.bar { height: 4px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; border-radius: 4px; background: var(--ink); transition: width 1.1s cubic-bezier(.2,.9,.25,1) .15s; }
+.row.in .bar i, .me .bar i.go { width: var(--pct); }
+.foot { text-align: center; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-top: 22px; }
+
+/* closed until the ceremony */
+.closed { margin: 40px auto 80px; max-width: 560px; text-align: center; padding: 44px 28px; border-radius: 24px; background: var(--ink); color: #fff; position: relative; overflow: hidden; }
+.closed::before { content: ''; position: absolute; top: -30%; left: 50%; width: 70%; height: 160%; margin-left: -35%; background: linear-gradient(180deg, rgba(231,181,74,.18), rgba(231,181,74,0) 70%); clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%); filter: blur(10px); transform-origin: 50% 0; animation: sway 7s ease-in-out infinite; }
+@keyframes sway { 0%,100% { transform: rotate(-14deg); } 50% { transform: rotate(14deg); } }
+.closed > * { position: relative; }
+.closed .k { font-family: var(--mono); font-size: 0.72rem; letter-spacing: .22em; color: #e7b54a; }
+.closed h2 { color: #fff; font-size: clamp(1.6rem, 4.5vw, 2.2rem); margin: 12px 0 8px; text-wrap: balance; }
+.closed p { color: rgba(255,255,255,.7); margin: 0 auto; max-width: 40ch; }
+.closed .clk { font-family: var(--mono); font-weight: 600; font-size: clamp(2.6rem, 10vw, 4rem); margin: 22px 0 6px; font-variant-numeric: tabular-nums; }
+
+.empty { text-align: center; padding: 56px 20px; margin-top: 26px; border: 1px dashed var(--border); border-radius: 18px; background: var(--surface); }
+.empty h3 { margin: 0 0 6px; } .empty p { margin: 0 auto; max-width: 42ch; }
+.empty button { margin-top: 16px; }
+.skel { background: linear-gradient(90deg, #efece4 20%, #f7f5f0 40%, #efece4 60%); background-size: 300% 100%; animation: sk 1.4s ease infinite; border-radius: 16px; }
+@keyframes sk { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
+@media (max-width: 680px) {
+  .top3 { grid-template-columns: 1fr; }
+  .t3.r1 { order: -1; }
+  .me, .row { grid-template-columns: 30px 36px minmax(0,1fr) 60px; gap: 10px; padding: 11px 14px; }
+  .me .bar, .row .bar { display: none; }
+  .row .nm small { display: none; }
+  .seg button { padding: 8px 11px; font-size: 0.8rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lb *, .lb *::before, .lb *::after { animation-duration: .001s !important; animation-delay: 0s !important; transition-duration: .001s !important; transition-delay: 0s !important; }
+}
+</style>
 </head>
 <body>
 
 <div id="content" style="display:none;">
-
   <header class="topbar">
     <div class="topbar-inner">
       <div class="logo">IELTS <span>MARATHON</span></div>
@@ -24,185 +122,220 @@
     </div>
   </header>
 
-  <section class="hero" style="padding-top:48px; padding-bottom:8px;">
-    <div class="wrap">
-      <div class="eyebrow">Leaderboard</div>
-      <h1 id="page-title">See where you stand</h1>
-      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:18px;">
-        <div class="tab-toggle" id="scope-toggle">
-          <button data-scope="group" class="active">My group</button>
-          <button data-scope="level">My level</button>
-        </div>
-        <div class="tab-toggle" id="period-toggle">
-          <button data-period="today" class="active">Today</button>
-          <button data-period="week">This week</button>
-          <button data-period="overall">Overall</button>
-        </div>
+  <main class="wrap lb">
+    <div class="lb-head">
+      <div>
+        <div class="eyebrow" id="eyebrow">Leaderboard</div>
+        <h1>Leaderboard</h1>
+      </div>
+      <a class="replay" id="replay" href="ceremony.html?replay" hidden>↺ Replay the ceremony</a>
+    </div>
+    <div class="controls" id="controls">
+      <div class="seg" id="scope-toggle" role="group" aria-label="Who to compare with">
+        <span class="glider"></span>
+        <button data-scope="group" class="active" aria-pressed="true">My group</button>
+        <button data-scope="level" aria-pressed="false">My level</button>
+      </div>
+      <div class="seg" id="period-toggle" role="group" aria-label="Time period">
+        <span class="glider"></span>
+        <button data-period="today" aria-pressed="false">Today</button>
+        <button data-period="week" aria-pressed="false">This week</button>
+        <button data-period="overall" class="active" aria-pressed="true">Overall</button>
       </div>
     </div>
-  </section>
-
-  <section>
-    <div class="wrap" id="board-root">
-      <p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>
-    </div>
-  </section>
-
+    <div id="board-root"></div>
+  </main>
 </div>
 
 <script src="supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 <script>
-  let me = null;
-  let myProfile = null;
-  let scope = 'group';
-  let period = 'today';
-  let currentDay = null;
+  let me = null, myProfile = null, scope = 'group', period = 'overall', currentDay = null, renderToken = 0;
+  let groupNames = {};
+  const cache = {};
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   requireAuth(async function (profile, user) {
-    me = user;
-    myProfile = profile;
+    me = user; myProfile = profile || {};
+    const isC2Student = myProfile.role === 'student' && myProfile.challenge === '2.0';
+
+    // Closed until the weekly ceremony; afterwards, a student who hasn't
+    // watched it yet is taken there first (once per device).
+    if (isC2Student) {
+      const now = await serverNow();
+      if (now < ceremonyLobbyMs()) { showClosed(); return; }
+      if (!ceremonySeen(user.id)) { window.location.href = 'ceremony.html'; return; }
+    }
+    if (myProfile.challenge === '2.0' || myProfile.role !== 'student') {
+      const now = await serverNow();
+      if (now >= ceremonyStartMs()) document.getElementById('replay').hidden = false;
+    }
+
     currentDay = await getMostRecentLiveDay(myProfile);
-    document.getElementById('scope-toggle').addEventListener('click', (e) => {
-      const btn = e.target.closest('button'); if (!btn) return;
-      scope = btn.dataset.scope;
-      document.querySelectorAll('#scope-toggle button').forEach(b => b.classList.toggle('active', b === btn));
-      render();
-    });
-    document.getElementById('period-toggle').addEventListener('click', (e) => {
-      const btn = e.target.closest('button'); if (!btn) return;
-      period = btn.dataset.period;
-      document.querySelectorAll('#period-toggle button').forEach(b => b.classList.toggle('active', b === btn));
-      render();
-    });
+    const track = myProfile.challenge === '2.0' ? `${cap(myProfile.level || 'standard')} track` : 'Challenge 1.0';
+    document.getElementById('eyebrow').textContent = track;
+    setupToggle('scope-toggle', 'scope', v => { scope = v; });
+    setupToggle('period-toggle', 'period', v => { period = v; });
+    try { const { data: gs } = await getSupabaseClient().from('groups').select('id, name'); (gs || []).forEach(g => { groupNames[g.id] = g.name; }); } catch (e) {}
     render();
   });
 
-  async function render() {
+  // ---------- closed state ----------
+  function showClosed() {
+    document.getElementById('controls').hidden = true;
     const root = document.getElementById('board-root');
-    root.innerHTML = '<p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading…</p>';
+    root.innerHTML = `<div class="closed">
+      <div class="k">WEEK ${CEREMONY.week} · COMPLETION CEREMONY</div>
+      <h2>The leaderboard opens with the ceremony</h2>
+      <p>Tonight at 21:00 Tashkent time. At 20:55 you’ll be taken to the ceremony hall automatically, so keep the platform open.</p>
+      <div class="clk" id="clk">--:--:--</div>
+      <p style="font-family:var(--mono); font-size:.75rem;">until the ceremony</p>
+    </div>`;
+    const tick = () => {
+      const left = ceremonyStartMs() - (Date.now() + (_serverOffsetMs || 0));
+      if (Date.now() + (_serverOffsetMs || 0) >= ceremonyLobbyMs()) { window.location.href = 'ceremony.html'; return; }
+      const s = Math.max(0, Math.floor(left / 1000));
+      document.getElementById('clk').textContent = [Math.floor(s / 3600), Math.floor(s / 60) % 60, s % 60].map(v => String(v).padStart(2, '0')).join(':');
+    };
+    tick(); setInterval(tick, 1000);
+  }
 
-    const sb = getSupabaseClient();
-    const mockDays = trackConfigFor(myProfile).mockDays;
-    let dayFrom, dayTo;
-    if (period === 'today') {
-      dayFrom = currentDay; dayTo = currentDay;
-    } else if (period === 'overall') {
-      // Only Day 7 onward counts for Challenge 2.0 — the pre-mock period
-      // before this points system existed is deliberately excluded.
-      // Challenge 1.0 has no such exclusion and counts from Day 1.
-      dayFrom = (myProfile.challenge === '2.0') ? 7 : 1;
-      dayTo = currentDay;
-    } else {
-      // "This week" only ever shows a week that's actually finished —
-      // never live, in-progress standings — so nobody can see or chase a
-      // number until the week is genuinely over.
-      const completed = getMostRecentCompletedWeek(currentDay, mockDays);
-      if (!completed) {
-        root.innerHTML = '<p style="color:var(--muted);">This week\'s results aren\'t in yet — check back once the current week wraps up.</p>';
-        return;
-      }
-      [dayFrom, dayTo] = completed;
-    }
-
-    let studentIds = null;
-    if (scope === 'group' && myProfile.group_id) {
-      const { data: groupStudents } = await sb.from('profiles').select('id').eq('group_id', myProfile.group_id).eq('role', 'student');
-      studentIds = (groupStudents || []).map(s => s.id);
-    } else if (scope === 'level') {
-      // "My level" means everyone on the same track as you — not literally
-      // everyone. A Challenge 1.0 student never competes against Challenge
-      // 2.0, and within 2.0, Standard/Advanced/Expert never mix.
-      let levelQuery = sb.from('profiles').select('id').eq('role', 'student').eq('challenge', myProfile.challenge || '1.0');
-      if (myProfile.challenge === '2.0') levelQuery = levelQuery.eq('level', myProfile.level);
-      const { data: trackStudents } = await levelQuery;
-      studentIds = (trackStudents || []).map(s => s.id);
-    }
-
-    // Summed in the database (leaderboard_totals RPC), not pulled as raw
-    // rows and added up here — a wide window (e.g. "Overall" once several
-    // weeks have passed) can easily be thousands of individual points
-    // rows, which silently hits Supabase's default 1000-row API cap on a
-    // plain select. Aggregating server-side always returns one row per
-    // student, so it can never be truncated.
-    if (!studentIds) {
-      const { data: allIds } = await sb.from('profiles').select('id').eq('role', 'student');
-      studentIds = (allIds || []).map(s => s.id);
-    }
-    const { data: totalsRows, error } = await sb.rpc('leaderboard_totals', {
-      day_from: dayFrom, day_to: dayTo, ids: studentIds
+  // ---------- helpers ----------
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+  function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+  function fmtPts(v) { const r = Math.round(v * 10) / 10; return r.toLocaleString('en-US', { minimumFractionDigits: Number.isInteger(r) ? 0 : 1, maximumFractionDigits: 1 }); }
+  const TONES = ['#2f4bb8', '#1d7a58', '#8a2e4a', '#5b3fa0', '#1f6f86', '#8a5a1c', '#3d4a66', '#7a3a7a'];
+  function toneFor(id) { let h = 0; for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0; return TONES[h % TONES.length]; }
+  function avatarHtml(p) {
+    const ini = esc(initialsFor(p.full_name));
+    const bg = `background:linear-gradient(145deg, ${toneFor(p.id)}, #14162b)`;
+    if (p.avatar_url) return `<div class="av" style="${bg}"><img src="${esc(p.avatar_url)}" alt="" loading="lazy" data-i="${ini}" onerror="this.parentNode.textContent=this.dataset.i"></div>`;
+    return `<div class="av" style="${bg}">${ini}</div>`;
+  }
+  function countUp(el, target, delay) {
+    if (reduceMotion) { el.textContent = fmtPts(target); return; }
+    const dur = 1100, t0 = performance.now() + (delay || 0);
+    el.textContent = '0';
+    const step = now => { const p = Math.min(1, Math.max(0, (now - t0) / dur)); const e = 1 - Math.pow(1 - p, 3); el.textContent = p < 1 ? Math.round(target * e).toLocaleString('en-US') : fmtPts(target); if (p < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  function setupToggle(id, key, apply) {
+    const el = document.getElementById(id), glider = el.querySelector('.glider');
+    const place = () => { const a = el.querySelector('button.active'); if (!a) return; glider.style.width = a.offsetWidth + 'px'; glider.style.transform = `translateX(${a.offsetLeft - 3}px)`; };
+    el.addEventListener('click', e => {
+      const btn = e.target.closest('button'); if (!btn || btn.classList.contains('active')) return;
+      el.querySelectorAll('button').forEach(b => { const on = b === btn; b.classList.toggle('active', on); b.setAttribute('aria-pressed', on); });
+      apply(btn.dataset[key]); place(); render();
     });
+    place(); window.addEventListener('resize', place);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  }
 
-    if (error) {
-      root.innerHTML = '<p style="color:var(--warn);">Could not load the leaderboard right now — please refresh.</p>';
-      console.error(error);
-      return;
+  // ---------- which days ----------
+  function computeWindow() {
+    const mockDays = trackConfigFor(myProfile).mockDays;
+    if (period === 'today') return { dayFrom: currentDay, dayTo: currentDay, label: `Day ${currentDay}`, isMock: mockDays.includes(currentDay) };
+    if (period === 'overall') { const from = myProfile.challenge === '2.0' ? 7 : 1; return { dayFrom: from, dayTo: currentDay, label: `Days ${from}–${currentDay}` }; }
+    const completed = getMostRecentCompletedWeek(currentDay, mockDays);
+    if (!completed) return { pending: true, label: 'This week' };
+    return { dayFrom: completed[0], dayTo: completed[1], label: `Days ${completed[0]}–${completed[1]}` };
+  }
+
+  // ---------- data ----------
+  async function getRoster() {
+    const myGroup = scope === 'group' && myProfile.group_id;
+    const key = 'roster:' + (myGroup ? 'group' : scope === 'level' ? 'level' : 'all');
+    if (cache[key]) return cache[key];
+    const sb = getSupabaseClient(), cols = 'id, full_name, avatar_url, group_id';
+    let build;
+    if (myGroup) build = () => sb.from('profiles').select(cols).eq('group_id', myProfile.group_id).eq('role', 'student').order('id');
+    else if (scope === 'level') build = () => { let q = sb.from('profiles').select(cols).eq('role', 'student').eq('challenge', myProfile.challenge || '1.0'); if (myProfile.challenge === '2.0') q = q.eq('level', myProfile.level); return q.order('id'); };
+    else build = () => sb.from('profiles').select(cols).eq('role', 'student').order('id');
+    return (cache[key] = await fetchAllRows(build));
+  }
+  async function getRanking(win) {
+    const key = `rank:${scope}:${win.dayFrom}:${win.dayTo}`;
+    if (cache[key]) return cache[key];
+    const roster = await getRoster();
+    if (!roster.length) return (cache[key] = []);
+    // Summed in the database (leaderboard_totals RPC) so it can never hit
+    // Supabase's 1,000-row cap, however many points rows the window has.
+    const { data, error } = await getSupabaseClient().rpc('leaderboard_totals', { day_from: win.dayFrom, day_to: win.dayTo, ids: roster.map(p => p.id) });
+    if (error) throw error;
+    const totals = {}; (data || []).forEach(r => { totals[r.student_id] = Number(r.total); });
+    const ranked = roster.filter(p => totals[p.id] !== undefined)
+      .map(p => ({ id: p.id, profile: p, points: Math.round(totals[p.id] * 10) / 10 }))
+      .sort((a, b) => b.points - a.points || String(a.profile.full_name).localeCompare(String(b.profile.full_name)));
+    ranked.forEach((r, i) => { r.rank = (i > 0 && r.points === ranked[i - 1].points) ? ranked[i - 1].rank : i + 1; });
+    return (cache[key] = ranked);
+  }
+
+  // ---------- render ----------
+  async function render() {
+    const token = ++renderToken, root = document.getElementById('board-root'), win = computeWindow();
+    root.classList.add('fading');
+    await new Promise(r => setTimeout(r, root.childElementCount ? 160 : 0));
+    if (token !== renderToken) return;
+    root.innerHTML = `<div class="top3"><div class="skel" style="height:86px"></div><div class="skel" style="height:104px"></div><div class="skel" style="height:86px"></div></div><div class="skel" style="height:70px;margin-top:14px"></div><div class="skel" style="height:300px;margin-top:14px"></div>`;
+    root.classList.remove('fading');
+
+    if (win.pending) return swap(root, token, emptyHtml('This week’s results aren’t in yet', 'Weekly standings appear once the week wraps up with its mock.'));
+    let ranked;
+    try { ranked = await getRanking(win); } catch (e) { console.error(e); return swap(root, token, emptyHtml('Could not load the leaderboard', 'Please refresh the page in a moment.')); }
+    if (token !== renderToken) return;
+    if (!ranked.length) return swap(root, token, emptyHtml(win.isMock ? 'Mock day: no points today' : 'No points on the board yet', win.isMock ? 'Mock exams don’t award points. See the overall standings instead.' : 'Finish a task and your name appears here.'));
+
+    swap(root, token, top3Html(ranked) + meHtml(ranked) + listHtml(ranked) + `<div class="foot">${ranked.length} students · ${esc(win.label)}</div>`);
+    if (token === renderToken) wire(root, ranked);
+  }
+  function swap(root, token, html) {
+    if (token !== renderToken) return;
+    root.innerHTML = html;
+    const b = root.querySelector('[data-overall]');
+    if (b) b.addEventListener('click', () => document.querySelector('#period-toggle [data-period="overall"]').click());
+  }
+  function emptyHtml(title, text) {
+    return `<div class="empty"><h3>${esc(title)}</h3><p>${esc(text)}</p>${period !== 'overall' ? '<button data-overall>See overall standings</button>' : ''}</div>`;
+  }
+  function groupOf(p) { return scope === 'level' && p.group_id && groupNames[p.group_id] ? groupNames[p.group_id] : ''; }
+  function top3Html(ranked) {
+    const card = (r, cls, label) => r ? `<div class="t3 ${cls}">${avatarHtml(Object.assign({ id: r.id }, r.profile))}<div class="who"><div class="lbl">${label}</div><div class="nm" title="${esc(r.profile.full_name)}">${esc(r.profile.full_name)}${r.id === me.id ? '<span class="tag-you">YOU</span>' : ''}</div>${groupOf(r.profile) ? `<div class="grp">${esc(groupOf(r.profile))}</div>` : ''}</div><div class="pts" data-count="${r.points}">${fmtPts(r.points)}</div></div>` : '<div></div>';
+    return `<div class="top3">${card(ranked[1], 'r2', `${ranked[1] ? ranked[1].rank : 2}ND`)}${card(ranked[0], 'r1', 'CHAMPION')}${card(ranked[2], 'r3', `${ranked[2] ? ranked[2].rank : 3}RD`)}</div>`;
+  }
+  function meHtml(ranked) {
+    const i = ranked.findIndex(r => r.id === me.id);
+    if (i === -1) return myProfile.role === 'student' ? `<div class="me none">Your name isn’t on the board for this period yet. Every task you finish adds points.</div>` : '';
+    const mine = ranked[i];
+    let j = i - 1; while (j > 0 && ranked[j].points === mine.points) j--;
+    const ahead = i > 0 ? ranked[j] : null;
+    const line = mine.rank === 1 ? (ranked[1] ? `${fmtPts(mine.points - ranked[1].points)} pts clear of 2nd place` : 'Top of the board') : `${fmtPts(ahead.points - mine.points)} pts behind ${esc(ahead.profile.full_name)} (#${ahead.rank})`;
+    const pct = ahead ? Math.max(3, Math.min(100, mine.points / ahead.points * 100)) : 100;
+    return `<div class="me"><div class="rk">${mine.rank}</div>${avatarHtml(Object.assign({ id: mine.id }, mine.profile))}<div style="min-width:0"><div class="t">You</div><div class="s">${line}</div></div><div class="bar"><i style="--pct:${pct.toFixed(1)}%"></i></div><div class="pt">${fmtPts(mine.points)}</div></div>`;
+  }
+  function listHtml(ranked) {
+    const rest = ranked.slice(3); if (!rest.length) return '';
+    const top = ranked[0].points || 1;
+    return `<div class="list">${rest.map(r => `<div class="row ${r.id === me.id ? 'is-you' : ''}" data-id="${esc(r.id)}"><div class="rk">${r.rank}</div>${avatarHtml(Object.assign({ id: r.id }, r.profile))}<div class="nm">${esc(r.profile.full_name)}${r.id === me.id ? '<span class="tag-you">YOU</span>' : ''}${groupOf(r.profile) ? `<small>${esc(groupOf(r.profile))}</small>` : ''}</div><div class="bar"><i style="--pct:${Math.max(2, Math.min(100, r.points / top * 100)).toFixed(1)}%"></i></div><div class="pt">${fmtPts(r.points)}</div></div>`).join('')}</div>`;
+  }
+  function wire(root, ranked) {
+    root.querySelectorAll('.t3 .pts[data-count]').forEach((el, k) => countUp(el, Number(el.dataset.count), 250 + k * 120));
+    const meBar = root.querySelector('.me .bar i'); if (meBar) setTimeout(() => meBar.classList.add('go'), 700);
+    const rows = root.querySelectorAll('.row');
+    if ('IntersectionObserver' in window && !reduceMotion) {
+      let first = true;
+      const io = new IntersectionObserver(entries => {
+        const vis = entries.filter(e => e.isIntersecting);
+        vis.forEach((e, k) => { e.target.style.transitionDelay = ((first ? 550 : 0) + k * 40) + 'ms'; e.target.classList.add('in'); io.unobserve(e.target); e.target.addEventListener('transitionend', () => { e.target.style.transitionDelay = ''; }, { once: true }); });
+        if (vis.length) first = false;
+      }, { rootMargin: '0px 0px -30px 0px' });
+      rows.forEach(r => io.observe(r));
+    } else rows.forEach(r => r.classList.add('in'));
+    const meRow = root.querySelector('.me');
+    if (meRow && !meRow.classList.contains('none')) {
+      meRow.style.cursor = 'pointer'; meRow.title = 'Find me in the list';
+      meRow.addEventListener('click', () => { const t = root.querySelector(`.row[data-id="${me.id}"]`); if (!t) return; t.classList.add('in'); t.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' }); t.classList.remove('flash'); void t.offsetWidth; t.classList.add('flash'); });
     }
-
-    const totals = {};
-    (totalsRows || []).forEach(r => { totals[r.student_id] = Number(r.total); });
-
-    const ids = Object.keys(totals);
-    if (ids.length === 0) {
-      root.innerHTML = '<p style="color:var(--muted);">No points recorded for this period yet.</p>';
-      return;
-    }
-
-    const { data: profiles } = await sb.from('profiles').select('id, full_name, avatar_url').in('id', ids);
-    const profileById = {};
-    (profiles || []).forEach(p => { profileById[p.id] = p; });
-
-    const ranked = ids
-      .map(id => ({ id, points: Math.round(totals[id] * 10) / 10, profile: profileById[id] }))
-      .filter(r => r.profile)
-      .sort((a, b) => b.points - a.points);
-
-    root.innerHTML = renderPodium(ranked) + renderList(ranked);
-  }
-
-  function avatarHtml(p, style) {
-    style = style || '';
-    if (p.avatar_url) return `<div class="avatar-circle" style="${style}"><img src="${p.avatar_url}" alt="" onerror="this.parentElement.textContent='${initialsFor(p.full_name)}'"></div>`;
-    return `<div class="avatar-circle" style="${style}">${initialsFor(p.full_name)}</div>`;
-  }
-
-  function renderPodium(ranked) {
-    const top3 = ranked.slice(0, 3);
-    if (top3.length === 0) return '';
-    // Display order: 2nd, 1st, 3rd (classic podium shape)
-    const order = [top3[1], top3[0], top3[2]].filter(Boolean);
-    const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
-    const slots = order.map(r => {
-      const rank = top3.indexOf(r) + 1;
-      const topIcon = rank === 1 ? '<span class="crown">👑</span>' : `<span class="medal">${medals[rank]}</span>`;
-      return `
-        <div class="podium-slot rank-${rank}">
-          ${topIcon}
-          ${avatarHtml(r.profile)}
-          <div class="p-name">${r.profile.full_name}</div>
-          <div class="podium-bar">
-            <div class="p-pts">${r.points}</div>
-            <div class="p-rank">${rank === 1 ? '1st' : rank === 2 ? '2nd' : '3rd'}</div>
-          </div>
-        </div>
-      `;
-    }).join('');
-    return `<div class="podium-wrap">${slots}</div>`;
-  }
-  function renderList(ranked) {
-    const rows = ranked.map((r, i) => {
-      const isYou = r.id === me.id;
-      return `
-        <div class="rank-row ${isYou ? 'is-you' : ''}">
-          <div class="r-num">${i + 1}</div>
-          ${avatarHtml(r.profile, 'width:32px;height:32px;font-size:0.78rem;')}
-          <div class="r-name">${isYou ? 'You' : r.profile.full_name}</div>
-          <div class="r-pts">${r.points}</div>
-        </div>
-      `;
-    }).join('');
-    return `<div class="rank-list">${rows}</div>`;
   }
 </script>
 </body>
