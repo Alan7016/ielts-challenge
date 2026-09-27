@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Completion Ceremony — IELTS Marathon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,500;1,500&family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Deliberately single-theme: a darkened cinema is the whole point. */
+:root {
+  color-scheme: dark;
+  --ink: #06070d;
+  --ink-2: #10122a;
+  --line: rgba(255,255,255,0.1);
+  --text: #f2f3f8;
+  --soft: #b6bace;
+  --mute: #7b7f99;
+  --gold-hi: #fff3d1; --gold-1: #f6dc98; --gold-2: #e0b458; --gold-3: #a8741f;
+  --silver: #d3d9e2; --bronze: #d9a17a;
+  --blue: #6f8cff;
+  --serif: 'Instrument Serif', Georgia, serif;
+  /* numbers: Instrument Serif's 1 reads as an l, so ranks use Playfair */
+  --num: 'Playfair Display', Georgia, serif;
+  --display: 'Space Grotesk', system-ui, sans-serif;
+  --body: 'Inter', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+html, body { height: 100%; }
+body { margin: 0; background: var(--ink); color: var(--text); font-family: var(--body); overflow: hidden; -webkit-font-smoothing: antialiased; }
+button { font: inherit; cursor: pointer; }
+[hidden] { display: none !important; }
+button:focus-visible, select:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* ---------- preview controls (prototype only) ---------- */
+.pv {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: rgba(6,7,13,0.82); border-top: 1px solid var(--line); backdrop-filter: blur(10px);
+  font-family: var(--mono); font-size: 12px; color: var(--mute);
+}
+.pv b { color: var(--gold-1); font-weight: 600; letter-spacing: .12em; }
+.pv select, .pv button { font-family: var(--mono); font-size: 12px; color: var(--text); background: rgba(255,255,255,0.06); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
+.pv button:hover { border-color: var(--gold-2); }
+
+/* ---------- stage ---------- */
+#stage {
+  position: fixed; inset: 0; overflow: hidden;
+  background:
+    radial-gradient(900px 520px at 50% 105%, rgba(224,180,88,0.10), rgba(224,180,88,0) 70%),
+    radial-gradient(1000px 600px at 50% -10%, #171a3c 0%, rgba(23,26,60,0) 65%),
+    var(--ink);
+}
+#stage.shake { animation: shake .6s cubic-bezier(.36,.07,.19,.97); }
+@keyframes shake { 10%,90% { transform: translate(-2px,1px); } 20%,80% { transform: translate(4px,-2px); } 30%,50%,70% { transform: translate(-6px,2px); } 40%,60% { transform: translate(6px,-1px); } }
+.grain { position: absolute; inset: 0; pointer-events: none; opacity: .07; z-index: 40;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.vignette { position: absolute; inset: 0; pointer-events: none; z-index: 39; background: radial-gradient(ellipse at center, rgba(0,0,0,0) 45%, rgba(0,0,0,0.65) 100%); }
+#flash { position: absolute; inset: 0; background: #fff8e6; opacity: 0; pointer-events: none; z-index: 45; }
+#flash.go { animation: flash .9s ease-out; }
+#flash.go.soft { animation: flashSoft 1.4s ease-out; }
+@keyframes flashSoft { 0% { opacity: .35; } 100% { opacity: 0; } }
+#s-title.bloom .t-week em { text-shadow: 0 0 60px rgba(246,220,152,.6); transition: text-shadow 1.2s; }
+#s-title.bloom .t-week { transform: scale(1.04); transition: transform 3s cubic-bezier(.2,.9,.25,1); }
+@keyframes flash { 0% { opacity: .85; } 100% { opacity: 0; } }
+#fx { position: absolute; inset: 0; pointer-events: none; z-index: 44; }
+.dust { position: absolute; bottom: -8px; border-radius: 50%; background: radial-gradient(circle, #fff3d1, rgba(224,180,88,0) 70%); animation: rise linear infinite; opacity: 0; }
+@keyframes rise { 0% { transform: translateY(0); opacity: 0; } 15%, 80% { opacity: var(--o); } 100% { transform: translate(var(--dx), -110vh); opacity: 0; } }
+
+.scene { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding-inline: 20px; opacity: 0; visibility: hidden; transition: opacity .9s ease, visibility 0s linear .9s; }
+.scene.on { opacity: 1; visibility: visible; transition: opacity .9s ease; }
+
+.kicker { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--gold-1); }
+
+/* ---------- waiting room ---------- */
+.sweep { position: absolute; top: -10%; left: 50%; width: 60vmax; height: 130%; margin-left: -30vmax; pointer-events: none;
+  background: linear-gradient(180deg, rgba(255,236,190,0.16), rgba(255,236,190,0) 75%);
+  clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%); filter: blur(14px); transform-origin: 50% 0; animation: sweep 9s ease-in-out infinite; }
+@keyframes sweep { 0%, 100% { transform: rotate(-24deg); } 50% { transform: rotate(24deg); } }
+.w-title { font-family: var(--serif); font-weight: 400; font-size: clamp(44px, 9vw, 96px); line-height: .95; letter-spacing: -.02em; margin: 14px 0 8px; text-wrap: balance; }
+.w-title em { background: linear-gradient(100deg, var(--gold-3), var(--gold-1) 35%, var(--gold-hi) 55%, var(--gold-2) 75%, var(--gold-3)); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: gold 5s ease-in-out infinite; }
+@keyframes gold { 0%, 100% { background-position: 0 0; } 50% { background-position: 100% 0; } }
+.w-sub { color: var(--soft); font-size: 15px; margin: 0; }
+.clock { display: flex; align-items: center; gap: 4px; margin: 34px 0 30px; font-family: var(--mono); font-weight: 600; font-size: clamp(56px, 14vw, 120px); line-height: 1; font-variant-numeric: tabular-nums; color: var(--text); transition: color .4s, transform .4s; }
+.clock .dg { display: inline-block; min-width: .62em; }
+.clock .dg.tick { animation: tick .45s cubic-bezier(.2,.9,.25,1.2); }
+@keyframes tick { 0% { transform: translateY(-35%); opacity: 0; filter: blur(4px); } 100% { transform: none; opacity: 1; filter: none; } }
+.clock .colon { opacity: .4; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: .1; } }
+.final .clock { color: var(--gold-1); transform: scale(1.08); text-shadow: 0 0 40px rgba(224,180,88,.45); }
+.enter { display: inline-flex; align-items: center; gap: 10px; padding: 15px 24px; border-radius: 999px; border: 1px solid rgba(246,220,152,.55); background: rgba(246,220,152,.08); color: var(--gold-hi); font-weight: 600; font-size: 15px; box-shadow: 0 0 0 0 rgba(246,220,152,.5); animation: pulse 2.2s ease-out infinite; }
+.enter:hover { background: rgba(246,220,152,.16); }
+.enter.ok { animation: none; border-color: var(--line); background: rgba(255,255,255,.05); color: var(--soft); font-weight: 500; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(246,220,152,.45); } 100% { box-shadow: 0 0 0 18px rgba(246,220,152,0); } }
+.enter svg { width: 18px; height: 18px; }
+.w-plinths { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); display: flex; align-items: flex-end; gap: 12px; width: min(560px, 92vw); opacity: .55; }
+.w-plinths div { flex: 1; border-radius: 8px 8px 0 0; background: linear-gradient(180deg, #1b1e3a, #0c0e1e); box-shadow: inset 0 1px 0 rgba(255,255,255,.12); }
+.big321 { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 20; font-family: var(--num); font-style: italic; font-size: clamp(160px, 42vw, 360px); color: var(--gold-1); }
+.big321 span { animation: n321 1s cubic-bezier(.2,.9,.25,1) forwards; text-shadow: 0 0 60px rgba(224,180,88,.5); }
+@keyframes n321 { 0% { transform: scale(2.2); opacity: 0; filter: blur(12px); } 25% { transform: scale(1); opacity: 1; filter: none; } 80% { opacity: 1; } 100% { transform: scale(.7); opacity: 0; } }
+
+/* ---------- title card ---------- */
+.t-week { font-family: var(--serif); font-weight: 400; font-size: clamp(80px, 20vw, 210px); line-height: .85; margin: 16px 0 18px; letter-spacing: -.03em; }
+.t-week .ch { display: inline-block; opacity: 0; transform: translateY(30px); filter: blur(10px); }
+.on .t-week .ch { animation: ch .9s cubic-bezier(.2,.9,.25,1) forwards; animation-delay: calc(var(--i) * 70ms + .3s); }
+@keyframes ch { to { opacity: 1; transform: none; filter: none; } }
+.t-week em { color: var(--gold-1); }
+.t-meta { font-family: var(--mono); font-size: 14px; color: var(--soft); letter-spacing: .06em; opacity: 0; }
+.on .t-meta { animation: fadeUp .8s ease 1.3s forwards; }
+.t-meta b { color: var(--text); font-weight: 600; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* ---------- top ten roll ---------- */
+.r-head { font-family: var(--serif); font-style: italic; font-size: clamp(30px, 6vw, 48px); color: var(--soft); margin-bottom: 26px; }
+.r-card { display: flex; align-items: center; gap: 22px; padding: 20px 28px 20px 22px; border-radius: 22px; background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02)); border: 1px solid var(--line); min-width: min(520px, 88vw); max-width: 92vw; box-sizing: border-box; text-align: left; }
+.r-card.in { animation: cardIn .5s cubic-bezier(.2,.9,.25,1) forwards; }
+.r-card.out { animation: cardOut .35s ease-in forwards; }
+@keyframes cardIn { from { opacity: 0; transform: translateX(80px) scale(.96); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes cardOut { to { opacity: 0; transform: translateX(-80px) scale(.96); filter: blur(6px); } }
+.r-rank { font-family: var(--num); font-style: italic; font-size: 60px; line-height: 1; color: var(--gold-1); min-width: 70px; }
+.r-card .nm { font-family: var(--display); font-weight: 700; font-size: clamp(20px, 4.5vw, 28px); color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.r-card .meta { font-family: var(--mono); font-size: 13px; color: var(--mute); margin-top: 2px; }
+.r-card .pts { margin-left: auto; font-family: var(--mono); font-weight: 600; font-size: 22px; color: var(--text); padding-left: 12px; }
+@media (max-width: 520px) {
+  .r-card { flex-wrap: wrap; justify-content: center; text-align: center; gap: 10px 16px; padding: 22px 18px; }
+  .r-card > div[style] { flex-basis: 100%; }
+  .r-card .nm { white-space: normal; }
+  .r-card .pts { margin-left: 0; padding-left: 0; }
+}
+.r-dots { display: flex; gap: 8px; margin-top: 26px; font-family: var(--mono); font-size: 12px; color: var(--mute); }
+.r-dots span { width: 26px; text-align: center; transition: color .3s; }
+.r-dots span.done { color: var(--gold-1); }
+
+/* ---------- avatars ---------- */
+.av { border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--display); font-weight: 700; color: #fff; flex-shrink: 0; width: 56px; height: 56px; font-size: 19px; }
+
+/* ---------- podium ---------- */
+.p-caption { position: absolute; top: 7%; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 12; padding-inline: 16px; }
+.p-label { font-family: var(--mono); font-size: 13px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--soft); min-height: 1.2em; transition: color .4s; }
+.p-name { font-family: var(--serif); font-size: clamp(44px, 10vw, 92px); line-height: 1; min-height: 1em; text-wrap: balance; }
+.p-name.in { animation: nameIn .9s cubic-bezier(.2,.9,.25,1) forwards; }
+@keyframes nameIn { from { opacity: 0; letter-spacing: .25em; filter: blur(10px); } to { opacity: 1; letter-spacing: -.01em; filter: none; } }
+.p-stage { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: min(720px, 96vw); height: 72%; }
+.p-stage.dark .pc:not(.lit) .pillar { filter: brightness(.35); }
+.p-grid { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1.15fr 1fr; align-items: end; gap: clamp(8px, 2vw, 20px); padding-inline: 8px; }
+.pc { display: flex; flex-direction: column; align-items: center; position: relative; min-width: 0; }
+.pc .who { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-bottom: 12px; opacity: 0; transform: translateY(-40px); min-width: 0; width: 100%; }
+.pc.lit .who { animation: drop .8s cubic-bezier(.3,1.5,.5,1) forwards; }
+@keyframes drop { to { opacity: 1; transform: none; } }
+.pc .who .av { width: clamp(54px, 12vw, 76px); height: clamp(54px, 12vw, 76px); font-size: clamp(17px, 3.6vw, 24px); box-shadow: 0 0 0 3px var(--ink), 0 0 0 5px var(--metal-edge); }
+.pc.p1 .who .av { width: clamp(70px, 16vw, 100px); height: clamp(70px, 16vw, 100px); font-size: clamp(22px, 5vw, 32px); box-shadow: 0 0 0 3px var(--ink), 0 0 0 6px var(--gold-2), 0 0 40px rgba(224,180,88,.5); }
+.pc .who .nm { font-family: var(--display); font-weight: 700; font-size: clamp(13px, 2.6vw, 17px); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pc .who .pts { font-family: var(--mono); font-weight: 600; font-size: clamp(13px, 2.6vw, 17px); color: var(--soft); }
+.pc.p1 .who .pts { color: var(--gold-1); }
+.crown { width: clamp(34px, 8vw, 50px); margin-bottom: -2px; filter: drop-shadow(0 4px 12px rgba(224,180,88,.6)); }
+.pillar { position: relative; width: 100%; height: 0; border-radius: 12px 12px 3px 3px; overflow: hidden; transition: height 1.2s cubic-bezier(.2,.95,.25,1.04), filter .6s; display: flex; justify-content: center; box-shadow: 0 30px 60px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.6); }
+.pc.up .pillar { height: var(--h); }
+.pillar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 10px; background: linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,0)); }
+.pillar::after { content: ''; position: absolute; top: -20%; bottom: -20%; width: 40%; left: -70%; background: linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,.5), rgba(255,255,255,0)); transform: skewX(-18deg); }
+.pc.up .pillar::after { animation: sheen 3.8s ease-in-out 1.2s infinite; }
+@keyframes sheen { 0% { left: -70%; } 35%, 100% { left: 140%; } }
+.pillar .num { font-family: var(--num); font-size: clamp(54px, 13vw, 96px); line-height: 1; margin-top: 12px; color: rgba(40,24,4,.34); text-shadow: 0 1px 0 rgba(255,255,255,.45); opacity: 0; transition: opacity .6s .9s; }
+.pc.up .num { opacity: 1; }
+.p1 { --h: clamp(170px, 34vh, 280px); --metal-edge: var(--gold-2); }
+.p2 { --h: clamp(120px, 24vh, 200px); --metal-edge: var(--silver); }
+.p3 { --h: clamp(90px, 18vh, 150px); --metal-edge: var(--bronze); }
+.p1 .pillar { background: linear-gradient(180deg, rgba(255,243,209,.35), rgba(255,243,209,0) 35%), linear-gradient(90deg, #6d4810, #c8923a 18%, #f6dc98 46%, #e0b458 62%, #8f5f16); }
+.p2 .pillar { background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0) 35%), linear-gradient(90deg, #4c535e, #9aa3b0 20%, #eef1f6 48%, #b8c0cc 64%, #555c68); }
+.p3 .pillar { background: linear-gradient(180deg, rgba(255,224,198,.3), rgba(255,224,198,0) 35%), linear-gradient(90deg, #4f2a10, #a9602f 20%, #eab48a 47%, #c47a45 63%, #5a3014); }
+.p2 .num { color: rgba(20,24,32,.3); }
+.spot { position: absolute; bottom: 0; left: 50%; width: 220%; height: 190%; transform: translateX(-50%); pointer-events: none; opacity: 0; transition: opacity .5s;
+  background: linear-gradient(180deg, rgba(255,240,210,.34), rgba(255,240,210,.05) 70%, rgba(255,240,210,0)); clip-path: polygon(42% 0, 58% 0, 88% 100%, 12% 100%); filter: blur(10px); z-index: -1; }
+.pc.lit .spot { opacity: 1; }
+.floor { position: absolute; left: -10%; right: -10%; bottom: -30px; height: 70px; background: radial-gradient(ellipse at center, rgba(224,180,88,.25), rgba(224,180,88,0) 70%); filter: blur(4px); }
+.searchlight { position: absolute; bottom: 0; width: 34%; height: 150%; pointer-events: none; opacity: 0; transition: opacity .6s;
+  background: linear-gradient(0deg, rgba(200,215,255,.22), rgba(200,215,255,0) 85%); clip-path: polygon(45% 100%, 55% 100%, 100% 0, 0 0); filter: blur(12px); transform-origin: 50% 100%; }
+.searchlight.l { left: -6%; } .searchlight.r { right: -6%; }
+.p-stage.dark .searchlight { opacity: 1; }
+.p-stage.dark .searchlight.l { animation: sl 1.6s ease-in-out infinite alternate; }
+.p-stage.dark .searchlight.r { animation: sl 1.3s ease-in-out infinite alternate-reverse; }
+@keyframes sl { from { transform: rotate(-28deg); } to { transform: rotate(28deg); } }
+
+/* ---------- your result ---------- */
+#s-you { justify-content: center; gap: 0; }
+.y-rank { font-family: var(--num); font-variant-numeric: lining-nums; font-size: clamp(120px, 30vw, 230px); line-height: .85; letter-spacing: -.04em; margin-top: 10px; font-variant-numeric: tabular-nums; }
+.y-rank sup { font-family: var(--mono); font-size: .16em; letter-spacing: 0; color: var(--mute); vertical-align: top; position: relative; top: .5em; margin-left: 4px; }
+.y-of { font-family: var(--mono); font-size: 14px; letter-spacing: .1em; color: var(--soft); margin-top: 10px; }
+.y-line { font-size: clamp(17px, 3.6vw, 21px); line-height: 1.45; max-width: 30ch; margin: 22px 0 18px; color: var(--soft); text-wrap: balance; }
+.y-line b { color: var(--text); }
+.y-bar { width: min(420px, 86vw); display: flex; flex-direction: column; gap: 8px; }
+.y-bar .lbl { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 12px; color: var(--mute); }
+.y-bar .track { height: 6px; border-radius: 6px; background: rgba(255,255,255,.1); overflow: hidden; }
+.y-bar .fill { height: 100%; width: 0; border-radius: 6px; background: linear-gradient(90deg, #3457d5, var(--blue)); transition: width 1.4s cubic-bezier(.2,.9,.25,1) .4s; }
+.y-stats { display: flex; gap: 8px; margin-top: 22px; flex-wrap: wrap; justify-content: center; }
+.y-stats div { padding: 12px 16px; border-radius: 14px; background: rgba(255,255,255,.05); border: 1px solid var(--line); min-width: 96px; }
+.y-stats b { display: block; font-family: var(--mono); font-size: 18px; font-weight: 600; }
+.y-stats span { font-size: 12px; color: var(--mute); }
+.y-actions { display: flex; gap: 10px; margin-top: 28px; flex-wrap: wrap; justify-content: center; }
+.btn { padding: 14px 22px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--text); font-weight: 600; font-size: 14px; }
+.btn.primary { background: var(--text); color: var(--ink); border-color: var(--text); }
+#s-you.podium .y-rank { color: var(--gold-1); text-shadow: 0 0 50px rgba(224,180,88,.4); }
+#s-you .stagger { opacity: 0; }
+#s-you.on .stagger { animation: fadeUp .7s cubic-bezier(.2,.9,.25,1) forwards; animation-delay: var(--d); }
+
+.snd { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); right: 14px; z-index: 50; display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: rgba(0,0,0,.35); color: var(--soft); font-family: var(--mono); font-size: 11px; }
+.snd svg { width: 15px; height: 15px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; transition-duration: .001s !important; }
+  .dust, .sweep { display: none; }
+}
+</style>
+<style>
+.w-later { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 8px; }
+.w-skip { color: var(--mute); font-family: var(--mono); font-size: 12px; text-decoration: none; padding: 10px; }
+.w-skip:hover { color: var(--soft); }
+.y-auto { margin-top: 14px; font-family: var(--mono); font-size: 12px; color: var(--mute); min-height: 1.2em; }
+.w-err { color: #ffb4a8; font-size: 14px; max-width: 34ch; }
+</style>
+</head>
+<body>
+
+
+<div id="stage">
+  <div class="vignette"></div><div class="grain"></div>
+  <div id="dust"></div>
+  <canvas id="fx"></canvas>
+  <div id="flash"></div>
+  <button class="snd" id="snd" aria-label="Toggle sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg><span>Sound off</span></button>
+
+  <section class="scene on" id="s-wait">
+    <div class="sweep"></div>
+    <div class="kicker" id="wKicker">Week 2 · Expert track</div>
+    <h1 class="w-title">Completion <em>Ceremony</em></h1>
+    <p class="w-sub" id="wSub">Starts at 21:00 Tashkent time. Stay on this screen.</p>
+    <div class="clock" id="clock" aria-live="polite"></div>
+    <div class="w-later"><button class="enter" id="enter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg><span>Take your seat, with sound</span></button><a class="w-skip" id="wSkip" href="leaderboard.html" hidden>Skip to the leaderboard</a><p class="w-err" id="wErr" hidden></p></div>
+    <div class="w-plinths"><div style="height: 70px"></div><div style="height: 104px"></div><div style="height: 52px"></div></div>
+  </section>
+
+  <section class="scene" id="s-title">
+    <div class="kicker">IELTS Marathon presents</div>
+    <h2 class="t-week" id="tWeek"></h2>
+    <div class="t-meta">Days 7–13 · <b id="tStudents">0</b> students · <b id="tPoints">0</b> points earned</div>
+  </section>
+
+  <section class="scene" id="s-roll">
+    <div class="r-head">The Top Ten</div>
+    <div class="r-card" id="rCard"></div>
+    <div class="r-dots" id="rDots"></div>
+  </section>
+
+  <section class="scene" id="s-podium">
+    <div class="p-caption"><div class="p-label" id="pLabel"></div><div class="p-name" id="pName"></div></div>
+    <div class="p-stage" id="pStage">
+      <div class="searchlight l"></div><div class="searchlight r"></div>
+      <div class="floor"></div>
+      <div class="p-grid" id="pGrid"></div>
+    </div>
+  </section>
+
+  <section class="scene" id="s-you">
+    <div class="kicker stagger" style="--d:.1s">Your result</div>
+    <div class="y-rank stagger" style="--d:.2s"><span id="yRank">0</span><sup id="ySup"></sup></div>
+    <div class="y-of stagger" style="--d:.5s" id="yOf"></div>
+    <p class="y-line stagger" style="--d:1.2s" id="yLine"></p>
+    <div class="y-bar stagger" style="--d:1.5s" id="yBar"><div class="lbl"><span id="yBarL"></span><span id="yBarR"></span></div><div class="track"><div class="fill" id="yFill"></div></div></div>
+    <div class="y-stats stagger" style="--d:1.8s" id="yStats"></div>
+    <div class="y-actions stagger" style="--d:2.2s">
+      <button class="btn" id="replay">Replay ceremony</button>
+      <a class="btn primary" id="toBoard" href="leaderboard.html" style="text-decoration:none">Open the leaderboard</a>
+    </div>
+    <div class="y-auto" id="yAuto"></div>
+  </section>
+</div>
+
+
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+<script src="ceremony-audio.js"></script>
+<script>
+let DATA = [];
+const AUDIO = window.CEREMONY_AUDIO || {};
+let TRACK = 'Expert';
+const WEEK_WORD = ['One','Two','Three','Four','Five','Six','Seven'][CEREMONY.week - 1] || String(CEREMONY.week);
+let ME_ID = null, IS_STUDENT = false, autoTimer = null;
+
+// ================= sound: real orchestral cues, decoded once, played in sync =================
+// Every cue was rendered from sampled orchestral instruments (FluidR3 GM, MIT licence).
+// The opening is the "sunrise" fanfare from Strauss's Also sprach Zarathustra (1896, public domain).
+const Sfx = (() => {
+  let ctx = null, master = null, muted = true, loading = null, waitSrc = null, waitGain = null;
+  const buf = {};
+  function b64ToAB(b64) { const bin = atob(b64); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u.buffer; }
+  function decode(ab) { return new Promise((res, rej) => ctx.decodeAudioData(ab, res, rej)); }
+  function ensure() {
+    if (!ctx) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return Promise.resolve(); ctx = new AC(); master = ctx.createGain(); master.connect(ctx.destination); }
+    if (ctx.state === 'suspended') ctx.resume();
+    if (!loading) loading = Promise.all(Object.keys(AUDIO).map(k => decode(b64ToAB(AUDIO[k])).then(d => { buf[k] = d; }).catch(() => {})));
+    return loading;
+  }
+  function play(name, opt) {
+    opt = opt || {}; if (!ctx || muted || !buf[name]) return null;
+    const s = ctx.createBufferSource(); s.buffer = buf[name]; s.playbackRate.value = opt.rate || 1;
+    const g = ctx.createGain(); g.gain.value = opt.gain == null ? 1 : opt.gain; s.connect(g); g.connect(master);
+    s.start(ctx.currentTime + (opt.delay || 0)); return s;
+  }
+  return {
+    async enable() { muted = false; await ensure(); master.gain.value = 1; },
+    toggle() { muted = !muted; if (!muted) { ensure(); if (master) master.gain.value = 1; } else if (master) master.gain.value = 0; return !muted; },
+    get on() { return !!ctx && !muted; },
+    tick() { play('tick', { gain: 0.9 }); },
+    boom() { play('hit'); },
+    intro() { play('intro'); },
+    stab(i) { play('stab', { rate: Math.pow(2, i / 12), gain: 0.85 }); },
+    rollShort(rate) { play('roll_short', { rate: rate || 1 }); },
+    champion() { play('champion'); },
+    result() { play('result', { gain: 0.9 }); },
+    waitStart() {
+      if (!ctx || muted || waitSrc || !buf.wait) return;
+      waitSrc = ctx.createBufferSource(); waitSrc.buffer = buf.wait; waitSrc.loop = true;
+      waitGain = ctx.createGain(); const t = ctx.currentTime; waitGain.gain.setValueAtTime(0.0001, t); waitGain.gain.exponentialRampToValueAtTime(0.9, t + 2.5);
+      waitSrc.connect(waitGain); waitGain.connect(master); waitSrc.start();
+    },
+    waitStop(fade) {
+      if (!waitSrc) return; const t = ctx.currentTime, s = waitSrc;
+      waitGain.gain.cancelScheduledValues(t); waitGain.gain.setValueAtTime(waitGain.gain.value, t); waitGain.gain.exponentialRampToValueAtTime(0.0001, t + (fade || 1.5));
+      setTimeout(() => { try { s.stop(); } catch (e) {} }, (fade || 1.5) * 1000 + 100); waitSrc = null;
+    }
+  };
+})();
+
+// ================= helpers =================
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = v => { const r = Math.round(v * 10) / 10; return r.toLocaleString('en-US', { minimumFractionDigits: Number.isInteger(r) ? 0 : 1, maximumFractionDigits: 1 }); };
+const ord = n => { const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return s[(v - 20) % 10] || s[v] || s[0]; };
+const initials = n => { const p = String(n || '?').trim().split(/\s+/); return ((p[0] || '')[0] + ((p[1] || '')[0] || '')).toUpperCase(); };
+const TONES = ['#2f4bb8', '#1d7a58', '#8a2e4a', '#5b3fa0', '#1f6f86', '#8a5a1c', '#3d4a66', '#7a3a7a'];
+const tone = id => { let h = 0; for (const c of id) h = (h * 31 + c.charCodeAt(0)) >>> 0; return TONES[h % TONES.length]; };
+const avatar = (p, cls) => `<div class="av ${cls || ''}" style="background:linear-gradient(145deg, ${tone(p.id)}, #10132a)">${p.a ? `<img src="${esc(p.a)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.remove()">` : ''}${p.a ? '' : esc(initials(p.n))}</div>`;
+let run = 0;
+const wait = (ms, token) => new Promise((res, rej) => setTimeout(() => token === run ? res() : rej('cancel'), ms));
+function show(id) { document.querySelectorAll('.scene').forEach(s => s.classList.toggle('on', s.id === id)); }
+function countUp(el, to, dur, fmtFn) { const t0 = performance.now(); const f = fmtFn || (v => Math.round(v).toLocaleString('en-US')); const step = now => { const p = Math.min(1, (now - t0) / dur); const e = 1 - Math.pow(1 - p, 3); el.textContent = p < 1 ? f(to * e) : (fmtFn ? fmtFn(to) : fmt(to)); if (p < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); }
+const CROWN = `<svg class="crown" viewBox="0 0 64 44" aria-hidden="true"><defs><linearGradient id="cg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fff3d1"/><stop offset=".45" stop-color="#e0b458"/><stop offset="1" stop-color="#8f5f16"/></linearGradient></defs><path d="M6 34 L3 11 L19 22 L32 3 L45 22 L61 11 L58 34 Z" fill="url(#cg)"/><rect x="6" y="35" width="52" height="6" rx="2" fill="url(#cg)"/><circle cx="3" cy="10" r="3" fill="#fff3d1"/><circle cx="32" cy="3" r="3.2" fill="#fff3d1"/><circle cx="61" cy="10" r="3" fill="#fff3d1"/><circle cx="32" cy="24" r="3.4" fill="#b8323f"/></svg>`;
+
+// ================= ambient dust =================
+(function () { if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; const box = $('dust'); for (let i = 0; i < 26; i++) { const d = document.createElement('span'); d.className = 'dust'; const s = 2 + Math.random() * 4; d.style.cssText = `left:${Math.random() * 100}%;width:${s}px;height:${s}px;animation-duration:${14 + Math.random() * 16}s;animation-delay:${-Math.random() * 30}s;--dx:${(Math.random() * 80 - 40).toFixed(0)}px;--o:${(0.2 + Math.random() * 0.5).toFixed(2)}`; box.appendChild(d); } })();
+
+// ================= confetti =================
+function confetti() {
+  const c = $('fx'), ctx = c.getContext('2d'), dpr = Math.min(2, devicePixelRatio || 1);
+  const W = c.clientWidth, H = c.clientHeight; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const cols = ['#fff3d1', '#f6dc98', '#e0b458', '#c8923a', '#ffffff', '#6f8cff'];
+  const P = []; for (let k = 0; k < 2; k++) for (let i = 0; i < 110; i++) { const a = -Math.PI / 2 + (k ? -1 : 1) * (0.35 + Math.random() * 0.5); const sp = 9 + Math.random() * 10; P.push({ x: k ? W * 0.92 : W * 0.08, y: H * 0.95, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, w: 5 + Math.random() * 6, h: 8 + Math.random() * 9, r: Math.random() * 6, vr: (Math.random() - .5) * .35, c: cols[(Math.random() * cols.length) | 0], life: 0, max: 170 + Math.random() * 80 }); }
+  const step = () => { ctx.clearRect(0, 0, W, H); let alive = 0; for (const p of P) { if (p.life > p.max) continue; alive++; p.life++; p.vx *= .985; p.vy = p.vy * .985 + .24; p.x += p.vx; p.y += p.vy; p.r += p.vr; const s = Math.abs(Math.cos(p.life / 7)); ctx.save(); ctx.globalAlpha = Math.min(1, (p.max - p.life) / 40); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h * s / 2, p.w, p.h * s + 1); ctx.restore(); } if (alive) requestAnimationFrame(step); else ctx.clearRect(0, 0, W, H); };
+  requestAnimationFrame(step);
+}
+
+// ================= waiting room =================
+let target = 0, clockTimer = null, lastTxt = '';
+function renderClock(ms) {
+  const s = Math.max(0, Math.ceil(ms / 1000)); const mm = Math.min(99, Math.floor(s / 60)); const txt = String(mm).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  const el = $('clock');
+  if (!el.children.length) el.innerHTML = '<span class="dg"></span><span class="dg"></span><span class="colon">:</span><span class="dg"></span><span class="dg"></span>';
+  const ds = el.querySelectorAll('.dg'); const chars = txt.replace(':', '');
+  ds.forEach((d, i) => { if (d.textContent !== chars[i]) { d.textContent = chars[i]; d.classList.remove('tick'); void d.offsetWidth; d.classList.add('tick'); } });
+  $('s-wait').classList.toggle('final', s <= 10);
+  if (txt !== lastTxt) { lastTxt = txt; if (s <= 10 && s > 3) Sfx.tick(); if (s === 4) Sfx.waitStop(3); }
+  return s;
+}
+function startWaiting(secondsLeft) {
+  run++; clearInterval(clockTimer); resetStage(); show('s-wait'); Sfx.waitStart();
+  target = ceremonyStartMs(); lastTxt = ''; let shown321 = 0; let refetched = false;
+  const token = run;
+  clockTimer = setInterval(() => {
+    if (token !== run) return clearInterval(clockTimer);
+    const left = target - (Date.now() + (_serverOffsetMs || 0)); const s = renderClock(left);
+    if (s <= 3 && s >= 1 && shown321 !== s) { shown321 = s; big321(s); }
+    if (s <= 6 && !refetched) { refetched = true; loadData().catch(() => {}); } // grab the very latest points just before the start
+    if (left <= 0) { clearInterval(clockTimer); ceremony(); }
+  }, 100);
+  renderClock(target - (Date.now() + (_serverOffsetMs || 0)));
+}
+function big321(n) { const b = document.createElement('div'); b.className = 'big321'; b.innerHTML = `<span>${n}</span>`; $('stage').appendChild(b); Sfx.boom(); setTimeout(() => b.remove(), 1000); }
+
+// ================= ceremony =================
+function resetStage() { ['s-title', 's-roll', 's-podium', 's-you'].forEach(id => $(id).classList.remove('podium')); $('pGrid').innerHTML = ''; $('pStage').classList.remove('dark'); $('pName').textContent = ''; $('pLabel').textContent = ''; }
+
+async function ceremony() {
+  const token = ++run; clearInterval(clockTimer); Sfx.waitStop(0.8); resetStage();
+  if (!DATA.length) { try { await loadData(); } catch (e) {} }
+  const ranked = DATA; const total = ranked.reduce((s, r) => s + r.p, 0);
+  if (!ranked.length) { show('s-wait'); $('wErr').hidden = false; $('wErr').textContent = 'Could not load the results. Check your connection and refresh the page.'; return; }
+  try {
+    // Act 1 — title card, cut to the Zarathustra sunrise:
+    // trumpet C at 0.3s, G at 1.9s, high C at 3.5s, orchestra at 4.8s, full organ + choir at 7.6s
+    $('tWeek').innerHTML = [...'Week '].map((ch, i) => `<span class="ch" style="--i:${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`).join('') + `<em>${[...WEEK_WORD].map((ch, i) => `<span class="ch" style="--i:${i + 5}">${ch}</span>`).join('')}</em>`;
+    $('s-title').classList.remove('bloom');
+    show('s-title'); Sfx.intro();
+    await wait(4800, token); countUp($('tStudents'), ranked.length, 1400); countUp($('tPoints'), total, 2600, v => fmt(v));
+    await wait(2800, token); $('s-title').classList.add('bloom'); $('flash').className = ''; void $('flash').offsetWidth; $('flash').className = 'go soft';
+    await wait(3600, token);
+
+    // Act 2 — ranks 10 to 4, one brass stab each, rising in pitch
+    const roll = ranked.filter(r => r.r >= 4 && r.r <= 10).sort((a, b) => b.r - a.r || a.n.localeCompare(b.n));
+    $('rDots').innerHTML = roll.map(r => `<span>${r.r}</span>`).join('');
+    show('s-roll'); await wait(900, token);
+    for (let i = 0; i < roll.length; i++) {
+      const r = roll[i], card = $('rCard');
+      card.className = 'r-card'; void card.offsetWidth;
+      card.innerHTML = `<div class="r-rank">${r.r}</div>${avatar(r)}<div style="min-width:0"><div class="nm">${esc(r.n)}</div><div class="meta">${esc(r.g || '')}</div></div><div class="pts">${fmt(r.p)}</div>`;
+      card.classList.add('in'); Sfx.stab(i);
+      $('rDots').children[i].classList.add('done');
+      await wait(1150, token);
+      card.classList.remove('in'); card.classList.add('out');
+      await wait(250, token);
+    }
+
+    // Act 3 — the podium
+    const top = [1, 2, 3].map(k => ranked.filter(r => r.r === k)[0] || null);
+    const pos = [[2, 'p2'], [1, 'p1'], [3, 'p3']];
+    $('pGrid').innerHTML = pos.map(([k, cls]) => { const r = top[k - 1]; return `<div class="pc ${cls}" id="pc${k}"><div class="spot"></div><div class="who">${k === 1 ? CROWN : ''}${r ? avatar(r) : ''}<div class="nm">${r ? esc(r.n) : ''}</div><div class="pts" id="pts${k}">0</div></div><div class="pillar"><span class="num">${k}</span></div></div>`; }).join('');
+    show('s-podium'); await wait(1200, token);
+
+    // drumroll → the cymbal hit lands exactly when the pillar starts to rise
+    const reveal = async (k, label, rate) => {
+      const r = top[k - 1]; const pc = $('pc' + k);
+      $('pLabel').textContent = label; $('pLabel').style.color = ''; $('pName').textContent = ''; $('pName').className = 'p-name';
+      Sfx.rollShort(rate); await wait(1800 / rate, token);
+      pc.classList.add('up');
+      await wait(600, token);
+      pc.classList.add('lit'); if (r) { $('pName').textContent = r.n; void $('pName').offsetWidth; $('pName').classList.add('in'); countUp($('pts' + k), r.p, 1200, v => fmt(v) + ' pts'); }
+    };
+    await reveal(3, 'Third place', 1); await wait(2800, token);
+    await reveal(2, 'Second place', Math.pow(2, 2 / 12)); await wait(2800, token);
+
+    // the long drumroll before the champion; the crash lands at 3.99s
+    $('pLabel').textContent = `And the Week ${WEEK_WORD} champion is…`; $('pName').textContent = ''; $('pName').className = 'p-name';
+    $('pStage').classList.add('dark'); Sfx.champion();
+    await wait(3990, token);
+    $('pStage').classList.remove('dark');
+    $('flash').className = ''; void $('flash').offsetWidth; $('flash').className = 'go';
+    $('stage').classList.remove('shake'); void $('stage').offsetWidth; $('stage').classList.add('shake');
+    $('pc1').classList.add('up', 'lit');
+    const champ = top[0]; $('pLabel').textContent = `Week ${WEEK_WORD} champion`; $('pLabel').style.color = 'var(--gold-1)';
+    if (champ) { $('pName').textContent = champ.n; void $('pName').offsetWidth; $('pName').classList.add('in'); countUp($('pts1'), champ.p, 1400, v => fmt(v) + ' pts'); }
+    setTimeout(() => confetti(), 300);
+    await wait(3000, token); setTimeout(() => confetti(), 0); // second burst on the grand chord
+    await wait(4200, token);
+
+    // Act 4 — your result
+    yourResult(token);
+  } catch (e) { if (e !== 'cancel') console.error(e); }
+}
+
+function yourResult(token) {
+  const me = DATA.find(r => r.id === ME_ID);
+  const n = DATA.length; const sec = $('s-you');
+  sec.classList.remove('podium');
+  if (!me) {
+    $('yRank').textContent = '–'; if (!IS_STUDENT) { $('ySup').textContent = ''; $('yOf').textContent = `${TRACK} track · Week ${CEREMONY.week}`; $('yLine').innerHTML = 'Preview mode. Staff accounts aren’t ranked.'; $('yBar').hidden = true; $('yStats').innerHTML = ''; show('s-you'); return; } $('ySup').textContent = ''; $('yOf').textContent = `${TRACK} track · Week ${WEEK_WORD}`;
+    $('yLine').innerHTML = 'Your name isn’t on the board this week. <b>Week ${CEREMONY.week + 1} starts tomorrow</b>, and every task counts.';
+    $('yBar').hidden = true; $('yStats').innerHTML = '';
+  } else {
+    const groupRank = me.g ? DATA.filter(r => r.g === me.g && r.p > me.p).length + 1 : null;
+    const tenth = DATA.find(r => r.r >= 10) || DATA[DATA.length - 1];
+    let line, barL, barR, pct;
+    if (me.r === 1) { const next = DATA.find(r => r.r > 1); line = `You are the <b>Week ${WEEK_WORD} champion</b>. ${next ? fmt(me.p - next.p) + ' points clear of second place.' : ''}`; sec.classList.add('podium'); }
+    else if (me.r <= 3) { const first = DATA[0]; line = `You finished <b>on the podium</b>. ${fmt(first.p - me.p)} points from first place.`; sec.classList.add('podium'); barL = `You · ${fmt(me.p)}`; barR = `#1 · ${fmt(first.p)}`; pct = me.p / first.p; }
+    else if (me.r <= 10) { const third = DATA.find(r => r.r === 3); line = `You made the <b>Top 10</b>. ${fmt(third.p - me.p)} points from the podium.`; barL = `You · ${fmt(me.p)}`; barR = `#3 · ${fmt(third.p)}`; pct = me.p / third.p; }
+    else { const gap = tenth.p - me.p; line = `You’re <b>${fmt(gap)} points</b> from the Top&nbsp;10. Week ${CEREMONY.week + 1} starts tomorrow.`; barL = `You · ${fmt(me.p)}`; barR = `#10 · ${fmt(tenth.p)}`; pct = me.p / tenth.p; }
+    $('yOf').textContent = `of ${n} in the ${TRACK} track`;
+    $('yLine').innerHTML = line;
+    if (pct) { $('yBar').hidden = false; $('yBarL').textContent = barL; $('yBarR').textContent = barR; $('yFill').style.width = '0'; setTimeout(() => { $('yFill').style.width = Math.max(3, Math.min(100, pct * 100)).toFixed(1) + '%'; }, 1600); } else $('yBar').hidden = true;
+    const topPct = Math.ceil(me.r / n * 100);
+    $('yStats').innerHTML = `<div><b>${fmt(me.p)}</b><span>points</span></div>` + (groupRank ? `<div><b>${groupRank}${ord(groupRank)}</b><span>in ${esc(me.g)}</span></div>` : '') + (topPct <= 50 ? `<div><b>Top ${topPct}%</b><span>of the track</span></div>` : '');
+    $('ySup').textContent = '';
+    // the number rolls down from the bottom of the table to your place
+    const el = $('yRank'); const from = n; const t0 = performance.now() + 250; const dur = 1600;
+    const step = now => { const p = Math.min(1, Math.max(0, (now - t0) / dur)); const e = 1 - Math.pow(1 - p, 4); el.textContent = Math.round(from - (from - me.r) * e); if (p < 1) requestAnimationFrame(step); else { $('ySup').textContent = ord(me.r); } };
+    el.textContent = from; requestAnimationFrame(step);
+  }
+  show('s-you'); Sfx.result();
+  if (IS_STUDENT) markCeremonySeen(ME_ID);
+  startAutoRedirect(token);
+}
+
+// ================= wiring =================
+function setSnd() { $('snd').querySelector('span').textContent = Sfx.on ? 'Sound on' : 'Sound off'; }
+async function loadData() { DATA = await fetchLevelStandings(TRACK.toLowerCase(), CEREMONY.dayFrom, CEREMONY.dayTo); return DATA; }
+function startAutoRedirect(token) {
+  clearInterval(autoTimer); let n = 20;
+  $('yAuto').textContent = `Opening the leaderboard in ${n}s`;
+  autoTimer = setInterval(() => {
+    if (token !== run) { clearInterval(autoTimer); $('yAuto').textContent = ''; return; }
+    n--; $('yAuto').textContent = `Opening the leaderboard in ${n}s`;
+    if (n <= 0) { clearInterval(autoTimer); window.location.href = 'leaderboard.html'; }
+  }, 1000);
+}
+$('snd').addEventListener('click', async () => { if (!Sfx.on) { await Sfx.enable(); if ($('s-wait').classList.contains('on') && !readyMode) Sfx.waitStart(); } else Sfx.toggle(); setSnd(); });
+$('replay').addEventListener('click', () => { clearInterval(autoTimer); $('yAuto').textContent = ''; ceremony(); });
+let readyMode = false;
+
+requireAuth(async function (profile, user) {
+  profile = profile || {};
+  IS_STUDENT = profile.role === 'student';
+  if (IS_STUDENT && profile.challenge !== '2.0') { window.location.href = 'index.html'; return; }
+  const qs = new URLSearchParams(window.location.search);
+  const level = IS_STUDENT ? (profile.level || 'standard') : (qs.get('level') || profile.level || 'expert');
+  TRACK = level.charAt(0).toUpperCase() + level.slice(1);
+  ME_ID = user.id;
+  $('wKicker').textContent = `Week ${CEREMONY.week} · ${TRACK} track`;
+  document.title = `Week ${CEREMONY.week} Ceremony — IELTS Marathon`;
+
+  const now = await serverNow();
+  loadData().catch(e => console.error(e));
+
+  if (qs.has('replay') || now >= ceremonyStartMs()) {
+    // Arrived after the start (or replaying): one tap starts it with sound.
+    readyMode = true; resetStage(); show('s-wait');
+    $('clock').hidden = true; $('wSkip').hidden = false;
+    $('wSub').textContent = qs.has('replay') ? 'Watch it again.' : 'The ceremony has started. Press play to watch it from the beginning.';
+    $('enter').querySelector('span').textContent = 'Play the ceremony';
+    $('enter').addEventListener('click', async () => { await Sfx.enable(); setSnd(); ceremony(); });
+  } else {
+    $('enter').addEventListener('click', async () => {
+      await Sfx.enable(); Sfx.waitStart(); setSnd();
+      $('enter').classList.add('ok'); $('enter').querySelector('span').textContent = 'You’re in. Sound is on.';
+    });
+    startWaiting();
+  }
+});
+</script>
+
+</body>
+</html>
