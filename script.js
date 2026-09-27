@@ -95,6 +95,7 @@ async function requireAuth(onReady) {
   }
 
   if (onReady) onReady(profile, session.user);
+  scheduleCeremonyPull(profile, session.user);
 }
 
 // ============================================
@@ -2822,4 +2823,84 @@ async function getLiveDays(folder, maxDays) {
     })
   );
   return checks.filter(d => d !== null);
+}
+
+
+// ============================================
+// WEEKLY COMPLETION CEREMONY
+// One config block drives everything: the leaderboard stays closed until
+// startsAt, students already on the platform are pulled into the lobby
+// (ceremony.html) lobbyMinutes before, and index.html shows the level's
+// champion on a platinum card from startsAt until the next week's config.
+// Next week: bump `week`, set the new day range and the new start time.
+// ============================================
+const CEREMONY = {
+  week: 2,
+  dayFrom: 7,
+  dayTo: 13,
+  startsAt: '2026-09-27T16:00:00Z', // 21:00 Tashkent (UTC+5)
+  lobbyMinutes: 5,                  // students get pulled in this long before the start
+  pullWindowMinutes: 25             // after start, how long we keep pulling students who haven't seen it
+};
+
+// Students' phone clocks are often wrong, so the ceremony runs on the
+// database's clock instead (public.server_now RPC), measured once per page.
+let _serverOffsetMs = null;
+async function serverNow() {
+  if (_serverOffsetMs === null) {
+    try {
+      const t0 = Date.now();
+      const { data, error } = await getSupabaseClient().rpc('server_now');
+      const t1 = Date.now();
+      _serverOffsetMs = (!error && data) ? new Date(data).getTime() - (t0 + t1) / 2 : 0;
+    } catch (e) { _serverOffsetMs = 0; }
+  }
+  return Date.now() + _serverOffsetMs;
+}
+function ceremonyStartMs() { return new Date(CEREMONY.startsAt).getTime(); }
+function ceremonyLobbyMs() { return ceremonyStartMs() - CEREMONY.lobbyMinutes * 60000; }
+function ceremonySeenKey(userId) { return `ceremony_seen_w${CEREMONY.week}_${userId}`; }
+function ceremonySeen(userId) { try { return localStorage.getItem(ceremonySeenKey(userId)) === '1'; } catch (e) { return false; } }
+function markCeremonySeen(userId) { try { localStorage.setItem(ceremonySeenKey(userId), '1'); } catch (e) {} }
+
+// Pulls a Challenge 2.0 student into the ceremony lobby. Anything typed on
+// a day page is saved first (same flush the page runs on refresh), so
+// nobody loses an answer by being moved.
+async function scheduleCeremonyPull(profile, user) {
+  try {
+    if (!profile || profile.role !== 'student' || profile.challenge !== '2.0' || !user) return;
+    if (/\/ceremony(\.html)?$/.test(window.location.pathname)) return;
+    if (ceremonySeen(user.id)) return;
+    const now = await serverNow();
+    const end = ceremonyStartMs() + CEREMONY.pullWindowMinutes * 60000;
+    if (now >= end) return;
+    const go = () => {
+      if (ceremonySeen(user.id)) return;
+      try { if (window.__flushAllPendingSaves) window.__flushAllPendingSaves(); } catch (e) {}
+      setTimeout(() => { window.location.href = pathToRoot() + 'ceremony.html'; }, 900);
+    };
+    const wait = ceremonyLobbyMs() - now;
+    if (wait <= 0) go(); else setTimeout(go, wait);
+  } catch (e) { console.error('ceremony pull', e); }
+}
+
+// Ranked standings for one Challenge 2.0 level over a day range — shared by
+// the ceremony and the champion card. Summed in the database, never capped.
+async function fetchLevelStandings(level, dayFrom, dayTo) {
+  const sb = getSupabaseClient();
+  const roster = await fetchAllRows(() => sb.from('profiles').select('id, full_name, avatar_url, group_id')
+    .eq('role', 'student').eq('challenge', '2.0').eq('level', level).order('id'));
+  if (!roster.length) return [];
+  const [{ data: totals, error }, { data: groups }] = await Promise.all([
+    sb.rpc('leaderboard_totals', { day_from: dayFrom, day_to: dayTo, ids: roster.map(p => p.id) }),
+    sb.from('groups').select('id, name')
+  ]);
+  if (error) throw error;
+  const gName = {}; (groups || []).forEach(g => { gName[g.id] = g.name; });
+  const tot = {}; (totals || []).forEach(r => { tot[r.student_id] = Number(r.total); });
+  const ranked = roster.filter(p => tot[p.id] > 0)
+    .map(p => ({ id: p.id, n: p.full_name || '—', a: p.avatar_url || null, g: gName[p.group_id] || null, p: Math.round(tot[p.id] * 10) / 10 }))
+    .sort((x, y) => y.p - x.p || String(x.n).localeCompare(String(y.n)));
+  ranked.forEach((r, i) => { r.r = (i > 0 && r.p === ranked[i - 1].p) ? ranked[i - 1].r : i + 1; });
+  return ranked;
 }
