@@ -363,10 +363,15 @@ function confetti() {
 // ================= waiting room =================
 let target = 0, clockTimer = null, lastTxt = '';
 function renderClock(ms) {
-  const s = Math.max(0, Math.ceil(ms / 1000)); const mm = Math.min(99, Math.floor(s / 60)); const txt = String(mm).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  const s = Math.max(0, Math.ceil(ms / 1000));
+  const p2 = v => String(v).padStart(2, '0');
+  const txt = s >= 3600 ? `${Math.floor(s / 3600)}:${p2(Math.floor(s / 60) % 60)}:${p2(s % 60)}` : `${p2(Math.floor(s / 60))}:${p2(s % 60)}`;
   const el = $('clock');
-  if (!el.children.length) el.innerHTML = '<span class="dg"></span><span class="dg"></span><span class="colon">:</span><span class="dg"></span><span class="dg"></span>';
-  const ds = el.querySelectorAll('.dg'); const chars = txt.replace(':', '');
+  if (el.dataset.shape !== txt.replace(/\d/g, '0')) {
+    el.dataset.shape = txt.replace(/\d/g, '0');
+    el.innerHTML = [...txt].map(c => c === ':' ? '<span class="colon">:</span>' : '<span class="dg"></span>').join('');
+  }
+  const ds = el.querySelectorAll('.dg'); const chars = txt.replace(/:/g, '');
   ds.forEach((d, i) => { if (d.textContent !== chars[i]) { d.textContent = chars[i]; d.classList.remove('tick'); void d.offsetWidth; d.classList.add('tick'); } });
   $('s-wait').classList.toggle('final', s <= 10);
   if (txt !== lastTxt) { lastTxt = txt; if (s <= 10 && s > 3) Sfx.tick(); if (s === 4) Sfx.waitStop(3); }
@@ -519,7 +524,8 @@ requireAuth(async function (profile, user) {
   const now = await serverNow();
   loadData().catch(e => console.error(e));
 
-  if (qs.has('replay') || now >= ceremonyStartMs()) {
+  // Students can't replay (or peek) before the start; staff can preview any time.
+  if ((qs.has('replay') && !IS_STUDENT) || now >= ceremonyStartMs()) {
     // Arrived after the start (or replaying): one tap starts it with sound.
     readyMode = true; resetStage(); show('s-wait');
     $('clock').hidden = true; $('wSkip').hidden = false;
