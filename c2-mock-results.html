@@ -184,12 +184,24 @@ async function loadAll(){
     var grpRes = await sb.from('groups').select('id, name');
     if(!grpRes.error && grpRes.data) grpRes.data.forEach(function(g){ groupMap[g.id] = g.name; });
 
-    // Scoped to this track specifically (challenge/level), not just role —
-    // otherwise a mentor covering multiple tracks would see students who
-    // were never enrolled in Standard mixed into this list.
     var levelFromTrack = TRACK_KEY.replace('2.0-', '');
-    var studQuery = sb.from('profiles').select('id, full_name, group_id').eq('role', 'student').eq('challenge', '2.0').eq('level', levelFromTrack);
-    if(myProfile.role !== 'admin' && myGroupIds.length > 0) studQuery = studQuery.in('group_id', myGroupIds);
+    var studQuery = sb.from('profiles').select('id, full_name, group_id').eq('role', 'student');
+    if (myProfile.role === 'admin') {
+      // Admin has no group scope of their own here, so filter down to just
+      // this track by level.
+      studQuery = studQuery.eq('challenge', '2.0').eq('level', levelFromTrack);
+    } else if (myGroupIds.length > 0) {
+      // Mentors are scoped to their own group(s) directly — a group's level
+      // is already fixed, so there's no need to also filter on the
+      // student's own challenge/level columns. Those can drift out of sync
+      // with group_id (e.g. after a group move) and used to silently hide a
+      // student's mock exam results from their mentor entirely.
+      studQuery = studQuery.in('group_id', myGroupIds);
+    } else {
+      // No group assigned yet — show nobody rather than falling through to
+      // every student on the track.
+      studQuery = studQuery.eq('id', '00000000-0000-0000-0000-000000000000');
+    }
     var studRes = await studQuery;
     if(studRes.error) throw studRes.error;
 
