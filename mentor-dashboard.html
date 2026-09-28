@@ -181,7 +181,13 @@
     const level = myGroup.level || 'standard';
     const need = totalTasksForDay(level, selectedDay);
 
-    const { data: students } = await sb.from('profiles').select('id, full_name, avatar_url, approval_status').eq('group_id', myGroup.id).eq('role', 'student').eq('challenge', '2.0').eq('level', level).order('full_name');
+    // Scoped by group_id alone — matching the same pattern admin/teacher/checker
+    // dashboards already use. A group's challenge/level already fully determines
+    // this, so re-checking the student's own (self- or admin-set) challenge/level
+    // columns here is both redundant and fragile: those columns can drift out of
+    // sync with group_id (e.g. after a group move), which used to make a student
+    // vanish from their mentor's roster entirely — invisible, not just ungraded.
+    const { data: students } = await sb.from('profiles').select('id, full_name, avatar_url, approval_status').eq('group_id', myGroup.id).eq('role', 'student').order('full_name');
 
     if (!students || students.length === 0) {
       root.innerHTML = `<p style="color:var(--muted);">No students registered in this group yet.</p>`;
@@ -413,8 +419,18 @@
         const status = row.querySelector('.admin-status');
         const newGroupId = +row.querySelector('.move-group-select').value;
         if (newGroupId === myGroup.id) { status.textContent = 'Already in this group'; return; }
+        const targetGroup = allC2Groups.find(g => g.id === newGroupId);
         status.textContent = 'Moving…';
-        const res = await sb.from('profiles').update({ group_id: newGroupId }).eq('id', row.dataset.student);
+        // Moving group_id alone (the old behavior) let a student's own
+        // challenge/level columns silently drift out of sync with the group
+        // they actually landed in — which then made them vanish entirely from
+        // whichever mentor inherited them next. Keep group_id and
+        // challenge/level moving together, in the same update.
+        const res = await sb.from('profiles').update({
+          group_id: newGroupId,
+          challenge: '2.0',
+          level: targetGroup ? targetGroup.level : myGroup.level
+        }).eq('id', row.dataset.student);
         status.textContent = res.error ? '⚠️ Failed' : '✓ Moved';
         if (!res.error) setTimeout(showStudentList, 500);
       });
