@@ -209,11 +209,14 @@
 @keyframes ccTw { 0%,100% { opacity: 0; transform: scale(.3) rotate(0); } 50% { opacity: 1; transform: scale(1) rotate(45deg); } }
 @media (max-width: 640px) { .champ-card { grid-template-columns: auto minmax(0,1fr); padding: 16px 18px; gap: 14px; } .cc-side { display: none; } .cc-emoji { width: 58px; height: 58px; font-size: 44px; } }
 @media (prefers-reduced-motion: reduce) { .champ-card, .champ-card::before, .cc-emoji, .cc-star { animation: none !important; } }
-.champ-comments { margin: -10px 0 22px; }
-.champ-comments summary { cursor: pointer; list-style: none; font-family: var(--mono); font-size: 0.82rem; color: var(--muted); padding: 4px 0; user-select: none; }
+.champ-comments { margin: -4px 0 22px; }
+.champ-comments summary { cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 0.78rem; font-weight: 600; color: #5b6272; padding: 7px 15px; border-radius: 999px; border: 1px solid #e4e6ec; background: linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%); box-shadow: 0 1px 2px rgba(20,22,43,.05), inset 0 1px 0 #fff; user-select: none; transition: transform .16s cubic-bezier(.34,1.56,.64,1), box-shadow .16s ease, background .16s ease, color .16s ease, border-color .16s ease; }
 .champ-comments summary::-webkit-details-marker { display: none; }
-.champ-comments summary:hover { color: var(--ink); }
-.champ-comments[open] summary { margin-bottom: 10px; }
+.champ-comments summary::after { content: '›'; display: inline-block; margin-left: 2px; font-size: 1rem; line-height: .6; transform: rotate(90deg); transition: transform .18s ease; color: #9098a8; }
+.champ-comments summary:hover { transform: translateY(-2px); box-shadow: 0 5px 12px rgba(20,22,43,.14); border-color: #d3d7e0; }
+.champ-comments[open] summary { margin-bottom: 14px; background: linear-gradient(135deg, #191c36 0%, #2c3060 100%); border-color: #14162b; color: #e7b54a; box-shadow: 0 4px 12px rgba(20,22,43,.28), inset 0 1px 0 rgba(255,255,255,.1); }
+.champ-comments[open] summary::after { transform: rotate(-90deg); color: #e7b54a; }
+@media (prefers-reduced-motion: reduce) { .champ-comments summary, .champ-comments summary::after { transition: none !important; } }
 .champ-comments-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
 .champ-comments-empty { color: var(--muted); font-size: 0.82rem; margin: 4px 0; }
 .champ-comment-item { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: start; }
@@ -398,17 +401,23 @@
       const st = document.createElement('style'); st.id = 'champ-reactions-css';
       st.textContent = `
 .champ-reactions { display:flex; flex-wrap:wrap; gap:8px; margin:-10px 0 22px; }
-.champ-reaction-btn { display:flex; align-items:center; gap:6px; padding:6px 12px; border-radius:999px; border:1px solid var(--border); background:#fff; cursor:pointer; font-size:0.95rem; font-family:var(--mono); transition:transform .12s ease, background .12s ease, border-color .12s ease; }
-.champ-reaction-btn:hover { transform:translateY(-1px); }
-.champ-reaction-btn.mine { background:#eef1ff; border-color:#3457d5; }
-.champ-reaction-btn .n { font-size:0.78rem; color:var(--muted); min-width:8px; text-align:left; }
-.champ-reaction-btn.mine .n { color:#3457d5; font-weight:700; }
-.champ-reaction-btn:disabled { opacity:.6; cursor:default; }`;
+.champ-reaction-btn { position:relative; display:flex; align-items:center; gap:6px; padding:7px 13px; border-radius:999px; border:1px solid #e4e6ec; background:linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%); box-shadow:0 1px 2px rgba(20,22,43,.05), inset 0 1px 0 #fff; cursor:pointer; font-size:1.08rem; line-height:1; font-family:var(--mono); transition:transform .16s cubic-bezier(.34,1.56,.64,1), box-shadow .16s ease, background .16s ease, border-color .16s ease; }
+.champ-reaction-btn .e { display:inline-block; transition:transform .25s cubic-bezier(.34,1.56,.64,1); }
+.champ-reaction-btn:hover { transform:translateY(-2px); box-shadow:0 5px 12px rgba(20,22,43,.14); border-color:#d3d7e0; }
+.champ-reaction-btn:hover .e { transform:scale(1.18) rotate(-6deg); }
+.champ-reaction-btn:active { transform:translateY(0) scale(.93); }
+.champ-reaction-btn.mine { background:linear-gradient(135deg, #191c36 0%, #2c3060 100%); border-color:#14162b; box-shadow:0 4px 12px rgba(20,22,43,.32), inset 0 1px 0 rgba(255,255,255,.1); }
+.champ-reaction-btn.mine .e { animation:ccReactPop .42s cubic-bezier(.34,1.56,.64,1); }
+@keyframes ccReactPop { 0% { transform:scale(1); } 45% { transform:scale(1.4) rotate(-8deg); } 100% { transform:scale(1); } }
+.champ-reaction-btn .n { font-size:0.74rem; color:var(--muted); min-width:7px; text-align:left; font-weight:600; }
+.champ-reaction-btn.mine .n { color:#e7b54a; font-weight:700; }
+.champ-reaction-btn:disabled { opacity:.55; cursor:default; }
+@media (prefers-reduced-motion: reduce) { .champ-reaction-btn, .champ-reaction-btn .e, .champ-reaction-btn.mine .e { animation:none !important; transition:none !important; } }`;
       document.head.appendChild(st);
     }
     host.innerHTML = REACTION_EMOJIS.map(e => `
       <button type="button" class="champ-reaction-btn${e === myReaction ? ' mine' : ''}" data-emoji="${e}">
-        <span>${e}</span><span class="n">${counts[e] > 0 ? counts[e] : ''}</span>
+        <span class="e">${e}</span><span class="n">${counts[e] > 0 ? counts[e] : ''}</span>
       </button>`).join('');
 
     host.querySelectorAll('.champ-reaction-btn').forEach(btn => {
