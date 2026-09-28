@@ -209,14 +209,9 @@
 @keyframes ccTw { 0%,100% { opacity: 0; transform: scale(.3) rotate(0); } 50% { opacity: 1; transform: scale(1) rotate(45deg); } }
 @media (max-width: 640px) { .champ-card { grid-template-columns: auto minmax(0,1fr); padding: 16px 18px; gap: 14px; } .cc-side { display: none; } .cc-emoji { width: 58px; height: 58px; font-size: 44px; } }
 @media (prefers-reduced-motion: reduce) { .champ-card, .champ-card::before, .cc-emoji, .cc-star { animation: none !important; } }
-.champ-comments { margin: -4px 0 22px; }
-.champ-comments summary { cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 0.78rem; font-weight: 600; color: #5b6272; padding: 7px 15px; border-radius: 999px; border: 1px solid #e4e6ec; background: linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%); box-shadow: 0 1px 2px rgba(20,22,43,.05), inset 0 1px 0 #fff; user-select: none; transition: transform .16s cubic-bezier(.34,1.56,.64,1), box-shadow .16s ease, background .16s ease, color .16s ease, border-color .16s ease; }
-.champ-comments summary::-webkit-details-marker { display: none; }
-.champ-comments summary::after { content: '›'; display: inline-block; margin-left: 2px; font-size: 1rem; line-height: .6; transform: rotate(90deg); transition: transform .18s ease; color: #9098a8; }
-.champ-comments summary:hover { transform: translateY(-2px); box-shadow: 0 5px 12px rgba(20,22,43,.14); border-color: #d3d7e0; }
-.champ-comments[open] summary { margin-bottom: 14px; background: linear-gradient(135deg, #191c36 0%, #2c3060 100%); border-color: #14162b; color: #e7b54a; box-shadow: 0 4px 12px rgba(20,22,43,.28), inset 0 1px 0 rgba(255,255,255,.1); }
-.champ-comments[open] summary::after { transform: rotate(-90deg); color: #e7b54a; }
-@media (prefers-reduced-motion: reduce) { .champ-comments summary, .champ-comments summary::after { transition: none !important; } }
+.champ-comments { margin: 0 0 22px; }
+.champ-comments summary { display: none; }
+.champ-comments[open] { padding: 14px 16px; border: 1px solid #e4e6ec; border-radius: 16px; background: #fff; box-shadow: 0 6px 18px -10px rgba(20,22,43,.25); }
 .champ-comments-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
 .champ-comments-empty { color: var(--muted); font-size: 0.82rem; margin: 4px 0; }
 .champ-comment-item { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: start; }
@@ -252,15 +247,18 @@
             <div class="cc-runners">${second ? `2nd ${esc(second.n)}` : ''}${third ? `<br>3rd ${esc(third.n)}` : ''}</div>
           </div>
         </a>
-        <div class="champ-reactions" id="champ-reactions"></div>
+        <div class="champ-bar">
+          <div class="champ-reactions" id="champ-reactions"></div>
+          <button type="button" class="champ-bubble" id="champ-comments-btn" aria-expanded="false">💬 <span class="n" id="champ-comments-count">0</span> comments</button>
+        </div>
         <details class="champ-comments" id="champ-comments">
-          <summary>💬 <span id="champ-comments-count">0</span> comments</summary>
+          <summary>Comments</summary>
           <div class="champ-comments-list" id="champ-comments-list"></div>
           <div class="champ-comment-compose">
             <textarea id="champ-comment-input" maxlength="300" placeholder="Say something nice…"></textarea>
             <div class="champ-comment-row">
               <div class="champ-comment-emojis">
-                ${['🔥', '👏', '🎉', '😍', '💪', '😂'].map(e => `<button type="button" data-insert="${e}">${e}</button>`).join('')}
+                ${['🔥', '🏆', '🤯', '🫡', '💯', '🤩', '👏', '😂'].map(e => `<button type="button" data-insert="${e}">${e}</button>`).join('')}
               </div>
               <button type="button" id="champ-comment-post" class="ghost">Post</button>
             </div>
@@ -292,9 +290,13 @@
     if (countEl) countEl.textContent = count || 0;
 
     let loaded = false;
+    const bubble = document.getElementById('champ-comments-btn');
     host.addEventListener('toggle', () => {
+      bubble.classList.toggle('open', host.open);
+      bubble.setAttribute('aria-expanded', host.open ? 'true' : 'false');
       if (host.open && !loaded) { loaded = true; loadChampionComments(level, week, myId); }
     });
+    bubble.addEventListener('click', () => { host.open = !host.open; });
 
     document.getElementById('champ-comment-post').addEventListener('click', async () => {
       const input = document.getElementById('champ-comment-input');
@@ -377,7 +379,14 @@
   // tapping a new emoji switches it, tapping your current one removes it.
   // Counts only, no names — same spirit as a Telegram/Instagram reaction
   // bar, without surfacing who-reacted-to-whom.
-  const REACTION_EMOJIS = ['🔥', '👏', '💪', '🎉', '😍'];
+  // Themed around winning, shown as Google's animated Noto emoji (the same
+  // source as the 😎 on the card), falling back to the plain character if
+  // the image can't load. The character itself is what gets stored.
+  const REACTION_EMOJIS = ['🔥', '🏆', '🤯', '🫡', '💯', '🤩'];
+  const REACTION_CODES = { '🔥': '1f525', '🏆': '1f3c6', '🤯': '1f92f', '🫡': '1fae1', '💯': '1f4af', '🤩': '1f929' };
+  function reactionImg(e) {
+    return `<img class="e" src="https://fonts.gstatic.com/s/e/notoemoji/latest/${REACTION_CODES[e]}/512.webp" alt="${e}" width="28" height="28" onerror="this.outerHTML='<span class=&quot;e&quot;>${e}</span>'">`;
+  }
 
   async function renderChampionReactions(level, week, myId) {
     const host = document.getElementById('champ-reactions');
@@ -400,24 +409,30 @@
     if (!document.getElementById('champ-reactions-css')) {
       const st = document.createElement('style'); st.id = 'champ-reactions-css';
       st.textContent = `
-.champ-reactions { display:flex; flex-wrap:wrap; gap:8px; margin:-10px 0 22px; }
-.champ-reaction-btn { position:relative; display:flex; align-items:center; gap:6px; padding:7px 13px; border-radius:999px; border:1px solid #e4e6ec; background:linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%); box-shadow:0 1px 2px rgba(20,22,43,.05), inset 0 1px 0 #fff; cursor:pointer; font-size:1.08rem; line-height:1; font-family:var(--mono); transition:transform .16s cubic-bezier(.34,1.56,.64,1), box-shadow .16s ease, background .16s ease, border-color .16s ease; }
-.champ-reaction-btn .e { display:inline-block; transition:transform .25s cubic-bezier(.34,1.56,.64,1); }
-.champ-reaction-btn:hover { transform:translateY(-2px); box-shadow:0 5px 12px rgba(20,22,43,.14); border-color:#d3d7e0; }
-.champ-reaction-btn:hover .e { transform:scale(1.18) rotate(-6deg); }
-.champ-reaction-btn:active { transform:translateY(0) scale(.93); }
-.champ-reaction-btn.mine { background:linear-gradient(135deg, #191c36 0%, #2c3060 100%); border-color:#14162b; box-shadow:0 4px 12px rgba(20,22,43,.32), inset 0 1px 0 rgba(255,255,255,.1); }
-.champ-reaction-btn.mine .e { animation:ccReactPop .42s cubic-bezier(.34,1.56,.64,1); }
-@keyframes ccReactPop { 0% { transform:scale(1); } 45% { transform:scale(1.4) rotate(-8deg); } 100% { transform:scale(1); } }
-.champ-reaction-btn .n { font-size:0.74rem; color:var(--muted); min-width:7px; text-align:left; font-weight:600; }
-.champ-reaction-btn.mine .n { color:#e7b54a; font-weight:700; }
-.champ-reaction-btn:disabled { opacity:.55; cursor:default; }
-@media (prefers-reduced-motion: reduce) { .champ-reaction-btn, .champ-reaction-btn .e, .champ-reaction-btn.mine .e { animation:none !important; transition:none !important; } }`;
+.champ-bar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:-4px 0 18px; padding-top:6px; }
+.champ-reactions { display:flex; flex-wrap:wrap; gap:12px; }
+.champ-reaction-btn { position:relative; width:48px; height:48px; padding:0; border-radius:50%; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at 35% 30%, #fff 0%, #eceef2 55%, #cfd4dc 100%); box-shadow:inset 0 -3px 0 rgba(20,22,43,.12), 0 3px 8px rgba(20,22,43,.15), 0 0 0 2px #fff, 0 0 0 3px #d3d8e0; transition:transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease; }
+.champ-reaction-btn .e { width:28px; height:28px; font-size:24px; line-height:28px; text-align:center; display:block; }
+.champ-reaction-btn:hover { transform:translateY(-3px) rotate(-6deg); }
+.champ-reaction-btn:active { transform:scale(.92); }
+.champ-reaction-btn.mine { background:radial-gradient(circle at 35% 30%, #fff3cf 0%, #f0c75e 50%, #c8912a 100%); box-shadow:inset 0 -3px 0 rgba(120,70,0,.25), 0 4px 12px rgba(200,145,42,.45), 0 0 0 2px #fff, 0 0 0 3px #c8912a; }
+.champ-reaction-btn.mine .e { animation:ccReactPop .45s cubic-bezier(.34,1.56,.64,1); }
+@keyframes ccReactPop { 0% { transform:scale(1); } 45% { transform:scale(1.45) rotate(-10deg); } 100% { transform:scale(1); } }
+.champ-reaction-btn .n { position:absolute; top:-5px; right:-7px; min-width:20px; height:20px; padding:0 6px; border-radius:999px; background:#14162b; color:#fff; font-family:var(--mono); font-size:.66rem; font-weight:700; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 2px var(--bg, #f6f5f1); }
+.champ-reaction-btn.mine .n { background:#e7b54a; color:#14162b; }
+.champ-reaction-btn .n:empty { display:none; }
+.champ-reaction-btn:disabled { cursor:default; }
+.champ-bubble { margin-left:auto; display:flex; align-items:center; gap:7px; padding:10px 16px; border-radius:16px 16px 16px 4px; border:none; background:#14162b; color:#fff; font-family:var(--mono); font-size:.74rem; font-weight:700; cursor:pointer; box-shadow:0 4px 12px rgba(20,22,43,.25); transition:transform .18s cubic-bezier(.34,1.56,.64,1), background .18s ease; }
+.champ-bubble .n { color:#e7b54a; }
+.champ-bubble:hover { transform:translateY(-2px); }
+.champ-bubble.open { background:linear-gradient(135deg, #191c36 0%, #2c3060 100%); box-shadow:0 0 0 2px #e7b54a, 0 4px 12px rgba(20,22,43,.3); }
+@media (max-width: 480px) { .champ-reactions { gap:10px; } .champ-reaction-btn { width:42px; height:42px; } .champ-reaction-btn .e { width:24px; height:24px; font-size:20px; line-height:24px; } }
+@media (prefers-reduced-motion: reduce) { .champ-reaction-btn, .champ-reaction-btn .e, .champ-bubble { animation:none !important; transition:none !important; } }`;
       document.head.appendChild(st);
     }
     host.innerHTML = REACTION_EMOJIS.map(e => `
-      <button type="button" class="champ-reaction-btn${e === myReaction ? ' mine' : ''}" data-emoji="${e}">
-        <span class="e">${e}</span><span class="n">${counts[e] > 0 ? counts[e] : ''}</span>
+      <button type="button" class="champ-reaction-btn${e === myReaction ? ' mine' : ''}" data-emoji="${e}" aria-label="React ${e}">
+        ${reactionImg(e)}<span class="n">${counts[e] > 0 ? counts[e] : ''}</span>
       </button>`).join('');
 
     host.querySelectorAll('.champ-reaction-btn').forEach(btn => {
