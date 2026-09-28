@@ -140,11 +140,24 @@ function roundToIELTSBand(avg){
 // rather than quietly averaging it away. This is the mentor's in-progress
 // review view; the student never sees this — they only see their result
 // once everything is graded and results_published is set.
-// Writing band: Expert's full mock grades Task 1 and Task 2 separately
-// (T2 counted twice as heavily, matching real IELTS weighting) — Standard
-// and Advanced only ever have a single essay, so that's just used directly.
+// Whether this specific exam used the Task 1 + Task 2 writing layout or the
+// single-essay layout. This used to be assumed from the track alone ("only
+// Expert has two tasks"), which broke the moment Advanced's Day 13 mock was
+// built with two tasks too — those submissions had real writing sitting in
+// writing_t1_text/writing_t2_text that the page never looked at, so it
+// showed as unsubmitted and never graded. Read from what the exam itself
+// actually has; the track-based guess is only a fallback for a brand new,
+// not-yet-attempted exam row.
+function examIsFullMock(exam){
+  if(exam.writing_t1_text != null || exam.writing_t2_text != null) return true;
+  if(exam.essay_text != null) return false;
+  return TRACK_KEY === '2.0-expert';
+}
+// Writing band: a full (two-task) mock grades Task 1 and Task 2 separately
+// (T2 counted twice as heavily, matching real IELTS weighting) — a
+// single-essay mock only ever has the one essay, so that's used directly.
 function writingBandFor(exam){
-  if(TRACK_KEY === '2.0-expert'){
+  if(examIsFullMock(exam)){
     var t1 = (exam.t1_band!==null && exam.t1_band!==undefined && exam.t1_band!=='') ? parseFloat(exam.t1_band) : null;
     var t2 = (exam.t2_band!==null && exam.t2_band!==undefined && exam.t2_band!=='') ? parseFloat(exam.t2_band) : null;
     if(t1===null && t2===null) return null;
@@ -363,7 +376,7 @@ function buildDetail(sid, exam){
   var bands = computeBands(exam);
   var liScore = bands.listeningScore !== null ? bands.listeningScore : '—';
   var rScore = bands.readingScore !== null ? bands.readingScore : '—';
-  var isFullMock = TRACK_KEY === '2.0-expert';
+  var isFullMock = examIsFullMock(exam);
 
   var overview = '<div class="score-overview">'+
     '<div class="score-box"><div class="label">Listening</div><div class="value">'+fmtBand(bands.l)+'</div>'+
