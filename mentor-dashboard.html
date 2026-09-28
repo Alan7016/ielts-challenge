@@ -71,6 +71,60 @@
     else el.textContent = initialsFor(fullName);
   }
 
+  // Moderation for the champion card's comment thread on the student board
+  // (index.html) — it's a level-wide space, not scoped to one mentor's own
+  // group, so any mentor for that level can remove a comment, matching the
+  // RLS policy on champion_comments. Collapsed by default and only loaded
+  // once per page visit; the panel hides itself entirely if there's nothing
+  // there yet.
+  async function renderChampionModerationPanel(level) {
+    const sb = getSupabaseClient();
+    const week = CEREMONY.week;
+    const { data, error } = await sb.from('champion_comments')
+      .select('id, comment, created_at, profiles(full_name)')
+      .eq('level', level).eq('week', week)
+      .order('created_at', { ascending: false });
+    if (error) { console.error('champion moderation load', error); return; }
+    const panel = document.getElementById('champ-mod-panel');
+    const countEl = document.getElementById('champ-mod-count');
+    const listEl = document.getElementById('champ-mod-list');
+    const rows = data || [];
+    countEl.textContent = rows.length;
+    panel.style.display = 'block';
+    const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const fmtTime = iso => new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    function draw() {
+      listEl.innerHTML = rows.length === 0
+        ? `<p style="color:var(--muted); font-size:0.82rem; margin:0;">No comments yet.</p>`
+        : rows.map(c => `
+          <div class="champ-mod-row" data-id="${c.id}" style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start; padding:6px 0; border-bottom:1px dashed var(--border);">
+            <div style="min-width:0;">
+              <div style="font-size:0.8rem;"><b>${esc((c.profiles && c.profiles.full_name) || 'Student')}</b> <span style="font-family:var(--mono); font-size:0.7rem; color:var(--muted);">${fmtTime(c.created_at)}</span></div>
+              <div style="font-size:0.85rem; margin-top:2px; overflow-wrap:anywhere;">${esc(c.comment)}</div>
+            </div>
+            <button type="button" class="ghost champ-mod-delete" style="padding:3px 10px; font-size:0.72rem; color:var(--warn); border-color:var(--warn); flex-shrink:0;">Delete</button>
+          </div>`).join('');
+      listEl.querySelectorAll('.champ-mod-delete').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const row = btn.closest('.champ-mod-row');
+          const id = row.dataset.id;
+          if (!confirm('Delete this comment from the champion card?')) return;
+          btn.disabled = true;
+          const res = await sb.from('champion_comments').delete().eq('id', id);
+          if (res.error) { console.error('champion comment delete', res.error); btn.disabled = false; return; }
+          const idx = rows.findIndex(r => String(r.id) === String(id));
+          if (idx !== -1) rows.splice(idx, 1);
+          countEl.textContent = rows.length;
+          draw();
+        });
+      });
+    }
+    draw();
+    document.getElementById('champ-mod-toggle').addEventListener('click', () => {
+      listEl.style.display = listEl.style.display === 'none' ? 'block' : 'none';
+    });
+  }
+
   let myGroup = null;
   let myUserId = null;
   let liveDays = [];
@@ -141,6 +195,13 @@
 
     document.getElementById('page-eyebrow').textContent = `Mentor view — Challenge 2.0 · ${level.charAt(0).toUpperCase() + level.slice(1)}`;
     document.getElementById('page-title').textContent = myGroup.name;
+
+    document.getElementById('day-picker-row').insertAdjacentHTML('beforebegin', `
+      <div class="champ-mod-panel" id="champ-mod-panel" style="margin-bottom:16px; display:none;">
+        <button type="button" class="ghost" id="champ-mod-toggle" style="padding:7px 14px; font-size:0.82rem;">💬 Champion card comments — ${level.charAt(0).toUpperCase() + level.slice(1)} (<span id="champ-mod-count">0</span>)</button>
+        <div id="champ-mod-list" style="display:none; margin-top:10px; padding:12px; border:1px solid var(--border); border-radius:10px;"></div>
+      </div>`);
+    renderChampionModerationPanel(level);
 
     const nonMockDays = liveDays.filter(d => !cfg.mockDays.includes(d)).sort((a, b) => b - a);
     const mockDaysLive = liveDays.filter(d => cfg.mockDays.includes(d));
