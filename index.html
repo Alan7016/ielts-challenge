@@ -208,7 +208,30 @@
 .cc-star path { fill: #fff; }
 @keyframes ccTw { 0%,100% { opacity: 0; transform: scale(.3) rotate(0); } 50% { opacity: 1; transform: scale(1) rotate(45deg); } }
 @media (max-width: 640px) { .champ-card { grid-template-columns: auto minmax(0,1fr); padding: 16px 18px; gap: 14px; } .cc-side { display: none; } .cc-emoji { width: 58px; height: 58px; font-size: 44px; } }
-@media (prefers-reduced-motion: reduce) { .champ-card, .champ-card::before, .cc-emoji, .cc-star { animation: none !important; } }`;
+@media (prefers-reduced-motion: reduce) { .champ-card, .champ-card::before, .cc-emoji, .cc-star { animation: none !important; } }
+.champ-comments { margin: -10px 0 22px; }
+.champ-comments summary { cursor: pointer; list-style: none; font-family: var(--mono); font-size: 0.82rem; color: var(--muted); padding: 4px 0; user-select: none; }
+.champ-comments summary::-webkit-details-marker { display: none; }
+.champ-comments summary:hover { color: var(--ink); }
+.champ-comments[open] summary { margin-bottom: 10px; }
+.champ-comments-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+.champ-comments-empty { color: var(--muted); font-size: 0.82rem; margin: 4px 0; }
+.champ-comment-item { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: start; }
+.cc-avatar { width: 30px; height: 30px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; background: linear-gradient(145deg, #3457d5, #14162b); color: #fff; font-family: var(--display); font-weight: 700; font-size: 0.78rem; flex-shrink: 0; }
+.cc-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.cc-comment-body { min-width: 0; }
+.cc-comment-head { font-size: 0.8rem; }
+.cc-comment-time { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin-left: 4px; }
+.cc-comment-text { font-size: 0.88rem; margin-top: 2px; overflow-wrap: anywhere; white-space: pre-wrap; }
+.cc-comment-delete { border: none; background: none; color: var(--muted); cursor: pointer; font-size: 0.8rem; padding: 2px 4px; }
+.cc-comment-delete:hover { color: var(--warn); }
+.champ-comment-compose { border-top: 1px solid var(--border); padding-top: 12px; }
+.champ-comment-compose textarea { width: 100%; min-height: 54px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-family: var(--body); font-size: 0.85rem; resize: vertical; }
+.champ-comment-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+.champ-comment-emojis { display: flex; gap: 4px; }
+.champ-comment-emojis button { border: 1px solid var(--border); background: #fff; border-radius: 8px; padding: 3px 7px; font-size: 0.95rem; cursor: pointer; }
+.champ-comment-emojis button:hover { background: #f4f5f8; }
+.champ-comment-status { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); display: block; margin-top: 6px; }`;
         document.head.appendChild(st);
       }
       const star = (css, d) => `<svg class="cc-star" viewBox="0 0 20 20" style="${css};animation-delay:${d}s" aria-hidden="true"><path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z"/></svg>`;
@@ -226,9 +249,123 @@
             <div class="cc-runners">${second ? `2nd ${esc(second.n)}` : ''}${third ? `<br>3rd ${esc(third.n)}` : ''}</div>
           </div>
         </a>
-        <div class="champ-reactions" id="champ-reactions"></div>`;
-      if (myId) renderChampionReactions(profile.level, CEREMONY.week, myId);
+        <div class="champ-reactions" id="champ-reactions"></div>
+        <details class="champ-comments" id="champ-comments">
+          <summary>💬 <span id="champ-comments-count">0</span> comments</summary>
+          <div class="champ-comments-list" id="champ-comments-list"></div>
+          <div class="champ-comment-compose">
+            <textarea id="champ-comment-input" maxlength="300" placeholder="Say something nice…"></textarea>
+            <div class="champ-comment-row">
+              <div class="champ-comment-emojis">
+                ${['🔥', '👏', '🎉', '😍', '💪', '😂'].map(e => `<button type="button" data-insert="${e}">${e}</button>`).join('')}
+              </div>
+              <button type="button" id="champ-comment-post" class="ghost">Post</button>
+            </div>
+            <span class="champ-comment-status" id="champ-comment-status"></span>
+          </div>
+        </details>`;
+      if (myId) {
+        renderChampionReactions(profile.level, CEREMONY.week, myId);
+        renderChampionComments(profile.level, CEREMONY.week, myId);
+      }
     } catch (e) { console.error('champion card', e); }
+  }
+
+  // Comments on the champion card. The count badge loads for everyone right
+  // away (a cheap head-only count query); the actual comment text is only
+  // fetched the first time a student expands the <details> — most students
+  // will glance at the number and move on, so there's no reason to pull
+  // every comment body on every page load.
+  // Free text (unlike reactions' curated emoji set), so the moderation
+  // story here is real names on every comment plus a delete button — for
+  // the student on their own comment, and for any mentor/admin on any
+  // comment (see the RLS policies on champion_comments).
+  async function renderChampionComments(level, week, myId) {
+    const host = document.getElementById('champ-comments');
+    if (!host) return;
+    const sb = getSupabaseClient();
+    const { count } = await sb.from('champion_comments').select('id', { count: 'exact', head: true }).eq('level', level).eq('week', week);
+    const countEl = document.getElementById('champ-comments-count');
+    if (countEl) countEl.textContent = count || 0;
+
+    let loaded = false;
+    host.addEventListener('toggle', () => {
+      if (host.open && !loaded) { loaded = true; loadChampionComments(level, week, myId); }
+    });
+
+    document.getElementById('champ-comment-post').addEventListener('click', async () => {
+      const input = document.getElementById('champ-comment-input');
+      const status = document.getElementById('champ-comment-status');
+      const text = input.value.trim();
+      if (!text) { status.textContent = 'Write something first.'; return; }
+      if (text.length > 300) { status.textContent = 'Keep it under 300 characters.'; return; }
+      const btn = document.getElementById('champ-comment-post');
+      btn.disabled = true;
+      status.textContent = 'Posting…';
+      const res = await sb.from('champion_comments').insert({ level, week, student_id: myId, comment: text });
+      btn.disabled = false;
+      if (res.error) {
+        console.error('champion comment post', res.error);
+        status.textContent = '⚠️ Failed to post — try again.';
+        return;
+      }
+      input.value = '';
+      status.textContent = '';
+      loaded = true;
+      await loadChampionComments(level, week, myId);
+      if (countEl) countEl.textContent = String((parseInt(countEl.textContent || '0', 10)) + 1);
+    });
+
+    host.querySelectorAll('.champ-comment-emojis button').forEach(b => {
+      b.addEventListener('click', () => {
+        const input = document.getElementById('champ-comment-input');
+        input.value += b.dataset.insert;
+        input.focus();
+      });
+    });
+  }
+
+  async function loadChampionComments(level, week, myId) {
+    const sb = getSupabaseClient();
+    const list = document.getElementById('champ-comments-list');
+    list.innerHTML = '<p class="champ-comments-empty">Loading…</p>';
+    const { data, error } = await sb.from('champion_comments')
+      .select('id, student_id, comment, created_at, profiles(full_name, avatar_url)')
+      .eq('level', level).eq('week', week)
+      .order('created_at', { ascending: true });
+    if (error) { console.error('champion comments load', error); list.innerHTML = '<p class="champ-comments-empty">Couldn\'t load comments.</p>'; return; }
+    if (!data || data.length === 0) { list.innerHTML = '<p class="champ-comments-empty">No comments yet — be the first!</p>'; return; }
+    const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const fmtTime = iso => new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    list.innerHTML = data.map(c => {
+      const name = (c.profiles && c.profiles.full_name) || 'Student';
+      const av = (c.profiles && c.profiles.avatar_url)
+        ? `<img src="${esc(c.profiles.avatar_url)}" alt="">`
+        : esc(initialsFor(name));
+      const mine = c.student_id === myId;
+      return `<div class="champ-comment-item" data-id="${c.id}">
+        <span class="cc-avatar">${av}</span>
+        <div class="cc-comment-body">
+          <div class="cc-comment-head"><b>${esc(name)}</b> <span class="cc-comment-time">${fmtTime(c.created_at)}</span></div>
+          <div class="cc-comment-text">${esc(c.comment)}</div>
+        </div>
+        ${mine ? `<button type="button" class="cc-comment-delete" title="Delete your comment">✕</button>` : ''}
+      </div>`;
+    }).join('');
+    list.querySelectorAll('.cc-comment-delete').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const item = btn.closest('.champ-comment-item');
+        btn.disabled = true;
+        const res = await sb.from('champion_comments').delete().eq('id', item.dataset.id).eq('student_id', myId);
+        if (res.error) { console.error('champion comment delete', res.error); btn.disabled = false; return; }
+        item.remove();
+        const countEl = document.getElementById('champ-comments-count');
+        if (countEl) countEl.textContent = String(Math.max(0, parseInt(countEl.textContent || '0', 10) - 1));
+        if (!document.querySelector('.champ-comment-item')) {
+          document.getElementById('champ-comments-list').innerHTML = '<p class="champ-comments-empty">No comments yet — be the first!</p>';
+        }
+      });
+    });
   }
 
   // Quick-tap reactions on the champion card — a small curated set (not a
