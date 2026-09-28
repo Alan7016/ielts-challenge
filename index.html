@@ -225,8 +225,77 @@
             <div class="cc-av">${av(champs[0])}</div>
             <div class="cc-runners">${second ? `2nd ${esc(second.n)}` : ''}${third ? `<br>3rd ${esc(third.n)}` : ''}</div>
           </div>
-        </a>`;
+        </a>
+        <div class="champ-reactions" id="champ-reactions"></div>`;
+      if (myId) renderChampionReactions(profile.level, CEREMONY.week, myId);
     } catch (e) { console.error('champion card', e); }
+  }
+
+  // Quick-tap reactions on the champion card — a small curated set (not a
+  // free-form emoji picker) so there's nothing inappropriate to choose from
+  // in the first place. One active reaction per student per level per week:
+  // tapping a new emoji switches it, tapping your current one removes it.
+  // Counts only, no names — same spirit as a Telegram/Instagram reaction
+  // bar, without surfacing who-reacted-to-whom.
+  const REACTION_EMOJIS = ['🔥', '👏', '💪', '🎉', '😍'];
+
+  async function renderChampionReactions(level, week, myId) {
+    const host = document.getElementById('champ-reactions');
+    if (!host) return;
+    const sb = getSupabaseClient();
+    const { data: rows, error } = await sb.from('champion_reactions').select('emoji, student_id').eq('level', level).eq('week', week);
+    if (error) { console.error('champion reactions load', error); return; }
+    const counts = {};
+    REACTION_EMOJIS.forEach(e => { counts[e] = 0; });
+    let myReaction = null;
+    (rows || []).forEach(r => {
+      if (counts[r.emoji] === undefined) return; // ignore anything outside the curated set
+      counts[r.emoji]++;
+      if (r.student_id === myId) myReaction = r.emoji;
+    });
+    drawReactionBar(host, level, week, myId, counts, myReaction);
+  }
+
+  function drawReactionBar(host, level, week, myId, counts, myReaction) {
+    if (!document.getElementById('champ-reactions-css')) {
+      const st = document.createElement('style'); st.id = 'champ-reactions-css';
+      st.textContent = `
+.champ-reactions { display:flex; flex-wrap:wrap; gap:8px; margin:-10px 0 22px; }
+.champ-reaction-btn { display:flex; align-items:center; gap:6px; padding:6px 12px; border-radius:999px; border:1px solid var(--border); background:#fff; cursor:pointer; font-size:0.95rem; font-family:var(--mono); transition:transform .12s ease, background .12s ease, border-color .12s ease; }
+.champ-reaction-btn:hover { transform:translateY(-1px); }
+.champ-reaction-btn.mine { background:#eef1ff; border-color:#3457d5; }
+.champ-reaction-btn .n { font-size:0.78rem; color:var(--muted); min-width:8px; text-align:left; }
+.champ-reaction-btn.mine .n { color:#3457d5; font-weight:700; }
+.champ-reaction-btn:disabled { opacity:.6; cursor:default; }`;
+      document.head.appendChild(st);
+    }
+    host.innerHTML = REACTION_EMOJIS.map(e => `
+      <button type="button" class="champ-reaction-btn${e === myReaction ? ' mine' : ''}" data-emoji="${e}">
+        <span>${e}</span><span class="n">${counts[e] > 0 ? counts[e] : ''}</span>
+      </button>`).join('');
+
+    host.querySelectorAll('.champ-reaction-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const emoji = btn.dataset.emoji;
+        const removingMine = emoji === myReaction;
+        host.querySelectorAll('.champ-reaction-btn').forEach(b => b.disabled = true);
+        const sbc = getSupabaseClient();
+        const res = removingMine
+          ? await sbc.from('champion_reactions').delete().eq('level', level).eq('week', week).eq('student_id', myId)
+          : await sbc.from('champion_reactions').upsert({ level, week, student_id: myId, emoji }, { onConflict: 'level,week,student_id' });
+        if (res.error) {
+          console.error('champion reaction save', res.error);
+          host.querySelectorAll('.champ-reaction-btn').forEach(b => b.disabled = false);
+          return;
+        }
+        // Optimistic local update — no need to refetch every reaction row
+        // on the level just to reflect one tap.
+        const newCounts = Object.assign({}, counts);
+        if (myReaction) newCounts[myReaction] = Math.max(0, (newCounts[myReaction] || 0) - 1);
+        if (!removingMine) newCounts[emoji] = (newCounts[emoji] || 0) + 1;
+        drawReactionBar(host, level, week, myId, newCounts, removingMine ? null : emoji);
+      });
+    });
   }
 
   async function buildGrid(profile, userId) {
