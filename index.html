@@ -116,6 +116,7 @@
   <section style="padding-top:0;">
     <div class="wrap">
       <div id="weekly-winner-banner"></div>
+      <div id="speaking-room-card"></div>
       <div id="track-grid" class="track-grid"></div>
     </div>
   </section>
@@ -507,6 +508,44 @@
       }
     }
     grid.innerHTML = html;
+    const nonMockLive = liveDays.filter(d => !cfg.mockDays.includes(d)).sort((a, b) => b - a);
+    return { latestDay: nonMockLive[0] || null, latestDone: nonMockLive.length ? completedDays.has(nonMockLive[0]) : false };
+  }
+
+  // Entry card for the Speaking Room (speaking-room.html). Read-only status
+  // check — it doesn't put the student in the waiting room.
+  async function renderSpeakingCard(profile, board) {
+    const el = document.getElementById('speaking-room-card');
+    if (!el || profile.challenge !== '2.0' || !profile.level) return;
+    try {
+      const { data: st, error } = await getSupabaseClient().rpc('speaking_peek');
+      if (error || !st || !st.allowed || st.enabled === false) return;
+      if (!document.getElementById('sr-card-css')) {
+        const style = document.createElement('style'); style.id = 'sr-card-css';
+        style.textContent = `
+.sr-entry { display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:16px; align-items:center; margin:0 0 22px; padding:16px 20px; border-radius:18px; text-decoration:none; color:#fff; background:linear-gradient(135deg,#14162b 0%,#2c3060 100%); box-shadow:0 14px 30px -18px rgba(20,22,43,.7); position:relative; overflow:hidden; }
+.sr-entry.off { background:#fff; color:#14162b; border:1px solid var(--border); box-shadow:none; }
+.sr-entry .ic { width:48px; height:48px; border-radius:50%; background:#e7b54a; color:#14162b; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+.sr-entry.off .ic { background:#eceef2; filter:grayscale(1); opacity:.8; }
+.sr-entry .tt { font-family:var(--display); font-weight:700; font-size:1.05rem; letter-spacing:-.01em; }
+.sr-entry .ss { font-size:.82rem; opacity:.85; margin-top:2px; }
+.sr-entry .go { font-family:var(--mono); font-weight:700; font-size:.78rem; padding:8px 14px; border-radius:999px; background:#e7b54a; color:#14162b; white-space:nowrap; }
+.sr-entry .live { display:inline-block; width:8px; height:8px; border-radius:50%; background:#2ee27f; margin-right:6px; animation:srPing 1.8s infinite; }
+@keyframes srPing { 0% { box-shadow:0 0 0 0 #2ee27f99; } 70% { box-shadow:0 0 0 8px #2ee27f00; } 100% { box-shadow:0 0 0 0 #2ee27f00; } }
+@media (max-width:480px) { .sr-entry { grid-template-columns:auto minmax(0,1fr); } .sr-entry .go { grid-column:1 / -1; text-align:center; } }`;
+        document.head.appendChild(style);
+      }
+      const hrs = `${String(st.open_hour).padStart(2, '0')}:00–${String(st.close_hour === 24 ? 0 : st.close_hour).padStart(2, '0')}:00`;
+      const min = Math.floor(st.remaining_seconds / 60);
+      let cls = 'off', sub, go = '', href = null;
+      if (board && board.latestDay && !board.latestDone) sub = `Finish Day ${board.latestDay} to unlock`;
+      else if (st.banned) sub = 'Paused while a mentor reviews a report';
+      else if (st.remaining_seconds < 120) sub = 'You’ve used today’s speaking time ✓';
+      else if (!st.in_window) sub = `Open daily ${hrs} · Tashkent time`;
+      else { cls = ''; href = 'speaking-room.html'; sub = `<span class="live"></span>${st.online > 0 ? st.online + ' online now' : 'Room is open'} · ${min} min left today`; go = 'Join →'; }
+      const inner = `<div class="ic">🎙️</div><div><div class="tt">Speaking Room</div><div class="ss">${sub}</div></div>${go ? `<div class="go">${go}</div>` : ''}`;
+      el.innerHTML = href ? `<a class="sr-entry ${cls}" href="${href}">${inner}</a>` : `<div class="sr-entry ${cls}">${inner}</div>`;
+    } catch (e) { console.error('speaking card', e); }
   }
 
   // ---------- Mandatory student survey ----------
@@ -628,7 +667,7 @@
     if (profile.role === 'teacher') { window.location.href = 'teacher-dashboard.html'; return; }
     if (profile.role === 'checker') { window.location.href = 'checker-dashboard.html'; return; }
     if (profile.role === 'mentor') { window.location.href = 'mentor-dashboard.html'; return; }
-    buildGrid(profile, user.id);
+    buildGrid(profile, user.id).then(board => renderSpeakingCard(profile, board)).catch(e => console.error('board', e));
     renderWeeklyWinnerBanner(profile);
     if (profile.challenge === '2.0' && profile.group_id) {
       document.getElementById('chat-nav-link').style.display = '';
