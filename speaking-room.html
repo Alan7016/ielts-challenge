@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speaking Room — IELTS Marathon</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  :root { --gold: #e7b54a; --navy: #14162b; --navy-2: #232750; }
+  .sr-wrap { max-width: 720px; margin: 0 auto; padding: 0 16px 60px; }
+  .screen { display: none; }
+  .screen.on { display: block; animation: srIn .35s ease both; }
+  @keyframes srIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .sr-hero { padding: 30px 0 10px; }
+  .sr-hero h1 { margin: 6px 0 6px; }
+  .sr-sub { color: var(--ink-soft); margin: 0; max-width: 46ch; }
+
+  .sr-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 22px 0 18px; }
+  .sr-stat { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px 12px 10px; box-shadow: var(--shadow); }
+  .sr-stat .k { font-family: var(--mono); font-size: .62rem; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+  .sr-stat .v { font-family: var(--display); font-weight: 700; font-size: 1.15rem; margin-top: 4px; letter-spacing: -.01em; white-space: nowrap; }
+  .sr-stat .v small { display: block; font-size: .7rem; font-weight: 600; color: var(--muted); margin-top: 1px; letter-spacing: 0; }
+  .sr-stat .v.live::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--good); margin-right: 7px; vertical-align: 2px; box-shadow: 0 0 0 0 #1f9d5588; animation: srPing 1.8s infinite; }
+  @keyframes srPing { 70% { box-shadow: 0 0 0 8px #1f9d5500; } 100% { box-shadow: 0 0 0 0 #1f9d5500; } }
+
+  .sr-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 18px; box-shadow: var(--shadow); margin-bottom: 14px; }
+  .sr-card h3 { margin: 0 0 10px; font-family: var(--display); font-size: 1rem; }
+  .sr-steps { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+  .sr-steps li { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; font-size: .9rem; color: var(--ink-soft); }
+  .sr-steps b { color: var(--ink); }
+  .sr-steps .n { width: 30px; height: 30px; border-radius: 50%; background: var(--navy); color: var(--gold); font-family: var(--mono); font-weight: 700; font-size: .8rem; display: flex; align-items: center; justify-content: center; }
+  .sr-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sr-chip { font-size: .8rem; padding: 6px 12px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); }
+  .sr-chip i { font-style: normal; font-family: var(--mono); font-size: .64rem; color: var(--muted); margin-right: 6px; letter-spacing: .08em; }
+  .sr-note { font-size: .8rem; color: var(--ink-soft); background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; }
+  .sr-warn { font-size: .85rem; color: #7a2a05; background: var(--warn-soft); border: 1px solid #d5490f55; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; }
+
+  .sr-cta { width: 100%; padding: 17px 20px; font-size: 1.05rem; border-radius: 16px; background: linear-gradient(135deg, #191c36, #2c3060); color: var(--gold); border: none; box-shadow: 0 10px 24px -10px rgba(20,22,43,.6); display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .sr-cta:hover { background: linear-gradient(135deg, #20244a, #363b78); }
+  .sr-cta .mic { font-size: 1.25rem; }
+  .sr-ghost { width: 100%; margin-top: 10px; }
+
+  /* Centered status screens */
+  .sr-center { text-align: center; padding: 46px 10px 20px; }
+  .sr-center h2 { font-family: var(--display); margin: 22px 0 8px; font-size: 1.5rem; letter-spacing: -.02em; }
+  .sr-center p { color: var(--ink-soft); margin: 0 auto 18px; max-width: 40ch; }
+  .sr-rings { position: relative; width: 120px; height: 120px; margin: 0 auto; }
+  .sr-rings span { position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--accent); opacity: 0; animation: srRing 2.4s ease-out infinite; }
+  .sr-rings span:nth-child(2) { animation-delay: .8s; } .sr-rings span:nth-child(3) { animation-delay: 1.6s; }
+  .sr-rings b { position: absolute; inset: 34px; border-radius: 50%; background: var(--navy); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+  @keyframes srRing { 0% { transform: scale(.35); opacity: .7; } 100% { transform: scale(1.1); opacity: 0; } }
+  .sr-avatar { width: 84px; height: 84px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; background: linear-gradient(145deg, #3457d5, #14162b); color: #fff; font-family: var(--display); font-weight: 700; font-size: 1.5rem; box-shadow: 0 0 0 4px #fff, 0 0 0 6px var(--border); margin: 0 auto; }
+  .sr-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .sr-bar { height: 6px; border-radius: 6px; background: var(--border); overflow: hidden; max-width: 260px; margin: 0 auto 18px; }
+  .sr-bar i { display: block; height: 100%; background: var(--gold); width: 100%; transition: width .25s linear; }
+  .sr-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .sr-row button { min-width: 130px; }
+  .sr-spinner { width: 46px; height: 46px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; margin: 0 auto; animation: srSpin 1s linear infinite; }
+  @keyframes srSpin { to { transform: rotate(360deg); } }
+  .sr-tip { font-size: .82rem; color: var(--muted); min-height: 2.4em; }
+
+  /* ---------- In-call ---------- */
+  .call { background: linear-gradient(165deg, #14162b 0%, #232750 100%); color: #fff; border-radius: 22px; padding: 18px 16px 16px; box-shadow: 0 24px 50px -24px rgba(20,22,43,.8); position: relative; overflow: hidden; }
+  .call-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .call-status { font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; color: #ffffffaa; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
+  .call-status i { width: 8px; height: 8px; border-radius: 50%; background: #2ee27f; display: inline-block; }
+  .call-status.bad i { background: #ff8a4c; animation: srPing 1.2s infinite; }
+  .call-timer { font-family: var(--mono); font-weight: 700; font-size: 2.3rem; letter-spacing: -.02em; text-align: center; margin: 8px 0 2px; font-variant-numeric: tabular-nums; }
+  .call-timer.low { color: #ff8a4c; }
+  .call-track { height: 6px; border-radius: 6px; background: #ffffff1f; position: relative; margin: 6px 4px 16px; }
+  .call-track .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px; background: linear-gradient(90deg, #e7b54a, #f3d27f); width: 0; }
+  .call-track .mid { position: absolute; left: 50%; top: -5px; width: 2px; height: 16px; background: #ffffff77; border-radius: 2px; }
+  .call-track .mid::after { content: 'swap'; position: absolute; top: 18px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: .58rem; letter-spacing: .1em; color: #ffffff88; }
+
+  .peers { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 26px 0 14px; }
+  .peer { background: #ffffff0f; border: 1px solid #ffffff1a; border-radius: 16px; padding: 14px 8px 12px; text-align: center; position: relative; min-width: 0; }
+  .peer .ring { --lvl: 0; width: 66px; height: 66px; margin: 0 auto 8px; border-radius: 50%; padding: 3px; background: conic-gradient(var(--gold) calc(var(--lvl) * 100%), #ffffff25 0); transition: background .08s linear; }
+  .peer .ring .sr-avatar { width: 100%; height: 100%; box-shadow: none; font-size: 1.15rem; }
+  .peer .nm { font-size: .84rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .peer .role { display: inline-block; margin-top: 6px; font-family: var(--mono); font-size: .6rem; letter-spacing: .12em; padding: 3px 8px; border-radius: 999px; background: #ffffff1a; color: #ffffffcc; }
+  .peer .role.ex { background: var(--gold); color: var(--navy); }
+  .peer .muted { position: absolute; top: 8px; right: 10px; font-size: .9rem; display: none; }
+  .peer.is-muted .muted { display: block; }
+
+  .rolebar { text-align: center; font-size: .86rem; color: #ffffffcc; margin: 0 0 12px; }
+  .rolebar b { color: var(--gold); }
+
+  .prompt { background: #fff; color: var(--ink); border-radius: 16px; padding: 14px 14px 12px; }
+  .prompt h4 { margin: 0 0 8px; font-family: var(--display); font-size: .98rem; }
+  .ptabs { display: flex; gap: 6px; margin-bottom: 10px; }
+  .ptab { flex: 1; padding: 8px 4px; font-size: .78rem; font-family: var(--mono); font-weight: 700; border-radius: 10px; background: var(--surface-2); color: var(--ink-soft); border: 1px solid var(--border); box-shadow: none; }
+  .ptab:hover { background: var(--surface-2); box-shadow: none; border-color: var(--ink); }
+  .ptab.on { background: var(--navy); color: var(--gold); border-color: var(--navy); }
+  .psel { width: 100%; padding: 9px 10px; border: 1px solid var(--border); border-radius: 10px; font-family: var(--body); font-size: .88rem; margin-bottom: 10px; background: #fff; }
+  .qcard { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+  .qcard .qn { font-family: var(--mono); font-size: .66rem; letter-spacing: .12em; color: var(--muted); text-transform: uppercase; }
+  .qcard .qt { font-family: var(--display); font-weight: 600; font-size: 1.12rem; line-height: 1.35; margin: 6px 0 10px; }
+  .qnav { display: flex; gap: 8px; }
+  .qnav button { flex: 1; padding: 9px 10px; font-size: .85rem; }
+  .cue ul { margin: 6px 0 6px 18px; padding: 0; } .cue li { margin: 3px 0; }
+  .cue .yc { font-family: var(--mono); font-size: .66rem; letter-spacing: .12em; color: var(--muted); }
+  .rounding { margin-top: 10px; font-size: .84rem; color: var(--ink-soft); }
+  .rounding b { color: var(--ink); }
+  .ptip { font-size: .76rem; color: var(--muted); margin-top: 10px; }
+  .prep { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+  .prep .clock { font-family: var(--mono); font-weight: 700; font-size: 1.1rem; }
+
+  .controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .cbtn { padding: 12px 6px; border-radius: 14px; font-size: .82rem; background: #ffffff14; color: #fff; border: 1px solid #ffffff22; box-shadow: none; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .cbtn:hover { background: #ffffff22; box-shadow: none; }
+  .cbtn span { font-size: 1.15rem; }
+  .cbtn.on { background: #fff; color: var(--navy); }
+  .cbtn.end { background: #e5484d; border-color: #e5484d; }
+  .cbtn.end:hover { background: #cf3a3f; }
+
+  .swap-overlay { position: absolute; inset: 0; background: #14162bee; display: none; align-items: center; justify-content: center; flex-direction: column; text-align: center; z-index: 5; padding: 20px; }
+  .swap-overlay.on { display: flex; animation: srIn .3s ease both; }
+  .swap-overlay .big { font-size: 3rem; } .swap-overlay h3 { font-family: var(--display); font-size: 1.6rem; margin: 8px 0 4px; } .swap-overlay p { color: #ffffffcc; margin: 0; }
+  .sound-btn { display: none; margin: 10px auto 0; }
+  .sound-btn.on { display: block; }
+
+  /* Modal */
+  .sr-modal { position: fixed; inset: 0; background: #14162b99; display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
+  .sr-modal.on { display: flex; }
+  .sr-sheet { background: #fff; border-radius: 18px; padding: 20px; width: 100%; max-width: 420px; }
+  .sr-sheet h3 { margin: 0 0 4px; font-family: var(--display); }
+  .sr-sheet p { margin: 0 0 12px; color: var(--ink-soft); font-size: .86rem; }
+  .sr-opt { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 8px; cursor: pointer; font-size: .88rem; }
+  .sr-opt input { width: auto; }
+  .sr-sheet textarea { width: 100%; min-height: 64px; padding: 9px 10px; border: 1px solid var(--border); border-radius: 10px; font-family: var(--body); font-size: .86rem; margin: 4px 0 12px; }
+
+  .sr-summary { font-family: var(--mono); font-size: 2rem; font-weight: 700; margin: 6px 0 2px; }
+  @media (max-width: 480px) { .sr-stat .v { font-size: 1.05rem; } .call-timer { font-size: 2rem; } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div id="content" style="display:none;">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">IELTS <span>MARATHON</span></div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <a href="index.html" id="back-link" style="font-family:var(--mono); font-size:0.82rem; font-weight:600; color:var(--accent); text-decoration:none;">← Board</a>
+        <button class="ghost" id="logout-btn" style="padding:7px 14px;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="sr-wrap">
+
+    <!-- LOADING -->
+    <div class="screen on" id="s-loading"><div class="sr-center"><div class="sr-spinner"></div><h2>Opening the Speaking Room…</h2></div></div>
+
+    <!-- BLOCKED / CLOSED / LOCKED -->
+    <div class="screen" id="s-blocked"><div class="sr-center">
+      <div style="font-size:3rem" id="blk-emoji">🔒</div>
+      <h2 id="blk-title"></h2>
+      <p id="blk-text"></p>
+      <div class="sr-row"><a class="btn" id="blk-cta" href="index.html" style="display:none; text-decoration:none; padding:12px 22px;">Back to board</a></div>
+    </div></div>
+
+    <!-- LOBBY -->
+    <div class="screen" id="s-lobby">
+      <section class="sr-hero">
+        <div class="eyebrow">Speaking Room · <span id="lb-level"></span></div>
+        <h1>Talk it out with a real partner</h1>
+        <p class="sr-sub">You finished Day <b id="lb-day"></b> — the room is open. Get matched with someone at your level and practise a real IELTS speaking test.</p>
+      </section>
+      <div class="sr-stats">
+        <div class="sr-stat"><div class="k">Open daily</div><div class="v"><span id="lb-hours"></span></div></div>
+        <div class="sr-stat"><div class="k">Time left</div><div class="v" id="lb-left"></div></div>
+        <div class="sr-stat"><div class="k">In the room</div><div class="v live" id="lb-online"></div></div>
+      </div>
+      <div class="sr-warn" id="lb-nomic" style="display:none;"></div>
+      <div class="sr-card">
+        <h3>How it works</h3>
+        <ol class="sr-steps">
+          <li><span class="n">1</span><div><b>Match.</b> We find someone at your level who is here right now. You both accept.</div></li>
+          <li><span class="n">2</span><div><b>Take turns.</b> One of you is the <b>examiner</b> (reads the questions), the other the <b>candidate</b>. Roles swap automatically at half time.</div></li>
+          <li><span class="n">3</span><div><b>Up to 15 minutes a day</b> in total. Pick Part 1, Part 2 or Part 3 topics during the call.</div></li>
+        </ol>
+      </div>
+      <div class="sr-card">
+        <h3>Suggested for Day <span id="lb-day2"></span></h3>
+        <div class="sr-chips" id="lb-chips"></div>
+      </div>
+      <div class="sr-note">🛡️ Be kind and keep it about English. <b>Don’t share</b> phone numbers, Telegram usernames or your address. Calls are never recorded, but mentors can see who spoke with whom. Anything wrong? Use the <b>Report</b> button.</div>
+      <button class="sr-cta" id="btn-find"><span class="mic">🎙️</span> Find a partner</button>
+    </div>
+
+    <!-- SEARCHING -->
+    <div class="screen" id="s-searching"><div class="sr-center">
+      <div class="sr-rings"><span></span><span></span><span></span><b>🎙️</b></div>
+      <h2>Looking for a partner…</h2>
+      <p>Searching for someone at your level (<span id="se-level"></span>). <span id="se-online"></span></p>
+      <div class="sr-tip" id="se-tip"></div>
+      <div class="sr-row" style="margin-top:14px"><button class="ghost" id="btn-cancel-search">Cancel</button></div>
+    </div></div>
+
+    <!-- PROPOSAL -->
+    <div class="screen" id="s-proposal"><div class="sr-center">
+      <div class="sr-avatar" id="pr-avatar"></div>
+      <h2 id="pr-name"></h2>
+      <p id="pr-text">is ready to practise with you.</p>
+      <div class="sr-bar"><i id="pr-bar"></i></div>
+      <div class="sr-row">
+        <button id="btn-accept" style="background:var(--good);">✓ Accept</button>
+        <button class="ghost" id="btn-decline">Decline</button>
+      </div>
+    </div></div>
+
+    <!-- CONNECTING -->
+    <div class="screen" id="s-connecting"><div class="sr-center">
+      <div class="sr-spinner"></div>
+      <h2>Connecting audio…</h2>
+      <p id="cn-text">Setting up a private voice connection with your partner.</p>
+      <div class="sr-row"><button class="ghost" id="btn-cancel-connect">Cancel</button></div>
+    </div></div>
+
+    <!-- CALL -->
+    <div class="screen" id="s-call">
+      <div class="call">
+        <div class="swap-overlay" id="swap-overlay"><div class="big">🔄</div><h3 id="swap-title">Swap roles!</h3><p id="swap-text"></p></div>
+        <div class="call-top">
+          <div class="call-status" id="call-status"><i></i><span id="call-status-text">Connected</span></div>
+          <div class="call-status" id="call-part-label"></div>
+        </div>
+        <div class="call-timer" id="call-timer">15:00</div>
+        <div class="call-track"><div class="fill" id="call-fill"></div><div class="mid"></div></div>
+
+        <div class="peers">
+          <div class="peer" id="peer-me"><div class="ring" id="ring-me"><div class="sr-avatar" id="av-me"></div></div><div class="nm">You</div><div class="role" id="role-me"></div></div>
+          <div class="peer" id="peer-them"><span class="muted">🔇</span><div class="ring" id="ring-them"><div class="sr-avatar" id="av-them"></div></div><div class="nm" id="nm-them"></div><div class="role" id="role-them"></div></div>
+        </div>
+
+        <div class="rolebar" id="rolebar"></div>
+        <div class="prompt" id="prompt"></div>
+        <button class="ghost sound-btn" id="btn-sound" style="color:#fff; border-color:#ffffff55;">🔈 Tap to enable sound</button>
+
+        <div class="controls">
+          <button class="cbtn" id="btn-mute"><span>🎙️</span>Mute</button>
+          <button class="cbtn" id="btn-report"><span>🚩</span>Report</button>
+          <button class="cbtn end" id="btn-end"><span>⏹️</span>End call</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENDED -->
+    <div class="screen" id="s-ended"><div class="sr-center">
+      <div style="font-size:3rem">🎉</div>
+      <h2 id="en-title">Nice work!</h2>
+      <div class="sr-summary" id="en-time">0:00</div>
+      <p id="en-text"></p>
+      <div class="sr-row">
+        <button id="btn-again" style="display:none;">🎙️ Find another partner</button>
+        <a class="btn ghost" href="index.html" style="text-decoration:none; padding:12px 22px; border:1px solid var(--border); border-radius:12px; color:var(--ink); background:transparent;">Back to board</a>
+      </div>
+      <p style="margin-top:16px"><a href="#" id="link-report-last" style="font-size:.82rem; color:var(--muted);">Something went wrong? Report <span id="en-partner"></span></a></p>
+    </div></div>
+
+  </div>
+
+  <audio id="remote-audio" autoplay playsinline></audio>
+
+  <!-- REPORT MODAL -->
+  <div class="sr-modal" id="report-modal">
+    <div class="sr-sheet">
+      <h3>Report your partner</h3>
+      <p>The call will end and your partner will be blocked from the room until a mentor has reviewed this.</p>
+      <label class="sr-opt"><input type="radio" name="rp" value="inappropriate" checked> Inappropriate language or content</label>
+      <label class="sr-opt"><input type="radio" name="rp" value="harassment"> Harassment or rude behaviour</label>
+      <label class="sr-opt"><input type="radio" name="rp" value="not_speaking"> Not speaking / not taking part</label>
+      <label class="sr-opt"><input type="radio" name="rp" value="other"> Something else</label>
+      <textarea id="rp-details" maxlength="300" placeholder="Optional: tell the mentor what happened (max 300 characters)"></textarea>
+      <div class="sr-row"><button id="rp-send" style="background:#e5484d;">Send report</button><button class="ghost" id="rp-cancel">Cancel</button></div>
+    </div>
+  </div>
+</div>
+
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+<script src="speaking-topics.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  const $ = id => document.getElementById(id);
+  const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const pad = n => String(n).padStart(2, '0');
+  const fmtClock = s => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + pad(s % 60); };
+
+  let sb, me, myProfile, myLevel, latestDay = null;
+  let offset = 0;                    // server clock minus this device's clock (ms)
+  let lastState = null;
+  let screen = 'loading';
+  let wantMatch = false;
+  let loopTimer = null, loopBusy = false;
+  let micStream = null, micMuted = false;
+  let sess = null;                   // current session object from the server
+  let lastSessionId = null, lastPartner = null;
+  let iceServers = [];
+  const rtc = { pc: null, chan: null, offerId: null, myNonce: null, peerNonce: null, pending: [], helloTimer: null,
+                connected: false, attempts: 0, offerTimer: null, lostTimer: null, remoteStream: null };
+  let clockTimer = null, meterRaf = null, audioCtx = null, analyserMe = null, analyserThem = null;
+  let announcedSwap = false, announcedLow = false, wakeLock = null;
+  let topic = { part: 1, id: null, qi: 0 };      // examiner's current selection
+  let seenTopic = null;                            // what the examiner told us (candidate view)
+  let prep = { timer: null, phase: null, left: 0 };
+  let searchStartedAt = 0;
+
+  // ---------------------------------------------------------------- screens
+  function show(name) {
+    screen = name;
+    if (name === 'lobby' || name === 'blocked' || name === 'ended') stopMic();   // never leave the mic open on idle screens
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === 's-' + name));
+    window.scrollTo({ top: 0 });
+  }
+
+  function stopMic() { if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; analyserMe = null; } }
+  let stickyBlocked = false;
+  function blocked(emoji, title, text, cta) {
+    $('blk-emoji').textContent = emoji; $('blk-title').textContent = title; $('blk-text').textContent = text;
+    const b = $('blk-cta'); b.style.display = cta ? 'inline-block' : 'none'; if (cta) { b.textContent = cta.label; b.href = cta.href; }
+    show('blocked');
+  }
+
+  // ------------------------------------------------------------ environment
+  const UA = navigator.userAgent || '';
+  const inAppBrowser = /Instagram|FBAN|FBAV|FB_IAB|Line\/|TikTok|musical_ly|BytedanceWebview|Snapchat|Telegram/i.test(UA) || !!window.TelegramWebviewProxy || !!window.TelegramWebview;
+  const noRtc = !(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) || !window.RTCPeerConnection;
+
+  // --------------------------------------------------------------- start-up
+  requireAuth(async function (profile, user) {
+    if (profile.role !== 'student') { window.location.href = profile.role === 'mentor' ? 'mentor-dashboard.html' : 'index.html'; return; }
+    if (profile.challenge !== '2.0' || !profile.level) { blocked('🎙️', 'Speaking Room is for Challenge 2.0', 'This room is only open to Challenge 2.0 students.', { label: 'Back to board', href: 'index.html' }); return; }
+    sb = getSupabaseClient(); me = user; myProfile = profile; myLevel = profile.level;
+    $('lb-level').textContent = cap(myLevel); $('se-level').textContent = cap(myLevel);
+
+    // Must have finished the newest live day (mock days have no tasks and are skipped).
+    try {
+      const cfg = trackConfigFor(profile);
+      const live = await getLiveDays(cfg.folder, cfg.totalDays);
+      const nonMock = live.filter(d => !cfg.mockDays.includes(d)).sort((a, b) => b - a);
+      latestDay = nonMock[0] || null;
+      const done = await getCompletedDaysForStudent(user.id, `2.0-${profile.level}`, cfg.totalDays);
+      if (latestDay && !done.has(latestDay)) {
+        blocked('📘', `Finish Day ${latestDay} to unlock`, `The Speaking Room opens once you’ve completed all of Day ${latestDay}. Finish your tasks, then come back and practise with a partner.`, { label: 'Go to Day ' + latestDay, href: 'index.html' });
+        return;
+      }
+    } catch (e) { console.error('eligibility check', e); }
+
+    // Pick up any call already in progress (e.g. after a refresh) before deciding what to show.
+    const st = await tick(false);
+    if (!st) { blocked('⚠️', 'Couldn’t reach the room', 'Check your connection and refresh the page.'); return; }
+    if (st.session) { await applyState(st); scheduleLoop(); return; }
+    if (!st.allowed) { showGate(st); scheduleLoop(); return; }
+    showLobby(st);
+    scheduleLoop();
+  });
+
+  const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+
+  // ------------------------------------------------------------- server tick
+  async function tick(want) {
+    const t0 = Date.now();
+    const { data, error } = await sb.rpc('speaking_tick', { p_want_match: !!want });
+    const t1 = Date.now();
+    if (error || !data) { console.error('speaking_tick', error); return null; }
+    if (data.server_now) {
+      const off = new Date(data.server_now).getTime() - (t0 + t1) / 2;
+      if (t1 - t0 < 1500) offset = off;
+    }
+    lastState = data;
+    return data;
+  }
+  const serverMs = () => Date.now() + offset;
+
+  function intervalFor() {
+    switch (screen) {
+      case 'searching': return 3000;
+      case 'proposal': return 2000;
+      case 'connecting': return 4000;
+      case 'call': return 12000;
+      case 'lobby': return 12000;
+      case 'blocked': return 30000;
+      default: return 15000;
+    }
+  }
+  function scheduleLoop() {
+    clearTimeout(loopTimer);
+    loopTimer = setTimeout(async () => {
+      if (loopBusy || (document.hidden && ['lobby', 'ended', 'blocked'].includes(screen))) { scheduleLoop(); return; }
+      loopBusy = true;
+      try { const st = await tick(wantMatch && (screen === 'searching')); if (st) await applyState(st); } catch (e) { console.error(e); }
+      loopBusy = false; scheduleLoop();
+    }, intervalFor());
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && screen !== 'loading') { clearTimeout(loopTimer); loopTimer = setTimeout(scheduleLoop, 50); } });
+
+  // ------------------------------------------------------- applying server state
+  async function applyState(st) {
+    if (st.session) {
+      const s = st.session; iceServers = st.ice_servers || iceServers;
+      const prevId = sess && sess.id; sess = s; lastSessionId = s.id; lastPartner = s.partner;
+      if (s.status === 'proposed') {
+        if (screen !== 'proposal') showProposal(s);
+        updateProposal(s);
+      } else if (s.status === 'accepted') {
+        if (screen !== 'connecting' && screen !== 'call') await startConnection();
+      } else if (s.status === 'active') {
+        if (screen !== 'call' && screen !== 'connecting') await startConnection();
+        else if (screen === 'call') renderRoles();
+      }
+      return;
+    }
+    // No live session on the server
+    if (screen === 'call' || screen === 'connecting' || screen === 'proposal') {
+      const was = screen;
+      await teardownCall({ keepMic: was !== 'call' });
+      if (was === 'call') { wantMatch = false; await showEnded(lastSessionId); return; }
+      // proposal declined / timed out, or the connection was cancelled: keep looking if we were searching
+      if (wantMatch) { startSearching(true); return; }
+      showLobby(st); return;
+    }
+    if (!st.allowed) { showGate(st); return; }
+    if ((screen === 'blocked' && !stickyBlocked) || screen === 'loading') { showLobby(st); return; }
+    if (screen === 'lobby') updateLobbyStats(st);
+    if (screen === 'searching') { $('se-online').textContent = st.online > 0 ? `${st.online} other${st.online === 1 ? '' : 's'} in the room right now.` : 'You’re the first one here — hang on!'; }
+  }
+
+  function showGate(st) {
+    const h = st.open_hour, c = st.close_hour;
+    const hours = `${pad(h)}:00–${pad(c === 24 ? 0 : c)}:00`;
+    switch (st.reason) {
+      case 'closed': {
+        const nowT = tashkentParts(serverMs());
+        const before = nowT.hour < h;
+        blocked('🌙', 'The room is closed right now', `The Speaking Room is open every day ${hours} (Tashkent time) so there are always people to talk to. It’s ${pad(nowT.hour)}:${pad(nowT.minute)} now — it opens ${before ? 'today' : 'tomorrow'} at ${pad(h)}:00.`, { label: 'Back to board', href: 'index.html' }); break; }
+      case 'no_time':
+        blocked('✅', 'You’ve used today’s speaking time', 'Well done — you’ve had your daily practice. The room resets tomorrow.', { label: 'Back to board', href: 'index.html' }); break;
+      case 'banned':
+        blocked('⏸️', 'Speaking Room paused for your account', 'A report is waiting to be reviewed by a mentor. Once it has been checked, you’ll be able to join again. Please talk to your mentor if you have questions.', { label: 'Back to board', href: 'index.html' }); break;
+      case 'disabled':
+        blocked('🛠️', 'The Speaking Room is switched off', 'It isn’t available at the moment. Check back soon.', { label: 'Back to board', href: 'index.html' }); break;
+      default:
+        blocked('🔒', 'Not available', 'The Speaking Room isn’t available for this account.', { label: 'Back to board', href: 'index.html' });
+    }
+  }
+  function tashkentParts(ms) {
+    const p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Tashkent', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date(ms));
+    return { hour: +p.find(x => x.type === 'hour').value % 24, minute: +p.find(x => x.type === 'minute').value };
+  }
+
+  // ------------------------------------------------------------------- lobby
+  function showLobby(st) {
+    $('lb-day').textContent = latestDay || ''; $('lb-day2').textContent = latestDay || '';
+    const sg = speakingSuggestions(latestDay || 1);
+    const chip = (lab, t) => `<span class="sr-chip"><i>${lab}</i>${esc(t.title)}</span>`;
+    $('lb-chips').innerHTML = sg.part1.map(t => chip('PART 1', t)).join('') + sg.part2.map(t => chip('PART 2', t)).join('') + sg.part3.map(t => chip('PART 3', t)).join('');
+    const nm = $('lb-nomic');
+    if (noRtc) {
+      nm.style.display = 'block';
+      nm.innerHTML = '⚠️ <b>This browser can’t do voice calls.</b> Open this page in <b>Chrome</b> or <b>Safari</b> (tap ⋯ or the share icon → “Open in browser”).';
+      $('btn-find').disabled = true;
+    } else if (inAppBrowser) {
+      nm.style.display = 'block';
+      nm.innerHTML = '⚠️ You seem to be inside an app’s built-in browser (Telegram/Instagram…). The microphone often <b>doesn’t work there</b>. If it fails, open this page in Chrome or Safari.';
+    }
+    updateLobbyStats(st);
+    show('lobby');
+  }
+  function updateLobbyStats(st) {
+    const h = st.open_hour, c = st.close_hour;
+    $('lb-hours').innerHTML = `${pad(h)}–${pad(c === 24 ? 0 : c)}<small>Tashkent time</small>`;
+    $('lb-left').innerHTML = fmtClock(st.remaining_seconds) + '<small>of ' + Math.round(st.daily_seconds / 60) + ' min today</small>';
+    $('lb-online').innerHTML = st.online > 0 ? `${st.online} online<small>at your level</small>` : 'Just you<small>be the first!</small>';
+  }
+
+  // Mic permission must be requested from a tap.
+  async function getMic() {
+    if (micStream && micStream.getAudioTracks().some(t => t.readyState === 'live')) return micStream;
+    micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }, video: false });
+    return micStream;
+  }
+  function unlockAudio() {
+    try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (e) {}
+    try { const a = $('remote-audio'); const p = a.play(); if (p && p.catch) p.catch(() => {}); } catch (e) {}
+  }
+
+  $('btn-find').addEventListener('click', async () => {
+    unlockAudio();
+    const btn = $('btn-find'); btn.disabled = true;
+    try { await getMic(); }
+    catch (e) {
+      console.error('mic', e); btn.disabled = false;
+      const nm = $('lb-nomic'); nm.style.display = 'block';
+      nm.innerHTML = '🎙️ <b>We couldn’t use your microphone.</b> Tap the lock/mic icon in the address bar, allow the microphone for this site, then try again. (In Telegram/Instagram’s built-in browser it can’t work — open the page in Chrome or Safari.)';
+      return;
+    }
+    btn.disabled = false;
+    startSearching(false);
+  });
+
+  // --------------------------------------------------------------- searching
+  const TIPS = ['Tip: speak in full sentences, not one-word answers.', 'Tip: if you don’t know a word, explain it in other words — examiners love that.', 'Tip: use headphones so your partner doesn’t hear an echo.', 'Tip: Part 2 is 1 minute to prepare, then up to 2 minutes of talking.', 'Tip: find a quiet spot — background noise makes it hard to practise.'];
+  let tipTimer = null;
+  async function startSearching(rematch) {
+    wantMatch = true; searchStartedAt = Date.now();
+    show('searching');
+    $('se-online').textContent = '';
+    let i = Math.floor(Math.random() * TIPS.length);
+    $('se-tip').textContent = TIPS[i];
+    clearInterval(tipTimer); tipTimer = setInterval(() => { i = (i + 1) % TIPS.length; $('se-tip').textContent = TIPS[i]; }, 6000);
+    const st = await tick(true); if (st) await applyState(st);
+    clearTimeout(loopTimer); scheduleLoop();
+  }
+  $('btn-cancel-search').addEventListener('click', async () => {
+    wantMatch = false; clearInterval(tipTimer);
+    await sb.rpc('speaking_leave');
+    const st = await tick(false); if (st) { st.session ? await applyState(st) : (st.allowed ? showLobby(st) : showGate(st)); }
+  });
+
+  // ---------------------------------------------------------------- proposal
+  let proposalCreated = 0;
+  function showProposal(s) {
+    clearInterval(tipTimer);
+    proposalCreated = new Date(s.created_at).getTime();
+    const p = s.partner || {};
+    $('pr-name').textContent = p.name || 'A student';
+    $('pr-avatar').innerHTML = p.avatar ? `<img src="${esc(p.avatar)}" alt="" onerror="this.parentNode.textContent='${esc(initialsFor(p.name || '?'))}'">` : esc(initialsFor(p.name || '?'));
+    $('btn-accept').disabled = false; $('btn-decline').disabled = false; $('btn-accept').style.display = '';
+    $('pr-text').textContent = 'is ready to practise with you.';
+    show('proposal');
+    clearInterval(showProposal.t);
+    showProposal.t = setInterval(() => { const left = Math.max(0, 1 - (serverMs() - proposalCreated) / 30000); $('pr-bar').style.width = (left * 100) + '%'; }, 200);
+  }
+  function updateProposal(s) {
+    const mineAccepted = s.my_slot === 'a' ? s.a_accepted : s.b_accepted;
+    if (mineAccepted) { $('btn-accept').style.display = 'none'; $('pr-text').textContent = 'Waiting for ' + ((s.partner && s.partner.name) || 'your partner') + ' to accept…'; }
+  }
+  $('btn-accept').addEventListener('click', async () => {
+    unlockAudio(); $('btn-accept').disabled = true;
+    try { await getMic(); } catch (e) { alert('Please allow the microphone to continue.'); $('btn-accept').disabled = false; return; }
+    const { data, error } = await sb.rpc('speaking_respond', { p_session: sess.id, p_accept: true });
+    if (error) { console.error(error); $('btn-accept').disabled = false; return; }
+    sess = Object.assign({}, sess, data); updateProposal(sess);
+    if (data.status === 'accepted') await startConnection();
+  });
+  $('btn-decline').addEventListener('click', async () => {
+    clearInterval(showProposal.t);
+    await sb.rpc('speaking_respond', { p_session: sess.id, p_accept: false });
+    wantMatch = false; sess = null;
+    const st = await tick(false); if (st) (st.allowed ? showLobby(st) : showGate(st));
+  });
+
+  // --------------------------------------------------------------- WebRTC
+  function sendSig(msg) { if (rtc.chan) rtc.chan.send({ type: 'broadcast', event: 'sig', payload: Object.assign({ from: sess.my_slot }, msg) }); }
+  const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now());
+
+  async function startConnection() {
+    if (rtc.chan) return;                       // already connecting
+    clearInterval(showProposal.t);
+    show('connecting');
+    $('cn-text').textContent = 'Setting up a private voice connection with your partner.';
+    try { await getMic(); }
+    catch (e) { showResumeButton(); return; }
+    rtc.myNonce = uuid(); rtc.peerNonce = null; rtc.connected = false; rtc.attempts = 0; rtc.pending = [];
+    rtc.chan = sb.channel('speaking-' + sess.id, { config: { broadcast: { self: false } } });
+    rtc.chan.on('broadcast', { event: 'sig' }, ({ payload }) => onSignal(payload));
+    rtc.chan.subscribe(status => {
+      if (status === 'SUBSCRIBED') {
+        sayHello(); clearInterval(rtc.helloTimer); rtc.helloTimer = setInterval(() => { if (!rtc.connected) sayHello(); }, 1500);
+      }
+    });
+    setTimeout(() => { if (screen === 'connecting') $('cn-text').textContent = 'Taking a bit longer than usual — this can happen on mobile data. Please stay on this page.'; }, 12000);
+    clearTimeout(rtc.giveUp);
+    rtc.giveUp = setTimeout(() => { if (!rtc.connected && rtc.chan) failConnection('We couldn’t connect the audio.'); }, 45000);
+  }
+  function showResumeButton() {
+    $('cn-text').innerHTML = 'Tap below to turn your microphone back on and rejoin the call.<br><br><button id="btn-rejoin">🎙️ Rejoin call</button>';
+    $('btn-rejoin').addEventListener('click', async () => { unlockAudio(); try { await getMic(); } catch (e) { return; } rtc.chan = null; startConnection(); });
+  }
+  const sayHello = () => sendSig({ t: 'hello', nonce: rtc.myNonce });
+
+  function closePc() { if (rtc.pc) { try { rtc.pc.onicecandidate = rtc.pc.ontrack = rtc.pc.oniceconnectionstatechange = null; rtc.pc.close(); } catch (e) {} rtc.pc = null; } }
+  function newPc() {
+    closePc();
+    const pc = new RTCPeerConnection({ iceServers: iceServers && iceServers.length ? iceServers : [{ urls: 'stun:stun.l.google.com:19302' }] });
+    const id = rtc.offerId;
+    pc.onicecandidate = e => { if (e.candidate) sendSig({ t: 'ice', offerId: id, c: e.candidate.toJSON ? e.candidate.toJSON() : e.candidate }); };
+    pc.ontrack = e => { rtc.remoteStream = e.streams[0] || new MediaStream([e.track]); attachRemote(); };
+    pc.oniceconnectionstatechange = () => onIceState(pc);
+    micStream.getAudioTracks().forEach(t => pc.addTrack(t, micStream));
+    rtc.pc = pc; return pc;
+  }
+  async function makeOffer() {
+    rtc.attempts++;
+    rtc.offerId = uuid(); rtc.pending = [];
+    const pc = newPc();
+    const offer = await pc.createOffer({ offerToReceiveAudio: true });
+    await pc.setLocalDescription(offer);
+    sendSig({ t: 'offer', offerId: rtc.offerId, sdp: { type: pc.localDescription.type, sdp: pc.localDescription.sdp } });
+    clearTimeout(rtc.offerTimer);
+    rtc.offerTimer = setTimeout(() => { if (!rtc.connected && rtc.chan && sess.my_slot === 'a') retryOffer(); }, 9000);
+  }
+  function retryOffer() {
+    if (rtc.attempts >= 4) { rtc.connected ? endCall('connection_lost', 'The connection dropped and couldn’t be restored.') : failConnection('We couldn’t connect the audio.'); return; }
+    makeOffer().catch(e => console.error('retry offer', e));
+  }
+  async function onOffer(m) {
+    rtc.offerId = m.offerId; rtc.pending = rtc.pending.filter(x => x.offerId === m.offerId);
+    const pc = newPc();
+    await pc.setRemoteDescription(m.sdp);
+    const answer = await pc.createAnswer(); await pc.setLocalDescription(answer);
+    sendSig({ t: 'answer', offerId: m.offerId, sdp: { type: pc.localDescription.type, sdp: pc.localDescription.sdp } });
+    await flushIce();
+  }
+  async function flushIce() {
+    if (!rtc.pc || !rtc.pc.remoteDescription) return;
+    const keep = [];
+    for (const x of rtc.pending) { if (x.offerId === rtc.offerId) { try { await rtc.pc.addIceCandidate(x.c); } catch (e) {} } else keep.push(x); }
+    rtc.pending = keep;
+  }
+  async function onSignal(m) {
+    if (!m || !sess || m.from === sess.my_slot) return;
+    try {
+      switch (m.t) {
+        case 'hello':
+          if (m.nonce !== rtc.peerNonce) {
+            rtc.peerNonce = m.nonce;
+            if (sess.my_slot === 'a') { await makeOffer(); } else { sayHello(); }
+            if (rtc.connected && sess.started_at && myRole() === 'examiner' && topic.id) setTimeout(announceTopic, 1500);
+          }
+          break;
+        case 'offer': if (sess.my_slot === 'b') await onOffer(m); break;
+        case 'answer':
+          if (sess.my_slot === 'a' && m.offerId === rtc.offerId && rtc.pc && !rtc.pc.remoteDescription) { await rtc.pc.setRemoteDescription(m.sdp); await flushIce(); }
+          break;
+        case 'ice':
+          if (rtc.pc && rtc.pc.remoteDescription && m.offerId === rtc.offerId) { try { await rtc.pc.addIceCandidate(m.c); } catch (e) {} }
+          else rtc.pending.push({ offerId: m.offerId, c: m.c });
+          break;
+        case 'topic': seenTopic = m; if (screen === 'call') renderPrompt(); break;
+        case 'mute': $('peer-them').classList.toggle('is-muted', !!m.muted); break;
+        case 'bye': await onPartnerBye(); break;
+      }
+    } catch (e) { console.error('signal', m && m.t, e); }
+  }
+  function onIceState(pc) {
+    if (pc !== rtc.pc) return;
+    const st = pc.iceConnectionState;
+    if (st === 'connected' || st === 'completed') { clearTimeout(rtc.lostTimer); rtc.attempts = 0; setCallStatus(true); if (!rtc.connected) onConnected(); }
+    else if (st === 'disconnected') { setCallStatus(false); clearTimeout(rtc.lostTimer); rtc.lostTimer = setTimeout(() => recover(), 6000); }
+    else if (st === 'failed') { setCallStatus(false); recover(); }
+  }
+  function recover() {
+    if (!rtc.chan) return;
+    if (sess.my_slot === 'a') { retryOffer(); }
+    clearTimeout(rtc.lostTimer);
+    rtc.lostTimer = setTimeout(() => { if (rtc.pc && !['connected', 'completed'].includes(rtc.pc.iceConnectionState)) endCall('connection_lost', 'The connection dropped and couldn’t be restored.'); }, 20000);
+  }
+  async function onConnected() {
+    rtc.connected = true; clearInterval(rtc.helloTimer); clearTimeout(rtc.offerTimer); clearTimeout(rtc.giveUp);
+    const { data, error } = await sb.rpc('speaking_mark_connected', { p_session: sess.id });
+    if (error || !data) { console.error('mark connected', error); return; }
+    if (data.server_now) offset = new Date(data.server_now).getTime() - Date.now();
+    sess = Object.assign({}, sess, data);
+    if (sess.status !== 'active') { await teardownCall(); const st = await tick(false); if (st) { st.allowed ? showLobby(st) : showGate(st); } return; }
+    enterCall();
+  }
+  function failConnection(msg) {
+    sb.rpc('speaking_end', { p_session: sess.id, p_reason: 'connect_failed' });
+    teardownCall(); wantMatch = false; stickyBlocked = true;
+    blocked('📡', 'Couldn’t connect', msg + ' This usually happens on some mobile networks. Try Wi-Fi, or try again in a minute. No time was used from your daily 15 minutes.', { label: 'Back to room', href: 'speaking-room.html' });
+  }
+  function attachRemote() {
+    const a = $('remote-audio'); a.srcObject = rtc.remoteStream;
+    const p = a.play(); if (p && p.catch) p.catch(() => { $('btn-sound').classList.add('on'); });
+    setupMeters();
+  }
+  $('btn-sound').addEventListener('click', () => { $('remote-audio').play().then(() => $('btn-sound').classList.remove('on')).catch(() => {}); unlockAudio(); });
+  $('btn-cancel-connect').addEventListener('click', () => endCall('cancelled'));
+
+  // ------------------------------------------------------------------- call UI
+  function enterCall() {
+    show('call');
+    announcedSwap = false; announcedLow = false;
+    const p = sess.partner || {};
+    $('nm-them').textContent = p.name || 'Partner';
+    const avOf = (name, url) => url ? `<img src="${esc(url)}" alt="" onerror="this.parentNode.textContent='${esc(initialsFor(name || '?'))}'">` : esc(initialsFor(name || '?'));
+    $('av-me').innerHTML = avOf(myProfile.full_name, myProfile.avatar_url);
+    $('av-them').innerHTML = avOf(p.name, p.avatar);
+    topic = { part: 1, id: null, qi: 0 }; seenTopic = null;
+    renderRoles(); renderPrompt();
+    clearInterval(clockTimer); clockTimer = setInterval(clockTick, 250); clockTick();
+    setupMeters();
+    try { if (navigator.wakeLock) navigator.wakeLock.request('screen').then(w => { wakeLock = w; }).catch(() => {}); } catch (e) {}
+  }
+  function elapsedS() { return (serverMs() - new Date(sess.started_at).getTime()) / 1000; }
+  function myRole() {
+    const first = elapsedS() < sess.max_seconds / 2;                 // first half: slot A examines
+    const examiner = (sess.my_slot === 'a') === first;
+    return examiner ? 'examiner' : 'candidate';
+  }
+  let lastRole = null;
+  function renderRoles() {
+    const r = myRole();
+    $('role-me').textContent = r === 'examiner' ? 'EXAMINER' : 'CANDIDATE'; $('role-me').className = 'role' + (r === 'examiner' ? ' ex' : '');
+    $('role-them').textContent = r === 'examiner' ? 'CANDIDATE' : 'EXAMINER'; $('role-them').className = 'role' + (r === 'examiner' ? '' : ' ex');
+    $('rolebar').innerHTML = r === 'examiner'
+      ? 'You are the <b>examiner</b> — pick a topic and read the questions aloud, one at a time.'
+      : 'You are the <b>candidate</b> — listen and answer as if it were the real test.';
+    if (lastRole !== r) { lastRole = r; renderPrompt(); }
+  }
+  function clockTick() {
+    if (!sess || !sess.started_at) return;
+    const left = sess.max_seconds - elapsedS();
+    $('call-timer').textContent = fmtClock(left);
+    $('call-timer').classList.toggle('low', left <= 60);
+    $('call-fill').style.width = Math.min(100, Math.max(0, (elapsedS() / sess.max_seconds) * 100)) + '%';
+    $('call-part-label').textContent = elapsedS() < sess.max_seconds / 2 ? 'Round 1 of 2' : 'Round 2 of 2';
+    if (!announcedSwap && elapsedS() >= sess.max_seconds / 2) { announcedSwap = true; seenTopic = null; clearInterval(prep.timer); prep = { timer: null, phase: null, left: 0 }; renderRoles(); announceSwap(); }
+    if (!announcedLow && left <= 60 && left > 0) { announcedLow = true; beep(660, .12); }
+    if (left <= 0) { endCall('time_up'); }
+  }
+  function announceSwap() {
+    const r = myRole();
+    $('swap-title').textContent = 'Swap roles!';
+    $('swap-text').textContent = r === 'examiner' ? 'Now YOU are the examiner.' : 'Now YOU are the candidate.';
+    $('swap-overlay').classList.add('on'); beep(880, .15); setTimeout(() => beep(1175, .2), 180);
+    setTimeout(() => $('swap-overlay').classList.remove('on'), 3200);
+  }
+  function setCallStatus(ok) { $('call-status').classList.toggle('bad', !ok); $('call-status-text').textContent = ok ? 'Connected' : 'Reconnecting…'; }
+  function beep(freq, dur) {
+    try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.frequency.value = freq; g.gain.value = .08; o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + dur); } catch (e) {}
+  }
+
+  // Voice-level rings
+  function setupMeters() {
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const mk = stream => { const an = audioCtx.createAnalyser(); an.fftSize = 512; audioCtx.createMediaStreamSource(stream).connect(an); return an; };
+      if (micStream && !analyserMe) analyserMe = mk(micStream);
+      if (rtc.remoteStream && !analyserThem) analyserThem = mk(rtc.remoteStream);
+    } catch (e) { return; }
+    if (meterRaf) return;
+    const buf = new Uint8Array(256);
+    const level = an => { if (!an) return 0; an.getByteTimeDomainData(buf); let s = 0; for (let i = 0; i < buf.length; i++) { const v = (buf[i] - 128) / 128; s += v * v; } return Math.min(1, Math.sqrt(s / buf.length) * 5); };
+    const loop = () => {
+      if (screen !== 'call') { meterRaf = null; return; }
+      $('ring-me').style.setProperty('--lvl', micMuted ? 0 : level(analyserMe).toFixed(2));
+      $('ring-them').style.setProperty('--lvl', level(analyserThem).toFixed(2));
+      meterRaf = requestAnimationFrame(loop);
+    };
+    meterRaf = requestAnimationFrame(loop);
+  }
+
+  // ------------------------------------------------------------ prompt panel
+  const allOf = part => SPEAKING_TOPICS['part' + part];
+  const findTopic = (part, id) => allOf(part).find(t => t.id === id);
+
+  function renderPrompt() {
+    const box = $('prompt');
+    if (!sess || !sess.started_at) return;
+    if (myRole() === 'examiner') renderExaminer(box); else renderCandidate(box);
+  }
+  function renderExaminer(box) {
+    const part = topic.part, list = allOf(part), sg = speakingSuggestions(latestDay || 1)['part' + part] || [];
+    const sgIds = new Set(sg.map(t => t.id));
+    if (!topic.id || !findTopic(part, topic.id)) { topic.id = (sg[0] || list[0]).id; topic.qi = 0; announceTopic(); }
+    const t = findTopic(part, topic.id);
+    const opts = `<optgroup label="Suggested for Day ${latestDay || ''}">${sg.map(x => `<option value="${x.id}" ${x.id === topic.id ? 'selected' : ''}>${esc(x.title)}</option>`).join('')}</optgroup>` +
+      `<optgroup label="All topics">${list.filter(x => !sgIds.has(x.id)).map(x => `<option value="${x.id}" ${x.id === topic.id ? 'selected' : ''}>${esc(x.title)}</option>`).join('')}</optgroup>`;
+    let body;
+    if (part === 2) {
+      body = `<div class="qcard cue"><div class="qn">Cue card — the candidate can see this</div>
+        <div class="qt">${esc(t.cue.prompt)}</div><div class="yc">You should say:</div>
+        <ul>${t.cue.points.map(p => `<li>${esc(p)}</li>`).join('')}</ul><div>${esc(t.cue.ending)}</div></div>
+        <div class="rounding"><b>Say:</b> “You have one minute to prepare. Then talk for one to two minutes.”<br><b>After they finish, ask:</b> ${t.rounding.map(esc).join(' &nbsp;·&nbsp; ')}</div>`;
+    } else {
+      const q = t.questions[topic.qi];
+      body = `<div class="qcard"><div class="qn">Question ${topic.qi + 1} of ${t.questions.length}</div><div class="qt">${esc(q)}</div>
+        <div class="qnav"><button class="ghost" id="q-prev" ${topic.qi === 0 ? 'disabled' : ''}>◀ Previous</button><button id="q-next" ${topic.qi === t.questions.length - 1 ? 'disabled' : ''}>Next ▶</button></div></div>`;
+    }
+    box.innerHTML = `<div class="ptabs">${[1, 2, 3].map(n => `<button class="ptab ${n === part ? 'on' : ''}" data-part="${n}">PART ${n}</button>`).join('')}</div>
+      <select class="psel" id="topic-sel">${opts}</select>${body}
+      <div class="ptip">Read the question aloud, then listen. Don’t interrupt — ask a follow-up like “Why?” if they finish quickly.</div>`;
+    box.querySelectorAll('.ptab').forEach(b => b.addEventListener('click', () => { topic.part = +b.dataset.part; topic.id = null; renderPrompt(); }));
+    $('topic-sel').addEventListener('change', e => { topic.id = e.target.value; topic.qi = 0; announceTopic(); renderPrompt(); });
+    const nx = $('q-next'), pv = $('q-prev');
+    if (nx) nx.addEventListener('click', () => { topic.qi++; renderPrompt(); });
+    if (pv) pv.addEventListener('click', () => { topic.qi--; renderPrompt(); });
+  }
+  function announceTopic() {
+    const t = findTopic(topic.part, topic.id); if (!t) return;
+    sendSig({ t: 'topic', part: topic.part, id: t.id, title: t.title, cue: topic.part === 2 ? t.cue : null });
+  }
+  function renderCandidate(box) {
+    const tp = seenTopic;
+    if (!tp) { box.innerHTML = `<h4>Get ready…</h4><div class="qcard"><div class="qt">The examiner is choosing a topic. Listen carefully to each question, then answer in full sentences.</div></div>`; return; }
+    if (tp.part === 2 && tp.cue) {
+      box.innerHTML = `<h4>Part 2 · ${esc(tp.title)}</h4><div class="qcard cue"><div class="qt">${esc(tp.cue.prompt)}</div><div class="yc">You should say:</div>
+        <ul>${tp.cue.points.map(p => `<li>${esc(p)}</li>`).join('')}</ul><div>${esc(tp.cue.ending)}</div></div>
+        <div class="prep"><button id="btn-prep">⏱ Start 1-min preparation</button><span class="clock" id="prep-clock"></span></div>
+        <div class="ptip">Tip: jot down keywords, not sentences. Then speak for as long as you can (up to 2 minutes).</div>`;
+      $('btn-prep').addEventListener('click', startPrep); paintPrep();
+    } else {
+      box.innerHTML = `<h4>Part ${tp.part} · ${esc(tp.title)}</h4><div class="qcard"><div class="qt">Listen to the examiner’s question, then answer in full sentences. Give reasons and examples.</div></div>`;
+    }
+  }
+  function startPrep() {
+    clearInterval(prep.timer); prep = { timer: null, phase: 'prep', left: 60 };
+    prep.timer = setInterval(() => {
+      prep.left--;
+      if (prep.left <= 0) {
+        if (prep.phase === 'prep') { prep.phase = 'talk'; prep.left = 120; beep(880, .2); } else { clearInterval(prep.timer); prep.phase = 'done'; beep(660, .3); }
+      }
+      paintPrep();
+    }, 1000); paintPrep();
+  }
+  function paintPrep() {
+    const c = $('prep-clock'), b = $('btn-prep'); if (!c) return;
+    if (prep.phase === 'prep') { c.textContent = 'Prepare: ' + fmtClock(prep.left); b.disabled = true; }
+    else if (prep.phase === 'talk') { c.textContent = 'Speak now: ' + fmtClock(prep.left); b.disabled = true; }
+    else if (prep.phase === 'done') { c.textContent = 'Time’s up'; b.disabled = false; b.textContent = '↺ Restart'; }
+    else { c.textContent = ''; }
+  }
+
+  // ---------------------------------------------------------------- controls
+  $('btn-mute').addEventListener('click', () => {
+    micMuted = !micMuted; if (micStream) micStream.getAudioTracks().forEach(t => t.enabled = !micMuted);
+    $('btn-mute').classList.toggle('on', micMuted); $('btn-mute').innerHTML = micMuted ? '<span>🔇</span>Unmute' : '<span>🎙️</span>Mute';
+    sendSig({ t: 'mute', muted: micMuted });
+  });
+  $('btn-end').addEventListener('click', () => { if (confirm('End the call now?')) { sendSig({ t: 'bye' }); endCall('ended'); } });
+
+  async function onPartnerBye() { wantMatch = false; await teardownCall(); await showEnded(lastSessionId, 'Your partner ended the call.'); }
+  async function endCall(reason, msg) {
+    const id = sess && sess.id; wantMatch = false;
+    await teardownCall();
+    if (id) await sb.rpc('speaking_end', { p_session: id, p_reason: reason });
+    if (reason === 'cancelled') { const st = await tick(false); st && (st.allowed ? showLobby(st) : showGate(st)); return; }
+    await showEnded(id, msg);
+  }
+  async function teardownCall(opts) {
+    opts = opts || {};
+    clearInterval(rtc.helloTimer); clearTimeout(rtc.offerTimer); clearTimeout(rtc.lostTimer); clearTimeout(rtc.giveUp); clearInterval(clockTimer); clearInterval(prep.timer);
+    closePc();
+    if (rtc.chan) { try { await sb.removeChannel(rtc.chan); } catch (e) {} rtc.chan = null; }
+    rtc.connected = false; rtc.remoteStream = null; analyserThem = null; lastRole = null;
+    try { $('remote-audio').srcObject = null; } catch (e) {}
+    try { if (wakeLock) { wakeLock.release(); wakeLock = null; } } catch (e) {}
+    $('swap-overlay').classList.remove('on'); $('btn-sound').classList.remove('on'); $('peer-them').classList.remove('is-muted');
+    micMuted = false; $('btn-mute').classList.remove('on'); $('btn-mute').innerHTML = '<span>🎙️</span>Mute';
+    if (!opts.keepMic) stopMic();
+    sess = null;
+  }
+
+  // -------------------------------------------------------------- ended screen
+  async function showEnded(id, msg) {
+    let secs = 0, reason = '';
+    if (id) { const { data } = await sb.from('speaking_sessions').select('started_at, ended_at, end_reason, status').eq('id', id).maybeSingle();
+      if (data && data.started_at && data.ended_at) secs = (new Date(data.ended_at) - new Date(data.started_at)) / 1000; reason = data ? data.end_reason : ''; }
+    $('en-time').textContent = fmtClock(secs);
+    $('en-partner').textContent = (lastPartner && lastPartner.name) || 'your partner';
+    const st = await tick(false);
+    const canAgain = st && st.allowed && !st.session && st.remaining_seconds >= 120;
+    $('btn-again').style.display = canAgain ? '' : 'none';
+    let text = msg || '';
+    if (!text) text = reason === 'time_up' ? 'That’s the end of your call time.' : 'Call finished.';
+    if (st && st.allowed !== undefined) text += canAgain ? ` You have ${fmtClock(st.remaining_seconds)} left today.` : (st && st.reason === 'no_time' ? ' You’ve used all of today’s speaking time — see you tomorrow!' : '');
+    if (reason === 'reported') text = 'This call was ended after a report. A mentor will look into it. Thank you for telling us.';
+    $('en-title').textContent = secs > 60 ? 'Nice work!' : 'Call ended';
+    $('en-text').textContent = text;
+    $('link-report-last').style.display = id ? '' : 'none';
+    show('ended');
+  }
+  $('btn-again').addEventListener('click', async () => {
+    unlockAudio(); try { await getMic(); } catch (e) { alert('Please allow the microphone to continue.'); return; }
+    startSearching(false);
+  });
+
+  // ------------------------------------------------------------------- reports
+  let reportTarget = null;
+  function openReport(id) { reportTarget = id; $('rp-details').value = ''; $('report-modal').classList.add('on'); }
+  $('btn-report').addEventListener('click', () => sess && openReport(sess.id));
+  $('link-report-last').addEventListener('click', e => { e.preventDefault(); if (lastSessionId) openReport(lastSessionId); });
+  $('rp-cancel').addEventListener('click', () => $('report-modal').classList.remove('on'));
+  $('rp-send').addEventListener('click', async () => {
+    const reason = (document.querySelector('input[name="rp"]:checked') || {}).value || 'other';
+    const wasInCall = screen === 'call'; const id = reportTarget;
+    $('rp-send').disabled = true;
+    const { error } = await sb.rpc('speaking_report', { p_session: id, p_reason: reason, p_details: $('rp-details').value.trim() || null });
+    $('rp-send').disabled = false; $('report-modal').classList.remove('on');
+    if (error) { console.error(error); alert('Sorry, the report didn’t go through. Please try again.'); return; }
+    if (wasInCall) { sendSig({ t: 'bye' }); wantMatch = false; await teardownCall(); }
+    await showEnded(id, 'Thanks for reporting. A mentor will review it, and your partner can’t use the room until they have.');
+    $('link-report-last').style.display = 'none';
+  });
+
+  window.addEventListener('pagehide', () => { if (wantMatch && sb) { try { sb.rpc('speaking_leave'); } catch (e) {} } });
+})();
+</script>
+</body>
+</html>
