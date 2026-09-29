@@ -71,6 +71,86 @@
     else el.textContent = initialsFor(fullName);
   }
 
+  // Speaking Room oversight: who spoke with whom (last 7 days) and any
+  // reports. A report blocks the reported student from the room until a
+  // mentor reviews it; only that student's own mentor (or an admin) can
+  // clear or confirm the block — the database enforces that.
+  async function renderSpeakingPanel() {
+    const sb = getSupabaseClient();
+    const panel = document.getElementById('speak-mod-panel');
+    const badge = document.getElementById('speak-mod-badge');
+    const list = document.getElementById('speak-mod-list');
+    const { count, error } = await sb.from('speaking_bans').select('student_id', { count: 'exact', head: true }).eq('status', 'pending');
+    if (error) { console.error('speaking panel', error); return; }
+    panel.style.display = 'block';
+    if (count > 0) badge.innerHTML = `<span style="background:var(--warn); color:#fff; border-radius:999px; padding:1px 8px; font-size:0.7rem; margin-left:6px;">${count} to review</span>`;
+    let loaded = false;
+    document.getElementById('speak-mod-toggle').addEventListener('click', async () => {
+      const open = list.style.display === 'none';
+      list.style.display = open ? 'block' : 'none';
+      if (open && !loaded) { loaded = true; await loadSpeakingActivity(list); }
+    });
+  }
+
+  async function loadSpeakingActivity(list) {
+    const sb = getSupabaseClient();
+    list.innerHTML = `<p style="color:var(--muted); font-size:0.82rem; margin:0;">Loading…</p>`;
+    const week = new Date(Date.now() - 7 * 86400000).toISOString();
+    const month = new Date(Date.now() - 30 * 86400000).toISOString();
+    const [sRes, rRes, bRes] = await Promise.all([
+      sb.from('speaking_sessions').select('id, user_a, user_b, started_at, ended_at, end_reason').not('started_at', 'is', null).gte('created_at', week).order('created_at', { ascending: false }).limit(200),
+      sb.from('speaking_reports').select('id, session_id, reporter_id, reported_id, reason, details, created_at').gte('created_at', month).order('created_at', { ascending: false }).limit(100),
+      sb.from('speaking_bans').select('student_id, status, report_id')
+    ]);
+    if (sRes.error || rRes.error || bRes.error) { console.error(sRes.error || rRes.error || bRes.error); list.innerHTML = `<p style="color:var(--warn); font-size:0.82rem; margin:0;">Couldn’t load.</p>`; return; }
+    const sessions = sRes.data || [], reports = rRes.data || [], bans = bRes.data || [];
+    const ids = new Set(); sessions.forEach(x => { ids.add(x.user_a); ids.add(x.user_b); }); reports.forEach(x => { ids.add(x.reporter_id); ids.add(x.reported_id); });
+    const name = {};
+    if (ids.size) { const { data } = await sb.from('profiles').select('id, full_name').in('id', [...ids]); (data || []).forEach(p => { name[p.id] = p.full_name; }); }
+    const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const when = iso => new Date(iso).toLocaleString('en-GB', { timeZone: 'Asia/Tashkent', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+    const dur = x => { if (!x.started_at || !x.ended_at) return 'in progress'; const s = Math.round((new Date(x.ended_at) - new Date(x.started_at)) / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+    const reasonLabel = { inappropriate: 'Inappropriate language/content', harassment: 'Harassment / rude', not_speaking: 'Not speaking', other: 'Other' };
+    const banOf = id => bans.find(b => b.student_id === id);
+    const pill = (txt, col) => `<span style="font-family:var(--mono); font-size:0.68rem; font-weight:700; color:${col}; border:1px solid ${col}; border-radius:20px; padding:1px 8px;">${txt}</span>`;
+
+    const repHtml = reports.length === 0 ? `<p style="color:var(--muted); font-size:0.82rem; margin:0 0 4px;">No reports in the last 30 days.</p>` : reports.map(r => {
+      const b = banOf(r.reported_id); const st = b ? b.status : 'none';
+      const status = st === 'pending' ? pill('WAITING FOR REVIEW', 'var(--warn)') : st === 'confirmed' ? pill('BLOCKED', 'var(--warn)') : st === 'cleared' ? pill('CLEARED', 'var(--good)') : '';
+      const actions = st === 'pending' || st === 'confirmed' ? `
+        <div class="speak-actions" data-student="${r.reported_id}" style="display:flex; gap:8px; margin-top:8px; align-items:center; flex-wrap:wrap;">
+          <button class="ghost speak-clear" style="padding:4px 12px; font-size:0.78rem;">✓ Clear — let them back in</button>
+          ${st === 'pending' ? `<button class="ghost speak-confirm" style="padding:4px 12px; font-size:0.78rem; color:var(--warn); border-color:var(--warn);">Keep blocked</button>` : ''}
+          <span class="speak-status" style="font-size:0.78rem; color:var(--muted);"></span>
+        </div>` : '';
+      return `<div style="padding:10px 0; border-bottom:1px dashed var(--border);">
+        <div style="font-size:0.85rem;"><b>${esc(name[r.reported_id] || 'Student')}</b> was reported by <b>${esc(name[r.reporter_id] || 'Student')}</b> ${status}</div>
+        <div style="font-size:0.78rem; color:var(--muted); margin-top:2px;">${esc(reasonLabel[r.reason] || r.reason)} · ${when(r.created_at)}</div>
+        ${r.details ? `<div style="font-size:0.85rem; margin-top:4px; overflow-wrap:anywhere;">“${esc(r.details)}”</div>` : ''}${actions}</div>`;
+    }).join('');
+
+    const callHtml = sessions.length === 0 ? `<p style="color:var(--muted); font-size:0.82rem; margin:0;">No calls yet this week.</p>` : `
+      <div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse; font-size:0.82rem;">
+        <tr style="text-align:left; color:var(--muted); font-family:var(--mono); font-size:0.7rem;"><th style="padding:4px 10px 4px 0;">WHEN</th><th style="padding-right:10px;">STUDENTS</th><th style="padding-right:10px;">LENGTH</th><th>ENDED</th></tr>
+        ${sessions.map(x => `<tr style="border-top:1px solid var(--border);"><td style="padding:6px 10px 6px 0; white-space:nowrap;">${when(x.started_at)}</td><td style="padding-right:10px;">${esc(name[x.user_a] || '?')} ↔ ${esc(name[x.user_b] || '?')}</td><td style="white-space:nowrap; padding-right:10px;">${dur(x)}</td><td style="color:var(--muted);">${esc((x.end_reason || '').replace(/_/g, ' '))}</td></tr>`).join('')}
+      </table></div>`;
+
+    list.innerHTML = `<div style="font-family:var(--mono); font-size:0.72rem; color:var(--muted); margin-bottom:6px;">REPORTS</div>${repHtml}
+      <div style="font-family:var(--mono); font-size:0.72rem; color:var(--muted); margin:16px 0 6px;">CALLS — LAST 7 DAYS · TASHKENT TIME</div>${callHtml}`;
+
+    async function review(btn, status) {
+      const row = btn.closest('.speak-actions'); const msg = row.querySelector('.speak-status');
+      msg.textContent = 'Saving…';
+      const res = await sb.from('speaking_bans').update({ status, reviewed_by: myUserId, reviewed_at: new Date().toISOString() }).eq('student_id', row.dataset.student).select();
+      if (res.error) { console.error(res.error); msg.textContent = '⚠️ Failed'; return; }
+      if (!res.data || res.data.length === 0) { msg.textContent = 'Only this student’s own mentor or an admin can review this.'; return; }
+      msg.textContent = status === 'cleared' ? '✓ Cleared' : '✓ Kept blocked';
+      setTimeout(() => loadSpeakingActivity(list), 700);
+    }
+    list.querySelectorAll('.speak-clear').forEach(b => b.addEventListener('click', () => review(b, 'cleared')));
+    list.querySelectorAll('.speak-confirm').forEach(b => b.addEventListener('click', () => review(b, 'confirmed')));
+  }
+
   // Moderation for the champion card's comment thread on the student board
   // (index.html) — it's a level-wide space, not scoped to one mentor's own
   // group, so any mentor for that level can remove a comment, matching the
@@ -202,6 +282,13 @@
         <div id="champ-mod-list" style="display:none; margin-top:10px; padding:12px; border:1px solid var(--border); border-radius:10px;"></div>
       </div>`);
     renderChampionModerationPanel(level);
+
+    document.getElementById('day-picker-row').insertAdjacentHTML('beforebegin', `
+      <div id="speak-mod-panel" style="margin-bottom:16px; display:none;">
+        <button type="button" class="ghost" id="speak-mod-toggle" style="padding:7px 14px; font-size:0.82rem;">🎙️ Speaking room — calls &amp; reports <span id="speak-mod-badge"></span></button>
+        <div id="speak-mod-list" style="display:none; margin-top:10px; padding:14px; border:1px solid var(--border); border-radius:10px;"></div>
+      </div>`);
+    renderSpeakingPanel();
 
     const nonMockDays = liveDays.filter(d => !cfg.mockDays.includes(d)).sort((a, b) => b - a);
     const mockDaysLive = liveDays.filter(d => cfg.mockDays.includes(d));
