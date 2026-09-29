@@ -5,6 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Day 15 — Advanced — IELTS Marathon 2.0</title>
 <link rel="stylesheet" href="../../style.css">
+<style>
+.cdi-embed *{box-sizing:border-box}
+.cdi-embed{margin:14px 0 0;height:800px;font-family:Arial,sans-serif;display:flex;flex-direction:column;overflow:hidden;color:#111;background:#fff;border:1px solid #d5d5d5;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.cdi-embed .top{height:52px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:0 18px;border-radius:10px 10px 0 0}
+.cdi-embed .top .win-label{font-size:0.78rem;font-weight:700;color:#777;font-family:var(--mono, monospace);letter-spacing:0.02em}
+.cdi-embed .top button{border:0;background:#fff;color:#333;font-size:18px;width:32px;height:32px;border-radius:4px}
+.cdi-embed .banner{margin:14px 16px 0;padding:12px 18px;background:#f2f3f4;border:1px solid #ddd;border-radius:6px}
+.cdi-embed .banner h2{margin:0 0 4px;font-size:18px}
+.cdi-embed .banner p{margin:0}
+.cdi-embed .split{flex:1;min-height:0;display:flex;margin:12px 16px 0;border-top:1px solid #ddd}
+.cdi-embed .pane{overflow:auto;padding:18px 26px 70px;min-width:180px}
+.cdi-embed .left{width:50%;flex:0 0 auto}
+.cdi-embed .right{flex:1}
+.cdi-embed .divider{width:12px;border-left:2px solid #999;cursor:col-resize;position:relative}
+.cdi-embed .divider:after{content:"";position:absolute;top:50%;left:-10px;width:20px;height:32px;margin-top:-16px;border:1px solid #ccc;border-radius:12px;background:#fff}
+.cdi-embed h1{font-size:25px;margin:0 0 8px;line-height:1.25}
+.cdi-embed .sub{font-size:18px;line-height:1.45;margin-top:0}
+.cdi-embed .para{font-weight:700;margin-top:24px;font-size:18px}
+.cdi-embed p{line-height:1.58;font-size:17px}
+.cdi-embed .qgroup{margin-bottom:34px}
+.cdi-embed .qgroup h3{font-size:22px;margin:0 0 10px}
+.cdi-embed .qnum{display:inline-flex;justify-content:center;align-items:center;min-width:30px;height:30px;border:1px solid #ddd;border-radius:5px;font-weight:700;background:#fff;margin-right:10px}
+.cdi-embed .tf-row, .cdi-embed .mcq{margin:22px 0 30px}
+.cdi-embed .statement, .cdi-embed .prompt{display:flex;gap:10px;align-items:flex-start;font-size:18px;line-height:1.4;margin-bottom:14px}
+.cdi-embed .options, .cdi-embed .choice-options{display:grid;gap:16px;margin-left:42px}
+.cdi-embed .options label, .cdi-embed .choice-option{display:flex;gap:12px;align-items:flex-start;font-size:17px;line-height:1.35}
+.cdi-embed input[type=radio]{appearance:none;width:20px;height:20px;border:2px solid #d9d9d9;border-radius:50%;background:#fff;vertical-align:middle;flex:0 0 auto}
+.cdi-embed input[type=radio]:checked{border-color:#c98292;box-shadow:inset 0 0 0 5px #fff;background:#c98292}
+.cdi-embed .gap{font:inherit;border:1px solid #999;border-radius:4px;background:#fff;padding:5px 8px;width:175px;text-align:center;margin:0 5px}
+.cdi-embed .notes{font-size:17px;line-height:1.75}
+.cdi-embed .note-row{margin:10px 0}
+.cdi-embed .box{background:#f2f3f4;border:1px solid #ddd;border-radius:6px;padding:14px 18px;line-height:1.7;font-size:17px;margin:14px 0}
+.cdi-embed .row{display:flex;gap:12px;align-items:flex-start;margin:16px 0}
+.cdi-embed .txt{flex:1;font-size:17px;line-height:1.45}
+.cdi-embed .select{font:inherit;border:1px solid #cfcfcf;border-radius:7px;background:#f7f8f9;padding:8px 28px 8px 14px;min-width:86px}
+.cdi-embed .tools{position:absolute;z-index:50;display:none;background:#222;border-radius:6px;padding:4px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.cdi-embed .tools button{background:none;border:0;color:#fff;padding:6px 10px;font:inherit}
+.cdi-embed .hl{background:#ffe45c}
+.cdi-embed .bar{height:59px;border-top:1px solid #ddd;display:flex;align-items:center;gap:28px;padding:8px 18px;background:#fff;overflow-x:auto}
+.cdi-embed .partnav{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.cdi-embed .partlabel{font-weight:700;border:0;background:#fff;font:inherit;cursor:pointer}
+.cdi-embed .count{color:#555;font-size:14px}
+.cdi-embed .tiles{display:flex;gap:4px}
+.cdi-embed .tile{min-width:32px;height:32px;border:1px solid #bbb;background:#fff;border-radius:2px;cursor:pointer}
+.cdi-embed .tile.answered{background:#2b2b2b;color:#fff}
+.cdi-embed .review{margin-left:auto;min-width:42px;height:34px;background:#ddd;border:0;border-radius:4px;font-weight:700}
+.cdi-embed .overlay{position:fixed;inset:0;background:white;z-index:500;display:none;flex-direction:column;overflow:auto}
+.cdi-embed .overlay.show{display:flex}
+.cdi-embed .ovh{position:relative;padding:22px}
+.cdi-embed .ovh h2{text-align:center;margin:0}
+.cdi-embed .close{position:absolute;right:24px;top:18px;border:0;background:none;font-size:26px}
+.cdi-embed .ovlist{max-width:880px;width:90%;margin:10px auto}
+.cdi-embed .ovrow{width:100%;padding:18px 22px;border:1px solid #ddd;background:white;font:inherit;text-align:left}
+.cdi-embed .submit{background:#cf3e45;color:white;border-color:#cf3e45;border-radius:6px;margin-bottom:18px;font-weight:700}
+.cdi-embed .score{background:#f2f3f4;border:1px solid #ddd;border-radius:8px;padding:18px 22px;margin-bottom:18px}
+.cdi-embed .score b{font-size:30px}
+.cdi-embed .ok{color:#168a46!important}
+.cdi-embed .no{color:#c73535!important}
+.cdi-embed .tag{font-size:13px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px}
+.cdi-embed .tag.ok{background:#e8f6ee;border:1px solid #168a46}
+.cdi-embed .tag.no{background:#fdecec;border:1px solid #c73535}
+.cdi-embed .expl{margin:6px 0 18px;padding:10px 14px;background:#fbf8ef;border:1px solid #e5dcc0;border-left:4px solid #b8963f;border-radius:4px;font-size:15px;line-height:1.5}
+.cdi-embed .expl b{color:#111}
+.cdi-embed .expl-loc{color:#8a6d2f;font-weight:700;font-size:13px}
+.cdi-embed input.gap.ok, .cdi-embed select.select.ok{border-color:#168a46;background:#e8f6ee}
+.cdi-embed input.gap.no, .cdi-embed select.select.no{border-color:#c73535;background:#fdecec}
+</style>
 </head>
 <body>
 
@@ -446,21 +513,25 @@
     <section class="task" id="task5" data-task="5">
       <div class="task-eyebrow">Task 5 of 6</div>
       <h2>Reading 1 — Out of Africa: Solar Energy from the Sahara</h2>
-      <p class="task-sub">A real IELTS-style passage with three different question types, just like the ones you're used to — built right into the page. Read the whole passage first, then answer the three question sets below.</p>
+      <p class="task-sub">A real IELTS-style reading window, exactly like the ones you're used to — built right into this page. Drag the divider to resize the panes, select text to highlight it, and use the question tiles at the bottom to jump between questions.</p>
 
       <div class="full-bleed" style="overflow:hidden; padding:0 22px;">
-      <div class="card">
-        <div class="passage-text">
-          <h3 style="margin-top:0;">Out of Africa: Solar Energy from the Sahara</h3>
-          <p><em>Vivienne Walt reports on how the Sahara Desert could offer a truly green solution to Europe's energy problems.</em></p>
-          <p><b>A</b> For years, the Sahara has been regarded by many Europeans as a <em>terra incognita</em> — an unknown land — of little economic value or importance. But this idea may soon change completely. Politicians and scientists on both sides of the Mediterranean are beginning to focus on the Sahara's potential to provide power for Europe in the future. They believe the desert's true value comes from the fact that it is dry and empty. Some areas of the Sahara reach 45°C on many afternoons. It is, in other words, a gigantic natural storehouse of solar energy.</p>
-          <p><b>B</b> A few years ago, scientists began to calculate just how much energy the Sahara holds. They were astonished at the answer. In theory, a 90,600 square kilometre chunk of the Sahara — smaller than Portugal, and a little over 1% of its total area — could yield the same amount of electricity as all the world's power plants combined. A smaller square of 15,500 square kilometres — about the size of Connecticut — could provide electricity for Europe's 500 million people. "I admit I was sceptical until I did the calculations myself," says Michael Pawlyn, director of Exploration Architecture, one of three British environmental companies comprising the Sahara Forest Project, which is testing solar plants in Oman and the United Arab Emirates. Pawlyn calls the Sahara's potential "staggering."</p>
-          <p><b>C</b> At the moment, no one is proposing the creation of a solar power station the size of a small country. But a relatively well-developed technology exists, which proponents say could turn the Sahara's heat and sunlight into a major source of electricity — Concentrating Solar Power (CSP). Unlike solar panels, which convert sunlight directly into electricity, CSP utilises mirrors which focus light on water pipes or boilers to produce very hot steam to operate the turbines of generators. Small CSP plants have produced power in California's Mojave Desert since the 1980s. The Sahara Forest Project proposes building CSP plants in areas below sea level (the Sahara has several such depressions) so that sea water can flow into them. This water would then be purified and used for powering turbines and washing dust off the mirrors. Waste water would then supply irrigation to areas around the stations, creating lush oases — hence the "forest" in the group's name.</p>
-          <p><b>D</b> But producing significant quantities of electricity means building huge arrays of mirrors and pipes across hundreds of miles of remote desert, which is expensive. Gerry Wolff, an engineer who heads DESERTEC, an international consortium of solar-power scientists, says they have estimated it will cost about $59 billion to begin transmitting power from the Sahara by 2020.</p>
-          <p><b>E</b> Building plants is just part of the challenge. One of the drawbacks to CSP technology is that it works at maximum efficiency only in sunny, hot climates — and deserts tend to be distant from population centres. To supply Europe with 20% of its electricity needs, more than 19,300 kilometres of cables would need to be laid under the Mediterranean, says Gunnar Asplund, head of HVDC research at ABB Power Technologies in Ludvika, Sweden. Indeed, to use renewable sources of power, including solar, wind and tidal, Europe will need to build completely new electrical grids — existing infrastructure, built largely for the coal-fired plants that supply 80% of Europe's power, would not be suitable for carrying the amount of electricity generated by the Sahara. Germany's government-run Aerospace Centre, which researches energy, estimates that replacing those lines could raise the cost of building solar plants in the Sahara and sending power to Europe to about $465 billion over the next 40 years. Generous government subsidies will be needed. "Of course it costs a lot of money," says Asplund. "It's a lot cheaper to burn coal than to make solar power in the Sahara."</p>
-          <p><b>F</b> Meanwhile, some companies are getting started. Seville engineering company Abengoa is building one solar-thermal plant in Algeria and another in Morocco, while a third is being built in Egypt by a Spanish–Japanese joint venture. The next step will be to get cables in place. Although the European Parliament has passed a law that aids investors who help the continent reach its goal of getting 20% of its power from renewable energy by 2020, it could take years to create the necessary infrastructure.</p>
-          <p><b>G</b> Nicholas Dunlop, secretary-general of the London-based NGO e-Parliament, thinks companies should begin transmitting small amounts of solar power as soon as the North African plants begin operating, by linking a few cable lines under the Med. "I call it the Lego method," he says. "Build it piece by piece." If it can be shown that power from the Sahara can be produced profitably, he says, companies and governments will soon jump in.</p>
-          <p style="font-size:0.85rem; color:var(--muted);"><em>adapted from Time Magazine</em></p>
+      <div class="cdi-embed" id="a5cdi-root">
+        <div class="top">
+          <span class="win-label">IELTS Reading — Passage 1</span>
+          <div><button type="button">|||</button><button type="button">◯</button><button type="button">≡</button></div>
+        </div>
+        <div class="banner"><h2 id="a5cdi-partTitle"></h2><p id="a5cdi-partSub"></p></div>
+        <div class="split" id="a5cdi-split">
+          <section class="pane left" id="a5cdi-left"></section>
+          <div class="divider" id="a5cdi-divider"></div>
+          <section class="pane right" id="a5cdi-right"></section>
+        </div>
+        <footer class="bar" id="a5cdi-footer"></footer>
+        <div class="tools" id="a5cdi-tools"><button type="button" data-act="hl">Highlight</button><button type="button" data-act="clear">Clear</button></div>
+        <div class="overlay" id="a5cdi-submit">
+          <div class="ovh"><h2>Submission page</h2><button type="button" class="close" id="a5cdi-closebtn">×</button></div>
+          <div class="ovlist" id="a5cdi-subwrap"></div>
         </div>
       </div>
       </div>
@@ -479,52 +550,219 @@
         </ul>
       </div>
 
-      <p style="margin-top:26px;"><strong>Questions 1–5 — Matching information.</strong> The passage has seven paragraphs, A–G. Which paragraph contains each piece of information? <em>NB: you may use any letter more than once.</em></p>
-      <div class="card" id="t5-info" style="font-size:1.02rem;">
-        <div class="vocab-item"><span class="vocab-word" style="min-width:340px; text-align:left;">1. a mention of systems which could not be used</span>
-          <select id="t5i-1" data-answer="E"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
-        <div class="vocab-item"><span class="vocab-word" style="min-width:340px; text-align:left;">2. estimates of the quantity of power the Sahara could produce</span>
-          <select id="t5i-2" data-answer="B"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
-        <div class="vocab-item"><span class="vocab-word" style="min-width:340px; text-align:left;">3. a suggestion for how to convince organisations about the Sahara's potential</span>
-          <select id="t5i-3" data-answer="G"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
-        <div class="vocab-item"><span class="vocab-word" style="min-width:340px; text-align:left;">4. a short description of the Sahara at present</span>
-          <select id="t5i-4" data-answer="A"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
-        <div class="vocab-item"><span class="vocab-word" style="min-width:340px; text-align:left;">5. a comparison of the costs of two different energy sources</span>
-          <select id="t5i-5" data-answer="E"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
-        <div style="display:flex; align-items:center; gap:16px; margin-top:12px;">
-          <button onclick="checkAllAnswers('t5-info', 't5-info-score')">Check answers</button>
-          <span id="t5-info-score" style="font-family: var(--mono); color: var(--muted);"></span>
-        </div>
-      </div>
+      <script>
+      (function () {
+        var split = document.getElementById('a5cdi-split');
+        var left = document.getElementById('a5cdi-left');
+        var right = document.getElementById('a5cdi-right');
+        var footer = document.getElementById('a5cdi-footer');
+        var tools = document.getElementById('a5cdi-tools');
+        var submit = document.getElementById('a5cdi-submit');
+        var subwrap = document.getElementById('a5cdi-subwrap');
+        var partTitle = document.getElementById('a5cdi-partTitle');
+        var partSub = document.getElementById('a5cdi-partSub');
+        var div = document.getElementById('a5cdi-divider');
 
-      <p style="margin-top:26px;"><strong>Questions 6–9 — Matching features.</strong> Match each statement with the correct organisation. <em>Not every organisation will be used.</em></p>
-      <div class="card">
-        <p style="margin-top:0; font-size:0.9rem; color:var(--muted);"><b>A</b> Exploration Architecture &nbsp; <b>B</b> DESERTEC &nbsp; <b>C</b> ABB Power Technologies &nbsp; <b>D</b> Aerospace Centre &nbsp; <b>E</b> Abengoa &nbsp; <b>F</b> The European Parliament &nbsp; <b>G</b> e-Parliament</p>
-      </div>
-      <div class="card" id="t5-feat" style="font-size:1.02rem; margin-top:16px;">
-        <div class="vocab-item"><span class="vocab-word" style="min-width:340px; text-align:left;">6. They have set a time for achieving an objective.</span>
-          <select id="t5f-1" data-answer="F"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
-        <div class="vocab-item"><span class="vocab-word" style="min-width:340px; text-align:left;">7. They believe successful small-scale projects will show that larger projects are possible.</span>
-          <select id="t5f-2" data-answer="G"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
-        <div class="vocab-item"><span class="vocab-word" style="min-width:340px; text-align:left;">8. They have a number of renewable energy projects under construction.</span>
-          <select id="t5f-3" data-answer="E"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
-        <div class="vocab-item"><span class="vocab-word" style="min-width:340px; text-align:left;">9. They are already experimenting with solar-energy installations in other parts of the world.</span>
-          <select id="t5f-4" data-answer="A"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
-        <div style="display:flex; align-items:center; gap:16px; margin-top:12px;">
-          <button onclick="checkAllAnswers('t5-feat', 't5-feat-score')">Check answers</button>
-          <span id="t5-feat-score" style="font-family: var(--mono); color: var(--muted);"></span>
-        </div>
-      </div>
+        var active = 1, graded = false, revealed = false, state = {}, ranges = { 1: [1, 13] };
 
-      <p style="margin-top:26px;"><strong>Questions 10–13 — Summary completion.</strong> Choose NO MORE THAN TWO WORDS from the passage for each answer.</p>
-      <div class="card" id="t5-summary">
-        <p style="margin-top:0;"><b>Concentrating Solar Power (CSP)</b><br>
-        Unlike solar panels, CSP concentrates the sun's rays on boilers by using <input type="text" class="text-answer" id="t5s-1" data-correct="mirrors" style="width:150px;">. The resulting heat produces high-temperature <input type="text" class="text-answer" id="t5s-2" data-correct="steam" style="width:150px;">, which in turn moves the turbines that generate electricity. CSP plants will be situated in <input type="text" class="text-answer" id="t5s-3" data-correct="depressions/areas below sea level" style="width:200px;"> to allow sea water to run in. This, when purified, can be used to wash the equipment. The resulting dirty water will be used for <input type="text" class="text-answer" id="t5s-4" data-correct="irrigation" style="width:150px;"> around the power plant, and in this way oases will be formed.</p>
-        <div style="display:flex; align-items:center; gap:16px; margin-top:12px;">
-          <button onclick="checkAllAnswers('t5-summary', 't5-summary-score')">Check answers</button>
-          <span id="t5-summary-score" style="font-family: var(--mono); color: var(--muted);"></span>
-        </div>
-      </div>
+        var DATA = {
+          passages: {
+            "1": "<h1>Out of Africa: Solar Energy from the Sahara</h1><p class='sub'>Vivienne Walt reports on how the Sahara Desert could offer a truly green solution to Europe's energy problems.</p>" +
+              "<div class='para'>A</div><p>For years, the Sahara has been regarded by many Europeans as a <i>terra incognita</i> — an unknown land — of little economic value or importance. But this idea may soon change completely. Politicians and scientists on both sides of the Mediterranean are beginning to focus on the Sahara's potential to provide power for Europe in the future. They believe the desert's true value comes from the fact that it is dry and empty. Some areas of the Sahara reach 45°C on many afternoons. It is, in other words, a gigantic natural storehouse of solar energy.</p>" +
+              "<div class='para'>B</div><p>A few years ago, scientists began to calculate just how much energy the Sahara holds. They were astonished at the answer. In theory, a 90,600 square kilometre chunk of the Sahara — smaller than Portugal, and a little over 1% of its total area — could yield the same amount of electricity as all the world's power plants combined. A smaller square of 15,500 square kilometres — about the size of Connecticut — could provide electricity for Europe's 500 million people. \"I admit I was sceptical until I did the calculations myself,\" says Michael Pawlyn, director of Exploration Architecture, one of three British environmental companies comprising the Sahara Forest Project, which is testing solar plants in Oman and the United Arab Emirates. Pawlyn calls the Sahara's potential \"staggering.\"</p>" +
+              "<div class='para'>C</div><p>At the moment, no one is proposing the creation of a solar power station the size of a small country. But a relatively well-developed technology exists, which proponents say could turn the Sahara's heat and sunlight into a major source of electricity — Concentrating Solar Power (CSP). Unlike solar panels, which convert sunlight directly into electricity, CSP utilises mirrors which focus light on water pipes or boilers to produce very hot steam to operate the turbines of generators. Small CSP plants have produced power in California's Mojave Desert since the 1980s. The Sahara Forest Project proposes building CSP plants in areas below sea level (the Sahara has several such depressions) so that sea water can flow into them. This water would then be purified and used for powering turbines and washing dust off the mirrors. Waste water would then supply irrigation to areas around the stations, creating lush oases — hence the \"forest\" in the group's name.</p>" +
+              "<div class='para'>D</div><p>But producing significant quantities of electricity means building huge arrays of mirrors and pipes across hundreds of miles of remote desert, which is expensive. Gerry Wolff, an engineer who heads DESERTEC, an international consortium of solar-power scientists, says they have estimated it will cost about $59 billion to begin transmitting power from the Sahara by 2020.</p>" +
+              "<div class='para'>E</div><p>Building plants is just part of the challenge. One of the drawbacks to CSP technology is that it works at maximum efficiency only in sunny, hot climates — and deserts tend to be distant from population centres. To supply Europe with 20% of its electricity needs, more than 19,300 kilometres of cables would need to be laid under the Mediterranean, says Gunnar Asplund, head of HVDC research at ABB Power Technologies in Ludvika, Sweden. Indeed, to use renewable sources of power, including solar, wind and tidal, Europe will need to build completely new electrical grids — existing infrastructure, built largely for the coal-fired plants that supply 80% of Europe's power, would not be suitable for carrying the amount of electricity generated by the Sahara. Germany's government-run Aerospace Centre, which researches energy, estimates that replacing those lines could raise the cost of building solar plants in the Sahara and sending power to Europe to about $465 billion over the next 40 years. Generous government subsidies will be needed. \"Of course it costs a lot of money,\" says Asplund. \"It's a lot cheaper to burn coal than to make solar power in the Sahara.\"</p>" +
+              "<div class='para'>F</div><p>Meanwhile, some companies are getting started. Seville engineering company Abengoa is building one solar-thermal plant in Algeria and another in Morocco, while a third is being built in Egypt by a Spanish–Japanese joint venture. The next step will be to get cables in place. Although the European Parliament has passed a law that aids investors who help the continent reach its goal of getting 20% of its power from renewable energy by 2020, it could take years to create the necessary infrastructure.</p>" +
+              "<div class='para'>G</div><p>Nicholas Dunlop, secretary-general of the London-based NGO e-Parliament, thinks companies should begin transmitting small amounts of solar power as soon as the North African plants begin operating, by linking a few cable lines under the Med. \"I call it the Lego method,\" he says. \"Build it piece by piece.\" If it can be shown that power from the Sahara can be produced profitably, he says, companies and governments will soon jump in.</p>" +
+              "<p style='font-size:14px;color:#777;'><i>adapted from Time Magazine</i></p>"
+          },
+          answers: { 1: "E", 2: "B", 3: "G", 4: "A", 5: "E", 6: "F", 7: "G", 8: "E", 9: "A", 10: "mirrors", 11: "steam", 12: "depressions", 13: "irrigation" },
+          alt: { 12: ["areas below sea level", "below sea level"] },
+          expl: {
+            1: { loc: "Para E", text: "Paragraph E explains that existing power lines 'would not be suitable for carrying the amount of electricity generated by the Sahara' — a system that could not be used → E." },
+            2: { loc: "Para B", text: "Paragraph B gives the calculations of how much electricity the Sahara could yield → B." },
+            3: { loc: "Para G", text: "Paragraph G suggests transmitting small amounts of power first so that companies and governments 'will soon jump in' → G." },
+            4: { loc: "Para A", text: "Paragraph A describes the Sahara as it is regarded today, 'a gigantic natural storehouse of solar energy' → A." },
+            5: { loc: "Para E", text: "Paragraph E compares the cost of solar power from the Sahara with the cost of burning coal → E." },
+            6: { loc: "Para F", text: "Paragraph F: the European Parliament passed a law tied to 'its goal of getting 20% of its power from renewable energy by 2020' → F (The European Parliament)." },
+            7: { loc: "Para G", text: "Paragraph G: e-Parliament's Dunlop calls this 'the Lego method' — small projects proving larger ones possible → G (e-Parliament)." },
+            8: { loc: "Para F", text: "Paragraph F: Abengoa 'is building one solar-thermal plant in Algeria and another in Morocco', with a third under construction in Egypt → E (Abengoa)." },
+            9: { loc: "Para B", text: "Paragraph B: Exploration Architecture's Pawlyn is already 'testing solar plants in Oman and the United Arab Emirates' → A (Exploration Architecture)." },
+            10: { loc: "Para C", text: "'CSP utilises mirrors which focus light on water pipes or boilers' → mirrors." },
+            11: { loc: "Para C", text: "The mirrors 'produce very hot steam to operate the turbines' → steam." },
+            12: { loc: "Para C", text: "CSP plants will be built 'in areas below sea level (the Sahara has several such depressions)' → depressions." },
+            13: { loc: "Para C", text: "'Waste water would then supply irrigation to areas around the stations' → irrigation." }
+          }
+        };
+
+        var passages = DATA.passages, answers = DATA.answers, alt = DATA.alt, EXPL = DATA.expl;
+
+        function gap(n) { return '<span class="qnum">' + n + '</span><input class="gap text-answer" id="gap' + n + '">'; }
+        function sel(n, t, letters) { return '<div class="row" id="q' + n + '"><span class="qnum">' + n + '</span><span class="txt">' + t + '</span><select class="select" id="sel' + n + '"><option value="">' + n + '</option>' + letters.map(function (l) { return '<option>' + l + '</option>'; }).join('') + '</select></div>'; }
+
+        function qhtml() {
+          return "<div class=\"qgroup\"><h3>Questions 1–5</h3><p><i>The passage has seven paragraphs, A–G. Which paragraph contains the following information?</i></p><p style=\"margin-top:-6px;color:#555;font-size:15px;\"><i>NB You may use any letter more than once.</i></p>" +
+            sel(1, "a mention of systems which could not be used", ["A","B","C","D","E","F","G"]) +
+            sel(2, "estimates of the quantity of power the Sahara could produce", ["A","B","C","D","E","F","G"]) +
+            sel(3, "a suggestion for how to convince organisations about the Sahara's potential", ["A","B","C","D","E","F","G"]) +
+            sel(4, "a short description of the Sahara at present", ["A","B","C","D","E","F","G"]) +
+            sel(5, "a comparison of the costs of two different energy sources", ["A","B","C","D","E","F","G"]) +
+            "</div><div class=\"qgroup\"><h3>Questions 6–9</h3><p><i>Look at the following statements and the list of organisations below. Match each statement with the correct organisation, A–G.</i></p><p style=\"margin-top:-6px;color:#555;font-size:15px;\"><i>NB Not every organisation will be used.</i></p><div class=\"box\"><b>A</b> Exploration Architecture &nbsp; <b>B</b> DESERTEC &nbsp; <b>C</b> ABB Power Technologies &nbsp; <b>D</b> Aerospace Centre &nbsp; <b>E</b> Abengoa &nbsp; <b>F</b> The European Parliament &nbsp; <b>G</b> e-Parliament</div>" +
+            sel(6, "They have set a time for achieving an objective.", ["A","B","C","D","E","F","G"]) +
+            sel(7, "They believe successful small-scale projects will show that larger projects are possible.", ["A","B","C","D","E","F","G"]) +
+            sel(8, "They have a number of renewable energy projects under construction.", ["A","B","C","D","E","F","G"]) +
+            sel(9, "They are already experimenting with solar-energy installations in other parts of the world.", ["A","B","C","D","E","F","G"]) +
+            "</div><div class=\"qgroup\"><h3>Questions 10–13</h3><p><i>Complete the summary below. Choose </i><b>NO MORE THAN TWO WORDS</b><i> from the passage for each answer.</i></p><div class=\"box\"><b>Concentrating Solar Power (CSP)</b><br>" +
+            "Unlike solar panels, CSP concentrates the sun's rays on boilers by using " + gap(10) + ". The resulting heat produces high-temperature " + gap(11) + ", which in turn moves the turbines that generate electricity. CSP plants will be situated in " + gap(12) + " to allow sea water to run in. This, when purified, can be used to wash the equipment. The resulting dirty water will be used for " + gap(13) + " around the power plant, and in this way oases will be formed." +
+            "</div></div>";
+        }
+
+        function render() {
+          partTitle.textContent = 'Reading Passage';
+          partSub.textContent = 'Read the text and answer questions 1–13.';
+          left.innerHTML = passages[active];
+          right.innerHTML = qhtml();
+          restore();
+          drawFooter();
+          left.scrollTop = right.scrollTop = 0;
+        }
+        function val(n) {
+          var g = document.getElementById('gap' + n); if (g) return g.value;
+          var s = document.getElementById('sel' + n); if (s) return s.value;
+          return '';
+        }
+        function save() { for (var n = 1; n <= 13; n++) { var v = val(n); if (v) state[n] = v; } }
+        function restore() {
+          for (var n = 1; n <= 13; n++) {
+            if (!state[n]) continue;
+            var g = document.getElementById('gap' + n); if (g) g.value = state[n];
+            var s = document.getElementById('sel' + n); if (s) s.value = state[n];
+          }
+        }
+        function answered(n) { return !!state[n] || !!val(n); }
+        function count(p) { var r = ranges[p], c = 0; for (var i = r[0]; i <= r[1]; i++) if (answered(i)) c++; return c; }
+        function drawFooter() {
+          save();
+          var r = ranges[1];
+          var h = '<div class="partnav"><button type="button" class="partlabel" disabled>Reading Passage</button><div class="tiles">';
+          for (var n = r[0]; n <= r[1]; n++) h += '<button type="button" class="tile ' + (answered(n) ? 'answered' : '') + '" data-q="' + n + '">' + n + '</button>';
+          h += '</div></div><button type="button" class="review" id="a5cdi-review">OK</button>';
+          footer.innerHTML = h;
+        }
+        document.addEventListener('change', function (e) { if (!split.contains(e.target)) return; save(); drawFooter(); checkAutoGrade(); });
+        document.addEventListener('input', function (e) { if (!split.contains(e.target)) return; save(); drawFooter(); });
+        function checkAutoGrade() {
+          if (graded) return;
+          var r = ranges[1];
+          for (var n = r[0]; n <= r[1]; n++) if (!answered(n)) return;
+          silentGrade();
+        }
+        var lastScore = null;
+        function renderActive() {
+          left.innerHTML = passages[active];
+          right.innerHTML = qhtml();
+          restore();
+          if (revealed) {
+            regradeCurrent();
+            right.insertAdjacentHTML('afterbegin', '<div class="score">Your score: <b>' + lastScore + ' / 13</b></div><p style="margin:-8px 0 18px;color:#555">Explanations with the exact location in the passage are shown below each answer.</p>');
+          }
+          drawFooter();
+          left.scrollTop = right.scrollTop = 0;
+        }
+        footer.onclick = function (e) {
+          var q = e.target.closest('[data-q]');
+          if (q) {
+            var n = +q.dataset.q;
+            var target = document.getElementById('q' + n) || document.getElementById('gap' + n) || document.getElementById('sel' + n);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+          }
+          if (e.target.closest('#a5cdi-review')) review();
+        };
+        function review() {
+          save();
+          var r = ranges[1], a = 0;
+          for (var n = r[0]; n <= r[1]; n++) if (answered(n)) a++;
+          subwrap.innerHTML = '<p>You have answered <b>' + a + '</b> of 13 questions.</p><p><button type="button" class="ovrow submit" id="a5cdi-final">Submit test</button></p>';
+          document.getElementById('a5cdi-final').onclick = grade;
+          submit.classList.add('show');
+        }
+        function norm(s) { return String(s || '').trim().toLowerCase().replace(/\s+/g, ' '); }
+        function correct(n, v) { return [answers[n]].concat(alt[n] || []).some(function (a) { return norm(a) === norm(v); }); }
+        function explHTML(n) {
+          var e = EXPL[n]; if (!e) return '';
+          return '<div class="expl"><b>Q' + n + ' — correct answer: ' + answers[n] + '</b> &nbsp;<span class="expl-loc">(' + e.loc + ')</span><br>' + e.text + '</div>';
+        }
+        function markGap(n) {
+          var x = document.getElementById('gap' + n); if (!x) return;
+          var ok = correct(n, x.value); x.disabled = true; x.classList.add(ok ? 'ok' : 'no');
+          x.insertAdjacentHTML('afterend', (ok ? ' <span class="tag ok">✓</span>' : ' <span class="tag no">✘ correct: ' + answers[n] + '</span>') + explHTML(n));
+          return ok;
+        }
+        function markSel(n) {
+          var s = document.getElementById('sel' + n); if (!s) return;
+          var ok = correct(n, s.value); s.disabled = true; s.classList.add(ok ? 'ok' : 'no');
+          var row = document.getElementById('q' + n);
+          var tag = (ok ? ' <span class="tag ok">✓</span>' : ' <span class="tag no">✘ correct: ' + answers[n] + '</span>');
+          if (row) { row.insertAdjacentHTML('beforeend', tag); row.insertAdjacentHTML('afterend', explHTML(n)); }
+          return ok;
+        }
+        function regradeCurrent() {
+          var r = ranges[active];
+          for (var n = r[0]; n <= r[1]; n++) {
+            var g = document.getElementById('gap' + n), s = document.getElementById('sel' + n);
+            if (g) markGap(n); else if (s) markSel(n);
+          }
+        }
+        function silentGrade() {
+          if (graded) return;
+          save();
+          var r = ranges[1], score = 0;
+          for (var n = r[0]; n <= r[1]; n++) if (correct(n, state[n] || '')) score++;
+          lastScore = score; graded = true;
+        }
+        function grade() { silentGrade(); revealed = true; active = 1; renderActive(); submit.classList.remove('show'); }
+        document.getElementById('a5cdi-closebtn').onclick = function () { submit.classList.remove('show'); };
+
+        var drag = false;
+        div.onmousedown = function () { drag = true; document.body.style.userSelect = 'none'; };
+        window.addEventListener('mouseup', function () { drag = false; document.body.style.userSelect = ''; });
+        window.addEventListener('mousemove', function (e) {
+          if (!drag) return;
+          var r = split.getBoundingClientRect();
+          left.style.width = Math.max(220, Math.min(r.width - 240, e.clientX - r.left)) + 'px';
+        });
+
+        split.onmouseup = function () {
+          setTimeout(function () {
+            var s = getSelection();
+            if (!s || s.isCollapsed || !s.rangeCount) { tools.style.display = 'none'; return; }
+            var rg = s.getRangeAt(0);
+            if (!split.contains(rg.commonAncestorContainer)) { tools.style.display = 'none'; return; }
+            var rc = rg.getBoundingClientRect();
+            tools.style.display = 'flex';
+            tools.style.left = (rc.left + scrollX) + 'px';
+            tools.style.top = Math.max(8, rc.top + scrollY - 42) + 'px';
+          }, 1);
+        };
+        tools.onclick = function (e) {
+          var b = e.target.closest('button'), s = getSelection();
+          if (!b || !s.rangeCount) return;
+          var rg = s.getRangeAt(0);
+          if (b.dataset.act === 'hl') {
+            try { var sp = document.createElement('span'); sp.className = 'hl'; rg.surroundContents(sp); }
+            catch (err) { document.execCommand('hiliteColor', false, '#ffe45c'); }
+          } else {
+            split.querySelectorAll('.hl').forEach(function (h) { h.replaceWith(document.createTextNode(h.textContent)); });
+          }
+          s.removeAllRanges();
+          tools.style.display = 'none';
+        };
+
+        render();
+      })();
+      </script>
     </section>
 
     <!-- TASK 6: COMPANION PASSAGE -->
@@ -639,7 +877,6 @@
       1: () => { checkVocab(); checkAllAnswers('t1-cloze', 't1-cloze-score'); checkAllAnswers('t1-mistakes', 't1-mistakes-score'); },
       3: () => { checkAllAnswers('t3-match', 't3-match-score'); },
       4: () => { checkComprehension('t4-mcq', 't4-mcq-score'); },
-      5: () => { checkAllAnswers('t5-info', 't5-info-score'); checkAllAnswers('t5-feat', 't5-feat-score'); checkAllAnswers('t5-summary', 't5-summary-score'); },
       6: () => { checkAllAnswers('t6-tf', 't6-tf-score'); checkAllAnswers('t6-gapfill', 't6-gapfill-score'); }
     });
   });
