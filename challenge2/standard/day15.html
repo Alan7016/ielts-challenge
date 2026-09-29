@@ -5,6 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Day 15 — Standard — IELTS Marathon 2.0</title>
 <link rel="stylesheet" href="../../style.css">
+<style>
+.cdi-embed *{box-sizing:border-box}
+.cdi-embed{margin:14px 0 0;height:800px;font-family:Arial,sans-serif;display:flex;flex-direction:column;overflow:hidden;color:#111;background:#fff;border:1px solid #d5d5d5;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.cdi-embed .top{height:52px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:0 18px;border-radius:10px 10px 0 0}
+.cdi-embed .top .win-label{font-size:0.78rem;font-weight:700;color:#777;font-family:var(--mono, monospace);letter-spacing:0.02em}
+.cdi-embed .top button{border:0;background:#fff;color:#333;font-size:18px;width:32px;height:32px;border-radius:4px}
+.cdi-embed .banner{margin:14px 16px 0;padding:12px 18px;background:#f2f3f4;border:1px solid #ddd;border-radius:6px}
+.cdi-embed .banner h2{margin:0 0 4px;font-size:18px}
+.cdi-embed .banner p{margin:0}
+.cdi-embed .split{flex:1;min-height:0;display:flex;margin:12px 16px 0;border-top:1px solid #ddd}
+.cdi-embed .pane{overflow:auto;padding:18px 26px 70px;min-width:180px}
+.cdi-embed .left{width:50%;flex:0 0 auto}
+.cdi-embed .right{flex:1}
+.cdi-embed .divider{width:12px;border-left:2px solid #999;cursor:col-resize;position:relative}
+.cdi-embed .divider:after{content:"";position:absolute;top:50%;left:-10px;width:20px;height:32px;margin-top:-16px;border:1px solid #ccc;border-radius:12px;background:#fff}
+.cdi-embed h1{font-size:25px;margin:0 0 8px;line-height:1.25}
+.cdi-embed .sub{font-size:18px;line-height:1.45;margin-top:0}
+.cdi-embed .para{font-weight:700;margin-top:24px;font-size:18px}
+.cdi-embed p{line-height:1.58;font-size:17px}
+.cdi-embed .qgroup{margin-bottom:34px}
+.cdi-embed .qgroup h3{font-size:22px;margin:0 0 10px}
+.cdi-embed .qnum{display:inline-flex;justify-content:center;align-items:center;min-width:30px;height:30px;border:1px solid #ddd;border-radius:5px;font-weight:700;background:#fff;margin-right:10px}
+.cdi-embed .tf-row, .cdi-embed .mcq{margin:22px 0 30px}
+.cdi-embed .statement, .cdi-embed .prompt{display:flex;gap:10px;align-items:flex-start;font-size:18px;line-height:1.4;margin-bottom:14px}
+.cdi-embed .options, .cdi-embed .choice-options{display:grid;gap:16px;margin-left:42px}
+.cdi-embed .options label, .cdi-embed .choice-option{display:flex;gap:12px;align-items:flex-start;font-size:17px;line-height:1.35}
+.cdi-embed input[type=radio]{appearance:none;width:20px;height:20px;border:2px solid #d9d9d9;border-radius:50%;background:#fff;vertical-align:middle;flex:0 0 auto}
+.cdi-embed input[type=radio]:checked{border-color:#c98292;box-shadow:inset 0 0 0 5px #fff;background:#c98292}
+.cdi-embed .gap{font:inherit;border:1px solid #999;border-radius:4px;background:#fff;padding:5px 8px;width:175px;text-align:center;margin:0 5px}
+.cdi-embed .notes{font-size:17px;line-height:1.75}
+.cdi-embed .note-row{margin:10px 0}
+.cdi-embed .box{background:#f2f3f4;border:1px solid #ddd;border-radius:6px;padding:14px 18px;line-height:1.7;font-size:17px;margin:14px 0}
+.cdi-embed .row{display:flex;gap:12px;align-items:flex-start;margin:16px 0}
+.cdi-embed .txt{flex:1;font-size:17px;line-height:1.45}
+.cdi-embed .select{font:inherit;border:1px solid #cfcfcf;border-radius:7px;background:#f7f8f9;padding:8px 28px 8px 14px;min-width:86px}
+.cdi-embed .tools{position:absolute;z-index:50;display:none;background:#222;border-radius:6px;padding:4px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.cdi-embed .tools button{background:none;border:0;color:#fff;padding:6px 10px;font:inherit}
+.cdi-embed .hl{background:#ffe45c}
+.cdi-embed .bar{height:59px;border-top:1px solid #ddd;display:flex;align-items:center;gap:28px;padding:8px 18px;background:#fff;overflow-x:auto}
+.cdi-embed .partnav{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.cdi-embed .partlabel{font-weight:700;border:0;background:#fff;font:inherit;cursor:pointer}
+.cdi-embed .count{color:#555;font-size:14px}
+.cdi-embed .tiles{display:flex;gap:4px}
+.cdi-embed .tile{min-width:32px;height:32px;border:1px solid #bbb;background:#fff;border-radius:2px;cursor:pointer}
+.cdi-embed .tile.answered{background:#2b2b2b;color:#fff}
+.cdi-embed .review{margin-left:auto;min-width:42px;height:34px;background:#ddd;border:0;border-radius:4px;font-weight:700}
+.cdi-embed .overlay{position:fixed;inset:0;background:white;z-index:500;display:none;flex-direction:column;overflow:auto}
+.cdi-embed .overlay.show{display:flex}
+.cdi-embed .ovh{position:relative;padding:22px}
+.cdi-embed .ovh h2{text-align:center;margin:0}
+.cdi-embed .close{position:absolute;right:24px;top:18px;border:0;background:none;font-size:26px}
+.cdi-embed .ovlist{max-width:880px;width:90%;margin:10px auto}
+.cdi-embed .ovrow{width:100%;padding:18px 22px;border:1px solid #ddd;background:white;font:inherit;text-align:left}
+.cdi-embed .submit{background:#cf3e45;color:white;border-color:#cf3e45;border-radius:6px;margin-bottom:18px;font-weight:700}
+.cdi-embed .score{background:#f2f3f4;border:1px solid #ddd;border-radius:8px;padding:18px 22px;margin-bottom:18px}
+.cdi-embed .score b{font-size:30px}
+.cdi-embed .ok{color:#168a46!important}
+.cdi-embed .no{color:#c73535!important}
+.cdi-embed .tag{font-size:13px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px}
+.cdi-embed .tag.ok{background:#e8f6ee;border:1px solid #168a46}
+.cdi-embed .tag.no{background:#fdecec;border:1px solid #c73535}
+.cdi-embed .expl{margin:6px 0 18px;padding:10px 14px;background:#fbf8ef;border:1px solid #e5dcc0;border-left:4px solid #b8963f;border-radius:4px;font-size:15px;line-height:1.5}
+.cdi-embed .expl b{color:#111}
+.cdi-embed .expl-loc{color:#8a6d2f;font-weight:700;font-size:13px}
+.cdi-embed input.gap.ok, .cdi-embed select.select.ok{border-color:#168a46;background:#e8f6ee}
+.cdi-embed input.gap.no, .cdi-embed select.select.no{border-color:#c73535;background:#fdecec}
+</style>
 </head>
 <body>
 
@@ -465,17 +532,25 @@
           <span class="vocab-feedback"></span></div>
       </div>
 
+      <p class="task-sub" style="margin-top:26px;">Now read the real IELTS-style reading window below and complete questions 1–8.</p>
+
       <div class="full-bleed" style="overflow:hidden; padding:0 22px;">
-      <div class="card" style="margin-top:24px;">
-        <div class="passage-text">
-          <h3 style="margin-top:0;">The Life of the European Bee-eater</h3>
-          <p><em>A brilliant flash of colour as it catches its food in the air, the European bee-eater moves between three continents every year.</em></p>
-          <p>True to their name, bee-eaters eat bees — though their diet includes almost any flying insect. When the bird catches a bee, it flies back to its perch to get rid of the insect's poison, which it does very efficiently: it hits the bee's head against one side of a branch, then rubs its body against the other side. This rubbing makes its prey harmless before the bird swallows it.</p>
-          <p>European bee-eaters (<em>Merops apiaster</em>) form flocks that breed in the spring and summer across an area stretching from Spain to Kazakhstan. Farmland and river valleys provide huge numbers of insects for them to eat, and flocks of bee-eaters often follow tractors as they work the fields, catching the insects that are disturbed. When the birds find a beehive, they eat extremely well — one researcher once found a hundred bees in the stomach of a single bee-eater.</p>
-          <p>European honeybees pass the winter sleeping inside their hives, which cuts off the bee-eater's main source of food. So, in late summer, bee-eaters begin a long and dangerous journey. Huge flocks from Spain, France and northern Italy cross the Sahara Desert to reach their wintering grounds in West Africa. Bee-eaters from Hungary and other parts of central and eastern Europe cross the Mediterranean Sea and the Arabian Desert to spend the winter in southern Africa. "It's an extremely risky stratagem, this migration," says one ornithologist who has studied European bee-eaters for more than 45 years. "At least 30 percent of the birds will be killed by predators before they make it back to Europe the following spring."</p>
-          <p>In April, the bee-eaters return to Europe. They build nests by digging tunnels into riverbanks, a job that can take up to 20 days. By the end of the work, a pair may have moved 15 to 26 pounds of soil — more than 80 times their own body weight.</p>
-          <p>The nesting season is a time when families help each other: older sons and even uncles help feed the chicks as soon as they hatch. The helpers benefit too, since parents with helpers can provide more food and raise more chicks to continue the family line.</p>
-          <p>It is a short but spectacular life. European bee-eaters typically live for only five to six years. The dangers of migration and of avoiding predators along the way affect every bird, and bee-eaters today find it even harder to find food, since pesticides have reduced the number of insects available. Their breeding sites are also disappearing, as rivers are increasingly turned into concrete-walled canals.</p>
+      <div class="cdi-embed" id="s4cdi-root">
+        <div class="top">
+          <span class="win-label">IELTS Reading — Passage 1</span>
+          <div><button type="button">|||</button><button type="button">◯</button><button type="button">≡</button></div>
+        </div>
+        <div class="banner"><h2 id="s4cdi-partTitle"></h2><p id="s4cdi-partSub"></p></div>
+        <div class="split" id="s4cdi-split">
+          <section class="pane left" id="s4cdi-left"></section>
+          <div class="divider" id="s4cdi-divider"></div>
+          <section class="pane right" id="s4cdi-right"></section>
+        </div>
+        <footer class="bar" id="s4cdi-footer"></footer>
+        <div class="tools" id="s4cdi-tools"><button type="button" data-act="hl">Highlight</button><button type="button" data-act="clear">Clear</button></div>
+        <div class="overlay" id="s4cdi-submit">
+          <div class="ovh"><h2>Submission page</h2><button type="button" class="close" id="s4cdi-closebtn">×</button></div>
+          <div class="ovlist" id="s4cdi-subwrap"></div>
         </div>
       </div>
       </div>
@@ -495,21 +570,191 @@
         </ul>
       </div>
 
-      <p style="margin-top:26px;"><strong>Complete the sentences below. Use NO MORE THAN TWO WORDS from the passage for each answer.</strong></p>
-      <div class="card" id="t4-gapfill">
-        <p>1. Bee-eaters' prey are bees and other <input type="text" class="text-answer" id="t4g-1" data-correct="insects/flying insects" style="width:180px;">.</p>
-        <p>2. Bee-eaters need to remove the <input type="text" class="text-answer" id="t4g-2" data-correct="poison" style="width:180px;"> from bees before eating them.</p>
-        <p>3. There is plenty of food for bee-eaters on agricultural land and in <input type="text" class="text-answer" id="t4g-3" data-correct="river valleys" style="width:180px;">.</p>
-        <p>4. Bee-eaters migrate to spend the winter in different parts of <input type="text" class="text-answer" id="t4g-4" data-correct="africa" style="width:180px;">.</p>
-        <p>5. Because of <input type="text" class="text-answer" id="t4g-5" data-correct="predators" style="width:180px;">, almost one-third of bee-eaters do not survive migration.</p>
-        <p>6. Bee-eaters make nests in <input type="text" class="text-answer" id="t4g-6" data-correct="riverbanks/tunnels in riverbanks" style="width:180px;">, which they build themselves.</p>
-        <p>7. When nesting, the <input type="text" class="text-answer" id="t4g-7" data-correct="chicks" style="width:180px;"> receive food from different family members.</p>
-        <p>8. One problem for bee-eaters is <input type="text" class="text-answer" id="t4g-8" data-correct="pesticides" style="width:180px;">, which have reduced the amount of food available.</p>
-        <div style="display:flex; align-items:center; gap:16px; margin-top:12px;">
-          <button onclick="checkAllAnswers('t4-gapfill', 't4-gapfill-score')">Check answers</button>
-          <span id="t4-gapfill-score" style="font-family: var(--mono); color: var(--muted);"></span>
-        </div>
-      </div>
+      <script>
+      (function () {
+        var split = document.getElementById('s4cdi-split');
+        var left = document.getElementById('s4cdi-left');
+        var right = document.getElementById('s4cdi-right');
+        var footer = document.getElementById('s4cdi-footer');
+        var tools = document.getElementById('s4cdi-tools');
+        var submit = document.getElementById('s4cdi-submit');
+        var subwrap = document.getElementById('s4cdi-subwrap');
+        var partTitle = document.getElementById('s4cdi-partTitle');
+        var partSub = document.getElementById('s4cdi-partSub');
+        var div = document.getElementById('s4cdi-divider');
+
+        var active = 1, graded = false, revealed = false, state = {}, ranges = { 1: [1, 8] };
+
+        var DATA = {
+          passages: {
+            "1": "<h1>The Life of the European Bee-eater</h1><p class='sub'>A brilliant flash of colour as it catches its food in the air, the European bee-eater moves between three continents every year.</p>" +
+              "<p>True to their name, bee-eaters eat bees — though their diet includes almost any flying insect. When the bird catches a bee, it flies back to its perch to get rid of the insect's poison, which it does very efficiently: it hits the bee's head against one side of a branch, then rubs its body against the other side. This rubbing makes its prey harmless before the bird swallows it.</p>" +
+              "<p>European bee-eaters (<i>Merops apiaster</i>) form flocks that breed in the spring and summer across an area stretching from Spain to Kazakhstan. Farmland and river valleys provide huge numbers of insects for them to eat, and flocks of bee-eaters often follow tractors as they work the fields, catching the insects that are disturbed. When the birds find a beehive, they eat extremely well — one researcher once found a hundred bees in the stomach of a single bee-eater.</p>" +
+              "<p>European honeybees pass the winter sleeping inside their hives, which cuts off the bee-eater's main source of food. So, in late summer, bee-eaters begin a long and dangerous journey. Huge flocks from Spain, France and northern Italy cross the Sahara Desert to reach their wintering grounds in West Africa. Bee-eaters from Hungary and other parts of central and eastern Europe cross the Mediterranean Sea and the Arabian Desert to spend the winter in southern Africa. \"It's an extremely risky stratagem, this migration,\" says one ornithologist who has studied European bee-eaters for more than 45 years. \"At least 30 percent of the birds will be killed by predators before they make it back to Europe the following spring.\"</p>" +
+              "<p>In April, the bee-eaters return to Europe. They build nests by digging tunnels into riverbanks, a job that can take up to 20 days. By the end of the work, a pair may have moved 15 to 26 pounds of soil — more than 80 times their own body weight.</p>" +
+              "<p>The nesting season is a time when families help each other: older sons and even uncles help feed the chicks as soon as they hatch. The helpers benefit too, since parents with helpers can provide more food and raise more chicks to continue the family line.</p>" +
+              "<p>It is a short but spectacular life. European bee-eaters typically live for only five to six years. The dangers of migration and of avoiding predators along the way affect every bird, and bee-eaters today find it even harder to find food, since pesticides have reduced the number of insects available. Their breeding sites are also disappearing, as rivers are increasingly turned into concrete-walled canals.</p>"
+          },
+          answers: { 1: "insects", 2: "poison", 3: "river valleys", 4: "Africa", 5: "predators", 6: "riverbanks", 7: "chicks", 8: "pesticides" },
+          alt: { 1: ["flying insects"], 6: ["tunnels in riverbanks", "tunnels"] },
+          expl: {
+            1: { loc: "1st paragraph", text: "'their diet includes almost any flying insect' → insects." },
+            2: { loc: "1st paragraph", text: "'it flies back to its perch to get rid of the insect's poison' → poison." },
+            3: { loc: "2nd paragraph", text: "'Farmland and river valleys provide huge numbers of insects for them to eat' → river valleys." },
+            4: { loc: "3rd paragraph", text: "Flocks fly on to 'their wintering grounds in West Africa' or 'to spend the winter in southern Africa' → Africa." },
+            5: { loc: "3rd paragraph", text: "'At least 30 percent of the birds will be killed by predators before they make it back to Europe' → predators." },
+            6: { loc: "4th paragraph", text: "'They build nests by digging tunnels into riverbanks' → riverbanks." },
+            7: { loc: "5th paragraph", text: "'older sons and even uncles help feed the chicks as soon as they hatch' → chicks." },
+            8: { loc: "6th paragraph", text: "'bee-eaters today find it even harder to find food, since pesticides have reduced the number of insects available' → pesticides." }
+          }
+        };
+
+        var passages = DATA.passages, answers = DATA.answers, alt = DATA.alt, EXPL = DATA.expl;
+
+        function gap(n) { return '<span class="qnum">' + n + '</span><input class="gap text-answer" id="gap' + n + '">'; }
+
+        function qhtml() {
+          return "<div class=\"qgroup\"><h3>Questions 1–8</h3><p><i>Complete the sentences below. Choose </i><b>NO MORE THAN TWO WORDS</b><i> from the passage for each answer.</i></p><div class=\"box\">" +
+            "1. Bee-eaters' prey are bees and other " + gap(1) + ".<br><br>" +
+            "2. Bee-eaters need to remove the " + gap(2) + " from bees before eating them.<br><br>" +
+            "3. There is plenty of food for bee-eaters on agricultural land and in " + gap(3) + ".<br><br>" +
+            "4. Bee-eaters migrate to spend the winter in different parts of " + gap(4) + ".<br><br>" +
+            "5. Because of " + gap(5) + ", almost one-third of bee-eaters do not survive migration.<br><br>" +
+            "6. Bee-eaters make nests in " + gap(6) + ", which they build themselves.<br><br>" +
+            "7. When nesting, the " + gap(7) + " receive food from different family members.<br><br>" +
+            "8. One problem for bee-eaters is " + gap(8) + ", which have reduced the amount of food available." +
+            "</div></div>";
+        }
+
+        function render() {
+          partTitle.textContent = 'Reading Passage';
+          partSub.textContent = 'Read the text and answer questions 1–8.';
+          left.innerHTML = passages[active];
+          right.innerHTML = qhtml();
+          restore();
+          drawFooter();
+          left.scrollTop = right.scrollTop = 0;
+        }
+        function val(n) { var g = document.getElementById('gap' + n); return g ? g.value : ''; }
+        function save() { for (var n = 1; n <= 8; n++) { var v = val(n); if (v) state[n] = v; } }
+        function restore() {
+          for (var n = 1; n <= 8; n++) {
+            if (!state[n]) continue;
+            var g = document.getElementById('gap' + n); if (g) g.value = state[n];
+          }
+        }
+        function answered(n) { return !!state[n] || !!val(n); }
+        function count(p) { var r = ranges[p], c = 0; for (var i = r[0]; i <= r[1]; i++) if (answered(i)) c++; return c; }
+        function drawFooter() {
+          save();
+          var r = ranges[1];
+          var h = '<div class="partnav"><button type="button" class="partlabel" disabled>Reading Passage</button><div class="tiles">';
+          for (var n = r[0]; n <= r[1]; n++) h += '<button type="button" class="tile ' + (answered(n) ? 'answered' : '') + '" data-q="' + n + '">' + n + '</button>';
+          h += '</div></div><button type="button" class="review" id="s4cdi-review">OK</button>';
+          footer.innerHTML = h;
+        }
+        document.addEventListener('change', function (e) { if (!split.contains(e.target)) return; save(); drawFooter(); checkAutoGrade(); });
+        document.addEventListener('input', function (e) { if (!split.contains(e.target)) return; save(); drawFooter(); });
+        function checkAutoGrade() {
+          if (graded) return;
+          var r = ranges[1];
+          for (var n = r[0]; n <= r[1]; n++) if (!answered(n)) return;
+          silentGrade();
+        }
+        var lastScore = null;
+        function renderActive() {
+          left.innerHTML = passages[active];
+          right.innerHTML = qhtml();
+          restore();
+          if (revealed) {
+            regradeCurrent();
+            right.insertAdjacentHTML('afterbegin', '<div class="score">Your score: <b>' + lastScore + ' / 8</b></div><p style="margin:-8px 0 18px;color:#555">Explanations with the location in the passage are shown below each answer.</p>');
+          }
+          drawFooter();
+          left.scrollTop = right.scrollTop = 0;
+        }
+        footer.onclick = function (e) {
+          var q = e.target.closest('[data-q]');
+          if (q) {
+            var n = +q.dataset.q;
+            var target = document.getElementById('gap' + n);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+          }
+          if (e.target.closest('#s4cdi-review')) review();
+        };
+        function review() {
+          save();
+          var r = ranges[1], a = 0;
+          for (var n = r[0]; n <= r[1]; n++) if (answered(n)) a++;
+          subwrap.innerHTML = '<p>You have answered <b>' + a + '</b> of 8 questions.</p><p><button type="button" class="ovrow submit" id="s4cdi-final">Submit test</button></p>';
+          document.getElementById('s4cdi-final').onclick = grade;
+          submit.classList.add('show');
+        }
+        function norm(s) { return String(s || '').trim().toLowerCase().replace(/\s+/g, ' '); }
+        function correct(n, v) { return [answers[n]].concat(alt[n] || []).some(function (a) { return norm(a) === norm(v); }); }
+        function explHTML(n) {
+          var e = EXPL[n]; if (!e) return '';
+          return '<div class="expl"><b>Q' + n + ' — correct answer: ' + answers[n] + '</b> &nbsp;<span class="expl-loc">(' + e.loc + ')</span><br>' + e.text + '</div>';
+        }
+        function markGap(n) {
+          var x = document.getElementById('gap' + n); if (!x) return;
+          var ok = correct(n, x.value); x.disabled = true; x.classList.add(ok ? 'ok' : 'no');
+          x.insertAdjacentHTML('afterend', (ok ? ' <span class="tag ok">✓</span>' : ' <span class="tag no">✘ correct: ' + answers[n] + '</span>') + explHTML(n));
+          return ok;
+        }
+        function regradeCurrent() {
+          var r = ranges[active];
+          for (var n = r[0]; n <= r[1]; n++) markGap(n);
+        }
+        function silentGrade() {
+          if (graded) return;
+          save();
+          var r = ranges[1], score = 0;
+          for (var n = r[0]; n <= r[1]; n++) if (correct(n, state[n] || '')) score++;
+          lastScore = score; graded = true;
+        }
+        function grade() { silentGrade(); revealed = true; active = 1; renderActive(); submit.classList.remove('show'); }
+        document.getElementById('s4cdi-closebtn').onclick = function () { submit.classList.remove('show'); };
+
+        var drag = false;
+        div.onmousedown = function () { drag = true; document.body.style.userSelect = 'none'; };
+        window.addEventListener('mouseup', function () { drag = false; document.body.style.userSelect = ''; });
+        window.addEventListener('mousemove', function (e) {
+          if (!drag) return;
+          var r = split.getBoundingClientRect();
+          left.style.width = Math.max(220, Math.min(r.width - 240, e.clientX - r.left)) + 'px';
+        });
+
+        split.onmouseup = function () {
+          setTimeout(function () {
+            var s = getSelection();
+            if (!s || s.isCollapsed || !s.rangeCount) { tools.style.display = 'none'; return; }
+            var rg = s.getRangeAt(0);
+            if (!split.contains(rg.commonAncestorContainer)) { tools.style.display = 'none'; return; }
+            var rc = rg.getBoundingClientRect();
+            tools.style.display = 'flex';
+            tools.style.left = (rc.left + scrollX) + 'px';
+            tools.style.top = Math.max(8, rc.top + scrollY - 42) + 'px';
+          }, 1);
+        };
+        tools.onclick = function (e) {
+          var b = e.target.closest('button'), s = getSelection();
+          if (!b || !s.rangeCount) return;
+          var rg = s.getRangeAt(0);
+          if (b.dataset.act === 'hl') {
+            try { var sp = document.createElement('span'); sp.className = 'hl'; rg.surroundContents(sp); }
+            catch (err) { document.execCommand('hiliteColor', false, '#ffe45c'); }
+          } else {
+            split.querySelectorAll('.hl').forEach(function (h) { h.replaceWith(document.createTextNode(h.textContent)); });
+          }
+          s.removeAllRanges();
+          tools.style.display = 'none';
+        };
+
+        render();
+      })();
+      </script>
     </section>
 
     <!-- TASK 5: READING 2 — WHALE MIGRATION -->
@@ -738,7 +983,7 @@
     initTaskFlow(15, 5, user.id, {
       1: () => { checkVocab(); checkAllAnswers('t1-cloze', 't1-cloze-score'); },
       3: () => { checkComprehension('t3-mcq', 't3-mcq-score'); },
-      4: () => { checkVocab(); checkAllAnswers('t4-gapfill', 't4-gapfill-score'); }
+      4: () => { checkVocab(); }
     });
   });
 </script>
