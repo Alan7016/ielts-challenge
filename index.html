@@ -6,7 +6,7 @@
 <title>IELTS Marathon</title>
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="board-page">
 
 <!-- MANDATORY STUDENT SURVEY — a full-page overlay shown once per student,
      entirely independent of the #content div below (it exists whether or
@@ -512,9 +512,11 @@
     const openUnfinished = days.filter(x => !x.isMock && x.state === 'open');
     let focusDay = null;
     if (latest && latest.state === 'open') focusDay = latestDay;
-    else if (latest && latest.state === 'locked') {
-      const blockers = openUnfinished.filter(x => x.d < latestDay);
-      focusDay = blockers.length ? blockers[blockers.length - 1].d : null;
+    else if (latest) {
+      // Today's day is locked (point at what's blocking it) or already
+      // finished (point at the most recent day still left unfinished).
+      const earlier = openUnfinished.filter(x => x.d < latestDay);
+      focusDay = earlier.length ? earlier[earlier.length - 1].d : null;
     }
     const catchUp = openUnfinished.filter(x => x.d !== focusDay).map(x => x.d);
 
@@ -527,8 +529,9 @@
     if (focusDay) {
       const f = days[focusDay - 1];
       const isToday = focusDay === latestDay;
+      const lbl = isToday ? 'Today' : latest.state === 'done' ? `Day ${latestDay} done ✓ · next up` : `Unlocks Day ${latestDay}`;
       nextCard = `<a class="bs-card bs-next" href="${cfg.folder}/day${focusDay}.html">
-        <div><div class="bs-lbl">${isToday ? 'Today' : `Unlocks Day ${latestDay}`}</div><div class="bs-title">Day ${focusDay}</div>
+        <div><div class="bs-lbl">${lbl}</div><div class="bs-title">Day ${focusDay}</div>
         <div class="bs-sub">${f.tasks} tasks · ${f.tasksDone} done</div></div>
         <span class="bs-go">${f.tasksDone > 0 ? 'Continue' : 'Start'} Day ${focusDay} →</span></a>`;
     } else if (latest && latest.state === 'done') {
