@@ -106,10 +106,7 @@
       <h1 id="page-title">Your Marathon Board</h1>
       <p class="tag" id="page-tag">Nine tasks a day, thirty days straight. Pick a day below and run the full leg: article, vocab, reading, writing, speaking, video, listening.</p>
 
-      <div class="progress-shell">
-        <span class="label" id="progress-label">1 / 30 days live</span>
-        <div class="bar-track"><div class="bar-fill" id="progress-fill" style="width:0%"></div></div>
-      </div>
+      <div id="board-status" class="board-status"></div>
     </div>
   </section>
 
@@ -117,7 +114,7 @@
     <div class="wrap">
       <div id="weekly-winner-banner"></div>
       <div id="speaking-room-card"></div>
-      <div id="track-grid" class="track-grid"></div>
+      <div id="track-grid" class="week-board"></div>
     </div>
   </section>
 
@@ -468,48 +465,131 @@
     document.getElementById('finish-line').textContent = cfg.finishLine;
 
     const grid = document.getElementById('track-grid');
+    const status = document.getElementById('board-status');
     grid.innerHTML = '<p style="color:var(--muted); font-family:var(--mono); font-size:0.85rem;">Loading days…</p>';
     const liveDays = await getLiveDays(cfg.folder, cfg.totalDays);
     const trackKey = profile.challenge === '2.0' ? `2.0-${profile.level || 'standard'}` : '1.0';
-    const completedDays = await getCompletedDaysForStudent(userId, trackKey, cfg.totalDays);
+    const { completedDays, doneCountByDay } = await getStudentDayProgress(userId, trackKey, cfg.totalDays);
 
-    document.getElementById('progress-label').textContent = `${liveDays.length} / ${cfg.totalDays} days live`;
-    document.getElementById('progress-fill').style.width = `${(liveDays.length / cfg.totalDays) * 100}%`;
+    // Mocks save to their own table, not `progress` — read it separately so
+    // a submitted mock can show as done. Best-effort: on any error the mock
+    // cell just shows as a plain open mock, exactly as before.
+    const mockSubmitted = new Set();
+    if (profile.challenge === '2.0') {
+      try {
+        const { data } = await getSupabaseClient().from('c2_mock_exams').select('mock_day, submitted_at').eq('student_id', userId);
+        (data || []).forEach(r => { if (r.submitted_at) mockSubmitted.add(r.mock_day); });
+      } catch (e) { console.error('mock status', e); }
+    }
 
-    let html = '';
+    const pad = n => String(n).padStart(2, '0');
+    const days = [];
     for (let d = 1; d <= cfg.totalDays; d++) {
       const isPublished = liveDays.includes(d);
       const isMock = cfg.mockDays.includes(d);
       // Mock days are intentionally open regardless of the previous day's
-      // completion — this first mock in particular has no such dependency.
-      // A later mock could be made to depend on a specific day by adding
-      // that logic here, but the default is open, not gated.
-      // A day right after a mock is also never gated on that mock being
-      // "complete" — mock exams save their own completion to a separate
-      // table entirely, not the regular progress table completedDays is
-      // built from, so that check would never actually pass and would
-      // permanently lock the day after every mock for everyone.
+      // completion. A day right after a mock is also never gated on that
+      // mock being "complete" — mock exams save their own completion to a
+      // separate table, not the progress table completedDays is built from,
+      // so that check would never pass and would permanently lock the day
+      // after every mock for everyone.
       const isEarned = isMock || d === 1 || cfg.mockDays.includes(d - 1) || completedDays.has(d - 1);
-      const isOpen = isPublished && isEarned;
-      const isFinish = d === cfg.totalDays;
-      if (isOpen) {
-        html += `<a class="day-chip open${isFinish ? ' finish' : ''}${isMock ? ' mock' : ''}" href="${cfg.folder}/day${d}.html">
-          <span class="num">${String(d).padStart(2, '0')}</span>
-          <span class="lbl">${isMock ? '🎯 Mock Exam' : 'Day ' + d}</span>
-          <span class="meta">${isMock ? 'Full practice test' : '9 tasks'}</span>
-        </a>`;
-      } else {
-        const reason = !isPublished ? 'Coming soon' : `Finish Day ${d - 1} first`;
-        html += `<div class="day-chip locked${isFinish ? ' finish' : ''}${isMock ? ' mock' : ''}" title="${reason}">
-          <span class="num">${String(d).padStart(2, '0')}</span>
-          <span class="lbl">${isMock ? '🎯 Mock Exam' : 'Day ' + d}</span>
-          <span class="meta">${isFinish ? 'Finish' : reason}</span>
-        </div>`;
-      }
+      let state;
+      if (!isPublished) state = 'soon';
+      else if (isMock) state = mockSubmitted.has(d) ? 'done' : 'open';
+      else if (completedDays.has(d)) state = 'done';
+      else if (isEarned) state = 'open';
+      else state = 'locked';
+      days.push({ d, isMock, state, isFinish: d === cfg.totalDays, tasks: isMock ? 0 : totalTasksForTrack(trackKey, d), tasksDone: doneCountByDay[d] || 0 });
     }
-    grid.innerHTML = html;
+
+    // "Today" is the newest live regular day. If the student can't open it
+    // yet, the main button points at the nearest earlier unfinished day
+    // that's blocking them instead of a locked card.
     const nonMockLive = liveDays.filter(d => !cfg.mockDays.includes(d)).sort((a, b) => b - a);
-    return { latestDay: nonMockLive[0] || null, latestDone: nonMockLive.length ? completedDays.has(nonMockLive[0]) : false };
+    const latestDay = nonMockLive[0] || null;
+    const latest = latestDay ? days[latestDay - 1] : null;
+    const openUnfinished = days.filter(x => !x.isMock && x.state === 'open');
+    let focusDay = null;
+    if (latest && latest.state === 'open') focusDay = latestDay;
+    else if (latest && latest.state === 'locked') {
+      const blockers = openUnfinished.filter(x => x.d < latestDay);
+      focusDay = blockers.length ? blockers[blockers.length - 1].d : null;
+    }
+    const catchUp = openUnfinished.filter(x => x.d !== focusDay).map(x => x.d);
+
+    // ---- Status cards: the student's own progress + one clear next step ----
+    const regularTotal = days.filter(x => !x.isMock).length;
+    const regularLive = days.filter(x => !x.isMock && x.state !== 'soon').length;
+    const regularDone = days.filter(x => !x.isMock && x.state === 'done').length;
+    const pct = regularLive ? Math.round(regularDone / regularLive * 100) : 0;
+    let nextCard;
+    if (focusDay) {
+      const f = days[focusDay - 1];
+      const isToday = focusDay === latestDay;
+      nextCard = `<a class="bs-card bs-next" href="${cfg.folder}/day${focusDay}.html">
+        <div><div class="bs-lbl">${isToday ? 'Today' : `Unlocks Day ${latestDay}`}</div><div class="bs-title">Day ${focusDay}</div>
+        <div class="bs-sub">${f.tasks} tasks · ${f.tasksDone} done</div></div>
+        <span class="bs-go">${f.tasksDone > 0 ? 'Continue' : 'Start'} Day ${focusDay} →</span></a>`;
+    } else if (latest && latest.state === 'done') {
+      nextCard = `<div class="bs-card bs-next bs-rest"><div><div class="bs-lbl">Today</div><div class="bs-title">Day ${latestDay} ✓</div>
+        <div class="bs-sub">All caught up — the next day opens soon.</div></div></div>`;
+    } else {
+      nextCard = `<div class="bs-card bs-next bs-rest"><div><div class="bs-lbl">Up next</div><div class="bs-title">Starting soon</div></div></div>`;
+    }
+    const w = n => (n / regularTotal * 100).toFixed(2);
+    status.innerHTML = `
+      <div class="bs-card bs-mine">
+        <div class="bs-lbl muted">Your progress</div>
+        <div class="bs-big">${regularDone} <small>of ${regularLive} live days finished${regularLive ? ` · ${pct}%` : ''}</small></div>
+        <div class="bs-bar"><i style="width:${w(regularDone)}%; background:var(--good)"></i><i style="width:${w(regularLive - regularDone)}%; background:var(--accent-line)"></i></div>
+        <div class="bs-legend"><span><b style="background:var(--good)"></b>Finished</span><span><b style="background:var(--accent-line)"></b>Live, not finished</span><span><b style="background:#eeebe3"></b>Coming (${regularTotal - regularLive})</span></div>
+        ${catchUp.length ? `<div class="bs-catch">Catch up: ${catchUp.map(d => `<a class="bs-pill" href="${cfg.folder}/day${d}.html">Day ${d}</a>`).join('')}<span class="bs-hint">each one unlocks the day after it</span></div>` : ''}
+      </div>
+      ${nextCard}`;
+
+    // ---- Week rows: one row per week, the mock always in the last column ----
+    const segments = [];
+    let start = 1;
+    cfg.mockDays.forEach(m => { if (m <= cfg.totalDays) { segments.push([start, m]); start = m + 1; } });
+    if (start <= cfg.totalDays) segments.push([start, cfg.totalDays]);
+
+    function cellHtml(x) {
+      const cur = x.d === focusDay;
+      const cls = ['dc', x.state, x.isMock ? 'mock' : '', cur ? 'current' : '', x.isFinish ? 'finish' : ''].join(' ');
+      let meta, badge = '', dots = '';
+      if (x.isMock) meta = x.state === 'done' ? 'Mock · done' : x.state === 'soon' ? 'Mock · soon' : 'Mock exam';
+      else if (x.state === 'done') meta = 'Done';
+      else if (x.state === 'open') meta = `${x.tasksDone}/${x.tasks} tasks`;
+      else if (x.state === 'locked') meta = `After Day ${x.d - 1}`;
+      else meta = x.isFinish ? '🏁 Finish' : 'Soon';
+      if (x.state === 'done') badge = '<span class="dc-badge">✓</span>';
+      else if (x.state === 'locked') badge = '<span class="dc-badge lock">🔒︎</span>';
+      if (cur) badge = `<span class="dc-now">${x.d === latestDay ? 'TODAY' : 'NEXT'}</span>`;
+      if (!x.isMock && x.state === 'open' && x.tasks) {
+        dots = `<div class="dc-dots">${Array.from({ length: x.tasks }, (_, i) => `<i class="${i < x.tasksDone ? 'f' : ''}"></i>`).join('')}</div>`;
+      }
+      const title = x.state === 'locked' ? `Finish Day ${x.d - 1} first` : x.state === 'soon' ? 'Coming soon' : `Day ${x.d}`;
+      const inner = `<span class="dc-num">${pad(x.d)}</span>${badge}${dots}<span class="dc-meta">${meta}</span>`;
+      return (x.state === 'open' || x.state === 'done')
+        ? `<a class="${cls}" href="${cfg.folder}/day${x.d}.html" title="${title}">${inner}</a>`
+        : `<div class="${cls}" title="${title}">${inner}</div>`;
+    }
+
+    grid.innerHTML = segments.map(([from, to], i) => {
+      const seg = days.slice(from - 1, to);
+      const reg = seg.filter(x => !x.isMock);
+      const fin = reg.filter(x => x.state === 'done').length;
+      const started = seg.some(x => x.state !== 'soon');
+      const lead = (7 - seg.length % 7) % 7;
+      const isFinal = i === segments.length - 1 && !cfg.mockDays.includes(to);
+      return `<div class="wk">
+        <div class="wk-label"><div class="wk-name">${isFinal ? 'Final stretch' : 'Week ' + (i + 1)}</div><div class="wk-range">Days ${from}–${to}</div>${started && reg.length ? `<div class="wk-count">${fin}/${reg.length} done</div>` : ''}</div>
+        <div class="wk-cells">${'<div class="dc-gap"></div>'.repeat(lead)}${seg.map(cellHtml).join('')}</div>
+      </div>`;
+    }).join('');
+
+    return { latestDay, latestDone: latest ? latest.state === 'done' : false };
   }
 
   // Entry card for the Speaking Room (speaking-room.html). Read-only status
