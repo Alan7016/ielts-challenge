@@ -1603,6 +1603,19 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
     if (lockedTasks[n]) return true;
     const container = document.getElementById('task' + n);
     if (!container) return true;
+
+    // Universal precondition, checked before any of the branches below:
+    // any field carrying data-min-words (e.g. a hard-gated written summary)
+    // must reach that many words, regardless of what else is in the task
+    // (a recording box elsewhere in the same task would otherwise short-
+    // circuit the checks further down before they ever look at this field).
+    const minWordFields = container.querySelectorAll('[data-min-words]');
+    for (const f of minWordFields) {
+      const min = parseInt(f.dataset.minWords, 10) || 0;
+      const words = f.value.trim() ? f.value.trim().split(/\s+/).length : 0;
+      if (words < min) return false;
+    }
+
     const confirmBox = container.querySelector('.confirm-row input[type="checkbox"]');
     if (confirmBox) return confirmBox.checked;
 
@@ -2730,8 +2743,8 @@ function renderGroupSections(groups, buttonHtmlFn) {
 // previously duplicated per-file, which let it silently drift out of date.
 const TRACK_DAY_TOTAL_TASKS = {
   '1.0': { 1: 9, 2: 9, 3: 9, 5: 9, 6: 9, 7: 9, 8: 8, 9: 8, 10: 8, 12: 8, 13: 8, 14: 8, 15: 8, 16: 8 },
-  '2.0-standard': { 1: 8, 2: 8, 3: 10, 4: 5, 5: 7, 6: 7, 7: 7, 8: 9, 9: 6, 10: 6, 11: 5, 12: 4, 14: 5, 15: 5 },
-  '2.0-advanced': { 1: 6, 2: 7, 3: 9, 4: 7, 5: 4, 7: 7, 8: 5, 9: 6, 10: 7, 11: 5, 12: 4, 14: 5, 15: 6 },
+  '2.0-standard': { 1: 8, 2: 8, 3: 10, 4: 5, 5: 7, 6: 7, 7: 7, 8: 9, 9: 6, 10: 6, 11: 5, 12: 4, 14: 5, 15: 5, 16: 7 },
+  '2.0-advanced': { 1: 6, 2: 7, 3: 9, 4: 7, 5: 4, 7: 7, 8: 5, 9: 6, 10: 7, 11: 5, 12: 4, 14: 5, 15: 6, 16: 6 },
   '2.0-expert': { 1: 6, 2: 7, 3: 9, 4: 8, 5: 4, 7: 8, 8: 7, 9: 6, 10: 5, 11: 4, 12: 4, 14: 5, 15: 5 }
 };
 function totalTasksForTrack(trackKey, day) { return (TRACK_DAY_TOTAL_TASKS[trackKey] || {})[day] || 9; }
