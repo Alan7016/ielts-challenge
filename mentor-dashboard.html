@@ -306,7 +306,26 @@
       document.getElementById('dashboard-root').innerHTML = `<p style="color:var(--muted);">No non-mock days are live for this group yet.</p>`;
       return;
     }
-    selectedDay = nonMockDays[0];
+
+    // Default to the most recent day this group has actually submitted work
+    // for, not the newest day built site-wide. A group that started later
+    // than the rest of the platform (or a student who's fallen behind) can
+    // be many days behind the latest live day — defaulting to the latest
+    // live day made their whole roster look empty (ticks blank, "No answers
+    // submitted yet") even though real, saved homework existed on earlier
+    // days, because nobody thought to click back through the day picker.
+    let defaultDay = nonMockDays[0];
+    const { data: groupStudents } = await sb.from('profiles').select('id').eq('group_id', myGroup.id).eq('role', 'student');
+    const groupStudentIds = (groupStudents || []).map(s => s.id);
+    if (groupStudentIds.length > 0) {
+      const { data: recentProgress } = await sb.from('progress').select('day').in('student_id', groupStudentIds).order('day', { ascending: false }).limit(1);
+      const mostRecentActiveDay = recentProgress && recentProgress.length > 0 ? recentProgress[0].day : null;
+      if (mostRecentActiveDay != null) {
+        const candidate = nonMockDays.find(d => d <= mostRecentActiveDay);
+        defaultDay = candidate !== undefined ? candidate : nonMockDays[nonMockDays.length - 1];
+      }
+    }
+    selectedDay = defaultDay;
 
     const dayRow = document.getElementById('day-picker-row');
     const daySelect = document.getElementById('day-select');
