@@ -293,6 +293,107 @@ function initWordCounter(textareaId, countId) {
   update();
 }
 
+// ---------- Timed writing coach (Task 1 practice) ----------
+// Adds a countdown timer, a live word count against a target, and an
+// "Analyse my writing" panel that checks for the Task 1 features taught in
+// class (paragraphs, overview, trend verbs, time prepositions, figures,
+// comparisons, countable/uncountable slips). Practice only: the timer
+// never locks the box. Usage: initWritingCoach('essay-id', { minutes: 20,
+// target: 150, countable: ['colonies'], uncountable: ['honey'] })
+function initWritingCoach(textareaId, opts) {
+  const ta = document.getElementById(textareaId);
+  if (!ta) return;
+  opts = Object.assign({ minutes: 20, target: 150, countable: [], uncountable: [] }, opts || {});
+  const uid = textareaId;
+  const wrap = document.createElement('div');
+  wrap.className = 'wc-coach';
+  wrap.innerHTML = `
+    <div class="wc-bar">
+      <button type="button" class="ghost wc-start" id="${uid}-start">▶ Start ${opts.minutes}-minute timer</button>
+      <span class="wc-timer" id="${uid}-timer">${String(opts.minutes).padStart(2, '0')}:00</span>
+      <span class="wc-count"><b id="${uid}-words">0</b> / ${opts.target} words</span>
+    </div>
+    <div class="wc-progress"><i id="${uid}-prog"></i></div>`;
+  ta.parentNode.insertBefore(wrap, ta);
+  const after = document.createElement('div');
+  after.innerHTML = `<button type="button" class="ghost wc-analyse" id="${uid}-analyse" style="margin-top:10px;">🔍 Analyse my writing</button><div class="wc-report" id="${uid}-report" hidden></div>`;
+  ta.parentNode.insertBefore(after, ta.nextSibling);
+
+  const words = () => { const t = ta.value.trim(); return t ? t.split(/\s+/).length : 0; };
+  function updateCount() {
+    const n = words();
+    document.getElementById(`${uid}-words`).textContent = n;
+    const p = document.getElementById(`${uid}-prog`);
+    p.style.width = Math.min(100, n / opts.target * 100) + '%';
+    p.classList.toggle('ok', n >= opts.target);
+  }
+  ta.addEventListener('input', updateCount);
+  updateCount();
+  // Field values are restored asynchronously after page load — recount then.
+  setTimeout(updateCount, 2500);
+
+  // Timer — remembers its start time in this browser so a refresh doesn't reset it.
+  const key = 'wc-timer-start-' + location.pathname + '-' + uid;
+  const timerEl = document.getElementById(`${uid}-timer`);
+  const startBtn = document.getElementById(`${uid}-start`);
+  let tick = null;
+  function run(startMs) {
+    startBtn.hidden = true;
+    const total = opts.minutes * 60;
+    const draw = () => {
+      const left = Math.max(0, total - Math.floor((Date.now() - startMs) / 1000));
+      timerEl.textContent = `${String(Math.floor(left / 60)).padStart(2, '0')}:${String(left % 60).padStart(2, '0')}`;
+      timerEl.classList.toggle('low', left <= 300 && left > 0);
+      if (left === 0) { timerEl.classList.add('done'); timerEl.textContent = "Time's up — finish your sentence"; clearInterval(tick); }
+    };
+    draw(); tick = setInterval(draw, 1000);
+  }
+  let saved = null;
+  try { saved = +localStorage.getItem(key) || null; } catch (e) {}
+  if (saved) run(saved);
+  startBtn.addEventListener('click', () => { const now = Date.now(); try { localStorage.setItem(key, now); } catch (e) {} run(now); });
+
+  document.getElementById(`${uid}-analyse`).addEventListener('click', () => {
+    const text = ta.value;
+    const low = ' ' + text.toLowerCase().replace(/\s+/g, ' ') + ' ';
+    const n = words();
+    const paras = text.split(/\n\s*\n|\n/).map(s => s.trim()).filter(Boolean).length;
+    const found = list => list.filter(w => new RegExp('\\b' + w + '\\b').test(low));
+    const trend = found(['rose', 'rise', 'rises', 'increased', 'increase', 'went up', 'grew', 'climbed', 'fell', 'fall', 'falls', 'dropped', 'decreased', 'decrease', 'declined', 'decline', 'went down', 'remained', 'peaked', 'reached', 'recovered']);
+    const time = [];
+    if (/\bfrom (19|20)\d\d to (19|20)\d\d\b/.test(low)) time.push('from … to …');
+    if (/\bbetween (19|20)\d\d and (19|20)\d\d\b/.test(low)) time.push('between … and …');
+    if (/\bin (19|20)\d\d\b/.test(low)) time.push('in + year');
+    if (/\b(during|over) (the|this|that)\b/.test(low)) time.push('during / over the period');
+    const figures = (text.match(/\d[\d,.]*/g) || []).length;
+    const overview = found(['overall', 'in general', 'to sum up', 'in summary', 'generally']);
+    const compare = found(['more', 'fewer', 'less', 'than', 'whereas', 'while', 'however', 'both', 'similarly', 'on the other hand', 'in contrast']);
+    const problems = [];
+    const C = opts.countable.join('|'), U = opts.uncountable.join('|');
+    if (U && new RegExp(`\\bnumber of (${U})\\b`).test(low)) problems.push(`“number of” + an uncountable noun (${opts.uncountable.join(', ')}) — use “amount of”`);
+    if (C && new RegExp(`\\bamount of (${C})\\b`).test(low)) problems.push(`“amount of” + a countable noun (${opts.countable.join(', ')}) — use “number of”`);
+    if (C && new RegExp(`\\bless (${C})\\b`).test(low)) problems.push('“less” + a countable noun — use “fewer”');
+    if (U && new RegExp(`\\b(fewer|many) (${U})\\b`).test(low)) problems.push('“fewer / many” + an uncountable noun — use “less / much”');
+    if (/\bon (19|20)\d\d\b/.test(low)) problems.push("“on” + a year — use “in” (e.g. in 2010)");
+    if (/\bsince (19|20)\d\d to\b/.test(low)) problems.push('“since … to …” — use “from … to …”');
+    if (/\bbetween (19|20)\d\d to\b/.test(low)) problems.push('“between … to …” — use “between … and …” or “from … to …”');
+    if (/\bfrom (19|20)\d\d and\b/.test(low)) problems.push('“from … and …” — use “from … to …” or “between … and …”');
+    const row = (ok, label, detail) => `<li class="${ok ? 'ok' : 'miss'}"><span>${ok ? '✓' : '•'}</span><div><b>${label}</b>${detail ? `<div class="d">${detail}</div>` : ''}</div></li>`;
+    const report = document.getElementById(`${uid}-report`);
+    report.hidden = false;
+    report.innerHTML = `<h4>Writing check</h4><ul>
+      ${row(n >= opts.target, `Length: ${n} words`, n >= opts.target ? 'You reached the minimum.' : `Aim for at least ${opts.target} — ${opts.target - n} more to go.`)}
+      ${row(paras >= 3, `Paragraphs: ${paras}`, 'Aim for 3–4: introduction, overview, and one or two paragraphs of details. Leave an empty line between paragraphs.')}
+      ${row(overview.length > 0, 'Overview', overview.length ? `Found: “${overview.join('”, “')}”.` : 'No overview found — add a sentence starting with “Overall, …” that gives the main trend.')}
+      ${row(trend.length >= 3, `Trend language: ${trend.length} different`, trend.length ? `Used: ${trend.join(', ')}.` : 'Use verbs like rose, fell, increased, dropped, remained stable, reached a peak.')}
+      ${row(time.length >= 2, 'Time phrases', time.length ? `Used: ${time.join(', ')}.` : 'Use from … to …, between … and …, in + year, over the period.')}
+      ${row(figures >= 4, `Figures from the chart: ${figures}`, figures >= 4 ? 'Good — you support your points with numbers.' : 'Add more numbers from the charts to support what you say.')}
+      ${row(compare.length >= 2, 'Comparisons', compare.length ? `Used: ${compare.join(', ')}.` : 'Compare the two charts: whereas, while, both, however, more / fewer than.')}
+      ${problems.length ? `<li class="warn"><span>!</span><div><b>Check these</b>${problems.map(p => `<div class="d">${p}</div>`).join('')}</div></li>` : row(true, 'No common grammar slips found', 'number / amount, fewer / less and time prepositions look fine.')}
+    </ul><p class="wc-note">This is an automatic check to help you revise — your mentor will give you real feedback on your writing.</p>`;
+  });
+}
+
 // ---------- Spelling & grammar review ----------
 // Runs once, right when a writing task locks in — not on every keystroke.
 // Uses LanguageTool's free public API (checks both spelling and basic
@@ -1649,7 +1750,9 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
     // earlier), which is exactly the inconsistency that let ungraded
     // listening-form inputs slip through with Next already active.
     const texts = container.querySelectorAll('input.text-answer, input[type="text"]:not(.notes-box), textarea.text-answer, textarea.no-check:not(.notes-box)');
-    for (const t of texts) { if (t.value.trim() === '') return false; }
+    // Fields inside a [hidden] block are skipped — e.g. a "correct the
+    // sentence" box that only appears once the student picks False.
+    for (const t of texts) { if (t.closest('[hidden]')) continue; if (t.value.trim() === '') return false; }
     const selects = container.querySelectorAll('select');
     for (const s of selects) { if (s.value === '') return false; }
     const radioNames = {};
@@ -1702,11 +1805,21 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
       // about to submit your response" confirm below fires on ANY task
       // that contains a speaking box at all, even one with no writing task
       // in it, showing a nonsensical "(0 words)" prompt.
-      const freeTextBox = container.querySelector('textarea.no-check:not(.notes-box)');
-      if (freeTextBox) {
-        const wordCount = freeTextBox.value.trim() ? freeTextBox.value.trim().split(/\s+/).length : 0;
+      // Counts every visible writing box, not just the first one — a task
+      // with several short answers (or a hidden "correct it" box that comes
+      // first) used to report "(0 words)" from whichever box came first.
+      const freeTextBoxes = Array.from(container.querySelectorAll('textarea.no-check:not(.notes-box)')).filter(t => !t.closest('[hidden]'));
+      const freeTextBox = freeTextBoxes[0] || null; // still used by the day-24+ grammar review below
+      if (freeTextBoxes.length) {
+        const wc = t => t.value.trim() ? t.value.trim().split(/\s+/).length : 0;
+        const wordCount = freeTextBoxes.reduce((sum, t) => sum + wc(t), 0);
+        const what = freeTextBoxes.length === 1
+          ? `your response (${wordCount} words)`
+          : `your written answers (${freeTextBoxes.length} boxes, ${wordCount} words in total)`;
         const sure = confirm(
-          `You're about to submit your response (${wordCount} words). Once you continue, it will be locked and you won't be able to edit it again. Are you sure you're finished?`
+          freeTextBoxes.length === 1
+            ? `You're about to submit ${what}. Once you continue, it will be locked and you won't be able to edit it again. Are you sure you're finished?`
+            : `You're about to submit ${what}. Once you continue, they will be locked and you won't be able to edit them again. Are you sure you're finished?`
         );
         if (!sure) return;
       }
@@ -2753,7 +2866,7 @@ function renderGroupSections(groups, buttonHtmlFn) {
 // previously duplicated per-file, which let it silently drift out of date.
 const TRACK_DAY_TOTAL_TASKS = {
   '1.0': { 1: 9, 2: 9, 3: 9, 5: 9, 6: 9, 7: 9, 8: 8, 9: 8, 10: 8, 12: 8, 13: 8, 14: 8, 15: 8, 16: 8 },
-  '2.0-standard': { 1: 8, 2: 8, 3: 10, 4: 5, 5: 7, 6: 7, 7: 7, 8: 9, 9: 6, 10: 6, 11: 5, 12: 4, 14: 5, 15: 5, 16: 7 },
+  '2.0-standard': { 1: 8, 2: 8, 3: 10, 4: 5, 5: 7, 6: 7, 7: 7, 8: 9, 9: 6, 10: 6, 11: 5, 12: 4, 14: 5, 15: 5, 16: 7, 17: 9 },
   '2.0-advanced': { 1: 6, 2: 7, 3: 9, 4: 7, 5: 4, 7: 7, 8: 5, 9: 6, 10: 7, 11: 5, 12: 4, 14: 5, 15: 6, 16: 6 },
   '2.0-expert': { 1: 6, 2: 7, 3: 9, 4: 8, 5: 4, 7: 8, 8: 7, 9: 6, 10: 5, 11: 4, 12: 4, 14: 5, 15: 5, 16: 5 }
 };
