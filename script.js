@@ -1627,11 +1627,15 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
     const readingFrame = container.querySelector('iframe[id^="reading-iframe"]');
     if (readingFrame) return readingFrame.dataset.cdiReadingDone === 'true';
 
+    // Any recording box in the task must be recorded — but this is an AND
+    // with whatever else is checked below, not an exclusive branch. A task
+    // can legitimately mix a speaking question-box with its own separate
+    // graded content (a listening table, MC/T-F questions, a written
+    // summary) — e.g. "discuss these questions, then listen and complete
+    // the table" — and both halves need to be done before Next enables,
+    // not just the recording while the table sits empty.
     const questionBoxes = container.querySelectorAll('.question-box[data-field]');
-    if (questionBoxes.length > 0) {
-      for (const qb of questionBoxes) { if (!qb.classList.contains('recorded')) return false; }
-      return true;
-    }
+    for (const qb of questionBoxes) { if (!qb.classList.contains('recorded')) return false; }
 
     // Plain <input> text fields, PLUS free-answer textareas — every
     // .no-check textarea except .notes-box (which is an optional scratch
@@ -1692,7 +1696,13 @@ async function initTaskFlow(dayNumber, totalTasks, userId, checkFns) {
     // Admins skip all of this: no confirm dialog, no lock, no save, no points.
     if (!isAdmin && !lockedTasks[current]) {
       const container = document.getElementById('task' + current);
-      const freeTextBox = container.querySelector('textarea.no-check');
+      // :not(.notes-box) matters here — a speaking question-box's "jot a
+      // few ideas before you record" scratch pad is also textarea.no-check,
+      // but it's never a real answer. Without this exclusion, the "you're
+      // about to submit your response" confirm below fires on ANY task
+      // that contains a speaking box at all, even one with no writing task
+      // in it, showing a nonsensical "(0 words)" prompt.
+      const freeTextBox = container.querySelector('textarea.no-check:not(.notes-box)');
       if (freeTextBox) {
         const wordCount = freeTextBox.value.trim() ? freeTextBox.value.trim().split(/\s+/).length : 0;
         const sure = confirm(
