@@ -354,6 +354,7 @@ function initWritingCoach(textareaId, opts) {
   startBtn.addEventListener('click', () => { const now = Date.now(); try { localStorage.setItem(key, now); } catch (e) {} run(now); });
 
   document.getElementById(`${uid}-analyse`).addEventListener('click', () => {
+    if (opts.mode === 'task2') return analyseTask2();
     const text = ta.value;
     const low = ' ' + text.toLowerCase().replace(/\s+/g, ' ') + ' ';
     const n = words();
@@ -392,6 +393,57 @@ function initWritingCoach(textareaId, opts) {
       ${problems.length ? `<li class="warn"><span>!</span><div><b>Check these</b>${problems.map(p => `<div class="d">${p}</div>`).join('')}</div></li>` : row(true, 'No common grammar slips found', 'number / amount, fewer / less and time prepositions look fine.')}
     </ul><p class="wc-note">This is an automatic check to help you revise — your mentor will give you real feedback on your writing.</p>`;
   });
+
+  // Task 2 (essay) version of the check: structure, a clear position,
+  // support, cohesion and register instead of trends and figures.
+  function analyseTask2() {
+    const text = ta.value;
+    const low = ' ' + text.toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, ' ') + ' ';
+    const n = words();
+    const paras = text.split(/\n\s*\n|\n/).map(s => s.trim()).filter(Boolean);
+    const has = re => re.test(low);
+    const found = list => list.filter(w => new RegExp('\\b' + w.replace(/ /g, '\\s+') + '\\b').test(low));
+    const position = found(['i believe', 'i think', 'in my opinion', 'in my view', 'i strongly', 'i agree', 'i disagree', 'i would argue', 'this essay will argue', 'this essay argues', 'i am convinced', 'i partly agree', 'i completely agree', 'i fully agree', 'outweigh']);
+    const examples = found(['for example', 'for instance', 'such as', 'a good example', 'to illustrate', 'in my country', 'a case in point', 'research shows', 'studies show', 'according to']);
+    const linkers = found(['firstly', 'secondly', 'finally', 'moreover', 'furthermore', 'in addition', 'however', 'on the other hand', 'nevertheless', 'although', 'whereas', 'while', 'therefore', 'as a result', 'consequently', 'because', 'since', 'despite', 'in contrast', 'similarly', 'thus', 'hence', 'admittedly']);
+    const conclusion = found(['in conclusion', 'to conclude', 'to sum up', 'in summary', 'overall', 'all things considered', 'on balance']);
+    const informal = found(["don't", "can't", "won't", "isn't", "doesn't", "it's", "i'm", "they're", 'kids', 'stuff', 'things', 'a lot of', 'lots of', 'gonna', 'wanna', 'really', 'very very', 'nowadays people', 'ok', 'okay']);
+    const sentences = text.split(/[.!?]+\s/).map(s => s.trim()).filter(s => s.split(/\s+/).length > 2);
+    const avgLen = sentences.length ? Math.round(sentences.reduce((a, s) => a + s.split(/\s+/).length, 0) / sentences.length) : 0;
+    // most repeated content word (4+ letters, not a stop word)
+    const stop = new Set(['that', 'this', 'with', 'they', 'their', 'there', 'have', 'will', 'from', 'which', 'more', 'than', 'also', 'because', 'would', 'should', 'could', 'these', 'those', 'such', 'when', 'what', 'many', 'some', 'other', 'into', 'been', 'were', 'about', 'does', 'only', 'very', 'much', 'most', 'them', 'make', 'example', 'however', 'people']);
+    const freq = {};
+    (low.match(/\b[a-z]{4,}\b/g) || []).forEach(w => { if (!stop.has(w)) freq[w] = (freq[w] || 0) + 1; });
+    const top = Object.entries(freq).sort((a, b) => b[1] - a[1])[0];
+    const firstPara = (paras[0] || '').toLowerCase();
+    const promptCopy = opts.prompt ? (() => {
+      const pw = opts.prompt.toLowerCase().match(/\b[a-z]+\b/g) || [];
+      const fw = firstPara.match(/\b[a-z]+\b/g) || [];
+      let best = 0;
+      for (let i = 0; i + 8 <= pw.length; i++) { const chunk = pw.slice(i, i + 8).join(' '); if (fw.join(' ').includes(chunk)) best = 8; }
+      return best >= 8;
+    })() : false;
+
+    const row = (ok, label, detail) => `<li class="${ok ? 'ok' : 'miss'}"><span>${ok ? '✓' : '•'}</span><div><b>${label}</b>${detail ? `<div class="d">${detail}</div>` : ''}</div></li>`;
+    const warn = [];
+    if (informal.length) warn.push(`Informal words or contractions: “${informal.join('”, “')}” — use full forms and more formal words (children, many, problems, will not …).`);
+    if (top && top[1] >= 7) warn.push(`You used “${top[0]}” ${top[1]} times — try a synonym or a pronoun in some places.`);
+    if (promptCopy) warn.push('Your introduction copies a long phrase from the question — paraphrase it in your own words.');
+    if (has(/\b(people|person) (is|are) agree\b|\bi am agree\b|\bam disagree\b/)) warn.push('“I am agree” is wrong — say “I agree” (agree is a verb).');
+    if (has(/\bmore better\b|\bmore easier\b|\bmore cheaper\b/)) warn.push('Double comparative (“more better”) — say “better”, “easier”, “cheaper”.');
+    const report = document.getElementById(`${uid}-report`);
+    report.hidden = false;
+    report.innerHTML = `<h4>Essay check</h4><ul>
+      ${row(n >= opts.target, `Length: ${n} words`, n >= opts.target ? 'You reached the minimum.' : `Aim for at least ${opts.target} — ${opts.target - n} more to go.`)}
+      ${row(paras.length >= 4 && paras.length <= 6, `Paragraphs: ${paras.length}`, 'Aim for 4–5: introduction, two or three body paragraphs, conclusion. Leave an empty line between paragraphs.')}
+      ${row(position.length > 0, 'Clear position', position.length ? `Found: “${position.join('”, “')}”.` : 'The question asks for your view — state it clearly in the introduction (e.g. “I strongly believe that …”) and repeat it in the conclusion.')}
+      ${row(examples.length >= 2, `Examples and support: ${examples.length}`, examples.length ? `Used: ${examples.join(', ')}.` : 'Support each main idea with an example: for example, for instance, such as …')}
+      ${row(linkers.length >= 5, `Linking words: ${linkers.length} different`, linkers.length ? `Used: ${linkers.join(', ')}.` : 'Connect your ideas: however, moreover, therefore, although, as a result …')}
+      ${row(conclusion.length > 0, 'Conclusion', conclusion.length ? `Found: “${conclusion[0]}”.` : 'No conclusion signal — start your last paragraph with “In conclusion, …”.')}
+      ${row(avgLen >= 14 && avgLen <= 28, `Average sentence length: ${avgLen} words`, avgLen < 14 ? 'Sentences are quite short — combine some with although, which, because, while.' : avgLen > 28 ? 'Some sentences are very long — split them so each one is clear.' : 'A good mix of sentence lengths.')}
+      ${warn.length ? `<li class="warn"><span>!</span><div><b>Check these</b>${warn.map(p => `<div class="d">${p}</div>`).join('')}</div></li>` : row(true, 'No common register slips found', 'No contractions, informal words or heavy repetition detected.')}
+    </ul><p class="wc-note">This is an automatic check to help you revise — it can't judge your ideas. Your mentor will give you real feedback on your essay.</p>`;
+  }
 }
 
 // ---------- Spelling & grammar review ----------
@@ -2866,9 +2918,9 @@ function renderGroupSections(groups, buttonHtmlFn) {
 // previously duplicated per-file, which let it silently drift out of date.
 const TRACK_DAY_TOTAL_TASKS = {
   '1.0': { 1: 9, 2: 9, 3: 9, 5: 9, 6: 9, 7: 9, 8: 8, 9: 8, 10: 8, 12: 8, 13: 8, 14: 8, 15: 8, 16: 8 },
-  '2.0-standard': { 1: 8, 2: 8, 3: 10, 4: 5, 5: 7, 6: 7, 7: 7, 8: 9, 9: 6, 10: 6, 11: 5, 12: 4, 14: 5, 15: 5, 16: 7, 17: 9 },
-  '2.0-advanced': { 1: 6, 2: 7, 3: 9, 4: 7, 5: 4, 7: 7, 8: 5, 9: 6, 10: 7, 11: 5, 12: 4, 14: 5, 15: 6, 16: 6, 17: 6 },
-  '2.0-expert': { 1: 6, 2: 7, 3: 9, 4: 8, 5: 4, 7: 8, 8: 7, 9: 6, 10: 5, 11: 4, 12: 4, 14: 5, 15: 5, 16: 5, 17: 6 }
+  '2.0-standard': { 1: 8, 2: 8, 3: 10, 4: 5, 5: 7, 6: 7, 7: 7, 8: 9, 9: 6, 10: 6, 11: 5, 12: 4, 14: 5, 15: 5, 16: 7, 17: 9, 18: 12 },
+  '2.0-advanced': { 1: 6, 2: 7, 3: 9, 4: 7, 5: 4, 7: 7, 8: 5, 9: 6, 10: 7, 11: 5, 12: 4, 14: 5, 15: 6, 16: 6, 17: 6, 18: 11 },
+  '2.0-expert': { 1: 6, 2: 7, 3: 9, 4: 8, 5: 4, 7: 8, 8: 7, 9: 6, 10: 5, 11: 4, 12: 4, 14: 5, 15: 5, 16: 5, 17: 6, 18: 10 }
 };
 function totalTasksForTrack(trackKey, day) { return (TRACK_DAY_TOTAL_TASKS[trackKey] || {})[day] || 9; }
 
