@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 18 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 18 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 11</div>
+      <h2>Wordlist — What Is University For?</h2>
+      <p class="task-sub">Today's focus is the <b>discussion essay</b>. The topic: should universities train students for jobs, or give them knowledge for its own sake?</p>
+      <div class="card" style="overflow-x:auto;"><table class="data-table" style="width:100%;">
+          <tr><th>word / phrase</th><th>meaning</th><th>example</th></tr><tr><td><b>employability</b></td><td>how likely someone is to get a job, based on their skills and qualifications</td><td>Many universities now publish data on graduate <b>employability</b>.</td></tr><tr><td><b>vocational</b></td><td>connected with the skills needed for a particular job</td><td>Nursing and engineering are highly <b>vocational</b> degrees.</td></tr><tr><td><b>for its own sake</b></td><td>because it is valuable in itself, not because it leads to something else</td><td>Some students study philosophy purely <b>for its own sake</b>.</td></tr><tr><td><b>critical thinking</b></td><td>the ability to analyse information and judge it carefully</td><td>Employers value <b>critical thinking</b> more than memorised facts.</td></tr><tr><td><b>transferable skills</b></td><td>abilities that are useful in many different jobs</td><td>Writing, teamwork and problem-solving are <b>transferable skills</b>.</td></tr><tr><td><b>curriculum</b></td><td>all the subjects and content taught on a course</td><td>The <b>curriculum</b> now includes a compulsory work placement.</td></tr><tr><td><b>tuition fees</b></td><td>the money students pay to study</td><td>Rising <b>tuition fees</b> have made students think more about job prospects.</td></tr><tr><td><b>return on investment</b></td><td>the benefit you get compared with what you spent</td><td>Students increasingly judge a degree by its <b>return on investment</b>.</td></tr><tr><td><b>intellectual curiosity</b></td><td>a strong wish to learn and understand things</td><td>Good teachers encourage <b>intellectual curiosity</b>.</td></tr><tr><td><b>the labour market</b></td><td>the supply of workers and the jobs available</td><td><b>The labour market</b> changes faster than university courses do.</td></tr><tr><td><b>obsolete</b></td><td>no longer useful because something newer exists</td><td>Some technical skills become <b>obsolete</b> within five years.</td></tr><tr><td><b>well-rounded</b></td><td>having a wide range of knowledge, skills and experience</td><td>Universities should produce <b>well-rounded</b> citizens, not just workers.</td></tr><tr><td><b>to equip (sb) with</b></td><td>to give someone the skills or tools they need</td><td>A degree should <b>equip</b> graduates <b>with</b> practical skills.</td></tr><tr><td><b>to undermine</b></td><td>to gradually make something weaker</td><td>Cutting arts funding could <b>undermine</b> the quality of education.</td></tr></table></div>
+      <p style="margin-top:26px;"><strong>Match each word or phrase to its meaning.</strong></p>
+      <div class="card" id="t1-m">
+        <div class="line-match" id="t1-m-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. vocational</button><button type="button" class="lm-item" data-key="2">2. for its own sake</button><button type="button" class="lm-item" data-key="3">3. transferable skills</button><button type="button" class="lm-item" data-key="4">4. return on investment</button><button type="button" class="lm-item" data-key="5">5. obsolete</button><button type="button" class="lm-item" data-key="6">6. well-rounded</button><button type="button" class="lm-item" data-key="7">7. to undermine</button><button type="button" class="lm-item" data-key="8">8. employability</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. abilities that are useful in many different jobs</button><button type="button" class="lm-item" data-key="b">b. the benefit you get compared with what you spent</button><button type="button" class="lm-item" data-key="c">c. no longer useful because something newer exists</button><button type="button" class="lm-item" data-key="d">d. having a wide range of knowledge and experience</button><button type="button" class="lm-item" data-key="e">e. to gradually make something weaker</button><button type="button" class="lm-item" data-key="f">f. how likely someone is to get a job</button><button type="button" class="lm-item" data-key="g">g. connected with the skills needed for a particular job</button><button type="button" class="lm-item" data-key="h">h. because it is valuable in itself</button></div>
+          <select class="lm-hidden-select select" id="t1-m-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-m-2" data-lm-key="2" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-m-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-m-4" data-lm-key="4" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-m-5" data-lm-key="5" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-m-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-m-7" data-lm-key="7" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-m-8" data-lm-key="8" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-m', 't1-m-score'); markLineMatchResult('t1-m-lm');">Check answers</button>
+          <span id="t1-m-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 11</div>
+      <h2>Vocabulary — Collocations and Word Families</h2>
+      <p class="task-sub">Band 7+ vocabulary is about natural word combinations and accurate word forms, not just "big words".</p>
+      <p style="margin-top:4px;"><strong>A. Choose the verb that collocates with the phrase.</strong></p>
+      <div class="card" id="t2-c"><div class="sel-row"><select class="select" id="t2-c-1" data-answer="pursue"><option value="">—</option><option value="pursue">pursue</option><option value="acquire">acquire</option><option value="meet">meet</option><option value="broaden">broaden</option><option value="gain">gain</option><option value="foster">foster</option><option value="enter">enter</option><option value="bridge">bridge</option><option value="place">place</option><option value="keep pace">keep pace</option></select><span><b>1.</b> to ______ a degree in economics</span></div><div class="sel-row"><select class="select" id="t2-c-2" data-answer="acquire"><option value="">—</option><option value="pursue">pursue</option><option value="acquire">acquire</option><option value="meet">meet</option><option value="broaden">broaden</option><option value="gain">gain</option><option value="foster">foster</option><option value="enter">enter</option><option value="bridge">bridge</option><option value="place">place</option><option value="keep pace">keep pace</option></select><span><b>2.</b> to ______ practical skills during a placement</span></div><div class="sel-row"><select class="select" id="t2-c-3" data-answer="meet"><option value="">—</option><option value="pursue">pursue</option><option value="acquire">acquire</option><option value="meet">meet</option><option value="broaden">broaden</option><option value="gain">gain</option><option value="foster">foster</option><option value="enter">enter</option><option value="bridge">bridge</option><option value="place">place</option><option value="keep pace">keep pace</option></select><span><b>3.</b> to ______ the needs of employers</span></div><div class="sel-row"><select class="select" id="t2-c-4" data-answer="broaden"><option value="">—</option><option value="pursue">pursue</option><option value="acquire">acquire</option><option value="meet">meet</option><option value="broaden">broaden</option><option value="gain">gain</option><option value="foster">foster</option><option value="enter">enter</option><option value="bridge">bridge</option><option value="place">place</option><option value="keep pace">keep pace</option></select><span><b>4.</b> to ______ your horizons by studying abroad</span></div><div class="sel-row"><select class="select" id="t2-c-5" data-answer="gain"><option value="">—</option><option value="pursue">pursue</option><option value="acquire">acquire</option><option value="meet">meet</option><option value="broaden">broaden</option><option value="gain">gain</option><option value="foster">foster</option><option value="enter">enter</option><option value="bridge">bridge</option><option value="place">place</option><option value="keep pace">keep pace</option></select><span><b>5.</b> to ______ valuable work experience</span></div><div class="sel-row"><select class="select" id="t2-c-6" data-answer="foster"><option value="">—</option><option value="pursue">pursue</option><option value="acquire">acquire</option><option value="meet">meet</option><option value="broaden">broaden</option><option value="gain">gain</option><option value="foster">foster</option><option value="enter">enter</option><option value="bridge">bridge</option><option value="place">place</option><option value="keep pace">keep pace</option></select><span><b>6.</b> to ______ independent thinking in students</span></div><div class="sel-row"><select class="select" id="t2-c-7" data-answer="enter"><option value="">—</option><option value="pursue">pursue</option><option value="acquire">acquire</option><option value="meet">meet</option><option value="broaden">broaden</option><option value="gain">gain</option><option value="foster">foster</option><option value="enter">enter</option><option value="bridge">bridge</option><option value="place">place</option><option value="keep pace">keep pace</option></select><span><b>7.</b> to ______ the job market after graduating</span></div><div class="sel-row"><select class="select" id="t2-c-8" data-answer="bridge"><option value="">—</option><option value="pursue">pursue</option><option value="acquire">acquire</option><option value="meet">meet</option><option value="broaden">broaden</option><option value="gain">gain</option><option value="foster">foster</option><option value="enter">enter</option><option value="bridge">bridge</option><option value="place">place</option><option value="keep pace">keep pace</option></select><span><b>8.</b> to ______ the gap between theory and practice</span></div><div class="sel-row"><select class="select" id="t2-c-9" data-answer="place"><option value="">—</option><option value="pursue">pursue</option><option value="acquire">acquire</option><option value="meet">meet</option><option value="broaden">broaden</option><option value="gain">gain</option><option value="foster">foster</option><option value="enter">enter</option><option value="bridge">bridge</option><option value="place">place</option><option value="keep pace">keep pace</option></select><span><b>9.</b> to ______ great emphasis on research</span></div><div class="sel-row"><select class="select" id="t2-c-10" data-answer="keep pace"><option value="">—</option><option value="pursue">pursue</option><option value="acquire">acquire</option><option value="meet">meet</option><option value="broaden">broaden</option><option value="gain">gain</option><option value="foster">foster</option><option value="enter">enter</option><option value="bridge">bridge</option><option value="place">place</option><option value="keep pace">keep pace</option></select><span><b>10.</b> to ______ with rapid technological change</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-c', 't2-c-score')">Check answers</button>
+          <span id="t2-c-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>B. Complete each sentence with the correct form of the word in brackets.</strong></p>
+      <div class="card" id="t2-f" style="line-height:2.3;"><p>1. Graduate <input type="text" class="text-answer" id="t2f-1" data-correct="employability" autocomplete="off" style="width:140px;"> is now used to rank universities. <span class='alt'>(employ)</span></p><p>2. The course is too <input type="text" class="text-answer" id="t2f-2" data-correct="theoretical" autocomplete="off" style="width:130px;"> and has little connection to real work. <span class='alt'>(theory)</span></p><p>3. Medicine combines academic study with <input type="text" class="text-answer" id="t2f-3" data-correct="practical" autocomplete="off" style="width:120px;"> training. <span class='alt'>(practice)</span></p><p>4. She left <input type="text" class="text-answer" id="t2f-4" data-correct="academia" autocomplete="off" style="width:120px;"> to work in industry. <span class='alt'>(academic)</span></p><p>5. <input type="text" class="text-answer" id="t2f-5" data-correct="Vocational" autocomplete="off" style="width:120px;"> courses teach skills for a specific trade. <span class='alt'>(vocation)</span></p><p>6. Universities should challenge students <input type="text" class="text-answer" id="t2f-6" data-correct="intellectually" autocomplete="off" style="width:140px;">, not just train them. <span class='alt'>(intellect)</span></p><p>7. Early <input type="text" class="text-answer" id="t2f-7" data-correct="specialisation/specialization" autocomplete="off" style="width:150px;"> may limit students' options later. <span class='alt'>(specialise)</span></p><p>8. Many graduates are <input type="text" class="text-answer" id="t2f-8" data-correct="underemployed" autocomplete="off" style="width:150px;">, working in jobs that do not need a degree. <span class='alt'>(employ)</span></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-f', 't2-f-score')">Check answers</button>
+          <span id="t2-f-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 11</div>
+      <h2>Reading Passage 1 — What Are Universities For?</h2>
+      <p class="task-sub">An IELTS Academic passage. Spend about <b>20 minutes</b>, then answer questions 1–19.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">What Are Universities For?</h3>
+        <p class="article-meta">Education · 537 words</p>
+        <p><span class="para-label">A</span>For most of their history, universities had little to do with employment. The medieval universities of Bologna, Paris and Oxford trained a small number of priests, lawyers and doctors, but their central purpose was the pursuit of knowledge itself. In the nineteenth century, the German philosopher Wilhelm von Humboldt developed this idea into a model that is still influential today: a university, he argued, should unite teaching and research, and its students should be free to follow their intellectual curiosity wherever it led.</p><p><span class="para-label">B</span>This model came under pressure in the second half of the twentieth century, as higher education expanded rapidly. In 1950, around 3 per cent of young people in Britain went to university; by 2020, the figure was approaching 50 per cent. A system designed for a small elite was now expected to educate half the population, and governments that paid for this expansion naturally wanted to see an economic return. Universities were increasingly described as engines of growth, and graduates as the skilled workforce that a modern economy needed.</p><p><span class="para-label">C</span>The introduction of tuition fees in many countries has intensified this pressure. When students pay tens of thousands of dollars or pounds for a degree, it is hardly surprising that many of them see it as an investment and expect it to lead to a well-paid job. Universities, competing for these students, now publish detailed statistics on graduate salaries and employment rates, and some governments have threatened to reduce funding for courses with poor job outcomes.</p><p><span class="para-label">D</span>Supporters of a more vocational approach argue that this is entirely reasonable. They point out that a significant proportion of graduates work in jobs that do not require a degree, and that employers frequently complain that new graduates lack basic workplace skills such as teamwork and communication. Building work placements, industry projects and career training into degree programmes, they say, would benefit students, employers and taxpayers alike.</p><p><span class="para-label">E</span>Critics respond that this argument rests on a narrow understanding of what is useful. The specific technical knowledge taught in a highly job-focused course may become obsolete within a few years, whereas the ability to think critically, write clearly and analyse complex problems lasts a lifetime. Several large surveys of employers have found that these general abilities are valued more highly than subject-specific knowledge. Ironically, therefore, a degree in history or philosophy may prove more "useful" in the long run than one designed to match the current needs of the labour market.</p><p><span class="para-label">F</span>There is also a wider social argument. Universities, the critics say, do not exist only to serve the economy: they preserve and extend human knowledge, and they educate citizens who can take part in democratic debate. Much of the research that has transformed modern life — from the internet to vaccines — began as curiosity-driven inquiry with no obvious practical purpose. A university system judged purely by graduate salaries, they warn, would gradually lose the very qualities that made it valuable in the first place.</p><p><span class="para-label">G</span>In practice, most universities now try to combine both aims. Many offer modules in employability alongside traditional academic subjects, and an increasing number encourage students to take courses outside their main field. Whether this compromise will satisfy students, employers and governments remains to be seen.</p>
+      </div>
+      <p style="margin-top:26px;"><strong>Questions 1–7.</strong> The passage has seven paragraphs, <b>A–G</b>. Choose the correct heading for each paragraph from the list. There are more headings than paragraphs.</p>
+      <div class="card" id="t3-h"><div class="opt-legend"><span><b>i</b> Why paying for a degree changes expectations</span><span><b>ii</b> The original idea of a university</span><span><b>iii</b> Useful in a different way</span><span><b>iv</b> A balance between two purposes</span><span><b>v</b> Growth in student numbers creates new demands</span><span><b>vi</b> The case for connecting degrees to jobs</span><span><b>vii</b> More than an economic role</span><span><b>viii</b> Why employers prefer older graduates</span><span><b>ix</b> The falling cost of higher education</span></div><div class="sel-row"><select class="select" id="t3-h-1" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>1.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t3-h-2" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>2.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t3-h-3" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>3.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t3-h-4" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>4.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t3-h-5" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>5.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t3-h-6" data-answer="vii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>6.</b> Paragraph F</span></div><div class="sel-row"><select class="select" id="t3-h-7" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>7.</b> Paragraph G</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-h', 't3-h-score')">Check answers</button>
+          <span id="t3-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Questions 8–13.</strong> Do the statements agree with the information in the passage? Choose <b>True</b>, <b>False</b> or <b>Not Given</b>.</p>
+      <div class="card" id="t3-tf"><div class="q-item" id="t3-tf-8">
+          <p>8. Medieval universities did not train students for any profession.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-8" data-correct="false"> True</label><label><input type="radio" value="1" name="t3-tf-8" data-correct="true"> False</label><label><input type="radio" value="2" name="t3-tf-8" data-correct="false"> Not Given</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-9">
+          <p>9. Humboldt believed that teaching and research should be combined.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-9" data-correct="true"> True</label><label><input type="radio" value="1" name="t3-tf-9" data-correct="false"> False</label><label><input type="radio" value="2" name="t3-tf-9" data-correct="false"> Not Given</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-10">
+          <p>10. By 2020, almost half of young people in Britain went to university.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-10" data-correct="true"> True</label><label><input type="radio" value="1" name="t3-tf-10" data-correct="false"> False</label><label><input type="radio" value="2" name="t3-tf-10" data-correct="false"> Not Given</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-11">
+          <p>11. Universities in Germany were the first to charge tuition fees.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-11" data-correct="false"> True</label><label><input type="radio" value="1" name="t3-tf-11" data-correct="false"> False</label><label><input type="radio" value="2" name="t3-tf-11" data-correct="true"> Not Given</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-12">
+          <p>12. According to several surveys, employers value general abilities more than subject knowledge.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-12" data-correct="true"> True</label><label><input type="radio" value="1" name="t3-tf-12" data-correct="false"> False</label><label><input type="radio" value="2" name="t3-tf-12" data-correct="false"> Not Given</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-13">
+          <p>13. The internet was developed by a company for commercial reasons.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-13" data-correct="false"> True</label><label><input type="radio" value="1" name="t3-tf-13" data-correct="true"> False</label><label><input type="radio" value="2" name="t3-tf-13" data-correct="false"> Not Given</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-tf', 't3-tf-score')">Check answers</button>
+          <span id="t3-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Questions 14–19.</strong> Complete the summary using words from the box. There are more words than gaps.</p>
+      <div class="word-bank">citizens · curiosity · employers · expanded · obsolete · placements · profit · return · salaries · shrunk</div><div class="card" id="t3-sum" style="line-height:2.5;"><p>As university education has <input type="text" class="text-answer" id="t3s-14" data-correct="expanded" autocomplete="off" style="width:110px;">, governments and students have increasingly expected it to produce an economic <input type="text" class="text-answer" id="t3s-15" data-correct="return" autocomplete="off" style="width:100px;">. Supporters of vocational degrees want courses to include work <input type="text" class="text-answer" id="t3s-16" data-correct="placements" autocomplete="off" style="width:120px;">, as employers say new graduates lack skills such as teamwork. However, critics argue that technical knowledge can quickly become <input type="text" class="text-answer" id="t3s-17" data-correct="obsolete" autocomplete="off" style="width:100px;">, whereas skills such as critical thinking last much longer. They also believe universities have a social role, educating <input type="text" class="text-answer" id="t3s-18" data-correct="citizens" autocomplete="off" style="width:100px;"> and carrying out research driven by <input type="text" class="text-answer" id="t3s-19" data-correct="curiosity" autocomplete="off" style="width:100px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-sum', 't3-sum-score')">Check answers</button>
+          <span id="t3-sum-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 11</div>
+      <h2>Reading Passage 2 — Mind the Skills Gap</h2>
+      <p class="task-sub">A shorter passage presenting three expert opinions. Spend about <b>15 minutes</b>, then answer questions 20–29.</p>
+      <div class="card article">
+        <h3 class="article-title">Mind the Skills Gap</h3>
+        <p class="article-meta">Employment · 346 words</p>
+        <p>Every year, business surveys report that employers struggle to find graduates with the right skills. This so-called "skills gap" has become one of the most powerful arguments for making degrees more job-focused. But a growing number of researchers are questioning whether the gap is as large — or as simple — as it appears.</p><p>Dr Lena Fischer, a labour economist, believes the problem has been exaggerated. "When employers say graduates lack skills, they often mean that graduates lack experience," she explains. "No three-year degree can produce a person who is fully ready for a specific job on the first day. Training new staff has always been the employer's responsibility, and many companies have simply stopped investing in it." In her view, asking universities to fill this role risks shifting a cost from businesses to students and taxpayers.</p><p>Professor Ahmed Raza, who runs a large engineering faculty, takes a more practical position. His department introduced a compulsory year-long industrial placement in 2015. "Our graduates now find jobs faster, and they are more confident," he says. "But the placement only works because it sits on top of a very demanding theoretical course. Students need the theory to understand what they are doing in the workplace." He is sceptical of degrees that replace academic content with job training, which he describes as "teaching people to use today's tools without understanding them".</p><p>For Maria Santos, who has recruited graduates for an international bank for twenty years, the subject of a degree matters less than people think. "Some of our best analysts studied music or classics," she says. "What I look for is someone who can learn quickly, handle uncertainty and explain a complicated idea simply." However, she admits that graduates with relevant work experience have a clear advantage at interview, "because they can give real examples of what they have done".</p><p>All three agree on one point: the debate is often presented as a choice between two extremes. In reality, they suggest, the most valuable degrees may be those that combine rigorous academic study with genuine opportunities to apply it.</p>
+      </div>
+      <p style="margin-top:26px;"><strong>Questions 20–23.</strong> Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p>
+      <div class="card" id="t4-mc"><div class="q-item" id="t4-mc-20">
+          <p>20. According to the first paragraph, some researchers</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-20" data-correct="false"> A. deny that employers have any complaints about graduates.</label><label><input type="radio" value="1" name="t4-mc-20" data-correct="true"> B. doubt that the skills gap is as simple as it seems.</label><label><input type="radio" value="2" name="t4-mc-20" data-correct="false"> C. want degrees to become more job-focused.</label><label><input type="radio" value="3" name="t4-mc-20" data-correct="false"> D. have carried out new surveys of employers.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-21">
+          <p>21. Dr Fischer suggests that the skills gap is partly caused by</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-21" data-correct="false"> A. poor teaching at universities.</label><label><input type="radio" value="1" name="t4-mc-21" data-correct="false"> B. students choosing the wrong subjects.</label><label><input type="radio" value="2" name="t4-mc-21" data-correct="true"> C. employers no longer training new staff.</label><label><input type="radio" value="3" name="t4-mc-21" data-correct="false"> D. the high cost of tuition fees.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-22">
+          <p>22. Why does Professor Raza think his placement scheme succeeds?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-22" data-correct="false"> A. It replaces some of the theoretical content.</label><label><input type="radio" value="1" name="t4-mc-22" data-correct="true"> B. It is built on a strong academic foundation.</label><label><input type="radio" value="2" name="t4-mc-22" data-correct="false"> C. It is shorter than most placements.</label><label><input type="radio" value="3" name="t4-mc-22" data-correct="false"> D. It is optional for students.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-23">
+          <p>23. What is the main point of the final paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-23" data-correct="false"> A. The experts disagree on almost everything.</label><label><input type="radio" value="1" name="t4-mc-23" data-correct="false"> B. Academic study is more important than work experience.</label><label><input type="radio" value="2" name="t4-mc-23" data-correct="true"> C. Combining academic study and practical experience may be best.</label><label><input type="radio" value="3" name="t4-mc-23" data-correct="false"> D. Universities should let employers design their courses.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mc', 't4-mc-score')">Check answers</button>
+          <span id="t4-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Questions 24–29.</strong> Which person makes each statement? Choose <b>A</b>, <b>B</b> or <b>C</b>. You may use a letter more than once.</p>
+      <div class="card" id="t4-who"><div class="opt-legend"><span><b>A</b> Dr Lena Fischer · <b>B</b> Professor Ahmed Raza · <b>C</b> Maria Santos</span></div><div class="sel-row"><select class="select" id="t4-who-24" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select><span><b>24.</b> Students learning only job skills may not understand the tools they use.</span></div><div class="sel-row"><select class="select" id="t4-who-25" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select><span><b>25.</b> A degree subject is less important than general abilities.</span></div><div class="sel-row"><select class="select" id="t4-who-26" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select><span><b>26.</b> Asking universities to train workers could move costs onto students.</span></div><div class="sel-row"><select class="select" id="t4-who-27" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select><span><b>27.</b> Work experience helps candidates answer interview questions.</span></div><div class="sel-row"><select class="select" id="t4-who-28" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select><span><b>28.</b> Employers often confuse a lack of skills with a lack of experience.</span></div><div class="sel-row"><select class="select" id="t4-who-29" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select><span><b>29.</b> A compulsory placement has helped graduates find work more quickly.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-who', 't4-who-score')">Check answers</button>
+          <span id="t4-who-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 11</div>
+      <h2>Writing Task 2 — The Discussion Essay</h2>
+      <p class="task-sub">In a discussion essay you must cover <b>both views fairly</b> <i>and</i> give <b>your own opinion</b>. Missing any of these three parts limits your score for Task Response.</p>
+      <div class="card advice-card"><p class="prompt-label">📘 How a discussion essay works</p><table class="data-table" style="width:100%;"><tr><th>paragraph</th><th>content</th></tr><tr><td>Introduction</td><td>Paraphrase both views + state your opinion clearly (thesis)</td></tr><tr><td>Body 1</td><td>View 1: why some people hold it — reasons + example</td></tr><tr><td>Body 2</td><td>View 2: why others hold it — reasons + example (often the view you agree with)</td></tr><tr><td>Conclusion</td><td>Summarise both views + restate your opinion</td></tr></table><p style="margin:10px 0 0; font-size:0.92rem;"><b>Common mistakes:</b> discussing only one view · giving no opinion · giving your opinion only in the conclusion · a vague thesis ("both views have advantages and disadvantages").</p></div>
+      <p style="margin-top:26px;"><strong>A. Which thesis statement best answers each discussion question?</strong></p>
+      <div class="card" id="t5-th"><div class="q-item" id="t5-th-1">
+          <p>1. Some people think children should start school at four; others believe seven is better. Discuss both views and give your opinion.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-th-1" data-correct="false"> A. There are many advantages and disadvantages of starting school early.</label><label><input type="radio" value="1" name="t5-th-1" data-correct="true"> B. While starting at four can help children socially, I believe that seven is a more suitable age, as younger children learn best through play.</label><label><input type="radio" value="2" name="t5-th-1" data-correct="false"> C. Children start school at different ages in different countries.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-th-2">
+          <p>2. Some say museums should be free; others believe visitors should pay. Discuss both views and give your opinion.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-th-2" data-correct="false"> A. Museums are very important for a country's culture.</label><label><input type="radio" value="1" name="t5-th-2" data-correct="false"> B. This essay will discuss both views.</label><label><input type="radio" value="2" name="t5-th-2" data-correct="true"> C. Although charging visitors would raise money, I am convinced that museums should remain free, since they educate the whole of society.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-th-3">
+          <p>3. Some believe that people should be allowed to work as long as they want; others think there should be a fixed retirement age. Discuss both views and give your opinion.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-th-3" data-correct="true"> A. In my view, people should be free to decide when to retire, provided that they are still able to do their job well.</label><label><input type="radio" value="1" name="t5-th-3" data-correct="false"> B. Retirement is a difficult time for many people.</label><label><input type="radio" value="2" name="t5-th-3" data-correct="false"> C. Both of these views have some good points.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-th-4">
+          <p>4. Some people think that newspapers are the best source of news; others prefer the internet. Discuss both views and give your opinion.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-th-4" data-correct="false"> A. The internet has changed the world.</label><label><input type="radio" value="1" name="t5-th-4" data-correct="true"> B. Although newspapers are generally more reliable, I believe the internet is a better source overall, as it is faster and offers a wider range of views.</label><label><input type="radio" value="2" name="t5-th-4" data-correct="false"> C. I will now explain why people prefer the internet.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-th-5">
+          <p>5. Some people believe that the main purpose of a university education is to prepare students for employment. Others think that universities should give students knowledge for its own sake, regardless of whether it is useful for a career. Discuss both views and give your own opinion.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-th-5" data-correct="false"> A. Universities have existed for hundreds of years.</label><label><input type="radio" value="1" name="t5-th-5" data-correct="true"> B. Although preparing students for work is important, I believe universities should mainly develop knowledge and thinking skills, which are more valuable in the long term.</label><label><input type="radio" value="2" name="t5-th-5" data-correct="false"> C. Many students go to university nowadays.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-th', 't5-th-score')">Check answers</button>
+          <span id="t5-th-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>B. True or false?</strong> If a statement is false, a box appears — rewrite it so that it is correct.</p>
+      <div class="card" id="t5-tf"><div class="q-item" id="t5-tf-1">
+          <p>1. In a discussion essay, you should explain both views, even the one you disagree with.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-1" data-correct="true"> True</label><label><input type="radio" value="1" name="t5-tf-1" data-correct="false"> False</label></div>
+          <div class="q-result"></div><div class="tf-fix" id="t5-tf-fixwrap-1" hidden>
+            <label for="t5-tf-fix-1">✏️ This is false — rewrite it so that it is correct:</label>
+            <textarea class="no-check mini-answer" id="t5-tf-fix-1" placeholder="Write the whole corrected sentence here..." style="min-height:54px;"></textarea>
+          </div>
+        </div><div class="q-item" id="t5-tf-2">
+          <p>2. You only need to give your opinion in the conclusion.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-2" data-correct="false"> True</label><label><input type="radio" value="1" name="t5-tf-2" data-correct="true"> False</label></div>
+          <div class="q-result"></div><div class="tf-fix" id="t5-tf-fixwrap-2" hidden>
+            <label for="t5-tf-fix-2">✏️ This is false — rewrite it so that it is correct:</label>
+            <textarea class="no-check mini-answer" id="t5-tf-fix-2" placeholder="Write the whole corrected sentence here..." style="min-height:54px;"></textarea>
+          </div>
+        </div><div class="q-item" id="t5-tf-3">
+          <p>3. The thesis "Both views have advantages and disadvantages" is a clear opinion.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-3" data-correct="false"> True</label><label><input type="radio" value="1" name="t5-tf-3" data-correct="true"> False</label></div>
+          <div class="q-result"></div><div class="tf-fix" id="t5-tf-fixwrap-3" hidden>
+            <label for="t5-tf-fix-3">✏️ This is false — rewrite it so that it is correct:</label>
+            <textarea class="no-check mini-answer" id="t5-tf-fix-3" placeholder="Write the whole corrected sentence here..." style="min-height:54px;"></textarea>
+          </div>
+        </div><div class="q-item" id="t5-tf-4">
+          <p>4. A common structure is: introduction, view 1, view 2, conclusion.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-4" data-correct="true"> True</label><label><input type="radio" value="1" name="t5-tf-4" data-correct="false"> False</label></div>
+          <div class="q-result"></div><div class="tf-fix" id="t5-tf-fixwrap-4" hidden>
+            <label for="t5-tf-fix-4">✏️ This is false — rewrite it so that it is correct:</label>
+            <textarea class="no-check mini-answer" id="t5-tf-fix-4" placeholder="Write the whole corrected sentence here..." style="min-height:54px;"></textarea>
+          </div>
+        </div><div class="q-item" id="t5-tf-5">
+          <p>5. It is a good idea to copy the question into your introduction.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-5" data-correct="false"> True</label><label><input type="radio" value="1" name="t5-tf-5" data-correct="true"> False</label></div>
+          <div class="q-result"></div><div class="tf-fix" id="t5-tf-fixwrap-5" hidden>
+            <label for="t5-tf-fix-5">✏️ This is false — rewrite it so that it is correct:</label>
+            <textarea class="no-check mini-answer" id="t5-tf-fix-5" placeholder="Write the whole corrected sentence here..." style="min-height:54px;"></textarea>
+          </div>
+        </div><div class="q-item" id="t5-tf-6">
+          <p>6. You can partly agree with both views, as long as your position is clear.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-6" data-correct="true"> True</label><label><input type="radio" value="1" name="t5-tf-6" data-correct="false"> False</label></div>
+          <div class="q-result"></div><div class="tf-fix" id="t5-tf-fixwrap-6" hidden>
+            <label for="t5-tf-fix-6">✏️ This is false — rewrite it so that it is correct:</label>
+            <textarea class="no-check mini-answer" id="t5-tf-fix-6" placeholder="Write the whole corrected sentence here..." style="min-height:54px;"></textarea>
+          </div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkTfWithFixes('t5-tf')">Check answers</button>
+          <span id="t5-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card corrected-card" id="t5-tf-corrected" hidden><p class="prompt-label">✓ Correct versions</p><ol><li>In a discussion essay, you should explain both views, even the one you disagree with.</li><li>You should give your opinion in the <u>introduction</u> and <u>repeat it in the conclusion</u>.</li><li>The thesis "Both views have advantages and disadvantages" is <u>not</u> a clear opinion — it does not say which view you support.</li><li>A common structure is: introduction, view 1, view 2, conclusion.</li><li>It is a good idea to <u>paraphrase</u> the question in your introduction, <u>using your own words</u>.</li><li>You can partly agree with both views, as long as your position is clear.</li></ol></div>
+      <p class="locked-note" id="t5-tf-corrected-note">🔒 Check your answers to see the correct versions.</p>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 11</div>
+      <h2>Analysing a Band 7.5 Discussion Essay</h2>
+      <p class="task-sub">Read this model essay. It answers a <b>different</b> question, so you can study the structure and language without borrowing ideas for today's essay.</p>
+      <div class="card task-prompt"><p><i>Some people think it is better for students to study at a university in their own country. Others believe that studying abroad is more beneficial. Discuss both views and give your own opinion.</i></p></div>
+      <div class="card model-text" style=""><p><span class="sent-num">S1</span>With the growth of international education, more young people than ever are choosing to complete their degrees overseas. <span class="sent-num">S2</span>While some argue that students are better served by universities at home, others maintain that studying abroad offers far greater benefits. <span class="sent-num">S3</span>In my view, although studying in one's own country has clear practical advantages, the experience of living and learning abroad is ultimately more valuable.</p><p><span class="sent-num">S4</span>Those who favour studying at home point first to cost. <span class="sent-num">S5</span>Tuition fees for international students are often several times higher than those for local students, and living costs in cities such as London or Sydney can be prohibitive. <span class="sent-num">S6</span>Furthermore, students who remain in their home country can build professional networks that will help them find employment after graduation, which may be more difficult for someone returning from overseas.</p><p><span class="sent-num">S7</span>Admittedly, these are significant considerations. <span class="sent-num">S8</span>Nevertheless, I believe that the benefits of studying abroad outweigh them. <span class="sent-num">S9</span>Living in another culture forces students to become independent and adaptable, qualities that employers increasingly value. <span class="sent-num">S10</span>A student from Uzbekistan who completes a degree in Germany, for example, not only gains an internationally recognised qualification but also becomes fluent in a second language and learns to work with people from many different backgrounds.</p><p><span class="sent-num">S11</span>In conclusion, while studying at home is cheaper and may offer useful local connections, I am convinced that studying abroad provides a broader education that better prepares young people for a globalised world. <span class="sent-num">S12</span>Governments could therefore do more to offer scholarships, so that this opportunity is not limited to the wealthy.</p></div>
+      <p style="margin-top:26px;"><strong>A. What is the function of each sentence?</strong></p>
+      <div class="card" id="t6-fn"><div class="sel-row"><select class="select" id="t6-fn-1" data-answer="background"><option value="">—</option><option value="background">background</option><option value="paraphrase of both views">paraphrase of both views</option><option value="thesis">thesis</option><option value="topic sentence: view 1">topic sentence: view 1</option><option value="support for view 1">support for view 1</option><option value="concession">concession</option><option value="writer&#x27;s counter-position">writer&#x27;s counter-position</option><option value="support for writer&#x27;s view">support for writer&#x27;s view</option><option value="specific example">specific example</option><option value="conclusion: summary + opinion">conclusion: summary + opinion</option><option value="recommendation">recommendation</option></select><span><b>1.</b> S1</span></div><div class="sel-row"><select class="select" id="t6-fn-2" data-answer="paraphrase of both views"><option value="">—</option><option value="background">background</option><option value="paraphrase of both views">paraphrase of both views</option><option value="thesis">thesis</option><option value="topic sentence: view 1">topic sentence: view 1</option><option value="support for view 1">support for view 1</option><option value="concession">concession</option><option value="writer&#x27;s counter-position">writer&#x27;s counter-position</option><option value="support for writer&#x27;s view">support for writer&#x27;s view</option><option value="specific example">specific example</option><option value="conclusion: summary + opinion">conclusion: summary + opinion</option><option value="recommendation">recommendation</option></select><span><b>2.</b> S2</span></div><div class="sel-row"><select class="select" id="t6-fn-3" data-answer="thesis"><option value="">—</option><option value="background">background</option><option value="paraphrase of both views">paraphrase of both views</option><option value="thesis">thesis</option><option value="topic sentence: view 1">topic sentence: view 1</option><option value="support for view 1">support for view 1</option><option value="concession">concession</option><option value="writer&#x27;s counter-position">writer&#x27;s counter-position</option><option value="support for writer&#x27;s view">support for writer&#x27;s view</option><option value="specific example">specific example</option><option value="conclusion: summary + opinion">conclusion: summary + opinion</option><option value="recommendation">recommendation</option></select><span><b>3.</b> S3</span></div><div class="sel-row"><select class="select" id="t6-fn-4" data-answer="topic sentence: view 1"><option value="">—</option><option value="background">background</option><option value="paraphrase of both views">paraphrase of both views</option><option value="thesis">thesis</option><option value="topic sentence: view 1">topic sentence: view 1</option><option value="support for view 1">support for view 1</option><option value="concession">concession</option><option value="writer&#x27;s counter-position">writer&#x27;s counter-position</option><option value="support for writer&#x27;s view">support for writer&#x27;s view</option><option value="specific example">specific example</option><option value="conclusion: summary + opinion">conclusion: summary + opinion</option><option value="recommendation">recommendation</option></select><span><b>4.</b> S4</span></div><div class="sel-row"><select class="select" id="t6-fn-5" data-answer="support for view 1"><option value="">—</option><option value="background">background</option><option value="paraphrase of both views">paraphrase of both views</option><option value="thesis">thesis</option><option value="topic sentence: view 1">topic sentence: view 1</option><option value="support for view 1">support for view 1</option><option value="concession">concession</option><option value="writer&#x27;s counter-position">writer&#x27;s counter-position</option><option value="support for writer&#x27;s view">support for writer&#x27;s view</option><option value="specific example">specific example</option><option value="conclusion: summary + opinion">conclusion: summary + opinion</option><option value="recommendation">recommendation</option></select><span><b>5.</b> S6</span></div><div class="sel-row"><select class="select" id="t6-fn-6" data-answer="concession"><option value="">—</option><option value="background">background</option><option value="paraphrase of both views">paraphrase of both views</option><option value="thesis">thesis</option><option value="topic sentence: view 1">topic sentence: view 1</option><option value="support for view 1">support for view 1</option><option value="concession">concession</option><option value="writer&#x27;s counter-position">writer&#x27;s counter-position</option><option value="support for writer&#x27;s view">support for writer&#x27;s view</option><option value="specific example">specific example</option><option value="conclusion: summary + opinion">conclusion: summary + opinion</option><option value="recommendation">recommendation</option></select><span><b>6.</b> S7</span></div><div class="sel-row"><select class="select" id="t6-fn-7" data-answer="writer&#x27;s counter-position"><option value="">—</option><option value="background">background</option><option value="paraphrase of both views">paraphrase of both views</option><option value="thesis">thesis</option><option value="topic sentence: view 1">topic sentence: view 1</option><option value="support for view 1">support for view 1</option><option value="concession">concession</option><option value="writer&#x27;s counter-position">writer&#x27;s counter-position</option><option value="support for writer&#x27;s view">support for writer&#x27;s view</option><option value="specific example">specific example</option><option value="conclusion: summary + opinion">conclusion: summary + opinion</option><option value="recommendation">recommendation</option></select><span><b>7.</b> S8</span></div><div class="sel-row"><select class="select" id="t6-fn-8" data-answer="support for writer&#x27;s view"><option value="">—</option><option value="background">background</option><option value="paraphrase of both views">paraphrase of both views</option><option value="thesis">thesis</option><option value="topic sentence: view 1">topic sentence: view 1</option><option value="support for view 1">support for view 1</option><option value="concession">concession</option><option value="writer&#x27;s counter-position">writer&#x27;s counter-position</option><option value="support for writer&#x27;s view">support for writer&#x27;s view</option><option value="specific example">specific example</option><option value="conclusion: summary + opinion">conclusion: summary + opinion</option><option value="recommendation">recommendation</option></select><span><b>8.</b> S9</span></div><div class="sel-row"><select class="select" id="t6-fn-9" data-answer="specific example"><option value="">—</option><option value="background">background</option><option value="paraphrase of both views">paraphrase of both views</option><option value="thesis">thesis</option><option value="topic sentence: view 1">topic sentence: view 1</option><option value="support for view 1">support for view 1</option><option value="concession">concession</option><option value="writer&#x27;s counter-position">writer&#x27;s counter-position</option><option value="support for writer&#x27;s view">support for writer&#x27;s view</option><option value="specific example">specific example</option><option value="conclusion: summary + opinion">conclusion: summary + opinion</option><option value="recommendation">recommendation</option></select><span><b>9.</b> S10</span></div><div class="sel-row"><select class="select" id="t6-fn-10" data-answer="conclusion: summary + opinion"><option value="">—</option><option value="background">background</option><option value="paraphrase of both views">paraphrase of both views</option><option value="thesis">thesis</option><option value="topic sentence: view 1">topic sentence: view 1</option><option value="support for view 1">support for view 1</option><option value="concession">concession</option><option value="writer&#x27;s counter-position">writer&#x27;s counter-position</option><option value="support for writer&#x27;s view">support for writer&#x27;s view</option><option value="specific example">specific example</option><option value="conclusion: summary + opinion">conclusion: summary + opinion</option><option value="recommendation">recommendation</option></select><span><b>10.</b> S11</span></div><div class="sel-row"><select class="select" id="t6-fn-11" data-answer="recommendation"><option value="">—</option><option value="background">background</option><option value="paraphrase of both views">paraphrase of both views</option><option value="thesis">thesis</option><option value="topic sentence: view 1">topic sentence: view 1</option><option value="support for view 1">support for view 1</option><option value="concession">concession</option><option value="writer&#x27;s counter-position">writer&#x27;s counter-position</option><option value="support for writer&#x27;s view">support for writer&#x27;s view</option><option value="specific example">specific example</option><option value="conclusion: summary + opinion">conclusion: summary + opinion</option><option value="recommendation">recommendation</option></select><span><b>11.</b> S12</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-fn', 't6-fn-score')">Check answers</button>
+          <span id="t6-fn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>B. Answer the questions about the essay.</strong></p>
+      <div class="card" id="t6-q"><div class="q-item" id="t6-q-1">
+          <p>1. Where does the writer first make their opinion clear?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-q-1" data-correct="false"> A. in the first sentence</label><label><input type="radio" value="1" name="t6-q-1" data-correct="true"> B. at the end of the introduction</label><label><input type="radio" value="2" name="t6-q-1" data-correct="false"> C. only in the conclusion</label><label><input type="radio" value="3" name="t6-q-1" data-correct="false"> D. in the second body paragraph</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-q-2">
+          <p>2. Why does paragraph 3 begin with "Admittedly"?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-q-2" data-correct="false"> A. to introduce a new view</label><label><input type="radio" value="1" name="t6-q-2" data-correct="true"> B. to accept the strength of the opposite view before disagreeing</label><label><input type="radio" value="2" name="t6-q-2" data-correct="false"> C. to give an example</label><label><input type="radio" value="3" name="t6-q-2" data-correct="false"> D. to summarise the essay</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-q-3">
+          <p>3. Which word in S5 means "so expensive that people cannot afford it"?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-q-3" data-correct="false"> A. significant</label><label><input type="radio" value="1" name="t6-q-3" data-correct="true"> B. prohibitive</label><label><input type="radio" value="2" name="t6-q-3" data-correct="false"> C. several</label><label><input type="radio" value="3" name="t6-q-3" data-correct="false"> D. favour</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-q-4">
+          <p>4. How is the conclusion different from the introduction?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-q-4" data-correct="false"> A. It gives a new opinion.</label><label><input type="radio" value="1" name="t6-q-4" data-correct="false"> B. It repeats the introduction word for word.</label><label><input type="radio" value="2" name="t6-q-4" data-correct="true"> C. It restates the opinion in new words and adds a recommendation.</label><label><input type="radio" value="3" name="t6-q-4" data-correct="false"> D. It only discusses one view.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-q', 't6-q-score')">Check answers</button>
+          <span id="t6-q-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 11</div>
+      <h2>Grammar — Contrast and Concession</h2>
+      <p class="task-sub">Discussion essays constantly balance two sides. Accurate contrast language is one of the quickest ways to raise your Grammatical Range score.</p>
+      <div class="card advice-card"><p class="prompt-label">Key grammar</p><table class="data-table" style="width:100%;"><tr><th>structure</th><th>grammar</th><th>example</th></tr><tr><td><b>although / even though</b></td><td>+ clause (subject + verb)</td><td><b>Although</b> degrees are expensive, they often lead to better jobs.</td></tr><tr><td><b>despite / in spite of</b></td><td>+ noun / -ing</td><td><b>Despite</b> the high cost, … · <b>Despite being</b> expensive, …</td></tr><tr><td><b>whereas / while</b></td><td>+ clause — compares two facts</td><td>Some value theory, <b>whereas</b> others want practical skills.</td></tr><tr><td><b>However, / Nevertheless,</b></td><td>new sentence + comma</td><td>Fees are high. <b>Nevertheless,</b> demand keeps rising.</td></tr><tr><td><b>Admittedly, … but …</b></td><td>accept a point, then disagree</td><td><b>Admittedly,</b> some courses are too theoretical, <b>but</b> …</td></tr></table></div>
+      <p style="margin-top:26px;"><strong>A. Choose the correct option.</strong></p>
+      <div class="card" id="t7-mc"><div class="q-item" id="t7-mc-1">
+          <p>1. ______ the high cost of tuition, the number of students continues to grow.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-1" data-correct="false"> Although</label><label><input type="radio" value="1" name="t7-mc-1" data-correct="true"> Despite</label><label><input type="radio" value="2" name="t7-mc-1" data-correct="false"> However</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-2">
+          <p>2. ______ some students choose a degree for its job prospects, others follow their interests.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-2" data-correct="false"> Despite</label><label><input type="radio" value="1" name="t7-mc-2" data-correct="true"> Whereas</label><label><input type="radio" value="2" name="t7-mc-2" data-correct="false"> Nevertheless</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-3">
+          <p>3. University is expensive. ______, it remains a good investment for most people.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-3" data-correct="false"> Although</label><label><input type="radio" value="1" name="t7-mc-3" data-correct="false"> In spite of</label><label><input type="radio" value="2" name="t7-mc-3" data-correct="true"> Nevertheless</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-4">
+          <p>4. In spite of ______ well qualified, many graduates struggle to find work.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-4" data-correct="false"> they are</label><label><input type="radio" value="1" name="t7-mc-4" data-correct="true"> being</label><label><input type="radio" value="2" name="t7-mc-4" data-correct="false"> be</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-5">
+          <p>5. Even ______ the course was difficult, she enjoyed it.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-5" data-correct="true"> though</label><label><input type="radio" value="1" name="t7-mc-5" data-correct="false"> despite</label><label><input type="radio" value="2" name="t7-mc-5" data-correct="false"> however</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-6">
+          <p>6. Engineering is vocational, ______ philosophy is mainly theoretical.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-6" data-correct="true"> while</label><label><input type="radio" value="1" name="t7-mc-6" data-correct="false"> despite</label><label><input type="radio" value="2" name="t7-mc-6" data-correct="false"> however,</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-7">
+          <p>7. ______ the fact that he studied history, he became a successful banker.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-7" data-correct="false"> Although</label><label><input type="radio" value="1" name="t7-mc-7" data-correct="true"> Despite</label><label><input type="radio" value="2" name="t7-mc-7" data-correct="false"> Whereas</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-8">
+          <p>8. Some argue that degrees should be free. ______, someone has to pay for them.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-8" data-correct="true"> However</label><label><input type="radio" value="1" name="t7-mc-8" data-correct="false"> Although</label><label><input type="radio" value="2" name="t7-mc-8" data-correct="false"> Despite</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-mc', 't7-mc-score')">Check answers</button>
+          <span id="t7-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>B. Rewrite each sentence using the word in brackets.</strong> Keep the meaning the same.</p>
+      <div class="card"><p class="mini-q">1. University fees are high. Many students still apply. <b>(despite)</b></p><textarea class="no-check mini-answer" id="t7-rw-1" placeholder="Rewrite the sentence..." style="min-height:56px;"></textarea><p class="mini-q">2. Practical courses help graduates find jobs. Academic courses develop thinking skills. <b>(whereas)</b></p><textarea class="no-check mini-answer" id="t7-rw-2" placeholder="Rewrite the sentence..." style="min-height:56px;"></textarea><p class="mini-q">3. She had no work experience. She got the job. <b>(although)</b></p><textarea class="no-check mini-answer" id="t7-rw-3" placeholder="Rewrite the sentence..." style="min-height:56px;"></textarea><p class="mini-q">4. Online degrees are cheaper. Many employers prefer traditional degrees. <b>(nevertheless)</b></p><textarea class="no-check mini-answer" id="t7-rw-4" placeholder="Rewrite the sentence..." style="min-height:56px;"></textarea><p class="mini-q">5. Some critics are right that some courses are too theoretical. Theory is still essential. <b>(admittedly … but)</b></p><textarea class="no-check mini-answer" id="t7-rw-5" placeholder="Rewrite the sentence..." style="min-height:56px;"></textarea><p class="mini-q">6. He was tired. He finished his essay. <b>(in spite of)</b></p><textarea class="no-check mini-answer" id="t7-rw-6" placeholder="Rewrite the sentence..." style="min-height:56px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t7-rw-btn">Show model answers</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t7-rw-ans"><ol>
+  <li><b>Despite</b> the high fees / <b>Despite</b> university fees being high, many students still apply.</li>
+  <li>Practical courses help graduates find jobs, <b>whereas</b> academic courses develop thinking skills.</li>
+  <li><b>Although</b> she had no work experience, she got the job.</li>
+  <li>Online degrees are cheaper. <b>Nevertheless,</b> many employers prefer traditional degrees.</li>
+  <li><b>Admittedly,</b> some courses are too theoretical, <b>but</b> theory is still essential.</li>
+  <li><b>In spite of</b> being tired / <b>In spite of</b> his tiredness, he finished his essay.</li>
+</ol></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 11</div>
+      <h2>Grammar — Relative Clauses for Precise Writing</h2>
+      <p class="task-sub">Relative clauses let you add detail and combine ideas into one complex sentence — a key feature of band 7 writing.</p>
+      <div class="card advice-card"><p class="prompt-label">Key grammar</p><table class="data-table" style="width:100%;"><tr><th>type</th><th>example</th></tr><tr><td><b>Defining</b> — essential information, no commas</td><td>Students <b>who do work placements</b> find jobs faster.</td></tr><tr><td><b>Non-defining</b> — extra information, commas, never "that"</td><td>Oxford, <b>which was founded in the 12th century</b>, is one of the oldest universities.</td></tr><tr><td><b>whose</b> — possession</td><td>Graduates <b>whose degrees include a placement</b> …</td></tr><tr><td><b>where / in which</b> — place, situation</td><td>a system <b>in which</b> students pay nothing</td></tr><tr><td><b>Reduced</b> (participle) clauses</td><td>Students <b>studying</b> abroad … · a model <b>developed</b> by Humboldt …</td></tr></table></div>
+      <p style="margin-top:26px;"><strong>A. Choose the correct option.</strong></p>
+      <div class="card" id="t8-mc"><div class="q-item" id="t8-mc-1">
+          <p>1. Professor Raza, ______ department introduced placements, is pleased with the results.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-1" data-correct="false"> who</label><label><input type="radio" value="1" name="t8-mc-1" data-correct="true"> whose</label><label><input type="radio" value="2" name="t8-mc-1" data-correct="false"> which</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-2">
+          <p>2. The University of Bologna, ______ was founded in 1088, is the oldest in Europe.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-2" data-correct="false"> that</label><label><input type="radio" value="1" name="t8-mc-2" data-correct="true"> which</label><label><input type="radio" value="2" name="t8-mc-2" data-correct="false"> who</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-3">
+          <p>3. Graduates ______ have relevant experience have an advantage at interview.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-3" data-correct="false"> which</label><label><input type="radio" value="1" name="t8-mc-3" data-correct="true"> who</label><label><input type="radio" value="2" name="t8-mc-3" data-correct="false"> whose</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-4">
+          <p>4. This is a system ______ students pay no tuition fees.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-4" data-correct="false"> which</label><label><input type="radio" value="1" name="t8-mc-4" data-correct="true"> in which</label><label><input type="radio" value="2" name="t8-mc-4" data-correct="false"> whose</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-5">
+          <p>5. Courses ______ only on theory may not prepare students for work.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-5" data-correct="true"> focusing</label><label><input type="radio" value="1" name="t8-mc-5" data-correct="false"> focused</label><label><input type="radio" value="2" name="t8-mc-5" data-correct="false"> which focusing</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-6">
+          <p>6. The Humboldt model, ______ in the nineteenth century, is still influential.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-6" data-correct="false"> developing</label><label><input type="radio" value="1" name="t8-mc-6" data-correct="true"> developed</label><label><input type="radio" value="2" name="t8-mc-6" data-correct="false"> which developed</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-7">
+          <p>7. Employers want staff ______ can learn quickly.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-7" data-correct="true"> who</label><label><input type="radio" value="1" name="t8-mc-7" data-correct="false"> whom</label><label><input type="radio" value="2" name="t8-mc-7" data-correct="false"> whose</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-8">
+          <p>8. Tuition fees, ______ have risen sharply, affect students' choices.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-8" data-correct="false"> that</label><label><input type="radio" value="1" name="t8-mc-8" data-correct="true"> which</label><label><input type="radio" value="2" name="t8-mc-8" data-correct="false"> what</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-mc', 't8-mc-score')">Check answers</button>
+          <span id="t8-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>B. Combine each pair of sentences into one, using a relative clause.</strong></p>
+      <div class="card"><p class="mini-q">1. Maria Santos has recruited graduates for twenty years. She works for an international bank.</p><textarea class="no-check mini-answer" id="t8-rw-1" placeholder="Write one combined sentence..." style="min-height:56px;"></textarea><p class="mini-q">2. Many students choose vocational degrees. These students hope to find work quickly.</p><textarea class="no-check mini-answer" id="t8-rw-2" placeholder="Write one combined sentence..." style="min-height:56px;"></textarea><p class="mini-q">3. Humboldt was a German philosopher. His ideas shaped modern universities.</p><textarea class="no-check mini-answer" id="t8-rw-3" placeholder="Write one combined sentence..." style="min-height:56px;"></textarea><p class="mini-q">4. Technical knowledge can become obsolete. It is taught on many job-focused courses.</p><textarea class="no-check mini-answer" id="t8-rw-4" placeholder="Write one combined sentence..." style="min-height:56px;"></textarea><p class="mini-q">5. Some countries offer free university education. In these countries, more students study the arts.</p><textarea class="no-check mini-answer" id="t8-rw-5" placeholder="Write one combined sentence..." style="min-height:56px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-rw-btn">Show model answers</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-rw-ans"><ol>
+  <li>Maria Santos, <b>who works for an international bank</b>, has recruited graduates for twenty years.</li>
+  <li>Many students <b>who choose vocational degrees</b> hope to find work quickly. <span class="alt">(or: Many students choose vocational degrees because they hope …)</span></li>
+  <li>Humboldt was a German philosopher <b>whose ideas shaped modern universities</b>.</li>
+  <li>Technical knowledge <b>(which is) taught on many job-focused courses</b> can become obsolete.</li>
+  <li>In countries <b>where / in which university education is free</b>, more students study the arts.</li>
+</ol></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 11</div>
+      <h2>Academic Style — Hedging and Stance</h2>
+      <p class="task-sub">Strong essays sound confident but not exaggerated. Over-general claims ("All graduates…", "University is useless") weaken your argument; careful language makes it more convincing.</p>
+      <div class="card advice-card"><p class="prompt-label">💡 Strong vs cautious language</p><table class="data-table" style="width:100%;"><tr><th>strong (for your main position)</th><th>cautious (for claims you can't prove)</th></tr><tr><td>I am convinced that … · It is clear that … · undoubtedly</td><td>It could be argued that … · may / might / tend to</td></tr><tr><td>There is no doubt that … · certainly</td><td>to some extent · in many cases · generally</td></tr><tr><td>I firmly believe … · without question</td><td>a significant number of … · it seems likely that …</td></tr></table></div>
+      <p style="margin-top:26px;"><strong>A. Is each phrase strong or cautious?</strong></p>
+      <div class="card" id="t9-cat"><div class="sel-row"><select class="select" id="t9-cat-1" data-answer="cautious"><option value="">—</option><option value="strong">strong</option><option value="cautious">cautious</option></select><span><b>1.</b> It could be argued that …</span></div><div class="sel-row"><select class="select" id="t9-cat-2" data-answer="strong"><option value="">—</option><option value="strong">strong</option><option value="cautious">cautious</option></select><span><b>2.</b> I am convinced that …</span></div><div class="sel-row"><select class="select" id="t9-cat-3" data-answer="cautious"><option value="">—</option><option value="strong">strong</option><option value="cautious">cautious</option></select><span><b>3.</b> … tend to …</span></div><div class="sel-row"><select class="select" id="t9-cat-4" data-answer="strong"><option value="">—</option><option value="strong">strong</option><option value="cautious">cautious</option></select><span><b>4.</b> There is no doubt that …</span></div><div class="sel-row"><select class="select" id="t9-cat-5" data-answer="cautious"><option value="">—</option><option value="strong">strong</option><option value="cautious">cautious</option></select><span><b>5.</b> to some extent</span></div><div class="sel-row"><select class="select" id="t9-cat-6" data-answer="strong"><option value="">—</option><option value="strong">strong</option><option value="cautious">cautious</option></select><span><b>6.</b> undoubtedly</span></div><div class="sel-row"><select class="select" id="t9-cat-7" data-answer="cautious"><option value="">—</option><option value="strong">strong</option><option value="cautious">cautious</option></select><span><b>7.</b> in many cases</span></div><div class="sel-row"><select class="select" id="t9-cat-8" data-answer="strong"><option value="">—</option><option value="strong">strong</option><option value="cautious">cautious</option></select><span><b>8.</b> I firmly believe that …</span></div><div class="sel-row"><select class="select" id="t9-cat-9" data-answer="cautious"><option value="">—</option><option value="strong">strong</option><option value="cautious">cautious</option></select><span><b>9.</b> it seems likely that …</span></div><div class="sel-row"><select class="select" id="t9-cat-10" data-answer="cautious"><option value="">—</option><option value="strong">strong</option><option value="cautious">cautious</option></select><span><b>10.</b> a significant number of …</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-cat', 't9-cat-score')">Check answers</button>
+          <span id="t9-cat-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>B. These claims are too extreme. Rewrite each one in a more careful, academic way.</strong></p>
+      <div class="card"><p class="mini-q">1. All graduates find good jobs.</p><textarea class="no-check mini-answer" id="t9-rw-1" placeholder="Rewrite more carefully..." style="min-height:56px;"></textarea><p class="mini-q">2. Studying philosophy is completely useless.</p><textarea class="no-check mini-answer" id="t9-rw-2" placeholder="Rewrite more carefully..." style="min-height:56px;"></textarea><p class="mini-q">3. Employers never train new staff any more.</p><textarea class="no-check mini-answer" id="t9-rw-3" placeholder="Rewrite more carefully..." style="min-height:56px;"></textarea><p class="mini-q">4. Students only go to university to earn more money.</p><textarea class="no-check mini-answer" id="t9-rw-4" placeholder="Rewrite more carefully..." style="min-height:56px;"></textarea><p class="mini-q">5. Vocational courses are always better than academic ones.</p><textarea class="no-check mini-answer" id="t9-rw-5" placeholder="Rewrite more carefully..." style="min-height:56px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-rw-btn">Show model answers</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-rw-ans"><ol>
+  <li><b>Many / Most</b> graduates <b>tend to</b> find good jobs.</li>
+  <li>Studying philosophy <b>may seem</b> less directly useful than other subjects, <b>but</b> it develops valuable thinking skills.</li>
+  <li><b>A significant number of</b> employers <b>appear to have reduced</b> the training they offer new staff.</li>
+  <li><b>It could be argued that many</b> students go to university <b>largely</b> to improve their earning potential.</li>
+  <li>Vocational courses are <b>often more suitable</b> for students who already know which career they want.</li>
+</ol></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 11</div>
+      <h2>Writing Introductions and Body Paragraphs</h2>
+      <p class="task-sub">An introduction needs three things: <b>background</b>, a <b>paraphrase of both views</b> and a clear <b>thesis</b>. A body paragraph needs a <b>topic sentence</b>, <b>explanation</b>, an <b>example</b> and often a <b>link</b> back to the question.</p>
+      <p style="margin-top:4px;"><strong>A. Put the sentences of this body paragraph in the correct order (1–6).</strong></p>
+      <div class="card model-text" style=""><p class="example-q" style="margin-top:0;">Question: Some people think young people should go straight to university; others think they should work for a year first. Discuss both views…</p>
+<ol type="A" style="line-height:1.8; margin:0;">
+  <li>For example, a student who works in a hospital for a year may discover whether medicine is really the right career for them.</li>
+  <li>Those who support a year of work argue that it helps young people make better decisions about their future.</li>
+  <li>As a result, they are less likely to drop out of their course or change subject later.</li>
+  <li>This is because experience of the real world shows them what different jobs actually involve.</li>
+  <li>For these reasons, a gap year can be a valuable investment rather than a waste of time.</li>
+  <li>Moreover, they often return to education more mature and motivated.</li>
+</ol></div>
+      <div class="card" id="t10-ord"><div class="opt-legend"><span>Choose the position of each sentence in the paragraph (1 = first).</span></div><div class="sel-row"><select class="select" id="t10-ord-1" data-answer="3"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><span><b>1.</b> Sentence A</span></div><div class="sel-row"><select class="select" id="t10-ord-2" data-answer="1"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><span><b>2.</b> Sentence B</span></div><div class="sel-row"><select class="select" id="t10-ord-3" data-answer="4"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><span><b>3.</b> Sentence C</span></div><div class="sel-row"><select class="select" id="t10-ord-4" data-answer="2"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><span><b>4.</b> Sentence D</span></div><div class="sel-row"><select class="select" id="t10-ord-5" data-answer="6"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><span><b>5.</b> Sentence E</span></div><div class="sel-row"><select class="select" id="t10-ord-6" data-answer="5"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><span><b>6.</b> Sentence F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-ord', 't10-ord-score')">Check answers</button>
+          <span id="t10-ord-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>B. Write an introduction (2–3 sentences) for each question.</strong> Include background, both views and your opinion.</p>
+      <div class="card"><p class="mini-q">1. <i>Some people believe that university education should be free for everyone. Others think students should pay. Discuss both views and give your opinion.</i></p><textarea class="no-check mini-answer" id="t10-intro-1" placeholder="Write your introduction..." style="min-height:90px;"></textarea><p class="mini-q">2. <i>Some think that online courses will replace traditional universities. Others believe face-to-face learning will always be necessary. Discuss both views and give your opinion.</i></p><textarea class="no-check mini-answer" id="t10-intro-2" placeholder="Write your introduction..." style="min-height:90px;"></textarea><p class="mini-q">3. <i>Some people say that schools should focus on academic subjects; others believe practical skills such as cooking and money management are more important. Discuss both views and give your opinion.</i></p><textarea class="no-check mini-answer" id="t10-intro-3" placeholder="Write your introduction..." style="min-height:90px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t10-intro-btn">Show model introductions</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t10-intro-ans"><ol>
+  <li>As the cost of higher education rises, the question of who should pay for it has become increasingly controversial. While some argue that university should be free for all, others believe that students themselves should cover the cost. In my view, tuition should be free, as education benefits society as a whole.</li>
+  <li>The rapid growth of online learning has led many to question the future of traditional universities. Some predict that digital courses will eventually replace campus-based study, whereas others insist that face-to-face teaching will remain essential. I believe that both forms will continue to exist, but online learning will never fully replace the campus experience.</li>
+  <li>There is ongoing debate about what schools should teach. Some people feel that academic subjects should remain the priority, while others argue that practical life skills deserve more attention. Although academic knowledge is vital, I am convinced that schools should also teach essential practical skills.</li>
+</ol></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 11</div>
+      <h2>Writing Task 2 — Your Discussion Essay</h2>
+      <p class="task-sub">Now write your full essay. Use ideas from both reading passages, today's vocabulary, contrast language, relative clauses and careful hedging.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Some people believe that the main purpose of a university education is to prepare students for employment. Others think that universities should give students knowledge for its own sake, regardless of whether it is useful for a career. Discuss both views and give your own opinion.</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t11-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t11-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t11-essay-model"><p>As university education has expanded and tuition fees have risen, there has been growing debate about what a degree is actually for. While some people believe that universities should primarily prepare students for the workplace, others argue that they should offer knowledge for its own sake. In my view, although employability matters, the deeper purpose of a university is to develop knowledge and the ability to think, which ultimately serve students better than narrow job training.</p>
+<p>Those who favour a career-focused approach make several reasonable points. Students who pay high fees understandably expect a return on their investment, and employers frequently complain that graduates lack practical skills such as teamwork and communication. Building work placements into degree programmes, as some engineering faculties have done, can help graduates find jobs more quickly and enter the labour market with greater confidence.</p>
+<p>Nevertheless, I believe that defining a university's purpose mainly in terms of employment is short-sighted. The specific technical knowledge taught on job-focused courses can become obsolete within a few years, whereas critical thinking, clear writing and the ability to analyse complex problems are transferable skills that last a lifetime. Indeed, employers themselves often value these general abilities more highly than subject knowledge, and some of the most successful bank analysts, for example, studied subjects such as music or history. Furthermore, much of the research that has transformed modern life began as curiosity-driven inquiry with no obvious commercial purpose.</p>
+<p>In conclusion, while universities should certainly help students prepare for work, I am convinced that their main role is to equip young people with knowledge and intellectual skills that go beyond any single job. The best approach may be to combine rigorous academic study with opportunities to apply it in practice. <span class="alt">(about 300 words)</span></p></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 11</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 18 of 45</div>
+    <h1>Day 18 complete! 🎉</h1>
+    <p>All 11 tasks done — two IELTS reading passages, contrast and relative-clause grammar, hedging, and your own discussion essay. Come back tomorrow for the next day.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {'t5-tf': 6};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-m-lm');
+    for (let i = 1; i <= 6; i++) document.querySelectorAll(`input[name="t5-tf-${i}"]`).forEach(r => r.addEventListener('change', () => syncTfFix('t5-tf')));
+    initWritingCoach('t11-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Some people believe that the main purpose of a university education is to prepare students for employment. Others think that universities should give students knowledge for its own sake, regardless of whether it is useful for a career. Discuss both views and give your own opinion.' });
+
+    await initTaskFlow(18, 11, user.id, {
+      1: () => { checkAllAnswers('t1-m', 't1-m-score'); markLineMatchResult('t1-m-lm'); },
+      2: () => { checkAllAnswers('t2-c', 't2-c-score'); checkAllAnswers('t2-f', 't2-f-score'); },
+      3: () => { checkAllAnswers('t3-h', 't3-h-score'); checkAllAnswers('t3-tf', 't3-tf-score'); checkAllAnswers('t3-sum', 't3-sum-score'); },
+      4: () => { checkAllAnswers('t4-mc', 't4-mc-score'); checkAllAnswers('t4-who', 't4-who-score'); },
+      5: () => { checkAllAnswers('t5-th', 't5-th-score'); syncTfFix('t5-tf'); checkAllAnswers('t5-tf', 't5-tf-score'); revealCorrected('t5-tf'); },
+      6: () => { checkAllAnswers('t6-fn', 't6-fn-score'); checkAllAnswers('t6-q', 't6-q-score'); },
+      7: () => { checkAllAnswers('t7-mc', 't7-mc-score'); },
+      8: () => { checkAllAnswers('t8-mc', 't8-mc-score'); },
+      9: () => { checkAllAnswers('t9-cat', 't9-cat-score'); },
+      10: () => { checkAllAnswers('t10-ord', 't10-ord-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+    syncTfFix('t5-tf');
+    initGatedMistakeReveal('t7-rw-btn', 't7-rw-ans', '[id^="t7-rw-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t8-rw-btn', 't8-rw-ans', '[id^="t8-rw-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-rw-btn', 't9-rw-ans', '[id^="t9-rw-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t10-intro-btn', 't10-intro-ans', '[id^="t10-intro-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t11-essay-model-btn', 't11-essay-model', '#t11-essay');
+  });
+</script>
+</body>
+</html>
