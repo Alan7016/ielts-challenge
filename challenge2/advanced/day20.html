@@ -283,6 +283,18 @@
 
 </div>
 
+
+<!-- FULL-SCREEN / LEFT-THE-TEST WARNING -->
+<div id="fsGuard" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(20,22,43,.86); align-items:center; justify-content:center; padding:20px;">
+  <div style="background:var(--surface); border-radius:16px; max-width:440px; width:100%; padding:26px 24px; text-align:center; box-shadow:0 10px 40px #0006;">
+    <div style="font-size:44px; margin-bottom:8px;">⚠️</div>
+    <h2 id="fsGuardTitle" style="font-family:var(--display); font-size:22px; margin-bottom:8px;">You left the test screen</h2>
+    <p style="color:var(--ink-soft); font-size:14.5px; line-height:1.6; margin-bottom:6px;">The test is still running — <strong>the timer does not stop.</strong></p>
+    <p style="color:var(--muted); font-size:13px; line-height:1.6; margin-bottom:18px;">Leaving the test screen is recorded and your teacher will see it.</p>
+    <button class="start-btn" id="fsGuardBack" style="margin-bottom:10px;">Go back to the test (full screen)</button><br>
+    <button class="ghost" id="fsGuardStay" style="padding:8px 16px; font-size:13px;">Continue without full screen</button>
+  </div>
+</div>
 <script src="../../supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../../script.js"></script>
@@ -306,6 +318,7 @@ var currentSection = 'intro';
 var timerInterval = null;
 var timerSeconds = 0;
 var currentCheckpointSection = null, currentEndAt = null;
+var timerEndAt = 0;
 var loadedExamRecord = null;
 var studentSession = null;
 var studentProfile = null;
@@ -428,6 +441,7 @@ function preloadListening(){
 }
 
 function startExam(){
+  if(fsSupported()) enterFullscreen();
   currentSection = 'listening';
   showScreen('listening');
   updateProgress(1);
@@ -730,6 +744,8 @@ function finishWriting(){
   if(examData.completed_sections.indexOf('writing') < 0) examData.completed_sections.push('writing');
 
   currentSection = 'complete';
+  hideGuard();
+  exitFullscreen();
   showScreen('complete');
   updateProgress(4);
   document.getElementById('headerLabel').textContent = 'Test Complete';
@@ -779,16 +795,16 @@ function runTransition(nextKey, badge, title, sub, seconds, onDone){
   document.getElementById('transitionTitle').textContent = title;
   document.getElementById('transitionSub').textContent = sub;
   var countEl = document.getElementById('transitionCount');
-  var remaining = seconds;
-  countEl.textContent = remaining;
+  var endAt = Date.now() + seconds * 1000;
+  countEl.textContent = seconds;
   var iv = setInterval(function(){
-    remaining--;
+    var remaining = Math.ceil((endAt - Date.now()) / 1000);
     countEl.textContent = Math.max(remaining, 0);
     if(remaining <= 0){
       clearInterval(iv);
       onDone();
     }
-  }, 1000);
+  }, 250);
 }
 
 function showScreen(name){
@@ -824,9 +840,13 @@ function startTimer(seconds, onZero, sectionName){
   var display = document.getElementById('timerDisplay');
   display.style.display = 'block';
   display.className = 'timer-display';
+  // The clock is worked out from a fixed end time, not by counting ticks:
+  // browsers slow timers right down in a tab that isn't on screen, so a
+  // tick counter used to stop moving whenever the student left the tab.
+  timerEndAt = Date.now() + seconds * 1000;
   updateTimerDisplay();
   timerInterval = setInterval(function(){
-    timerSeconds--;
+    timerSeconds = Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
     updateTimerDisplay();
     if(timerSeconds <= 60) display.classList.add('danger');
     if(timerSeconds <= 0){
@@ -834,14 +854,12 @@ function startTimer(seconds, onZero, sectionName){
       display.textContent = '00:00';
       if(onZero) onZero();
     }
-  }, 1000);
+  }, 250);
 }
 function stopTimer(){ if(timerInterval) clearInterval(timerInterval); timerInterval = null; }
 function extendTimer(additionalSeconds){
-  // Just adds to the plain counter setInterval is already decrementing —
-  // no need to stop/restart anything, the running countdown picks up the
-  // extra time on its very next tick.
-  timerSeconds += Math.ceil(additionalSeconds);
+  timerEndAt += Math.ceil(additionalSeconds) * 1000;
+  timerSeconds = Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
   updateTimerDisplay();
 }
 function updateTimerDisplay(){
@@ -876,6 +894,7 @@ async function saveToSupabase(){
     writing_t2_text: examData.writing_t2_text,
     writing_t2_words: examData.writing_t2_words,
     completed_sections: examData.completed_sections,
+    integrity: examData.integrity || { fullscreen_exits: 0, tab_leaves: 0, seconds_away: 0, events: [] },
     submitted_at: new Date().toISOString()
   };
 
@@ -1103,6 +1122,81 @@ function tryResumeFromCheckpoint(){
   return true;
 }
 
+
+// ── FULL SCREEN + "LEFT THE TEST" TRACKING ─────────────────────────────────
+// The exam runs in full screen. If the student leaves full screen or
+// switches to another tab/app, a warning covers the page (the timer keeps
+// running) and the event is counted; the counts are saved with the exam so
+// the mentor can see them. A student can choose to carry on without full
+// screen after confirming -- leaving the tab is still counted either way.
+var fsOptOut = false;
+var awaySince = null;
+function fsSupported(){ var d = document.documentElement; return !!(d.requestFullscreen || d.webkitRequestFullscreen); }
+function isFullscreen(){ return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+function enterFullscreen(){
+  var d = document.documentElement;
+  try {
+    var p = d.requestFullscreen ? d.requestFullscreen({ navigationUI: 'hide' }) : (d.webkitRequestFullscreen ? d.webkitRequestFullscreen() : null);
+    if(p && p.catch) p.catch(function(){});
+  } catch(e){}
+}
+function exitFullscreen(){
+  try {
+    if(isFullscreen()){
+      var p = document.exitFullscreen ? document.exitFullscreen() : (document.webkitExitFullscreen ? document.webkitExitFullscreen() : null);
+      if(p && p.catch) p.catch(function(){});
+    }
+  } catch(e){}
+}
+function examRunning(){
+  return ['listening','reading','writing','transition'].indexOf(currentSection) >= 0 || document.getElementById('screen-transition').classList.contains('active');
+}
+function integ(){
+  if(!examData.integrity) examData.integrity = { fullscreen_exits: 0, tab_leaves: 0, seconds_away: 0, events: [] };
+  return examData.integrity;
+}
+function logEvent(type){
+  var i = integ();
+  if(i.events.length < 60) i.events.push({ t: new Date().toISOString(), type: type, section: currentSection });
+}
+function showGuard(title){
+  if(!examRunning()) return;
+  document.getElementById('fsGuardTitle').textContent = title;
+  document.getElementById('fsGuardStay').style.display = (fsSupported() && !fsOptOut) ? 'inline-block' : 'none';
+  document.getElementById('fsGuardBack').textContent = (fsSupported() && !fsOptOut) ? 'Go back to the test (full screen)' : 'Go back to the test';
+  document.getElementById('fsGuard').style.display = 'flex';
+}
+function hideGuard(){ document.getElementById('fsGuard').style.display = 'none'; }
+document.getElementById('fsGuardBack').addEventListener('click', function(){
+  if(fsSupported() && !fsOptOut) enterFullscreen();
+  hideGuard();
+});
+document.getElementById('fsGuardStay').addEventListener('click', function(){
+  if(!confirm('Continue the test without full screen?\n\nYour teacher will see that you left full screen.')) return;
+  fsOptOut = true;
+  logEvent('fullscreen_opt_out');
+  hideGuard();
+});
+function onFsChange(){
+  if(isFullscreen() || !examRunning()) return;
+  integ().fullscreen_exits++;
+  logEvent('left_fullscreen');
+  if(!fsOptOut) showGuard('You left full screen');
+}
+document.addEventListener('fullscreenchange', onFsChange);
+document.addEventListener('webkitfullscreenchange', onFsChange);
+document.addEventListener('visibilitychange', function(){
+  if(!examRunning()) return;
+  if(document.hidden){
+    awaySince = Date.now();
+    integ().tab_leaves++;
+    logEvent('left_tab');
+  } else {
+    if(awaySince){ integ().seconds_away += Math.round((Date.now() - awaySince) / 1000); awaySince = null; }
+    showGuard('You left the test page');
+  }
+});
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
 requireMockUnlockCode(20, function(){
 requireAuth(function(profile, user){
@@ -1125,6 +1219,7 @@ requireAuth(function(profile, user){
   checkAlreadySubmitted().then(function(){
     if(currentSection === 'intro'){
       var resumed = tryResumeFromCheckpoint();
+      if(resumed && fsSupported() && !isFullscreen() && examRunning()) showGuard('Your test is still running');
       if(!resumed) preloadListening();
     }
   });
