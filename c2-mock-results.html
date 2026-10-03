@@ -525,7 +525,7 @@ function buildDetail(sid, exam){
   }
 
   var sPane = '<div class="tab-pane" id="pane-'+sid+'-speaking">'+
-    '<div class="no-key-notice">ℹ️ Speaking isn\'t part of this mock test. Run the speaking test separately with this student, then enter their band and feedback below.</div>'+
+    buildSpeakingAI(exam, sid)+
     '<label class="feedback-label" style="margin-top:0;">Feedback for Speaking:</label>'+
     '<textarea class="feedback-textarea" id="fb-speaking-'+sid+'" placeholder="Write your feedback here…">'+esc(exam.speaking_feedback||'')+'</textarea>'+
     '<div class="band-row"><label style="font-size:13px;font-weight:700;">Band:</label>'+
@@ -583,7 +583,72 @@ function toggleCard(sid){
 }
 window.toggleCard = toggleCard;
 
+// ---------- AI speaking test (from Day 20 on) ----------
+var CRIT_NAMES = { fc:'Fluency & Coherence', lr:'Lexical Resource', gra:'Grammar', pr:'Pronunciation*' };
+function buildSpeakingAI(exam, sid){
+  var st = exam.speaking_status, ai = exam.speaking_ai || {};
+  if(!st){
+    return '<div class="no-key-notice">ℹ️ Speaking isn\'t part of this mock test. Run the speaking test separately with this student, then enter their band and feedback below.</div>';
+  }
+  var rerun = '<button class="save-feedback-btn" style="background:var(--surface);color:var(--accent);border:1px solid var(--accent);margin-top:8px;" onclick="rerunSpeakingAI(\''+exam.id+'\',\''+sid+'\',this)">↻ Run AI marking again</button>';
+  var html = '<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px;">';
+  if(st === 'submitted' || st === 'grading'){
+    html += '<div style="font-weight:700;">⏳ AI marking in progress…</div><div style="font-size:13px;color:var(--muted);">It usually takes 1–2 minutes. Refresh this page to see the result.</div>' + (st==='grading' ? '' : rerun);
+  } else if(st === 'error'){
+    html += '<div style="font-weight:700;color:var(--warn);">⚠️ AI marking failed</div><div style="font-size:12px;color:var(--muted);font-family:var(--mono);word-break:break-word;">'+esc(ai.error||'')+'</div>' + rerun;
+  } else if(st === 'done' && ai.result){
+    var r = ai.result;
+    html += '<div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px;"><span style="font-weight:700;">🤖 AI estimate</span><span style="font-size:26px;font-weight:800;color:var(--accent);">'+r.overall+'</span><span style="font-size:12.5px;color:var(--muted);">'+(ai.stats?ai.stats.words+' words · '+Math.round((ai.stats.seconds||0)/60)+' min of speech':'')+'</span></div>';
+    html += '<table class="ans-table" style="margin-bottom:10px;"><tbody>' + ['fc','lr','gra','pr'].map(function(k){
+      return '<tr><td style="font-weight:700;white-space:nowrap;">'+CRIT_NAMES[k]+'</td><td style="font-weight:800;color:var(--accent);">'+r[k]+'</td><td style="font-size:13px;color:var(--ink-soft);">'+esc(r[k+'_note']||'')+'</td></tr>';
+    }).join('') + '</tbody></table>';
+    html += '<div style="font-size:12px;color:var(--muted);">*Pronunciation is estimated from the transcript — please listen to a couple of answers and adjust the band if needed. The band and feedback below were filled in by the AI; edit them before you send results.</div>';
+  }
+  html += '</div>';
+  var recs = ai.recordings || [];
+  if(recs.length){
+    html += '<details style="margin-bottom:16px;"><summary style="cursor:pointer;font-weight:700;">🎧 Recordings & transcripts ('+recs.length+')</summary><div style="margin-top:10px;">';
+    recs.forEach(function(rc){
+      var label = rc.part === 0 ? 'Intro' : 'Part ' + rc.part;
+      html += '<div style="border-bottom:1px solid var(--border);padding:10px 0;">'+
+        '<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;">'+label+(rc.duration?' · '+rc.duration+'s':'')+(rc.words!==undefined?' · '+rc.words+' words':'')+'</div>'+
+        '<div style="font-size:13.5px;font-weight:600;margin:2px 0 6px;">'+esc(rc.question||'')+'</div>'+
+        '<audio controls preload="none" data-path="'+esc(rc.path)+'" style="width:100%;height:36px;"></audio>'+
+        (rc.text!==undefined ? '<div style="font-size:14px;line-height:1.6;margin-top:6px;background:var(--surface-2);border-radius:6px;padding:8px 10px;">'+(rc.text?esc(rc.text):'<em style="color:var(--muted);">(no answer / silence)</em>')+'</div>' : '')+
+      '</div>';
+    });
+    html += '</div></details>';
+  }
+  return html;
+}
+async function loadSpeakingAudio(sid){
+  var pane = document.getElementById('pane-'+sid+'-speaking');
+  if(!pane || pane.dataset.audioLoaded) return;
+  var els = Array.prototype.slice.call(pane.querySelectorAll('audio[data-path]'));
+  if(!els.length) return;
+  pane.dataset.audioLoaded = '1';
+  try {
+    var res = await sb.storage.from('speaking-recordings').createSignedUrls(els.map(function(a){ return a.dataset.path; }), 3600);
+    (res.data || []).forEach(function(d, i){ if(d && d.signedUrl) els[i].src = d.signedUrl; });
+  } catch(e){ console.warn('Could not load recordings', e); }
+}
+async function rerunSpeakingAI(examId, sid, btn){
+  var exam = allExams.find(function(e){ return e.id === examId; });
+  if(!exam) return;
+  btn.disabled = true; btn.textContent = 'Starting…';
+  try {
+    var r = await sb.functions.invoke('mock-speaking', { body: { action:'grade', student_id: exam.student_id, track: TRACK_KEY, mock_day: MOCK_DAY, force: true } });
+    if(r.error) throw r.error;
+    btn.textContent = 'Started — refresh in 1–2 minutes';
+  } catch(e){
+    alert('Could not start AI marking: ' + (e.message || e));
+    btn.disabled = false; btn.textContent = '↻ Run AI marking again';
+  }
+}
+window.rerunSpeakingAI = rerunSpeakingAI;
+
 function switchTab(sid, tabName, el){
+  if(tabName === 'speaking') loadSpeakingAudio(sid);
   var card = el.closest('.student-card');
   card.querySelectorAll('.detail-tab').forEach(function(t){t.classList.remove('active');});
   card.querySelectorAll('.tab-pane').forEach(function(p){p.classList.remove('active');});
