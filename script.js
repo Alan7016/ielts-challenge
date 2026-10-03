@@ -293,6 +293,17 @@ function initWordCounter(textareaId, countId) {
   update();
 }
 
+// ---------- Is this saved answer a speaking recording? ----------
+// Recordings are saved as a storage path ending in an audio extension
+// (e.g. "15/<uuid>/t3-speaking-summary.webm"). Dashboards used to detect
+// them only by a field_id starting with "speaking-", so newer field names
+// like "t3-speaking-summary" showed the raw path as if it were writing.
+function isRecordingAnswer(a) {
+  const v = String((a && a.value) || '').trim();
+  const id = String((a && a.field_id) || '');
+  return /\/[^\s]+\.(webm|ogg|mp4|m4a|wav|mp3|aac)$/i.test(v) || id.startsWith('speaking-');
+}
+
 // ---------- Timed writing coach (Task 1 practice) ----------
 // Adds a countdown timer, a live word count against a target, and an
 // "Analyse my writing" panel that checks for the Task 1 features taught in
@@ -2534,7 +2545,11 @@ const SPEAKING_QUESTIONS = {
   'speaking-town2-q8': 'What do you think visitors to your town or region should see? Why?'
 };
 function speakingLabel(fieldId) {
-  return SPEAKING_QUESTIONS[fieldId] || fieldId.replace('speaking-', '').replace(/-/g, ' ');
+  // e.g. "t3-speaking-summary" → "Task 3 · summary"
+  if (SPEAKING_QUESTIONS[fieldId]) return SPEAKING_QUESTIONS[fieldId];
+  const m = fieldId.match(/^t(\d+)-speaking-?(.*)$/);
+  if (m) return `Task ${m[1]} · ${(m[2] || 'recording').replace(/-/g, ' ')}`;
+  return fieldId.replace('speaking-', '').replace(/-/g, ' ');
 }
 async function initRecordControl(box, userId, day, task, fieldId, minSeconds) {
   minSeconds = minSeconds || 0;
