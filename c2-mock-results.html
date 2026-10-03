@@ -114,11 +114,97 @@ function scoreToBand(r, maxQ){
   if(scaled >= 16) return 5; if(scaled >= 13) return 4.5; if(scaled >= 10) return 4; if(scaled >= 8) return 3.5;
   if(scaled >= 6) return 3; if(scaled >= 4) return 2.5; if(scaled >= 2) return 2; if(scaled === 1) return 1.5; return 0;
 }
+// ---------- answer normalization ----------
+// IELTS accepts a range of equivalent ways to write the same answer:
+// British vs American spelling, digits vs number words, "18th" vs "18",
+// stray punctuation/spacing, and case. checkIsCorrect() now normalizes
+// both sides the same way before comparing, instead of a bare exact
+// string match — that was marking genuinely-correct answers wrong (e.g.
+// "18th June" vs a key of "18 June").
+var NUM_WORDS = { zero:0, one:1, two:2, three:3, four:4, five:5, six:6, seven:7, eight:8, nine:9,
+  ten:10, eleven:11, twelve:12, thirteen:13, fourteen:14, fifteen:15, sixteen:16, seventeen:17, eighteen:18, nineteen:19,
+  twenty:20, thirty:30, forty:40, fifty:50, sixty:60, seventy:70, eighty:80, ninety:90, hundred:100 };
+var ORD_WORDS = { zeroth:0, first:1, second:2, third:3, fourth:4, fifth:5, sixth:6, seventh:7, eighth:8, ninth:9,
+  tenth:10, eleventh:11, twelfth:12, thirteenth:13, fourteenth:14, fifteenth:15, sixteenth:16, seventeenth:17, eighteenth:18, nineteenth:19,
+  twentieth:20, thirtieth:30, fortieth:40, fiftieth:50, sixtieth:60, seventieth:70, eightieth:80, ninetieth:90, hundredth:100 };
+// Common British/American spelling pairs likely to turn up as IELTS
+// gap-fill or short-answer content. Both spellings map to the same
+// canonical (American) token so either one matches the answer key.
+var SPELLING_VARIANTS = {
+  colour:'color', favour:'favor', favourite:'favorite', honour:'honor', honourable:'honorable',
+  labour:'labor', neighbour:'neighbor', neighbourhood:'neighborhood', rumour:'rumor', humour:'humor',
+  humorous:'humorous', behaviour:'behavior', behavioural:'behavioral', endeavour:'endeavor',
+  organise:'organize', organised:'organized', organising:'organizing', organisation:'organization',
+  organisations:'organizations', realise:'realize', realised:'realized', realising:'realizing',
+  recognise:'recognize', recognised:'recognized', apologise:'apologize', apologised:'apologized',
+  criticise:'criticize', criticised:'criticized', emphasise:'emphasize', emphasised:'emphasized',
+  minimise:'minimize', maximise:'maximize', specialise:'specialize', specialised:'specialized',
+  summarise:'summarize', summarised:'summarized', analyse:'analyze', analysed:'analyzed',
+  analysing:'analyzing', characterise:'characterize', memorise:'memorize', familiarise:'familiarize',
+  prioritise:'prioritize', customise:'customize', utilise:'utilize', utilised:'utilized',
+  standardise:'standardize', modernise:'modernize', industrialise:'industrialize',
+  globalisation:'globalization', civilisation:'civilization', civilisations:'civilizations',
+  colonise:'colonize', colonised:'colonized', authorise:'authorize', authorised:'authorized',
+  programme:'program', programmes:'programs', catalogue:'catalog', catalogues:'catalogs',
+  dialogue:'dialog', dialogues:'dialogs', cheque:'check', cheques:'checks', grey:'gray',
+  tyre:'tire', tyres:'tires', kerb:'curb', mould:'mold', aeroplane:'airplane',
+  aluminium:'aluminum', jewellery:'jewelry', plough:'plow', sceptic:'skeptic', sceptical:'skeptical',
+  defence:'defense', licence:'license', offence:'offense', pretence:'pretense',
+  practise:'practice', practised:'practiced', practising:'practicing',
+  enrol:'enroll', enrolment:'enrollment', fulfil:'fulfill', fulfilment:'fulfillment',
+  skilful:'skillful', wilful:'willful', instalment:'installment', instalments:'installments',
+  travelling:'traveling', travelled:'traveled', traveller:'traveler', travellers:'travelers',
+  cancelled:'canceled', cancelling:'canceling', modelling:'modeling', modelled:'modeled',
+  labelled:'labeled', labelling:'labeling', jewelled:'jeweled', counsellor:'counselor',
+  marvellous:'marvelous', centre:'center', centres:'centers', theatre:'theater', theatres:'theaters',
+  litre:'liter', litres:'liters', metre:'meter', metres:'meters', millimetre:'millimeter',
+  centimetre:'centimeter', kilometre:'kilometer', fibre:'fiber'
+};
+function wordsToDigits(s){
+  var tokens = s.replace(/-/g, ' ').split(' ');
+  var out = [];
+  for(var i=0; i<tokens.length; i++){
+    var w = tokens[i];
+    if(NUM_WORDS.hasOwnProperty(w)){
+      var val = NUM_WORDS[w];
+      if(val >= 20 && val <= 90 && i+1 < tokens.length){
+        if(NUM_WORDS.hasOwnProperty(tokens[i+1]) && NUM_WORDS[tokens[i+1]] < 10){ val += NUM_WORDS[tokens[i+1]]; i++; }
+        else if(ORD_WORDS.hasOwnProperty(tokens[i+1]) && ORD_WORDS[tokens[i+1]] < 10){ val += ORD_WORDS[tokens[i+1]]; i++; }
+      }
+      out.push(String(val));
+    } else if(ORD_WORDS.hasOwnProperty(w)){
+      out.push(String(ORD_WORDS[w]));
+    } else {
+      out.push(w);
+    }
+  }
+  return out.join(' ');
+}
+function normalizeAnswer(raw){
+  if(raw === undefined || raw === null) return '';
+  var s = String(raw).trim().toLowerCase();
+  if(!s) return '';
+  s = s.replace(/\s+/g, ' ').replace(/^[\s.,;:'"()]+|[\s.,;:'"()]+$/g, '');
+  // "18th" / "21st" / "3rd" -> "18" / "21" / "3"
+  s = s.replace(/\b(\d+)(st|nd|rd|th)\b/g, '$1');
+  s = wordsToDigits(s);
+  s = s.split(' ').map(function(w){ return SPELLING_VARIANTS[w] || w; }).join(' ');
+  // "3 000" / "3,000" -> "3000"
+  s = s.replace(/\s*,\s*/g, ' ').replace(/(\d) (?=\d{3}\b)/g, '$1').replace(/(\d),(?=\d{3}\b)/g, '$1');
+  // "May 11" / "11 May" / "11 of May" are the same date
+  var t = s.split(' ').filter(function(x){ return x !== 'of' && x !== 'the'; });
+  if(t.length === 2){
+    if(MONTHS.indexOf(t[0]) >= 0 && /^\d+$/.test(t[1])) s = t[1] + ' ' + t[0];
+    else if(MONTHS.indexOf(t[1]) >= 0 && /^\d+$/.test(t[0])) s = t[0] + ' ' + t[1];
+  }
+  return s;
+}
+var MONTHS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
 function checkIsCorrect(studentAns, correctAns){
-  if(studentAns === undefined || studentAns === null || String(studentAns).trim()==='') return null;
-  var sa = String(studentAns).trim().toLowerCase();
-  if(Array.isArray(correctAns)) return correctAns.some(function(c){ return String(c).trim().toLowerCase() === sa; });
-  return String(correctAns).trim().toLowerCase() === sa;
+  if(studentAns === undefined || studentAns === null || String(studentAns).trim()==='' || studentAns === 'No Answer') return null;
+  var sa = normalizeAnswer(studentAns);
+  if(Array.isArray(correctAns)) return correctAns.some(function(c){ return normalizeAnswer(c) === sa; });
+  return normalizeAnswer(correctAns) === sa;
 }
 function esc(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function recomputeScoreAndBand(answers, key, total){
