@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading &mdash; Mock Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            line-height: 1.4;
+            font-size: 16px;
+            padding-bottom: 90px;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 60px;
+        }
+
+        .timer-container { display: none; }
+
+        .main-container {
+            margin-top: 60px;
+            display: flex;
+            background: #ffffff;
+            padding-bottom: 100px;
+        }
+
+        .left-panel {
+            width: 48%;
+            padding: 24px 28px;
+            border-right: 1px solid #e0e0e0;
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+            position: sticky;
+            top: 60px;
+        }
+
+        .right-panel {
+            display: block;
+            width: 52%;
+            padding: 24px 28px;
+        }
+
+        .passage-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .passage-sub {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 18px;
+            font-style: italic;
+        }
+
+        #passage-text p { margin-bottom: 14px; text-align: justify; }
+
+        .part-header {
+            background-color: #f1f2ec;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .question { margin-bottom: 36px; }
+        .question p { margin-bottom: 10px; }
+        .question-prompt { margin-bottom: 16px; }
+
+        .answer-input {
+            border: 1px solid #9aa3ad;
+            border-radius: 4px;
+            background-color: #fff;
+            padding: 4px 8px;
+            font-size: 16px;
+            width: 140px;
+            height: 28px;
+            line-height: 1.2;
+            vertical-align: middle;
+            transition: border-color 0.15s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        .answer-input::placeholder { color: #999; font-weight: bold; text-align: center; }
+        .answer-input:focus { outline: none; border-color: #2c6bed; border-width: 2px; }
+        .answer-input.correct { border-color: #28a745; background-color: #e9f7ef; }
+        .answer-input.incorrect { border-color: #dc3545; background-color: #f8d7da; color: #721c24; }
+
+        .correct-inline {
+            color: #28a745;
+            font-weight: 700;
+            margin-left: 10px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .correct-inline::before { content: "\2192  "; }
+
+        .multi-choice-option {
+            display: block;
+            width: 100%;
+            padding: 10px 14px;
+            background-color: #fff;
+            border: 1px solid transparent;
+            transition: background-color 0.2s;
+        }
+        .multi-choice-option:hover { background-color: #f1f7ff; border-color: #c6dcfb; }
+        .multi-choice-option:has(input[type="radio"]:checked) { background-color: #cfe3f9; }
+        .multi-choice-option.correct { background-color: #d4edda !important; }
+        .multi-choice-option.incorrect { background-color: #f8d7da !important; }
+        .multi-choice-option label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 16px; width: 100%; }
+        .multi-choice-option input[type="radio"] { transform: scale(1.2); }
+
+        .headings-box {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px 18px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        .headings-box p { margin: 3px 0; }
+
+        .hidden { display: none; }
+
+        .nav-arrows { position: fixed; bottom: 100px; right: 20px; display: flex; gap: 5px; z-index: 101; }
+        .nav-arrow {
+            width: 50px; height: 50px; background: #333; color: white; border: none;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 22px; font-weight: bold;
+        }
+        .nav-arrow:hover { background: #555; }
+        .nav-arrow:disabled { background: #ccc; cursor: not-allowed; }
+
+        .nav-row {
+            position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff; padding: 0;
+            display: flex; align-items: center; height: 80px; z-index: 100;
+            overflow-x: auto; overflow-y: hidden; white-space: nowrap;
+        }
+        .footer__questionWrapper___1tZ46 { display: flex; align-items: center; margin-right: 20px; flex-shrink: 0; }
+        .footer__questionNo___3WNct {
+            background: none; border: none; padding: 10px 15px; font-size: 16px; font-weight: 600;
+            color: #333; cursor: pointer; display: flex; align-items: center; gap: 5px;
+        }
+        .footer__questionNo___3WNct:hover { background-color: #f8f9fa; }
+        .attemptedCount { font-size: 14px; color: #666; margin-left: 5px; font-weight: 400; }
+        .footer__subquestionWrapper___9GgoP { display: none; gap: 2px; margin-left: 10px; }
+        .footer__questionWrapper___1tZ46.selected .footer__subquestionWrapper___9GgoP { display: flex; }
+        .footer__questionWrapper___1tZ46.selected .attemptedCount { display: none; }
+        .subQuestion {
+            width: 32px; height: 32px; border: 1px solid #ccc; background: white; color: #333;
+            font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; transition: all 0.2s; border-radius: 2px;
+        }
+        .subQuestion.answered { background-color: #e9ecef; border-color: #ddd; }
+        .subQuestion.correct { background-color: #28a745; color: white; border-color: #28a745; }
+        .subQuestion.incorrect { background-color: #dc3545; color: white; border-color: #dc3545; }
+        .subQuestion:hover { background-color: #f0f0f0; border-color: #999; }
+        .subQuestion.active { background-color: #4a90e2; color: white; border-color: #4a90e2; }
+        .sr-only {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+        }
+        .footer__deliverButton___3FM07 {
+            margin-left: auto; margin-right: 20px; background-color: #f0f0f0; color: #333;
+            border: 1px solid #ccc; padding: 12px 20px; border-radius: 4px; font-size: 16px;
+            font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            min-width: 170px; justify-content: center;
+        }
+        .footer__deliverButton___3FM07:hover { background-color: #e0e0e0; border-color: #bbb; }
+        .footer__deliverButton___3FM07.success { background-color: #28a745; color: #fff; border-color: #28a745; }
+
+        .highlight { background-color: #ffff00; }
+        .comment-highlight { background-color: #90EE90; position: relative; cursor: help; }
+        .comment-tooltip {
+            position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #333;
+            color: white; padding: 8px 12px; border-radius: 4px; font-size: 14px; white-space: nowrap;
+            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .comment-highlight:hover .comment-tooltip { opacity: 1; }
+
+        .context-menu {
+            position: absolute; background: white; border: 1px solid #ccc; border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); z-index: 1000; display: none; min-width: 140px;
+        }
+        .context-menu-item {
+            padding: 12px 16px; cursor: pointer; font-size: 16px; border-bottom: 1px solid #f0f0f0;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .context-menu-item:hover { background-color: #f8f9fa; }
+        .context-menu-item:last-child { border-bottom: none; }
+
+        .tfng-question {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 26px;
+        }
+        .tfng-num-box {
+            width: 26px;
+            height: 26px;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .tfng-body { flex: 1; }
+        .tfng-statement { margin-bottom: 10px; }
+        .tfng-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .tfng-option input[type="radio"] { transform: scale(1.15); cursor: pointer; }
+
+        .selection-toolbar {
+            position: absolute;
+            display: none;
+            background: #2b2b2b;
+            border-radius: 6px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            z-index: 1500;
+            overflow: hidden;
+        }
+        .selection-toolbar button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            padding: 8px 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .selection-toolbar button:hover { background: #444; }
+        .selection-toolbar button + button { border-left: 1px solid #555; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6);
+            z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-content {
+            background: white; padding: 25px; border-radius: 8px; width: 100%; max-width: 800px;
+            max-height: 90vh; overflow-y: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd;
+            padding-bottom: 15px; margin-bottom: 20px;
+        }
+        .modal-header h2 { font-size: 24px; color: #333; }
+        .modal-close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #888; }
+        .modal-close-btn:hover { color: #333; }
+        #score-summary {
+            font-size: 16px; font-weight: 600; color: #111827; background: #f1f5f9; border: 1px solid #e2e8f0;
+            padding: 10px 12px; border-radius: 8px; display: inline-block; margin-bottom: 15px;
+        }
+        #result-details table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        #result-details th, #result-details td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        #result-details th { background-color: #f8f9fa; font-weight: 600; }
+        .result-correct { color: #28a745; font-weight: bold; }
+        .result-incorrect { color: #dc3545; font-weight: bold; }
+
+        @keyframes flash { 0% { background-color: #e6f4ff; } 100% { background-color: transparent; } }
+        .question.flash { animation: flash 1s ease-out; }
+
+        select.answer-select {
+            border: 1px solid #9aa3ad; border-radius: 4px; background-color: #fff; padding: 4px 8px;
+            font-size: 15px; height: 32px; vertical-align: middle;
+        }
+        select.answer-select.correct { border-color: #28a745; background-color: #e9f7ef; }
+        select.answer-select.incorrect { border-color: #dc3545; background-color: #f8d7da; }
+
+        @media (max-width: 1024px) {
+            .main-container { flex-direction: column; }
+            .left-panel { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid #e0e0e0; }
+            .right-panel { width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="timer-container"><span class="timer-display">60:00</span></div>
+        <div style="font-weight:700;color:#3e3e3e;">IELTS Reading &mdash; Mock Test</div>
+        <div></div>
+    </div>
+
+    <div class="main-container">
+        <div class="left-panel">
+            <div id="passage-1" class="passage-part">
+                <div class="passage-title">Soap</div>
+                <div class="passage-sub">Reading Passage 1</div>
+                <div id="passage-text">
+<p>One substance everyone uses every day is soap, whether it be for washing our hands using a bar of soap, doing the laundry or washing the floor with detergent. Technically, soaps are ionic compounds from fatty acids and they are used for a variety of cleaning purposes. Soaps allow particles that cannot usually be dissolved in water to be soluble and then be washed away. Although made in a different way, synthetic detergents operate in a similar fashion.</p>
+<p>The human skin is under daily attack from various things, such as scorching sun, drying winds, biting cold weather, bacteria and dirt, and so our distant ancestors learned quickly that preserving the health of skin is a way for better and longer life. Popular in different civilisations, the benefits of soap finally managed to appeal to a wide European population in the 17th century, and, since then, the tradition of maintaining high personal hygiene has experienced only constant growth. With its ability to clean people’s clothes and disinfect their surroundings from harmful bacteria and dirt, soaps remain one of the most useful and fundamental hygiene tools that mankind ever created.</p>
+<p>The first concrete evidence we have of a soap-like substance is dated around 2800 BC. The first soap makers were Babylonians, Mesopotamians, Egyptians, as well as the ancient Greeks and Romans. All of them made soap by mixing fat, oils and salts. Soap was not made and used for bathing and personal hygiene, but was rather produced for cleaning cooking utensils or goods or was used for medicinal purposes. According to Roman legend, their natural soap was first discovered near a mount called ‘Sapo’, where animals were sacrificed. Rain used to wash the fat from sacrificed animals along with wood ashes into the River Tiber, where the women who were washing clothes in it found the mixture made their washing easier. It is a nice story, but unfortunately there is no such place on record and no evidence for the mythical story.</p>
+<p>Soaps today come in three principal forms: bars, powders and liquids. Some liquid products are so viscous that they are gels. Raw materials are chosen according to many criteria, including their human and environmental safety, cost, compatibility with other ingredients, and the desired form and performance characteristics of the finished product. In ancient times, soap was made from animal fats and wood ashes. Today, it is still produced from vegetable or animal fats and alkali. The main sources of fats are beef and mutton tallow, while palm, coconut and palm kernel oils are the principal oils.</p>
+<p>In the early beginnings of soap making, it was an exclusive technique used by small groups of soap makers. The demand for early soap was high, but it was very expensive and there was a monopoly on soap production in many areas. Over time, recipes for soap making became more widely known, but soap was still expensive.</p>
+<p>Modern soap was made by the batch kettle boiling method until shortly after World War II, when continuous processes were developed. Continuous processes are preferred today, because of their flexibility, speed and economics. The first part of the manufacturing process is to heat the raw materials to remove impurities. This is followed by saponification, which involves adding a powerful alkali to the heated raw materials. This releases the fatty acids (known as ‘neat soap’) that are the basis of the soap and a valuable by-product, glycerine. The glycerine is recovered by chemical treatment, followed by evaporation and refining. Refined glycerine is an important industrial material used in foods, cosmetics, drugs and many other products. The next processing for the soap is vacuum spray drying to convert the neat soap into dry soap pellets.</p>
+<p>The moisture content of the pellets will be determined by the desired characteristics of the soap bar. In the final processing step, the dry soap pellets pass through a bar soap finishing line. The first unit in the line is a mixer, called an amalgamator, in which the soap pellets are blended together with fragrance, shades and all other ingredients. The mixture is then homogenised and refined through rolling mills and refining plodders to achieve thorough blending and a uniform texture. Finally, the mixture is cut into bar-size units and stamped into its final shape in a soap press.</p>
+<p>The history of liquid soaps and gels started only recently, when the technological and chemical advancements of the modern age enabled countless inventors to start experimenting with more complicated recipes. The first appearance of liquid soap happened in the mid 1800’s with the exploits of several inventors. In 1865, William Shepphard patented liquid soap; however, popularity of this product would not arrive until the creation of Palmolive soap in 1898 by B.J. Johnson.</p>
+<p>Advancements in modern chemistry enabled the creation of shower gel. The main difference between liquid soaps and shower gels is that gels do not contain saponified oil. They are based mostly on petroleum, have numerous chemical ingredients that help the easier cleaning of skin, lather better in hard water areas, do not leave a residue on the skin and bathtub, and are in a balanced PH state, so that they do not cause skin irritations. Because some shower gels can cause drying up of the skin after use, many manufacturers insert various moisturisers into their recipes. Some use menthol, an ingredient that gives skin a sensation of coldness and freshness.</p>
+                </div>
+            </div>
+            <div id="passage-2" class="passage-part hidden">
+                <div class="passage-title">Western Immigration of Canada</div>
+                <div class="passage-sub">Reading Passage 2</div>
+                <div id="passage-text">
+<p><strong>A</strong></p><p>By the mid-1870s, Canada wanted an immigrant population of agricultural settlers established in the West. No urban centres existed on the prairies in the 1870s, and rural settlement was the focus of the federal government’s attention. The western rural settlement was desired, as it would provide homesteads for the sons and daughters of eastern farmers, as eastern agricultural landfilled to capacity. As well, eastern farmers and politicians viewed western Canada, with its broad expanses of unpopulated land, as a prime location for expanding Canada’s agricultural output, especially in terms of wheat production to serve the markets of eastern Canada.</p>
+<p><strong>B</strong></p><p>To bolster Canada’s population and agricultural output, the federal government took steps to secure western land. The Dominion of Canada purchased Rupert’s Land from the Hudson’s Bay Company in 1870. In 1872, the federal government enacted the Dominion Lands Act. This act enabled settlers to acquire 160 acres of free land, as long as settlers remained on their land for a period of three years, made certain minor improvements to the land, and paid a $10.00 registration fee. The Canadian government also created a Mounted Police Force in 1873. The Mounties journeyed west to secure the area for future settlers. By 1876, the NWMP had established themselves in the West. The major posts included Swan River, Fort Saskatchewan, Fort Calgary, Fort Walsh and Fort Macleod. All of these initiatives attracted a number of eastern-Canadian settlers, as well as European and American immigrants, to Canada’s West, and particularly to the area of Manitoba.</p>
+<p><strong>C</strong></p><p>The surest way to protect Canadian territory, and to achieve the secondary goal for joining British Columbia to the rest of the country, was to import large numbers of Eastern Canadian and British settlers. Settling the West also made imperative the building of a transcontinental railway. The railway would work to create an east-west economy, in which western Canada would feed the growing urban industrial population of the east, and in return become a market for eastern Canadian manufactured goods.</p>
+<p><strong>D</strong></p><p>Winnipeg became the metropolis of the West during this period. Winnipeg’s growth before 1900 was the result of a combination of land speculation, growth of housing starts, and the federal government’s solution in 1881 of Winnipeg as a major stop along the CPR. This decision culminated in a land boom between 1881 and 1883 which resulted in the transformation of hamlets like Portage la Prairie and Brandon into towns, and a large increase in Manitoba’s population. Soon, Winnipeg stood at the junction of three transcontinental railway lines which employed thousands in rail yards. Winnipeg also became the major processor of agricultural products for the surrounding hinterland.</p>
+<p><strong>E</strong></p><p>The majority of settlers to Winnipeg, and the surrounding countryside, during this early period, were primarily Protestant English-speaking settlers from Ontario and the British Isles. These settlers established Winnipeg upon a British-Ontarian ethos which came to dominate the society’s social, political, and economic spirit. This British-Ontarian ethnic homogeneity, however, did not last very long. Increasing numbers of foreign immigrants, especially from Austria-Hungary and Ukraine soon added a new ethnic element to the recent British, the older First Nation Métis, and Selkirk’s settler population base. Settling the West with (in particular) Eastern Canadians and British immigrant offered the advantage of safeguarding the 49th parallel from the threat of American take-over, had not the Minnesota legislature passed a resolution which provided for the annexation of the Red River district. The Red River in 1870 was the most important settlement on the Canadian prairies. It contained 11,963 inhabitants of whom 9,700 were Métis and First Nations. But neighbouring Minnesota already had a population of over 100,000.</p>
+<p><strong>F</strong></p><p>Not all of the settlers who came to western Canada in the 1880s, however, desired to remain there. In the 1870s and 1880s, economic depression kept the value of Canada’s staple exports low, which discouraged many from permanent settlement in the West. Countries including Brazil, Argentina, Australia, New Zealand and the United States competed with Canada for immigrants. Many immigrants and thousands of Canadians chose to settle in the accessible and attractive American frontier. Canada before 1891 has been called “a huge demographic railway station” where thousands of men, women, and children were constantly going and coming, and where the number of departures invariably exceeded that of arrivals.”</p>
+<p><strong>G</strong></p><p>By 1891 Eastern Canada had its share of both large urban centres and problems associated with city life. While the booming economic centres of Toronto and Montreal were complete with electricity and telephones in the cities’ wealthiest areas by the turn of the century, slum conditions characterised the poorest areas like the district known as ‘the Ward’ in Toronto. Chickens and pigs ran through the streets; privy buckets spilled onto backyards and lanes creating cesspools in urban slums. These same social reformers believed that rural living, in stark contrast to urban, would lead to a healthy, moral, and charitable way of life. Social reformers praised the ability of fresh air, hard work, and open spaces for ‘Canadianizing’ immigrants. Agricultural pursuits were seen as especially fitting for attaining this ‘moral’ and family-oriented way of life, in opposition to the single male-dominated atmosphere of the cities. Certainly, agriculture played an important part in the Canadian economy in 1891. One-third of the workforce worked on farms.</p>
+<p><strong>H</strong></p><p>The Canadian government presented Canada’s attractions to potential overseas migrants in several ways. The government offered free or cheap land to potential agriculturists. As well, the government established agents and/or agencies for the purpose of attracting emigrants overseas. Assisted passage schemes, bonuses and commissions to agents and settlers and pamphlets also attracted some immigrants to Canada. The most influential form of attracting others to Canada, however, remained the letters home written by emigrants already in Canada. Letters from trusted friends and family members. Letters home often contained exaggerations of the ‘wonder of the new world.’ Migrant workers and settlers already in Canada did not want to disappoint, or worry, their family and friends at home. Embellished tales of good fortune and happiness often succeeded in encouraging others to come.</p>
+                </div>
+            </div>
+            <div id="passage-3" class="passage-part hidden">
+                <div class="passage-title">What is meaning? Why do we respond to words and symbols in the ways we do?</div>
+                <div class="passage-sub">Reading Passage 3</div>
+                <div id="passage-text">
+<p>Semantics, in general, is the subdivision of linguistics concerned with meaning. Semantics attempts the systematic study of the assignment of meanings to minimal meaning-bearing elements and the combination of these in the production of more complex meaningful expressions. Elementary word groups may be combined in a relationship of content, forming thematic groups and semantic and lexical “fields”. For example, all the means of expressing the concept of joy in a given language constitute the lexical-semantic field “joy”. Because of the trained patterns of response, people listen more respectfully to the health advice of someone who has “MD” after his name than to that of someone who hasn’t. A “pattern of reactions”, then, is the sum of the ways we act in response to events, to words, and to symbols.</p>
+<p>Words and word meanings are one of the most important information cues used in speaking and understanding, as well as in reading. Indeed, a person’s life experience and cultural experience (even reading comic strips) are most relevant to the development of linguistic “meaning making” in any language, which is very important in the communication process. Words from a person’s native language and culture perspective can carry special associations. For instance, the Spanish words for hammock, tobacco, and potato are derived from Tamo words for these items. Therefore, when people’s semantic habits are reasonably similar to those of most people around them, they are regarded as “normal” or perhaps “dull”. If their semantic habits are noticeably different from those of others, they are regarded as “individualistic” or “original”, or, if the differences are disapproved of or viewed with alarm, as “crazy”.</p>
+<p>A definition states the meaning of a word using other words. It is clear that to define a word, as a dictionary does, is simply to explain the word with more words. However, defining words with more words usually gets people (especially children) at once into what mathematicians call an “infinite regress”, an infinite series of occurrences or concepts. For example, it can lead people into the kind of run-around that people sometimes encounter when they look up “impertinence” and find it defined as “impudence”, so they look up “impudence” and find it defined as “impertinence”. Yet —and here we come to another common reaction pattern— people often act as if words can be explained fully with more words. To a person who asked for a definition of jazz, Louis Armstrong is said to have replied, “If you have to ask what jazz is, you’ll never know”, proving himself to be an intuitive semanticist as well as a great trumpet player.</p>
+<p>Semantics, then, seeks the “operational” definition instead of the dictionary Bridgman, the 1946 Nobel Prize winner and physicist, once wrote, “The true meaning of a term is to be found by observing what a man does with it, not by what he says about it.” He made an enormous contribution to science by showing that the meaning of a scientific term lies in the operations, the things are done, that establish its validity, rather than in verbal definitions. An example of operational definition of the term “weight” of an object, operationalized to a degree, would be the following: “weight is the numbers that appear when that object is placed on a weighing scale”. According to it, when one starts reading the numbers on the scale, it would more fully make an operational definition. But if people say — and revolutionists have started uprisings with just this statement “Man is born free, but everywhere he is in chains!” — what operations could we perform to demonstrate its accuracy or inaccuracy?</p>
+<p>Next, if this suggestion of “operationalism” is pulled outside the physical sciences where Bridgman applied it, what “operations” are people expected to perform as the result of both the language they use and the language other people use in communicating to them? Here is a personnel manager studying an application form. He comes to the words “Education: Harvard University”, and drops the application form in the wastebasket (that’s the “operation”) because, as he would say if you asked him, “I don’t like Harvard men”. This is an instance of “meaning” at work — but it is not a meaning that can be found in dictionaries.</p>
+<p>So far as we know, human beings are the only creatures that have, over and above that biological equipment which we have in common with other creatures, the additional capacity for manufacturing symbols and systems of symbols. When we react to a flag, we are not reacting simply to a piece of cloth, but to the meaning with which it has been symbolically endowed. When we react to a word, we are not reacting to a set of sounds, but to the meaning with which that set of sounds has been symbolically endowed. As a matter of fact, how sound symbolism is processed in our brains has not yet been fully explained in the field.</p>
+<p>Simply put, the key point of semantics lies in, not the words definition, but our own semantic reactions, which occur when we respond to things the way they “should” be, rather than to the way they are. If a person was to tell a shockingly obscene story in Arabic or Hindustani or Swahili before an audience that understood only English, no one would blush or be angry; the story would be neither shocking nor obscene — indeed, it would not even be a story. Likewise, the value of a dollar bill is not in the bill, but in our social agreement to accept it as a symbol of value. If that agreement were to break down through the collapse of our government, the dollar bill would become only a scrap of paper. We do not understand a dollar bill by staring at it long and hard. We understand it by observing how people act with respect to it. We understand it by understanding the social mechanisms and the loyalties that keep it meaningful. Therefore, semantics belongs to social studies and potentially underpins the integrity of the social sciences.</p>
+                </div>
+            </div>
+        </div><!-- end left-panel -->
+
+        <div class="right-panel">
+            <div id="part-1" class="question-part">
+                <div class="part-header">
+                    <p><strong>Reading Passage 1</strong></p>
+                    <p>You should spend about 20 minutes on Questions 1&ndash;13, which are based on Reading Passage 1.</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 1&ndash;4</strong></p>
+                            <p>Do the following statements agree with the information given in Reading Passage 1?</p>
+                            <p>Write <strong>TRUE</strong> if the statement agrees with the information, <strong>FALSE</strong> if the statement contradicts the information, <strong>NOT GIVEN</strong> if there is no information on this.</p>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">1</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">Current research is working on a way to make soap from discarded bio-rubbish.</p>
+                                <label class="tfng-option"><input type="radio" name="q1" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q1" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q1" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">2</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">Soap has enjoyed widespread popularity in Europe for over a thousand years.</p>
+                                <label class="tfng-option"><input type="radio" name="q2" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q2" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q2" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">3</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">One similarity of many ancient soaps is that they all used fat as an ingredient.</p>
+                                <label class="tfng-option"><input type="radio" name="q3" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q3" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q3" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">4</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">Early soap was an inexpensive product due to an easy availability of ingredients.</p>
+                                <label class="tfng-option"><input type="radio" name="q4" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q4" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q4" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 5&ndash;10</strong></p>
+                            <p>Complete the flow chart below.</p>
+                            <p>Write <strong>NO MORE THAN TWO WORDS</strong> from the text for each answer.</p>
+                        </div>
+                        <div style="border:1px solid #ccc;border-radius:5px;padding:16px 20px;background:#fafafa;margin-bottom:14px;">
+                            <p style="font-weight:700;margin-bottom:10px;text-align:center;">Soap manufacturing process</p>
+                            <p style="margin-bottom:10px;"><input type="text" id="q5" class="answer-input" placeholder="5" style="width:160px;"> are removed by heating the raw materials.</p>
+                            <p style="text-align:center;margin:6px 0;">&#8595;</p>
+                            <p style="margin-bottom:10px;">Saponification takes place by adding a strong <input type="text" id="q6" class="answer-input" placeholder="6" style="width:160px;"> &ndash; fatty acids and glycerine are the result.</p>
+                            <p style="text-align:center;margin:6px 0;">&#8595;</p>
+                            <p style="margin-bottom:10px;">Glycerine undergoes treatment, <input type="text" id="q7" class="answer-input" placeholder="7" style="width:160px;"> and refining, and is then sold.</p>
+                            <p style="text-align:center;margin:6px 0;">&#8595;</p>
+                            <p style="margin-bottom:10px;">The neat soap is converted to pellets using vacuum spray drying &ndash; the remaining <input type="text" id="q8" class="answer-input" placeholder="8" style="width:160px;"> depends on the soap&rsquo;s chosen properties.</p>
+                            <p style="text-align:center;margin:6px 0;">&#8595;</p>
+                            <p style="margin-bottom:10px;">An amalgamator adds <input type="text" id="q9" class="answer-input" placeholder="9" style="width:160px;">, colour and additional components.</p>
+                            <p style="text-align:center;margin:6px 0;">&#8595;</p>
+                            <p style="margin-bottom:10px;">Homogenisation, refining and blending takes place.</p>
+                            <p style="text-align:center;margin:6px 0;">&#8595;</p>
+                            <p style="margin-bottom:0;">The finished soap is cut and stamped by a <input type="text" id="q10" class="answer-input" placeholder="10" style="width:160px;">.</p>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 11&ndash;13</strong></p>
+                            <p>Answer the questions below.</p>
+                            <p>Choose <strong>NO MORE THAN TWO WORDS AND/OR A NUMBER</strong> from the passage for each answer.</p>
+                        </div>
+                        <div style="padding:4px 2px 0;">
+                            <p style="margin-bottom:12px;"><strong>11</strong>&nbsp; In which year was liquid soap first patented? <input type="text" id="q11" class="answer-input" placeholder="11" style="width:160px;"></p>
+                            <p style="margin-bottom:12px;"><strong>12</strong>&nbsp; What are most shower gels mainly based on? <input type="text" id="q12" class="answer-input" placeholder="12" style="width:160px;"></p>
+                            <p style="margin-bottom:0;"><strong>13</strong>&nbsp; Which ingredient makes the skin feel cold and fresh? <input type="text" id="q13" class="answer-input" placeholder="13" style="width:160px;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="part-2" class="question-part hidden">
+                <div class="part-header">
+                    <p><strong>Reading Passage 2</strong></p>
+                    <p>You should spend about 20 minutes on Questions 14&ndash;26, which are based on Reading Passage 2.</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 14&ndash;20</strong></p>
+                            <p>Reading Passage 2 has eight paragraphs, A&ndash;H. Choose the correct heading for paragraphs B&ndash;H from the list of headings below.</p>
+                        </div>
+                        <div class="headings-box">
+                            <p style="font-weight:700;margin-bottom:8px;">List of Headings</p>
+                            <p>i &nbsp; Not all would stay in Canada forever</p>
+                            <p>ii &nbsp; Government&rsquo;s safeguard in the West</p>
+                            <p>iii &nbsp; Eastern Canada is full</p>
+                            <p>iv &nbsp; Built-up to the new infrastructure</p>
+                            <p>v &nbsp; An exclusive British domination in Ontario established ever since</p>
+                            <p>vi &nbsp; Ethnics and language make-up</p>
+                            <p>vii &nbsp; Pursuing a pure life</p>
+                            <p>viii &nbsp; Police recruited from mid-class families</p>
+                            <p>ix &nbsp; Demand of western immigration</p>
+                            <p>x &nbsp; Early major urban development of the West</p>
+                            <p>xi &nbsp; Attracting urban environment</p>
+                            <p>xii &nbsp; Advertising of Western Canada</p>
+                            <p style="margin-top:10px;font-style:italic;color:#555;">Example: Paragraph A &ndash; ix</p>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:160px;">14 &nbsp; Paragraph B</span>
+                            <select class="answer-select" id="q14">
+                                <option value="">--</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                                <option value="viii">viii</option>
+                                <option value="ix">ix</option>
+                                <option value="x">x</option>
+                                <option value="xi">xi</option>
+                                <option value="xii">xii</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:160px;">15 &nbsp; Paragraph C</span>
+                            <select class="answer-select" id="q15">
+                                <option value="">--</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                                <option value="viii">viii</option>
+                                <option value="ix">ix</option>
+                                <option value="x">x</option>
+                                <option value="xi">xi</option>
+                                <option value="xii">xii</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:160px;">16 &nbsp; Paragraph D</span>
+                            <select class="answer-select" id="q16">
+                                <option value="">--</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                                <option value="viii">viii</option>
+                                <option value="ix">ix</option>
+                                <option value="x">x</option>
+                                <option value="xi">xi</option>
+                                <option value="xii">xii</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:160px;">17 &nbsp; Paragraph E</span>
+                            <select class="answer-select" id="q17">
+                                <option value="">--</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                                <option value="viii">viii</option>
+                                <option value="ix">ix</option>
+                                <option value="x">x</option>
+                                <option value="xi">xi</option>
+                                <option value="xii">xii</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:160px;">18 &nbsp; Paragraph F</span>
+                            <select class="answer-select" id="q18">
+                                <option value="">--</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                                <option value="viii">viii</option>
+                                <option value="ix">ix</option>
+                                <option value="x">x</option>
+                                <option value="xi">xi</option>
+                                <option value="xii">xii</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:160px;">19 &nbsp; Paragraph G</span>
+                            <select class="answer-select" id="q19">
+                                <option value="">--</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                                <option value="viii">viii</option>
+                                <option value="ix">ix</option>
+                                <option value="x">x</option>
+                                <option value="xi">xi</option>
+                                <option value="xii">xii</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:160px;">20 &nbsp; Paragraph H</span>
+                            <select class="answer-select" id="q20">
+                                <option value="">--</option>
+                                <option value="i">i</option>
+                                <option value="ii">ii</option>
+                                <option value="iii">iii</option>
+                                <option value="iv">iv</option>
+                                <option value="v">v</option>
+                                <option value="vi">vi</option>
+                                <option value="vii">vii</option>
+                                <option value="viii">viii</option>
+                                <option value="ix">ix</option>
+                                <option value="x">x</option>
+                                <option value="xi">xi</option>
+                                <option value="xii">xii</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 21&ndash;26</strong></p>
+                            <p>Complete the summary below. Use <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</p>
+                        </div>
+                        <div style="border:1px solid #ccc;border-radius:5px;padding:18px 20px;background:#fafafa;">
+                            <p style="margin-bottom:10px;">With the saturation of Eastern Canada, the Western rural area would supply <input type="text" id="q21" class="answer-input" placeholder="21" style="width:170px;"> for the descendants of easterners. Politicians also declared that Western is got potential to increase <input type="text" id="q22" class="answer-input" placeholder="22" style="width:170px;"> of Canada according to <input type="text" id="q23" class="answer-input" placeholder="23" style="width:170px;"> crop that consumed in the East.</p>
+                            <p style="margin-bottom:10px;">The federal government started to prepare and made it happen. First, the government bought land from a private <input type="text" id="q24" class="answer-input" placeholder="24" style="width:170px;">, and legally offered a certain area to people who stayed for a qualifying period of time. Then, mounted <input type="text" id="q25" class="answer-input" placeholder="25" style="width:170px;"> was found to secure the land. However, the best way to protect citizens was to build a <input type="text" id="q26" class="answer-input" placeholder="26" style="width:200px;"> to transport the migrants and goods between the West and the East.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="part-3" class="question-part hidden">
+                <div class="part-header">
+                    <p><strong>Reading Passage 3</strong></p>
+                    <p>You should spend about 20 minutes on Questions 27&ndash;40, which are based on Reading Passage 3.</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 27&ndash;31</strong></p>
+                            <p>Choose the correct letter, <strong>A, B, C</strong> or <strong>D</strong>.</p>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">27 &nbsp; What point is made in the first paragraph?</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q27" value="A"> A &nbsp; The aim of education is to teach people to read.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q27" value="B"> B &nbsp; Semantics focuses on the definition of words.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q27" value="C"> C &nbsp; Printed words only carry meaning to those who have received appropriate ways to respond.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q27" value="D"> D &nbsp; Writers should ensure their works satisfy a variety of readers.</label></div>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">28 &nbsp; According to the second paragraph, people are judged by</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q28" value="A"> A &nbsp; their level of education.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q28" value="B"> B &nbsp; the closely-related people around them.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q28" value="C"> C &nbsp; how conventional their responses are.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q28" value="D"> D &nbsp; complex situations.</label></div>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">29 &nbsp; What point is made in the third paragraph?</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q29" value="A"> A &nbsp; Standard ways are incapable of defining words precisely.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q29" value="B"> B &nbsp; A dictionary often provides clear definitions of words.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q29" value="C"> C &nbsp; Infinite regress is a common occurrence in a dictionary.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q29" value="D"> D &nbsp; Mathematicians could define words accurately.</label></div>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">30 &nbsp; What does the writer suggest about Louis Armstrong?</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q30" value="A"> A &nbsp; He is a language expert.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q30" value="B"> B &nbsp; He demonstrated there are similarities between music and language.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q30" value="C"> C &nbsp; He provided insights into how words are defined.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q30" value="D"> D &nbsp; His good skill in music helped him do research in other fields.</label></div>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">31 &nbsp; What does the writer intend to show with the example of the &ldquo;personnel manager&rdquo;?</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q31" value="A"> A &nbsp; The manager hates applicants from Harvard University.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q31" value="B"> B &nbsp; Meaning can be unique to one person.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q31" value="C"> C &nbsp; The manager has a bad memory of Harvard University.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q31" value="D"> D &nbsp; People's behaviour usually doesn't agree with their words.</label></div>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 32&ndash;35</strong></p>
+                            <p>Do the following statements agree with the views of the writer in Reading Passage 3?</p>
+                            <p>Write <strong>YES</strong> if the statement agrees with the views of the writer, <strong>NO</strong> if the statement contradicts the views of the writer, <strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this.</p>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">32</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">Some statements are incapable of being proved or disproved.</p>
+                                <label class="tfng-option"><input type="radio" name="q32" value="YES"> YES</label>
+                                <label class="tfng-option"><input type="radio" name="q32" value="NO"> NO</label>
+                                <label class="tfng-option"><input type="radio" name="q32" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">33</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">Meaning that is unique to an individual is less worthy of study than shared meanings.</p>
+                                <label class="tfng-option"><input type="radio" name="q33" value="YES"> YES</label>
+                                <label class="tfng-option"><input type="radio" name="q33" value="NO"> NO</label>
+                                <label class="tfng-option"><input type="radio" name="q33" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">34</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">Flags and words are both elicited responses.</p>
+                                <label class="tfng-option"><input type="radio" name="q34" value="YES"> YES</label>
+                                <label class="tfng-option"><input type="radio" name="q34" value="NO"> NO</label>
+                                <label class="tfng-option"><input type="radio" name="q34" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">35</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">A story can be entertaining without being understood.</p>
+                                <label class="tfng-option"><input type="radio" name="q35" value="YES"> YES</label>
+                                <label class="tfng-option"><input type="radio" name="q35" value="NO"> NO</label>
+                                <label class="tfng-option"><input type="radio" name="q35" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 36&ndash;40</strong></p>
+                            <p>Complete each sentence with the correct ending, A&ndash;H, below.</p>
+                        </div>
+                        <div class="headings-box">
+                            <p style="font-weight:700;margin-bottom:8px;">Endings</p>
+                            <p>A &nbsp; is meaningless.</p>
+                            <p>B &nbsp; can have a lasting effect on human behaviour.</p>
+                            <p>C &nbsp; is a symbol that has lost its meaning.</p>
+                            <p>D &nbsp; can be understood only in its social context.</p>
+                            <p>E &nbsp; can provide only an inadequate definition of meaning.</p>
+                            <p>F &nbsp; reflects the variability of human behaviours.</p>
+                            <p>G &nbsp; emphasizes the importance of analyzing how words were used.</p>
+                            <p>H &nbsp; suggests that certain types of behaviour carry more meaning than others.</p>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:260px;">36 &nbsp; A comic strip</span>
+                            <select class="answer-select" id="q36">
+                                <option value="">--</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:260px;">37 &nbsp; A dictionary</span>
+                            <select class="answer-select" id="q37">
+                                <option value="">--</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:260px;">38 &nbsp; Bridgman</span>
+                            <select class="answer-select" id="q38">
+                                <option value="">--</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:260px;">39 &nbsp; A story in a language the audience cannot understand</span>
+                            <select class="answer-select" id="q39">
+                                <option value="">--</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:260px;">40 &nbsp; A dollar bill without public acceptance</span>
+                            <select class="answer-select" id="q40">
+                                <option value="">--</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- end right-panel -->
+    </div><!-- end main-container -->
+
+    <!-- Nav Arrows -->
+    <div class="nav-arrows">
+        <button class="nav-arrow" onclick="previousQ()" id="prevBtn">&#8249;</button>
+        <button class="nav-arrow" onclick="nextQ()" id="nextBtn">&#8250;</button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="nav-row" aria-label="Questions">
+        <div class="footer__questionWrapper___1tZ46 selected multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(1)">
+                <span><span class="section-prefix">Passage </span><span class="sectionNr">1</span><span class="attemptedCount">0 of 13</span></span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion" onclick="goToQuestion(1)"><span class="sr-only">Q1</span><span>1</span></button>
+                <button class="subQuestion" onclick="goToQuestion(2)"><span class="sr-only">Q2</span><span>2</span></button>
+                <button class="subQuestion" onclick="goToQuestion(3)"><span class="sr-only">Q3</span><span>3</span></button>
+                <button class="subQuestion" onclick="goToQuestion(4)"><span class="sr-only">Q4</span><span>4</span></button>
+                <button class="subQuestion" onclick="goToQuestion(5)"><span class="sr-only">Q5</span><span>5</span></button>
+                <button class="subQuestion" onclick="goToQuestion(6)"><span class="sr-only">Q6</span><span>6</span></button>
+                <button class="subQuestion" onclick="goToQuestion(7)"><span class="sr-only">Q7</span><span>7</span></button>
+                <button class="subQuestion" onclick="goToQuestion(8)"><span class="sr-only">Q8</span><span>8</span></button>
+                <button class="subQuestion" onclick="goToQuestion(9)"><span class="sr-only">Q9</span><span>9</span></button>
+                <button class="subQuestion" onclick="goToQuestion(10)"><span class="sr-only">Q10</span><span>10</span></button>
+                <button class="subQuestion" onclick="goToQuestion(11)"><span class="sr-only">Q11</span><span>11</span></button>
+                <button class="subQuestion" onclick="goToQuestion(12)"><span class="sr-only">Q12</span><span>12</span></button>
+                <button class="subQuestion" onclick="goToQuestion(13)"><span class="sr-only">Q13</span><span>13</span></button>
+            </div>
+        </div>
+        <div class="footer__questionWrapper___1tZ46 multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(2)">
+                <span><span class="section-prefix">Passage </span><span class="sectionNr">2</span><span class="attemptedCount">0 of 13</span></span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion" onclick="goToQuestion(14)"><span class="sr-only">Q14</span><span>14</span></button>
+                <button class="subQuestion" onclick="goToQuestion(15)"><span class="sr-only">Q15</span><span>15</span></button>
+                <button class="subQuestion" onclick="goToQuestion(16)"><span class="sr-only">Q16</span><span>16</span></button>
+                <button class="subQuestion" onclick="goToQuestion(17)"><span class="sr-only">Q17</span><span>17</span></button>
+                <button class="subQuestion" onclick="goToQuestion(18)"><span class="sr-only">Q18</span><span>18</span></button>
+                <button class="subQuestion" onclick="goToQuestion(19)"><span class="sr-only">Q19</span><span>19</span></button>
+                <button class="subQuestion" onclick="goToQuestion(20)"><span class="sr-only">Q20</span><span>20</span></button>
+                <button class="subQuestion" onclick="goToQuestion(21)"><span class="sr-only">Q21</span><span>21</span></button>
+                <button class="subQuestion" onclick="goToQuestion(22)"><span class="sr-only">Q22</span><span>22</span></button>
+                <button class="subQuestion" onclick="goToQuestion(23)"><span class="sr-only">Q23</span><span>23</span></button>
+                <button class="subQuestion" onclick="goToQuestion(24)"><span class="sr-only">Q24</span><span>24</span></button>
+                <button class="subQuestion" onclick="goToQuestion(25)"><span class="sr-only">Q25</span><span>25</span></button>
+                <button class="subQuestion" onclick="goToQuestion(26)"><span class="sr-only">Q26</span><span>26</span></button>
+            </div>
+        </div>
+        <div class="footer__questionWrapper___1tZ46 multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(3)">
+                <span><span class="section-prefix">Passage </span><span class="sectionNr">3</span><span class="attemptedCount">0 of 14</span></span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion" onclick="goToQuestion(27)"><span class="sr-only">Q27</span><span>27</span></button>
+                <button class="subQuestion" onclick="goToQuestion(28)"><span class="sr-only">Q28</span><span>28</span></button>
+                <button class="subQuestion" onclick="goToQuestion(29)"><span class="sr-only">Q29</span><span>29</span></button>
+                <button class="subQuestion" onclick="goToQuestion(30)"><span class="sr-only">Q30</span><span>30</span></button>
+                <button class="subQuestion" onclick="goToQuestion(31)"><span class="sr-only">Q31</span><span>31</span></button>
+                <button class="subQuestion" onclick="goToQuestion(32)"><span class="sr-only">Q32</span><span>32</span></button>
+                <button class="subQuestion" onclick="goToQuestion(33)"><span class="sr-only">Q33</span><span>33</span></button>
+                <button class="subQuestion" onclick="goToQuestion(34)"><span class="sr-only">Q34</span><span>34</span></button>
+                <button class="subQuestion" onclick="goToQuestion(35)"><span class="sr-only">Q35</span><span>35</span></button>
+                <button class="subQuestion" onclick="goToQuestion(36)"><span class="sr-only">Q36</span><span>36</span></button>
+                <button class="subQuestion" onclick="goToQuestion(37)"><span class="sr-only">Q37</span><span>37</span></button>
+                <button class="subQuestion" onclick="goToQuestion(38)"><span class="sr-only">Q38</span><span>38</span></button>
+                <button class="subQuestion" onclick="goToQuestion(39)"><span class="sr-only">Q39</span><span>39</span></button>
+                <button class="subQuestion" onclick="goToQuestion(40)"><span class="sr-only">Q40</span><span>40</span></button>
+            </div>
+        </div>
+        <button id="deliver-button" class="footer__deliverButton___3FM07"><span>Check Answers</span></button>
+    </nav>
+
+    <!-- Context Menu -->
+    <div id="contextMenu" class="context-menu">
+        <div class="context-menu-item" onclick="highlightText()">Highlight</div>
+        <div class="context-menu-item" onclick="addComment()">Comment</div>
+        <div class="context-menu-item" id="clear-item" onclick="clearHighlight()" style="display:none;">Clear</div>
+        <div class="context-menu-item" onclick="clearAllHighlights()">Clear All</div>
+    </div>
+
+    <!-- Selection Toolbar (appears on text selection, no right-click needed) -->
+    <div id="selectionToolbar" class="selection-toolbar">
+        <button type="button" onclick="highlightText()">&#9998; Highlight</button>
+        <button type="button" onclick="addComment()">&#128172; Comment</button>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="result-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Results</h2>
+                <button id="modal-close-button" class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="score-summary"></p>
+                <div id="result-details"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Answer key. Q27, Q28, Q30 corrected to C (the source key flagged its own D's
+        // as doubtful). Q39 accepts A or D. Q11-13 were added for this mock.
+        const correctAnswers = {
+            // Passage 1
+            'q1': ['NOT GIVEN'], 'q2': ['FALSE'], 'q3': ['TRUE'], 'q4': ['FALSE'],
+            'q5': ['impurities'], 'q6': ['alkali'], 'q7': ['evaporation'],
+            'q8': ['moisture', 'moisture content'], 'q9': ['fragrance'], 'q10': ['press', 'soap press'],
+            'q11': ['1865', 'in 1865'], 'q12': ['petroleum'], 'q13': ['menthol'],
+            // Passage 2
+            'q14': ['ii'], 'q15': ['iv'], 'q16': ['x'], 'q17': ['vi'], 'q18': ['i'], 'q19': ['vii'], 'q20': ['xii'],
+            'q21': ['homesteads'], 'q22': ['agricultural output'], 'q23': ['wheat'], 'q24': ['company'],
+            'q25': ['police', 'police force'], 'q26': ['transcontinental railway'],
+            // Passage 3
+            'q27': 'C', 'q28': 'C', 'q29': 'A', 'q30': 'C', 'q31': 'B',
+            'q32': ['YES'], 'q33': ['NOT GIVEN'], 'q34': ['YES'], 'q35': ['NO'],
+            'q36': 'B', 'q37': 'E', 'q38': 'G', 'q39': ['A', 'D'], 'q40': 'C'
+        };
+
+        const questionTypes = {
+            'q1': 'radio', 'q2': 'radio', 'q3': 'radio', 'q4': 'radio',
+            'q5': 'text', 'q6': 'text', 'q7': 'text', 'q8': 'text', 'q9': 'text', 'q10': 'text',
+            'q11': 'text', 'q12': 'text', 'q13': 'text',
+            'q14': 'select', 'q15': 'select', 'q16': 'select', 'q17': 'select', 'q18': 'select', 'q19': 'select', 'q20': 'select',
+            'q21': 'text', 'q22': 'text', 'q23': 'text', 'q24': 'text', 'q25': 'text', 'q26': 'text',
+            'q27': 'mcq', 'q28': 'mcq', 'q29': 'mcq', 'q30': 'mcq', 'q31': 'mcq',
+            'q32': 'radio', 'q33': 'radio', 'q34': 'radio', 'q35': 'radio',
+            'q36': 'select', 'q37': 'select', 'q38': 'select', 'q39': 'select', 'q40': 'select'
+        };
+
+        // part ranges (variable size per passage)
+        const partRanges = { 1: [1, 13], 2: [14, 26], 3: [27, 40] };
+        const allQNums = Array.from({length: 40}, (_, i) => i + 1);
+
+        let currentPart = 1;
+        let currentQuestion = 1;
+        let selectedRange = null;
+        let contextElement = null;
+
+        function partOf(qNum) {
+            for (const p in partRanges) {
+                const [s, e] = partRanges[p];
+                if (qNum >= s && qNum <= e) return parseInt(p);
+            }
+            return 1;
+        }
+
+        function switchToPart(partNumber) {
+            currentPart = partNumber;
+            document.querySelectorAll('.question-part').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.passage-part').forEach(el => el.classList.add('hidden'));
+            const part = document.getElementById('part-' + partNumber);
+            if (part) part.classList.remove('hidden');
+            const passage = document.getElementById('passage-' + partNumber);
+            if (passage) passage.classList.remove('hidden');
+            document.querySelectorAll('.footer__questionWrapper___1tZ46').forEach((w, i) => w.classList.toggle('selected', i + 1 === partNumber));
+            const [partStart, partEnd] = partRanges[partNumber];
+            if (currentQuestion < partStart || currentQuestion > partEnd) {
+                currentQuestion = partStart;
+                document.querySelectorAll('.subQuestion').forEach(b => b.classList.remove('active'));
+                const activeBtn = document.querySelector('.subQuestion[onclick="goToQuestion(' + partStart + ')"]');
+                if (activeBtn) activeBtn.classList.add('active');
+            }
+            updateAttemptedCount(partNumber);
+            document.getElementById('prevBtn').disabled = currentQuestion <= allQNums[0];
+            document.getElementById('nextBtn').disabled = currentQuestion >= allQNums[allQNums.length - 1];
+        }
+
+        function goToQuestion(qNum) {
+            currentQuestion = qNum;
+            const part = partOf(qNum);
+            if (currentPart !== part) switchToPart(part);
+            document.querySelectorAll('.subQuestion').forEach(b => b.classList.remove('active'));
+            const btn = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
+            if (btn) btn.classList.add('active');
+            let el = document.getElementById('q' + qNum) || document.querySelector('input[name="q' + qNum + '"]');
+            if (el) {
+                const container = el.closest('.question') || el.closest('div[style]');
+                if (container) {
+                    container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    container.classList.add('flash');
+                    setTimeout(() => container.classList.remove('flash'), 1000);
+                }
+            }
+            const idx = allQNums.indexOf(qNum);
+            document.getElementById('prevBtn').disabled = idx <= 0;
+            document.getElementById('nextBtn').disabled = idx >= allQNums.length - 1;
+        }
+
+        function nextQ() {
+            const idx = allQNums.indexOf(currentQuestion);
+            if (idx < allQNums.length - 1) goToQuestion(allQNums[idx + 1]);
+        }
+        function previousQ() {
+            const idx = allQNums.indexOf(currentQuestion);
+            if (idx > 0) goToQuestion(allQNums[idx - 1]);
+        }
+
+        function updateAttemptedCount(partNumber) {
+            const [start, end] = partRanges[partNumber];
+            let count = 0;
+            for (let i = start; i <= end; i++) {
+                const txt = document.getElementById('q' + i);
+                const sel = document.getElementById('q' + i);
+                const rad = document.querySelector('input[name="q' + i + '"]:checked');
+                if (txt && txt.tagName === 'SELECT' && txt.value) count++;
+                else if (txt && txt.tagName === 'INPUT' && txt.value.trim()) count++;
+                else if (rad) count++;
+            }
+            const wrapper = document.querySelectorAll('.footer__questionWrapper___1tZ46')[partNumber - 1];
+            if (wrapper) {
+                const span = wrapper.querySelector('.attemptedCount');
+                if (span) span.textContent = count + ' of ' + (end - start + 1);
+            }
+        }
+
+        function updateAnsweredIndicators() {
+            allQNums.forEach(qNum => {
+                const btn = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
+                if (!btn || btn.classList.contains('correct') || btn.classList.contains('incorrect')) return;
+                const el = document.getElementById('q' + qNum);
+                const rad = document.querySelector('input[name="q' + qNum + '"]:checked');
+                let answered = false;
+                if (el && el.tagName === 'SELECT') answered = !!el.value;
+                else if (el && el.tagName === 'INPUT') answered = el.value.trim() !== '';
+                else if (rad) answered = true;
+                btn.classList.toggle('answered', answered);
+            });
+            [1, 2, 3].forEach(p => updateAttemptedCount(p));
+        }
+
+        document.querySelectorAll('.answer-input, .answer-select, input[type="radio"]').forEach(inp => {
+            inp.addEventListener('input', updateAnsweredIndicators);
+            inp.addEventListener('change', updateAnsweredIndicators);
+        });
+
+
+        // ---- Lenient answer matching (same rules as the mentor results page) ----
+        // Case, extra spaces, surrounding punctuation, "18th" vs "18",
+        // number words vs digits, British vs American spelling and
+        // "May 11" vs "11 May" are all treated as the same answer.
+        const __NUM = { zero:0, one:1, two:2, three:3, four:4, five:5, six:6, seven:7, eight:8, nine:9, ten:10, eleven:11, twelve:12, thirteen:13, fourteen:14, fifteen:15, sixteen:16, seventeen:17, eighteen:18, nineteen:19, twenty:20, thirty:30, forty:40, fifty:50, sixty:60, seventy:70, eighty:80, ninety:90, hundred:100 };
+        const __ORD = { first:1, second:2, third:3, fourth:4, fifth:5, sixth:6, seventh:7, eighth:8, ninth:9, tenth:10, eleventh:11, twelfth:12, thirteenth:13, fourteenth:14, fifteenth:15, sixteenth:16, seventeenth:17, eighteenth:18, nineteenth:19, twentieth:20, thirtieth:30 };
+        const __SPELL = { colour:'color', favourite:'favorite', neighbour:'neighbor', behaviour:'behavior', organise:'organize', organisation:'organization', realise:'realize', recognise:'recognize', analyse:'analyze', programme:'program', programmes:'programs', catalogue:'catalog', cheque:'check', grey:'gray', tyre:'tire', tyres:'tires', mould:'mold', aluminium:'aluminum', jewellery:'jewelry', defence:'defense', licence:'license', practise:'practice', enrolment:'enrollment', travelling:'traveling', traveller:'traveler', cancelled:'canceled', centre:'center', centres:'centers', theatre:'theater', metre:'meter', metres:'meters', litre:'liter', litres:'liters', kilometre:'kilometer', kilometres:'kilometers', fibre:'fiber', homogenise:'homogenize', fossilised:'fossilized', pedestrianised:'pedestrianized' };
+        const __MONTHS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+        function __normAns(raw) {
+            if (raw === undefined || raw === null) return '';
+            let s = String(raw).trim().toLowerCase();
+            if (!s) return '';
+            s = s.replace(/[‘’]/g, "'").replace(/\s+/g, ' ').replace(/^[\s.,;:'"()]+|[\s.,;:'"()!?]+$/g, '');
+            s = s.replace(/\b(\d+)(st|nd|rd|th)\b/g, '$1');
+            s = s.replace(/-/g, ' ').split(' ').map(w => (w in __NUM) ? String(__NUM[w]) : (w in __ORD) ? String(__ORD[w]) : (__SPELL[w] || w)).join(' ');
+            s = s.replace(/\s*,\s*/g, ' ').replace(/(\d) (?=\d{3}\b)/g, '$1').replace(/(\d),(?=\d{3}\b)/g, '$1');
+            const t = s.split(' ').filter(x => x !== 'of' && x !== 'the');
+            if (t.length === 2) {
+                if (__MONTHS.indexOf(t[0]) >= 0 && /^\d+$/.test(t[1])) s = t[1] + ' ' + t[0];
+                else if (__MONTHS.indexOf(t[1]) >= 0 && /^\d+$/.test(t[0])) s = t[0] + ' ' + t[1];
+            }
+            return s;
+        }
+        function __matches(accepted, user) {
+            const u = __normAns(user);
+            if (!u) return false;
+            return (Array.isArray(accepted) ? accepted : [accepted]).some(a => a !== '???' && __normAns(a) === u);
+        }
+        function __bandFor(r) {
+            if (r >= 39) return 9; if (r >= 37) return 8.5; if (r >= 35) return 8; if (r >= 32) return 7.5;
+            if (r >= 30) return 7; if (r >= 26) return 6.5; if (r >= 23) return 6; if (r >= 18) return 5.5;
+            if (r >= 16) return 5; if (r >= 13) return 4.5; if (r >= 10) return 4; if (r >= 8) return 3.5;
+            if (r >= 6) return 3; if (r >= 4) return 2.5; if (r >= 2) return 2; if (r === 1) return 1.5; return 0;
+        }
+        function __readAnswer(key) {
+            const el = document.getElementById(key);
+            if (el && (el.tagName === 'INPUT' || el.tagName === 'SELECT')) return (el.value || '').trim();
+            const checked = document.querySelector('input[name="' + key + '"]:checked');
+            return checked ? checked.value : '';
+        }
+        // ---- Mock exam bridge ----
+        // Used only by the mock orchestrator page. Grades silently (nothing on
+        // screen changes, no answers revealed) and returns everything that
+        // gets saved: the student's answers, the FULL list of accepted
+        // answers for every question (not just the first one), and the score.
+        window.__mockGetResult = function () {
+            const answers = {}, key = {};
+            let score = 0;
+            Object.keys(correctAnswers).forEach(k => {
+                const q = k.replace('q', '');
+                const user = __readAnswer(k);
+                answers[q] = user;
+                key[q] = Array.isArray(correctAnswers[k]) ? correctAnswers[k].slice() : correctAnswers[k];
+                if (__matches(correctAnswers[k], user)) score++;
+            });
+            return { score: score, total: Object.keys(correctAnswers).length, band: __bandFor(score), answers: answers, key: key };
+        };
+        // Puts previously saved answers back (after a page reload mid-section).
+        window.__mockRestore = function (answers) {
+            if (!answers) return;
+            Object.keys(answers).forEach(q => {
+                const v = answers[q];
+                if (v === undefined || v === null || v === '' || v === 'No Answer') return;
+                const el = document.getElementById('q' + q);
+                if (el && (el.tagName === 'INPUT' || el.tagName === 'SELECT')) { el.value = v; return; }
+                document.querySelectorAll('input[name="q' + q + '"]').forEach(r => { if (r.value === v) r.checked = true; });
+            });
+            try { updateAnsweredIndicators(); } catch (e) { }
+        };
+        window.__mockLock = function () {
+            document.querySelectorAll('.answer-input, .answer-select, input[type="radio"], input[type="checkbox"]').forEach(el => el.disabled = true);
+        };
+
+        function checkAnswers() {
+            let score = 0;
+            const resultsData = [];
+
+            document.querySelectorAll('.correct-inline').forEach(el => el.remove());
+            document.querySelectorAll('.answer-input, .answer-select').forEach(el => el.classList.remove('correct', 'incorrect'));
+            document.querySelectorAll('.multi-choice-option').forEach(el => el.classList.remove('correct', 'incorrect'));
+
+            Object.keys(correctAnswers).forEach(key => {
+                const correct = correctAnswers[key];
+                const type = questionTypes[key];
+                const qNum = parseInt(key.replace('q', ''));
+                let userAnswer = '', isCorrect = false;
+
+                if (type === 'text') {
+                    const el = document.getElementById(key);
+                    userAnswer = el ? el.value.trim() : '';
+                    const accepted = Array.isArray(correct) ? correct : [correct];
+                    isCorrect = __matches(accepted, userAnswer);
+                    if (el) {
+                        el.classList.add(isCorrect ? 'correct' : 'incorrect');
+                        if (!isCorrect) {
+                            const sp = document.createElement('span');
+                            sp.className = 'correct-inline';
+                            sp.textContent = accepted[0];
+                            el.insertAdjacentElement('afterend', sp);
+                        }
+                    }
+                } else if (type === 'select') {
+                    const el = document.getElementById(key);
+                    userAnswer = el ? el.value : '';
+                    const accepted = Array.isArray(correct) ? correct : [correct];
+                    isCorrect = __matches(accepted, userAnswer);
+                    if (el) {
+                        el.classList.add(isCorrect ? 'correct' : 'incorrect');
+                        if (!isCorrect) {
+                            const sp = document.createElement('span');
+                            sp.className = 'correct-inline';
+                            sp.textContent = accepted[0];
+                            el.insertAdjacentElement('afterend', sp);
+                        }
+                    }
+                } else if (type === 'radio') {
+                    const checked = document.querySelector('input[name="' + key + '"]:checked');
+                    userAnswer = checked ? checked.value : 'No Answer';
+                    const accepted = Array.isArray(correct) ? correct : [correct];
+                    isCorrect = __matches(accepted, userAnswer);
+                } else if (type === 'mcq') {
+                    const checked = document.querySelector('input[name="' + key + '"]:checked');
+                    userAnswer = checked ? checked.value : 'No Answer';
+                    isCorrect = userAnswer === correct;
+                    document.querySelectorAll('input[name="' + key + '"]').forEach(r => {
+                        const wrapper = r.closest('.multi-choice-option');
+                        if (!wrapper) return;
+                        if (r.value === correct) wrapper.classList.add('correct');
+                        else if (r.checked) wrapper.classList.add('incorrect');
+                    });
+                }
+
+                if (isCorrect) score++;
+                const navBtn = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
+                if (navBtn) { navBtn.classList.remove('answered'); navBtn.classList.add(isCorrect ? 'correct' : 'incorrect'); }
+                resultsData.push({ question: qNum, userAnswer: userAnswer || 'No Answer', correctAnswer: Array.isArray(correct) ? correct[0] : correct, isCorrect });
+            });
+
+            document.querySelectorAll('.answer-input, .answer-select, input[type="radio"]').forEach(el => el.disabled = true);
+
+            const band = (function (r) {
+                if (r >= 39) return 9; if (r >= 37) return 8.5; if (r >= 35) return 8; if (r >= 32) return 7.5;
+                if (r >= 30) return 7; if (r >= 26) return 6.5; if (r >= 23) return 6; if (r >= 18) return 5.5;
+                if (r >= 16) return 5; if (r >= 13) return 4.5; if (r >= 10) return 4; if (r >= 8) return 3.5;
+                if (r >= 6) return 3; if (r >= 4) return 2.5; if (r >= 2) return 2; if (r === 1) return 1.5; return 0;
+            })(score);
+
+            document.getElementById('score-summary').textContent = 'You scored ' + score + ' out of 40 (Band ' + band + ').';
+
+            const resultDetails = document.getElementById('result-details');
+            let rhtml = '<table><thead><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody>';
+            resultsData.sort((a, b) => a.question - b.question).forEach(r => {
+                rhtml += '<tr><td>' + r.question + '</td><td>' + r.userAnswer + '</td><td>' + r.correctAnswer + '</td><td class="' + (r.isCorrect ? 'result-correct' : 'result-incorrect') + '">' + (r.isCorrect ? '&#10003; Correct' : '&#10007; Incorrect') + '</td></tr>';
+            });
+            rhtml += '</tbody></table>';
+            resultDetails.innerHTML = rhtml;
+
+            const deliverButton = document.getElementById('deliver-button');
+            deliverButton.classList.add('success');
+            deliverButton.innerHTML = '<span>My Results</span>';
+            const newBtn = deliverButton.cloneNode(true);
+            deliverButton.parentNode.replaceChild(newBtn, deliverButton);
+            newBtn.addEventListener('click', () => { document.getElementById('result-modal').style.display = 'flex'; });
+            document.getElementById('result-modal').style.display = 'flex';
+        }
+
+        document.getElementById('deliver-button').addEventListener('click', checkAnswers);
+        document.getElementById('modal-close-button').addEventListener('click', () => { document.getElementById('result-modal').style.display = 'none'; });
+
+        document.addEventListener('selectionchange', () => {
+            const sel = window.getSelection();
+            if (sel && sel.rangeCount > 0 && !sel.isCollapsed) selectedRange = sel.getRangeAt(0);
+        });
+        document.body.addEventListener('contextmenu', function (e) {
+            const text = window.getSelection().toString();
+            if (!text) return;
+            e.preventDefault();
+            const menu = document.getElementById('contextMenu');
+            menu.style.left = e.pageX + 'px';
+            menu.style.top = e.pageY + 'px';
+            menu.style.display = 'block';
+            contextElement = e.target.closest('.highlight, .comment-highlight');
+            document.getElementById('clear-item').style.display = contextElement ? 'block' : 'none';
+        });
+        document.body.addEventListener('click', function (e) {
+            if (!e.target.closest('.context-menu')) document.getElementById('contextMenu').style.display = 'none';
+        });
+
+        // ---- Selection toolbar: shows a floating Highlight/Comment button
+        // above any text the user selects inside the passage, no right-click
+        // or long-press menu required. Works with mouse drag and touch.
+        const selectionToolbar = document.getElementById('selectionToolbar');
+
+        function showSelectionToolbar() {
+            const sel = window.getSelection();
+            if (!sel || sel.rangeCount === 0 || sel.isCollapsed) { hideSelectionToolbar(); return; }
+            const text = sel.toString().trim();
+            if (!text) { hideSelectionToolbar(); return; }
+            const anchorNode = sel.anchorNode;
+            const passage = document.getElementById('passage-text');
+            if (!passage || !anchorNode || !passage.contains(anchorNode.nodeType === 1 ? anchorNode : anchorNode.parentNode)) {
+                hideSelectionToolbar();
+                return;
+            }
+            const range = sel.getRangeAt(0);
+            selectedRange = range;
+            const rect = range.getBoundingClientRect();
+            if (!rect || (rect.width === 0 && rect.height === 0)) { hideSelectionToolbar(); return; }
+            const toolbarWidth = selectionToolbar.offsetWidth || 160;
+            let left = rect.left + rect.width / 2 - toolbarWidth / 2 + window.scrollX;
+            left = Math.max(8, Math.min(left, window.innerWidth - toolbarWidth - 8 + window.scrollX));
+            let top = rect.top + window.scrollY - 44;
+            if (top < window.scrollY) top = rect.bottom + window.scrollY + 8;
+            selectionToolbar.style.left = left + 'px';
+            selectionToolbar.style.top = top + 'px';
+            selectionToolbar.style.display = 'flex';
+        }
+
+        function hideSelectionToolbar() {
+            selectionToolbar.style.display = 'none';
+        }
+
+        document.getElementById('passage-text') && document.addEventListener('mouseup', (e) => {
+            if (e.target.closest('#selectionToolbar')) return;
+            setTimeout(showSelectionToolbar, 0);
+        });
+        document.addEventListener('touchend', (e) => {
+            if (e.target.closest('#selectionToolbar')) return;
+            setTimeout(showSelectionToolbar, 0);
+        });
+        document.addEventListener('scroll', hideSelectionToolbar, true);
+        document.addEventListener('mousedown', (e) => {
+            if (!e.target.closest('#selectionToolbar')) hideSelectionToolbar();
+        });
+
+        function highlightText() {
+            if (!selectedRange || selectedRange.collapsed) return;
+            try { const span = document.createElement('span'); span.className = 'highlight'; selectedRange.surroundContents(span); } catch (e) { }
+            window.getSelection().removeAllRanges();
+            document.getElementById('contextMenu').style.display = 'none';
+            hideSelectionToolbar();
+        }
+        function addComment() {
+            const t = prompt('Enter your comment:');
+            if (!t || !selectedRange) return;
+            try {
+                const span = document.createElement('span'); span.className = 'comment-highlight';
+                const tip = document.createElement('span'); tip.className = 'comment-tooltip'; tip.textContent = t;
+                span.appendChild(tip); selectedRange.surroundContents(span);
+            } catch (e) { }
+            window.getSelection().removeAllRanges();
+            document.getElementById('contextMenu').style.display = 'none';
+            hideSelectionToolbar();
+        }
+        function clearHighlight() {
+            if (contextElement) {
+                const parent = contextElement.parentNode;
+                while (contextElement.firstChild) parent.insertBefore(contextElement.firstChild, contextElement);
+                parent.removeChild(contextElement); parent.normalize();
+            }
+            document.getElementById('contextMenu').style.display = 'none';
+        }
+        function clearAllHighlights() {
+            document.querySelectorAll('.highlight, .comment-highlight').forEach(el => {
+                const parent = el.parentNode;
+                while (el.firstChild) parent.insertBefore(el.firstChild, el);
+                parent.removeChild(el); parent.normalize();
+            });
+            document.getElementById('contextMenu').style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            switchToPart(1);
+            goToQuestion(1);
+        });
+    </script>
+</body>
+
+</html>
