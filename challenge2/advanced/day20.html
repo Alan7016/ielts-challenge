@@ -175,9 +175,9 @@
       <div class="section-row"><span class="name">✏️ Writing (Task 1 &amp; 2)</span><span class="time">60 min</span></div>
     </div>
     <div class="warn-box">
-      ⚠️ <strong>Important:</strong> Each section ends automatically when its time is up — there's no "Next" button, so don't step away. You must complete all sections in one sitting; closing or refreshing this tab loses your progress. Make sure you have at least <strong>2.5 hours</strong> of uninterrupted time before starting.
+      ⚠️ <strong>Exam rules:</strong> the test opens in <strong>full screen</strong>. If you press <strong>Esc</strong>, leave full screen, switch to another tab or app, or reload the page, <strong>the mock is cancelled</strong> and you must start again from the beginning. Each section ends automatically when its time is up. Make sure you have at least <strong>2.5 hours</strong> of uninterrupted time, a charged device and a quiet place before starting.
     </div>
-    <button class="start-btn" onclick="startExam()">I'm ready — Start Test →</button>
+    <button class="start-btn" onclick="startExam()">I understand — Start Test →</button>
   </div>
 </div>
 
@@ -284,15 +284,14 @@
 </div>
 
 
-<!-- FULL-SCREEN / LEFT-THE-TEST WARNING -->
-<div id="fsGuard" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(20,22,43,.86); align-items:center; justify-content:center; padding:20px;">
-  <div style="background:var(--surface); border-radius:16px; max-width:440px; width:100%; padding:26px 24px; text-align:center; box-shadow:0 10px 40px #0006;">
-    <div style="font-size:44px; margin-bottom:8px;">⚠️</div>
-    <h2 id="fsGuardTitle" style="font-family:var(--display); font-size:22px; margin-bottom:8px;">You left the test screen</h2>
-    <p style="color:var(--ink-soft); font-size:14.5px; line-height:1.6; margin-bottom:6px;">The test is still running — <strong>the timer does not stop.</strong></p>
-    <p style="color:var(--muted); font-size:13px; line-height:1.6; margin-bottom:18px;">Leaving the test screen is recorded and your teacher will see it.</p>
-    <button class="start-btn" id="fsGuardBack" style="margin-bottom:10px;">Go back to the test (full screen)</button><br>
-    <button class="ghost" id="fsGuardStay" style="padding:8px 16px; font-size:13px;">Continue without full screen</button>
+<!-- MOCK CANCELLED (left full screen / left the page / reloaded) -->
+<div id="fsGuard" style="display:none; position:fixed; inset:0; z-index:9999; background:var(--bg); align-items:center; justify-content:center; padding:20px;">
+  <div style="background:var(--surface); border:1px solid var(--border); border-radius:16px; max-width:460px; width:100%; padding:28px 24px; text-align:center; box-shadow:var(--shadow);">
+    <div style="font-size:48px; margin-bottom:8px;">⛔</div>
+    <h2 style="font-family:var(--display); font-size:24px; margin-bottom:8px;">Mock test cancelled</h2>
+    <p id="fsGuardReason" style="color:var(--ink-soft); font-size:15px; line-height:1.6; margin-bottom:8px;"></p>
+    <p style="color:var(--muted); font-size:13.5px; line-height:1.6; margin-bottom:20px;">Your answers from this attempt were not saved. Your teacher can see that this attempt was cancelled. When you are ready, start again from the beginning — in full screen, without leaving the test.</p>
+    <button class="start-btn" onclick="location.reload()">Start again from the beginning</button>
   </div>
 </div>
 <script src="../../supabase-config.js"></script>
@@ -412,7 +411,7 @@ function esc(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&l
 
 // ── WARN ON UNLOAD ──────────────────────────────────────────────────────────
 window.addEventListener('beforeunload', function(e){
-  if(currentSection !== 'intro' && currentSection !== 'complete' && currentSection !== 'results' && currentSection !== 'done' && currentSection !== 'ready'){
+  if(currentSection !== 'intro' && currentSection !== 'complete' && currentSection !== 'results' && currentSection !== 'done' && currentSection !== 'ready' && currentSection !== 'cancelled'){
     e.preventDefault(); e.returnValue='';
   }
 });
@@ -442,6 +441,7 @@ function preloadListening(){
 
 function startExam(){
   if(fsSupported()) enterFullscreen();
+  keepScreenOn();
   currentSection = 'listening';
   showScreen('listening');
   updateProgress(1);
@@ -744,8 +744,8 @@ function finishWriting(){
   if(examData.completed_sections.indexOf('writing') < 0) examData.completed_sections.push('writing');
 
   currentSection = 'complete';
-  hideGuard();
   exitFullscreen();
+  try { if(wakeLock) wakeLock.release(); } catch(e){}
   showScreen('complete');
   updateProgress(4);
   document.getElementById('headerLabel').textContent = 'Test Complete';
@@ -894,7 +894,6 @@ async function saveToSupabase(){
     writing_t2_text: examData.writing_t2_text,
     writing_t2_words: examData.writing_t2_words,
     completed_sections: examData.completed_sections,
-    integrity: examData.integrity || { fullscreen_exits: 0, tab_leaves: 0, seconds_away: 0, events: [] },
     submitted_at: new Date().toISOString()
   };
 
@@ -1123,14 +1122,12 @@ function tryResumeFromCheckpoint(){
 }
 
 
-// ── FULL SCREEN + "LEFT THE TEST" TRACKING ─────────────────────────────────
-// The exam runs in full screen. If the student leaves full screen or
-// switches to another tab/app, a warning covers the page (the timer keeps
-// running) and the event is counted; the counts are saved with the exam so
-// the mentor can see them. A student can choose to carry on without full
-// screen after confirming -- leaving the tab is still counted either way.
-var fsOptOut = false;
-var awaySince = null;
+// ── STRICT EXAM MODE ───────────────────────────────────────────────────────
+// The test runs in full screen. Leaving full screen (Esc), switching to
+// another tab or app, or reloading the page CANCELS the attempt: nothing is
+// saved, the cancellation is logged for the mentor, and the student has to
+// start again from the beginning.
+var cancelled = false, wasFullscreen = false, wakeLock = null;
 function fsSupported(){ var d = document.documentElement; return !!(d.requestFullscreen || d.webkitRequestFullscreen); }
 function isFullscreen(){ return !!(document.fullscreenElement || document.webkitFullscreenElement); }
 function enterFullscreen(){
@@ -1148,53 +1145,51 @@ function exitFullscreen(){
     }
   } catch(e){}
 }
+// Stops a phone's screen from switching off during the long listening
+// section (a locked screen would otherwise count as leaving the test).
+function keepScreenOn(){
+  try { if(navigator.wakeLock) navigator.wakeLock.request('screen').then(function(l){ wakeLock = l; }).catch(function(){}); } catch(e){}
+}
 function examRunning(){
-  return ['listening','reading','writing','transition'].indexOf(currentSection) >= 0 || document.getElementById('screen-transition').classList.contains('active');
+  return !cancelled && (['listening','reading','writing'].indexOf(currentSection) >= 0 || document.getElementById('screen-transition').classList.contains('active'));
 }
-function integ(){
-  if(!examData.integrity) examData.integrity = { fullscreen_exits: 0, tab_leaves: 0, seconds_away: 0, events: [] };
-  return examData.integrity;
-}
-function logEvent(type){
-  var i = integ();
-  if(i.events.length < 60) i.events.push({ t: new Date().toISOString(), type: type, section: currentSection });
-}
-function showGuard(title){
-  if(!examRunning()) return;
-  document.getElementById('fsGuardTitle').textContent = title;
-  document.getElementById('fsGuardStay').style.display = (fsSupported() && !fsOptOut) ? 'inline-block' : 'none';
-  document.getElementById('fsGuardBack').textContent = (fsSupported() && !fsOptOut) ? 'Go back to the test (full screen)' : 'Go back to the test';
+var CANCEL_REASONS = {
+  left_fullscreen: 'You left full screen during the test.',
+  left_tab: 'You left the test page (switched to another tab or app, or the screen turned off).',
+  reloaded: 'The test page was closed or reloaded during the test.'
+};
+function cancelMock(reason, section){
+  if(cancelled) return;
+  cancelled = true;
+  stopTimer();
+  clearCheckpoint();
+  ['listeningFrame','readingFrame'].forEach(function(id){
+    var f = document.getElementById(id);
+    try { if(f.contentWindow.__mockStopAudio) f.contentWindow.__mockStopAudio(); } catch(e){}
+    try { f.src = 'about:blank'; } catch(e){}
+  });
+  currentSection = 'cancelled';
+  document.getElementById('timerDisplay').style.display = 'none';
+  document.getElementById('fsGuardReason').textContent = CANCEL_REASONS[reason] || '';
   document.getElementById('fsGuard').style.display = 'flex';
+  try { if(wakeLock) wakeLock.release(); } catch(e){}
+  exitFullscreen();
+  try {
+    if(sb && studentSession) sb.from('c2_mock_cancellations').insert({ student_id: studentSession.id, track: TRACK_KEY, mock_day: MOCK_DAY, reason: reason, section: section || null }).then(function(){}, function(){});
+  } catch(e){}
 }
-function hideGuard(){ document.getElementById('fsGuard').style.display = 'none'; }
-document.getElementById('fsGuardBack').addEventListener('click', function(){
-  if(fsSupported() && !fsOptOut) enterFullscreen();
-  hideGuard();
-});
-document.getElementById('fsGuardStay').addEventListener('click', function(){
-  if(!confirm('Continue the test without full screen?\n\nYour teacher will see that you left full screen.')) return;
-  fsOptOut = true;
-  logEvent('fullscreen_opt_out');
-  hideGuard();
-});
 function onFsChange(){
-  if(isFullscreen() || !examRunning()) return;
-  integ().fullscreen_exits++;
-  logEvent('left_fullscreen');
-  if(!fsOptOut) showGuard('You left full screen');
+  if(isFullscreen()){ wasFullscreen = true; return; }
+  if(wasFullscreen && examRunning()) cancelMock('left_fullscreen', currentSection);
 }
 document.addEventListener('fullscreenchange', onFsChange);
 document.addEventListener('webkitfullscreenchange', onFsChange);
+// A reload/close also hides the page; that case is handled (as "reloaded")
+// when the page loads again, so it isn't logged twice here.
+var unloading = false;
+window.addEventListener('pagehide', function(){ unloading = true; });
 document.addEventListener('visibilitychange', function(){
-  if(!examRunning()) return;
-  if(document.hidden){
-    awaySince = Date.now();
-    integ().tab_leaves++;
-    logEvent('left_tab');
-  } else {
-    if(awaySince){ integ().seconds_away += Math.round((Date.now() - awaySince) / 1000); awaySince = null; }
-    showGuard('You left the test page');
-  }
+  if(document.hidden && !unloading && examRunning()) cancelMock('left_tab', currentSection);
 });
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
@@ -1218,9 +1213,18 @@ requireAuth(function(profile, user){
 
   checkAlreadySubmitted().then(function(){
     if(currentSection === 'intro'){
-      var resumed = tryResumeFromCheckpoint();
-      if(resumed && fsSupported() && !isFullscreen() && examRunning()) showGuard('Your test is still running');
-      if(!resumed) preloadListening();
+      var cp = loadCheckpoint();
+      if(cp && cp.section === 'writing' && cp.endAt <= Date.now()){
+        // The test had already finished but saving didn't go through:
+        // save it now rather than throwing the essays away.
+        tryResumeFromCheckpoint();
+        return;
+      }
+      if(cp){
+        cancelMock('reloaded', cp.section);
+        return;
+      }
+      preloadListening();
     }
   });
 });
