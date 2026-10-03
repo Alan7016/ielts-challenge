@@ -511,7 +511,7 @@
 
     // Speaking answers store a storage path, not the actual audio — fetch a
     // temporary playable URL for each one before rendering.
-    const speakingPaths = (answers || []).filter(a => a.field_id.startsWith('speaking-')).map(a => a.value);
+    const speakingPaths = (answers || []).filter(isRecordingAnswer).map(a => a.value);
     const signedUrlByPath = {};
     await Promise.all(speakingPaths.map(async (path) => {
       const { data, error } = await sb.storage.from('speaking-recordings').createSignedUrl(path, 3600);
@@ -540,8 +540,8 @@
       return taskNums.map(taskNum => {
         const items = byTask[taskNum];
 
-        const speakingItems = items.filter(i => i.field_id.startsWith('speaking-'));
-        const writingItems = items.filter(i => !i.field_id.startsWith('speaking-') && i.is_correct === null);
+        const speakingItems = items.filter(isRecordingAnswer);
+        const writingItems = items.filter(i => !isRecordingAnswer(i) && i.is_correct === null);
         const gradedItems = items.filter(i => i.is_correct !== null);
         const sections = [];
 
