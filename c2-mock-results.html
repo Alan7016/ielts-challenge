@@ -103,6 +103,7 @@
 var TRACK_KEY = new URLSearchParams(window.location.search).get('track') || '2.0-standard';
 var MOCK_DAY = parseInt(new URLSearchParams(window.location.search).get('day'), 10) || 6;
 var sb, myProfile, myUserId;
+var cancelsByStudent = {};
 var allStudents = {}, allExams = [], myStudentIds = [], groupMap = {};
 
 function scoreToBand(r, maxQ){
@@ -317,6 +318,12 @@ async function loadAll(){
     var examRes = await sb.from('c2_mock_exams').select('*').eq('track', TRACK_KEY).eq('mock_day', MOCK_DAY).in('student_id', myStudentIds).order('submitted_at', {ascending:false});
     if(examRes.error) throw examRes.error;
     allExams = examRes.data || [];
+    // Cancelled attempts (left full screen / left the page / reloaded).
+    cancelsByStudent = {};
+    try {
+      var cRes = await sb.from('c2_mock_cancellations').select('student_id, reason, created_at').eq('track', TRACK_KEY).eq('mock_day', MOCK_DAY).in('student_id', myStudentIds);
+      (cRes.data || []).forEach(function(c){ (cancelsByStudent[c.student_id] = cancelsByStudent[c.student_id] || []).push(c); });
+    } catch(e){ console.warn('Could not load cancellations', e); }
 
     populateGroupFilter();
     document.getElementById('loadingState').style.display = 'none';
@@ -481,17 +488,14 @@ function buildDetail(sid, exam){
     ? '<div class="detail-tab" onclick="switchTab(\''+sid+'\',\'writing1\',this)">✏️ Writing T1</div>'+
       '<div class="detail-tab" onclick="switchTab(\''+sid+'\',\'writing2\',this)">✏️ Writing T2</div>'
     : '<div class="detail-tab" onclick="switchTab(\''+sid+'\',\'writing\',this)">✏️ Writing</div>';
-  // Did the student leave full screen / switch away during the test? (Day 20 on)
-  var integ = exam.integrity, integHtml = '';
-  if(integ && (integ.fullscreen_exits || integ.tab_leaves)){
-    var away = integ.seconds_away || 0;
-    integHtml = '<div style="background:#fff4e5;border:1px solid #f0c27a;border-radius:8px;padding:9px 14px;font-size:13px;color:#8a5300;margin-bottom:12px;">⚠️ During the test this student '+
-      (integ.tab_leaves ? 'left the test page <strong>'+integ.tab_leaves+'</strong> time'+(integ.tab_leaves>1?'s':'')+(away?' (about '+(away>=60?Math.round(away/60)+' min':away+' sec')+' in total)':'') : '')+
-      (integ.tab_leaves && integ.fullscreen_exits ? ' and ' : '')+
-      (integ.fullscreen_exits ? 'left full screen <strong>'+integ.fullscreen_exits+'</strong> time'+(integ.fullscreen_exits>1?'s':'') : '')+
-      '.</div>';
-  } else if(integ){
-    integHtml = '<div style="font-size:12.5px;color:var(--good);margin-bottom:10px;">✓ Stayed on the test screen the whole time.</div>';
+  // Attempts that were cancelled for leaving full screen / the page (Day 20 on).
+  var cancels = cancelsByStudent[exam.student_id] || [], integHtml = '';
+  if(cancels.length){
+    var why = { left_fullscreen: 'left full screen', left_tab: 'left the page', reloaded: 'reloaded the page' };
+    var counts = {};
+    cancels.forEach(function(c){ var w = why[c.reason] || c.reason; counts[w] = (counts[w] || 0) + 1; });
+    integHtml = '<div style="background:#fff4e5;border:1px solid #f0c27a;border-radius:8px;padding:9px 14px;font-size:13px;color:#8a5300;margin-bottom:12px;">⚠️ This student had <strong>'+cancels.length+'</strong> cancelled attempt'+(cancels.length>1?'s':'')+' before this one ('+
+      Object.keys(counts).map(function(k){ return k+(counts[k]>1?' ×'+counts[k]:''); }).join(', ')+').</div>';
   }
   var tabs = integHtml + '<div class="detail-tabs">'+
     '<div class="detail-tab active" onclick="switchTab(\''+sid+'\',\'listening\',this)">🎧 Listening</div>'+
