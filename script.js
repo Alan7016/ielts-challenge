@@ -2840,7 +2840,8 @@ function mockDaysForC2(totalDays) {
 // only ever calls requireMockUnlockCode(dayNumber, ...) and this config is
 // read fresh on every page load.
 const MOCK_UNLOCK_CODES = {
-  13: 'mock13-s'
+  13: 'mock13-s',
+    20: 'mock20-s'
 };
 function requireMockUnlockCode(dayNumber, onUnlocked) {
   const requiredCode = MOCK_UNLOCK_CODES[dayNumber];
