@@ -175,7 +175,7 @@
       <div class="section-row"><span class="name">✏️ Writing (Task 1 &amp; 2)</span><span class="time">60 min</span></div>
     </div>
     <div class="warn-box">
-      ⚠️ <strong>Exam rules:</strong> the test opens in <strong>full screen</strong>. If you press <strong>Esc</strong>, leave full screen, switch to another tab or app, or reload the page, <strong>the mock is cancelled</strong> and you must start again from the beginning. Each section ends automatically when its time is up. Make sure you have at least <strong>2.5 hours</strong> of uninterrupted time, a charged device and a quiet place before starting.
+      ⚠️ <strong>Exam rules:</strong> the test opens in <strong>full screen</strong>. If you <strong>switch to another tab or app</strong> or <strong>reload the page</strong>, <strong>the mock is cancelled</strong> and you must start again from the beginning. If you leave full screen (for example by pressing Esc), you get <strong>10 seconds</strong> to go back before it is cancelled. Each section ends automatically when its time is up. Make sure you have at least <strong>2.5 hours</strong> of uninterrupted time, a charged device and a quiet place before starting.
     </div>
     <button class="start-btn" onclick="startExam()">I understand — Start Test →</button>
   </div>
@@ -283,6 +283,18 @@
 
 </div>
 
+
+<!-- WARNING: left full screen (e.g. pressed Esc by accident) -->
+<div id="fsWarn" style="display:none; position:fixed; inset:0; z-index:9998; background:rgba(20,22,43,.88); align-items:center; justify-content:center; padding:20px;">
+  <div style="background:var(--surface); border-radius:16px; max-width:440px; width:100%; padding:26px 24px; text-align:center; box-shadow:0 10px 40px #0006;">
+    <div style="font-size:44px; margin-bottom:6px;">⚠️</div>
+    <h2 style="font-family:var(--display); font-size:22px; margin-bottom:8px;">You left full screen</h2>
+    <p style="color:var(--ink-soft); font-size:15px; line-height:1.6; margin-bottom:6px;">Go back to full screen now, or the mock will be <strong>cancelled</strong>.</p>
+    <div id="fsWarnCount" style="font-family:var(--mono); font-size:44px; font-weight:800; color:var(--warn); margin:8px 0 14px;">10</div>
+    <button class="start-btn" id="fsWarnBack">Go back to full screen</button>
+    <p style="color:var(--muted); font-size:12.5px; margin-top:12px;">The test timer keeps running. Do not switch to another tab or app — that cancels the mock immediately.</p>
+  </div>
+</div>
 
 <!-- MOCK CANCELLED (left full screen / left the page / reloaded) -->
 <div id="fsGuard" style="display:none; position:fixed; inset:0; z-index:9999; background:var(--bg); align-items:center; justify-content:center; padding:20px;">
@@ -744,6 +756,7 @@ function finishWriting(){
   if(examData.completed_sections.indexOf('writing') < 0) examData.completed_sections.push('writing');
 
   currentSection = 'complete';
+  hideFsWarn();
   exitFullscreen();
   try { if(wakeLock) wakeLock.release(); } catch(e){}
   showScreen('complete');
@@ -1154,13 +1167,14 @@ function examRunning(){
   return !cancelled && (['listening','reading','writing'].indexOf(currentSection) >= 0 || document.getElementById('screen-transition').classList.contains('active'));
 }
 var CANCEL_REASONS = {
-  left_fullscreen: 'You left full screen during the test.',
+  left_fullscreen: 'You left full screen and did not go back within 10 seconds.',
   left_tab: 'You left the test page (switched to another tab or app, or the screen turned off).',
   reloaded: 'The test page was closed or reloaded during the test.'
 };
 function cancelMock(reason, section){
   if(cancelled) return;
   cancelled = true;
+  hideFsWarn();
   stopTimer();
   clearCheckpoint();
   ['listeningFrame','readingFrame'].forEach(function(id){
@@ -1178,9 +1192,36 @@ function cancelMock(reason, section){
     if(sb && studentSession) sb.from('c2_mock_cancellations').insert({ student_id: studentSession.id, track: TRACK_KEY, mock_day: MOCK_DAY, reason: reason, section: section || null }).then(function(){}, function(){});
   } catch(e){}
 }
+var FS_GRACE_S = 10;     // seconds to get back into full screen after Esc
+var fsWarnTimer = null;
+function lockEscKey(){
+  // In Chrome/Edge this makes a single Esc press do nothing; the student
+  // has to HOLD Esc to leave full screen, so an accidental tap is harmless.
+  try { if(navigator.keyboard && navigator.keyboard.lock) navigator.keyboard.lock(['Escape']).catch(function(){}); } catch(e){}
+}
+function hideFsWarn(){
+  if(fsWarnTimer){ clearInterval(fsWarnTimer); fsWarnTimer = null; }
+  document.getElementById('fsWarn').style.display = 'none';
+}
+function showFsWarn(){
+  if(fsWarnTimer) return;
+  var endAt = Date.now() + FS_GRACE_S * 1000;
+  var el = document.getElementById('fsWarnCount');
+  el.textContent = FS_GRACE_S;
+  document.getElementById('fsWarn').style.display = 'flex';
+  fsWarnTimer = setInterval(function(){
+    var left = Math.ceil((endAt - Date.now()) / 1000);
+    el.textContent = Math.max(0, left);
+    if(left <= 0){
+      hideFsWarn();
+      if(!isFullscreen() && examRunning()) cancelMock('left_fullscreen', currentSection);
+    }
+  }, 200);
+}
+document.getElementById('fsWarnBack').addEventListener('click', function(){ enterFullscreen(); });
 function onFsChange(){
-  if(isFullscreen()){ wasFullscreen = true; return; }
-  if(wasFullscreen && examRunning()) cancelMock('left_fullscreen', currentSection);
+  if(isFullscreen()){ wasFullscreen = true; hideFsWarn(); lockEscKey(); return; }
+  if(wasFullscreen && examRunning()) showFsWarn();
 }
 document.addEventListener('fullscreenchange', onFsChange);
 document.addEventListener('webkitfullscreenchange', onFsChange);
