@@ -3052,7 +3052,7 @@ const CEREMONY = {
   dayTo: 19,                        // Day 20 is the mock (no points), so the week's points are Days 14–19
   startsAt: '2026-10-05T16:00:00Z', // Monday 5 October, 21:00 Tashkent (UTC+5)
   lobbyMinutes: 5,                  // students get pulled in this long before the start
-  pullWindowMinutes: 25             // after start, how long we keep pulling students who haven't seen it
+  pullWindowMinutes: 25             // (no longer used: students are now sent to the ceremony any time after 21:00 until they have watched it)
 };
 
 // Students' phone clocks are often wrong, so the ceremony runs on the
@@ -3073,7 +3073,20 @@ function ceremonyStartMs() { return new Date(CEREMONY.startsAt).getTime(); }
 function ceremonyLobbyMs() { return ceremonyStartMs() - CEREMONY.lobbyMinutes * 60000; }
 function ceremonySeenKey(userId) { return `ceremony_seen_w${CEREMONY.week}_${userId}`; }
 function ceremonySeen(userId) { try { return localStorage.getItem(ceremonySeenKey(userId)) === '1'; } catch (e) { return false; } }
-function markCeremonySeen(userId) { try { localStorage.setItem(ceremonySeenKey(userId), '1'); } catch (e) {} }
+// "Seen" is also saved in the database, so a student who watched it on their
+// phone isn't sent to it again on their laptop (and vice versa).
+async function ceremonySeenAnywhere(userId) {
+  if (ceremonySeen(userId)) return true;
+  try {
+    const { data } = await getSupabaseClient().from('c2_ceremony_seen').select('week').eq('student_id', userId).eq('week', CEREMONY.week).maybeSingle();
+    if (data) { try { localStorage.setItem(ceremonySeenKey(userId), '1'); } catch (e) {} return true; }
+  } catch (e) {}
+  return false;
+}
+function markCeremonySeen(userId) {
+  try { localStorage.setItem(ceremonySeenKey(userId), '1'); } catch (e) {}
+  try { getSupabaseClient().from('c2_ceremony_seen').upsert({ student_id: userId, week: CEREMONY.week }, { onConflict: 'student_id,week' }).then(() => {}, () => {}); } catch (e) {}
+}
 
 // Pulls a Challenge 2.0 student into the ceremony lobby. Anything typed on
 // a day page is saved first (same flush the page runs on refresh), so
@@ -3084,8 +3097,10 @@ async function scheduleCeremonyPull(profile, user) {
     if (/\/ceremony(\.html)?$/.test(window.location.pathname)) return;
     if (ceremonySeen(user.id)) return;
     const now = await serverNow();
-    const end = ceremonyStartMs() + CEREMONY.pullWindowMinutes * 60000;
-    if (now >= end) return;
+    // From the lobby time onwards, every student who hasn't watched this
+    // week's ceremony yet is taken to it the first time they open the
+    // platform — whether that's at 21:00 or two days later.
+    if (now >= ceremonyLobbyMs() && await ceremonySeenAnywhere(user.id)) return;
     const go = () => {
       if (ceremonySeen(user.id)) return;
       try { if (window.__flushAllPendingSaves) window.__flushAllPendingSaves(); } catch (e) {}
@@ -3098,6 +3113,29 @@ async function scheduleCeremonyPull(profile, user) {
 
 // Ranked standings for one Challenge 2.0 level over a day range — shared by
 // the ceremony and the champion card. Summed in the database, never capped.
+// Test / staff logins that sit in the student table. They are never shown on
+// the leaderboard or in the ceremony (nothing is deleted — they are just
+// skipped). Rule: anyone in a "... 7.0" test group, plus a few test names.
+function isTestAccount(name, groupName) {
+  const n = String(name || '').trim().toLowerCase();
+  if (groupName && /\b7\.0$/.test(String(groupName).trim())) return true;
+  if (!n || n === '.' || /^tests?$/.test(n) || /^abuadv\d*$/.test(n) || /mentor$/.test(n) || /test$/.test(n)) return true;
+  return false;
+}
+
+// Students of a level who completed EVERY task on every day of the week
+// (the "Perfect week" act of the ceremony). Mock days have no tasks and are skipped.
+async function fetchPerfectWeek(level, dayFrom, dayTo) {
+  const req = {};
+  for (let d = dayFrom; d <= dayTo; d++) {
+    const n = (TRACK_DAY_TOTAL_TASKS['2.0-' + level] || {})[d];
+    if (n) req[d] = n;
+  }
+  const { data, error } = await getSupabaseClient().rpc('perfect_week_students', { lvl: level, req });
+  if (error) throw error;
+  return (data || []).map(r => r.student_id);
+}
+
 async function fetchLevelStandings(level, dayFrom, dayTo) {
   const sb = getSupabaseClient();
   const roster = await fetchAllRows(() => sb.from('profiles').select('id, full_name, avatar_url, group_id')
@@ -3110,7 +3148,7 @@ async function fetchLevelStandings(level, dayFrom, dayTo) {
   if (error) throw error;
   const gName = {}; (groups || []).forEach(g => { gName[g.id] = g.name; });
   const tot = {}; (totals || []).forEach(r => { tot[r.student_id] = Number(r.total); });
-  const ranked = roster.filter(p => tot[p.id] > 0)
+  const ranked = roster.filter(p => tot[p.id] > 0 && !isTestAccount(p.full_name, gName[p.group_id]))
     .map(p => ({ id: p.id, n: p.full_name || '—', a: p.avatar_url || null, g: gName[p.group_id] || null, p: Math.round(tot[p.id] * 10) / 10 }))
     .sort((x, y) => y.p - x.p || String(x.n).localeCompare(String(y.n)));
   ranked.forEach((r, i) => { r.r = (i > 0 && r.p === ranked[i - 1].p) ? ranked[i - 1].r : i + 1; });
