@@ -155,8 +155,8 @@
       <div class="seg" id="period-toggle" role="group" aria-label="Time period">
         <span class="glider"></span>
         <button data-period="today" aria-pressed="false">Today</button>
-        <button data-period="week" aria-pressed="false">This week</button>
-        <button data-period="overall" class="active" aria-pressed="true">Overall</button>
+        <button data-period="week" class="active" aria-pressed="true">This week</button>
+        <button data-period="last" aria-pressed="false">Last week</button>
       </div>
     </div>
     <div id="board-root"></div>
@@ -167,7 +167,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 <script>
-  let me = null, myProfile = null, scope = 'group', period = 'overall', currentDay = null, renderToken = 0;
+  let me = null, myProfile = null, scope = 'group', period = 'week', currentDay = null, renderToken = 0;
   let groupNames = {};
   const cache = {};
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -252,10 +252,16 @@
   function computeWindow() {
     const mockDays = trackConfigFor(myProfile).mockDays;
     if (period === 'today') return { dayFrom: currentDay, dayTo: currentDay, label: `Day ${currentDay}`, isMock: mockDays.includes(currentDay) };
-    if (period === 'overall') { const from = myProfile.challenge === '2.0' ? 7 : 1; return { dayFrom: from, dayTo: currentDay, label: `Days ${from}–${currentDay}` }; }
+    // The contest is always ONE week (the days between two mocks) — never a
+    // running total. Students' all-time totals live on their profile page.
+    if (period === 'week') {
+      const lastMock = mockDays.filter(m => m < currentDay).sort((a, b) => b - a)[0] || 0;
+      const from = Math.max(lastMock + 1, myProfile.challenge === '2.0' ? 7 : 1);
+      return { dayFrom: from, dayTo: currentDay, label: from === currentDay ? `This week · Day ${from}` : `This week · Days ${from}–${currentDay}` };
+    }
     const completed = getMostRecentCompletedWeek(currentDay, mockDays);
-    if (!completed) return { pending: true, label: 'This week' };
-    return { dayFrom: completed[0], dayTo: completed[1], label: `Days ${completed[0]}–${completed[1]}` };
+    if (!completed) return { pending: true, label: 'Last week' };
+    return { dayFrom: completed[0], dayTo: completed[1], label: `Last week · Days ${completed[0]}–${completed[1]}` };
   }
 
   // ---------- data ----------
@@ -296,11 +302,11 @@
     root.innerHTML = `<div class="top3"><div class="skel" style="height:86px"></div><div class="skel" style="height:104px"></div><div class="skel" style="height:86px"></div></div><div class="skel" style="height:70px;margin-top:14px"></div><div class="skel" style="height:300px;margin-top:14px"></div>`;
     root.classList.remove('fading');
 
-    if (win.pending) return swap(root, token, emptyHtml('This week’s results aren’t in yet', 'Weekly standings appear once the week wraps up with its mock.'));
+    if (win.pending) return swap(root, token, emptyHtml('No finished week yet', 'Last week’s standings appear once a week has wrapped up with its mock.'));
     let ranked;
     try { ranked = await getRanking(win); } catch (e) { console.error(e); return swap(root, token, emptyHtml('Could not load the leaderboard', 'Please refresh the page in a moment.')); }
     if (token !== renderToken) return;
-    if (!ranked.length) return swap(root, token, emptyHtml(win.isMock ? 'Mock day: no points today' : 'No points on the board yet', win.isMock ? 'Mock exams don’t award points. See the overall standings instead.' : 'Finish a task and your name appears here.'));
+    if (!ranked.length) return swap(root, token, emptyHtml(win.isMock ? 'Mock day: no points today' : 'No points on the board yet', win.isMock ? 'Mock exams don’t award points. See this week’s standings instead.' : 'Finish a task and your name appears here.'));
 
     swap(root, token, top3Html(ranked) + meHtml(ranked) + listHtml(ranked) + `<div class="foot">${ranked.length} students · ${esc(win.label)}</div>`);
     if (token === renderToken) wire(root, ranked);
@@ -309,10 +315,10 @@
     if (token !== renderToken) return;
     root.innerHTML = html;
     const b = root.querySelector('[data-overall]');
-    if (b) b.addEventListener('click', () => document.querySelector('#period-toggle [data-period="overall"]').click());
+    if (b) b.addEventListener('click', () => document.querySelector('#period-toggle [data-period="week"]').click());
   }
   function emptyHtml(title, text) {
-    return `<div class="empty"><h3>${esc(title)}</h3><p>${esc(text)}</p>${period !== 'overall' ? '<button data-overall>See overall standings</button>' : ''}</div>`;
+    return `<div class="empty"><h3>${esc(title)}</h3><p>${esc(text)}</p>${period !== 'week' ? '<button data-overall>See this week’s standings</button>' : ''}</div>`;
   }
   function groupOf(p) { return scope === 'level' && p.group_id && groupNames[p.group_id] ? groupNames[p.group_id] : ''; }
   function top3Html(ranked) {
