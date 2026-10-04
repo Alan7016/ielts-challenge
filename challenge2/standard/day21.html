@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 21 — Standard — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 21 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 9</div>
+      <h2>The Trap Lab — What Sunday's Mock Taught Us</h2>
+      <p class="task-sub">Day 21 is a reading day — and a hard one. Before we start, look at four questions from your Day 20 mock that many Standard students got wrong. Each one is a classic IELTS trap. Learn the trap, then avoid it all day today.</p>
+      <div class="card stat-card"><p style="margin:0;">Standard group, Day 20 reading: only <span class="big">46%</span> got Question 2 right,
+        <span class="big">36%</span> got Question 20 right, and <span class="big">38%</span> got Question 22 right.
+        These were not "difficult English" questions — they were <b>trap</b> questions.</p></div>
+      <div class="card" id="t1-trap"><div class="q-item" id="t1-trap-1">
+          <p>1. <b>Mock Question 2.</b> Statement: <i>"Soap has enjoyed widespread popularity in Europe for over a thousand years."</i> The text said: <i>"the benefits of soap finally managed to appeal to a wide European population in the 17th century."</i> The answer is FALSE. Why?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-trap-1" data-correct="false"> A. Because soap was not invented in Europe.</label><label><input type="radio" value="1" name="t1-trap-1" data-correct="true"> B. Because the 17th century was only about 400 years ago, so "over a thousand years" contradicts the text.</label><label><input type="radio" value="2" name="t1-trap-1" data-correct="false"> C. Because the text does not mention Europe at all.</label><label><input type="radio" value="3" name="t1-trap-1" data-correct="false"> D. Because "widespread" and "wide" mean different things.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-trap-2">
+          <p>2. <b>Mock Question 20.</b> Paragraph H was about the government advertising Canada abroad: agents, pamphlets and letters home. Many students chose the heading <i>"Attracting urban environment"</i>. What was the trap?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-trap-2" data-correct="true"> A. The heading repeated the word "attract", but the paragraph was not about cities at all.</label><label><input type="radio" value="1" name="t1-trap-2" data-correct="false"> B. The heading was too long.</label><label><input type="radio" value="2" name="t1-trap-2" data-correct="false"> C. The paragraph did not mention immigrants.</label><label><input type="radio" value="3" name="t1-trap-2" data-correct="false"> D. There was no trap — both headings were correct.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-trap-3">
+          <p>3. <b>Mock Question 22.</b> Instructions: <i>NO MORE THAN TWO WORDS.</i> Gap: <i>"...the West could increase ______ of Canada."</i> Which answer gets the mark?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-trap-3" data-correct="false"> A. the agricultural output</label><label><input type="radio" value="1" name="t1-trap-3" data-correct="true"> B. agricultural output</label><label><input type="radio" value="2" name="t1-trap-3" data-correct="false"> C. Canada's agricultural output</label><label><input type="radio" value="3" name="t1-trap-3" data-correct="false"> D. output of agriculture</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-trap-4">
+          <p>4. <b>The NOT GIVEN rule.</b> Text: <i>"The metro opened in 1977."</i> Statement: <i>"The metro was the most expensive building project in the city."</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-trap-4" data-correct="false"> A. TRUE — a metro is always expensive.</label><label><input type="radio" value="1" name="t1-trap-4" data-correct="false"> B. FALSE — the text gives a different fact.</label><label><input type="radio" value="2" name="t1-trap-4" data-correct="true"> C. NOT GIVEN — the text says nothing about cost.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-trap', 't1-trap-score')">Check answers</button>
+          <span id="t1-trap-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card advice-card"><p class="prompt-label">Today's three rules</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li><b>Numbers and time words</b> (over, only, first, all, never, before) decide TRUE/FALSE. Check them word by word.</li>
+  <li><b>Same word ≠ same meaning.</b> If a heading or option repeats a word from the text, be suspicious, not happy.</li>
+  <li><b>Count the words</b> in every gap answer. "the" is a word.</li></ul></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 9</div>
+      <h2>Words Before You Read</h2>
+      <p class="task-sub">Today's first passage is about the Aral Sea — a disaster that happened very close to home. Learn these words first; you will meet every one of them.</p>
+      <div class="card" style="overflow-x:auto;"><table class="data-table" style="width:100%;">
+          <tr><th>word / phrase</th><th>meaning</th><th>example</th></tr><tr><td><b>irrigation</b></td><td>bringing water to fields through canals or pipes</td><td>Cotton needs a lot of <b>irrigation</b> in a hot climate.</td></tr><tr><td><b>divert</b></td><td>to make water, traffic etc. go a different way</td><td>The rivers were <b>diverted</b> to the fields.</td></tr><tr><td><b>canal</b></td><td>an artificial river dug for water or boats</td><td>Many <b>canals</b> had no lining.</td></tr><tr><td><b>evaporate</b></td><td>to turn from liquid into gas (and disappear into the air)</td><td>Water <b>evaporates</b> quickly in the desert.</td></tr><tr><td><b>shrink</b></td><td>to become smaller</td><td>The sea began to <b>shrink</b> in the 1960s.</td></tr><tr><td><b>salty / salinity</b></td><td>containing salt / the amount of salt in water</td><td>The water became too <b>salty</b> for fish.</td></tr><tr><td><b>collapse</b></td><td>(of an industry) to fail suddenly and completely</td><td>The fishing industry <b>collapsed</b>.</td></tr><tr><td><b>seabed</b></td><td>the ground at the bottom of the sea</td><td>The dry <b>seabed</b> is now a desert.</td></tr><tr><td><b>shrub</b></td><td>a small, low tree with many stems</td><td>Saxaul is a tough desert <b>shrub</b>.</td></tr><tr><td><b>established</b></td><td>(of a plant) growing strongly in a new place</td><td>Many young plants die before they become <b>established</b>.</td></tr></table></div>
+      <p style="margin-top:26px;"><strong>Match the word to its meaning.</strong></p>
+      <div class="card" id="t2-m">
+        <div class="line-match" id="t2-m-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. divert</button><button type="button" class="lm-item" data-key="2">2. evaporate</button><button type="button" class="lm-item" data-key="3">3. shrink</button><button type="button" class="lm-item" data-key="4">4. collapse</button><button type="button" class="lm-item" data-key="5">5. seabed</button><button type="button" class="lm-item" data-key="6">6. irrigation</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. become smaller</button><button type="button" class="lm-item" data-key="b">b. fail suddenly and completely</button><button type="button" class="lm-item" data-key="c">c. the floor of the sea</button><button type="button" class="lm-item" data-key="d">d. bringing water to fields</button><button type="button" class="lm-item" data-key="e">e. make something go a different way</button><button type="button" class="lm-item" data-key="f">f. turn into gas and disappear</button></div>
+          <select class="lm-hidden-select select" id="t2-m-1" data-lm-key="1" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t2-m-2" data-lm-key="2" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t2-m-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t2-m-4" data-lm-key="4" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t2-m-5" data-lm-key="5" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t2-m-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-m', 't2-m-score'); markLineMatchResult('t2-m-lm');">Check answers</button>
+          <span id="t2-m-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 9</div>
+      <h2>Reading 1 — The Sea That Walked Away</h2>
+      <p class="task-sub">Suggested time: 20 minutes for Tasks 3–6. Read the whole passage once quickly for the main idea of each paragraph. Then choose the correct heading for paragraphs B–G. There are more headings than paragraphs — and three of them are traps.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Sea That Walked Away</h3>
+        <p class="article-meta">Environment · Central Asia · 633 words</p>
+        <p><span class="para-label">A</span>In 1960, a fisherman in the town of Muynak, in the north-west of Uzbekistan, could walk out of his front door and see the water. The Aral Sea, which was actually a giant lake, covered about 68,000 square kilometres and was the fourth-largest lake on the planet. Two great rivers, the Amu Darya and the Syr Darya, carried water from the mountains far to the south-east and kept it full. Its fish fed people across the Soviet Union, and Muynak had a busy port and a large fish factory.</p><p><span class="para-label">B</span>Then the planners arrived. In the 1960s, the Soviet government decided that Central Asia should become one of the world's biggest producers of cotton, a crop that needs enormous amounts of water in a hot, dry climate. Thousands of kilometres of irrigation canals were dug, and water from both rivers was taken away to the fields. Many of the canals were simply channels cut into the sand without any lining, so a large share of the water soaked into the ground or evaporated before it ever reached a cotton plant. By the 1980s, in some years almost no river water reached the sea at all.</p><p><span class="para-label">C</span>The result was one of the worst environmental disasters of the twentieth century. The sea began to shrink, slowly at first and then at an alarming speed. By 1987 it had divided into two separate parts: a small northern sea in Kazakhstan and a larger southern sea, most of it in Uzbekistan. By the late 2000s, the Aral had lost about ninety per cent of its water, and in 2014 satellite photographs showed that the eastern part of the southern sea had dried up completely for the first time in modern history.</p><p><span class="para-label">D</span>As the water disappeared, what was left became saltier and saltier, until most of the native fish could no longer survive. The fishing industry, which had once provided tens of thousands of jobs, collapsed. Today Muynak lies more than a hundred kilometres from the shore, and the rusting fishing boats that still sit on the sand have become a strange kind of tourist attraction. Visitors take photographs of them, but for the people who remember the port, the ships are a painful reminder of how quickly a way of life can vanish.</p><p><span class="para-label">E</span>The damage did not stop at the old shoreline. The dry seabed, now a new desert known as the Aralkum, is covered in salt mixed with chemicals that once ran off the cotton fields. Strong winds lift this dust and carry it hundreds of kilometres, and doctors in the region have linked it to breathing problems and other illnesses. Without the sea to soften the weather, summers in the area have become hotter and winters colder.</p><p><span class="para-label">F</span>However, the story is not only one of loss. In 2005, Kazakhstan finished building a dam about thirteen kilometres long that separates the northern sea from the southern one. Water from the Syr Darya now stays in the north, and the level there has risen by several metres. Fish have returned, and some local fishermen are working again. The southern sea, which depends on the Amu Darya, has not been saved in the same way, and most experts agree that it will never return to its old size.</p><p><span class="para-label">G</span>Instead, Uzbekistan has chosen a different goal: rather than trying to bring back the water, it is trying to hold down the land. In recent years, workers have planted saxaul, a tough desert shrub with very deep roots, across large areas of the dry seabed. The plants help to stop the salty dust from blowing away, although many young plants die before they become established. Nobody believes the new forests will replace the sea, but supporters argue that they may at least make the region safer for the people who stayed.</p>
+      </div>
+<div class="card"><p class="prompt-label">List of headings</p><p style="margin:3px 0;"><b>i</b>&nbsp; A partial recovery in one part of the sea</p><p style="margin:3px 0;"><b>ii</b>&nbsp; Why the rivers were sent somewhere else</p><p style="margin:3px 0;"><b>iii</b>&nbsp; A new desert that harms health and changes the weather</p><p style="margin:3px 0;"><b>iv</b>&nbsp; Planting instead of refilling</p><p style="margin:3px 0;"><b>v</b>&nbsp; Tourists bring new money to Muynak</p><p style="margin:3px 0;"><b>vi</b>&nbsp; The end of an industry and a town far from the water</p><p style="margin:3px 0;"><b>vii</b>&nbsp; A lake that once fed a nation</p><p style="margin:3px 0;"><b>viii</b>&nbsp; A sea that split and kept disappearing</p><p style="margin:3px 0;"><b>ix</b>&nbsp; Building canals to save the sea</p><p style="margin:3px 0;"><b>x</b>&nbsp; Why scientists cannot agree about the sea's future</p><p class="alt" style="margin-top:8px;">Example: Paragraph A — <b>vii</b></p></div>
+      <div class="card" id="t3-h"><div class="sel-row"><select class="select" id="t3-h-1" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>1.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t3-h-2" data-answer="viii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>2.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t3-h-3" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>3.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t3-h-4" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>4.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t3-h-5" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>5.</b> Paragraph F</span></div><div class="sel-row"><select class="select" id="t3-h-6" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>6.</b> Paragraph G</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-h', 't3-h-score')">Check answers</button>
+          <span id="t3-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 9</div>
+      <h2>Reading 1 — TRUE, FALSE or NOT GIVEN</h2>
+      <p class="task-sub">Do the statements agree with the information in the passage? Watch the small words: <i>any, all, first, before, only, also</i>.</p>
+      <details class="card article passage-ref labelled" open>
+        <summary>📄 The passage — The Sea That Walked Away</summary>
+        <p><span class="para-label">A</span>In 1960, a fisherman in the town of Muynak, in the north-west of Uzbekistan, could walk out of his front door and see the water. The Aral Sea, which was actually a giant lake, covered about 68,000 square kilometres and was the fourth-largest lake on the planet. Two great rivers, the Amu Darya and the Syr Darya, carried water from the mountains far to the south-east and kept it full. Its fish fed people across the Soviet Union, and Muynak had a busy port and a large fish factory.</p><p><span class="para-label">B</span>Then the planners arrived. In the 1960s, the Soviet government decided that Central Asia should become one of the world's biggest producers of cotton, a crop that needs enormous amounts of water in a hot, dry climate. Thousands of kilometres of irrigation canals were dug, and water from both rivers was taken away to the fields. Many of the canals were simply channels cut into the sand without any lining, so a large share of the water soaked into the ground or evaporated before it ever reached a cotton plant. By the 1980s, in some years almost no river water reached the sea at all.</p><p><span class="para-label">C</span>The result was one of the worst environmental disasters of the twentieth century. The sea began to shrink, slowly at first and then at an alarming speed. By 1987 it had divided into two separate parts: a small northern sea in Kazakhstan and a larger southern sea, most of it in Uzbekistan. By the late 2000s, the Aral had lost about ninety per cent of its water, and in 2014 satellite photographs showed that the eastern part of the southern sea had dried up completely for the first time in modern history.</p><p><span class="para-label">D</span>As the water disappeared, what was left became saltier and saltier, until most of the native fish could no longer survive. The fishing industry, which had once provided tens of thousands of jobs, collapsed. Today Muynak lies more than a hundred kilometres from the shore, and the rusting fishing boats that still sit on the sand have become a strange kind of tourist attraction. Visitors take photographs of them, but for the people who remember the port, the ships are a painful reminder of how quickly a way of life can vanish.</p><p><span class="para-label">E</span>The damage did not stop at the old shoreline. The dry seabed, now a new desert known as the Aralkum, is covered in salt mixed with chemicals that once ran off the cotton fields. Strong winds lift this dust and carry it hundreds of kilometres, and doctors in the region have linked it to breathing problems and other illnesses. Without the sea to soften the weather, summers in the area have become hotter and winters colder.</p><p><span class="para-label">F</span>However, the story is not only one of loss. In 2005, Kazakhstan finished building a dam about thirteen kilometres long that separates the northern sea from the southern one. Water from the Syr Darya now stays in the north, and the level there has risen by several metres. Fish have returned, and some local fishermen are working again. The southern sea, which depends on the Amu Darya, has not been saved in the same way, and most experts agree that it will never return to its old size.</p><p><span class="para-label">G</span>Instead, Uzbekistan has chosen a different goal: rather than trying to bring back the water, it is trying to hold down the land. In recent years, workers have planted saxaul, a tough desert shrub with very deep roots, across large areas of the dry seabed. The plants help to stop the salty dust from blowing away, although many young plants die before they become established. Nobody believes the new forests will replace the sea, but supporters argue that they may at least make the region safer for the people who stayed.</p>
+      </details>
+      <div class="card" id="t4-tf"><div class="q-item" id="t4-tf-1">
+          <p>1. In 1960, the Aral Sea was larger than any other lake in the world.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-1" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-1" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t4-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-2">
+          <p>2. Cotton was chosen because it grows well without much water.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-2" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t4-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-3">
+          <p>3. Some of the water taken from the rivers never reached the cotton fields.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-3" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t4-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-4">
+          <p>4. The Soviet planners expected the sea to become smaller.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-4" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-5">
+          <p>5. The sea had split into two parts before the end of the 1980s.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-5" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t4-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-6">
+          <p>6. Before 2014, the eastern part of the southern sea had already dried up completely at least once in modern times.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-6" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-6" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t4-tf-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-7">
+          <p>7. Most of the tourists who visit Muynak's old boats come from abroad.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-7" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-7" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-7" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-8">
+          <p>8. The dust from the Aralkum contains chemicals from farming.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-8" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t4-tf-8" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-8" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-9">
+          <p>9. The dam in the north has also raised the water level of the southern sea.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-9" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-9" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t4-tf-9" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-10">
+          <p>10. All of the saxaul planted on the seabed has survived.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-10" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-10" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t4-tf-10" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-tf', 't4-tf-score')">Check answers</button>
+          <span id="t4-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 9</div>
+      <h2>Reading 1 — Summary Completion</h2>
+      <p class="task-sub">Complete the summary. Choose <b>NO MORE THAN TWO WORDS</b> from the passage for each answer. Count your words!</p>
+      <details class="card article passage-ref labelled" open>
+        <summary>📄 The passage — The Sea That Walked Away</summary>
+        <p><span class="para-label">A</span>In 1960, a fisherman in the town of Muynak, in the north-west of Uzbekistan, could walk out of his front door and see the water. The Aral Sea, which was actually a giant lake, covered about 68,000 square kilometres and was the fourth-largest lake on the planet. Two great rivers, the Amu Darya and the Syr Darya, carried water from the mountains far to the south-east and kept it full. Its fish fed people across the Soviet Union, and Muynak had a busy port and a large fish factory.</p><p><span class="para-label">B</span>Then the planners arrived. In the 1960s, the Soviet government decided that Central Asia should become one of the world's biggest producers of cotton, a crop that needs enormous amounts of water in a hot, dry climate. Thousands of kilometres of irrigation canals were dug, and water from both rivers was taken away to the fields. Many of the canals were simply channels cut into the sand without any lining, so a large share of the water soaked into the ground or evaporated before it ever reached a cotton plant. By the 1980s, in some years almost no river water reached the sea at all.</p><p><span class="para-label">C</span>The result was one of the worst environmental disasters of the twentieth century. The sea began to shrink, slowly at first and then at an alarming speed. By 1987 it had divided into two separate parts: a small northern sea in Kazakhstan and a larger southern sea, most of it in Uzbekistan. By the late 2000s, the Aral had lost about ninety per cent of its water, and in 2014 satellite photographs showed that the eastern part of the southern sea had dried up completely for the first time in modern history.</p><p><span class="para-label">D</span>As the water disappeared, what was left became saltier and saltier, until most of the native fish could no longer survive. The fishing industry, which had once provided tens of thousands of jobs, collapsed. Today Muynak lies more than a hundred kilometres from the shore, and the rusting fishing boats that still sit on the sand have become a strange kind of tourist attraction. Visitors take photographs of them, but for the people who remember the port, the ships are a painful reminder of how quickly a way of life can vanish.</p><p><span class="para-label">E</span>The damage did not stop at the old shoreline. The dry seabed, now a new desert known as the Aralkum, is covered in salt mixed with chemicals that once ran off the cotton fields. Strong winds lift this dust and carry it hundreds of kilometres, and doctors in the region have linked it to breathing problems and other illnesses. Without the sea to soften the weather, summers in the area have become hotter and winters colder.</p><p><span class="para-label">F</span>However, the story is not only one of loss. In 2005, Kazakhstan finished building a dam about thirteen kilometres long that separates the northern sea from the southern one. Water from the Syr Darya now stays in the north, and the level there has risen by several metres. Fish have returned, and some local fishermen are working again. The southern sea, which depends on the Amu Darya, has not been saved in the same way, and most experts agree that it will never return to its old size.</p><p><span class="para-label">G</span>Instead, Uzbekistan has chosen a different goal: rather than trying to bring back the water, it is trying to hold down the land. In recent years, workers have planted saxaul, a tough desert shrub with very deep roots, across large areas of the dry seabed. The plants help to stop the salty dust from blowing away, although many young plants die before they become established. Nobody believes the new forests will replace the sea, but supporters argue that they may at least make the region safer for the people who stayed.</p>
+      </details>
+      <div class="card" id="t5-s" style="line-height:2.6;"><p>Part of the Aral Sea has been helped by a <input type="text" class="text-answer" id="t5-1" data-correct="dam" autocomplete="off" style="width:120px;"> that Kazakhstan completed in 2005. Because the water of the <input type="text" class="text-answer" id="t5-2" data-correct="Syr Darya" autocomplete="off" style="width:120px;"> is now kept in the north, the water level has gone up by several metres, <input type="text" class="text-answer" id="t5-3" data-correct="fish" autocomplete="off" style="width:110px;"> have come back and some people are fishing again. The southern sea relies on a different river, the <input type="text" class="text-answer" id="t5-4" data-correct="Amu Darya" autocomplete="off" style="width:120px;">, and experts do not think it will ever return to its old size. Uzbekistan is therefore trying to fix the <input type="text" class="text-answer" id="t5-5" data-correct="land/dry seabed/seabed" autocomplete="off" style="width:120px;"> rather than refill the sea. It plants saxaul, whose very deep <input type="text" class="text-answer" id="t5-6" data-correct="roots" autocomplete="off" style="width:110px;"> help to stop the salty <input type="text" class="text-answer" id="t5-7" data-correct="dust" autocomplete="off" style="width:110px;"> from blowing away, even though many young plants die before they become <input type="text" class="text-answer" id="t5-8" data-correct="established" autocomplete="off" style="width:130px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-s', 't5-s-score')">Check answers</button>
+          <span id="t5-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 9</div>
+      <h2>Reading 1 — Multiple Choice</h2>
+      <p class="task-sub">Choose the correct letter. In multiple choice, the wrong options often use words from the passage — the right one usually says the same idea in different words.</p>
+      <details class="card article passage-ref labelled" open>
+        <summary>📄 The passage — The Sea That Walked Away</summary>
+        <p><span class="para-label">A</span>In 1960, a fisherman in the town of Muynak, in the north-west of Uzbekistan, could walk out of his front door and see the water. The Aral Sea, which was actually a giant lake, covered about 68,000 square kilometres and was the fourth-largest lake on the planet. Two great rivers, the Amu Darya and the Syr Darya, carried water from the mountains far to the south-east and kept it full. Its fish fed people across the Soviet Union, and Muynak had a busy port and a large fish factory.</p><p><span class="para-label">B</span>Then the planners arrived. In the 1960s, the Soviet government decided that Central Asia should become one of the world's biggest producers of cotton, a crop that needs enormous amounts of water in a hot, dry climate. Thousands of kilometres of irrigation canals were dug, and water from both rivers was taken away to the fields. Many of the canals were simply channels cut into the sand without any lining, so a large share of the water soaked into the ground or evaporated before it ever reached a cotton plant. By the 1980s, in some years almost no river water reached the sea at all.</p><p><span class="para-label">C</span>The result was one of the worst environmental disasters of the twentieth century. The sea began to shrink, slowly at first and then at an alarming speed. By 1987 it had divided into two separate parts: a small northern sea in Kazakhstan and a larger southern sea, most of it in Uzbekistan. By the late 2000s, the Aral had lost about ninety per cent of its water, and in 2014 satellite photographs showed that the eastern part of the southern sea had dried up completely for the first time in modern history.</p><p><span class="para-label">D</span>As the water disappeared, what was left became saltier and saltier, until most of the native fish could no longer survive. The fishing industry, which had once provided tens of thousands of jobs, collapsed. Today Muynak lies more than a hundred kilometres from the shore, and the rusting fishing boats that still sit on the sand have become a strange kind of tourist attraction. Visitors take photographs of them, but for the people who remember the port, the ships are a painful reminder of how quickly a way of life can vanish.</p><p><span class="para-label">E</span>The damage did not stop at the old shoreline. The dry seabed, now a new desert known as the Aralkum, is covered in salt mixed with chemicals that once ran off the cotton fields. Strong winds lift this dust and carry it hundreds of kilometres, and doctors in the region have linked it to breathing problems and other illnesses. Without the sea to soften the weather, summers in the area have become hotter and winters colder.</p><p><span class="para-label">F</span>However, the story is not only one of loss. In 2005, Kazakhstan finished building a dam about thirteen kilometres long that separates the northern sea from the southern one. Water from the Syr Darya now stays in the north, and the level there has risen by several metres. Fish have returned, and some local fishermen are working again. The southern sea, which depends on the Amu Darya, has not been saved in the same way, and most experts agree that it will never return to its old size.</p><p><span class="para-label">G</span>Instead, Uzbekistan has chosen a different goal: rather than trying to bring back the water, it is trying to hold down the land. In recent years, workers have planted saxaul, a tough desert shrub with very deep roots, across large areas of the dry seabed. The plants help to stop the salty dust from blowing away, although many young plants die before they become established. Nobody believes the new forests will replace the sea, but supporters argue that they may at least make the region safer for the people who stayed.</p>
+      </details>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-1">
+          <p>1. What is the main purpose of paragraph A?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-1" data-correct="false"> A. to explain why the sea later disappeared</label><label><input type="radio" value="1" name="t6-mc-1" data-correct="true"> B. to show what the sea and Muynak were like before the changes</label><label><input type="radio" value="2" name="t6-mc-1" data-correct="false"> C. to compare the Aral Sea with other large lakes</label><label><input type="radio" value="3" name="t6-mc-1" data-correct="false"> D. to describe the life of one particular fisherman</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-2">
+          <p>2. According to paragraph B, why was so much water lost?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-2" data-correct="false"> A. Farmers used too much water on the cotton.</label><label><input type="radio" value="1" name="t6-mc-2" data-correct="true"> B. Many canals were badly built.</label><label><input type="radio" value="2" name="t6-mc-2" data-correct="false"> C. The fields were too far from the rivers.</label><label><input type="radio" value="3" name="t6-mc-2" data-correct="false"> D. The weather became much hotter.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-3">
+          <p>3. How do people who remember the port feel about the old boats?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-3" data-correct="false"> A. proud that they are still there</label><label><input type="radio" value="1" name="t6-mc-3" data-correct="true"> B. upset when they see them</label><label><input type="radio" value="2" name="t6-mc-3" data-correct="false"> C. happy that tourists come to see them</label><label><input type="radio" value="3" name="t6-mc-3" data-correct="false"> D. keen to have them removed</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-4">
+          <p>4. What does the writer say about the saxaul forests?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-4" data-correct="false"> A. They will eventually bring the sea back.</label><label><input type="radio" value="1" name="t6-mc-4" data-correct="false"> B. They have already solved the dust problem.</label><label><input type="radio" value="2" name="t6-mc-4" data-correct="true"> C. They are useful even though they cannot replace the sea.</label><label><input type="radio" value="3" name="t6-mc-4" data-correct="false"> D. Most experts think they are a waste of money.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 9</div>
+      <h2>Reading 2 — Palaces Under the City</h2>
+      <p class="task-sub">Suggested time: 15 minutes for Tasks 7–8. A shorter passage about a place many of you use. Answer the questions with <b>NO MORE THAN THREE WORDS AND/OR A NUMBER</b> from the passage.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Palaces Under the City</h3>
+        <p class="article-meta">Cities · Tashkent · 399 words</p>
+        <p><span class="para-label">A</span>On 26 April 1966, a powerful earthquake struck the centre of Tashkent. It was not the strongest earthquake the region had ever known, but it hit directly under the city, and thousands of buildings — many of them old houses made of mud brick — were destroyed or badly damaged. Hundreds of thousands of people lost their homes. The city was rebuilt with help from across the Soviet Union, and when planners later decided to give Tashkent an underground railway, they knew it would have to survive the next big earthquake.</p><p><span class="para-label">B</span>The Tashkent Metro opened on 6 November 1977 and was the first underground railway in Central Asia. Its tunnels and stations were designed with earthquakes in mind, using strengthened structures and special joints that allow the tunnels to move a little without breaking.</p><p><span class="para-label">C</span>Yet visitors rarely talk about the engineering. What they remember is the decoration. Each station was designed around its own theme. Kosmonavtlar station, built in honour of space exploration, is decorated in deep blue, with round portraits of cosmonauts, including Yuri Gagarin and Vladimir Dzhanibekov, who was born in the Tashkent region. Alisher Navoi station has domes and ceramic panels showing scenes from the great poet's works. Other stations use marble, granite, carved plaster and huge chandeliers.</p><p><span class="para-label">D</span>For decades, however, very few outsiders saw these underground "palaces" in photographs. The metro was also designed to serve as a shelter in case of nuclear war, and taking pictures inside it was strictly forbidden; police officers regularly stopped tourists who tried. The ban was finally lifted in 2018, and within months images of the stations were being shared all over the internet, turning the metro into one of the city's most popular attractions.</p><p><span class="para-label">E</span>The system has continued to grow. A third line, the Yunusobod line, opened in 2001, and in the 2020s a new ring line — much of it running above the ground rather than below it — began to connect districts on the edge of the expanding city. The newer stations are lighter and simpler than the old ones, which some residents welcome as modern and others criticise as ordinary.</p><p><span class="para-label">F</span>Today the metro carries hundreds of thousands of passengers every day. For most of them it is simply the cheapest and quickest way across town. For visitors, however, the stations remain proof that a public building does not have to be plain to be practical.</p>
+      </div>
+      <div class="card" id="t7-sa" style="line-height:2.3;"><p>1. In which year did the Tashkent Metro open? <input type="text" class="text-answer" id="t7-1" data-correct="1977/in 1977" autocomplete="off" style="width:110px;"></p><p>2. What were many of the old damaged houses made of? <input type="text" class="text-answer" id="t7-2" data-correct="mud brick/mud bricks" autocomplete="off" style="width:140px;"></p><p>3. Which colour is used most in Kosmonavtlar station? <input type="text" class="text-answer" id="t7-3" data-correct="deep blue/blue" autocomplete="off" style="width:120px;"></p><p>4. Apart from transport, what was the metro also designed to be? <input type="text" class="text-answer" id="t7-4" data-correct="a shelter/shelter/a nuclear shelter/nuclear shelter" autocomplete="off" style="width:160px;"></p><p>5. Who used to stop tourists taking photographs? <input type="text" class="text-answer" id="t7-5" data-correct="police officers/police/the police" autocomplete="off" style="width:150px;"></p><p>6. Where does much of the newest line run? <input type="text" class="text-answer" id="t7-6" data-correct="above the ground/above ground" autocomplete="off" style="width:160px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-sa', 't7-sa-score')">Check answers</button>
+          <span id="t7-sa-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 9</div>
+      <h2>Reading 2 — Which Paragraph?</h2>
+      <p class="task-sub">Which paragraph, A–F, contains the following information? This question type is hard because the information can be <b>one small sentence</b> inside a paragraph about something else. You may use a letter more than once.</p>
+      <details class="card article passage-ref labelled" open>
+        <summary>📄 The passage — Palaces Under the City</summary>
+        <p><span class="para-label">A</span>On 26 April 1966, a powerful earthquake struck the centre of Tashkent. It was not the strongest earthquake the region had ever known, but it hit directly under the city, and thousands of buildings — many of them old houses made of mud brick — were destroyed or badly damaged. Hundreds of thousands of people lost their homes. The city was rebuilt with help from across the Soviet Union, and when planners later decided to give Tashkent an underground railway, they knew it would have to survive the next big earthquake.</p><p><span class="para-label">B</span>The Tashkent Metro opened on 6 November 1977 and was the first underground railway in Central Asia. Its tunnels and stations were designed with earthquakes in mind, using strengthened structures and special joints that allow the tunnels to move a little without breaking.</p><p><span class="para-label">C</span>Yet visitors rarely talk about the engineering. What they remember is the decoration. Each station was designed around its own theme. Kosmonavtlar station, built in honour of space exploration, is decorated in deep blue, with round portraits of cosmonauts, including Yuri Gagarin and Vladimir Dzhanibekov, who was born in the Tashkent region. Alisher Navoi station has domes and ceramic panels showing scenes from the great poet's works. Other stations use marble, granite, carved plaster and huge chandeliers.</p><p><span class="para-label">D</span>For decades, however, very few outsiders saw these underground "palaces" in photographs. The metro was also designed to serve as a shelter in case of nuclear war, and taking pictures inside it was strictly forbidden; police officers regularly stopped tourists who tried. The ban was finally lifted in 2018, and within months images of the stations were being shared all over the internet, turning the metro into one of the city's most popular attractions.</p><p><span class="para-label">E</span>The system has continued to grow. A third line, the Yunusobod line, opened in 2001, and in the 2020s a new ring line — much of it running above the ground rather than below it — began to connect districts on the edge of the expanding city. The newer stations are lighter and simpler than the old ones, which some residents welcome as modern and others criticise as ordinary.</p><p><span class="para-label">F</span>Today the metro carries hundreds of thousands of passengers every day. For most of them it is simply the cheapest and quickest way across town. For visitors, however, the stations remain proof that a public building does not have to be plain to be practical.</p>
+      </details>
+      <div class="card" id="t8-mi"><div class="sel-row"><select class="select" id="t8-mi-1" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>1.</b> a reason why the stations were kept out of photographs</span></div><div class="sel-row"><select class="select" id="t8-mi-2" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>2.</b> different opinions about the design of the newer stations</span></div><div class="sel-row"><select class="select" id="t8-mi-3" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>3.</b> the cause of serious damage to many homes</span></div><div class="sel-row"><select class="select" id="t8-mi-4" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>4.</b> a station that celebrates a writer</span></div><div class="sel-row"><select class="select" id="t8-mi-5" data-answer="F"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>5.</b> the idea that a building can be both useful and beautiful</span></div><div class="sel-row"><select class="select" id="t8-mi-6" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>6.</b> a way of building tunnels so that they do not break</span></div><div class="sel-row"><select class="select" id="t8-mi-7" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>7.</b> the fact that the city received help from other places</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-mi', 't8-mi-score')">Check answers</button>
+          <span id="t8-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 9</div>
+      <h2>Paraphrase Detective</h2>
+      <p class="task-sub">Every IELTS reading answer hides behind a paraphrase: the question says the idea one way, the passage says it another way. Match the <b>question words</b> (left) to the <b>passage words</b> (right). This is the skill that would have saved most of Sunday's mistakes.</p>
+      <div class="card" id="t9-p">
+        <div class="line-match" id="t9-p-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. a great deal of water</button><button type="button" class="lm-item" data-key="2">2. was redirected to the farms</button><button type="button" class="lm-item" data-key="3">3. vanished completely</button><button type="button" class="lm-item" data-key="4">4. could not stay alive any more</button><button type="button" class="lm-item" data-key="5">5. problems with the lungs</button><button type="button" class="lm-item" data-key="6">6. was allowed again</button><button type="button" class="lm-item" data-key="7">7. on the outskirts</button><button type="button" class="lm-item" data-key="8">8. built to cope with earthquakes</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. dried up completely</button><button type="button" class="lm-item" data-key="b">b. could no longer survive</button><button type="button" class="lm-item" data-key="c">c. breathing problems</button><button type="button" class="lm-item" data-key="d">d. the ban was finally lifted</button><button type="button" class="lm-item" data-key="e">e. on the edge of the expanding city</button><button type="button" class="lm-item" data-key="f">f. designed with earthquakes in mind</button><button type="button" class="lm-item" data-key="g">g. enormous amounts of water</button><button type="button" class="lm-item" data-key="h">h. was taken away to the fields</button></div>
+          <select class="lm-hidden-select select" id="t9-p-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-p-2" data-lm-key="2" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-p-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-p-4" data-lm-key="4" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-p-5" data-lm-key="5" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-p-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-p-7" data-lm-key="7" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-p-8" data-lm-key="8" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-p', 't9-p-score'); markLineMatchResult('t9-p-lm');">Check answers</button>
+          <span id="t9-p-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 9</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 21 of 45</div>
+    <h1>Day 21 complete! 🎉</h1>
+    <p>Day 21 done — two passages, nine tasks and a lot of traps avoided. Remember the three rules: check the small words, distrust repeated words, count your words.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t2-m-lm');
+    initLineMatch('t9-p-lm');
+
+
+
+    await initTaskFlow(21, 9, user.id, {
+      1: () => { checkAllAnswers('t1-trap', 't1-trap-score'); },
+      2: () => { checkAllAnswers('t2-m', 't2-m-score'); markLineMatchResult('t2-m-lm'); },
+      3: () => { checkAllAnswers('t3-h', 't3-h-score'); },
+      4: () => { checkAllAnswers('t4-tf', 't4-tf-score'); },
+      5: () => { checkAllAnswers('t5-s', 't5-s-score'); },
+      6: () => { checkAllAnswers('t6-mc', 't6-mc-score'); },
+      7: () => { checkAllAnswers('t7-sa', 't7-sa-score'); },
+      8: () => { checkAllAnswers('t8-mi', 't8-mi-score'); },
+      9: () => { checkAllAnswers('t9-p', 't9-p-score'); markLineMatchResult('t9-p-lm'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+
+  });
+</script>
+</body>
+</html>
