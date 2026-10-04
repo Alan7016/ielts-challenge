@@ -3047,10 +3047,10 @@ async function getLiveDays(folder, maxDays) {
 // Next week: bump `week`, set the new day range and the new start time.
 // ============================================
 const CEREMONY = {
-  week: 2,
-  dayFrom: 7,
-  dayTo: 13,
-  startsAt: '2026-09-27T16:00:00Z', // 21:00 Tashkent (UTC+5)
+  week: 3,
+  dayFrom: 14,
+  dayTo: 19,                        // Day 20 is the mock (no points), so the week's points are Days 14–19
+  startsAt: '2026-10-05T16:00:00Z', // Monday 5 October, 21:00 Tashkent (UTC+5)
   lobbyMinutes: 5,                  // students get pulled in this long before the start
   pullWindowMinutes: 25             // after start, how long we keep pulling students who haven't seen it
 };
