@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 22 — Standard — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 22 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 9</div>
+      <h2>Words Before You Read — and Before You Write</h2>
+      <p class="task-sub">Day 22 is a <b>read → learn → write</b> day. Everything you read today, you will use at the end in a full Writing Task 2 essay about cheap clothes. So learn these words well — you will meet each one in the passage <b>and</b> you should use at least six of them in your essay.</p>
+      <div class="card" style="overflow-x:auto;"><table class="data-table" style="width:100%;">
+          <tr><th>word / phrase</th><th>meaning</th><th>example</th></tr><tr><td><b>garment</b></td><td>one piece of clothing (formal word)</td><td>Each <b>garment</b> is worn only a few times.</td></tr><tr><td><b>disposable</b></td><td>made to be used once or for a short time, then thrown away</td><td>Clothes have become almost <b>disposable</b>.</td></tr><tr><td><b>affordable</b></td><td>cheap enough for most people to buy</td><td>Fashion is now more <b>affordable</b> than ever.</td></tr><tr><td><b>consumer</b></td><td>a person who buys goods or services</td><td><b>Consumers</b> want new styles every month.</td></tr><tr><td><b>manufacturer</b></td><td>a company that makes goods in large numbers</td><td>The <b>manufacturer</b> paid its workers very little.</td></tr><tr><td><b>landfill</b></td><td>a place where rubbish is buried under the ground</td><td>Most old clothes end up in <b>landfill</b>.</td></tr><tr><td><b>synthetic</b></td><td>made by people from chemicals, not from plants or animals</td><td>Polyester is a <b>synthetic</b> material.</td></tr><tr><td><b>impulse buying</b></td><td>buying something suddenly without planning to</td><td>Cheap prices encourage <b>impulse buying</b>.</td></tr><tr><td><b>second-hand</b></td><td>owned and used by someone before you</td><td>She buys most of her clothes <b>second-hand</b>.</td></tr><tr><td><b>durable</b></td><td>strong; lasting a long time</td><td>Better clothes are more <b>durable</b>.</td></tr><tr><td><b>pollution</b></td><td>damage to air, water or land by harmful substances</td><td>Dyeing cloth causes serious water <b>pollution</b>.</td></tr><tr><td><b>campaign</b></td><td>a planned set of activities to change something</td><td>A <b>campaign</b> asked shoppers to buy less.</td></tr></table></div>
+      <p style="margin-top:26px;"><strong>Match each word to its meaning.</strong></p>
+      <div class="card" id="t1-m">
+        <div class="line-match" id="t1-m-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. disposable</button><button type="button" class="lm-item" data-key="2">2. durable</button><button type="button" class="lm-item" data-key="3">3. synthetic</button><button type="button" class="lm-item" data-key="4">4. landfill</button><button type="button" class="lm-item" data-key="5">5. impulse buying</button><button type="button" class="lm-item" data-key="6">6. second-hand</button><button type="button" class="lm-item" data-key="7">7. manufacturer</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. lasting a long time</button><button type="button" class="lm-item" data-key="b">b. made from chemicals</button><button type="button" class="lm-item" data-key="c">c. a place where rubbish is buried</button><button type="button" class="lm-item" data-key="d">d. buying without planning</button><button type="button" class="lm-item" data-key="e">e. used by someone before</button><button type="button" class="lm-item" data-key="f">f. a company that makes goods</button><button type="button" class="lm-item" data-key="g">g. used for a short time, then thrown away</button></div>
+          <select class="lm-hidden-select select" id="t1-m-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t1-m-2" data-lm-key="2" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t1-m-3" data-lm-key="3" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t1-m-4" data-lm-key="4" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t1-m-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t1-m-6" data-lm-key="6" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t1-m-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-m', 't1-m-score'); markLineMatchResult('t1-m-lm');">Check answers</button>
+          <span id="t1-m-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 9</div>
+      <h2>Reading — The Real Price of a Cheap T-shirt</h2>
+      <p class="task-sub">Suggested time: 20 minutes for Tasks 2–4. Read the passage once for the main idea of each paragraph, then choose the correct heading for paragraphs A–G. There are more headings than paragraphs, and three of them are traps that repeat words from the text.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Real Price of a Cheap T-shirt</h3>
+        <p class="article-meta">Society · Environment · 566 words</p>
+        <p><span class="para-label">A</span>Twenty years ago, most families bought new clothes a few times a year: a coat for winter, shoes for the new school year, perhaps something special for a wedding. Today, many shoppers buy something new almost every week. According to a 2016 report by the consultancy McKinsey, the amount of clothing produced in the world roughly doubled between 2000 and 2014, while the number of times each garment was worn fell sharply. Clothes, in other words, have become almost disposable.</p><p><span class="para-label">B</span>The main reason is price. Large fashion chains have learned to design, produce and deliver new styles in a few weeks instead of several months, and they sell them at prices that would have seemed impossible a generation ago. A T-shirt can cost less than a sandwich. Because the items are so cheap, buying them feels like a small decision, and shops encourage impulse buying by changing their collections constantly. A customer who sees something she likes knows that it may not be there next week.</p><p><span class="para-label">C</span>Social media has made the cycle faster. Many young people say they do not want to be photographed in the same outfit twice, and online influencers are often paid to show a different look every day. Shopping apps add to the pressure: they send messages about sales and "last chance" offers, and a new top is only a few taps away. For some consumers, buying clothes has become a hobby rather than a response to a real need.</p><p><span class="para-label">D</span>The low prices, however, hide real costs. Most cheap clothes are made in countries such as Bangladesh, Vietnam and Cambodia, where many garment workers earn very low wages and work long hours. In 2013, the Rana Plaza building near Dhaka, which contained several clothing factories, collapsed and killed more than 1,100 people. Cracks had appeared in the walls the day before, but workers were told to return to their sewing machines.</p><p><span class="para-label">E</span>The environment pays a price too. Growing cotton needs large amounts of water, and the chemicals used to dye cloth often end up in rivers. Many cheap garments are made from polyester and other synthetic materials, which are produced from oil and can take hundreds of years to break down. Every time these clothes are washed, tiny plastic fibres are released into the water and eventually reach the sea.</p><p><span class="para-label">F</span>Then there is the question of what happens to clothes when we no longer want them. The Ellen MacArthur Foundation, a British charity, has calculated that the equivalent of one rubbish truck full of textiles is buried in landfill or burned every second, and that less than one per cent of the material used to make clothing is recycled into new clothing. Some unwanted clothes are sent abroad: in the Atacama Desert in Chile, huge piles of second-hand garments from Europe, the USA and Asia have been dumped in the sand.</p><p><span class="para-label">G</span>Solutions exist, but none of them is simple. Some governments are discussing laws that would make manufacturers responsible for collecting and recycling the clothes they sell. Several brands now offer repair services or take back old items. Second-hand shopping, both in charity shops and on apps, has become fashionable among young people, and campaigns encourage consumers to ask one simple question before they buy: "Will I wear this at least thirty times?" Experts agree, however, that the most effective solution is also the least popular one: buying fewer, more durable clothes.</p>
+      </div>
+<div class="card"><p class="prompt-label">List of headings</p><p style="margin:3px 0;"><b>i</b>&nbsp; Danger for the people who make the clothes</p><p style="margin:3px 0;"><b>ii</b>&nbsp; The price that nature pays</p><p style="margin:3px 0;"><b>iii</b>&nbsp; From a few times a year to every week</p><p style="margin:3px 0;"><b>iv</b>&nbsp; How online life speeds up shopping</p><p style="margin:3px 0;"><b>v</b>&nbsp; Why new laws have already solved the problem</p><p style="margin:3px 0;"><b>vi</b>&nbsp; Where unwanted clothes finally go</p><p style="margin:3px 0;"><b>vii</b>&nbsp; Fast, cheap and always changing</p><p style="margin:3px 0;"><b>viii</b>&nbsp; Several answers, but no easy one</p><p style="margin:3px 0;"><b>ix</b>&nbsp; The best way to dye cloth</p><p style="margin:3px 0;"><b>x</b>&nbsp; Why influencers prefer expensive brands</p></div>
+      <div class="card" id="t2-h"><div class="sel-row"><select class="select" id="t2-h-1" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>1.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t2-h-2" data-answer="vii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>2.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t2-h-3" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>3.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t2-h-4" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>4.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t2-h-5" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>5.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t2-h-6" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>6.</b> Paragraph F</span></div><div class="sel-row"><select class="select" id="t2-h-7" data-answer="viii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>7.</b> Paragraph G</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-h', 't2-h-score')">Check answers</button>
+          <span id="t2-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 9</div>
+      <h2>Reading — TRUE, FALSE or NOT GIVEN</h2>
+      <p class="task-sub">Do the statements agree with the passage? Remember yesterday's rule: one small word (<i>all, only, most, before, never</i>) can change TRUE into FALSE.</p>
+      <details class="card article passage-ref labelled" open>
+        <summary>📄 The passage — The Real Price of a Cheap T-shirt</summary>
+        <p><span class="para-label">A</span>Twenty years ago, most families bought new clothes a few times a year: a coat for winter, shoes for the new school year, perhaps something special for a wedding. Today, many shoppers buy something new almost every week. According to a 2016 report by the consultancy McKinsey, the amount of clothing produced in the world roughly doubled between 2000 and 2014, while the number of times each garment was worn fell sharply. Clothes, in other words, have become almost disposable.</p><p><span class="para-label">B</span>The main reason is price. Large fashion chains have learned to design, produce and deliver new styles in a few weeks instead of several months, and they sell them at prices that would have seemed impossible a generation ago. A T-shirt can cost less than a sandwich. Because the items are so cheap, buying them feels like a small decision, and shops encourage impulse buying by changing their collections constantly. A customer who sees something she likes knows that it may not be there next week.</p><p><span class="para-label">C</span>Social media has made the cycle faster. Many young people say they do not want to be photographed in the same outfit twice, and online influencers are often paid to show a different look every day. Shopping apps add to the pressure: they send messages about sales and "last chance" offers, and a new top is only a few taps away. For some consumers, buying clothes has become a hobby rather than a response to a real need.</p><p><span class="para-label">D</span>The low prices, however, hide real costs. Most cheap clothes are made in countries such as Bangladesh, Vietnam and Cambodia, where many garment workers earn very low wages and work long hours. In 2013, the Rana Plaza building near Dhaka, which contained several clothing factories, collapsed and killed more than 1,100 people. Cracks had appeared in the walls the day before, but workers were told to return to their sewing machines.</p><p><span class="para-label">E</span>The environment pays a price too. Growing cotton needs large amounts of water, and the chemicals used to dye cloth often end up in rivers. Many cheap garments are made from polyester and other synthetic materials, which are produced from oil and can take hundreds of years to break down. Every time these clothes are washed, tiny plastic fibres are released into the water and eventually reach the sea.</p><p><span class="para-label">F</span>Then there is the question of what happens to clothes when we no longer want them. The Ellen MacArthur Foundation, a British charity, has calculated that the equivalent of one rubbish truck full of textiles is buried in landfill or burned every second, and that less than one per cent of the material used to make clothing is recycled into new clothing. Some unwanted clothes are sent abroad: in the Atacama Desert in Chile, huge piles of second-hand garments from Europe, the USA and Asia have been dumped in the sand.</p><p><span class="para-label">G</span>Solutions exist, but none of them is simple. Some governments are discussing laws that would make manufacturers responsible for collecting and recycling the clothes they sell. Several brands now offer repair services or take back old items. Second-hand shopping, both in charity shops and on apps, has become fashionable among young people, and campaigns encourage consumers to ask one simple question before they buy: "Will I wear this at least thirty times?" Experts agree, however, that the most effective solution is also the least popular one: buying fewer, more durable clothes.</p>
+      </details>
+      <div class="card" id="t3-tf"><div class="q-item" id="t3-tf-1">
+          <p>1. Between 2000 and 2014, people wore each garment more often than before.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-1" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-1" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-2">
+          <p>2. Fashion chains now need only a few weeks to bring a new style to the shops.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t3-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-3">
+          <p>3. All young people refuse to be photographed in the same clothes twice.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-4">
+          <p>4. Shopping apps send messages to customers about special offers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-4" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t3-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-5">
+          <p>5. Garment workers in Vietnam earn more than garment workers in Bangladesh.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-5" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-6">
+          <p>6. There were warning signs before the Rana Plaza building collapsed.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-6" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t3-tf-6" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-7">
+          <p>7. Polyester is more expensive to produce than cotton.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-7" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-7" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-7" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-8">
+          <p>8. Washing polyester clothes can add plastic to the sea.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-8" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t3-tf-8" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-8" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-9">
+          <p>9. Most of the material in old clothes is recycled into new clothes.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-9" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-9" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-9" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-10">
+          <p>10. The clothes in the Atacama Desert came only from Europe.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-10" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-10" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-10" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-tf', 't3-tf-score')">Check answers</button>
+          <span id="t3-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 9</div>
+      <h2>Reading — Summary and Short Answers</h2>
+      <p class="task-sub">Part 1: complete the summary with <b>NO MORE THAN TWO WORDS</b> from the passage. Part 2: answer with <b>NO MORE THAN THREE WORDS AND/OR A NUMBER</b>. Count every word — "the" is a word.</p>
+      <details class="card article passage-ref labelled" open>
+        <summary>📄 The passage — The Real Price of a Cheap T-shirt</summary>
+        <p><span class="para-label">A</span>Twenty years ago, most families bought new clothes a few times a year: a coat for winter, shoes for the new school year, perhaps something special for a wedding. Today, many shoppers buy something new almost every week. According to a 2016 report by the consultancy McKinsey, the amount of clothing produced in the world roughly doubled between 2000 and 2014, while the number of times each garment was worn fell sharply. Clothes, in other words, have become almost disposable.</p><p><span class="para-label">B</span>The main reason is price. Large fashion chains have learned to design, produce and deliver new styles in a few weeks instead of several months, and they sell them at prices that would have seemed impossible a generation ago. A T-shirt can cost less than a sandwich. Because the items are so cheap, buying them feels like a small decision, and shops encourage impulse buying by changing their collections constantly. A customer who sees something she likes knows that it may not be there next week.</p><p><span class="para-label">C</span>Social media has made the cycle faster. Many young people say they do not want to be photographed in the same outfit twice, and online influencers are often paid to show a different look every day. Shopping apps add to the pressure: they send messages about sales and "last chance" offers, and a new top is only a few taps away. For some consumers, buying clothes has become a hobby rather than a response to a real need.</p><p><span class="para-label">D</span>The low prices, however, hide real costs. Most cheap clothes are made in countries such as Bangladesh, Vietnam and Cambodia, where many garment workers earn very low wages and work long hours. In 2013, the Rana Plaza building near Dhaka, which contained several clothing factories, collapsed and killed more than 1,100 people. Cracks had appeared in the walls the day before, but workers were told to return to their sewing machines.</p><p><span class="para-label">E</span>The environment pays a price too. Growing cotton needs large amounts of water, and the chemicals used to dye cloth often end up in rivers. Many cheap garments are made from polyester and other synthetic materials, which are produced from oil and can take hundreds of years to break down. Every time these clothes are washed, tiny plastic fibres are released into the water and eventually reach the sea.</p><p><span class="para-label">F</span>Then there is the question of what happens to clothes when we no longer want them. The Ellen MacArthur Foundation, a British charity, has calculated that the equivalent of one rubbish truck full of textiles is buried in landfill or burned every second, and that less than one per cent of the material used to make clothing is recycled into new clothing. Some unwanted clothes are sent abroad: in the Atacama Desert in Chile, huge piles of second-hand garments from Europe, the USA and Asia have been dumped in the sand.</p><p><span class="para-label">G</span>Solutions exist, but none of them is simple. Some governments are discussing laws that would make manufacturers responsible for collecting and recycling the clothes they sell. Several brands now offer repair services or take back old items. Second-hand shopping, both in charity shops and on apps, has become fashionable among young people, and campaigns encourage consumers to ask one simple question before they buy: "Will I wear this at least thirty times?" Experts agree, however, that the most effective solution is also the least popular one: buying fewer, more durable clothes.</p>
+      </details>
+      <div class="card" id="t4-s" style="line-height:2.6;"><p>Clothes are cheap partly because big chains change their <input type="text" class="text-answer" id="t4-1" data-correct="collections" autocomplete="off" style="width:130px;"> all the time, so customers buy quickly before items disappear. Social media adds pressure, and for some people shopping is now a <input type="text" class="text-answer" id="t4-2" data-correct="hobby/a hobby" autocomplete="off" style="width:110px;"> and not a response to a real need. Many cheap clothes are made of <input type="text" class="text-answer" id="t4-3" data-correct="polyester/synthetic materials/synthetic material" autocomplete="off" style="width:140px;">, which comes from <input type="text" class="text-answer" id="t4-4" data-correct="oil" autocomplete="off" style="width:90px;">. To reduce waste, some brands offer <input type="text" class="text-answer" id="t4-5" data-correct="repair services/repair service/repairs" autocomplete="off" style="width:150px;"> or take back old items, and experts say that the best solution is to buy fewer, more <input type="text" class="text-answer" id="t4-6" data-correct="durable" autocomplete="off" style="width:120px;"> clothes.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-s', 't4-s-score')">Check answers</button>
+          <span id="t4-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t4-sa" style="line-height:2.3;"><p>1. Which organisation wrote the 2016 report about clothing production? <input type="text" class="text-answer" id="t4-7" data-correct="McKinsey" autocomplete="off" style="width:130px;"></p><p>2. Near which city was the Rana Plaza building? <input type="text" class="text-answer" id="t4-8" data-correct="Dhaka" autocomplete="off" style="width:110px;"></p><p>3. How many people died when it collapsed? <input type="text" class="text-answer" id="t4-9" data-correct="more than 1,100/more than 1100/over 1,100/over 1100/1,100/1100" autocomplete="off" style="width:150px;"></p><p>4. In which country is the Atacama Desert? <input type="text" class="text-answer" id="t4-10" data-correct="Chile" autocomplete="off" style="width:110px;"></p><p>5. How many times should you wear a garment, according to the campaign question? <input type="text" class="text-answer" id="t4-11" data-correct="at least thirty/thirty/30/at least 30" autocomplete="off" style="width:150px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-sa', 't4-sa-score')">Check answers</button>
+          <span id="t4-sa-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 9</div>
+      <h2>Vocabulary Push — Essay Collocations</h2>
+      <p class="task-sub">Band 6 essays use single words; Band 7 essays use <b>collocations</b> — words that naturally go together. Every collocation below is useful for today's essay. Choose the right word from the box for each gap.</p>
+      <div class="word-bank">impact · role · take · responsibility · wages · raise · reduce · getting · make · damage</div><div class="card" id="t5-c" style="line-height:2.3;"><p>1. Cheap clothes have a negative <input type="text" class="text-answer" id="t5-1" data-correct="impact" autocomplete="off" style="width:110px;"> on the environment.</p><p>2. Social media plays a key <input type="text" class="text-answer" id="t5-2" data-correct="role" autocomplete="off" style="width:100px;"> in how young people shop.</p><p>3. The government should <input type="text" class="text-answer" id="t5-3" data-correct="take" autocomplete="off" style="width:90px;"> action to reduce textile waste.</p><p>4. Manufacturers must take <input type="text" class="text-answer" id="t5-4" data-correct="responsibility" autocomplete="off" style="width:140px;"> for the clothes they produce.</p><p>5. Many workers earn very low <input type="text" class="text-answer" id="t5-5" data-correct="wages" autocomplete="off" style="width:100px;">.</p><p>6. Campaigns can <input type="text" class="text-answer" id="t5-6" data-correct="raise" autocomplete="off" style="width:90px;"> awareness of the problem.</p><p>7. Buying second-hand is a simple way to <input type="text" class="text-answer" id="t5-7" data-correct="reduce" autocomplete="off" style="width:100px;"> waste.</p><p>8. This problem is <input type="text" class="text-answer" id="t5-8" data-correct="getting" autocomplete="off" style="width:100px;"> worse every year.</p><p>9. People should think carefully before they <input type="text" class="text-answer" id="t5-9" data-correct="make" autocomplete="off" style="width:90px;"> a purchase.</p><p>10. Fast fashion causes serious <input type="text" class="text-answer" id="t5-10" data-correct="damage" autocomplete="off" style="width:100px;"> to rivers and seas.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-c', 't5-c-score')">Check answers</button>
+          <span id="t5-c-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Word forms.</strong> Write the correct form of the word in brackets.</p>
+      <div class="card" id="t5-f" style="line-height:2.3;"><p>1. Polyester is not very <input type="text" class="text-answer" id="t5-11" data-correct="environmentally" autocomplete="off" style="width:150px;"> friendly. (environment)</p><p>2. Prices are <input type="text" class="text-answer" id="t5-12" data-correct="surprisingly" autocomplete="off" style="width:140px;"> low. (surprise)</p><p>3. The <input type="text" class="text-answer" id="t5-13" data-correct="production" autocomplete="off" style="width:130px;"> of cotton uses a lot of water. (produce)</p><p>4. Many people are not <input type="text" class="text-answer" id="t5-14" data-correct="aware" autocomplete="off" style="width:100px;"> of the real cost. (awareness)</p><p>5. Fashion brands should be more <input type="text" class="text-answer" id="t5-15" data-correct="responsible" autocomplete="off" style="width:140px;">. (responsibility)</p><p>6. Durable clothes are a better <input type="text" class="text-answer" id="t5-16" data-correct="investment" autocomplete="off" style="width:130px;">. (invest)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-f', 't5-f-score')">Check answers</button>
+          <span id="t5-f-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 9</div>
+      <h2>Grammar Push — Cause, Effect and Solutions</h2>
+      <p class="task-sub">A "Why? What can be done?" essay needs two kinds of grammar: language for <b>causes and effects</b>, and language for <b>solutions</b>. Choose the correct option, then rewrite five sentences.</p>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-1">
+          <p>1. People buy more clothes ______ they are cheap.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-1" data-correct="true"> because</label><label><input type="radio" value="1" name="t6-mc-1" data-correct="false"> because of</label><label><input type="radio" value="2" name="t6-mc-1" data-correct="false"> due to</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-2">
+          <p>2. People buy more clothes ______ low prices.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-2" data-correct="false"> because</label><label><input type="radio" value="1" name="t6-mc-2" data-correct="true"> because of</label><label><input type="radio" value="2" name="t6-mc-2" data-correct="false"> so</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-3">
+          <p>3. Clothes are very cheap. ______, people buy more than they need.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-3" data-correct="false"> Because</label><label><input type="radio" value="1" name="t6-mc-3" data-correct="true"> As a result</label><label><input type="radio" value="2" name="t6-mc-3" data-correct="false"> Due to</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-4">
+          <p>4. T-shirts are ______ cheap that people buy them without thinking.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-4" data-correct="false"> such</label><label><input type="radio" value="1" name="t6-mc-4" data-correct="true"> so</label><label><input type="radio" value="2" name="t6-mc-4" data-correct="false"> too</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-5">
+          <p>5. They are ______ cheap clothes that people throw them away quickly.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-5" data-correct="false"> so</label><label><input type="radio" value="1" name="t6-mc-5" data-correct="true"> such</label><label><input type="radio" value="2" name="t6-mc-5" data-correct="false"> very</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-6">
+          <p>6. If governments ______ stricter laws, brands would produce less.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-6" data-correct="false"> introduce</label><label><input type="radio" value="1" name="t6-mc-6" data-correct="true"> introduced</label><label><input type="radio" value="2" name="t6-mc-6" data-correct="false"> will introduce</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-7">
+          <p>7. If people ______ fewer clothes, there will be less waste.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-7" data-correct="true"> buy</label><label><input type="radio" value="1" name="t6-mc-7" data-correct="false"> bought</label><label><input type="radio" value="2" name="t6-mc-7" data-correct="false"> would buy</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-8">
+          <p>8. Manufacturers ______ be made responsible for recycling old clothes.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-8" data-correct="true"> should</label><label><input type="radio" value="1" name="t6-mc-8" data-correct="false"> should to</label><label><input type="radio" value="2" name="t6-mc-8" data-correct="false"> must to</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-9">
+          <p>9. One solution ______ to repair clothes instead of replacing them.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-9" data-correct="true"> is</label><label><input type="radio" value="1" name="t6-mc-9" data-correct="false"> is that</label><label><input type="radio" value="2" name="t6-mc-9" data-correct="false"> are</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-10">
+          <p>10. Many garments ______ in Bangladesh and Vietnam.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-10" data-correct="false"> make</label><label><input type="radio" value="1" name="t6-mc-10" data-correct="true"> are made</label><label><input type="radio" value="2" name="t6-mc-10" data-correct="false"> are making</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Rewrite each sentence as instructed.</strong></p>
+      <div class="card"><p class="mini-q">1. Clothes are cheap. People throw them away easily. <b>(use "so … that")</b></p><textarea class="no-check mini-answer" id="t6-rw-1" placeholder="Write the new sentence..." style="min-height:56px;"></textarea><p class="mini-q">2. People buy more clothes because of social media. <b>(begin "Social media …" and use "leads to" or "encourages")</b></p><textarea class="no-check mini-answer" id="t6-rw-2" placeholder="Write the new sentence..." style="min-height:56px;"></textarea><p class="mini-q">3. The government should make a law. Brands will collect old clothes. <b>(use "If the government …, brands would …")</b></p><textarea class="no-check mini-answer" id="t6-rw-3" placeholder="Write the new sentence..." style="min-height:56px;"></textarea><p class="mini-q">4. Schools should teach children about the problem. <b>(begin "One possible solution is …")</b></p><textarea class="no-check mini-answer" id="t6-rw-4" placeholder="Write the new sentence..." style="min-height:56px;"></textarea><p class="mini-q">5. Low wages. Dangerous factories. These are the hidden costs. <b>(make one sentence starting "Two of the hidden costs …")</b></p><textarea class="no-check mini-answer" id="t6-rw-5" placeholder="Write the new sentence..." style="min-height:56px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t6-rw-btn">Show model answers</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t6-rw-ans"><ol>
+  <li>Clothes are <b>so cheap that</b> people throw them away easily.</li>
+  <li>Social media <b>encourages people to buy</b> more clothes. / Social media <b>leads to</b> more clothes being bought.</li>
+  <li><b>If the government made</b> a law, brands <b>would collect</b> old clothes.</li>
+  <li><b>One possible solution is</b> for schools to teach children about the problem. / … is to teach children about the problem at school.</li>
+  <li><b>Two of the hidden costs are</b> low wages and dangerous factories.</li>
+</ol></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 9</div>
+      <h2>Inside a Task 2 Essay</h2>
+      <p class="task-sub">Before you plan, look closely at how a good "causes and solutions" essay is built. Below are eight sentences from a short model essay. For each one, choose its <b>job</b> in the essay.</p>
+<div class="card model-text"><p class="prompt-label">Model essay — key sentences</p><p style="margin:4px 0;"><span class="sent-num">1</span> Many people now buy cheap clothes, wear them a few times and then throw them away.</p><p style="margin:4px 0;"><span class="sent-num">2</span> This essay will explain why this happens and suggest some ways to solve the problem.</p><p style="margin:4px 0;"><span class="sent-num">3</span> The main reason for this trend is the very low price of fashion today.</p><p style="margin:4px 0;"><span class="sent-num">4</span> Because a T-shirt can cost less than a sandwich, people buy clothes without thinking carefully.</p><p style="margin:4px 0;"><span class="sent-num">5</span> For example, a teenager may buy a new top every weekend simply because it is on sale.</p><p style="margin:4px 0;"><span class="sent-num">6</span> However, there are practical ways to reduce this waste.</p><p style="margin:4px 0;"><span class="sent-num">7</span> Firstly, governments could make manufacturers responsible for recycling the clothes they sell.</p><p style="margin:4px 0;"><span class="sent-num">8</span> In conclusion, cheap prices and social media are the main causes, but laws and education can help.</p></div>
+      <div class="card" id="t7-job"><div class="sel-row"><select class="select" id="t7-job-1" data-answer="paraphrase of the question"><option value="">—</option><option value="paraphrase of the question">paraphrase of the question</option><option value="outline of the essay">outline of the essay</option><option value="topic sentence">topic sentence</option><option value="explanation">explanation</option><option value="example">example</option><option value="summary of the essay">summary of the essay</option></select><span><b>1.</b> Sentence 1</span></div><div class="sel-row"><select class="select" id="t7-job-2" data-answer="outline of the essay"><option value="">—</option><option value="paraphrase of the question">paraphrase of the question</option><option value="outline of the essay">outline of the essay</option><option value="topic sentence">topic sentence</option><option value="explanation">explanation</option><option value="example">example</option><option value="summary of the essay">summary of the essay</option></select><span><b>2.</b> Sentence 2</span></div><div class="sel-row"><select class="select" id="t7-job-3" data-answer="topic sentence"><option value="">—</option><option value="paraphrase of the question">paraphrase of the question</option><option value="outline of the essay">outline of the essay</option><option value="topic sentence">topic sentence</option><option value="explanation">explanation</option><option value="example">example</option><option value="summary of the essay">summary of the essay</option></select><span><b>3.</b> Sentence 3</span></div><div class="sel-row"><select class="select" id="t7-job-4" data-answer="explanation"><option value="">—</option><option value="paraphrase of the question">paraphrase of the question</option><option value="outline of the essay">outline of the essay</option><option value="topic sentence">topic sentence</option><option value="explanation">explanation</option><option value="example">example</option><option value="summary of the essay">summary of the essay</option></select><span><b>4.</b> Sentence 4</span></div><div class="sel-row"><select class="select" id="t7-job-5" data-answer="example"><option value="">—</option><option value="paraphrase of the question">paraphrase of the question</option><option value="outline of the essay">outline of the essay</option><option value="topic sentence">topic sentence</option><option value="explanation">explanation</option><option value="example">example</option><option value="summary of the essay">summary of the essay</option></select><span><b>5.</b> Sentence 5</span></div><div class="sel-row"><select class="select" id="t7-job-6" data-answer="topic sentence"><option value="">—</option><option value="paraphrase of the question">paraphrase of the question</option><option value="outline of the essay">outline of the essay</option><option value="topic sentence">topic sentence</option><option value="explanation">explanation</option><option value="example">example</option><option value="summary of the essay">summary of the essay</option></select><span><b>6.</b> Sentence 6</span></div><div class="sel-row"><select class="select" id="t7-job-7" data-answer="explanation"><option value="">—</option><option value="paraphrase of the question">paraphrase of the question</option><option value="outline of the essay">outline of the essay</option><option value="topic sentence">topic sentence</option><option value="explanation">explanation</option><option value="example">example</option><option value="summary of the essay">summary of the essay</option></select><span><b>7.</b> Sentence 7</span></div><div class="sel-row"><select class="select" id="t7-job-8" data-answer="summary of the essay"><option value="">—</option><option value="paraphrase of the question">paraphrase of the question</option><option value="outline of the essay">outline of the essay</option><option value="topic sentence">topic sentence</option><option value="explanation">explanation</option><option value="example">example</option><option value="summary of the essay">summary of the essay</option></select><span><b>8.</b> Sentence 8</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-job', 't7-job-score')">Check answers</button>
+          <span id="t7-job-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Find and fix.</strong> Each sentence from a student essay has <b>one</b> mistake. Write the corrected sentence.</p>
+      <div class="card"><p class="mini-q">1. Nowadays, people buys clothes more often than in the past.</p><textarea class="no-check mini-answer" id="t7-fx-1" placeholder="Write the correct sentence..." style="min-height:56px;"></textarea><p class="mini-q">2. This problem have many negative effects on the environment.</p><textarea class="no-check mini-answer" id="t7-fx-2" placeholder="Write the correct sentence..." style="min-height:56px;"></textarea><p class="mini-q">3. Because of clothes are cheap, people do not think before buying.</p><textarea class="no-check mini-answer" id="t7-fx-3" placeholder="Write the correct sentence..." style="min-height:56px;"></textarea><p class="mini-q">4. In my opinion, the government should to introduce new laws.</p><textarea class="no-check mini-answer" id="t7-fx-4" placeholder="Write the correct sentence..." style="min-height:56px;"></textarea><p class="mini-q">5. Second-hand shopping is more cheaper than buying new clothes.</p><textarea class="no-check mini-answer" id="t7-fx-5" placeholder="Write the correct sentence..." style="min-height:56px;"></textarea><p class="mini-q">6. If people repaired their clothes, they will save money.</p><textarea class="no-check mini-answer" id="t7-fx-6" placeholder="Write the correct sentence..." style="min-height:56px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t7-fx-btn">Show corrections</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t7-fx-ans"><ol>
+  <li>Nowadays, people <b>buy</b> clothes more often than in the past.</li>
+  <li>This problem <b>has</b> many negative effects on the environment.</li>
+  <li><b>Because</b> clothes are cheap, … / <b>Because of cheap prices</b>, …</li>
+  <li>… the government <b>should introduce</b> new laws.</li>
+  <li>Second-hand shopping is <b>cheaper</b> than buying new clothes.</li>
+  <li>If people repaired their clothes, they <b>would save</b> money.</li>
+</ol></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 9</div>
+      <h2>Plan Your Essay</h2>
+      <p class="task-sub">This is your essay question. Use the passage for ideas — but <b>never copy whole sentences</b>; use your own words and today's collocations. Fill in every box, then compare with a model plan.</p>
+      <div class="card task-prompt"><p class="prompt-label">Writing Task 2</p>
+        <p><i>Many people today buy cheap clothes, wear them only a few times and then throw them away. Why is this happening? What can be done to solve this problem?</i></p><p><i>Write at least 250 words.</i></p></div>
+      <div class="card advice-card"><p class="prompt-label">How to organise this essay</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li><b>Introduction:</b> paraphrase the question + say what the essay will do.</li>
+  <li><b>Body 1 — causes:</b> topic sentence + 2 causes, each explained, one example.</li>
+  <li><b>Body 2 — solutions:</b> topic sentence + 2 solutions, each explained (who should do what?).</li>
+  <li><b>Conclusion:</b> 1–2 sentences; no new ideas.</li></ul></div>
+      <div class="card"><p class="mini-q">1. Paraphrase the question in <b>one sentence</b> (change the words, keep the meaning).</p><textarea class="no-check mini-answer" id="t8-pl-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. Cause 1 + a short explanation.</p><textarea class="no-check mini-answer" id="t8-pl-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Cause 2 + a short explanation or example.</p><textarea class="no-check mini-answer" id="t8-pl-3" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">4. Solution 1: <b>who</b> should do <b>what</b>?</p><textarea class="no-check mini-answer" id="t8-pl-4" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">5. Solution 2: <b>who</b> should do <b>what</b>?</p><textarea class="no-check mini-answer" id="t8-pl-5" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-pl-btn">Show a model plan</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-pl-ans"><ol>
+  <li>These days, a large number of people buy low-priced clothing, wear it only a handful of times and then get rid of it.</li>
+  <li>Clothes are so cheap that buying them feels like a small decision, so people buy on impulse.</li>
+  <li>Social media puts pressure on young people to wear something new in every photo — e.g. influencers show a new outfit every day.</li>
+  <li>Governments could make manufacturers responsible for collecting and recycling the clothes they sell.</li>
+  <li>Schools and campaigns could raise awareness, e.g. the "Will I wear it 30 times?" question, and encourage second-hand shopping.</li>
+</ol></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 9</div>
+      <h2>Write Your Essay</h2>
+      <p class="task-sub">Now write the full essay from your plan. Aim for four paragraphs and at least 250 words. Use at least <b>six</b> words from Task 1, <b>four</b> collocations from Task 5, one <b>so … that</b> and one <b>if</b>-sentence.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Many people today buy cheap clothes, wear them only a few times and then throw them away. Why is this happening? What can be done to solve this problem?</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t9-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-essay-model"><div class="model-text" style="padding:2px 0;">
+  <p>These days, a large number of people buy low-priced clothing, wear it only a handful of times and then throw it away. This essay will explain the main reasons for this trend and suggest some ways to deal with it.</p>
+  <p>There are two main causes of this problem. The first is price. Fashion chains now produce new styles so quickly and so cheaply that a T-shirt can cost less than a sandwich. As a result, buying clothes has become a small decision, and many consumers buy on impulse rather than because they need something. The second cause is social media. Many young people do not want to be photographed in the same outfit twice, and influencers show a different look every day. This creates pressure to buy constantly, so clothes become almost disposable.</p>
+  <p>However, there are practical ways to tackle this issue. Firstly, governments should take action by making manufacturers responsible for collecting and recycling the clothes they sell. If companies had to pay for this, they would have a reason to make more durable garments. Secondly, schools and public campaigns could raise awareness of the hidden costs of fast fashion, such as water pollution and the low wages of garment workers. Encouraging people to buy second-hand or to repair their clothes would also reduce the amount of textiles that end up in landfill.</p>
+  <p>In conclusion, low prices and social media are the main reasons why people treat clothes as disposable. Stricter rules for manufacturers and better education for consumers could help to make fashion less wasteful.</p>
+  <p class="alt">≈ 290 words</p>
+</div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 9</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 22 of 45</div>
+    <h1>Day 22 complete! 🎉</h1>
+    <p>Day 22 done — you read a hard passage, learned its words and grammar, and turned them into a full Task 2 essay. That is exactly how Band 6.5+ writers work: read, collect, reuse.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-m-lm');
+
+    initWritingCoach('t9-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Many people today buy cheap clothes, wear them only a few times and then throw them away. Why is this happening? What can be done to solve this problem?' });
+
+    await initTaskFlow(22, 9, user.id, {
+      1: () => { checkAllAnswers('t1-m', 't1-m-score'); markLineMatchResult('t1-m-lm'); },
+      2: () => { checkAllAnswers('t2-h', 't2-h-score'); },
+      3: () => { checkAllAnswers('t3-tf', 't3-tf-score'); },
+      4: () => { checkAllAnswers('t4-s', 't4-s-score'); checkAllAnswers('t4-sa', 't4-sa-score'); },
+      5: () => { checkAllAnswers('t5-c', 't5-c-score'); checkAllAnswers('t5-f', 't5-f-score'); },
+      6: () => { checkAllAnswers('t6-mc', 't6-mc-score'); },
+      7: () => { checkAllAnswers('t7-job', 't7-job-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t6-rw-btn', 't6-rw-ans', '[id^="t6-rw-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t7-fx-btn', 't7-fx-ans', '[id^="t7-fx-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t8-pl-btn', 't8-pl-ans', '[id^="t8-pl-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-essay-model-btn', 't9-essay-model', '#t9-essay');
+  });
+</script>
+</body>
+</html>
