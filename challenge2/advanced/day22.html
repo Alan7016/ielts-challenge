@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 22 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 22 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 10</div>
+      <h2>Academic Vocabulary — Read It, Then Use It</h2>
+      <p class="task-sub">Day 22 is a <b>read → harvest → write</b> day. The passage gives you the ideas, the vocabulary and the grammar; at the end you turn them into a full Task 2 essay. Every item below appears in the passage, and at least <b>eight</b> of them should appear in your essay.</p>
+      <div class="card" style="overflow-x:auto;"><table class="data-table" style="width:100%;">
+          <tr><th>word / phrase</th><th>meaning</th><th>example</th></tr><tr><td><b>pedestrianise</b></td><td>to close a street to vehicles so that only people on foot can use it</td><td>The old town was <b>pedestrianised</b> in 1999.</td></tr><tr><td><b>congestion</b></td><td>a situation in which roads are so full that traffic moves slowly</td><td>Traffic <b>congestion</b> costs cities billions.</td></tr><tr><td><b>emissions</b></td><td>gases released into the air, e.g. by cars</td><td>Vehicle <b>emissions</b> fell by a third.</td></tr><tr><td><b>footfall</b></td><td>the number of people entering a shop or area</td><td>Shops reported higher <b>footfall</b>.</td></tr><tr><td><b>mobility</b></td><td>the ability to move around easily</td><td>Older residents with reduced <b>mobility</b> rely on cars.</td></tr><tr><td><b>displace</b></td><td>to force something to move from its usual place</td><td>The ban may simply <b>displace</b> traffic to the suburbs.</td></tr><tr><td><b>backlash</b></td><td>a strong negative reaction by many people</td><td>The plan provoked a <b>backlash</b> from shopkeepers.</td></tr><tr><td><b>vibrant</b></td><td>full of energy and activity</td><td>The square became a <b>vibrant</b> meeting place.</td></tr><tr><td><b>incentive</b></td><td>something that encourages a person to do something</td><td>Free buses are an <b>incentive</b> to leave the car at home.</td></tr><tr><td><b>inequitable</b></td><td>unfair; not giving everyone the same advantages</td><td>Critics call the policy <b>inequitable</b>.</td></tr><tr><td><b>gentrification</b></td><td>a process in which an area becomes more expensive and poorer residents are pushed out</td><td>Car-free streets can speed up <b>gentrification</b>.</td></tr><tr><td><b>trade-off</b></td><td>a balance between two things you cannot have at the same time</td><td>Every transport policy involves a <b>trade-off</b>.</td></tr></table></div>
+      <p style="margin-top:26px;"><strong>Match each word to its meaning.</strong></p>
+      <div class="card" id="t1-m">
+        <div class="line-match" id="t1-m-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. footfall</button><button type="button" class="lm-item" data-key="2">2. backlash</button><button type="button" class="lm-item" data-key="3">3. displace</button><button type="button" class="lm-item" data-key="4">4. inequitable</button><button type="button" class="lm-item" data-key="5">5. trade-off</button><button type="button" class="lm-item" data-key="6">6. congestion</button><button type="button" class="lm-item" data-key="7">7. incentive</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. a strong negative public reaction</button><button type="button" class="lm-item" data-key="b">b. push something to a different place</button><button type="button" class="lm-item" data-key="c">c. unfair to some groups</button><button type="button" class="lm-item" data-key="d">d. a balance between two competing aims</button><button type="button" class="lm-item" data-key="e">e. roads so full that traffic hardly moves</button><button type="button" class="lm-item" data-key="f">f. a reason that encourages an action</button><button type="button" class="lm-item" data-key="g">g. the number of visitors to a shop or area</button></div>
+          <select class="lm-hidden-select select" id="t1-m-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t1-m-2" data-lm-key="2" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t1-m-3" data-lm-key="3" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t1-m-4" data-lm-key="4" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t1-m-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t1-m-6" data-lm-key="6" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t1-m-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-m', 't1-m-score'); markLineMatchResult('t1-m-lm');">Check answers</button>
+          <span id="t1-m-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 10</div>
+      <h2>Reading — The City Without Cars</h2>
+      <p class="task-sub">Suggested time: 25 minutes for Tasks 2–5. This passage is long and argumentative, like a real Passage 3. Read it once for structure, then choose the correct heading for paragraphs A–H. There are three extra headings, and each one is a trap.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The City Without Cars</h3>
+        <p class="article-meta">Urban planning · Society · 755 words</p>
+        <p><span class="para-label">A</span>In 1999, Miguel Anxo Fernández Lores became mayor of Pontevedra, a city of about 80,000 people in north-west Spain. Within months, he had closed most of the historic centre to private cars. Delivery vans were allowed in only during limited hours, residents could drive to their own garages, and everyone else had to walk. The decision was deeply unpopular at first; shopkeepers predicted ruin and some residents talked of leaving. Two decades later, Pontevedra is regularly held up as a model by urban planners from around the world, and the mayor has been re-elected repeatedly.</p><p><span class="para-label">B</span>The arguments for such policies are, on the surface, compelling. Cars in city centres generate congestion, noise and emissions, and they occupy an extraordinary amount of space: a parked car takes up roughly the same area as a small bedroom, yet sits unused for most of the day. Remove the cars, supporters argue, and streets can be returned to people — to children playing, to cafés and markets, to trees. Pontevedra's city council reports that its centre went for years without a single traffic death, and that the population of the old town, which had been falling, began to grow again.</p><p><span class="para-label">C</span>Other cities have taken less radical routes. Oslo announced in 2015 that it would make its centre car-free, but after protests it chose a softer approach: rather than banning cars outright, it removed most of the on-street parking spaces in the centre and replaced them with cycle lanes, benches and small parks. Driving was still permitted, but there was little reason to do it. In 2019, not a single pedestrian or cyclist was killed in the city's traffic. Ghent, in Belgium, divided its centre into sectors in 2017; cars can still enter each sector, but they cannot drive directly from one to another and must return to a ring road instead. Within a short time, cycling had risen sharply and through-traffic had largely disappeared.</p><p><span class="para-label">D</span>The most common objection comes from business. Shopkeepers tend to assume that their customers arrive by car and that removing parking will drive them away. The evidence, however, suggests that this assumption is often mistaken. One frequently cited survey from Bristol, in England, found that local traders believed around 40 per cent of their customers came by car; the real figure was closer to 20 per cent. Pedestrians and cyclists may spend less on each visit, but they tend to visit more often, and several studies have found that footfall increases once streets become pleasanter places to be.</p><p><span class="para-label">E</span>This does not mean that the critics are simply wrong. A car-free centre works best in a compact city with a dense historic core, where most destinations are within walking distance. In sprawling cities with poor public transport, a ban can turn a short drive into a long and complicated journey. People with reduced mobility, parents with small children and workers who need to carry tools all depend on vehicles in ways that enthusiastic planners sometimes overlook. There is also the risk that traffic is not removed but merely displaced, moving congestion and pollution from wealthy central districts to the poorer neighbourhoods around them.</p><p><span class="para-label">F</span>A subtler concern is that success can itself create problems. When streets become quieter, greener and safer, they also become more desirable, and property prices tend to rise. Critics argue that car-free schemes can speed up gentrification, pushing out the very residents who might have benefited most from cleaner air. A policy designed to make the city fairer may, in the end, make it more inequitable.</p><p><span class="para-label">G</span>Paris offers a reminder that these battles are often political as much as technical. When the city closed an expressway along the banks of the Seine to traffic in 2016, the decision provoked a fierce backlash from drivers and suburban politicians and was challenged in court; it was eventually upheld, and the road is now a riverside park. Supporters regard it as a symbol of a healthier city; opponents still see it as a decision made by central Parisians at the expense of commuters from outside.</p><p><span class="para-label">H</span>What these examples suggest is that the real question is not whether cars should be banned, but how, where and for whom. The most successful schemes have combined restrictions with genuine alternatives — frequent buses, safe cycle routes, exemptions for those who truly need a car — and have been introduced gradually enough for people to adjust. Every transport policy involves a trade-off. A city that pretends otherwise, in either direction, is unlikely to persuade the people who live in it.</p>
+      </div>
+<div class="card"><p class="prompt-label">List of headings</p><p style="margin:3px 0;"><b>i</b>&nbsp; Gentler approaches elsewhere in Europe</p><p style="margin:3px 0;"><b>ii</b>&nbsp; When improvement leads to unfairness</p><p style="margin:3px 0;"><b>iii</b>&nbsp; A conflict between the centre and the suburbs</p><p style="margin:3px 0;"><b>iv</b>&nbsp; An unpopular decision that was later admired</p><p style="margin:3px 0;"><b>v</b>&nbsp; Why the right answer depends on the circumstances</p><p style="margin:3px 0;"><b>vi</b>&nbsp; Shopkeepers' fears tested against the facts</p><p style="margin:3px 0;"><b>vii</b>&nbsp; Why most cities have now banned cars completely</p><p style="margin:3px 0;"><b>viii</b>&nbsp; The attractive case for removing traffic</p><p style="margin:3px 0;"><b>ix</b>&nbsp; Groups that genuinely need vehicles</p><p style="margin:3px 0;"><b>x</b>&nbsp; Rising house prices in Pontevedra</p><p style="margin:3px 0;"><b>xi</b>&nbsp; A legal victory for drivers</p></div>
+      <div class="card" id="t2-h"><div class="sel-row"><select class="select" id="t2-h-1" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option><option value="xi">xi</option></select><span><b>1.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t2-h-2" data-answer="viii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option><option value="xi">xi</option></select><span><b>2.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t2-h-3" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option><option value="xi">xi</option></select><span><b>3.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t2-h-4" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option><option value="xi">xi</option></select><span><b>4.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t2-h-5" data-answer="ix"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option><option value="xi">xi</option></select><span><b>5.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t2-h-6" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option><option value="xi">xi</option></select><span><b>6.</b> Paragraph F</span></div><div class="sel-row"><select class="select" id="t2-h-7" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option><option value="xi">xi</option></select><span><b>7.</b> Paragraph G</span></div><div class="sel-row"><select class="select" id="t2-h-8" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option><option value="xi">xi</option></select><span><b>8.</b> Paragraph H</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-h', 't2-h-score')">Check answers</button>
+          <span id="t2-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 10</div>
+      <h2>Reading — YES, NO or NOT GIVEN</h2>
+      <p class="task-sub">Do the statements agree with the <b>views of the writer</b>? YES/NO/NOT GIVEN tests opinions, not facts — look for the writer's evaluative language: <i>on the surface, however, does not mean, subtler, merely</i>.</p>
+      <details class="card article passage-ref labelled" open>
+        <summary>📄 The passage — The City Without Cars</summary>
+        <p><span class="para-label">A</span>In 1999, Miguel Anxo Fernández Lores became mayor of Pontevedra, a city of about 80,000 people in north-west Spain. Within months, he had closed most of the historic centre to private cars. Delivery vans were allowed in only during limited hours, residents could drive to their own garages, and everyone else had to walk. The decision was deeply unpopular at first; shopkeepers predicted ruin and some residents talked of leaving. Two decades later, Pontevedra is regularly held up as a model by urban planners from around the world, and the mayor has been re-elected repeatedly.</p><p><span class="para-label">B</span>The arguments for such policies are, on the surface, compelling. Cars in city centres generate congestion, noise and emissions, and they occupy an extraordinary amount of space: a parked car takes up roughly the same area as a small bedroom, yet sits unused for most of the day. Remove the cars, supporters argue, and streets can be returned to people — to children playing, to cafés and markets, to trees. Pontevedra's city council reports that its centre went for years without a single traffic death, and that the population of the old town, which had been falling, began to grow again.</p><p><span class="para-label">C</span>Other cities have taken less radical routes. Oslo announced in 2015 that it would make its centre car-free, but after protests it chose a softer approach: rather than banning cars outright, it removed most of the on-street parking spaces in the centre and replaced them with cycle lanes, benches and small parks. Driving was still permitted, but there was little reason to do it. In 2019, not a single pedestrian or cyclist was killed in the city's traffic. Ghent, in Belgium, divided its centre into sectors in 2017; cars can still enter each sector, but they cannot drive directly from one to another and must return to a ring road instead. Within a short time, cycling had risen sharply and through-traffic had largely disappeared.</p><p><span class="para-label">D</span>The most common objection comes from business. Shopkeepers tend to assume that their customers arrive by car and that removing parking will drive them away. The evidence, however, suggests that this assumption is often mistaken. One frequently cited survey from Bristol, in England, found that local traders believed around 40 per cent of their customers came by car; the real figure was closer to 20 per cent. Pedestrians and cyclists may spend less on each visit, but they tend to visit more often, and several studies have found that footfall increases once streets become pleasanter places to be.</p><p><span class="para-label">E</span>This does not mean that the critics are simply wrong. A car-free centre works best in a compact city with a dense historic core, where most destinations are within walking distance. In sprawling cities with poor public transport, a ban can turn a short drive into a long and complicated journey. People with reduced mobility, parents with small children and workers who need to carry tools all depend on vehicles in ways that enthusiastic planners sometimes overlook. There is also the risk that traffic is not removed but merely displaced, moving congestion and pollution from wealthy central districts to the poorer neighbourhoods around them.</p><p><span class="para-label">F</span>A subtler concern is that success can itself create problems. When streets become quieter, greener and safer, they also become more desirable, and property prices tend to rise. Critics argue that car-free schemes can speed up gentrification, pushing out the very residents who might have benefited most from cleaner air. A policy designed to make the city fairer may, in the end, make it more inequitable.</p><p><span class="para-label">G</span>Paris offers a reminder that these battles are often political as much as technical. When the city closed an expressway along the banks of the Seine to traffic in 2016, the decision provoked a fierce backlash from drivers and suburban politicians and was challenged in court; it was eventually upheld, and the road is now a riverside park. Supporters regard it as a symbol of a healthier city; opponents still see it as a decision made by central Parisians at the expense of commuters from outside.</p><p><span class="para-label">H</span>What these examples suggest is that the real question is not whether cars should be banned, but how, where and for whom. The most successful schemes have combined restrictions with genuine alternatives — frequent buses, safe cycle routes, exemptions for those who truly need a car — and have been introduced gradually enough for people to adjust. Every transport policy involves a trade-off. A city that pretends otherwise, in either direction, is unlikely to persuade the people who live in it.</p>
+      </details>
+      <div class="card" id="t3-yn"><div class="q-item" id="t3-yn-1">
+          <p>1. The case for removing cars from city centres is more convincing than it first appears.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-1" data-correct="false"> YES</label><label><input type="radio" value="1" name="t3-yn-1" data-correct="true"> NO</label><label><input type="radio" value="2" name="t3-yn-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-2">
+          <p>2. Shopkeepers are often wrong about how their customers travel.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-2" data-correct="true"> YES</label><label><input type="radio" value="1" name="t3-yn-2" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-3">
+          <p>3. People who walk to shops spend more money per visit than drivers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-3" data-correct="false"> YES</label><label><input type="radio" value="1" name="t3-yn-3" data-correct="true"> NO</label><label><input type="radio" value="2" name="t3-yn-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-4">
+          <p>4. Critics of car-free policies raise some valid concerns.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-4" data-correct="true"> YES</label><label><input type="radio" value="1" name="t3-yn-4" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-5">
+          <p>5. Car-free schemes are likely to work equally well in any city.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-5" data-correct="false"> YES</label><label><input type="radio" value="1" name="t3-yn-5" data-correct="true"> NO</label><label><input type="radio" value="2" name="t3-yn-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-6">
+          <p>6. Planners who support car bans sometimes forget the needs of certain groups.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-6" data-correct="true"> YES</label><label><input type="radio" value="1" name="t3-yn-6" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-7">
+          <p>7. Gentrification is a bigger problem in Spain than in other European countries.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-7" data-correct="false"> YES</label><label><input type="radio" value="1" name="t3-yn-7" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-7" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-8">
+          <p>8. The Paris expressway closure was a mistake.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-8" data-correct="false"> YES</label><label><input type="radio" value="1" name="t3-yn-8" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-8" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-9">
+          <p>9. Introducing restrictions slowly is more effective than introducing them suddenly.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-9" data-correct="true"> YES</label><label><input type="radio" value="1" name="t3-yn-9" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-9" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-yn', 't3-yn-score')">Check answers</button>
+          <span id="t3-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 10</div>
+      <h2>Reading — Matching Features</h2>
+      <p class="task-sub">Match each statement to the correct city or source, <b>A–E</b>. You may use any letter more than once. This question type rewards paraphrase-spotting: none of the statements uses the passage's exact words.</p>
+      <details class="card article passage-ref labelled" open>
+        <summary>📄 The passage — The City Without Cars</summary>
+        <p><span class="para-label">A</span>In 1999, Miguel Anxo Fernández Lores became mayor of Pontevedra, a city of about 80,000 people in north-west Spain. Within months, he had closed most of the historic centre to private cars. Delivery vans were allowed in only during limited hours, residents could drive to their own garages, and everyone else had to walk. The decision was deeply unpopular at first; shopkeepers predicted ruin and some residents talked of leaving. Two decades later, Pontevedra is regularly held up as a model by urban planners from around the world, and the mayor has been re-elected repeatedly.</p><p><span class="para-label">B</span>The arguments for such policies are, on the surface, compelling. Cars in city centres generate congestion, noise and emissions, and they occupy an extraordinary amount of space: a parked car takes up roughly the same area as a small bedroom, yet sits unused for most of the day. Remove the cars, supporters argue, and streets can be returned to people — to children playing, to cafés and markets, to trees. Pontevedra's city council reports that its centre went for years without a single traffic death, and that the population of the old town, which had been falling, began to grow again.</p><p><span class="para-label">C</span>Other cities have taken less radical routes. Oslo announced in 2015 that it would make its centre car-free, but after protests it chose a softer approach: rather than banning cars outright, it removed most of the on-street parking spaces in the centre and replaced them with cycle lanes, benches and small parks. Driving was still permitted, but there was little reason to do it. In 2019, not a single pedestrian or cyclist was killed in the city's traffic. Ghent, in Belgium, divided its centre into sectors in 2017; cars can still enter each sector, but they cannot drive directly from one to another and must return to a ring road instead. Within a short time, cycling had risen sharply and through-traffic had largely disappeared.</p><p><span class="para-label">D</span>The most common objection comes from business. Shopkeepers tend to assume that their customers arrive by car and that removing parking will drive them away. The evidence, however, suggests that this assumption is often mistaken. One frequently cited survey from Bristol, in England, found that local traders believed around 40 per cent of their customers came by car; the real figure was closer to 20 per cent. Pedestrians and cyclists may spend less on each visit, but they tend to visit more often, and several studies have found that footfall increases once streets become pleasanter places to be.</p><p><span class="para-label">E</span>This does not mean that the critics are simply wrong. A car-free centre works best in a compact city with a dense historic core, where most destinations are within walking distance. In sprawling cities with poor public transport, a ban can turn a short drive into a long and complicated journey. People with reduced mobility, parents with small children and workers who need to carry tools all depend on vehicles in ways that enthusiastic planners sometimes overlook. There is also the risk that traffic is not removed but merely displaced, moving congestion and pollution from wealthy central districts to the poorer neighbourhoods around them.</p><p><span class="para-label">F</span>A subtler concern is that success can itself create problems. When streets become quieter, greener and safer, they also become more desirable, and property prices tend to rise. Critics argue that car-free schemes can speed up gentrification, pushing out the very residents who might have benefited most from cleaner air. A policy designed to make the city fairer may, in the end, make it more inequitable.</p><p><span class="para-label">G</span>Paris offers a reminder that these battles are often political as much as technical. When the city closed an expressway along the banks of the Seine to traffic in 2016, the decision provoked a fierce backlash from drivers and suburban politicians and was challenged in court; it was eventually upheld, and the road is now a riverside park. Supporters regard it as a symbol of a healthier city; opponents still see it as a decision made by central Parisians at the expense of commuters from outside.</p><p><span class="para-label">H</span>What these examples suggest is that the real question is not whether cars should be banned, but how, where and for whom. The most successful schemes have combined restrictions with genuine alternatives — frequent buses, safe cycle routes, exemptions for those who truly need a car — and have been introduced gradually enough for people to adjust. Every transport policy involves a trade-off. A city that pretends otherwise, in either direction, is unlikely to persuade the people who live in it.</p>
+      </details>
+      <div class="card"><div class="opt-legend"><span><b>A</b> Pontevedra</span><span><b>B</b> Oslo</span><span><b>C</b> Ghent</span><span><b>D</b> Bristol</span><span><b>E</b> Paris</span></div></div>
+      <div class="card" id="t4-mf"><div class="sel-row"><select class="select" id="t4-mf-1" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>1.</b> Drivers were not banned, but they were given few reasons to bring their cars.</span></div><div class="sel-row"><select class="select" id="t4-mf-2" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>2.</b> A road along a river was turned into green public space.</span></div><div class="sel-row"><select class="select" id="t4-mf-3" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>3.</b> More people started living in the historic centre again.</span></div><div class="sel-row"><select class="select" id="t4-mf-4" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>4.</b> A study revealed that business owners overestimated the importance of drivers.</span></div><div class="sel-row"><select class="select" id="t4-mf-5" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>5.</b> Vehicles must leave the centre in order to reach a neighbouring area.</span></div><div class="sel-row"><select class="select" id="t4-mf-6" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>6.</b> A plan for a complete ban was abandoned after public opposition.</span></div><div class="sel-row"><select class="select" id="t4-mf-7" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>7.</b> The policy was opposed by people living outside the city.</span></div><div class="sel-row"><select class="select" id="t4-mf-8" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>8.</b> The politician behind the policy kept winning elections.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mf', 't4-mf-score')">Check answers</button>
+          <span id="t4-mf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 10</div>
+      <h2>Reading — Summary Completion (Word Bank)</h2>
+      <p class="task-sub">Complete the summary of paragraphs D–F using words from the box. There are more words than gaps, and several are grammatically possible but wrong in meaning. Type the word exactly.</p>
+      <details class="card article passage-ref labelled" open>
+        <summary>📄 The passage — The City Without Cars</summary>
+        <p><span class="para-label">A</span>In 1999, Miguel Anxo Fernández Lores became mayor of Pontevedra, a city of about 80,000 people in north-west Spain. Within months, he had closed most of the historic centre to private cars. Delivery vans were allowed in only during limited hours, residents could drive to their own garages, and everyone else had to walk. The decision was deeply unpopular at first; shopkeepers predicted ruin and some residents talked of leaving. Two decades later, Pontevedra is regularly held up as a model by urban planners from around the world, and the mayor has been re-elected repeatedly.</p><p><span class="para-label">B</span>The arguments for such policies are, on the surface, compelling. Cars in city centres generate congestion, noise and emissions, and they occupy an extraordinary amount of space: a parked car takes up roughly the same area as a small bedroom, yet sits unused for most of the day. Remove the cars, supporters argue, and streets can be returned to people — to children playing, to cafés and markets, to trees. Pontevedra's city council reports that its centre went for years without a single traffic death, and that the population of the old town, which had been falling, began to grow again.</p><p><span class="para-label">C</span>Other cities have taken less radical routes. Oslo announced in 2015 that it would make its centre car-free, but after protests it chose a softer approach: rather than banning cars outright, it removed most of the on-street parking spaces in the centre and replaced them with cycle lanes, benches and small parks. Driving was still permitted, but there was little reason to do it. In 2019, not a single pedestrian or cyclist was killed in the city's traffic. Ghent, in Belgium, divided its centre into sectors in 2017; cars can still enter each sector, but they cannot drive directly from one to another and must return to a ring road instead. Within a short time, cycling had risen sharply and through-traffic had largely disappeared.</p><p><span class="para-label">D</span>The most common objection comes from business. Shopkeepers tend to assume that their customers arrive by car and that removing parking will drive them away. The evidence, however, suggests that this assumption is often mistaken. One frequently cited survey from Bristol, in England, found that local traders believed around 40 per cent of their customers came by car; the real figure was closer to 20 per cent. Pedestrians and cyclists may spend less on each visit, but they tend to visit more often, and several studies have found that footfall increases once streets become pleasanter places to be.</p><p><span class="para-label">E</span>This does not mean that the critics are simply wrong. A car-free centre works best in a compact city with a dense historic core, where most destinations are within walking distance. In sprawling cities with poor public transport, a ban can turn a short drive into a long and complicated journey. People with reduced mobility, parents with small children and workers who need to carry tools all depend on vehicles in ways that enthusiastic planners sometimes overlook. There is also the risk that traffic is not removed but merely displaced, moving congestion and pollution from wealthy central districts to the poorer neighbourhoods around them.</p><p><span class="para-label">F</span>A subtler concern is that success can itself create problems. When streets become quieter, greener and safer, they also become more desirable, and property prices tend to rise. Critics argue that car-free schemes can speed up gentrification, pushing out the very residents who might have benefited most from cleaner air. A policy designed to make the city fairer may, in the end, make it more inequitable.</p><p><span class="para-label">G</span>Paris offers a reminder that these battles are often political as much as technical. When the city closed an expressway along the banks of the Seine to traffic in 2016, the decision provoked a fierce backlash from drivers and suburban politicians and was challenged in court; it was eventually upheld, and the road is now a riverside park. Supporters regard it as a symbol of a healthier city; opponents still see it as a decision made by central Parisians at the expense of commuters from outside.</p><p><span class="para-label">H</span>What these examples suggest is that the real question is not whether cars should be banned, but how, where and for whom. The most successful schemes have combined restrictions with genuine alternatives — frequent buses, safe cycle routes, exemptions for those who truly need a car — and have been introduced gradually enough for people to adjust. Every transport policy involves a trade-off. A city that pretends otherwise, in either direction, is unlikely to persuade the people who live in it.</p>
+      </details>
+      <div class="word-bank">overestimate · underestimate · frequently · rarely · footfall · income · compact · sprawling · hardship · relief · displaced · reduced · desirable · affordable · inequitable · popular</div><div class="card" id="t5-s" style="line-height:2.6;"><p>Business owners usually <input type="text" class="text-answer" id="t5-1" data-correct="overestimate" autocomplete="off" style="width:140px;"> the number of customers who drive. Although pedestrians may spend less each time, they come more <input type="text" class="text-answer" id="t5-2" data-correct="frequently" autocomplete="off" style="width:130px;">, and studies show that <input type="text" class="text-answer" id="t5-3" data-correct="footfall" autocomplete="off" style="width:120px;"> tends to rise. Nevertheless, a ban is most likely to succeed in a <input type="text" class="text-answer" id="t5-4" data-correct="compact" autocomplete="off" style="width:120px;"> city. In cities that are spread out and badly served by public transport, it can cause real <input type="text" class="text-answer" id="t5-5" data-correct="hardship" autocomplete="off" style="width:120px;">, and traffic may be <input type="text" class="text-answer" id="t5-6" data-correct="displaced" autocomplete="off" style="width:120px;"> to poorer areas rather than removed. Finally, because quiet green streets are <input type="text" class="text-answer" id="t5-7" data-correct="desirable" autocomplete="off" style="width:120px;">, housing costs may rise, so the policy could end up being <input type="text" class="text-answer" id="t5-8" data-correct="inequitable" autocomplete="off" style="width:130px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-s', 't5-s-score')">Check answers</button>
+          <span id="t5-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 10</div>
+      <h2>Vocabulary Push — Paraphrase and Collocation for Task 2</h2>
+      <p class="task-sub">Two skills that separate Band 6 from Band 7 in Lexical Resource: <b>paraphrasing</b> the question instead of copying it, and using <b>natural collocations</b>. Part 1: match the plain phrase to its academic paraphrase. Part 2: complete the collocations.</p>
+      <div class="card" id="t6-p">
+        <div class="line-match" id="t6-p-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. ban cars</button><button type="button" class="lm-item" data-key="2">2. city centres</button><button type="button" class="lm-item" data-key="3">3. more problems than it solves</button><button type="button" class="lm-item" data-key="4">4. people who cannot walk well</button><button type="button" class="lm-item" data-key="5">5. make people use buses</button><button type="button" class="lm-item" data-key="6">6. dirty air</button><button type="button" class="lm-item" data-key="7">7. shops lose money</button><button type="button" class="lm-item" data-key="8">8. people who live far away</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. do more harm than good</button><button type="button" class="lm-item" data-key="b">b. those with limited mobility</button><button type="button" class="lm-item" data-key="c">c. encourage a shift to public transport</button><button type="button" class="lm-item" data-key="d">d. poor air quality</button><button type="button" class="lm-item" data-key="e">e. local businesses suffer financially</button><button type="button" class="lm-item" data-key="f">f. residents of outlying areas</button><button type="button" class="lm-item" data-key="g">g. prohibit private vehicles</button><button type="button" class="lm-item" data-key="h">h. urban cores</button></div>
+          <select class="lm-hidden-select select" id="t6-p-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-p-2" data-lm-key="2" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-p-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-p-4" data-lm-key="4" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-p-5" data-lm-key="5" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-p-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-p-7" data-lm-key="7" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-p-8" data-lm-key="8" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-p', 't6-p-score'); markLineMatchResult('t6-p-lm');">Check answers</button>
+          <span id="t6-p-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="word-bank">improve · pose · strike · raise · disproportionately · invest · far-reaching · granted</div><div class="card" id="t6-c" style="line-height:2.3;"><p>1. Banning cars would significantly <input type="text" class="text-answer" id="t6-1" data-correct="improve" autocomplete="off" style="width:110px;"> air quality.</p><p>2. Such a policy could <input type="text" class="text-answer" id="t6-2" data-correct="pose" autocomplete="off" style="width:90px;"> a serious threat to small businesses.</p><p>3. Governments must <input type="text" class="text-answer" id="t6-3" data-correct="strike" autocomplete="off" style="width:100px;"> a balance between health and convenience.</p><p>4. Opponents <input type="text" class="text-answer" id="t6-4" data-correct="raise" autocomplete="off" style="width:90px;"> legitimate concerns about access.</p><p>5. The policy would <input type="text" class="text-answer" id="t6-5" data-correct="disproportionately" autocomplete="off" style="width:170px;"> affect people on low incomes.</p><p>6. Cities should <input type="text" class="text-answer" id="t6-6" data-correct="invest" autocomplete="off" style="width:100px;"> heavily in public transport first.</p><p>7. This measure has <input type="text" class="text-answer" id="t6-7" data-correct="far-reaching" autocomplete="off" style="width:140px;"> consequences for commuters.</p><p>8. Exemptions should be <input type="text" class="text-answer" id="t6-8" data-correct="granted" autocomplete="off" style="width:110px;"> to disabled drivers.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-c', 't6-c-score')">Check answers</button>
+          <span id="t6-c-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 10</div>
+      <h2>Grammar Push — Concession, Contrast and Distance</h2>
+      <p class="task-sub">A "discuss both views" essay lives or dies on <b>concession</b> (admitting the other side) and <b>distancing</b> (reporting a view without owning it). These are the structures the passage itself uses. Choose the correct option, then transform six sentences.</p>
+      <div class="card" id="t7-mc"><div class="q-item" id="t7-mc-1">
+          <p>1. ______ the scheme was unpopular at first, it was later widely admired.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-1" data-correct="false"> Despite</label><label><input type="radio" value="1" name="t7-mc-1" data-correct="true"> Although</label><label><input type="radio" value="2" name="t7-mc-1" data-correct="false"> However</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-2">
+          <p>2. ______ initial opposition, the mayor was re-elected.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-2" data-correct="false"> Although</label><label><input type="radio" value="1" name="t7-mc-2" data-correct="false"> Even though</label><label><input type="radio" value="2" name="t7-mc-2" data-correct="true"> Despite</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-3">
+          <p>3. Pedestrians spend less per visit; ______, they visit more often.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-3" data-correct="true"> nevertheless</label><label><input type="radio" value="1" name="t7-mc-3" data-correct="false"> although</label><label><input type="radio" value="2" name="t7-mc-3" data-correct="false"> despite this fact that</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-4">
+          <p>4. Car bans suit compact cities, ______ sprawling cities may struggle.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-4" data-correct="true"> whereas</label><label><input type="radio" value="1" name="t7-mc-4" data-correct="false"> despite</label><label><input type="radio" value="2" name="t7-mc-4" data-correct="false"> in spite</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-5">
+          <p>5. It ______ that car-free schemes increase property prices.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-5" data-correct="true"> is argued</label><label><input type="radio" value="1" name="t7-mc-5" data-correct="false"> argues</label><label><input type="radio" value="2" name="t7-mc-5" data-correct="false"> is arguing</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-6">
+          <p>6. Car-free centres ______ to reduce traffic deaths.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-6" data-correct="true"> are believed</label><label><input type="radio" value="1" name="t7-mc-6" data-correct="false"> believe</label><label><input type="radio" value="2" name="t7-mc-6" data-correct="false"> are believing</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-7">
+          <p>7. ______ compelling the arguments may be, they ignore some groups.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-7" data-correct="true"> However</label><label><input type="radio" value="1" name="t7-mc-7" data-correct="false"> Although</label><label><input type="radio" value="2" name="t7-mc-7" data-correct="false"> Despite</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-8">
+          <p>8. Not only ______ pollution, but it also makes streets safer.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-8" data-correct="false"> it reduces</label><label><input type="radio" value="1" name="t7-mc-8" data-correct="true"> does it reduce</label><label><input type="radio" value="2" name="t7-mc-8" data-correct="false"> reduces it</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-9">
+          <p>9. ______ cities provided alternatives, a ban would be unfair.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-9" data-correct="true"> Unless</label><label><input type="radio" value="1" name="t7-mc-9" data-correct="false"> Despite</label><label><input type="radio" value="2" name="t7-mc-9" data-correct="false"> Whereas</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-10">
+          <p>10. While there are clear benefits, ______.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-10" data-correct="false"> but the costs are real</label><label><input type="radio" value="1" name="t7-mc-10" data-correct="true"> the costs are also real</label><label><input type="radio" value="2" name="t7-mc-10" data-correct="false"> however the costs are real</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-mc', 't7-mc-score')">Check answers</button>
+          <span id="t7-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Transform each sentence as instructed.</strong></p>
+      <div class="card"><p class="mini-q">1. Banning cars reduces pollution. It harms some businesses. <b>(begin "Although …")</b></p><textarea class="no-check mini-answer" id="t7-rw-1" placeholder="Write the transformed sentence..." style="min-height:56px;"></textarea><p class="mini-q">2. People believe that car bans make cities safer. <b>(begin "It is widely believed …")</b></p><textarea class="no-check mini-answer" id="t7-rw-2" placeholder="Write the transformed sentence..." style="min-height:56px;"></textarea><p class="mini-q">3. Car bans are popular with planners. <b>(begin "Car bans are said …")</b></p><textarea class="no-check mini-answer" id="t7-rw-3" placeholder="Write the transformed sentence..." style="min-height:56px;"></textarea><p class="mini-q">4. The policy reduces noise. It also reduces emissions. <b>(begin "Not only …")</b></p><textarea class="no-check mini-answer" id="t7-rw-4" placeholder="Write the transformed sentence..." style="min-height:56px;"></textarea><p class="mini-q">5. The scheme was opposed at first. It became a success. <b>(use "Despite …")</b></p><textarea class="no-check mini-answer" id="t7-rw-5" placeholder="Write the transformed sentence..." style="min-height:56px;"></textarea><p class="mini-q">6. The arguments for a ban are strong, but they ignore disabled people. <b>(begin "However strong …")</b></p><textarea class="no-check mini-answer" id="t7-rw-6" placeholder="Write the transformed sentence..." style="min-height:56px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t7-rw-btn">Show model answers</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t7-rw-ans"><ol>
+  <li><b>Although</b> banning cars reduces pollution, it harms some businesses.</li>
+  <li><b>It is widely believed that</b> car bans make cities safer.</li>
+  <li>Car bans <b>are said to be</b> popular with planners.</li>
+  <li><b>Not only does the policy reduce</b> noise, <b>but it also reduces</b> emissions.</li>
+  <li><b>Despite being opposed at first</b> / <b>Despite initial opposition</b>, the scheme became a success.</li>
+  <li><b>However strong the arguments for a ban may be</b>, they ignore disabled people.</li>
+</ol></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 10</div>
+      <h2>From Band 6 to Band 7 — Fix the Argument</h2>
+      <p class="task-sub">Examiners say most Advanced-level "discuss both views" essays lose marks in <b>Task Response</b>: an unclear position, or a body paragraph that lists ideas without developing them. First choose the best thesis, then rewrite a weak paragraph.</p>
+      <div class="card" id="t8-th"><div class="q-item" id="t8-th-1">
+          <p>1. Which is the best introduction thesis for today's essay?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-th-1" data-correct="false"> A. This essay will discuss both views.</label><label><input type="radio" value="1" name="t8-th-1" data-correct="false"> B. There are many advantages and disadvantages of banning cars.</label><label><input type="radio" value="2" name="t8-th-1" data-correct="true"> C. While a total ban would create genuine hardship for some groups, I believe that city centres should be largely car-free, provided that good alternatives are in place.</label><label><input type="radio" value="3" name="t8-th-1" data-correct="false"> D. I think cars are bad and should be banned everywhere.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-th-2">
+          <p>2. Where should your own opinion appear in a "discuss both views and give your opinion" essay?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-th-2" data-correct="false"> A. Only in the conclusion.</label><label><input type="radio" value="1" name="t8-th-2" data-correct="true"> B. In the introduction and the conclusion, and it should guide the body paragraphs.</label><label><input type="radio" value="2" name="t8-th-2" data-correct="false"> C. In a separate paragraph after the conclusion.</label><label><input type="radio" value="3" name="t8-th-2" data-correct="false"> D. Nowhere — you should stay neutral.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-th-3">
+          <p>3. Which topic sentence best introduces the paragraph about the <b>opposing</b> view?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-th-3" data-correct="false"> A. Cars are useful.</label><label><input type="radio" value="1" name="t8-th-3" data-correct="true"> B. Opponents of a ban, however, raise legitimate concerns about access and fairness.</label><label><input type="radio" value="2" name="t8-th-3" data-correct="false"> C. Some people disagree, and they have reasons.</label><label><input type="radio" value="3" name="t8-th-3" data-correct="false"> D. Secondly, there are disadvantages.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-th', 't8-th-score')">Check answers</button>
+          <span id="t8-th-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card model-text"><p class="prompt-label">Band 6 body paragraph</p>
+        <p style="margin:0;"><i>On the other hand, some people think banning cars is bad. Firstly, shops will lose money. Secondly, old people cannot walk far. Thirdly, the traffic will go to other places. Also, people who live far away need cars. So there are many problems with banning cars.</i></p></div>
+      <div class="card"><p class="mini-q">Rewrite this paragraph at <b>Band 7+</b>: a clear topic sentence, only <b>two</b> ideas (not four), each one explained and supported with an example from the passage in your own words, concession language, and no "Firstly / Secondly / Thirdly / Also".</p><textarea class="no-check mini-answer" id="t8-up-1" placeholder="Your improved paragraph..." style="min-height:200px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-up-btn">Show a Band 7+ version</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-up-ans"><p style="margin:0;">Opponents of a ban, however, raise legitimate concerns about access and fairness. The most serious is that a car-free centre can disproportionately affect people who cannot easily walk or cycle, such as elderly residents, parents with young children and tradespeople who need to carry heavy equipment. For them, a journey that once took ten minutes by car may become long and exhausting, particularly in cities with poor public transport. A further concern is that a ban may not reduce traffic at all, but simply displace it; when vehicles are forced onto ring roads, congestion and pollution may move from wealthy central districts to the poorer neighbourhoods around them. In this sense, a policy intended to improve public health could end up being deeply inequitable.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 10</div>
+      <h2>Plan Your Essay</h2>
+      <p class="task-sub">Plan before you write — five minutes of planning saves fifteen minutes of confused writing. Use ideas from the passage, but express them in your own words.</p>
+      <div class="card task-prompt"><p class="prompt-label">Writing Task 2</p>
+        <p><i>Some people believe that private cars should be banned from city centres. Others argue that this would cause more problems than it solves. Discuss both views and give your own opinion.</i></p><p><i>Write at least 250 words.</i></p></div>
+      <div class="card advice-card"><p class="prompt-label">Structure that works</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li><b>Introduction:</b> paraphrase both views + your thesis (your opinion <i>and</i> your main reason).</li>
+  <li><b>Body 1:</b> the view you agree with <i>less</i> — explained fairly, with an example.</li>
+  <li><b>Body 2:</b> the view you agree with <i>more</i> — explained, supported, and linked back to your thesis.</li>
+  <li><b>Conclusion:</b> restate your position in new words; no new arguments.</li></ul></div>
+      <div class="card"><p class="mini-q">1. Paraphrase <b>both views</b> in one or two sentences (no copied phrases).</p><textarea class="no-check mini-answer" id="t9-pl-1" placeholder="Write here..." style="min-height:70px;"></textarea><p class="mini-q">2. Your <b>thesis</b>: your opinion + the main reason (use concession: <i>While … / Although …</i>).</p><textarea class="no-check mini-answer" id="t9-pl-2" placeholder="Write here..." style="min-height:70px;"></textarea><p class="mini-q">3. Body 1 topic sentence + two supporting ideas (and one example).</p><textarea class="no-check mini-answer" id="t9-pl-3" placeholder="Write here..." style="min-height:70px;"></textarea><p class="mini-q">4. Body 2 topic sentence + two supporting ideas (and one example).</p><textarea class="no-check mini-answer" id="t9-pl-4" placeholder="Write here..." style="min-height:70px;"></textarea><p class="mini-q">5. Your conclusion in one sentence.</p><textarea class="no-check mini-answer" id="t9-pl-5" placeholder="Write here..." style="min-height:70px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-pl-btn">Show a model plan</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-pl-ans"><ol>
+  <li>It is sometimes argued that private vehicles should be prohibited in urban centres, while others believe that such a ban would do more harm than good.</li>
+  <li>Although a total ban could cause genuine hardship for certain groups, I believe that city centres should be largely car-free, as long as reliable alternatives are provided.</li>
+  <li><i>Opponents raise legitimate concerns.</i> (1) people with limited mobility, parents, tradespeople depend on cars; (2) traffic may be displaced to poorer areas → unfair. Example: congestion moving to ring roads.</li>
+  <li><i>However, the benefits are greater.</i> (1) health and safety: less pollution, fewer deaths (Oslo 2019 / Pontevedra); (2) local businesses often gain — more frequent visits, higher footfall (Bristol traders overestimated drivers).</li>
+  <li>On balance, car-free centres improve public health and urban life, but only if cities invest in public transport and grant exemptions to those who genuinely need to drive.</li>
+</ol></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 10</div>
+      <h2>Write Your Essay</h2>
+      <p class="task-sub">Write the full essay from your plan in 40 minutes. Target: <b>at least 270 words</b>, four paragraphs. Checklist: eight words from Task 1, three paraphrases from Task 6, one <b>Although/Despite</b>, one <b>It is argued / believed that</b>, and one emphatic structure (<b>Not only … / However … may be</b>).</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Some people believe that private cars should be banned from city centres. Others argue that this would cause more problems than it solves. Discuss both views and give your own opinion.</i></p>
+        <p><i>Write at least 270 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t10-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t10-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t10-essay-model"><div class="model-text" style="padding:2px 0;">
+  <p>It is sometimes argued that private vehicles should be prohibited in urban centres, whereas others believe that such a measure would do more harm than good. Although a total ban could cause genuine hardship for certain groups, I believe that city centres should be largely car-free, provided that reliable alternatives are in place.</p>
+  <p>Opponents of a ban raise legitimate concerns, particularly about access and fairness. Elderly residents, parents with young children and tradespeople who need to carry tools all depend on vehicles, and for them a short drive could become a long and exhausting journey, especially where public transport is poor. It is also argued that traffic would not disappear but simply be displaced, so that congestion and pollution move from wealthy central districts to the poorer neighbourhoods surrounding them. In this sense, a policy intended to benefit everyone could prove inequitable.</p>
+  <p>Nevertheless, I am convinced that the advantages are considerably greater. Not only do car-free streets dramatically improve air quality, but they also save lives: in 2019 Oslo, which removed most central parking, recorded no pedestrian or cyclist deaths at all. Moreover, the fear that local businesses will suffer financially appears to be exaggerated. Shopkeepers tend to overestimate how many customers arrive by car, and people on foot, while spending less per visit, come more frequently, so footfall often rises once streets become pleasant places to be.</p>
+  <p>In conclusion, however serious the objections may be, they are arguments for introducing car-free zones carefully rather than for rejecting them altogether. If cities invest in public transport first and grant exemptions to those who truly need to drive, removing cars from their centres will do far more good than harm.</p>
+  <p class="alt">≈ 330 words</p>
+</div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 10</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 22 of 45</div>
+    <h1>Day 22 complete! 🎉</h1>
+    <p>Day 22 done — a Passage 3-level text, four reading question types, and a full discuss-both-views essay built from what you read. Read, harvest, write: that is the Band 7 workflow.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-m-lm');
+    initLineMatch('t6-p-lm');
+
+    initWritingCoach('t10-essay', { mode: 'task2', minutes: 40, target: 270, prompt: 'Some people believe that private cars should be banned from city centres. Others argue that this would cause more problems than it solves. Discuss both views and give your own opinion.' });
+
+    await initTaskFlow(22, 10, user.id, {
+      1: () => { checkAllAnswers('t1-m', 't1-m-score'); markLineMatchResult('t1-m-lm'); },
+      2: () => { checkAllAnswers('t2-h', 't2-h-score'); },
+      3: () => { checkAllAnswers('t3-yn', 't3-yn-score'); },
+      4: () => { checkAllAnswers('t4-mf', 't4-mf-score'); },
+      5: () => { checkAllAnswers('t5-s', 't5-s-score'); },
+      6: () => { checkAllAnswers('t6-p', 't6-p-score'); markLineMatchResult('t6-p-lm'); checkAllAnswers('t6-c', 't6-c-score'); },
+      7: () => { checkAllAnswers('t7-mc', 't7-mc-score'); },
+      8: () => { checkAllAnswers('t8-th', 't8-th-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t7-rw-btn', 't7-rw-ans', '[id^="t7-rw-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t8-up-btn', 't8-up-ans', '[id^="t8-up-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-pl-btn', 't9-pl-ans', '[id^="t9-pl-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t10-essay-model-btn', 't10-essay-model', '#t10-essay');
+  });
+</script>
+</body>
+</html>
