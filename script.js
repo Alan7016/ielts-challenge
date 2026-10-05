@@ -3050,7 +3050,7 @@ const CEREMONY = {
   week: 3,
   dayFrom: 14,
   dayTo: 19,                        // Day 20 is the mock (no points), so the week's points are Days 14–19
-  startsAt: '2026-10-05T16:00:00Z', // Monday 5 October, 21:00 Tashkent (UTC+5)
+  startsAt: '2026-10-05T16:15:00Z', // Monday 5 October, 21:15 Tashkent (UTC+5) — re-run after the 21:00 database slowdown
   lobbyMinutes: 5,                  // students get pulled in this long before the start
   pullWindowMinutes: 25             // (no longer used: students are now sent to the ceremony any time after 21:00 until they have watched it)
 };
