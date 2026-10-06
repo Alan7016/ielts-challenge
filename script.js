@@ -1638,8 +1638,13 @@ function freezeTask(taskNum, checkFn) {
 // right after it, matching mentor_comments to what the mentor dashboard saves.
 async function initMentorComments(userId, dayNumber) {
   const sb = getSupabaseClient();
-  const { data: comments } = await sb.from('mentor_comments').select('field_id, comment').eq('student_id', userId).eq('day', dayNumber);
+  const [{ data: comments }, { data: dayPts }] = await Promise.all([
+    sb.from('mentor_comments').select('field_id, comment').eq('student_id', userId).eq('day', dayNumber),
+    sb.from('points').select('category, points').eq('student_id', userId).eq('day', dayNumber)
+  ]);
+  renderDayReviewBanner(dayNumber, comments || [], dayPts || []);
   (comments || []).forEach(c => {
+    if (c.field_id === DAY_REVIEW_FIELD) return; // shown in the banner instead
     if (!c.comment || !c.comment.trim()) return;
     const anchor = document.getElementById(c.field_id) || document.querySelector('[data-field="' + c.field_id + '"]');
     if (!anchor) return;
@@ -1649,6 +1654,58 @@ async function initMentorComments(userId, dayNumber) {
     box.innerHTML = '<span class="mentor-feedback-label">💬 Mentor feedback</span>' + c.comment.replace(/</g, '&lt;');
     anchor.insertAdjacentElement('afterend', box);
   });
+}
+
+// ---------- Mentor's end-of-day review ----------
+// Mentors can give each student up to 5 bonus points per day for taking part
+// in off-platform activities, plus one general comment about the whole day.
+// Saved by mentor-dashboard.html as points category 'mentor-day' and
+// mentor_comments task 0 / field 'day-review'. The bonus counts in the
+// leaderboard like any other points.
+const DAY_BONUS_CATEGORY = 'mentor-day';
+const DAY_REVIEW_FIELD = 'day-review';
+const DAY_BONUS_MAX = 5;
+function fmtPoints(v) { const r = Math.round(Number(v || 0) * 10) / 10; return Number.isInteger(r) ? String(r) : r.toFixed(1); }
+
+// At the top of a day page: the student's points for this day and, once the
+// mentor has reviewed it, the bonus and the mentor's comment.
+function renderDayReviewBanner(dayNumber, comments, pts) {
+  const main = document.querySelector('main.wrap') || document.querySelector('main');
+  if (!main || document.getElementById('day-review-banner')) return;
+  const review = comments.find(c => c.field_id === DAY_REVIEW_FIELD && c.comment && c.comment.trim());
+  const bonusRow = pts.find(p => p.category === DAY_BONUS_CATEGORY);
+  const total = pts.reduce((a, p) => a + Number(p.points || 0), 0);
+  if (!review && !bonusRow && total <= 0) return;
+  if (!document.getElementById('day-review-css')) {
+    const st = document.createElement('style'); st.id = 'day-review-css';
+    st.textContent = `
+#day-review-banner { margin: 0 0 22px; border-radius: 14px; border: 1px solid #e7b54a66; background: linear-gradient(135deg, #fffaf0, #fff4dc); padding: 14px 16px; }
+#day-review-banner .drb-top { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; }
+#day-review-banner .drb-k { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: #9a6b08; font-weight: 700; }
+#day-review-banner .drb-total { font-family: var(--mono); font-weight: 700; color: var(--ink); }
+#day-review-banner .drb-bonus { font-family: var(--mono); font-size: 0.8rem; font-weight: 700; color: #fff; background: #c48a12; border-radius: 12px; padding: 2px 10px; }
+#day-review-banner .drb-comment { margin: 10px 0 0; color: var(--ink); line-height: 1.6; white-space: pre-wrap; }
+#day-review-banner .drb-comment b { color: #9a6b08; }`;
+    document.head.appendChild(st);
+  }
+  const box = document.createElement('div');
+  box.id = 'day-review-banner';
+  box.innerHTML = `<div class="drb-top"><span class="drb-k">Your Day ${dayNumber}</span><span class="drb-total">${fmtPoints(total)} points</span>`
+    + (bonusRow ? `<span class="drb-bonus">⭐ +${fmtPoints(bonusRow.points)} mentor bonus</span>` : '') + `</div>`
+    + (review ? `<p class="drb-comment"><b>💬 Mentor's review of the day:</b> ${review.comment.replace(/</g, '&lt;')}</p>` : '');
+  main.insertAdjacentElement('afterbegin', box);
+}
+
+// All of a student's own points, grouped by day — for the board.
+async function fetchMyPointsByDay(userId) {
+  const { data, error } = await getSupabaseClient().from('points').select('day, category, points').eq('student_id', userId).limit(5000);
+  if (error) throw error;
+  const total = {}, bonus = {};
+  (data || []).forEach(r => {
+    total[r.day] = (total[r.day] || 0) + Number(r.points || 0);
+    if (r.category === DAY_BONUS_CATEGORY) bonus[r.day] = Number(r.points || 0);
+  });
+  return { total, bonus };
 }
 
 // ---------- PERMANENT SAFETY NET: no field can ever silently fail to save again ----------
@@ -3001,7 +3058,7 @@ async function initNotificationBell(userId, folder) {
     dropdown.innerHTML = items.length === 0
       ? '<p class="notif-empty">No new feedback</p>'
       : items.map(it => `<a href="${folder}/day${it.day}.html" class="notif-item" data-id="${it.id}">
-          <span class="notif-day">Day ${it.day} · Task ${it.task}</span>
+          <span class="notif-day">Day ${it.day} · ${it.field_id === DAY_REVIEW_FIELD ? '⭐ Mentor\'s review of the day' : 'Task ' + it.task}</span>
           <span class="notif-snippet">${it.comment.slice(0, 70).replace(/</g, '&lt;')}${it.comment.length > 70 ? '…' : ''}</span>
         </a>`).join('');
 
