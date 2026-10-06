@@ -482,6 +482,11 @@
       } catch (e) { console.error('mock status', e); }
     }
 
+    // The student's own points per day (and mentor bonuses), shown on the
+    // board even while the leaderboard is closed. Best-effort.
+    let myPts = { total: {}, bonus: {} };
+    try { myPts = await fetchMyPointsByDay(userId); } catch (e) { console.error('my points', e); }
+
     const pad = n => String(n).padStart(2, '0');
     const days = [];
     for (let d = 1; d <= cfg.totalDays; d++) {
@@ -500,7 +505,7 @@
       else if (completedDays.has(d)) state = 'done';
       else if (isEarned) state = 'open';
       else state = 'locked';
-      days.push({ d, isMock, state, isFinish: d === cfg.totalDays, tasks: isMock ? 0 : totalTasksForTrack(trackKey, d), tasksDone: doneCountByDay[d] || 0 });
+      days.push({ d, isMock, state, isFinish: d === cfg.totalDays, tasks: isMock ? 0 : totalTasksForTrack(trackKey, d), tasksDone: doneCountByDay[d] || 0, pts: myPts.total[d] || 0, bonus: myPts.bonus[d] });
     }
 
     // "Today" is the newest live regular day. If the student can't open it
@@ -541,12 +546,17 @@
       nextCard = `<div class="bs-card bs-next bs-rest"><div><div class="bs-lbl">Up next</div><div class="bs-title">Starting soon</div></div></div>`;
     }
     const w = n => (n / regularTotal * 100).toFixed(2);
+    // Points this week = the days since the last mock (same weeks as the contest).
+    const lastMockBefore = cfg.mockDays.filter(m => latestDay && m < latestDay).pop() || 0;
+    const weekPts = days.filter(x => !x.isMock && x.d > lastMockBefore && x.d <= (latestDay || 0)).reduce((a, x) => a + x.pts, 0);
+    const todayPts = latestDay ? days[latestDay - 1].pts : 0;
     status.innerHTML = `
       <div class="bs-card bs-mine">
         <div class="bs-lbl muted">Your progress</div>
         <div class="bs-big">${regularDone} <small>of ${regularLive} live days finished${regularLive ? ` · ${pct}%` : ''}</small></div>
         <div class="bs-bar"><i style="width:${w(regularDone)}%; background:var(--good)"></i><i style="width:${w(regularLive - regularDone)}%; background:var(--accent-line)"></i></div>
         <div class="bs-legend"><span><b style="background:var(--good)"></b>Finished</span><span><b style="background:var(--accent-line)"></b>Live, not finished</span><span><b style="background:#eeebe3"></b>Coming (${regularTotal - regularLive})</span></div>
+        <div class="bs-pts"><span><b>${fmtPoints(todayPts)}</b> pts today</span><span><b>${fmtPoints(weekPts)}</b> pts this week</span><span class="bs-hint">your points for each day are shown under the day</span></div>
         ${catchUp.length ? `<div class="bs-catch">Catch up: ${catchUp.map(d => `<a class="bs-pill" href="${cfg.folder}/day${d}.html">Day ${d}</a>`).join('')}<span class="bs-hint">each one unlocks the day after it</span></div>` : ''}
       </div>
       ${nextCard}`;
@@ -573,7 +583,8 @@
         dots = `<div class="dc-dots">${Array.from({ length: x.tasks }, (_, i) => `<i class="${i < x.tasksDone ? 'f' : ''}"></i>`).join('')}</div>`;
       }
       const title = x.state === 'locked' ? `Finish Day ${x.d - 1} first` : x.state === 'soon' ? 'Coming soon' : `Day ${x.d}`;
-      const inner = `<span class="dc-num">${pad(x.d)}</span>${badge}${dots}<span class="dc-meta">${meta}</span>`;
+      const pts = (!x.isMock && (x.pts > 0 || x.bonus != null)) ? `<span class="dc-pts${x.d === focusDay ? ' on' : ''}">${fmtPoints(x.pts)} pts${x.bonus != null ? ' <b title="Mentor bonus">⭐+' + fmtPoints(x.bonus) + '</b>' : ''}</span>` : '';
+      const inner = `<span class="dc-num">${pad(x.d)}</span>${badge}${dots}<span class="dc-meta">${meta}</span>${pts}`;
       return (x.state === 'open' || x.state === 'done')
         ? `<a class="${cls}" href="${cfg.folder}/day${x.d}.html" title="${title}">${inner}</a>`
         : `<div class="${cls}" title="${title}">${inner}</div>`;
@@ -586,8 +597,9 @@
       const started = seg.some(x => x.state !== 'soon');
       const lead = (7 - seg.length % 7) % 7;
       const isFinal = i === segments.length - 1 && !cfg.mockDays.includes(to);
+      const wkPts = seg.reduce((a, x) => a + (x.isMock ? 0 : x.pts), 0);
       return `<div class="wk">
-        <div class="wk-label"><div class="wk-name">${isFinal ? 'Final stretch' : 'Week ' + (i + 1)}</div><div class="wk-range">Days ${from}–${to}</div>${started && reg.length ? `<div class="wk-count">${fin}/${reg.length} done</div>` : ''}</div>
+        <div class="wk-label"><div class="wk-name">${isFinal ? 'Final stretch' : 'Week ' + (i + 1)}</div><div class="wk-range">Days ${from}–${to}</div>${started && reg.length ? `<div class="wk-count">${fin}/${reg.length} done</div>` : ''}${wkPts > 0 ? `<div class="wk-pts">${fmtPoints(wkPts)} pts</div>` : ''}</div>
         <div class="wk-cells">${'<div class="dc-gap"></div>'.repeat(lead)}${seg.map(cellHtml).join('')}</div>
       </div>`;
     }).join('');
