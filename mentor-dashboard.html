@@ -5,6 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mentor Dashboard — IELTS Marathon</title>
 <link rel="stylesheet" href="style.css">
+<style>
+  .day-total { font-family: var(--mono); font-size: 0.78rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 12px; padding: 2px 10px; margin-right: 10px; white-space: nowrap; }
+  .student-ticks { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .day-review { margin-top: 12px; padding: 12px 14px; border: 1.5px dashed #e7b54a; border-radius: 12px; background: #fffaf0; }
+  .day-review.is-done { border-style: solid; border-color: #1f9d5566; background: var(--good-soft); }
+  .dr-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .dr-title { font-weight: 700; color: var(--ink); }
+  .dr-state { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .day-review.is-done .dr-state { color: var(--good); font-weight: 700; }
+  .dr-hint { font-size: 0.78rem; color: var(--muted); margin: 4px 0 8px; }
+  .dr-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 6px 0; }
+  .dr-pts { font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+  .dr-points { padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; }
+  .dr-comment { width: 100%; min-height: 60px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-family: var(--body); font-size: 0.86rem; background: #fff; }
+  .dr-save { padding: 6px 14px; font-size: 0.82rem; }
+  .dr-status { font-size: 0.8rem; color: var(--muted); }
+  .dr-summary { font-family: var(--mono); font-size: 0.82rem; color: var(--ink-soft); margin: 0 0 14px; }
+</style>
 </head>
 <body>
 
@@ -63,6 +81,8 @@
   // falling back to 9 for every single advanced/expert day), which made
   // fully-completed days look partially done here specifically. Now there's
   // exactly one place this number is ever defined.
+  // DAY_BONUS_CATEGORY, DAY_REVIEW_FIELD, DAY_BONUS_MAX and fmtPoints live in script.js.
+  const fmtPts = fmtPoints;
   function totalTasksForDay(level, day) { return totalTasksForTrack('2.0-' + level, day); }
 
   function renderAvatar(url, fullName) {
@@ -366,8 +386,18 @@
       sb.from('progress').select('student_id, task, completed').eq('day', selectedDay).in('student_id', studentIds),
       sb.from('answers').select('student_id, task, field_id, value, is_correct').eq('day', selectedDay).in('student_id', studentIds),
       sb.from('mentor_comments').select('student_id, task, field_id, comment').eq('day', selectedDay).in('student_id', studentIds),
-      sb.from('points').select('student_id, category, points').eq('day', selectedDay).in('student_id', studentIds).like('category', 'field-%')
+      sb.from('points').select('student_id, category, points').eq('day', selectedDay).in('student_id', studentIds)
     ]);
+
+    // Day total per student (everything they earned on this day), and the
+    // mentor's end-of-day review: up to 5 bonus points for off-platform
+    // participation (category 'mentor-day') plus one general comment for the
+    // whole day (mentor_comments, task 0, field 'day-review').
+    const dayTotal = {}, dayBonus = {};
+    (pointsRows || []).forEach(p => {
+      dayTotal[p.student_id] = (dayTotal[p.student_id] || 0) + Number(p.points || 0);
+      if (p.category === DAY_BONUS_CATEGORY) dayBonus[p.student_id] = Number(p.points);
+    });
 
     const commentByField = {};
     (commentRows || []).forEach(c => {
@@ -375,7 +405,7 @@
       commentByField[c.student_id][c.field_id] = c.comment || '';
     });
     const pointsByField = {};
-    (pointsRows || []).forEach(p => {
+    (pointsRows || []).filter(p => p.category.startsWith('field-')).forEach(p => {
       pointsByField[p.student_id] = pointsByField[p.student_id] || {};
       // category is 'field-<fieldId>' — strip the prefix to key by fieldId directly.
       pointsByField[p.student_id][p.category.replace(/^field-/, '')] = p.points;
@@ -433,6 +463,25 @@
             <button class="ghost save-mentor-comment" style="padding:4px 12px; font-size:0.78rem;">Save</button>
             <span class="save-status" style="font-size:0.78rem; color:var(--muted);"></span>
           </div>
+        </div>`;
+    }
+
+    function dayReviewHtml(studentId) {
+      const saved = (commentByField[studentId] || {})[DAY_REVIEW_FIELD] || '';
+      const savedPts = dayBonus[studentId];
+      const opts = [];
+      for (let p = 0; p <= DAY_BONUS_MAX; p += 0.5) opts.push(`<option value="${p}" ${savedPts === p ? 'selected' : ''}>${p}</option>`);
+      const done = savedPts != null || saved.trim();
+      return `<div class="day-review ${done ? 'is-done' : ''}" data-student="${studentId}">
+          <div class="dr-head"><span class="dr-title">⭐ Day ${selectedDay} review</span><span class="dr-state">${done ? '✓ Reviewed' : 'Not reviewed yet'}</span></div>
+          <p class="dr-hint">After checking this student's answers: up to ${DAY_BONUS_MAX} bonus points for active participation in off-platform activities (classes, speaking clubs, group chat…), and one general comment about the whole day. The student sees both.</p>
+          <div class="dr-row">
+            <label class="dr-pts">Bonus:
+              <select class="dr-points"><option value="" ${savedPts == null ? 'selected' : ''}>—</option>${opts.join('')}</select> / ${DAY_BONUS_MAX} pts
+            </label>
+          </div>
+          <textarea class="dr-comment no-check" placeholder="General comment about this student's Day ${selectedDay}…">${saved.replace(/</g, '&lt;')}</textarea>
+          <div class="dr-row"><button class="dr-save" type="button">Save review</button><span class="dr-status"></span></div>
         </div>`;
     }
 
@@ -534,7 +583,7 @@
             ${s.full_name}
             ${statusBadgeHtml(s.approval_status)}
           </span>
-          <div class="student-ticks"><div class="day-ticks">${renderTicks(s.id)}</div></div>
+          <div class="student-ticks"><span class="day-total" title="Everything this student earned on Day ${selectedDay}">${fmtPts(dayTotal[s.id] || 0)} pts</span><div class="day-ticks">${renderTicks(s.id)}</div></div>
         </div>
         <div class="student-admin-row" data-student="${s.id}" style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);">
           ${s.approval_status !== 'approved' ? `<button class="ghost approve-student" style="padding:4px 12px; font-size:0.78rem;">✓ Approve</button>` : ''}
@@ -546,8 +595,54 @@
         </div>
         <button class="writing-toggle" data-target="detail-${s.id}">Show details ▾</button>
         <div class="writing-box" id="detail-${s.id}">${renderTaskDetail(s.id)}</div>
+        ${dayReviewHtml(s.id)}
       </div>
     `).join('');
+
+    const reviewedCount = students.filter(s => dayBonus[s.id] != null || ((commentByField[s.id] || {})[DAY_REVIEW_FIELD] || '').trim()).length;
+    root.insertAdjacentHTML('afterbegin', `<p class="dr-summary">⭐ Day ${selectedDay} reviews: <b id="dr-count">${reviewedCount}</b> of ${students.length} students</p>`);
+
+    root.querySelectorAll('.dr-save').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const box = btn.closest('.day-review');
+        const status = box.querySelector('.dr-status');
+        const studentId = box.dataset.student;
+        const ptsVal = box.querySelector('.dr-points').value;
+        const comment = box.querySelector('.dr-comment').value.trim();
+        if (ptsVal === '' && !comment) { status.textContent = 'Choose the bonus points or write a comment first'; status.style.color = 'var(--warn)'; return; }
+        btn.disabled = true; status.style.color = 'var(--muted)'; status.textContent = 'Saving…';
+        const now = new Date().toISOString();
+        const [cRes, pRes] = await Promise.all([
+          sb.from('mentor_comments').upsert({
+            student_id: studentId, day: selectedDay, task: 0, field_id: DAY_REVIEW_FIELD,
+            comment, updated_by: myUserId, updated_at: now, seen_at: null
+          }, { onConflict: 'student_id,day,task,field_id' }),
+          ptsVal === '' ? Promise.resolve({ error: null }) : sb.from('points').upsert({
+            student_id: studentId, day: selectedDay, category: DAY_BONUS_CATEGORY,
+            points: parseFloat(ptsVal), max_points: DAY_BONUS_MAX, comment: comment || null,
+            awarded_by: myUserId, updated_at: now
+          }, { onConflict: 'student_id,day,category' })
+        ]);
+        btn.disabled = false;
+        if (cRes.error || pRes.error) {
+          console.error(cRes.error || pRes.error);
+          status.textContent = '⚠️ Failed to save — try again'; status.style.color = 'var(--warn)';
+          return;
+        }
+        status.textContent = '✓ Saved'; status.style.color = 'var(--good)';
+        if (!box.classList.contains('is-done')) {
+          box.classList.add('is-done'); box.querySelector('.dr-state').textContent = '✓ Reviewed';
+          const c = document.getElementById('dr-count'); if (c) c.textContent = String(+c.textContent + 1);
+        }
+        // refresh the day total shown next to the name
+        const oldBonus = dayBonus[studentId] || 0;
+        if (ptsVal !== '') {
+          dayTotal[studentId] = (dayTotal[studentId] || 0) - oldBonus + parseFloat(ptsVal);
+          dayBonus[studentId] = parseFloat(ptsVal);
+          const t = box.closest('.student-row').querySelector('.day-total'); if (t) t.textContent = fmtPts(dayTotal[studentId]) + ' pts';
+        }
+      });
+    });
 
     root.querySelectorAll('.writing-toggle').forEach(btn => {
       btn.addEventListener('click', () => {
