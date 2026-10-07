@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 24 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+  .audio-card { margin-top: 12px; }
+  .audio-card .prompt-label { margin-bottom: 8px !important; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 24 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 12</div>
+      <h2>Starting Off — IT Society</h2>
+      <p class="task-sub">Unit 6 examines how information technology is reshaping education, entertainment and everyday life. Begin by analysing six everyday uses of IT, then build the precise vocabulary you will need all day.</p>
+      <div class="card"><p class="prompt-label">Six photos</p><ol style="margin:0; padding-left:20px; line-height:1.8;">
+  <li>A family in a living room: a large screen on the wall, one person on a laptop, others on their phones.</li>
+  <li>A man driving, glancing at a small screen fixed to the windscreen.</li>
+  <li>A hand holding a bank card reader next to a printed bank statement.</li>
+  <li>A shop assistant handing a card machine to a customer at a counter.</li>
+  <li>A businessman on a station platform, working on a tablet.</li>
+  <li>An operator in a control room, surrounded by a wall of CCTV monitors.</li></ol></div>
+      <p style="margin-top:26px;"><strong>Match each photo with the use of information technology it shows.</strong></p>
+      <div class="card" id="t1-ph"><div class="opt-legend"><span><b>a</b> monitoring passenger movement</span><span><b>b</b> finding directions</span><span><b>c</b> working / studying</span><span><b>d</b> providing entertainment</span><span><b>e</b> managing personal finance</span><span><b>f</b> purchasing goods</span></div><div class="sel-row"><select class="select" id="t1-ph-1" data-answer="d"><option value="">—</option><option value="a">a</option><option value="b">b</option><option value="c">c</option><option value="d">d</option><option value="e">e</option><option value="f">f</option></select><span><b>1.</b> Photo 1</span></div><div class="sel-row"><select class="select" id="t1-ph-2" data-answer="b"><option value="">—</option><option value="a">a</option><option value="b">b</option><option value="c">c</option><option value="d">d</option><option value="e">e</option><option value="f">f</option></select><span><b>2.</b> Photo 2</span></div><div class="sel-row"><select class="select" id="t1-ph-3" data-answer="e"><option value="">—</option><option value="a">a</option><option value="b">b</option><option value="c">c</option><option value="d">d</option><option value="e">e</option><option value="f">f</option></select><span><b>3.</b> Photo 3</span></div><div class="sel-row"><select class="select" id="t1-ph-4" data-answer="f"><option value="">—</option><option value="a">a</option><option value="b">b</option><option value="c">c</option><option value="d">d</option><option value="e">e</option><option value="f">f</option></select><span><b>4.</b> Photo 4</span></div><div class="sel-row"><select class="select" id="t1-ph-5" data-answer="c"><option value="">—</option><option value="a">a</option><option value="b">b</option><option value="c">c</option><option value="d">d</option><option value="e">e</option><option value="f">f</option></select><span><b>5.</b> Photo 5</span></div><div class="sel-row"><select class="select" id="t1-ph-6" data-answer="a"><option value="">—</option><option value="a">a</option><option value="b">b</option><option value="c">c</option><option value="d">d</option><option value="e">e</option><option value="f">f</option></select><span><b>6.</b> Photo 6</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-ph', 't1-ph-score')">Check answers</button>
+          <span id="t1-ph-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">1. Choose <b>two</b> of the photos. How has IT changed the way people do these things? Use <i>used to</i> for the past and the present perfect for the change.</p><textarea class="no-check mini-answer" id="t1-ch-1" placeholder="Write here..." style="min-height:90px;"></textarea><p class="mini-q">2. Choose <b>one</b> type of IT from the photos and predict how it will change in the next ten years. Give at least one advantage and one risk.</p><textarea class="no-check mini-answer" id="t1-ch-2" placeholder="Write here..." style="min-height:90px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t1-ch-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t1-ch-ans"><p><i>In the past, people used to queue in the bank and talk to a cashier to do simple financial transactions. Now they can do this from home at any time of day, and many have stopped visiting branches altogether.</i></p><p>Strong prediction answers hedge: <i>it is likely that…, may well…, there is a risk that…</i></p></div>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Precision vocabulary for today.</strong> Match each item to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. supplement (n)</button><button type="button" class="lm-item" data-key="2">2. overhaul (v)</button><button type="button" class="lm-item" data-key="3">3. grapple with</button><button type="button" class="lm-item" data-key="4">4. in vain</button><button type="button" class="lm-item" data-key="5">5. mediocrity</button><button type="button" class="lm-item" data-key="6">6. rote learning</button><button type="button" class="lm-item" data-key="7">7. cater to</button><button type="button" class="lm-item" data-key="8">8. spearhead</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. lead an attack, campaign or movement</button><button type="button" class="lm-item" data-key="b">b. learning by repetition rather than understanding</button><button type="button" class="lm-item" data-key="c">c. examine and change a system thoroughly</button><button type="button" class="lm-item" data-key="d">d. the quality of being only average or not very good</button><button type="button" class="lm-item" data-key="e">e. try hard to deal with a difficult problem</button><button type="button" class="lm-item" data-key="f">f. provide what a particular group wants or needs</button><button type="button" class="lm-item" data-key="g">g. something added to improve or complete something</button><button type="button" class="lm-item" data-key="h">h. without success</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 12</div>
+      <h2>Lead-in 1 — The Two Sigma Problem</h2>
+      <p class="task-sub">Before the Reading Section 3 passage (about video-based and self-paced learning), read this article about one of the most famous ideas in education research. About 18 minutes.</p>
+      <div class="card article">
+        <h3 class="article-title">The Two Sigma Problem</h3>
+        <p class="article-meta">Education research · 382 words</p>
+        <p>In 1984 the American educational psychologist Benjamin Bloom published a short paper with a striking claim. Comparing students taught in conventional classes of around thirty with students taught by a tutor one-to-one, he reported that the tutored students performed about two standard deviations — two 'sigma' — better. Put simply, the average tutored student outperformed roughly 98 per cent of the students taught in an ordinary class. The tutoring in these studies was combined with what Bloom called mastery learning: students were tested regularly, given corrective help, and only moved on once they had genuinely understood each unit.</p><p>Bloom was not arguing that every child should have a private tutor. On the contrary, he acknowledged that one-to-one teaching was far too expensive for any society to provide on a large scale. His real point was a challenge: if tutoring could produce such dramatic gains, researchers should look for methods of group instruction that came as close as possible to the same effect. He called this 'the two sigma problem'.</p><p>For four decades, the problem has served as a kind of North Star for educational reformers. Each wave of technology has been presented, at least by its enthusiasts, as the long-awaited solution: first computer-assisted instruction, then adaptive software that adjusts the difficulty of exercises to each learner, then online video platforms, and most recently artificial-intelligence tutors that can hold a conversation with a student. Alongside these, cheaper human approaches such as peer tutoring and small-group teaching have also been tested.</p><p>There is, however, an awkward complication. When later researchers examined large numbers of tutoring studies, they generally found positive effects — but effects considerably smaller than the two sigma Bloom had reported. Some have pointed out that the original studies were small and short, and that students who are taught to the test of a particular unit may naturally score very highly on it. Two sigma, in other words, may describe an exceptional result rather than a typical one.</p><p>None of this makes Bloom's challenge irrelevant. Even a fraction of his reported effect would represent an enormous improvement if it could be delivered to millions of students at low cost. But it does suggest that any new technology claiming to have 'solved' the two sigma problem deserves to be examined with considerable care.</p>
+      </div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-1">
+          <p>1. What did Bloom report about the tutored students?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-1" data-correct="false"> A. They studied for longer than other students.</label><label><input type="radio" value="1" name="t2-mc-1" data-correct="true"> B. They performed far better than students in conventional classes.</label><label><input type="radio" value="2" name="t2-mc-1" data-correct="false"> C. They preferred working alone.</label><label><input type="radio" value="3" name="t2-mc-1" data-correct="false"> D. They needed less corrective help.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-2">
+          <p>2. What was Bloom's main purpose in describing the "two sigma problem"?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-2" data-correct="false"> A. to argue that every child should have a private tutor</label><label><input type="radio" value="1" name="t2-mc-2" data-correct="true"> B. to challenge researchers to find affordable methods that came close to tutoring</label><label><input type="radio" value="2" name="t2-mc-2" data-correct="false"> C. to show that class sizes should be reduced to one</label><label><input type="radio" value="3" name="t2-mc-2" data-correct="false"> D. to prove that mastery learning does not work</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-3">
+          <p>3. According to the article, how have later studies changed the picture?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-3" data-correct="false"> A. They found that tutoring has no effect.</label><label><input type="radio" value="1" name="t2-mc-3" data-correct="false"> B. They found larger effects than Bloom reported.</label><label><input type="radio" value="2" name="t2-mc-3" data-correct="true"> C. They generally found positive but much smaller effects.</label><label><input type="radio" value="3" name="t2-mc-3" data-correct="false"> D. They only studied artificial-intelligence tutors.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-4">
+          <p>4. What is the writer's overall attitude to technologies that claim to solve the problem?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-4" data-correct="false"> A. enthusiastic</label><label><input type="radio" value="1" name="t2-mc-4" data-correct="false"> B. dismissive</label><label><input type="radio" value="2" name="t2-mc-4" data-correct="true"> C. cautious</label><label><input type="radio" value="3" name="t2-mc-4" data-correct="false"> D. indifferent</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. In Bloom's studies, tutored students moved on only after they had understood each unit.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="true"> True</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. Bloom believed that one-to-one tutoring could easily be provided for all students.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="false"> True</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. The writer suggests that the original studies may have exaggerated the typical effect of tutoring.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="true"> True</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. According to the writer, artificial-intelligence tutors have now solved the two sigma problem.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="false"> True</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 120 words</b>. Present the central argument, the key evidence and any limitations, then add a short evaluation of your own. No phrase of four or more words may be copied.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 120 words):</p><textarea class="no-check mini-answer" id="t2-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:190px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t2-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t2-sum-ans"><p>The article discusses what has become known as the two sigma problem. In the 1980s, the educational researcher Benjamin Bloom reported that students taught one-to-one, using a mastery approach, performed around two standard deviations better than those taught in conventional classes — the average tutored student outscoring almost all of the class-taught group. Since individual tutoring is far too expensive to provide for everyone, Bloom challenged researchers to find methods that could achieve similar gains at scale. The writer explains that adaptive software, peer tutoring and, more recently, artificial-intelligence tutors have all been presented as possible answers. However, later studies have generally found tutoring effects to be considerably smaller than Bloom's figure, so the two sigma target may be more of an inspiring ideal than a realistic benchmark. In my view, the article is right to treat technological claims in this area with caution. (≈ 150 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t2-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading — speak for <b>at least 60 seconds</b>. Include one point you agree with and one you would question.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central claim is that…”</li><li>“This rests largely on…”</li><li>“What strikes me as particularly persuasive is…”</li><li>“Where I'd take issue is…”</li><li>“All things considered,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 12</div>
+      <h2>Reading Section 3 — The Classroom Turned Inside Out</h2>
+      <p class="task-sub">Suggested time: 20 minutes. This is a Section 3-length passage with a writer who evaluates both sides. Question types: <b>multiple choice</b> (including reference and meaning-in-context questions), <b>YES / NO / NOT GIVEN</b> and <b>matching sentence endings</b>. Passage on the left, questions on the right. Answers are checked when you press <b>Next</b>.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li><b>Multiple choice:</b> underline the key idea in the question, not the options. For <b>reference</b> questions, read around the word — the answer may come before or after it. Be wary of options that simply repeat passage words.</li>
+  <li><b>YES / NO / NOT GIVEN:</b> answers follow passage order, but may be spread across different parts of the text.</li>
+  <li><b>Sentence endings:</b> use names and key terms in the questions to find the place; then read the completed sentence to check it makes sense.</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Classroom Turned Inside Out<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Video lessons and self-paced software promise to free every learner to move at their own speed. Can schools built around age and timetables keep up?</small></h3>
+            <p class="article-meta">Reading Passage 3 · Education and technology · 808 words</p>
+            <p><span class="para-label">A</span>In one corner of the room, a twelve-year-old is working through problems on equations that most of her classmates will not meet for another year. Beside her, a boy is watching a short video on fractions for the third time, pausing it every few seconds to copy the diagrams into his notebook. Their teacher moves between them with a tablet that shows, in real time, which pupils have mastered which skills and which are stuck. Nobody is listening to a lecture. To anyone educated in a traditional classroom, the scene looks almost chaotic; to its supporters, it represents the future of schooling.</p><p><span class="para-label">B</span>The best-known source of such videos began almost by accident. In 2004, Salman Khan, then working as a financial analyst, started tutoring a young cousin in mathematics over the internet. When other relatives asked for help, he began recording short lessons and posting them online so that they could watch at their own convenience. To his surprise, the videos attracted thousands of viewers who were not related to him at all, and in 2008 he set up a non-profit organisation, Khan Academy, leaving his job the following year to work on it full-time. It now offers lessons in many subjects and languages.</p><p><span class="para-label">C</span>Part of the appeal lies in the format. A recorded explanation can be paused, rewound and replayed as often as a learner needs, without the embarrassment of asking a teacher to repeat something in front of thirty classmates. Combined with exercises that adapt to the learner's answers, this arrangement allows each student, at least in principle, to move on only once they have genuinely mastered a topic — an approach educationalists call mastery learning.</p><p><span class="para-label">D</span>The attraction for schools is easy to understand. Teachers have long complained that a single lesson pitched at the middle of a class inevitably leaves some pupils bored and others lost. The obvious remedy, individual instruction, has always been prohibitively expensive, and successive waves of classroom technology, from educational television to interactive whiteboards, have promised far more than they delivered. Self-paced software appears to offer something closer to a personal tutor at a fraction of the cost.</p><p><span class="para-label">E</span>Video lessons have also made possible a wider change known as the 'flipped classroom'. The idea is usually credited to two chemistry teachers in Colorado, Jonathan Bergmann and Aaron Sams, who began recording their lessons around 2007 so that pupils who missed classes for sports or illness could catch up. They soon noticed that the recordings could be used by everyone. Students watched the explanation at home and spent lesson time doing the exercises that would traditionally have been homework, with the teacher on hand at the moment they were most likely to need help.</p><p><span class="para-label">F</span>Yet the model has its critics, and their objections deserve to be taken seriously. Some argue that a recorded lecture followed by automated practice is not a revolution at all but the oldest form of teaching — transmission and drill — in a new format: old wine in new bottles. Others point out that software of this kind works best in subjects such as mathematics, where answers are clearly right or wrong, and is far less useful in history or literature, where the most valuable answers are open to interpretation. A flipped classroom also assumes that every pupil has a quiet place to study and a reliable internet connection at home, an assumption that does not hold for many families.</p><p><span class="para-label">G</span>A subtler danger is what might be called the illusion of progress. A student can collect badges and complete exercises by recognising familiar patterns, while understanding very little of why a method works. Self-pacing can also widen gaps: highly motivated pupils race ahead, while those who most need encouragement may quietly fall further behind, especially when nobody is setting the pace for them. Courses delivered entirely online have often been reported to have very low completion rates for precisely this reason.</p><p><span class="para-label">H</span>Perhaps the most awkward challenge, however, is organisational. Most school systems still group children by age and expect each year group to cover the same material at the same time. A model in which a twelve-year-old may be studying advanced algebra while a classmate is still revising fractions sits uneasily with timetables, textbooks and national examinations designed around the opposite assumption. Some teachers who welcome the approach have admitted that they are not sure what to do with a pupil who finishes the year's course in March.</p><p><span class="para-label">I</span>None of this suggests that video platforms will replace teachers. If anything, the evidence so far points the other way: the technology appears to be most effective when a skilled teacher decides how and when to use it, notices who is struggling, and provides the discussion, encouragement and challenge that no video can. What it may change is not whether teachers are needed but what they spend their time doing.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–5</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t3-mc"><div class="q-item" id="t3-mc-1">
+          <p>1. What is the purpose of the first paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-1" data-correct="false"> A. to criticise teachers who allow classrooms to become chaotic</label><label><input type="radio" value="1" name="t3-mc-1" data-correct="true"> B. to illustrate a classroom in which pupils work at different levels at the same time</label><label><input type="radio" value="2" name="t3-mc-1" data-correct="false"> C. to show that younger pupils learn mathematics faster</label><label><input type="radio" value="3" name="t3-mc-1" data-correct="false"> D. to compare tablets with traditional textbooks</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-mc-2">
+          <p>2. In paragraph C, what does "this arrangement" refer to?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-2" data-correct="false"> A. a teacher repeating explanations in front of the class</label><label><input type="radio" value="1" name="t3-mc-2" data-correct="true"> B. recorded explanations combined with exercises that respond to the learner</label><label><input type="radio" value="2" name="t3-mc-2" data-correct="false"> C. a system in which students are grouped by ability</label><label><input type="radio" value="3" name="t3-mc-2" data-correct="false"> D. a personal tutor working with each pupil</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-mc-3">
+          <p>3. According to paragraph D, why has individual instruction not been widely used?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-3" data-correct="false"> A. Teachers have rejected it.</label><label><input type="radio" value="1" name="t3-mc-3" data-correct="false"> B. It has not been shown to work.</label><label><input type="radio" value="2" name="t3-mc-3" data-correct="true"> C. It has been too costly.</label><label><input type="radio" value="3" name="t3-mc-3" data-correct="false"> D. Pupils prefer learning in groups.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-mc-4">
+          <p>4. Why does the writer mention Bergmann and Sams?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-4" data-correct="true"> A. to show that the flipped classroom began as a practical solution to a specific problem</label><label><input type="radio" value="1" name="t3-mc-4" data-correct="false"> B. to argue that chemistry is the best subject for video teaching</label><label><input type="radio" value="2" name="t3-mc-4" data-correct="false"> C. to prove that the flipped classroom was invented by Khan Academy</label><label><input type="radio" value="3" name="t3-mc-4" data-correct="false"> D. to suggest that sports have a negative effect on learning</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-mc-5">
+          <p>5. What does the writer mean by "the illusion of progress" in paragraph G?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-5" data-correct="true"> A. Students may appear to advance while understanding little.</label><label><input type="radio" value="1" name="t3-mc-5" data-correct="false"> B. Teachers may exaggerate the results of new methods.</label><label><input type="radio" value="2" name="t3-mc-5" data-correct="false"> C. Software companies hide poor results.</label><label><input type="radio" value="3" name="t3-mc-5" data-correct="false"> D. Badges encourage students to work harder.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-mc', 't3-mc-score')">Check answers</button>
+          <span id="t3-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 6–10</p><p class="qg-instr">Do the following statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t3-yn"><div class="q-item" id="t3-yn-6">
+          <p>6. Classroom technology has often failed to live up to the expectations it created.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-6" data-correct="true"> YES</label><label><input type="radio" value="1" name="t3-yn-6" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-7">
+          <p>7. The flipped classroom was originally intended for all students rather than only for those who missed lessons.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-7" data-correct="false"> YES</label><label><input type="radio" value="1" name="t3-yn-7" data-correct="true"> NO</label><label><input type="radio" value="2" name="t3-yn-7" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-8">
+          <p>8. Most teachers who flip their classrooms report improved examination results.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-8" data-correct="false"> YES</label><label><input type="radio" value="1" name="t3-yn-8" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-8" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-9">
+          <p>9. Allowing students to work at their own pace may increase the differences between them.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-9" data-correct="true"> YES</label><label><input type="radio" value="1" name="t3-yn-9" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-9" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-10">
+          <p>10. Video platforms are likely to make teachers unnecessary in the future.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-10" data-correct="false"> YES</label><label><input type="radio" value="1" name="t3-yn-10" data-correct="true"> NO</label><label><input type="radio" value="2" name="t3-yn-10" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-yn', 't3-yn-score')">Check answers</button>
+          <span id="t3-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–14</p><p class="qg-instr">Complete each sentence with the correct ending, <b>A–G</b>, below.</p></div>
+<div class="card"><p class="prompt-label">Endings</p><p style="margin:3px 0;"><b>A</b>&nbsp; should not move on to a new topic until they fully understand the previous one.</p><p style="margin:3px 0;"><b>B</b>&nbsp; repeats a traditional way of teaching in a new format.</p><p style="margin:3px 0;"><b>C</b>&nbsp; may disadvantage pupils without reliable internet access at home.</p><p style="margin:3px 0;"><b>D</b>&nbsp; are harder to teach through automated exercises because answers can be interpreted in different ways.</p><p style="margin:3px 0;"><b>E</b>&nbsp; will soon replace national examinations.</p><p style="margin:3px 0;"><b>F</b>&nbsp; is more effective than tutoring by a person.</p><p style="margin:3px 0;"><b>G</b>&nbsp; were the first to use video in a classroom.</p></div>
+      <div class="card" id="t3-se"><div class="sel-row"><select class="select" id="t3-se-11" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select><span><b>11.</b> Supporters of mastery learning believe that students</span></div><div class="sel-row"><select class="select" id="t3-se-12" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select><span><b>12.</b> Critics who describe the model as "old wine in new bottles" argue that it</span></div><div class="sel-row"><select class="select" id="t3-se-13" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select><span><b>13.</b> The flipped classroom's reliance on home study</span></div><div class="sel-row"><select class="select" id="t3-se-14" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select><span><b>14.</b> Subjects such as history and literature</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-se', 't3-se-score')">Check answers</button>
+          <span id="t3-se-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 12</div>
+      <h2>Reading Section 3 — Answer Analysis</h2>
+      <p class="task-sub">Open each question to see the evidence, the paraphrase and the trap. At this level, the marks are lost on <b>reference</b>, <b>scope</b> (what exactly the writer claims) and <b>distractors that recycle passage words</b>.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Classroom Turned Inside Out</summary>
+        <p><span class="para-label">A</span>In one corner of the room, a twelve-year-old is working through problems on equations that most of her classmates will not meet for another year. Beside her, a boy is watching a short video on fractions for the third time, pausing it every few seconds to copy the diagrams into his notebook. Their teacher moves between them with a tablet that shows, in real time, which pupils have mastered which skills and which are stuck. Nobody is listening to a lecture. To anyone educated in a traditional classroom, the scene looks almost chaotic; to its supporters, it represents the future of schooling.</p><p><span class="para-label">B</span>The best-known source of such videos began almost by accident. In 2004, Salman Khan, then working as a financial analyst, started tutoring a young cousin in mathematics over the internet. When other relatives asked for help, he began recording short lessons and posting them online so that they could watch at their own convenience. To his surprise, the videos attracted thousands of viewers who were not related to him at all, and in 2008 he set up a non-profit organisation, Khan Academy, leaving his job the following year to work on it full-time. It now offers lessons in many subjects and languages.</p><p><span class="para-label">C</span>Part of the appeal lies in the format. A recorded explanation can be paused, rewound and replayed as often as a learner needs, without the embarrassment of asking a teacher to repeat something in front of thirty classmates. Combined with exercises that adapt to the learner's answers, this arrangement allows each student, at least in principle, to move on only once they have genuinely mastered a topic — an approach educationalists call mastery learning.</p><p><span class="para-label">D</span>The attraction for schools is easy to understand. Teachers have long complained that a single lesson pitched at the middle of a class inevitably leaves some pupils bored and others lost. The obvious remedy, individual instruction, has always been prohibitively expensive, and successive waves of classroom technology, from educational television to interactive whiteboards, have promised far more than they delivered. Self-paced software appears to offer something closer to a personal tutor at a fraction of the cost.</p><p><span class="para-label">E</span>Video lessons have also made possible a wider change known as the 'flipped classroom'. The idea is usually credited to two chemistry teachers in Colorado, Jonathan Bergmann and Aaron Sams, who began recording their lessons around 2007 so that pupils who missed classes for sports or illness could catch up. They soon noticed that the recordings could be used by everyone. Students watched the explanation at home and spent lesson time doing the exercises that would traditionally have been homework, with the teacher on hand at the moment they were most likely to need help.</p><p><span class="para-label">F</span>Yet the model has its critics, and their objections deserve to be taken seriously. Some argue that a recorded lecture followed by automated practice is not a revolution at all but the oldest form of teaching — transmission and drill — in a new format: old wine in new bottles. Others point out that software of this kind works best in subjects such as mathematics, where answers are clearly right or wrong, and is far less useful in history or literature, where the most valuable answers are open to interpretation. A flipped classroom also assumes that every pupil has a quiet place to study and a reliable internet connection at home, an assumption that does not hold for many families.</p><p><span class="para-label">G</span>A subtler danger is what might be called the illusion of progress. A student can collect badges and complete exercises by recognising familiar patterns, while understanding very little of why a method works. Self-pacing can also widen gaps: highly motivated pupils race ahead, while those who most need encouragement may quietly fall further behind, especially when nobody is setting the pace for them. Courses delivered entirely online have often been reported to have very low completion rates for precisely this reason.</p><p><span class="para-label">H</span>Perhaps the most awkward challenge, however, is organisational. Most school systems still group children by age and expect each year group to cover the same material at the same time. A model in which a twelve-year-old may be studying advanced algebra while a classmate is still revising fractions sits uneasily with timetables, textbooks and national examinations designed around the opposite assumption. Some teachers who welcome the approach have admitted that they are not sure what to do with a pupil who finishes the year's course in March.</p><p><span class="para-label">I</span>None of this suggests that video platforms will replace teachers. If anything, the evidence so far points the other way: the technology appears to be most effective when a skilled teacher decides how and when to use it, notices who is struggling, and provides the discussion, encouragement and challenge that no video can. What it may change is not whether teachers are needed but what they spend their time doing.</p>
+      </details>
+      <div class="card an-card"><p class="an-intro">Look at Q7: the writer states clearly who the recordings were first for, and the statement contradicts it, so the answer is NO. NOT GIVEN means the writer says nothing about the point at all.</p><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">B</span><span class="an-where">Para A</span></summary><div class="an-body"><p>The paragraph shows a pupil <span class="ev">working through problems on equations that most of her classmates will not meet for another year</span> next to one <span class="ev">watching a short video on fractions for the third time</span>: different levels at the same time.</p><p><span class="trap">Trap:</span> A uses <i>chaotic</i>, but the writer only says the scene <i>looks</i> chaotic to traditionally educated people.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p>Read <b>before</b> the reference: <span class="ev">A recorded explanation can be paused, rewound and replayed</span> … <span class="ev">Combined with exercises that adapt to the learner’s answers, this arrangement</span>. <i>This arrangement</i> = recorded explanations + adaptive exercises.</p><p><span class="trap">Trap:</span> D (a personal tutor) is what the arrangement imitates, not what it refers to.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">C</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">The obvious remedy, individual instruction, has always been prohibitively expensive</span>. <i>Prohibitively expensive</i> = too costly.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">A</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">began recording their lessons around 2007 so that pupils who missed classes for sports or illness could catch up</span> — a practical problem — and only then <span class="ev">noticed that the recordings could be used by everyone</span>.</p><p><span class="trap">Trap:</span> D twists a detail (sports) into a claim the writer never makes.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">A</span><span class="an-where">Para G</span></summary><div class="an-body"><p><span class="ev">A student can collect badges and complete exercises by recognising familiar patterns, while understanding very little</span>.</p><p><span class="trap">Trap:</span> D mentions badges, but the writer presents them as part of the problem, not as a motivator.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">YES</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">successive waves of classroom technology … have promised far more than they delivered</span>. <i>Failed to live up to expectations</i> = <i>promised more than they delivered</i>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">NO</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">so that pupils who missed classes for sports or illness could catch up</span> … <span class="ev">They soon noticed that the recordings could be used by everyone</span>: use by <b>everyone</b> came later, so the statement contradicts the passage.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>The passage never discusses examination results of flipped classrooms. <span class="trap">Trap:</span> <i>national examinations</i> appear in paragraph H, but only as an organisational obstacle.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">YES</span><span class="an-where">Para G</span></summary><div class="an-body"><p><span class="ev">Self-pacing can also widen gaps</span>. <i>Increase the differences</i> = <i>widen gaps</i>. Note the hedge <i>can</i> ↔ <i>may</i>: the strength of the claim matches.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">NO</span><span class="an-where">Para I</span></summary><div class="an-body"><p><span class="ev">None of this suggests that video platforms will replace teachers. If anything, the evidence so far points the other way</span>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">A</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">move on only once they have genuinely mastered a topic — an approach educationalists call mastery learning</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">not a revolution at all but the oldest form of teaching — transmission and drill — in a new format</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">C</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">assumes that every pupil has a quiet place to study and a reliable internet connection at home, an assumption that does not hold for many families</span>.</p></div></details><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">D</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">far less useful in history or literature, where the most valuable answers are open to interpretation</span>.</p><p><span class="trap">Trap:</span> F (more effective than a person) contradicts paragraph I; G (the first to use video) is never claimed.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Meaning in context.</strong> Choose the meaning of each word or phrase as it is used in the passage.</p>
+      <div class="card" id="t4-mc"><div class="q-item" id="t4-mc-1">
+          <p>1. <i>pitched at</i> the middle of a class (Para D)</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-1" data-correct="false"> thrown towards</label><label><input type="radio" value="1" name="t4-mc-1" data-correct="true"> aimed at a particular level</label><label><input type="radio" value="2" name="t4-mc-1" data-correct="false"> sold to</label><label><input type="radio" value="3" name="t4-mc-1" data-correct="false"> shouted at</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-2">
+          <p>2. <i>prohibitively</i> expensive (Para D)</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-2" data-correct="false"> illegally</label><label><input type="radio" value="1" name="t4-mc-2" data-correct="true"> so much that it prevents use</label><label><input type="radio" value="2" name="t4-mc-2" data-correct="false"> slightly</label><label><input type="radio" value="3" name="t4-mc-2" data-correct="false"> surprisingly</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-3">
+          <p>3. <i>sits uneasily with</i> timetables (Para H)</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-3" data-correct="true"> does not fit comfortably with</label><label><input type="radio" value="1" name="t4-mc-3" data-correct="false"> replaces</label><label><input type="radio" value="2" name="t4-mc-3" data-correct="false"> improves</label><label><input type="radio" value="3" name="t4-mc-3" data-correct="false"> is sold together with</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-4">
+          <p>4. <i>If anything</i>, the evidence points the other way (Para I)</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-4" data-correct="false"> in any case</label><label><input type="radio" value="1" name="t4-mc-4" data-correct="true"> if there is any difference at all, it is the opposite</label><label><input type="radio" value="2" name="t4-mc-4" data-correct="false"> without evidence</label><label><input type="radio" value="3" name="t4-mc-4" data-correct="false"> for example</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mc', 't4-mc-score')">Check answers</button>
+          <span id="t4-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 12</div>
+      <h2>Reading Skills — Reference and Cohesion</h2>
+      <p class="task-sub">Writers use reference words and phrases (<i>it, this, such, so, the latter…</i>) to avoid repetition and link ideas. IELTS tests these directly in multiple-choice questions — and misreading them causes many wrong answers. Decide what each word in <i>italics</i> refers to.</p>
+      <details class="card article passage-ref labelled" open>
+        <summary>📄 The passage — The Classroom Turned Inside Out</summary>
+        <p><span class="para-label">A</span>In one corner of the room, a twelve-year-old is working through problems on equations that most of her classmates will not meet for another year. Beside her, a boy is watching a short video on fractions for the third time, pausing it every few seconds to copy the diagrams into his notebook. Their teacher moves between them with a tablet that shows, in real time, which pupils have mastered which skills and which are stuck. Nobody is listening to a lecture. To anyone educated in a traditional classroom, the scene looks almost chaotic; to its supporters, it represents the future of schooling.</p><p><span class="para-label">B</span>The best-known source of such videos began almost by accident. In 2004, Salman Khan, then working as a financial analyst, started tutoring a young cousin in mathematics over the internet. When other relatives asked for help, he began recording short lessons and posting them online so that they could watch at their own convenience. To his surprise, the videos attracted thousands of viewers who were not related to him at all, and in 2008 he set up a non-profit organisation, Khan Academy, leaving his job the following year to work on it full-time. It now offers lessons in many subjects and languages.</p><p><span class="para-label">C</span>Part of the appeal lies in the format. A recorded explanation can be paused, rewound and replayed as often as a learner needs, without the embarrassment of asking a teacher to repeat something in front of thirty classmates. Combined with exercises that adapt to the learner's answers, this arrangement allows each student, at least in principle, to move on only once they have genuinely mastered a topic — an approach educationalists call mastery learning.</p><p><span class="para-label">D</span>The attraction for schools is easy to understand. Teachers have long complained that a single lesson pitched at the middle of a class inevitably leaves some pupils bored and others lost. The obvious remedy, individual instruction, has always been prohibitively expensive, and successive waves of classroom technology, from educational television to interactive whiteboards, have promised far more than they delivered. Self-paced software appears to offer something closer to a personal tutor at a fraction of the cost.</p><p><span class="para-label">E</span>Video lessons have also made possible a wider change known as the 'flipped classroom'. The idea is usually credited to two chemistry teachers in Colorado, Jonathan Bergmann and Aaron Sams, who began recording their lessons around 2007 so that pupils who missed classes for sports or illness could catch up. They soon noticed that the recordings could be used by everyone. Students watched the explanation at home and spent lesson time doing the exercises that would traditionally have been homework, with the teacher on hand at the moment they were most likely to need help.</p><p><span class="para-label">F</span>Yet the model has its critics, and their objections deserve to be taken seriously. Some argue that a recorded lecture followed by automated practice is not a revolution at all but the oldest form of teaching — transmission and drill — in a new format: old wine in new bottles. Others point out that software of this kind works best in subjects such as mathematics, where answers are clearly right or wrong, and is far less useful in history or literature, where the most valuable answers are open to interpretation. A flipped classroom also assumes that every pupil has a quiet place to study and a reliable internet connection at home, an assumption that does not hold for many families.</p><p><span class="para-label">G</span>A subtler danger is what might be called the illusion of progress. A student can collect badges and complete exercises by recognising familiar patterns, while understanding very little of why a method works. Self-pacing can also widen gaps: highly motivated pupils race ahead, while those who most need encouragement may quietly fall further behind, especially when nobody is setting the pace for them. Courses delivered entirely online have often been reported to have very low completion rates for precisely this reason.</p><p><span class="para-label">H</span>Perhaps the most awkward challenge, however, is organisational. Most school systems still group children by age and expect each year group to cover the same material at the same time. A model in which a twelve-year-old may be studying advanced algebra while a classmate is still revising fractions sits uneasily with timetables, textbooks and national examinations designed around the opposite assumption. Some teachers who welcome the approach have admitted that they are not sure what to do with a pupil who finishes the year's course in March.</p><p><span class="para-label">I</span>None of this suggests that video platforms will replace teachers. If anything, the evidence so far points the other way: the technology appears to be most effective when a skilled teacher decides how and when to use it, notices who is struggling, and provides the discussion, encouragement and challenge that no video can. What it may change is not whether teachers are needed but what they spend their time doing.</p>
+      </details>
+      <div class="card" id="t5-ref"><div class="q-item" id="t5-ref-1">
+          <p>1. Para A: <i>its</i> supporters</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-ref-1" data-correct="false"> the teacher's</label><label><input type="radio" value="1" name="t5-ref-1" data-correct="true"> the scene's (this way of running a classroom)</label><label><input type="radio" value="2" name="t5-ref-1" data-correct="false"> the tablet's</label><label><input type="radio" value="3" name="t5-ref-1" data-correct="false"> the lecture's</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-ref-2">
+          <p>2. Para B: so that <i>they</i> could watch at their own convenience</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-ref-2" data-correct="false"> the lessons</label><label><input type="radio" value="1" name="t5-ref-2" data-correct="true"> the relatives</label><label><input type="radio" value="2" name="t5-ref-2" data-correct="false"> the viewers who were not related to him</label><label><input type="radio" value="3" name="t5-ref-2" data-correct="false"> financial analysts</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-ref-3">
+          <p>3. Para D: The obvious <i>remedy</i> — a remedy for what?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-ref-3" data-correct="false"> the high cost of classroom technology</label><label><input type="radio" value="1" name="t5-ref-3" data-correct="true"> a single lesson leaving some pupils bored and others lost</label><label><input type="radio" value="2" name="t5-ref-3" data-correct="false"> teachers' complaints about workload</label><label><input type="radio" value="3" name="t5-ref-3" data-correct="false"> the failure of educational television</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-ref-4">
+          <p>4. Para E: <i>They</i> soon noticed</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-ref-4" data-correct="false"> the pupils who missed classes</label><label><input type="radio" value="1" name="t5-ref-4" data-correct="true"> Bergmann and Sams</label><label><input type="radio" value="2" name="t5-ref-4" data-correct="false"> the recordings</label><label><input type="radio" value="3" name="t5-ref-4" data-correct="false"> sports teams</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-ref-5">
+          <p>5. Para F: <i>an assumption</i> that does not hold for many families</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-ref-5" data-correct="true"> that every pupil has a quiet place to study and reliable internet at home</label><label><input type="radio" value="1" name="t5-ref-5" data-correct="false"> that software works best in mathematics</label><label><input type="radio" value="2" name="t5-ref-5" data-correct="false"> that recorded lectures are a revolution</label><label><input type="radio" value="3" name="t5-ref-5" data-correct="false"> that history answers are open to interpretation</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-ref-6">
+          <p>6. Para G: for precisely <i>this reason</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-ref-6" data-correct="false"> badges are unpopular</label><label><input type="radio" value="1" name="t5-ref-6" data-correct="true"> nobody sets the pace, so less motivated learners fall behind</label><label><input type="radio" value="2" name="t5-ref-6" data-correct="false"> software is expensive</label><label><input type="radio" value="3" name="t5-ref-6" data-correct="false"> pupils recognise patterns</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-ref-7">
+          <p>7. Para H: <i>the opposite assumption</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-ref-7" data-correct="false"> that pupils should study at home</label><label><input type="radio" value="1" name="t5-ref-7" data-correct="true"> that pupils of the same age cover the same material at the same time</label><label><input type="radio" value="2" name="t5-ref-7" data-correct="false"> that teachers are unnecessary</label><label><input type="radio" value="3" name="t5-ref-7" data-correct="false"> that pupils learn best in March</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-ref', 't5-ref-score')">Check answers</button>
+          <span id="t5-ref-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Discuss.</strong> Record an answer to each question. Use at least one reference device (<i>this, such, the latter…</i>) deliberately in each answer.</p>
+      <div class="question-box" data-field="t5-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">What IT or websites do you use to supplement your classwork or lectures? How effective are they — and what are their limits?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“One resource I rely on is…”</li><li>“What makes it so useful is…”</li><li>“That said, such tools can't…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">What effect do you think IT will have on classrooms in the future? Will the role of the teacher change, and how?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I suspect that…”</li><li>“This would mean that…”</li><li>“Where I think technology will fall short is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 12</div>
+      <h2>Lead-in 2 — Video: The Magic Ingredient That Brings Pixar Movies to Life</h2>
+      <p class="task-sub">Before the listening (a lecture on animation technology), watch this TED talk by Danielle Feinberg, a director of photography at Pixar (about 9 minutes). Turn on English subtitles only if you need them.</p>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="position:relative; padding-bottom:56.25%; height:0;">
+          <iframe src="https://embed.ted.com/talks/danielle_feinberg_the_magic_ingredient_that_brings_pixar_movies_to_life" title="Danielle Feinberg — The magic ingredient that brings Pixar movies to life" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe>
+        </div></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-1">
+          <p>1. What is Feinberg's job at Pixar?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-1" data-correct="false"> A. scriptwriter</label><label><input type="radio" value="1" name="t6-mc-1" data-correct="true"> B. director of photography, responsible for lighting</label><label><input type="radio" value="2" name="t6-mc-1" data-correct="false"> C. voice actor</label><label><input type="radio" value="3" name="t6-mc-1" data-correct="false"> D. marketing director</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-2">
+          <p>2. According to the talk, what does lighting contribute to a film?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-2" data-correct="false"> A. It only makes images brighter.</label><label><input type="radio" value="1" name="t6-mc-2" data-correct="true"> B. It sets the mood and helps to tell the story.</label><label><input type="radio" value="2" name="t6-mc-2" data-correct="false"> C. It reduces production costs.</label><label><input type="radio" value="3" name="t6-mc-2" data-correct="false"> D. It replaces the need for music.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-3">
+          <p>3. Which subjects does she show are essential to her creative work?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-3" data-correct="false"> A. history and geography</label><label><input type="radio" value="1" name="t6-mc-3" data-correct="true"> B. mathematics, science and computer code</label><label><input type="radio" value="2" name="t6-mc-3" data-correct="false"> C. economics and law</label><label><input type="radio" value="3" name="t6-mc-3" data-correct="false"> D. languages and literature</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-4">
+          <p>4. What is her central message?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-4" data-correct="false"> A. Art and science are opposites.</label><label><input type="radio" value="1" name="t6-mc-4" data-correct="true"> B. Art and science work together to make imaginary worlds believable.</label><label><input type="radio" value="2" name="t6-mc-4" data-correct="false"> C. Computers will soon replace artists.</label><label><input type="radio" value="3" name="t6-mc-4" data-correct="false"> D. Animated films are mainly for children.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the talk in your own words — <b>at least 120 words</b>. Present the central argument, the key evidence and any limitations, then add a short evaluation of your own. No phrase of four or more words may be copied.</p>
+      <div class="card"><p class="mini-q">Your summary of the talk (at least 120 words):</p><textarea class="no-check mini-answer" id="t6-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:190px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t6-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t6-sum-ans"><p>In this talk, Danielle Feinberg, a director of photography at Pixar, explains how lighting turns computer-generated scenes into believable worlds that audiences care about. She argues that lighting is not merely technical: it sets the mood of a scene and guides the viewer's emotions, and it therefore plays a central role in telling the story. Drawing on films such as Toy Story, Finding Nemo, WALL-E and Brave, she shows that achieving this effect depends heavily on mathematics, science and computer code. Her main message is that art and science are not opposites; at Pixar they work together, and the technical work is what allows imaginative worlds to feel real. I found her argument persuasive, particularly because it challenges the common assumption that people must choose between creative and scientific careers. (≈ 135 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t6-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the talk <b>aloud</b> without reading — speak for <b>at least 60 seconds</b>. Include one point you agree with and one you would question.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central claim is that…”</li><li>“This rests largely on…”</li><li>“What strikes me as particularly persuasive is…”</li><li>“Where I'd take issue is…”</li><li>“All things considered,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 12</div>
+      <h2>Listening Section 4 — Animation Technology</h2>
+      <p class="task-sub">You will hear a media-studies lecturer talking about animation technology in the film industry. Section 4 is a monologue with no break in the middle, so <b>preparation is everything</b>: predict the type of word for every gap before you listen.</p>
+      <div class="card"><p class="mini-q">1. How did film makers make animated films before the invention of computers?</p><textarea class="no-check mini-answer" id="t7-pre-1" placeholder="Your ideas..." style="min-height:60px;"></textarea><p class="mini-q">2. Why do you think both adults and children enjoy animated films?</p><textarea class="no-check mini-answer" id="t7-pre-2" placeholder="Your ideas..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t7-pre-btn">Show suggested answers</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t7-pre-ans"><ol><li>Everything had to be done by hand: thousands of drawings, painted by artists with excellent skills.</li><li>Children love the colours, expressions and characters; adults appreciate the humour, the emotions the films stir, their wisdom in simplicity, and being reminded of their childhood.</li></ol></div>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Predict.</strong> Before listening, decide what type of answer each gap needs.</p>
+      <div class="card" id="t7-type"><div class="sel-row"><select class="select" id="t7-type-1" data-answer="plural noun"><option value="">—</option><option value="plural noun">plural noun</option><option value="noun (a material)">noun (a material)</option><option value="adjective">adjective</option><option value="number (an amount of money)">number (an amount of money)</option><option value="noun (a feature)">noun (a feature)</option><option value="noun (a technique)">noun (a technique)</option><option value="noun (something on screen)">noun (something on screen)</option><option value="noun (an aspect of humans)">noun (an aspect of humans)</option><option value="noun (a product)">noun (a product)</option></select><span><b>1.</b> Gap 1 — used many ___ of faces</span></div><div class="sel-row"><select class="select" id="t7-type-2" data-answer="noun (a material)"><option value="">—</option><option value="plural noun">plural noun</option><option value="noun (a material)">noun (a material)</option><option value="adjective">adjective</option><option value="number (an amount of money)">number (an amount of money)</option><option value="noun (a feature)">noun (a feature)</option><option value="noun (a technique)">noun (a technique)</option><option value="noun (something on screen)">noun (something on screen)</option><option value="noun (an aspect of humans)">noun (an aspect of humans)</option><option value="noun (a product)">noun (a product)</option></select><span><b>2.</b> Gap 2 — cut-outs made of ___</span></div><div class="sel-row"><select class="select" id="t7-type-3" data-answer="adjective"><option value="">—</option><option value="plural noun">plural noun</option><option value="noun (a material)">noun (a material)</option><option value="adjective">adjective</option><option value="number (an amount of money)">number (an amount of money)</option><option value="noun (a feature)">noun (a feature)</option><option value="noun (a technique)">noun (a technique)</option><option value="noun (something on screen)">noun (something on screen)</option><option value="noun (an aspect of humans)">noun (an aspect of humans)</option><option value="noun (a product)">noun (a product)</option></select><span><b>3.</b> Gap 3 — used ___ slides</span></div><div class="sel-row"><select class="select" id="t7-type-4" data-answer="number (an amount of money)"><option value="">—</option><option value="plural noun">plural noun</option><option value="noun (a material)">noun (a material)</option><option value="adjective">adjective</option><option value="number (an amount of money)">number (an amount of money)</option><option value="noun (a feature)">noun (a feature)</option><option value="noun (a technique)">noun (a technique)</option><option value="noun (something on screen)">noun (something on screen)</option><option value="noun (an aspect of humans)">noun (an aspect of humans)</option><option value="noun (a product)">noun (a product)</option></select><span><b>4.</b> Gap 4 — over $___ worldwide</span></div><div class="sel-row"><select class="select" id="t7-type-5" data-answer="noun (a feature)"><option value="">—</option><option value="plural noun">plural noun</option><option value="noun (a material)">noun (a material)</option><option value="adjective">adjective</option><option value="number (an amount of money)">number (an amount of money)</option><option value="noun (a feature)">noun (a feature)</option><option value="noun (a technique)">noun (a technique)</option><option value="noun (something on screen)">noun (something on screen)</option><option value="noun (an aspect of humans)">noun (an aspect of humans)</option><option value="noun (a product)">noun (a product)</option></select><span><b>5.</b> Gap 5 — included ___ as a new animation feature</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-type', 't7-type-score')">Check answers</button>
+          <span id="t7-type-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="prompt-label">Questions 1–10 · Complete the notes · Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.</p></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 01 — Questions 1–10 (one recording, no pause in the middle)</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track01.mp3"></audio></div>
+      <div class="card" id="t7-n" style="line-height:2.3;"><p><b>Animation Technology</b></p><p><b>History</b></p><p>Thomas Edison: first camera – 1889</p><p>J. Stuart Blackton: first animated film technique – used many <input type="text" class="text-answer" id="t7-1" data-correct="drawings" autocomplete="off" style="width:140px;"> (1) of faces</p><p>Émile Cohl: first animated scene – used cut-outs made of <input type="text" class="text-answer" id="t7-2" data-correct="paper" autocomplete="off" style="width:120px;"> (2)</p><p>Walt Disney: first talking colour film – 1928 – used <input type="text" class="text-answer" id="t7-3" data-correct="hand-painted/hand painted/handpainted" autocomplete="off" style="width:150px;"> (3) slides; first full-length colour film – <i>Snow White and the Seven Dwarfs</i> – 1937</p><p><b>Pixar Animation Studios</b></p><p>Origins: graphics group</p><p>Earnings: over $ <input type="text" class="text-answer" id="t7-4" data-correct="6.3 billion/6.3bn/6,300,000,000/6300000000/6.3 billion dollars" autocomplete="off" style="width:140px;"> (4) worldwide</p><p>Famous films: 1995 – <i>Toy Story</i> – first computer-animated film · 2001 – <i>Monsters, Inc.</i> – included <input type="text" class="text-answer" id="t7-5" data-correct="fur/animal fur" autocomplete="off" style="width:120px;"> (5) as a new animation feature</p><p><i>Finding Nemo</i> – new techniques in <input type="text" class="text-answer" id="t7-6" data-correct="digital lighting" autocomplete="off" style="width:150px;"> (6) · <i>The Incredibles</i> – believable simulations of people and <input type="text" class="text-answer" id="t7-7" data-correct="crowds" autocomplete="off" style="width:120px;"> (7)</p><p><b>Future developments</b></p><p>a. Digital humans: focusing particularly on skin and <input type="text" class="text-answer" id="t7-8" data-correct="facial movement/facial movements" autocomplete="off" style="width:160px;"> (8)</p><p>b. Speed: companies producing <input type="text" class="text-answer" id="t7-9" data-correct="video games" autocomplete="off" style="width:140px;"> (9) will help</p><p>c. Colour: aim to preserve vibrancy</p><p>d. Styles of animation: a move from <input type="text" class="text-answer" id="t7-10" data-correct="reality" autocomplete="off" style="width:120px;"> (10) to new concepts</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-n', 't7-n-score')">Check answers</button>
+          <span id="t7-n-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card advice-card"><p class="prompt-label">Exam advice — note completion</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li>Check how many words you have written for each answer.</li><li>Spell carefully — misspelt answers score zero.</li><li>Use your predictions about word type to make an intelligent guess at the end: there is no penalty for a wrong answer.</li></ul></div>
+      <div class="question-box" data-field="t7-speaking-film">
+        <div class="q-num">Short talk — a film with computer animation</div>
+        <div class="q-text">Give a short talk (1–2 minutes) about a film you have seen that includes computer-animated features or effects. Say what the film was about, which computer effects you noticed, and what you particularly liked or disliked about them.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The film I'd like to talk about is…”</li><li>“What really stood out visually was…”</li><li>“The effects were so convincing that…”</li><li>“If I had one criticism, it would be that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 12</div>
+      <h2>Vocabulary — Adjective + Noun Collocations</h2>
+      <p class="task-sub">Natural collocations are one of the clearest markers of Band 7–8 Lexical Resource. Many adjectives look like synonyms but only some combine naturally with a given noun.</p>
+      <p style="margin-top:26px;"><strong>Part 1.</strong> In each sentence, which adjective <b>cannot</b> be used with the noun in bold?</p>
+      <div class="card" id="t8-x"><div class="q-item" id="t8-x-1">
+          <p>1. The project required a large / big / considerable <b>number</b> of volunteers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-x-1" data-correct="false"> large</label><label><input type="radio" value="1" name="t8-x-1" data-correct="true"> big</label><label><input type="radio" value="2" name="t8-x-1" data-correct="false"> considerable</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-x-2">
+          <p>2. The director has won numerous / plentiful / countless <b>awards</b>.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-x-2" data-correct="false"> numerous</label><label><input type="radio" value="1" name="t8-x-2" data-correct="true"> plentiful</label><label><input type="radio" value="2" name="t8-x-2" data-correct="false"> countless</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-x-3">
+          <p>3. Reviewers praised the app's outstanding / irreplaceable / excellent <b>features</b>.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-x-3" data-correct="false"> outstanding</label><label><input type="radio" value="1" name="t8-x-3" data-correct="true"> irreplaceable</label><label><input type="radio" value="2" name="t8-x-3" data-correct="false"> excellent</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-x-4">
+          <p>4. Mapping the human genome was among the most extensive / significant / noteworthy scientific <b>achievements</b> of its time.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-x-4" data-correct="true"> extensive</label><label><input type="radio" value="1" name="t8-x-4" data-correct="false"> significant</label><label><input type="radio" value="2" name="t8-x-4" data-correct="false"> noteworthy</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-x-5">
+          <p>5. The novel's central / primary / main <b>characters</b> are two sisters who run a bakery.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-x-5" data-correct="false"> central</label><label><input type="radio" value="1" name="t8-x-5" data-correct="true"> primary</label><label><input type="radio" value="2" name="t8-x-5" data-correct="false"> main</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-x-6">
+          <p>6. Online study demands a certain / particular / sure <b>level</b> of self-discipline.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-x-6" data-correct="false"> certain</label><label><input type="radio" value="1" name="t8-x-6" data-correct="false"> particular</label><label><input type="radio" value="2" name="t8-x-6" data-correct="true"> sure</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-x-7">
+          <p>7. Parents often have high / tall / great <b>expectations</b> of new educational apps.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-x-7" data-correct="false"> high</label><label><input type="radio" value="1" name="t8-x-7" data-correct="true"> tall</label><label><input type="radio" value="2" name="t8-x-7" data-correct="false"> great</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-x', 't8-x-score')">Check answers</button>
+          <span id="t8-x-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2.</strong> Complete each sentence with a natural adjective + noun collocation from Part 1 (two words).</p>
+      <div class="card" id="t8-c" style="line-height:2.4;"><p>1. If friends praise a film too much, your <input type="text" class="text-answer" id="t8-1" data-correct="expectations" autocomplete="off" style="width:120px;"> can be too <input type="text" class="text-answer" id="t8-1b" data-correct="high/great" autocomplete="off" style="width:90px;"> when you go to see it.</p><p>2. Audiences need to be able to identify with the <input type="text" class="text-answer" id="t8-2" data-correct="central characters/main characters" autocomplete="off" style="width:190px;"> in a film.</p><p>3. In my view, the lighting was the most <input type="text" class="text-answer" id="t8-3" data-correct="outstanding feature" autocomplete="off" style="width:190px;"> of the film.</p><p>4. Producers now have a <input type="text" class="text-answer" id="t8-4" data-correct="considerable number/large number" autocomplete="off" style="width:190px;"> of animation techniques at their disposal.</p><p>5. Making a short animated film was a <input type="text" class="text-answer" id="t8-5" data-correct="significant achievement/noteworthy achievement" autocomplete="off" style="width:210px;"> for me.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-c', 't8-c-score')">Check answers</button>
+          <span id="t8-c-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 3 — Band 8 collocations.</strong> Choose the adjective that collocates naturally with the noun in bold.</p>
+      <div class="card" id="t8-b8"><div class="q-item" id="t8-b8-1">
+          <p>1. Online learning could have <b>______ consequences</b> for the teaching profession.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-b8-1" data-correct="true"> far-reaching</label><label><input type="radio" value="1" name="t8-b8-1" data-correct="false"> far-going</label><label><input type="radio" value="2" name="t8-b8-1" data-correct="false"> wide-reaching</label><label><input type="radio" value="3" name="t8-b8-1" data-correct="false"> long-going</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-b8-2">
+          <p>2. There is a <b>______ gap</b> between pupils with and without internet access.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-b8-2" data-correct="true"> widening</label><label><input type="radio" value="1" name="t8-b8-2" data-correct="false"> broadening</label><label><input type="radio" value="2" name="t8-b8-2" data-correct="false"> enlarging</label><label><input type="radio" value="3" name="t8-b8-2" data-correct="false"> extending</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-b8-3">
+          <p>3. The research is based on <b>______ evidence</b> rather than personal anecdote.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-b8-3" data-correct="true"> empirical</label><label><input type="radio" value="1" name="t8-b8-3" data-correct="false"> empiric</label><label><input type="radio" value="2" name="t8-b8-3" data-correct="false"> experiential</label><label><input type="radio" value="3" name="t8-b8-3" data-correct="false"> experimented</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-b8-4">
+          <p>4. Critics raised <b>______ concerns</b> about pupils' privacy.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-b8-4" data-correct="true"> legitimate</label><label><input type="radio" value="1" name="t8-b8-4" data-correct="false"> legal</label><label><input type="radio" value="2" name="t8-b8-4" data-correct="false"> lawful</label><label><input type="radio" value="3" name="t8-b8-4" data-correct="false"> licit</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-b8-5">
+          <p>5. Technology has had a <b>______ impact</b> on the way we work.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-b8-5" data-correct="true"> profound</label><label><input type="radio" value="1" name="t8-b8-5" data-correct="false"> deep-down</label><label><input type="radio" value="2" name="t8-b8-5" data-correct="false"> heavy</label><label><input type="radio" value="3" name="t8-b8-5" data-correct="false"> thick</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-b8', 't8-b8-score')">Check answers</button>
+          <span id="t8-b8-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 12</div>
+      <h2>Speaking Part 2 — A Website You Like Using</h2>
+      <p class="task-sub">Listen to a candidate, Rosy, then study the strategies high-scoring candidates use when they can't remember a word — the examiner gives credit for paraphrasing successfully.</p>
+      <div class="card task-prompt"><p class="prompt-label">Part 2 task card</p><p><b>Describe a website that you like using.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what this website is<br>&nbsp;&nbsp;how people use it<br>&nbsp;&nbsp;who uses it<br>and explain why you like using this website.</p></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 02 — Rosy</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track02.mp3"></audio></div>
+      <p style="margin-top:26px;"><strong>Which of these things does Rosy do?</strong></p>
+      <div class="card" id="t9-ros"><div class="q-item" id="t9-ros-1">
+          <p>1. introduces her topic</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-ros-1" data-correct="true"> Yes</label><label><input type="radio" value="1" name="t9-ros-1" data-correct="false"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-ros-2">
+          <p>2. introduces each point clearly</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-ros-2" data-correct="true"> Yes</label><label><input type="radio" value="1" name="t9-ros-2" data-correct="false"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-ros-3">
+          <p>3. paraphrases when she can't remember a word or phrase</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-ros-3" data-correct="true"> Yes</label><label><input type="radio" value="1" name="t9-ros-3" data-correct="false"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-ros-4">
+          <p>4. repeats some points</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-ros-4" data-correct="false"> Yes</label><label><input type="radio" value="1" name="t9-ros-4" data-correct="true"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-ros-5">
+          <p>5. rephrases to avoid hesitation</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-ros-5" data-correct="true"> Yes</label><label><input type="radio" value="1" name="t9-ros-5" data-correct="false"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-ros-6">
+          <p>6. uses a strategy to include something she forgot</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-ros-6" data-correct="true"> Yes</label><label><input type="radio" value="1" name="t9-ros-6" data-correct="false"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-ros-7">
+          <p>7. pauses unnecessarily</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-ros-7" data-correct="false"> Yes</label><label><input type="radio" value="1" name="t9-ros-7" data-correct="true"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-ros-8">
+          <p>8. ends her talk naturally within two minutes</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-ros-8" data-correct="true"> Yes</label><label><input type="radio" value="1" name="t9-ros-8" data-correct="false"> No</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-ros', 't9-ros-score')">Check answers</button>
+          <span id="t9-ros-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Paraphrasing strategies.</strong> In her talk, Rosy can't remember the words <i>amateur</i> and <i>music genre</i>. Strategies: <b>a</b> saying what it is not · <b>b</b> explaining how it works · <b>c</b> giving a definition · <b>d</b> describing what it looks like.</p>
+      <div class="card" id="t9-str"><div class="q-item" id="t9-str-1">
+          <p>1. Which strategies does she use to explain <i>amateur</i>?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-str-1" data-correct="true"> A. a and c</label><label><input type="radio" value="1" name="t9-str-1" data-correct="false"> B. b only</label><label><input type="radio" value="2" name="t9-str-1" data-correct="false"> C. b and d</label><label><input type="radio" value="3" name="t9-str-1" data-correct="false"> D. d only</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-str-2">
+          <p>2. Which strategy does she use to explain <i>music genre</i>?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-str-2" data-correct="false"> A. a</label><label><input type="radio" value="1" name="t9-str-2" data-correct="false"> B. b</label><label><input type="radio" value="2" name="t9-str-2" data-correct="true"> C. c</label><label><input type="radio" value="3" name="t9-str-2" data-correct="false"> D. d</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-str', 't9-str-score')">Check answers</button>
+          <span id="t9-str-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Your turn to paraphrase.</strong> If you had forgotten the word in bold, how would you explain the idea? Write your paraphrase, then choose which strategy (a–d) you used.</p>
+      <div class="card"><p class="mini-q">1. What people do is they make a CD in a <b>recording studio</b> somewhere.</p><textarea class="no-check mini-answer" id="t9-pp-1" placeholder="Your paraphrase (and strategy a–d)..." style="min-height:40px;"></textarea><p class="mini-q">2. … some people set up the <b>recording equipment</b> in their own home …</p><textarea class="no-check mini-answer" id="t9-pp-2" placeholder="Your paraphrase (and strategy a–d)..." style="min-height:40px;"></textarea><p class="mini-q">3. … though there's no <b>age limit</b> …</p><textarea class="no-check mini-answer" id="t9-pp-3" placeholder="Your paraphrase (and strategy a–d)..." style="min-height:40px;"></textarea><p class="mini-q">4. … they're usually talented musicians and <b>composers</b>.</p><textarea class="no-check mini-answer" id="t9-pp-4" placeholder="Your paraphrase (and strategy a–d)..." style="min-height:40px;"></textarea><p class="mini-q">5. … and they hope a <b>talent scout</b> will <b>spot</b> them on the website!</p><textarea class="no-check mini-answer" id="t9-pp-5" placeholder="Your paraphrase (and strategy a–d)..." style="min-height:40px;"></textarea><p class="mini-q">6. I love this website because you get to hear <b>original music</b> …</p><textarea class="no-check mini-answer" id="t9-pp-6" placeholder="Your paraphrase (and strategy a–d)..." style="min-height:40px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-pp-btn">Show suggested paraphrases</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-pp-ans"><ol><li>in a special place — a building with rooms where other people can record you (<b>c</b>)</li><li>it sometimes looks like a huge table with lots of buttons and switches, plus microphones and amplifiers (<b>d</b>)</li><li>you can be any age (<b>c</b>)</li><li>people who write their own songs (<b>c</b>)</li><li>someone who looks for talented people; notice (<b>c</b>)</li><li>music that no one has heard before (<b>a</b>)</li></ol></div>
+        </div></div>
+      <div class="card advice-card"><p class="prompt-label">Exam advice — Speaking Part 2</p><p style="margin:0;">Use a range of strategies to express ideas when you can't think of the right word. Showing you can do this <b>raises</b> your score — silence lowers it.</p></div>
+      <div class="question-box" data-field="t9-speaking-web">
+        <div class="q-num">Your Part 2 talk — a website</div>
+        <div class="q-text">Do the task card yourself. Prepare for 1 minute, then speak for <b>2 minutes</b>. Deliberately use at least one paraphrasing strategy and one "something I forgot" repair.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The website I'd like to talk about is…”</li><li>“What it is, basically, is a site where…”</li><li>“It's mainly … who use it, because…”</li><li>“Oh, and something I meant to mention earlier is…”</li><li>“What I love most about it is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="card task-prompt" style="margin-top:22px;"><p class="prompt-label">Part 2 task card — extra practice</p><p><b>Describe a piece of technology you could not live without.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what it is<br>&nbsp;&nbsp;when you started using it<br>&nbsp;&nbsp;what you use it for<br>and explain why it is so important to you.</p></div>
+      <div class="question-box" data-field="t9-speaking-tech">
+        <div class="q-num">Your Part 2 talk — technology</div>
+        <div class="q-text">Prepare for 1 minute, then speak for <b>2 minutes</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“A piece of technology I genuinely couldn't do without is…”</li><li>“I first started using it when…”</li><li>“I tend to use it for…”</li><li>“If I had to give it up, I suspect that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 12</div>
+      <h2>Speaking Part 3 — Children, the Internet and Entertainment</h2>
+      <p class="task-sub">Part 3 rewards candidates who present <b>advantages and disadvantages clearly</b> and signal agreement or disagreement — even with the examiner's suggestion — in a friendly, engaged way.</p>
+      <div class="card"><p class="prompt-label">Children's use of the Internet</p><ol style="margin:0; padding-left:20px; line-height:1.8;">
+  <li>Some people say it isn't good for children to use the Internet a lot in their free time — what do you think?</li>
+  <li>Is it true that the Internet is sometimes an <i>unhelpful</i> tool when it comes to children's education?</li>
+  <li>Would you agree that the Internet has a positive effect on children's social lives?</li></ol></div>
+      <p style="margin-top:26px;"><strong>Listen to three candidates.</strong> Which question does each candidate answer?</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 03 — Katalina</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track03.mp3"></audio></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 04 — Obi</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track04.mp3"></audio></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 05 — Elicia</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track05.mp3"></audio></div>
+      <div class="card" id="t10-who"><div class="sel-row"><select class="select" id="t10-who-1" data-answer="Question 3"><option value="">—</option><option value="Question 1">Question 1</option><option value="Question 2">Question 2</option><option value="Question 3">Question 3</option></select><span><b>1.</b> Katalina</span></div><div class="sel-row"><select class="select" id="t10-who-2" data-answer="Question 1"><option value="">—</option><option value="Question 1">Question 1</option><option value="Question 2">Question 2</option><option value="Question 3">Question 3</option></select><span><b>2.</b> Obi</span></div><div class="sel-row"><select class="select" id="t10-who-3" data-answer="Question 2"><option value="">—</option><option value="Question 1">Question 1</option><option value="Question 2">Question 2</option><option value="Question 3">Question 3</option></select><span><b>3.</b> Elicia</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-who', 't10-who-score')">Check answers</button>
+          <span id="t10-who-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write down any phrases you heard the candidates use to talk about <b>advantages and disadvantages</b> (e.g. <i>a significant advantage for anyone is…</i>).</p><textarea class="no-check mini-answer" id="t10-phr-1" placeholder="Phrases you heard..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t10-phr-btn">Show the phrases</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t10-phr-ans"><p><b>Katalina:</b> a significant advantage for anyone is… / Another is… · <b>Obi:</b> there aren't many benefits to doing that · <b>Elicia:</b> one of the main drawbacks of using… / A real benefit to children of using…</p></div>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Prepositions with advantages and disadvantages.</strong> Choose the correct preposition.</p>
+      <div class="card" id="t10-prep"><div class="q-item" id="t10-prep-1">
+          <p>1. One of the many advantages ______ studying online is the flexibility it offers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-prep-1" data-correct="true"> of</label><label><input type="radio" value="1" name="t10-prep-1" data-correct="false"> for</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-prep-2">
+          <p>2. Pupils benefited enormously ______ the extra tutoring sessions.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-prep-2" data-correct="true"> from</label><label><input type="radio" value="1" name="t10-prep-2" data-correct="false"> with</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-prep-3">
+          <p>3. There are several drawbacks ______ relying entirely on screens.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-prep-3" data-correct="true"> to</label><label><input type="radio" value="1" name="t10-prep-3" data-correct="false"> on</label><label><input type="radio" value="2" name="t10-prep-3" data-correct="false"> for</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-prep-4">
+          <p>4. ______ a designer, it is a significant advantage to have fast software.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-prep-4" data-correct="true"> For</label><label><input type="radio" value="1" name="t10-prep-4" data-correct="false"> To</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-prep-5">
+          <p>5. The new platform has clear advantages ______ its rivals.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-prep-5" data-correct="true"> over</label><label><input type="radio" value="1" name="t10-prep-5" data-correct="false"> from</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-prep', 't10-prep-score')">Check answers</button>
+          <span id="t10-prep-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card advice-card"><p class="prompt-label">Exam advice — Speaking Part 3</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li>Introduce positive and negative points clearly, using appropriate language.</li><li>Use intonation to signal agreement and disagreement — a flat voice sounds bored or even hostile.</li></ul></div>
+      <p style="margin-top:26px;"><strong>Your turn.</strong> Record an answer to each question. Weigh up both sides before giving your view.</p>
+      <div class="question-box" data-field="t10-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Some people say it isn't good for children to use the Internet a lot in their free time — what do you think?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“One of the main advantages of … is…”</li><li>“A real drawback to … is…”</li><li>“That could be right, but…”</li><li>“On balance, I'd say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Is it true that the Internet is sometimes an unhelpful tool when it comes to children's education?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“One of the main advantages of … is…”</li><li>“A real drawback to … is…”</li><li>“That could be right, but…”</li><li>“On balance, I'd say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Would you agree that the Internet has a positive effect on children's social lives?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“One of the main advantages of … is…”</li><li>“A real drawback to … is…”</li><li>“That could be right, but…”</li><li>“On balance, I'd say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Would you say the Internet is a better form of entertainment than television? Why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“One of the main advantages of … is…”</li><li>“A real drawback to … is…”</li><li>“That could be right, but…”</li><li>“On balance, I'd say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-5">
+        <div class="q-num">Question 5</div>
+        <div class="q-text">Would you agree that there are a lot of advantages to watching TV on the Internet? Why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“One of the main advantages of … is…”</li><li>“A real drawback to … is…”</li><li>“That could be right, but…”</li><li>“On balance, I'd say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-6">
+        <div class="q-num">Question 6</div>
+        <div class="q-text">Some people say the Internet is a good place to be "discovered" as an entertainer. What do you think? Why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“One of the main advantages of … is…”</li><li>“A real drawback to … is…”</li><li>“That could be right, but…”</li><li>“On balance, I'd say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-7">
+        <div class="q-num">Question 7</div>
+        <div class="q-text">Some people say we've reached the point where technology is intruding on our private lives. Would you agree?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“One of the main advantages of … is…”</li><li>“A real drawback to … is…”</li><li>“That could be right, but…”</li><li>“On balance, I'd say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-8">
+        <div class="q-num">Question 8</div>
+        <div class="q-text">Should governments limit the amount of time children spend online? Why / why not?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“One of the main advantages of … is…”</li><li>“A real drawback to … is…”</li><li>“That could be right, but…”</li><li>“On balance, I'd say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 12</div>
+      <h2>Pronunciation — Intonation to Show Engagement</h2>
+      <p class="task-sub">Speakers use intonation to show they are engaged in a discussion. This matters most when you introduce arguments — and especially when you want to <b>disagree with the examiner</b> while keeping a friendly, interested tone.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 06 — two students respond to a Part 3 question</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track06.mp3"></audio></div>
+<div class="card"><p style="margin:0;"><b>a</b> <i>Not really. It's convenient sometimes, but I don't think it's as enjoyable.</i><br><b>b</b> <i>Yeah – a lot of young people do that these days.</i></p></div>
+      <div class="card" id="t11-a"><div class="q-item" id="t11-a-1">
+          <p>1. Which speaker sounds more interested?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-a-1" data-correct="true"> A. Speaker a</label><label><input type="radio" value="1" name="t11-a-1" data-correct="false"> B. Speaker b</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-a-2">
+          <p>2. Why does that speaker sound more interested?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-a-2" data-correct="true"> A. The voice rises and moves, e.g. on <i>not really</i> and <i>convenient</i>.</label><label><input type="radio" value="1" name="t11-a-2" data-correct="false"> B. The voice stays flat throughout.</label><label><input type="radio" value="2" name="t11-a-2" data-correct="false"> C. The speaker speaks more quickly.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-a-3">
+          <p>3. How does the other speaker sound?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-a-3" data-correct="false"> A. excited</label><label><input type="radio" value="1" name="t11-a-3" data-correct="true"> B. bored — the tone is flat</label><label><input type="radio" value="2" name="t11-a-3" data-correct="false"> C. angry</label><label><input type="radio" value="3" name="t11-a-3" data-correct="false"> D. nervous</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-a', 't11-a-score')">Check answers</button>
+          <span id="t11-a-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Listen and repeat.</strong> Notice where the voices rise and fall in these exchanges — especially on the stressed words <i>right, yeah, agree, that</i> and <i>actually, I think, positive, one</i>.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 07 — questions and answers</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track07.mp3"></audio></div>
+      <div class="question-box" data-field="t11-speaking-rep">
+        <div class="q-num">Repeat</div>
+        <div class="q-text">Repeat the two answers from Track 07 aloud, copying the intonation as closely as you can: <i>“That could be right – yeah, a lot of people would agree with that.”</i> / <i>“Oh, well, actually, I think it has a positive one.”</i></div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>Stress the key words and let your voice move on them.</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="card"><p class="prompt-label">Question</p><p><i>Some people say we've reached the point where technology is intruding on our private lives. Would you agree?</i></p>
+  <ol type="a" style="margin:0; padding-left:20px; line-height:1.8;"><li>Oh, completely. There are CCTV cameras everywhere.</li><li>I don't think people notice really – they're just used to it.</li><li>I would, yes. Everywhere you go, there are screens of one kind or another.</li><li>Well, you can't stop it – new developments are happening all the time.</li><li>I'm not sure. In some ways it's a nuisance, but in others it isn't.</li></ol></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 08 — the five responses</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track08.mp3"></audio></div>
+      <div class="question-box" data-field="t11-speaking-resp">
+        <div class="q-num">Five responses</div>
+        <div class="q-text">Say all five responses (a–e) aloud so that you sound <b>interested and engaged</b>, including the ones that disagree. Listen to Track 08 first, then record yourself.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>Let your voice rise on the key words: <i>completely, CCTV, notice, used, would, yes, screens, can't stop, sure, nuisance</i>.</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 12</div>
+      <h2>Consolidation — Lexis for IT and Education</h2>
+      <p class="task-sub">A final, demanding check of today's vocabulary. All answers come from today's tasks. Then use the language in one extended spoken answer.</p>
+      <p style="margin-top:26px;"><strong>Word formation.</strong> Write the correct form of the word in brackets.</p>
+      <div class="card" id="t12-wf" style="line-height:2.5;"><p>1. Bloom's findings suggested that tutoring could be <input type="text" class="text-answer" id="t12-1" data-correct="dramatically" autocomplete="off" style="width:140px;"> more effective than whole-class teaching. (drama)</p><p>2. Individual instruction has always been <input type="text" class="text-answer" id="t12-2" data-correct="prohibitively" autocomplete="off" style="width:150px;"> expensive. (prohibit)</p><p>3. The software adapts to each learner's level of <input type="text" class="text-answer" id="t12-3" data-correct="mastery" autocomplete="off" style="width:130px;">. (master)</p><p>4. Critics fear that self-pacing will reward only the most <input type="text" class="text-answer" id="t12-4" data-correct="motivated" autocomplete="off" style="width:130px;"> pupils. (motivate)</p><p>5. Many families lack the <input type="text" class="text-answer" id="t12-5" data-correct="connectivity/connection/connections" autocomplete="off" style="width:140px;"> needed for online homework. (connect)</p><p>6. The claim that technology has solved the problem is, at best, <input type="text" class="text-answer" id="t12-6" data-correct="questionable" autocomplete="off" style="width:140px;">. (question)</p><p>7. Lighting plays a central role in the <input type="text" class="text-answer" id="t12-7" data-correct="believability" autocomplete="off" style="width:150px;"> of an animated world. (believe)</p><p>8. Repeating drills without understanding can create only an <input type="text" class="text-answer" id="t12-8" data-correct="illusion" autocomplete="off" style="width:130px;"> of progress. (illusory)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-wf', 't12-wf-score')">Check answers</button>
+          <span id="t12-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Collocation check.</strong> Complete each phrase with one word.</p>
+      <div class="card" id="t12-col" style="line-height:2.3;"><p>1. to grapple <input type="text" class="text-answer" id="t12-c1" data-correct="with" autocomplete="off" style="width:80px;"> a difficult problem</p><p>2. to cater <input type="text" class="text-answer" id="t12-c2" data-correct="to/for" autocomplete="off" style="width:80px;"> a particular group</p><p>3. the effort was <input type="text" class="text-answer" id="t12-c3" data-correct="in" autocomplete="off" style="width:80px;"> vain</p><p>4. to <input type="text" class="text-answer" id="t12-c4" data-correct="spearhead" autocomplete="off" style="width:120px;"> a campaign to translate the videos (sp…)</p><p>5. old wine in new <input type="text" class="text-answer" id="t12-c5" data-correct="bottles" autocomplete="off" style="width:100px;"></p><p>6. to fall further <input type="text" class="text-answer" id="t12-c6" data-correct="behind" autocomplete="off" style="width:100px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-col', 't12-col-score')">Check answers</button>
+          <span id="t12-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t12-speaking-final">
+        <div class="q-num">Final extended answer</div>
+        <div class="q-text">Extended answer (about 2 minutes): <i>“Technology will never close the gap between the best and the weakest students in a class.”</i> To what extent do you agree? Use at least <b>six</b> items from today (e.g. <i>mastery, widen gaps, prohibitively, cater to, far-reaching consequences, legitimate concerns</i>).</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I'd agree up to a point, in that…”</li><li>“Where I'd disagree is…”</li><li>“The evidence on this is rather mixed:…”</li><li>“Ultimately, I'd argue that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 12</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 24 of 45</div>
+    <h1>Day 24 complete! 🎉</h1>
+    <p>Day 24 done — Unit 6, IT Society: a Section 3 passage, a Section 4 lecture, collocations, Speaking Parts 2 and 3 and intonation, each with a demanding lead-in. That is Band 8 work.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t2-speaking-summary"]'); if (b) initRecordControl(b, user.id, 24, 2, 't2-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-1"]'); if (b) initRecordControl(b, user.id, 24, 5, 't5-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-2"]'); if (b) initRecordControl(b, user.id, 24, 5, 't5-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t6-speaking-summary"]'); if (b) initRecordControl(b, user.id, 24, 6, 't6-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-film"]'); if (b) initRecordControl(b, user.id, 24, 7, 't7-speaking-film', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-web"]'); if (b) initRecordControl(b, user.id, 24, 9, 't9-speaking-web', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-tech"]'); if (b) initRecordControl(b, user.id, 24, 9, 't9-speaking-tech', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-1"]'); if (b) initRecordControl(b, user.id, 24, 10, 't10-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-2"]'); if (b) initRecordControl(b, user.id, 24, 10, 't10-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-3"]'); if (b) initRecordControl(b, user.id, 24, 10, 't10-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-4"]'); if (b) initRecordControl(b, user.id, 24, 10, 't10-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-5"]'); if (b) initRecordControl(b, user.id, 24, 10, 't10-speaking-5', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-6"]'); if (b) initRecordControl(b, user.id, 24, 10, 't10-speaking-6', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-7"]'); if (b) initRecordControl(b, user.id, 24, 10, 't10-speaking-7', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-8"]'); if (b) initRecordControl(b, user.id, 24, 10, 't10-speaking-8', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-rep"]'); if (b) initRecordControl(b, user.id, 24, 11, 't11-speaking-rep', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-resp"]'); if (b) initRecordControl(b, user.id, 24, 11, 't11-speaking-resp', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-final"]'); if (b) initRecordControl(b, user.id, 24, 12, 't12-speaking-final', 0); }
+
+    await initTaskFlow(24, 12, user.id, {
+      1: () => { checkAllAnswers('t1-ph', 't1-ph-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-mc', 't2-mc-score'); checkAllAnswers('t2-tf', 't2-tf-score'); },
+      3: () => { checkAllAnswers('t3-mc', 't3-mc-score'); checkAllAnswers('t3-yn', 't3-yn-score'); checkAllAnswers('t3-se', 't3-se-score'); },
+      4: () => { checkAllAnswers('t4-mc', 't4-mc-score'); },
+      5: () => { checkAllAnswers('t5-ref', 't5-ref-score'); },
+      6: () => { checkAllAnswers('t6-mc', 't6-mc-score'); },
+      7: () => { checkAllAnswers('t7-type', 't7-type-score'); checkAllAnswers('t7-n', 't7-n-score'); },
+      8: () => { checkAllAnswers('t8-x', 't8-x-score'); checkAllAnswers('t8-c', 't8-c-score'); checkAllAnswers('t8-b8', 't8-b8-score'); },
+      9: () => { checkAllAnswers('t9-ros', 't9-ros-score'); checkAllAnswers('t9-str', 't9-str-score'); },
+      10: () => { checkAllAnswers('t10-who', 't10-who-score'); checkAllAnswers('t10-prep', 't10-prep-score'); },
+      11: () => { checkAllAnswers('t11-a', 't11-a-score'); },
+      12: () => { checkAllAnswers('t12-wf', 't12-wf-score'); checkAllAnswers('t12-col', 't12-col-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t1-ch-btn', 't1-ch-ans', '[id^="t1-ch-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t2-sum-btn', 't2-sum-ans', '[id^="t2-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t6-sum-btn', 't6-sum-ans', '[id^="t6-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t7-pre-btn', 't7-pre-ans', '[id^="t7-pre-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-pp-btn', 't9-pp-ans', '[id^="t9-pp-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t10-phr-btn', 't10-phr-ans', '[id^="t10-phr-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>
