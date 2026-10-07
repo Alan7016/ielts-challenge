@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 24 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+  .audio-card { margin-top: 12px; }
+  .audio-card .prompt-label { margin-bottom: 8px !important; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 24 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 10</div>
+      <h2>Starting Off — Making Money, Spending Money</h2>
+      <p class="task-sub">Unit 6 is about shops, shoppers and money: how retailers persuade us to buy, how banks work, and how advertising shapes our choices. Start by thinking about your own shopping habits, then learn the core vocabulary of retail.</p>
+      <div class="card"><p class="prompt-label">Four kinds of shop</p>
+        <ol style="margin:0; padding-left:20px; line-height:1.8;"><li>a large electronics store where you can try the newest laptops and phones</li><li>a big bookshop with tables of bestsellers near the door</li><li>a small boutique selling designer clothes</li><li>a souvenir stall crowded with T-shirts, mugs and football scarves</li></ol></div>
+      <div class="card"><p class="mini-q">1. Which of these shops would you prefer to shop at, and why? Which would you avoid?</p><textarea class="no-check mini-answer" id="t1-sh-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. What attracts you to some shops more than others? Give at least <b>three</b> factors (e.g. layout, staff, prices, atmosphere).</p><textarea class="no-check mini-answer" id="t1-sh-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Which sentence describes you best — and why? <i>“I only go shopping when I have to.” / “Shopping is my favourite free-time activity.” / “I quite enjoy shopping when I'm in the right mood.”</i></p><textarea class="no-check mini-answer" id="t1-sh-3" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t1-sh-btn">Show an example answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t1-sh-ans"><p>There are no right answers here — but strong answers give <b>reasons</b> and <b>examples</b>: <i>“I'd rather shop at the bookshop because I can browse without anyone pressuring me to buy…”</i></p></div>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Retail vocabulary.</strong> Match each word or phrase to its meaning. You will meet all of them in today's lead-in and passage.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. aisle</button><button type="button" class="lm-item" data-key="2">2. bargain</button><button type="button" class="lm-item" data-key="3">3. branded product</button><button type="button" class="lm-item" data-key="4">4. own-label product</button><button type="button" class="lm-item" data-key="5">5. promotion</button><button type="button" class="lm-item" data-key="6">6. purchase</button><button type="button" class="lm-item" data-key="7">7. retailer</button><button type="button" class="lm-item" data-key="8">8. impulse buy</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. something bought suddenly, without planning</button><button type="button" class="lm-item" data-key="b">b. something that you buy</button><button type="button" class="lm-item" data-key="c">c. something sold for less than its real value</button><button type="button" class="lm-item" data-key="d">d. activity designed to advertise and sell something</button><button type="button" class="lm-item" data-key="e">e. goods made and named by a well-known company</button><button type="button" class="lm-item" data-key="f">f. a business that sells goods directly to the public</button><button type="button" class="lm-item" data-key="g">g. a long, narrow space between rows of shelves</button><button type="button" class="lm-item" data-key="h">h. goods sold under the shop's own name</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Collocations.</strong> Complete each phrase with one word from the box.</p>
+      <div class="word-bank">spend · end · offer · free · afford · handed</div><div class="card" id="t1-c" style="line-height:2.3;"><p>1. Supermarkets try to boost the time shoppers <input type="text" class="text-answer" id="t1-1" data-correct="spend" autocomplete="off" style="width:100px;"> in the store.</p><p>2. Many people go shopping with a list but <input type="text" class="text-answer" id="t1-2" data-correct="end" autocomplete="off" style="width:90px;"> up buying far more.</p><p>3. Products on special <input type="text" class="text-answer" id="t1-3" data-correct="offer" autocomplete="off" style="width:90px;"> are often placed at the end of an aisle.</p><p>4. If you buy two, you get the third one <input type="text" class="text-answer" id="t1-4" data-correct="free" autocomplete="off" style="width:90px;"> of charge.</p><p>5. I never buy designer clothes — I simply can't <input type="text" class="text-answer" id="t1-5" data-correct="afford" autocomplete="off" style="width:100px;"> them.</p><p>6. The shop was so crowded that I left empty-<input type="text" class="text-answer" id="t1-6" data-correct="handed" autocomplete="off" style="width:100px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-c', 't1-c-score')">Check answers</button>
+          <span id="t1-c-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 10</div>
+      <h2>Lead-in 1 — The Shopping Brain</h2>
+      <p class="task-sub">Before the reading passage about how supermarkets influence shoppers, read this article on the psychology of buying. It introduces three key ideas — <i>anchoring</i>, <i>scarcity</i> and <i>social proof</i> — that will help you understand the passage. About 15 minutes.</p>
+      <div class="card article">
+        <h3 class="article-title">The Shopping Brain</h3>
+        <p class="article-meta">Psychology · Consumer behaviour · 354 words</p>
+        <p>Most of us like to think that we shop rationally: we notice a need, compare options and buy the best one. Yet anyone who has come home from a quick trip for milk carrying a bag of things they never intended to buy knows that the reality is rather different. A substantial share of what people buy is bought on impulse, and the reasons have more to do with psychology than with the products themselves.</p><p>Part of the explanation lies in how the brain handles reward. Research using brain scans suggests that the pleasure of shopping is often strongest not when we own something but when we are about to get it. The anticipation itself is rewarding, which is why browsing can feel so enjoyable and why the excitement of a new purchase so often fades once it is home.</p><p>Retailers have become skilled at triggering this feeling. One of the oldest techniques is the crossed-out price: a jacket marked '<s>£120</s> £60' feels like a bargain, even if it was never sold at the higher price for long. The first number acts as an anchor, and every later number is judged against it. A second technique is scarcity. Messages such as 'only two left in stock' or 'offer ends at midnight' create a fear of missing out that pushes people to decide quickly rather than carefully. A third is what psychologists call social proof: when we learn that thousands of others have bought something, we assume it must be worth having.</p><p>Online shops use all of these methods, and they can do so with far greater precision than any physical store. Because they record every click, they can test which colour of button or which wording of a message produces the most sales, and then show it to millions of customers within hours.</p><p>None of this means that shoppers are helpless. The most effective defence, according to many consumer experts, is simply to recognise these techniques when they appear. A shopper who notices the anchor, questions the countdown clock and ignores the crowd is far more likely to buy what they actually came for.</p>
+      </div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-1">
+          <p>1. According to the article, when is the pleasure of shopping often strongest?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-1" data-correct="false"> A. when we pay for something</label><label><input type="radio" value="1" name="t2-mc-1" data-correct="true"> B. just before we get something</label><label><input type="radio" value="2" name="t2-mc-1" data-correct="false"> C. when we use a product for the first time</label><label><input type="radio" value="3" name="t2-mc-1" data-correct="false"> D. when we show a purchase to others</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-2">
+          <p>2. What is the purpose of a crossed-out higher price?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-2" data-correct="false"> A. to show that the product is high quality</label><label><input type="radio" value="1" name="t2-mc-2" data-correct="true"> B. to give shoppers a reference point that makes the new price seem low</label><label><input type="radio" value="2" name="t2-mc-2" data-correct="false"> C. to prove that the item was always expensive</label><label><input type="radio" value="3" name="t2-mc-2" data-correct="false"> D. to encourage shoppers to wait for further reductions</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-3">
+          <p>3. Messages like “only two left” mainly encourage shoppers to</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-3" data-correct="false"> A. compare products more carefully</label><label><input type="radio" value="1" name="t2-mc-3" data-correct="true"> B. decide quickly</label><label><input type="radio" value="2" name="t2-mc-3" data-correct="false"> C. buy cheaper alternatives</label><label><input type="radio" value="3" name="t2-mc-3" data-correct="false"> D. ask staff for advice</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-4">
+          <p>4. Why are online shops especially effective at using these techniques?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-4" data-correct="false"> A. They have lower prices.</label><label><input type="radio" value="1" name="t2-mc-4" data-correct="true"> B. They can test different versions and see which sells best.</label><label><input type="radio" value="2" name="t2-mc-4" data-correct="false"> C. They have more products.</label><label><input type="radio" value="3" name="t2-mc-4" data-correct="false"> D. Their customers are younger.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. The writer believes most shopping decisions are made rationally.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="false"> True</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. Social proof means trusting a product because many other people have bought it.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="true"> True</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. The writer argues that shoppers cannot protect themselves against these techniques.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="false"> True</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 100 words</b>. Cover the main argument, the key evidence, and finish with your own evaluation. Do not copy phrases of four or more words.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 100 words):</p><textarea class="no-check mini-answer" id="t2-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t2-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t2-sum-ans"><p>The article explores why consumers so often buy things they neither planned nor need. It argues that impulse purchases are driven less by the product than by the pleasure of anticipating it, a feeling retailers deliberately trigger. Several techniques are described: showing a crossed-out original price so that the new one seems cheap, suggesting that stock or time is running out, and displaying how many other people have bought an item. Online shops, the writer notes, use the same tactics with even greater precision because they can track every click. The article concludes that simply recognising these methods is the most effective defence. I found the point about anticipation particularly convincing. (≈ 110 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t2-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your notes — speak for <b>at least 45 seconds</b>, and finish with your own opinion.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central argument is that…”</li><li>“This is supported by…”</li><li>“What I found most striking was…”</li><li>“That said, I'm not entirely convinced that…”</li><li>“On balance, I'd say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 10</div>
+      <h2>Reading Section 1 — Designed to Make You Spend</h2>
+      <p class="task-sub">Suggested time: 20 minutes. Three IELTS question types: <b>labelling a diagram</b>, <b>TRUE / FALSE / NOT GIVEN</b> and <b>flow-chart completion</b>. You do not need to read the whole passage in detail — scan for the part each task is about. Passage on the left, questions on the right. Answers are checked when you press <b>Next</b>.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li><b>Diagram / flow chart:</b> use the <b>title</b> to find the right part of the passage; check the word limit; copy words <b>exactly</b> — spelling counts.</li>
+  <li><b>TRUE / FALSE / NOT GIVEN:</b> don't re-read the whole passage. FALSE = the passage <b>contradicts</b> the statement; NOT GIVEN = the passage says <b>nothing</b> about it.</li>
+  <li>Answers usually come in passage order — so you shouldn't need to scan the same part twice.</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Designed to Make You Spend<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Behind the friendly aisles of a modern supermarket lies a carefully engineered plan to shape what — and how much — we buy.</small></h3>
+            <p class="article-meta">Reading Passage · Retail psychology · 727 words</p>
+            <p><span class="para-label">A</span>The average shopper walks into a supermarket believing that their choices are their own. Industry surveys, however, regularly suggest that a large proportion of supermarket purchases are not planned before the shopper enters the store. This is no accident. Over several decades, retailers have studied customers in remarkable detail — filming them, tracking their routes and analysing their receipts — and the layout of a typical store now reflects what they have learned.</p><p><span class="para-label">B</span>The process begins before shoppers have taken more than a few steps. The first area inside the door is often called the transition zone, because people entering it are still adjusting to the change in light, noise and temperature. While they adjust, they tend to ignore what is around them, so experienced retailers rarely place important products there. Instead, the area is kept relatively open or used for large seasonal displays that set the mood. Observers who film shoppers also report that most people turn to the right after entering, which is why many stores put their most attractive displays along the right-hand wall.</p><p><span class="para-label">C</span>Perhaps the best-known feature of supermarket design is the position of everyday essentials such as milk, eggs and bread. These are almost always found at the back of the store. Since nearly every customer needs at least one of them, placing them as far as possible from the entrance forces shoppers to walk past hundreds of other products on the way. Every extra minute spent in the store — what the industry calls dwell time — increases the chance of an unplanned purchase.</p><p><span class="para-label">D</span>Within each aisle, position matters just as much. Products placed at eye level sell far better than those on the top or bottom shelves, so this space is usually given to the brands that earn the store the most money. Products aimed at children, by contrast, are frequently placed on lower shelves, at a child's eye level. The shelves at the end of each aisle, known as end caps, are especially valuable: goods displayed there tend to sell well even when their price has not been reduced, because many shoppers simply assume that anything placed there must be a bargain.</p><p><span class="para-label">E</span>Stores also appeal to the senses. In a well-known study carried out in an American supermarket in the 1980s, researchers changed the speed of the background music. When the music was slow, customers moved through the store more slowly and spent more money than when it was fast. The smell of freshly baked bread is used to stimulate appetite, and lighting is chosen with care: warm light can make fruit and vegetables look fresher than they really are.</p><p><span class="para-label">F</span>Surprisingly, offering more products does not always lead to more sales. In a famous experiment, researchers set up a tasting table in an upmarket food store, displaying either twenty-four varieties of jam or only six. The larger display attracted more passing shoppers, but only about 3 per cent of those who stopped went on to make a purchase. With the smaller display, around 30 per cent bought a jar. The researchers concluded that too much choice can make decisions harder rather than easier, and that shoppers faced with too many options may choose nothing at all.</p><p><span class="para-label">G</span>Retailers have learned to steer choices in another way too. When customers must choose between two similar products, adding a third option that is clearly worse than one of them — a so-called decoy — makes that product look more attractive by comparison. In one experiment described by a behavioural economist, students were offered three magazine subscriptions: online only, print only, and print plus online for the same price as print alone. Almost nobody chose the print-only option, yet its presence persuaded most students to choose the more expensive combined package. When it was removed, most chose the cheaper online subscription instead.</p><p><span class="para-label">H</span>Does this mean supermarkets are deceiving their customers? Not necessarily. Many of these techniques simply make shopping more pleasant, and nobody is forced to buy anything. But shoppers who want to stay in control can take some simple steps: writing a list and sticking to it, avoiding shopping when hungry, and pausing before reaching for anything placed at eye level or at the end of an aisle. A store may be designed to make you spend, but knowing how it works is the first step towards spending only what you intended.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–4</p><p class="qg-instr">Label the diagram below. Choose <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.</p></div>
+<div class="card"><svg viewBox="0 0 640 400" class="svg-chart" role="img" aria-label="Layout of a typical supermarket" style="width:100%; max-width:620px; display:block; margin:0 auto;">
+  <text x="320" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Layout of a typical supermarket</text>
+  <rect x="120" y="50" width="400" height="290" fill="#fbfaf6" stroke="#14162b" stroke-width="2"/>
+  <rect x="140" y="60" width="360" height="22" fill="#c9d6f2"/>
+  <text x="320" y="76" text-anchor="middle" font-size="11" fill="#14162b">back wall</text>
+  <g fill="#d9d4c5">
+    <rect x="170" y="110" width="22" height="150"/><rect x="250" y="110" width="22" height="150"/><rect x="330" y="110" width="22" height="150"/><rect x="410" y="110" width="22" height="150"/>
+  </g>
+  <g fill="#f2b48c"><rect x="168" y="262" width="26" height="12"/><rect x="248" y="262" width="26" height="12"/><rect x="328" y="262" width="26" height="12"/><rect x="408" y="262" width="26" height="12"/></g>
+  <rect x="490" y="100" width="20" height="200" fill="#bfe3c8"/>
+  <rect x="200" y="300" width="240" height="30" fill="#efe9f8" stroke="#b7a8d8" stroke-dasharray="4 3"/>
+  <path d="M300 395 L300 345" stroke="#c23b22" stroke-width="3" marker-end="url(#ar)"/><text x="310" y="388" font-size="12" font-weight="700" fill="#c23b22">WAY IN</text>
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c23b22"/></marker></defs>
+  <line x1="200" y1="66" x2="70" y2="40" stroke="#14162b"/><text x="4" y="30" font-size="12" fill="#14162b">everyday (3) ______</text><text x="4" y="45" font-size="11" fill="#4b4e5c">e.g. milk, eggs, bread</text>
+  <line x1="510" y1="200" x2="575" y2="150" stroke="#14162b"/><text x="530" y="120" font-size="12" fill="#14162b">right-hand wall:</text><text x="530" y="136" font-size="12" fill="#14162b">most attractive</text><text x="530" y="152" font-size="12" fill="#14162b">(2) ______</text>
+  <line x1="181" y1="270" x2="60" y2="230" stroke="#14162b"/><text x="4" y="196" font-size="12" fill="#14162b">'end caps': goods</text><text x="4" y="212" font-size="12" fill="#14162b">often assumed</text><text x="4" y="228" font-size="12" fill="#14162b">to be (4) ______</text>
+  <line x1="440" y1="318" x2="560" y2="350" stroke="#14162b"/><text x="530" y="335" font-size="12" fill="#14162b">'transition zone':</text><text x="530" y="351" font-size="12" fill="#14162b">shoppers adjust to</text><text x="530" y="367" font-size="12" fill="#14162b">light, noise and</text><text x="530" y="383" font-size="12" fill="#14162b">(1) ______</text>
+</svg></div>
+      <div class="card" id="t3-d" style="line-height:2.3;"><p>1. <input type="text" class="text-answer" id="t3-1" data-correct="temperature" autocomplete="off" style="width:140px;"></p><p>2. <input type="text" class="text-answer" id="t3-2" data-correct="displays" autocomplete="off" style="width:140px;"></p><p>3. <input type="text" class="text-answer" id="t3-3" data-correct="essentials" autocomplete="off" style="width:140px;"></p><p>4. <input type="text" class="text-answer" id="t3-4" data-correct="a bargain/bargain/bargains" autocomplete="off" style="width:140px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-d', 't3-d-score')">Check answers</button>
+          <span id="t3-d-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 5–10</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t3-tf"><div class="q-item" id="t3-tf-5">
+          <p>5. Most shoppers pay close attention to the products placed immediately inside the entrance.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-5" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-6">
+          <p>6. Supermarkets in Europe and North America follow the same basic layout.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-6" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-6" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-6" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-7">
+          <p>7. Goods at the end of an aisle can sell well even if they are not on special offer.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-7" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t3-tf-7" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-7" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-8">
+          <p>8. In the 1980s study, customers spent more money when slow music was played.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-8" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t3-tf-8" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-8" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-9">
+          <p>9. Products for children are usually placed on the highest shelves.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-9" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-9" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-9" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-10">
+          <p>10. Most supermarkets today play slow background music.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-10" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-10" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-10" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-tf', 't3-tf-score')">Check answers</button>
+          <span id="t3-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–13</p><p class="qg-instr">Complete the flow chart below. Choose <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.</p></div>
+<div class="card" style="text-align:center;"><p class="prompt-label" style="text-align:center;">The jam-tasting experiment</p>
+      <div class="card" id="t3-f" style="line-height:2.2;"><p>A tasting table offers either 24 or 6 varieties of jam.</p><p>↓</p><p>The larger display attracts more passing <input type="text" class="text-answer" id="t3-11" data-correct="shoppers" autocomplete="off" style="width:130px;"> (11).</p><p>↓</p><p>But only about 3% of those who stop go on to make a <input type="text" class="text-answer" id="t3-12" data-correct="purchase" autocomplete="off" style="width:130px;"> (12) — compared with around 30% at the smaller display.</p><p>↓</p><p>Conclusion: too much choice can make decisions <input type="text" class="text-answer" id="t3-13" data-correct="harder" autocomplete="off" style="width:130px;"> (13) rather than easier.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-f', 't3-f-score')">Check answers</button>
+          <span id="t3-f-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 10</div>
+      <h2>Reading — Answer Analysis and Verb Patterns</h2>
+      <p class="task-sub">Open each question to see exactly where the answer is and why the tempting wrong answer is wrong. The biggest lesson today is the difference between <b>FALSE</b> and <b>NOT GIVEN</b>. Then practise the verb patterns the passage uses.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Designed to Make You Spend</summary>
+        <p><span class="para-label">A</span>The average shopper walks into a supermarket believing that their choices are their own. Industry surveys, however, regularly suggest that a large proportion of supermarket purchases are not planned before the shopper enters the store. This is no accident. Over several decades, retailers have studied customers in remarkable detail — filming them, tracking their routes and analysing their receipts — and the layout of a typical store now reflects what they have learned.</p><p><span class="para-label">B</span>The process begins before shoppers have taken more than a few steps. The first area inside the door is often called the transition zone, because people entering it are still adjusting to the change in light, noise and temperature. While they adjust, they tend to ignore what is around them, so experienced retailers rarely place important products there. Instead, the area is kept relatively open or used for large seasonal displays that set the mood. Observers who film shoppers also report that most people turn to the right after entering, which is why many stores put their most attractive displays along the right-hand wall.</p><p><span class="para-label">C</span>Perhaps the best-known feature of supermarket design is the position of everyday essentials such as milk, eggs and bread. These are almost always found at the back of the store. Since nearly every customer needs at least one of them, placing them as far as possible from the entrance forces shoppers to walk past hundreds of other products on the way. Every extra minute spent in the store — what the industry calls dwell time — increases the chance of an unplanned purchase.</p><p><span class="para-label">D</span>Within each aisle, position matters just as much. Products placed at eye level sell far better than those on the top or bottom shelves, so this space is usually given to the brands that earn the store the most money. Products aimed at children, by contrast, are frequently placed on lower shelves, at a child's eye level. The shelves at the end of each aisle, known as end caps, are especially valuable: goods displayed there tend to sell well even when their price has not been reduced, because many shoppers simply assume that anything placed there must be a bargain.</p><p><span class="para-label">E</span>Stores also appeal to the senses. In a well-known study carried out in an American supermarket in the 1980s, researchers changed the speed of the background music. When the music was slow, customers moved through the store more slowly and spent more money than when it was fast. The smell of freshly baked bread is used to stimulate appetite, and lighting is chosen with care: warm light can make fruit and vegetables look fresher than they really are.</p><p><span class="para-label">F</span>Surprisingly, offering more products does not always lead to more sales. In a famous experiment, researchers set up a tasting table in an upmarket food store, displaying either twenty-four varieties of jam or only six. The larger display attracted more passing shoppers, but only about 3 per cent of those who stopped went on to make a purchase. With the smaller display, around 30 per cent bought a jar. The researchers concluded that too much choice can make decisions harder rather than easier, and that shoppers faced with too many options may choose nothing at all.</p><p><span class="para-label">G</span>Retailers have learned to steer choices in another way too. When customers must choose between two similar products, adding a third option that is clearly worse than one of them — a so-called decoy — makes that product look more attractive by comparison. In one experiment described by a behavioural economist, students were offered three magazine subscriptions: online only, print only, and print plus online for the same price as print alone. Almost nobody chose the print-only option, yet its presence persuaded most students to choose the more expensive combined package. When it was removed, most chose the cheaper online subscription instead.</p><p><span class="para-label">H</span>Does this mean supermarkets are deceiving their customers? Not necessarily. Many of these techniques simply make shopping more pleasant, and nobody is forced to buy anything. But shoppers who want to stay in control can take some simple steps: writing a list and sticking to it, avoiding shopping when hungry, and pausing before reaching for anything placed at eye level or at the end of an aisle. A store may be designed to make you spend, but knowing how it works is the first step towards spending only what you intended.</p>
+      </details>
+      <div class="card an-card"><p class="an-intro">Q6 and Q10 are both NOT GIVEN: the topic is in the passage, but the specific information is not. If you cannot point to words that confirm or contradict, choose NOT GIVEN.</p><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">temperature</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">people entering it are still adjusting to the change in light, noise and temperature</span>.</p><p>The label already gives <i>light, noise and</i> — the gap is the third item of the list. Copy it exactly.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">displays</span><span class="an-where">Para B, last sentence</span></summary><div class="an-body"><p><span class="ev">many stores put their most attractive displays along the right-hand wall</span>.</p><p><span class="trap">Trap:</span> <i>seasonal displays</i> appear earlier in the paragraph, but they are near the entrance, not on the right-hand wall.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">essentials</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">everyday essentials such as milk, eggs and bread … at the back of the store</span>. The label gives <i>everyday</i> and the examples; the gap is the noun.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">a bargain</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">many shoppers simply assume that anything placed there must be a bargain</span>. <i>Assumed to be</i> ↔ <i>assume … must be</i>. <i>bargain</i>, <i>a bargain</i> and <i>bargains</i> are accepted — all within the word limit.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">While they adjust, they tend to ignore what is around them</span>.</p><p><i>Pay close attention</i> is the <b>opposite</b> of <i>ignore</i> → the passage contradicts the statement → FALSE.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>The passage describes <i>a typical store</i> but never compares countries or regions.</p><p><span class="trap">Trap:</span> it feels true because the passage talks about general patterns — but no information about Europe vs North America → NOT GIVEN.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">TRUE</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">goods displayed there tend to sell well even when their price has not been reduced</span>. <i>Not on special offer</i> = <i>price has not been reduced</i>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">TRUE</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">When the music was slow, customers moved through the store more slowly and spent more money</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">FALSE</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Products aimed at children, by contrast, are frequently placed on lower shelves</span>. Highest ↔ lower → contradiction → FALSE.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para E</span></summary><div class="an-body"><p>The passage describes <b>one</b> study from the 1980s. It says nothing about how many supermarkets play slow music <b>today</b>.</p><p><span class="trap">Trap:</span> compare with Q8: the same paragraph gives you TRUE for the study but NOT GIVEN for the present day. Time words matter.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">shoppers</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">The larger display attracted more passing shoppers</span>. The chart already gives <i>passing</i>, so the answer is <b>shoppers</b>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">purchase</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">only about 3 per cent of those who stopped went on to make a purchase</span>. <i>Make a ___</i> needs a noun.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">harder</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">too much choice can make decisions harder rather than easier</span>. <span class="trap">Trap:</span> <i>more difficult</i> means the same but is not in the passage — in IELTS you must use the passage's words.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Verb patterns from the passage.</strong> Choose the correct form. (Some verbs are followed by <i>to do</i>, others by <i>doing</i>.)</p>
+      <div class="card" id="t4-vp"><div class="q-item" id="t4-vp-1">
+          <p>1. Retailers <b>tend</b> ______ important products near the entrance.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-vp-1" data-correct="true"> to avoid placing</label><label><input type="radio" value="1" name="t4-vp-1" data-correct="false"> avoiding to place</label><label><input type="radio" value="2" name="t4-vp-1" data-correct="false"> to avoid to place</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-vp-2">
+          <p>2. Shoppers who <b>avoid</b> ______ when hungry spend less.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-vp-2" data-correct="false"> to shop</label><label><input type="radio" value="1" name="t4-vp-2" data-correct="true"> shopping</label><label><input type="radio" value="2" name="t4-vp-2" data-correct="false"> shop</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-vp-3">
+          <p>3. The design <b>forces</b> shoppers ______ past hundreds of products.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-vp-3" data-correct="false"> walking</label><label><input type="radio" value="1" name="t4-vp-3" data-correct="true"> to walk</label><label><input type="radio" value="2" name="t4-vp-3" data-correct="false"> walk</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-vp-4">
+          <p>4. Many shoppers <b>end up</b> ______ things they never planned to buy.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-vp-4" data-correct="false"> to buy</label><label><input type="radio" value="1" name="t4-vp-4" data-correct="true"> buying</label><label><input type="radio" value="2" name="t4-vp-4" data-correct="false"> buy</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-vp-5">
+          <p>5. The decoy <b>persuaded</b> most students ______ the combined package.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-vp-5" data-correct="false"> choosing</label><label><input type="radio" value="1" name="t4-vp-5" data-correct="true"> to choose</label><label><input type="radio" value="2" name="t4-vp-5" data-correct="false"> choose</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-vp-6">
+          <p>6. It is <b>worth</b> ______ before reaching for goods at eye level.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-vp-6" data-correct="false"> to pause</label><label><input type="radio" value="1" name="t4-vp-6" data-correct="true"> pausing</label><label><input type="radio" value="2" name="t4-vp-6" data-correct="false"> pause</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-vp', 't4-vp-score')">Check answers</button>
+          <span id="t4-vp-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 10</div>
+      <h2>Lead-in 2 — Video: How to Buy Happiness</h2>
+      <p class="task-sub">Before the listening (about banks and money), watch this TED talk by Harvard Business School professor Michael Norton (about 11 minutes). He asks whether money can buy happiness — and answers with experiments. Turn on English subtitles only if you need them.</p>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="position:relative; padding-bottom:56.25%; height:0;">
+          <iframe src="https://embed.ted.com/talks/michael_norton_how_to_buy_happiness" title="Michael Norton — How to buy happiness" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe>
+        </div></div>
+      <div class="card" id="t5-mc"><div class="q-item" id="t5-mc-1">
+          <p>1. What is Norton's main claim?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-1" data-correct="false"> A. Money cannot buy happiness under any circumstances.</label><label><input type="radio" value="1" name="t5-mc-1" data-correct="true"> B. Money can increase happiness if we spend it on other people rather than on ourselves.</label><label><input type="radio" value="2" name="t5-mc-1" data-correct="false"> C. People with more money are always happier.</label><label><input type="radio" value="3" name="t5-mc-1" data-correct="false"> D. Saving money makes people happier than spending it.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-2">
+          <p>2. In the experiments, what were participants given?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-2" data-correct="false"> A. a voucher for a shop</label><label><input type="radio" value="1" name="t5-mc-2" data-correct="true"> B. an envelope containing money and instructions on how to spend it</label><label><input type="radio" value="2" name="t5-mc-2" data-correct="false"> C. a bank account</label><label><input type="radio" value="3" name="t5-mc-2" data-correct="false"> D. a gift to give away</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-3">
+          <p>3. What happened to people who spent the money on others?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-3" data-correct="false"> A. They regretted it.</label><label><input type="radio" value="1" name="t5-mc-3" data-correct="true"> B. They reported feeling happier.</label><label><input type="radio" value="2" name="t5-mc-3" data-correct="false"> C. They felt no different.</label><label><input type="radio" value="3" name="t5-mc-3" data-correct="false"> D. They asked for more money.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-4">
+          <p>4. How much did the amount of money matter?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-4" data-correct="false"> A. A lot — larger amounts produced much more happiness.</label><label><input type="radio" value="1" name="t5-mc-4" data-correct="true"> B. Very little — the amount made little difference to how happy people felt.</label><label><input type="radio" value="2" name="t5-mc-4" data-correct="false"> C. Only small amounts worked.</label><label><input type="radio" value="3" name="t5-mc-4" data-correct="false"> D. The talk does not say.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-5">
+          <p>5. What did the research in different countries show?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-5" data-correct="false"> A. The effect only works in rich countries.</label><label><input type="radio" value="1" name="t5-mc-5" data-correct="true"> B. Similar results appeared in very different countries, even though people bought different things.</label><label><input type="radio" value="2" name="t5-mc-5" data-correct="false"> C. People in all countries bought the same things.</label><label><input type="radio" value="3" name="t5-mc-5" data-correct="false"> D. The effect disappeared outside North America.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-6">
+          <p>6. What did Norton find in workplace and team settings?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-6" data-correct="true"> A. Teams whose members spent money on each other tended to perform better.</label><label><input type="radio" value="1" name="t5-mc-6" data-correct="false"> B. Bonuses spent on yourself improved performance most.</label><label><input type="radio" value="2" name="t5-mc-6" data-correct="false"> C. Money had no effect on teams.</label><label><input type="radio" value="3" name="t5-mc-6" data-correct="false"> D. Employees preferred to save their bonuses.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-mc', 't5-mc-score')">Check answers</button>
+          <span id="t5-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the talk in your own words — <b>at least 100 words</b>. Cover the main argument, the key evidence, and finish with your own evaluation. Do not copy phrases of four or more words.</p>
+      <div class="card"><p class="mini-q">Your summary of the talk (at least 100 words):</p><textarea class="no-check mini-answer" id="t5-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t5-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t5-sum-ans"><p>In this talk, Michael Norton challenges the idea that money cannot buy happiness. He describes experiments in which people were given an envelope of cash and told either to spend it on themselves or on someone else by the end of the day. Those who spent it on others reported feeling happier, and, surprisingly, the amount of money made little difference. Similar results appeared in very different countries, even though people bought very different things. He also describes teams whose members were given money to spend on one another and who then performed better. His conclusion is that how we spend matters more than how much we have. I find the argument persuasive, although happiness is hard to measure. (≈ 120 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t5-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the talk <b>aloud</b> without reading your notes — speak for <b>at least 45 seconds</b>, and finish with your own opinion.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central argument is that…”</li><li>“This is supported by…”</li><li>“What I found most striking was…”</li><li>“That said, I'm not entirely convinced that…”</li><li>“On balance, I'd say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 10</div>
+      <h2>Listening Section 2 — Banking for New Arrivals</h2>
+      <p class="task-sub">You will hear an adviser talking to people who have recently arrived in Britain about the banking system. Two IELTS question types: <b>matching</b> and <b>labelling a diagram</b>. Prepare carefully before each recording — the speaker will not use exactly the words on the page.</p>
+      <p style="margin-top:26px;"><strong>Banking vocabulary.</strong> Match each word or phrase to its meaning.</p>
+      <div class="card" id="t6-v">
+        <div class="line-match" id="t6-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. account</button><button type="button" class="lm-item" data-key="2">2. balance</button><button type="button" class="lm-item" data-key="3">3. branch</button><button type="button" class="lm-item" data-key="4">4. direct debit</button><button type="button" class="lm-item" data-key="5">5. in credit</button><button type="button" class="lm-item" data-key="6">6. interest rate</button><button type="button" class="lm-item" data-key="7">7. overdraft</button><button type="button" class="lm-item" data-key="8">8. savings</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. the percentage charged on money you borrow</button><button type="button" class="lm-item" data-key="b">b. an instruction letting a company take regular payments from your account</button><button type="button" class="lm-item" data-key="c">c. an arrangement with a bank to keep your money there</button><button type="button" class="lm-item" data-key="d">d. one of the local offices of a bank</button><button type="button" class="lm-item" data-key="e">e. when you have taken out more money than you had in your account</button><button type="button" class="lm-item" data-key="f">f. the exact amount of money in a bank account</button><button type="button" class="lm-item" data-key="g">g. money you have kept and not spent</button><button type="button" class="lm-item" data-key="h">h. having money in your account</button></div>
+          <select class="lm-hidden-select select" id="t6-v-1" data-lm-key="1" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-v-2" data-lm-key="2" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-v-3" data-lm-key="3" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-v-4" data-lm-key="4" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-v-5" data-lm-key="5" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-v-6" data-lm-key="6" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-v-7" data-lm-key="7" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t6-v-8" data-lm-key="8" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-v', 't6-v-score'); markLineMatchResult('t6-v-lm');">Check answers</button>
+          <span id="t6-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Before you listen — paraphrase.</strong> How might the speaker express each idea in Questions 1–4 in different words? Write one paraphrase for each.</p>
+      <div class="card"><p class="mini-q">1 a branch on the campus</p><textarea class="no-check mini-answer" id="t6-para-1" placeholder="Your paraphrase..." style="min-height:36px;"></textarea><p class="mini-q">2 a free gift for new customers</p><textarea class="no-check mini-answer" id="t6-para-2" placeholder="Your paraphrase..." style="min-height:36px;"></textarea><p class="mini-q">3 special interest rates for students</p><textarea class="no-check mini-answer" id="t6-para-3" placeholder="Your paraphrase..." style="min-height:36px;"></textarea><p class="mini-q">4 no bank charges for certain customers</p><textarea class="no-check mini-answer" id="t6-para-4" placeholder="Your paraphrase..." style="min-height:36px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t6-para-btn">Show suggested paraphrases</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t6-para-ans"><ol><li>the bank has an office inside the university</li><li>you get a present when you become a client</li><li>students pay a lower percentage on their loans</li><li>some clients do not have to pay the bank for its services</li></ol></div>
+        </div></div>
+      <div class="card"><p class="prompt-label">Questions 1–4</p><p style="margin:0 0 6px;">Which bank provides the following? Choose <b>FOUR</b> answers from the box. You will not need all the letters.</p>
+        <div class="opt-legend"><span><b>A</b> Evergreen</span><span><b>B</b> Finley's</span><span><b>C</b> Great Western</span><span><b>D</b> International Union</span><span><b>E</b> Moneysafe</span><span><b>F</b> Northern Star</span></div></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 01 — Questions 1–4</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track01.mp3"></audio></div>
+      <div class="card" id="t6-m"><div class="sel-row"><select class="select" id="t6-m-1" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>1.</b> a branch on the campus</span></div><div class="sel-row"><select class="select" id="t6-m-2" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>2.</b> a free gift for new customers</span></div><div class="sel-row"><select class="select" id="t6-m-3" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>3.</b> special interest rates for students</span></div><div class="sel-row"><select class="select" id="t6-m-4" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>4.</b> no bank charges for certain customers</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-m', 't6-m-score')">Check answers</button>
+          <span id="t6-m-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card advice-card"><p class="prompt-label">Exam advice — labelling a diagram</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li>Read the title, then find the <b>first gap</b> — it will be the first thing you hear.</li>
+  <li>Use the labels already given (<i>cardholder's name, expiry…</i>) to keep your place.</li>
+  <li>Know location phrases: <i>at the top, halfway down, on the left, in the bottom right-hand corner</i>.</li></ul></div>
+<div class="card"><p class="prompt-label">Questions 5–10 — label the diagram. Write ONE OR TWO WORDS for each answer.</p><svg viewBox="0 0 720 300" class="svg-chart" role="img" aria-label="Debit card, front and back" style="width:100%; display:block;">
+  <text x="360" y="20" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">DEBIT CARD</text>
+  <text x="175" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="#4b4e5c">FRONT</text>
+  <text x="545" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="#4b4e5c">BACK</text>
+  <rect x="40" y="58" width="270" height="170" rx="14" fill="#cfe0f7" stroke="#14162b"/>
+  <rect x="60" y="72" width="170" height="22" rx="4" fill="#fff" stroke="#8aa2c8"/>
+  <rect x="62" y="110" width="38" height="30" rx="5" fill="#e8c85a" stroke="#9a7b12"/>
+  <text x="62" y="170" font-size="14" font-family="monospace" fill="#14162b">1384 5353 6737 9800</text>
+  <rect x="62" y="178" width="40" height="14" rx="3" fill="#fff" stroke="#8aa2c8"/>
+  <rect x="62" y="200" width="150" height="16" rx="3" fill="#fff" stroke="#8aa2c8"/>
+  <rect x="236" y="110" width="52" height="40" rx="6" fill="#f6e27a" stroke="#c8a400"/>
+  <rect x="236" y="180" width="52" height="38" rx="6" fill="#fff" stroke="#8aa2c8"/>
+  <rect x="410" y="58" width="270" height="170" rx="14" fill="#eef1f6" stroke="#14162b"/>
+  <rect x="410" y="80" width="270" height="34" fill="#222"/>
+  <rect x="430" y="140" width="200" height="24" rx="4" fill="#fff" stroke="#8aa2c8"/>
+  <g font-size="12" fill="#14162b">
+    <line x1="230" y1="83" x2="318" y2="83" stroke="#14162b"/><text x="318" y="70" font-size="10">name of bank</text><text x="318" y="98" font-size="10">or card company</text>
+    <line x1="80" y1="125" x2="20" y2="125" stroke="#14162b"/><text x="4" y="120" text-anchor="start">(10)</text>
+    <line x1="82" y1="185" x2="20" y2="200" stroke="#14162b"/><text x="4" y="215">expiry (9)</text>
+    <line x1="120" y1="216" x2="120" y2="262" stroke="#14162b"/><text x="70" y="276">cardholder's name</text>
+    <line x1="262" y1="110" x2="300" y2="40" stroke="#14162b"/><text x="250" y="36">hologram with moving (5)</text>
+    <line x1="262" y1="218" x2="300" y2="260" stroke="#14162b"/><text x="285" y="276">(8)</text>
+    <line x1="600" y1="97" x2="640" y2="40" stroke="#14162b"/><text x="590" y="36">black (6)</text>
+    <line x1="530" y1="164" x2="560" y2="262" stroke="#14162b"/><text x="470" y="278">security number and holder's (7)</text>
+  </g>
+</svg></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 02 — Questions 5–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track02.mp3"></audio></div>
+      <div class="card" id="t6-d" style="line-height:2.3;"><p>5. hologram with moving <input type="text" class="text-answer" id="t6-5" data-correct="picture" autocomplete="off" style="width:130px;"></p><p>6. black <input type="text" class="text-answer" id="t6-6" data-correct="magnetic strip/strip" autocomplete="off" style="width:150px;"></p><p>7. security number and holder's <input type="text" class="text-answer" id="t6-7" data-correct="signature" autocomplete="off" style="width:130px;"></p><p>8. <input type="text" class="text-answer" id="t6-8" data-correct="bank logo/logo" autocomplete="off" style="width:130px;"></p><p>9. expiry <input type="text" class="text-answer" id="t6-9" data-correct="date" autocomplete="off" style="width:130px;"></p><p>10. <input type="text" class="text-answer" id="t6-10" data-correct="chip" autocomplete="off" style="width:130px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-d', 't6-d-score')">Check answers</button>
+          <span id="t6-d-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Discuss.</strong> Record a short answer to each question.</p>
+      <div class="question-box" data-field="t6-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">What things are important to you when choosing a bank? Put them in order of importance (e.g. friendly staff, location, quick service, low interest rates, easy loans) and explain your top two.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“For me, the most important factor is…”</li><li>“…matters less, because…”</li><li>“I'd also look at…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t6-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Which do you prefer to use: a credit card or cash? Why? Are there situations where you would choose the other?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I tend to use … because…”</li><li>“The main drawback of … is that…”</li><li>“That said, when…, I'd rather…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 10</div>
+      <h2>Vocabulary — Verb + <i>to do</i> / Verb + <i>doing</i></h2>
+      <p class="task-sub">Verb patterns are one of the most common sources of error in IELTS Writing and Speaking at Band 6–7. Some verbs take <i>to do</i>, some take <i>doing</i>, and some take both — with a <b>change in meaning</b>. The negative forms are <i>not to do</i> and <i>not doing</i>.</p>
+      <div class="card advice-card"><table class="data-table" style="width:100%;"><tr><th>+ to do</th><th>+ doing</th><th>both — meaning changes</th></tr>
+  <tr><td>afford, agree, decide, expect, manage, offer, refuse, tend, want, persuade/encourage/force sb <b>to</b></td><td>avoid, can't help, consider, deny, enjoy, end up, keep, mind, recommend, risk, suggest, (be) worth</td><td>remember, forget, stop, try, regret</td></tr></table></div>
+      <p style="margin-top:26px;"><strong>Part 1 — Correct the mistakes.</strong> Each sentence was written by an IELTS candidate and contains <b>one</b> verb-pattern error. Write the correct form of the underlined verb.</p>
+      <div class="card" id="t7-e" style="line-height:2.5;"><p>1. I suggest <u>to improve</u> the situation by spending more on public transport. → <input type="text" class="text-answer" id="t7-1" data-correct="improving" autocomplete="off" style="width:140px;"></p><p>2. Many people cannot afford <u>buying</u> expensive clothes. → <input type="text" class="text-answer" id="t7-2" data-correct="to buy" autocomplete="off" style="width:140px;"></p><p>3. Oil prices are forecast <u>increasing</u> in the medium term. → <input type="text" class="text-answer" id="t7-3" data-correct="to increase" autocomplete="off" style="width:140px;"></p><p>4. Parents should give children pocket money to enable them <u>buying</u> what they want. → <input type="text" class="text-answer" id="t7-4" data-correct="to buy" autocomplete="off" style="width:140px;"></p><p>5. Some people will spend all their spare time <u>to shop</u>. → <input type="text" class="text-answer" id="t7-5" data-correct="shopping" autocomplete="off" style="width:140px;"></p><p>6. The government should consider <u>to reduce</u> taxes on small shops. → <input type="text" class="text-answer" id="t7-6" data-correct="reducing" autocomplete="off" style="width:140px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-e', 't7-e-score')">Check answers</button>
+          <span id="t7-e-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Meaning changes.</strong> Complete each sentence with the correct form of the verb in brackets.</p>
+      <div class="card" id="t7-m" style="line-height:2.5;"><p>1. I'll never forget <input type="text" class="text-answer" id="t7-m1" data-correct="opening" autocomplete="off" style="width:120px;"> my first bank account — I was so proud. (open)</p><p>2. Remember <input type="text" class="text-answer" id="t7-m2" data-correct="to check" autocomplete="off" style="width:120px;"> your balance before you pay by card. (check)</p><p>3. He stopped <input type="text" class="text-answer" id="t7-m3" data-correct="buying" autocomplete="off" style="width:120px;"> coffee every morning and saved a fortune. (buy)</p><p>4. On the way home, she stopped <input type="text" class="text-answer" id="t7-m4" data-correct="to buy" autocomplete="off" style="width:120px;"> some bread. (buy)</p><p>5. If the banking app freezes, try <input type="text" class="text-answer" id="t7-m5" data-correct="restarting" autocomplete="off" style="width:120px;"> your phone. (restart)</p><p>6. We regret <input type="text" class="text-answer" id="t7-m6" data-correct="to inform" autocomplete="off" style="width:120px;"> you that your application has been rejected. (inform)</p><p>7. I really regret <input type="text" class="text-answer" id="t7-m7" data-correct="lending" autocomplete="off" style="width:120px;"> him money — he never paid it back. (lend)</p><p>8. Most shoppers can't help <input type="text" class="text-answer" id="t7-m8" data-correct="looking" autocomplete="off" style="width:120px;"> at the displays at the end of an aisle. (look)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-m', 't7-m-score')">Check answers</button>
+          <span id="t7-m-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 3 — Talk about shopping.</strong> Record an answer to each question. Use at least <b>two</b> verb patterns from this task in each answer.</p>
+      <div class="question-box" data-field="t7-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Do you enjoy shopping at your local supermarket? Why? / Why not?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I tend to…”</li><li>“I always end up…”</li><li>“I'd recommend going…”</li><li>“It's worth…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">How does your supermarket try to persuade you to spend more money?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I tend to…”</li><li>“I always end up…”</li><li>“I'd recommend going…”</li><li>“It's worth…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Where would you recommend visitors to your town or city go shopping?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I tend to…”</li><li>“I always end up…”</li><li>“I'd recommend going…”</li><li>“It's worth…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 10</div>
+      <h2>Speaking Part 2 — An Advertisement</h2>
+      <p class="task-sub">Listen to a candidate, Irina, doing a Part 2 task, then do it yourself. In Part 2 you have <b>1 minute</b> to prepare and should speak for <b>1–2 minutes</b>.</p>
+      <div class="card task-prompt"><p class="prompt-label">Part 2 task card</p><p><b>Describe an advertisement which you found very persuasive.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what the advertisement was for<br>&nbsp;&nbsp;where you saw or read it<br>&nbsp;&nbsp;what the advertisement consisted of<br>and explain why you found it so persuasive.</p></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 03 — Irina</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track03.mp3"></audio></div>
+      <div class="card"><p class="mini-q">What the advertisement was for:</p><textarea class="no-check mini-answer" id="t8-irina-1" placeholder="Notes..." style="min-height:36px;"></textarea><p class="mini-q">Where she saw it:</p><textarea class="no-check mini-answer" id="t8-irina-2" placeholder="Notes..." style="min-height:36px;"></textarea><p class="mini-q">What it consisted of:</p><textarea class="no-check mini-answer" id="t8-irina-3" placeholder="Notes..." style="min-height:36px;"></textarea><p class="mini-q">Why she found it persuasive:</p><textarea class="no-check mini-answer" id="t8-irina-4" placeholder="Notes..." style="min-height:36px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-irina-btn">Show the answers</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-irina-ans"><ol><li>an energy drink — for a sporting activity</li><li>on television</li><li>an Olympic athlete — the 100 metres — natural ingredients</li><li>a famous, successful person; she was preparing for university exams and playing in her school volleyball team</li></ol></div>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Did Irina do these things?</strong> A good Part 2 answer starts straight away, covers every point, keeps to the topic, keeps going for the full time and sounds interested. Use this checklist for your own answer too.</p>
+      <div class="question-box" data-field="t8-speaking-ad">
+        <div class="q-num">Your Part 2 talk — advertisement</div>
+        <div class="q-text">Now do the task yourself. Prepare for 1 minute (use the notes box), then speak for <b>1–2 minutes</b> without stopping.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I'd like to talk about an advert for…”</li><li>“I first came across it…”</li><li>“What made it so memorable was…”</li><li>“I think the main reason it persuaded me was…”</li><li>“In fact, I ended up buying…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="card task-prompt" style="margin-top:22px;"><p class="prompt-label">Part 2 task card — extra practice</p><p><b>Describe something you bought recently which has been very useful to you.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what it is<br>&nbsp;&nbsp;why you bought it<br>&nbsp;&nbsp;where you bought it<br>and explain how it has been so useful to you.</p></div>
+      <div class="question-box" data-field="t8-speaking-useful">
+        <div class="q-num">Your Part 2 talk — a useful purchase</div>
+        <div class="q-text">Prepare for 1 minute, then speak for <b>1–2 minutes</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Something I bought recently that has turned out to be really useful is…”</li><li>“I decided to buy it because…”</li><li>“I managed to find it at…”</li><li>“It's been invaluable, especially when…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 10</div>
+      <h2>Speaking Part 3 — Advertising and Consumer Society</h2>
+      <p class="task-sub">Part 3 questions are more abstract. Strong candidates give <b>reasons and examples</b>, and when they can't find a word or make a mistake, they <b>repair</b> it smoothly instead of stopping.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 04 — Irina answers: “How important do you think it is for companies to advertise their products?”</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track04.mp3"></audio></div>
+      <div class="card"><p class="mini-q">Which reasons does Irina give?</p><textarea class="no-check mini-answer" id="t9-irina-1" placeholder="Notes..." style="min-height:40px;"></textarea><p class="mini-q">Which examples does she give?</p><textarea class="no-check mini-answer" id="t9-irina-2" placeholder="Notes..." style="min-height:40px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-irina-btn">Show the answers</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-irina-ans"><ol><li>so that people know a new product exists; to give information about products; to attract new customers</li><li>clothes; a new drink for sportspeople</li></ol></div>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Listen again.</strong> Which phrase does Irina use for each purpose?</p>
+      <div class="card" id="t9-ph"><div class="sel-row"><select class="select" id="t9-ph-1" data-answer="in other words"><option value="">—</option><option value="I mean">I mean</option><option value="in other words">in other words</option><option value="what&#x27;s the word / how do you say">what&#x27;s the word / how do you say</option></select><span><b>1.</b> to express the same idea again more clearly</span></div><div class="sel-row"><select class="select" id="t9-ph-2" data-answer="I mean"><option value="">—</option><option value="I mean">I mean</option><option value="in other words">in other words</option><option value="what&#x27;s the word / how do you say">what&#x27;s the word / how do you say</option></select><span><b>2.</b> to correct something she has said</span></div><div class="sel-row"><select class="select" id="t9-ph-3" data-answer="what&#x27;s the word / how do you say"><option value="">—</option><option value="I mean">I mean</option><option value="in other words">in other words</option><option value="what&#x27;s the word / how do you say">what&#x27;s the word / how do you say</option></select><span><b>3.</b> when she's looking for the correct word</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-ph', 't9-ph-score')">Check answers</button>
+          <span id="t9-ph-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card advice-card"><p class="prompt-label">Exam advice — Speaking Parts 2 and 3</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li>If you think you haven't expressed yourself clearly, say it again in other words: <i>in other words…, what I mean is…</i></li>
+  <li>If you make a mistake, correct yourself: <i>…I mean…</i></li>
+  <li>If a word won't come, keep talking: <i>what's the word…, how do you say…</i> — then paraphrase. Silence costs more marks than a repair.</li></ul></div>
+      <p style="margin-top:26px;"><strong>Your turn.</strong> Record an answer to each question. Give reasons and examples, and use at least one repair phrase somewhere.</p>
+      <div class="question-box" data-field="t9-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">How important do you think it is for companies to advertise their products?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I'd say it's … because…”</li><li>“A good example of this is…”</li><li>“In other words,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">How do advertisements influence people to buy things?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I'd say it's … because…”</li><li>“A good example of this is…”</li><li>“In other words,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">How effective is advertising as a way of persuading people to buy things?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I'd say it's … because…”</li><li>“A good example of this is…”</li><li>“In other words,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Apart from advertising, what other factors influence people's decisions to buy things?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I'd say it's … because…”</li><li>“A good example of this is…”</li><li>“In other words,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-5">
+        <div class="q-num">Question 5</div>
+        <div class="q-text">In what ways can advertising be bad or harmful to society?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I'd say it's … because…”</li><li>“A good example of this is…”</li><li>“In other words,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-6">
+        <div class="q-num">Question 6</div>
+        <div class="q-text">Why do you think some people say advertising is a form of art?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I'd say it's … because…”</li><li>“A good example of this is…”</li><li>“In other words,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-7">
+        <div class="q-num">Question 7</div>
+        <div class="q-text">Why do some people prefer to save money instead of spending it?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I'd say it's … because…”</li><li>“A good example of this is…”</li><li>“In other words,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-8">
+        <div class="q-num">Question 8</div>
+        <div class="q-text">When is it better to visit small specialist shops rather than large stores?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I'd say it's … because…”</li><li>“A good example of this is…”</li><li>“In other words,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 10</div>
+      <h2>Pronunciation — Word Stress</h2>
+      <p class="task-sub">In words with more than one syllable, one syllable is stressed more than the others. Wrong stress is one of the main reasons listeners misunderstand a speaker — even when every sound is correct.</p>
+<div class="card advice-card"><p style="margin:0;"><i>actually</i> has three syllables: ac · tual · ly — one of them is stressed.</p></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 05 — the first sentence of Irina's answer</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track05.mp3"></audio></div>
+      <div class="card" id="t10-a"><div class="q-item" id="t10-a-1">
+          <p>1. Which syllable is stressed in <i>actually</i>?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-a-1" data-correct="true"> A. AC · tual · ly</label><label><input type="radio" value="1" name="t10-a-1" data-correct="false"> B. ac · TUAL · ly</label><label><input type="radio" value="2" name="t10-a-1" data-correct="false"> C. ac · tual · LY</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-a', 't10-a-score')">Check answers</button>
+          <span id="t10-a-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>How many syllables?</strong> Write the number of syllables in each word (as normally spoken).</p>
+      <div class="card" id="t10-n" style="line-height:2.6;"><p>1. advertisements <input type="text" class="text-answer" id="t10-n1" data-correct="4" autocomplete="off" style="width:50px;"> &nbsp; 2. persuasive <input type="text" class="text-answer" id="t10-n2" data-correct="3" autocomplete="off" style="width:50px;"> &nbsp; 3. energy <input type="text" class="text-answer" id="t10-n3" data-correct="3" autocomplete="off" style="width:50px;"> &nbsp; 4. activity <input type="text" class="text-answer" id="t10-n4" data-correct="4" autocomplete="off" style="width:50px;"> &nbsp; 5. television <input type="text" class="text-answer" id="t10-n5" data-correct="4" autocomplete="off" style="width:50px;"></p><p>6. generally <input type="text" class="text-answer" id="t10-n6" data-correct="3/4" autocomplete="off" style="width:50px;"> &nbsp; 7. advertising <input type="text" class="text-answer" id="t10-n7" data-correct="4" autocomplete="off" style="width:50px;"> &nbsp; 8. usually <input type="text" class="text-answer" id="t10-n8" data-correct="3/4" autocomplete="off" style="width:50px;"> &nbsp; 9. product <input type="text" class="text-answer" id="t10-n9" data-correct="2" autocomplete="off" style="width:50px;"> &nbsp; 10. person <input type="text" class="text-answer" id="t10-n10" data-correct="2" autocomplete="off" style="width:50px;"></p><p>11. famous <input type="text" class="text-answer" id="t10-n11" data-correct="2" autocomplete="off" style="width:50px;"> &nbsp; 12. successful <input type="text" class="text-answer" id="t10-n12" data-correct="3" autocomplete="off" style="width:50px;"> &nbsp; 13. university <input type="text" class="text-answer" id="t10-n13" data-correct="5" autocomplete="off" style="width:50px;"> &nbsp; 14. expensive <input type="text" class="text-answer" id="t10-n14" data-correct="3" autocomplete="off" style="width:50px;"> &nbsp; 15. energetic <input type="text" class="text-answer" id="t10-n15" data-correct="4" autocomplete="off" style="width:50px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-n', 't10-n-score')">Check answers</button>
+          <span id="t10-n-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Which syllable has the main stress?</strong> Decide, then listen to Irina's talk again to check.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 06 — check the stress</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track06.mp3"></audio></div>
+      <div class="card" id="t10-s"><div class="q-item" id="t10-s-1">
+          <p>1. <b>ad·ver·tise·ments</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-1" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t10-s-1" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t10-s-1" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-2">
+          <p>2. <b>per·sua·sive</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-2" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t10-s-2" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t10-s-2" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-3">
+          <p>3. <b>en·er·gy</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-3" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t10-s-3" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t10-s-3" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-4">
+          <p>4. <b>ac·tiv·i·ty</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-4" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t10-s-4" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t10-s-4" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-5">
+          <p>5. <b>tel·e·vi·sion</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-5" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t10-s-5" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t10-s-5" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-6">
+          <p>6. <b>gen·er·al·ly</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-6" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t10-s-6" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t10-s-6" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-7">
+          <p>7. <b>ad·ver·tis·ing</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-7" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t10-s-7" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t10-s-7" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-8">
+          <p>8. <b>u·su·al·ly</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-8" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t10-s-8" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t10-s-8" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-9">
+          <p>9. <b>prod·uct</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-9" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t10-s-9" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t10-s-9" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-10">
+          <p>10. <b>per·son</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-10" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t10-s-10" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t10-s-10" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-11">
+          <p>11. <b>fa·mous</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-11" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t10-s-11" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t10-s-11" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-12">
+          <p>12. <b>suc·cess·ful</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-12" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t10-s-12" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t10-s-12" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-13">
+          <p>13. <b>u·ni·ver·si·ty</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-13" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t10-s-13" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t10-s-13" data-correct="true"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-14">
+          <p>14. <b>ex·pen·sive</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-14" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t10-s-14" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t10-s-14" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-s-15">
+          <p>15. <b>en·er·get·ic</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-s-15" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t10-s-15" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t10-s-15" data-correct="true"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-s', 't10-s-score')">Check answers</button>
+          <span id="t10-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t10-q"><div class="q-item" id="t10-q-1">
+          <p>1. What do you notice about <i>advertisements</i> / <i>advertising</i> and <i>energy</i> / <i>energetic</i>?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-q-1" data-correct="false"> A. They are stressed on the same syllable.</label><label><input type="radio" value="1" name="t10-q-1" data-correct="true"> B. Related words can be stressed on different syllables.</label><label><input type="radio" value="2" name="t10-q-1" data-correct="false"> C. The longer word is always stressed on the first syllable.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-q-2">
+          <p>2. Which syllable is usually <b>not</b> stressed?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-q-2" data-correct="false"> A. the first syllable</label><label><input type="radio" value="1" name="t10-q-2" data-correct="true"> B. the final syllable</label><label><input type="radio" value="2" name="t10-q-2" data-correct="false"> C. the second syllable</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-q', 't10-q-score')">Check answers</button>
+          <span id="t10-q-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t10-speaking-stress">
+        <div class="q-num">Word stress practice</div>
+        <div class="q-text">Choose <b>five</b> words from the list and use each one in a sentence about advertising or shopping. Say them aloud with the correct stress.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Television advertisements are generally…”</li><li>“Successful advertising is usually…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 10</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 24 of 45</div>
+    <h1>Day 24 complete! 🎉</h1>
+    <p>Day 24 done — Unit 6, Making Money, Spending Money: retail psychology, banking, verb patterns, Speaking Parts 2 and 3 and word stress, each skill with its own lead-in.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t6-v-lm');
+
+
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t2-speaking-summary"]'); if (b) initRecordControl(b, user.id, 24, 2, 't2-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-summary"]'); if (b) initRecordControl(b, user.id, 24, 5, 't5-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t6-speaking-1"]'); if (b) initRecordControl(b, user.id, 24, 6, 't6-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t6-speaking-2"]'); if (b) initRecordControl(b, user.id, 24, 6, 't6-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-1"]'); if (b) initRecordControl(b, user.id, 24, 7, 't7-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-2"]'); if (b) initRecordControl(b, user.id, 24, 7, 't7-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-3"]'); if (b) initRecordControl(b, user.id, 24, 7, 't7-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-ad"]'); if (b) initRecordControl(b, user.id, 24, 8, 't8-speaking-ad', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-useful"]'); if (b) initRecordControl(b, user.id, 24, 8, 't8-speaking-useful', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-1"]'); if (b) initRecordControl(b, user.id, 24, 9, 't9-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-2"]'); if (b) initRecordControl(b, user.id, 24, 9, 't9-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-3"]'); if (b) initRecordControl(b, user.id, 24, 9, 't9-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-4"]'); if (b) initRecordControl(b, user.id, 24, 9, 't9-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-5"]'); if (b) initRecordControl(b, user.id, 24, 9, 't9-speaking-5', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-6"]'); if (b) initRecordControl(b, user.id, 24, 9, 't9-speaking-6', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-7"]'); if (b) initRecordControl(b, user.id, 24, 9, 't9-speaking-7', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-8"]'); if (b) initRecordControl(b, user.id, 24, 9, 't9-speaking-8', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-stress"]'); if (b) initRecordControl(b, user.id, 24, 10, 't10-speaking-stress', 0); }
+
+    await initTaskFlow(24, 10, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-c', 't1-c-score'); },
+      2: () => { checkAllAnswers('t2-mc', 't2-mc-score'); checkAllAnswers('t2-tf', 't2-tf-score'); },
+      3: () => { checkAllAnswers('t3-d', 't3-d-score'); checkAllAnswers('t3-tf', 't3-tf-score'); checkAllAnswers('t3-f', 't3-f-score'); },
+      4: () => { checkAllAnswers('t4-vp', 't4-vp-score'); },
+      5: () => { checkAllAnswers('t5-mc', 't5-mc-score'); },
+      6: () => { checkAllAnswers('t6-v', 't6-v-score'); markLineMatchResult('t6-v-lm'); checkAllAnswers('t6-m', 't6-m-score'); checkAllAnswers('t6-d', 't6-d-score'); },
+      7: () => { checkAllAnswers('t7-e', 't7-e-score'); checkAllAnswers('t7-m', 't7-m-score'); },
+      9: () => { checkAllAnswers('t9-ph', 't9-ph-score'); },
+      10: () => { checkAllAnswers('t10-a', 't10-a-score'); checkAllAnswers('t10-n', 't10-n-score'); checkAllAnswers('t10-s', 't10-s-score'); checkAllAnswers('t10-q', 't10-q-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t1-sh-btn', 't1-sh-ans', '[id^="t1-sh-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t2-sum-btn', 't2-sum-ans', '[id^="t2-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t5-sum-btn', 't5-sum-ans', '[id^="t5-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t6-para-btn', 't6-para-ans', '[id^="t6-para-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t8-irina-btn', 't8-irina-ans', '[id^="t8-irina-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-irina-btn', 't9-irina-ans', '[id^="t9-irina-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>
