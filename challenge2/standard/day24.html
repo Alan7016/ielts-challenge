@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 24 — Standard — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+  .audio-card { margin-top: 12px; }
+  .audio-card .prompt-label { margin-bottom: 8px !important; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 24 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 12</div>
+      <h2>Starting Off — Being Human</h2>
+      <p class="task-sub">Unit 6 is about people: why we change (or don't), how we remember, and what makes someone successful. Four people are each thinking about a change they could make in their lives. Read what each one says and complete their thought with a word from the box.</p>
+      <div class="card">
+        <p class="prompt-label">The four people</p>
+        <ol style="margin:0; padding-left:20px; line-height:1.8;">
+          <li>A man is sitting in his car. A colleague suggests that he walks to work instead of driving.</li>
+          <li>A businessman in a suit is looking at a big, powerful motorbike in a showroom.</li>
+          <li>An older man is walking past a charity collection box — <i>“Donations welcome”</i>.</li>
+          <li>A young woman is reading a magazine article: <i>“Why not go somewhere different this year?”</i></li>
+        </ol></div>
+<div class="word-bank">boring · chance · familiar · generous · image · <s>keen</s> · real · unusual</div>
+      <div class="card" id="t1-sb" style="line-height:2.3;"><p><span class="example-q">Example — Person 1: “Mmm. I'm not very <b>keen</b> on walking.”</span></p><p>Person 2: “I've always wanted one, but it doesn't really suit my <select class="select inline" id="t1-2" data-answer="image"><option value="">—</option><option value="boring">boring</option><option value="chance">chance</option><option value="familiar">familiar</option><option value="generous">generous</option><option value="image">image</option><option value="real">real</option><option value="unusual">unusual</option></select>.”</p><p>Person 3: “I really should be more <select class="select inline" id="t1-3" data-answer="generous"><option value="">—</option><option value="boring">boring</option><option value="chance">chance</option><option value="familiar">familiar</option><option value="generous">generous</option><option value="image">image</option><option value="real">real</option><option value="unusual">unusual</option></select>.”</p><p>Person 4: “It's a nice idea, but I prefer to go to a <select class="select inline" id="t1-4" data-answer="familiar"><option value="">—</option><option value="boring">boring</option><option value="chance">chance</option><option value="familiar">familiar</option><option value="generous">generous</option><option value="image">image</option><option value="real">real</option><option value="unusual">unusual</option></select> place.”</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-sb', 't1-sb-score')">Check answers</button>
+          <span id="t1-sb-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Opposites.</strong> Write the opposite of each adjective. (Hint: some take a prefix like <i>un-</i>, some are completely different words.)</p>
+      <div class="card" id="t1-op" style="line-height:2.3;"><p>1. familiar ↔ <input type="text" class="text-answer" id="t1-o1" data-correct="unfamiliar" autocomplete="off" style="width:130px;"></p><p>2. unusual ↔ <input type="text" class="text-answer" id="t1-o2" data-correct="usual/common/normal/ordinary" autocomplete="off" style="width:130px;"></p><p>3. real ↔ <input type="text" class="text-answer" id="t1-o3" data-correct="unreal/fake/imaginary" autocomplete="off" style="width:130px;"></p><p>4. generous ↔ <input type="text" class="text-answer" id="t1-o4" data-correct="mean/selfish/stingy" autocomplete="off" style="width:130px;"></p><p>5. boring ↔ <input type="text" class="text-answer" id="t1-o5" data-correct="interesting/exciting" autocomplete="off" style="width:130px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-op', 't1-op-score')">Check answers</button>
+          <span id="t1-op-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>What reasons might each person have for changing?</strong> Write one sentence for each. Example (person 1): <i>He needs to take more exercise.</i></p>
+      <div class="card"><p class="mini-q">1. Person 2 (the motorbike):</p><textarea class="no-check mini-answer" id="t1-why-1" placeholder="Write here..." style="min-height:50px;"></textarea><p class="mini-q">2. Person 3 (the charity box):</p><textarea class="no-check mini-answer" id="t1-why-2" placeholder="Write here..." style="min-height:50px;"></textarea><p class="mini-q">3. Person 4 (the holiday):</p><textarea class="no-check mini-answer" id="t1-why-3" placeholder="Write here..." style="min-height:50px;"></textarea><p class="mini-q">4. Do you think any of the four people <b>will</b> change? Why? / Why not?</p><textarea class="no-check mini-answer" id="t1-why-4" placeholder="Write here..." style="min-height:50px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t1-why-btn">Show suggested answers</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t1-why-ans"><ol><li>He'd like to feel younger / be more adventurous.</li><li>He ought to give more money to charity / be less selfish.</li><li>She ought to visit a new place for her holiday / be more adventurous.</li>
+    <li>Look again at what they say — <i>not very keen</i>, <i>doesn't really suit my image</i>, <i>I prefer…</i>. Every one of them is giving a reason <b>not</b> to change! That is exactly what today's first reading passage is about.</li></ol></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 12</div>
+      <h2>Lead-in 1 — Creatures of Habit</h2>
+      <p class="task-sub">Before the first reading passage, read this short article about why change is difficult. It gives you ideas and vocabulary for Reading 1. Answer the questions, then summarise the article in writing and aloud. About 15 minutes.</p>
+      <div class="card article">
+        <h3 class="article-title">Creatures of Habit</h3>
+        <p class="article-meta">Psychology · Everyday life · 295 words</p>
+        <p>Think about how your day started. You probably woke up at a similar time to yesterday, did the same things in the same order, and perhaps took the same route to school or work. Psychologists say that a large part of what we do each day is not really decided at all — it is habit.</p><p>Habits are useful. When an action becomes automatic, the brain does not have to think about it, so it can save its energy for new problems. This is why an experienced driver can hold a conversation while driving, but a learner cannot. Our love of the familiar has a cost, however: once a habit is in place, it is very hard to change, even when we know it is bad for us.</p><p>This explains why so many New Year resolutions fail. People decide to change a lot at once — to exercise every day, stop eating sugar and learn a language — and depend on willpower alone. After a few stressful days, the old routine returns, because it is easier than the new one.</p><p>Experts who study behaviour suggest a different approach. First, make the change very small: five minutes of exercise is better than an hour you never do. Second, connect the new habit to something you already do every day, for example reading ten pages straight after dinner. Third, repeat it until it feels automatic, which can take weeks rather than days.</p><p>Interestingly, people often find it easier to change at moments when their life is already changing — when they move house, start a new job or go to university. Old routines are broken anyway, so there is space for new ones. A new start, it seems, is the best time to make a new start.</p>
+      </div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-1">
+          <p>1. According to the article, why are habits useful?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-1" data-correct="false"> A. They make us more intelligent.</label><label><input type="radio" value="1" name="t2-mc-1" data-correct="true"> B. They save the brain's energy for new problems.</label><label><input type="radio" value="2" name="t2-mc-1" data-correct="false"> C. They help us to drive safely.</label><label><input type="radio" value="3" name="t2-mc-1" data-correct="false"> D. They are easy to change.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-2">
+          <p>2. Why do many New Year resolutions fail?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-2" data-correct="false"> A. People change too little.</label><label><input type="radio" value="1" name="t2-mc-2" data-correct="true"> B. People try to change too much at once and rely only on willpower.</label><label><input type="radio" value="2" name="t2-mc-2" data-correct="false"> C. People start them at the wrong time of year.</label><label><input type="radio" value="3" name="t2-mc-2" data-correct="false"> D. People do not know which habits are bad for them.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-3">
+          <p>3. Which piece of advice is NOT given in the article?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-3" data-correct="false"> A. Make the change very small.</label><label><input type="radio" value="1" name="t2-mc-3" data-correct="false"> B. Link the new habit to something you already do.</label><label><input type="radio" value="2" name="t2-mc-3" data-correct="true"> C. Reward yourself with something sweet.</label><label><input type="radio" value="3" name="t2-mc-3" data-correct="false"> D. Repeat the habit until it feels automatic.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-4">
+          <p>4. When, according to the article, is change often easier?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-4" data-correct="true"> A. When life is already changing, for example after moving house.</label><label><input type="radio" value="1" name="t2-mc-4" data-correct="false"> B. When you are on holiday.</label><label><input type="radio" value="2" name="t2-mc-4" data-correct="false"> C. At the start of the year.</label><label><input type="radio" value="3" name="t2-mc-4" data-correct="false"> D. When you are very busy.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 80 words</b>. Say what it is about, give the two or three most important points, and finish with one sentence about what you think.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 80 words):</p><textarea class="no-check mini-answer" id="t2-sum-1" data-min-words="80" placeholder="Write your summary here..." style="min-height:150px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t2-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t2-sum-ans"><p>This article explains why it is so difficult to change our habits. Much of what we do every day is automatic, which saves the brain energy but makes old routines hard to break. Many New Year resolutions fail because people try to change too much at once and rely only on willpower. Experts suggest making very small changes, linking a new habit to something we already do, and repeating it for weeks. Change is often easier when our life is already changing. I think the advice about small steps is very practical. (≈ 95 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t2-speaking-summary">
+        <div class="q-num">Spoken summary (at least 30 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 30 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This text is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“For example,…”</li><li>“Personally, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 12</div>
+      <h2>Reading 1 — Ready for Something New?</h2>
+      <p class="task-sub">IELTS question type: <b>YES / NO / NOT GIVEN</b>. Suggested time: 15 minutes. First read the title and subheading and predict what the writer will say. Then read the passage on the left and answer the questions on the right. Your answers are checked when you press <b>Next</b>.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice — YES / NO / NOT GIVEN</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li>These questions are about the writer's <b>opinions and claims</b>, not just facts.</li>
+  <li><b>Underline</b> the key words in each statement, then find words in the passage with the same or the <b>opposite</b> meaning.</li>
+  <li><b>YES</b> = the writer agrees · <b>NO</b> = the writer says the opposite · <b>NOT GIVEN</b> = the writer says nothing about this idea.</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Ready for Something New?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Why do some of us love change while others avoid it — and does age make a difference?</small></h3>
+            <p class="article-meta">Reading Passage 1 · Psychology · 476 words</p>
+            <p><span class="para-label">A</span>Every January, millions of people promise themselves a new start: a healthier diet, a new language, a different job. By February, many of these promises have been forgotten. Change, it seems, is something we talk about far more often than we actually do. Yet the desire for something new is a basic part of being human, and it is strongest at one particular stage of life.</p><p><span class="para-label">B</span>Studies of personality suggest that people are most open to new experiences in their late teens and early twenties. This is the age when many young people leave home, travel, try unusual jobs or move to a city where they know nobody. Psychologists believe this makes sense: young adults are building an identity, and new experiences help them to discover what they enjoy and what they are good at. In my view, this period of exploration is one of the most valuable times in a person's life, and adults should encourage it rather than worry about it.</p><p><span class="para-label">C</span>As people get older, however, their openness to novelty tends to fall gradually. The main reason is not that the brain loses its curiosity but that life becomes fuller. A person with a family, a mortgage and a steady job has less time and less freedom to experiment, and the cost of a mistake is higher. Routines also become more comfortable. When you have found a café you like or a quick route to work, there is little reason to look for another one.</p><p><span class="para-label">D</span>This does not mean that older people cannot change. Many people start new careers in their forties or fifties, and some discover hobbies such as painting or running only after they retire. What seems to matter more than age is personality. Some people find routine reassuring, while others quickly become bored when every day looks the same. These differences can often be seen in early childhood: some toddlers happily play with the same toy for hours, while others want something different every few minutes.</p><p><span class="para-label">E</span>Interestingly, changes that we choose ourselves usually feel very different from changes that are forced on us. Moving to a new city for an exciting job can feel thrilling, while moving because a factory has closed can feel frightening, even if the two moves are similar in practical terms. People who feel in control of a change tend to cope with it far better.</p><p><span class="para-label">F</span>So what is the best way to make a change? I believe that small steps are more effective than dramatic decisions. Someone who wants to get fit is more likely to succeed by walking for ten minutes a day than by joining an expensive gym and planning to go every evening. Waiting for the perfect moment is usually a mistake, because that moment rarely arrives. If there is something you want to change, the best time to begin is probably now.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–8</p><p class="qg-instr">Do the following statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t3-yn"><div class="q-item" id="t3-yn-1">
+          <p>1. People usually find it easier to talk about change than to actually make a change.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-1" data-correct="true"> YES</label><label><input type="radio" value="1" name="t3-yn-1" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-2">
+          <p>2. Young adults are generally more open to new experiences than older adults.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-2" data-correct="true"> YES</label><label><input type="radio" value="1" name="t3-yn-2" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-3">
+          <p>3. Parents should try to stop young people from travelling.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-3" data-correct="false"> YES</label><label><input type="radio" value="1" name="t3-yn-3" data-correct="true"> NO</label><label><input type="radio" value="2" name="t3-yn-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-4">
+          <p>4. The main reason older people change less is that their brains become less curious.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-4" data-correct="false"> YES</label><label><input type="radio" value="1" name="t3-yn-4" data-correct="true"> NO</label><label><input type="radio" value="2" name="t3-yn-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-5">
+          <p>5. People who change careers later in life are usually happier than those who do not.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-5" data-correct="false"> YES</label><label><input type="radio" value="1" name="t3-yn-5" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-5" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-6">
+          <p>6. Differences in how people feel about routine may appear when they are very young.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-6" data-correct="true"> YES</label><label><input type="radio" value="1" name="t3-yn-6" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-7">
+          <p>7. Moving to a new city is always a frightening experience.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-7" data-correct="false"> YES</label><label><input type="radio" value="1" name="t3-yn-7" data-correct="true"> NO</label><label><input type="radio" value="2" name="t3-yn-7" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-yn-8">
+          <p>8. People with expensive gym memberships exercise more than people without them.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-yn-8" data-correct="false"> YES</label><label><input type="radio" value="1" name="t3-yn-8" data-correct="false"> NO</label><label><input type="radio" value="2" name="t3-yn-8" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-yn', 't3-yn-score')">Check answers</button>
+          <span id="t3-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Question 9</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t3-mi"><div class="q-item" id="t3-mi-9">
+          <p>9. Which statement best describes the writer's main idea?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mi-9" data-correct="false"> A. People of all ages dislike change.</label><label><input type="radio" value="1" name="t3-mi-9" data-correct="true"> B. Change usually becomes harder as people grow older and their lives get fuller, but it is still possible.</label><label><input type="radio" value="2" name="t3-mi-9" data-correct="false"> C. Young people make better decisions than older people.</label><label><input type="radio" value="3" name="t3-mi-9" data-correct="false"> D. Change is easier at work than at home.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-mi', 't3-mi-score')">Check answers</button>
+          <span id="t3-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 12</div>
+      <h2>Reading 1 — Answer Analysis and Vocabulary</h2>
+      <p class="task-sub">Open each question and check your thinking: where is the answer, which words in the question match which words in the passage, and why the other answers are wrong. Then learn the key words and talk about a change in your own life.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Ready for Something New?</summary>
+        <p><span class="para-label">A</span>Every January, millions of people promise themselves a new start: a healthier diet, a new language, a different job. By February, many of these promises have been forgotten. Change, it seems, is something we talk about far more often than we actually do. Yet the desire for something new is a basic part of being human, and it is strongest at one particular stage of life.</p><p><span class="para-label">B</span>Studies of personality suggest that people are most open to new experiences in their late teens and early twenties. This is the age when many young people leave home, travel, try unusual jobs or move to a city where they know nobody. Psychologists believe this makes sense: young adults are building an identity, and new experiences help them to discover what they enjoy and what they are good at. In my view, this period of exploration is one of the most valuable times in a person's life, and adults should encourage it rather than worry about it.</p><p><span class="para-label">C</span>As people get older, however, their openness to novelty tends to fall gradually. The main reason is not that the brain loses its curiosity but that life becomes fuller. A person with a family, a mortgage and a steady job has less time and less freedom to experiment, and the cost of a mistake is higher. Routines also become more comfortable. When you have found a café you like or a quick route to work, there is little reason to look for another one.</p><p><span class="para-label">D</span>This does not mean that older people cannot change. Many people start new careers in their forties or fifties, and some discover hobbies such as painting or running only after they retire. What seems to matter more than age is personality. Some people find routine reassuring, while others quickly become bored when every day looks the same. These differences can often be seen in early childhood: some toddlers happily play with the same toy for hours, while others want something different every few minutes.</p><p><span class="para-label">E</span>Interestingly, changes that we choose ourselves usually feel very different from changes that are forced on us. Moving to a new city for an exciting job can feel thrilling, while moving because a factory has closed can feel frightening, even if the two moves are similar in practical terms. People who feel in control of a change tend to cope with it far better.</p><p><span class="para-label">F</span>So what is the best way to make a change? I believe that small steps are more effective than dramatic decisions. Someone who wants to get fit is more likely to succeed by walking for ten minutes a day than by joining an expensive gym and planning to go every evening. Waiting for the perfect moment is usually a mistake, because that moment rarely arrives. If there is something you want to change, the best time to begin is probably now.</p>
+      </details>
+      <div class="card an-card"><p class="an-intro">Three of the NO answers come from a small word: <i>not</i>, <i>rather than</i>, <i>always</i>. Look for these first next time.</p><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">YES</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="q">easier to talk about change than to actually make a change</span> ↔ <span class="ev">Change, it seems, is something we talk about far more often than we actually do</span>.</p><p>Same idea, different words: <i>talk about far more often than we do</i> = <i>easier to talk about than to make</i>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">YES</span><span class="an-where">Para B + C</span></summary><div class="an-body"><p>Para B: <span class="ev">people are most open to new experiences in their late teens and early twenties</span>. Para C: <span class="ev">As people get older, however, their openness to novelty tends to fall</span>.</p><p><i>Open to new experiences</i> = <i>openness to novelty</i>. You needed <b>two</b> paragraphs here — that is common.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">NO</span><span class="an-where">Para B, last sentence</span></summary><div class="an-body"><p><span class="ev">adults should encourage it rather than worry about it</span>.</p><p>The writer says the <b>opposite</b>: adults (parents) should <i>encourage</i> exploration, not <i>stop</i> it. Opposite meaning → NO.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">NO</span><span class="an-where">Para C, line 2</span></summary><div class="an-body"><p><span class="ev">The main reason is not that the brain loses its curiosity but that life becomes fuller</span>.</p><p><span class="trap">Trap:</span> the statement uses the passage's own words (<i>main reason</i>, <i>brain</i>, <i>curious</i>) — but the passage says <b>not</b>. Always check the small words: <i>not … but …</i></p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Many people start new careers in their forties or fifties</span> — but the writer never compares how <b>happy</b> they are.</p><p><span class="trap">Trap:</span> the topic (late career changes) is in the passage, so it <i>feels</i> like YES. But the idea of being happier is missing → NOT GIVEN.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">YES</span><span class="an-where">Para D, last sentence</span></summary><div class="an-body"><p><span class="ev">These differences can often be seen in early childhood</span> — e.g. toddlers.</p><p><i>When they are very young</i> = <i>early childhood</i>, <i>toddlers</i>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">NO</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Moving to a new city for an exciting job can feel thrilling</span>.</p><p><b>Always</b> frightening ↔ can feel <b>thrilling</b>. Words like <i>always, all, never, only</i> often make a statement NO.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para F</span></summary><div class="an-body"><p>The writer mentions <span class="ev">joining an expensive gym</span> only as an example of a big decision that is less likely to work. There is no comparison of how much people <b>with and without</b> memberships exercise.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">B</span><span class="an-where">Whole passage</span></summary><div class="an-body"><p>Para C says openness falls as life gets fuller; Para D says older people <b>can</b> still change; Para F gives advice. Only B covers all of this.</p><p>A is too extreme (<i>all ages</i>), C and D are never compared in the passage.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Vocabulary from the passage.</strong> Match each word or phrase to its meaning.</p>
+      <div class="card" id="t4-v">
+        <div class="line-match" id="t4-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. novelty</button><button type="button" class="lm-item" data-key="2">2. openness (to)</button><button type="button" class="lm-item" data-key="3">3. routine</button><button type="button" class="lm-item" data-key="4">4. reassuring</button><button type="button" class="lm-item" data-key="5">5. cope with</button><button type="button" class="lm-item" data-key="6">6. gradually</button><button type="button" class="lm-item" data-key="7">7. a creature of habit</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. someone who always does the same things in the same way</button><button type="button" class="lm-item" data-key="b">b. the quality of being new or unusual</button><button type="button" class="lm-item" data-key="c">c. making you feel calm and less worried</button><button type="button" class="lm-item" data-key="d">d. slowly, over a period of time</button><button type="button" class="lm-item" data-key="e">e. the usual order in which you do things</button><button type="button" class="lm-item" data-key="f">f. deal successfully with something difficult</button><button type="button" class="lm-item" data-key="g">g. being willing to consider new ideas or experiences</button></div>
+          <select class="lm-hidden-select select" id="t4-v-1" data-lm-key="1" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t4-v-2" data-lm-key="2" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t4-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t4-v-4" data-lm-key="4" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t4-v-5" data-lm-key="5" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t4-v-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select><select class="lm-hidden-select select" id="t4-v-7" data-lm-key="7" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-v', 't4-v-score'); markLineMatchResult('t4-v-lm');">Check answers</button>
+          <span id="t4-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="question-box" data-field="t4-speaking-change">
+        <div class="q-num">Speaking — a change I made</div>
+        <div class="q-text">Describe a change that you made in your life. Say <b>why</b> you made it, whether <b>anyone helped</b> you, and whether it was <b>successful</b> (why / why not).</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“A year ago, I decided to…”</li><li>“The main reason was that…”</li><li>“My … helped me by…”</li><li>“At first it was difficult because…, but…”</li><li>“Looking back, I think it was (not) successful because…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 12</div>
+      <h2>Lead-in 2 — Remembering Things That Never Happened</h2>
+      <p class="task-sub">Before Reading 2 (about sleep and memory mistakes), read this short article. It explains the idea of a <i>false memory</i>, which you need for the passage. About 15 minutes.</p>
+      <div class="card article">
+        <h3 class="article-title">Remembering Things That Never Happened</h3>
+        <p class="article-meta">Psychology · Memory · 281 words</p>
+        <p>Most of us think of memory as a kind of video camera: something happens, the brain records it, and later we press play. Psychologists have shown that this picture is wrong. Every time we remember an event, the brain rebuilds it from small pieces, and while it rebuilds, it can add details that were never there.</p><p>A famous experiment shows how easily this happens. People are asked to listen to a list of related words, such as <i>bed, rest, tired, dream, pillow</i> and <i>night</i>. Later, they are asked which words were on the list. Many people say, very confidently, that they heard the word <i>sleep</i> — but it was never on the list. The brain noticed the topic of the list and filled in the most likely word.</p><p>These 'false memories' are completely normal, and most of the time they do no harm. However, they can matter a great deal. A witness to a crime may be certain about the colour of a car or the face of a stranger and still be wrong. Feeling sure about a memory, it turns out, is not the same as being right.</p><p>False memories can also cause problems in daily life. You may be sure you locked the door or took your medicine, simply because you have done it so many times before. This is why some people keep a written list or use an alarm for important tasks — they do not trust the memory alone.</p><p>Scientists are still trying to understand why some people make more of these mistakes than others, and what can help to reduce them. As the next passage shows, one surprising answer may be a good night's sleep.</p>
+      </div>
+      <div class="card" id="t5-tf"><div class="q-item" id="t5-tf-1">
+          <p>1. According to the article, memory works like a video camera.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-1" data-correct="false"> True</label><label><input type="radio" value="1" name="t5-tf-1" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-2">
+          <p>2. In the word-list experiment, many people remember a word that they did not hear.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-2" data-correct="true"> True</label><label><input type="radio" value="1" name="t5-tf-2" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-3">
+          <p>3. False memories are rare and only happen to people with health problems.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-3" data-correct="false"> True</label><label><input type="radio" value="1" name="t5-tf-3" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-4">
+          <p>4. A witness who feels certain about a memory can still be wrong.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-4" data-correct="true"> True</label><label><input type="radio" value="1" name="t5-tf-4" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-5">
+          <p>5. Some people use lists or alarms because they do not trust their memory alone.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-5" data-correct="true"> True</label><label><input type="radio" value="1" name="t5-tf-5" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-tf', 't5-tf-score')">Check answers</button>
+          <span id="t5-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 80 words</b>. Say what it is about, give the two or three most important points, and finish with one sentence about what you think.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 80 words):</p><textarea class="no-check mini-answer" id="t5-sum-1" data-min-words="80" placeholder="Write your summary here..." style="min-height:150px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t5-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t5-sum-ans"><p>This article explains that memory does not work like a video camera. When we remember something, the brain rebuilds it and can add details that never happened. In a well-known experiment, people who heard a list of words connected with sleep often remembered the word sleep, although it was not on the list. False memories are normal, but they can be serious, for example when a witness is sure but wrong. That is why some people use lists or alarms. I was surprised that feeling certain does not mean being right. (≈ 95 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t5-speaking-summary">
+        <div class="q-num">Spoken summary (at least 30 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 30 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This text is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“For example,…”</li><li>“Personally, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 12</div>
+      <h2>Reading 2 — Sleep on It</h2>
+      <p class="task-sub">IELTS question types: <b>summary completion with a box</b> and <b>TRUE / FALSE / NOT GIVEN</b>. Suggested time: 15 minutes. Read the title and subheading first — they tell you what the passage is about. Passage on the left, questions on the right.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice — summary completion with a box</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li>Use the <b>title</b> of the summary to find the right part of the passage.</li>
+  <li>Before you look at the box, decide what <b>kind of word</b> each gap needs (a number? an adjective? a noun?).</li>
+  <li>Read that part of the passage carefully, then choose the option in the box that <b>means the same</b>.</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Sleep on It<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">A study suggests that a night's sleep may help us to notice the mistakes in our memories.</small></h3>
+            <p class="article-meta">Reading Passage 2 · Science · 408 words</p>
+            <p><span class="para-label">A</span>Scientists have known for many years that sleep helps us to remember what we have learned. A study led by Kimberly Fenn, a psychologist at Michigan State University in the USA, looked at a different question: can sleep also help us to avoid remembering things <i>wrongly</i>? According to the researchers, it was the first study to focus on errors in memory rather than on memory in general. Its findings were published in 2009 in the journal <i>Learning &amp; Memory</i>.</p><p><span class="para-label">B</span>Fenn worked with colleagues from the University of Chicago and Washington University in St Louis. The participants in the research were college students. First, they were shown or played lists of words. Twelve hours later, they were given a test: they saw individual words and had to say which ones had been on the earlier lists. Some of the test words had not been on any list but were closely related to the words that had.</p><p><span class="para-label">C</span>The students were divided into two groups. The first group learned the words at ten o'clock in the morning and took the test at ten in the evening, after a normal day without any sleep. The second group learned the words in the evening and were tested twelve hours later, the next morning, after about six hours of sleep.</p><p><span class="para-label">D</span>The researchers conducted three experiments. Each time, the result was the same: the students who had slept between learning and testing made fewer false-memory mistakes, choosing fewer words that had not really been on the lists. In other words, sleep seemed to help them to pick out the parts of their memory that were incorrect.</p><p><span class="para-label">E</span>Why this happens is not yet known. One possibility is that sleep strengthens the memory of the <i>source</i> of information — where and when we first saw or heard something. If you can remember where a piece of information came from, it is easier to decide whether it is true. Another possibility is that the students who stayed awake took in so much other information during the day that it interfered with their memory.</p><p><span class="para-label">F</span>The researchers believe the work could have practical uses, from students preparing for multiple-choice tests to older people who sometimes confuse their medicines. Older adults generally have weaker memories than younger people and are more likely to have false memories, so the team hoped to study this group next. If sleep can help them to reject false information, it might improve their quality of life.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">Complete the summary using the list of words and phrases, <b>A–J</b>, below.</p></div>
+<div class="card"><p class="prompt-label">The words</p><div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:2px 18px;"><span><b>A</b>&nbsp; twelve</span><span><b>B</b>&nbsp; six</span><span><b>C</b>&nbsp; three</span><span><b>D</b>&nbsp; awake</span><span><b>E</b>&nbsp; asleep</span><span><b>F</b>&nbsp; fewer</span><span><b>G</b>&nbsp; more</span><span><b>H</b>&nbsp; source</span><span><b>I</b>&nbsp; ten</span><span><b>J</b>&nbsp; the same</span></div></div>
+      <div class="card" id="t6-s" style="line-height:2.4;"><p><b>How the study worked</b></p><p>In the study, participants saw or heard lists of words. <b>1</b> <select class="select inline" id="t6-1" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option><option value="J">J</option></select> hours later, they were asked which words had been on the lists. One group learned the words in the morning and stayed <b>2</b> <select class="select inline" id="t6-2" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option><option value="J">J</option></select> all day before the test, while the other learned them at night and had about <b>3</b> <select class="select inline" id="t6-3" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option><option value="J">J</option></select> hours of sleep. The experiment was carried out <b>4</b> <select class="select inline" id="t6-4" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option><option value="J">J</option></select> times. Each time, the group that had slept chose <b>5</b> <select class="select inline" id="t6-5" data-answer="F"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option><option value="J">J</option></select> incorrect words. One explanation is that sleep helps people to remember the <b>6</b> <select class="select inline" id="t6-6" data-answer="H"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option><option value="J">J</option></select> of a memory — where they first met the information.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-s', 't6-s-score')">Check answers</button>
+          <span id="t6-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–10</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-tf"><div class="q-item" id="t6-tf-7">
+          <p>7. The study was the first to look at mistakes in memory rather than memory in general.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-tf-7" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t6-tf-7" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t6-tf-7" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-tf-8">
+          <p>8. All the participants in the study were over 60 years old.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-tf-8" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t6-tf-8" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t6-tf-8" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-tf-9">
+          <p>9. The researchers know exactly why sleep reduces memory errors.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-tf-9" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t6-tf-9" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t6-tf-9" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-tf-10">
+          <p>10. The students were paid for taking part in the study.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-tf-10" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t6-tf-10" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t6-tf-10" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-tf', 't6-tf-score')">Check answers</button>
+          <span id="t6-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Question 11</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-11">
+          <p>11. Which group of people do the researchers think could benefit most from this research?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-11" data-correct="false"> A. college students</label><label><input type="radio" value="1" name="t6-mc-11" data-correct="true"> B. older people</label><label><input type="radio" value="2" name="t6-mc-11" data-correct="false"> C. people who work at night</label><label><input type="radio" value="3" name="t6-mc-11" data-correct="false"> D. scientists</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 12</div>
+      <h2>Reading 2 — Answer Analysis and Research Vocabulary</h2>
+      <p class="task-sub">Check each answer, then learn the vocabulary we use to talk about research — you will need it for IELTS Reading, Writing and Speaking.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Sleep on It</summary>
+        <p><span class="para-label">A</span>Scientists have known for many years that sleep helps us to remember what we have learned. A study led by Kimberly Fenn, a psychologist at Michigan State University in the USA, looked at a different question: can sleep also help us to avoid remembering things <i>wrongly</i>? According to the researchers, it was the first study to focus on errors in memory rather than on memory in general. Its findings were published in 2009 in the journal <i>Learning &amp; Memory</i>.</p><p><span class="para-label">B</span>Fenn worked with colleagues from the University of Chicago and Washington University in St Louis. The participants in the research were college students. First, they were shown or played lists of words. Twelve hours later, they were given a test: they saw individual words and had to say which ones had been on the earlier lists. Some of the test words had not been on any list but were closely related to the words that had.</p><p><span class="para-label">C</span>The students were divided into two groups. The first group learned the words at ten o'clock in the morning and took the test at ten in the evening, after a normal day without any sleep. The second group learned the words in the evening and were tested twelve hours later, the next morning, after about six hours of sleep.</p><p><span class="para-label">D</span>The researchers conducted three experiments. Each time, the result was the same: the students who had slept between learning and testing made fewer false-memory mistakes, choosing fewer words that had not really been on the lists. In other words, sleep seemed to help them to pick out the parts of their memory that were incorrect.</p><p><span class="para-label">E</span>Why this happens is not yet known. One possibility is that sleep strengthens the memory of the <i>source</i> of information — where and when we first saw or heard something. If you can remember where a piece of information came from, it is easier to decide whether it is true. Another possibility is that the students who stayed awake took in so much other information during the day that it interfered with their memory.</p><p><span class="para-label">F</span>The researchers believe the work could have practical uses, from students preparing for multiple-choice tests to older people who sometimes confuse their medicines. Older adults generally have weaker memories than younger people and are more likely to have false memories, so the team hoped to study this group next. If sleep can help them to reject false information, it might improve their quality of life.</p>
+      </details>
+      <div class="card an-card"><p class="an-intro">In summary completion, the box often contains two or three words from the same family (twelve / six / ten). Decide what the gap needs before you look.</p><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">A — twelve</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Twelve hours later, they were given a test</span>. The gap is followed by <i>hours later</i>, so you need a <b>number</b>. Three numbers are in the box (twelve, six, ten) — only <b>twelve</b> matches the time between learning and the test.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">D — awake</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">after a normal day without any sleep</span>. <i>Stayed ___ all day</i> needs an adjective: <i>without any sleep</i> = <b>awake</b>. <span class="trap">Trap:</span> <i>asleep</i> is the opposite.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">B — six</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">after about six hours of sleep</span>. <span class="trap">Trap:</span> <i>ten</i> appears in the passage too (<i>ten o'clock</i>) — but it is a time, not a number of hours of sleep.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">C — three</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">The researchers conducted three experiments</span>. <i>Carried out</i> = <i>conducted</i>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">F — fewer</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">made fewer false-memory mistakes, choosing fewer words that had not really been on the lists</span>. <i>Incorrect words</i> = <i>words that had not really been on the lists</i>.</p><p>Grammar note: <b>fewer</b> + plural countable nouns (fewer words); <b>less</b> + uncountable nouns (less sleep).</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">H — source</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">sleep strengthens the memory of the source of information — where and when we first saw or heard something</span>. <i>Where they first met the information</i> = <i>source</i>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">it was the first study to focus on errors in memory rather than on memory in general</span>. <i>Mistakes</i> = <i>errors</i>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">The participants in the research were college students</span> — not people over 60. <span class="trap">Trap:</span> older people are mentioned in paragraph F, but only as a group to study <b>in the future</b>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">FALSE</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Why this happens is not yet known</span>. The passage gives two <i>possibilities</i>, so the researchers do <b>not</b> know exactly.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>The passage never mentions money or payment. The topic (participants) is there, but the idea of being paid is not → NOT GIVEN.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">B — older people</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Older adults generally have weaker memories … and are more likely to have false memories, so the team hoped to study this group next</span>. <span class="trap">Trap:</span> college students were the participants in <b>this</b> study, but the passage says sleep could help older people's <i>quality of life</i>.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Research vocabulary.</strong> Match each word to its definition.</p>
+      <div class="card" id="t7-v">
+        <div class="line-match" id="t7-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. findings</button><button type="button" class="lm-item" data-key="2">2. conducted</button><button type="button" class="lm-item" data-key="3">3. research</button><button type="button" class="lm-item" data-key="4">4. experiments</button><button type="button" class="lm-item" data-key="5">5. participants</button><button type="button" class="lm-item" data-key="6">6. colleagues</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. a detailed study of a subject</button><button type="button" class="lm-item" data-key="b">b. people who take part in an activity</button><button type="button" class="lm-item" data-key="c">c. discoveries from a study</button><button type="button" class="lm-item" data-key="d">d. people who work together</button><button type="button" class="lm-item" data-key="e">e. organised or carried out (e.g. a test)</button><button type="button" class="lm-item" data-key="f">f. tests done to find something out</button></div>
+          <select class="lm-hidden-select select" id="t7-v-1" data-lm-key="1" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t7-v-2" data-lm-key="2" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t7-v-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t7-v-4" data-lm-key="4" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t7-v-5" data-lm-key="5" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t7-v-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-v', 't7-v-score'); markLineMatchResult('t7-v-lm');">Check answers</button>
+          <span id="t7-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-study">
+        <div class="q-num">Speaking — a study I took part in</div>
+        <div class="q-text">Describe some research or an experiment that you have carried out or taken part in (at school, at university or for a project). Say <b>what its purpose was</b>, <b>when</b> you did it, <b>who</b> you did it with, and <b>what the results were</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The purpose of the study was to find out…”</li><li>“We conducted it in… with…”</li><li>“The participants were…”</li><li>“Our main findings were that…”</li><li>“If I did it again, I would…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 12</div>
+      <h2>Speaking Part 3 — Talking About People in General</h2>
+      <p class="task-sub">In Speaking Part 3 the examiner asks about <b>people in general</b>, not just about you. Learn how to give a longer, more general answer, then practise with your own recordings.</p>
+      <div class="card model-text"><p class="prompt-label">Examiner</p><p><i>We've been talking about memory … What methods do people use to help themselves remember things?</i></p>
+        <p class="prompt-label" style="margin-top:12px !important;">Kim</p><p style="margin:0;"><i>That's easy. I use a notepad.</i></p></div>
+      <p style="margin-top:26px;"><strong>What do you think about Kim's answer?</strong> Decide whether each comment is a real problem with it.</p>
+      <div class="card" id="t8-kim"><div class="q-item" id="t8-kim-1">
+          <p>1. It is not on the topic.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-kim-1" data-correct="false"> Yes, a problem</label><label><input type="radio" value="1" name="t8-kim-1" data-correct="true"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-kim-2">
+          <p>2. It is personal, not general.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-kim-2" data-correct="true"> Yes, a problem</label><label><input type="radio" value="1" name="t8-kim-2" data-correct="false"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-kim-3">
+          <p>3. It is too short.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-kim-3" data-correct="true"> Yes, a problem</label><label><input type="radio" value="1" name="t8-kim-3" data-correct="false"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-kim-4">
+          <p>4. It only gives one method.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-kim-4" data-correct="true"> Yes, a problem</label><label><input type="radio" value="1" name="t8-kim-4" data-correct="false"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-kim-5">
+          <p>5. It is grammatically inaccurate.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-kim-5" data-correct="false"> Yes, a problem</label><label><input type="radio" value="1" name="t8-kim-5" data-correct="true"> No</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-kim', 't8-kim-score')">Check answers</button>
+          <span id="t8-kim-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>A better answer.</strong> Complete it with ideas from these four pictures (they are in a different order): <i>a note written on someone's hand · a calendar on the wall · a list on paper or on a phone · a diary / planner</i>. Then listen and check.</p>
+      <div class="card" id="t8-better" style="line-height:2.6;"><p>“Well, some people use a <b>1</b> <input type="text" class="text-answer" id="t8-1" data-correct="calendar" autocomplete="off" style="width:120px;"> and others use a <b>2</b> <input type="text" class="text-answer" id="t8-2" data-correct="diary/planner" autocomplete="off" style="width:120px;">. But I think if you're really busy, you'll make a <b>3</b> <input type="text" class="text-answer" id="t8-3" data-correct="list" autocomplete="off" style="width:110px;">, maybe on your phone if you have one. Or sometimes you see a note on the back of someone's <b>4</b> <input type="text" class="text-answer" id="t8-4" data-correct="hand" autocomplete="off" style="width:110px;">!”</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-better', 't8-better-score')">Check answers</button>
+          <span id="t8-better-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 01 — listen and compare the answer with yours</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track01.mp3"></audio></div>
+      <p style="margin-top:26px;"><strong>Talking about people in general.</strong> <i>Some people</i> refers to people in general. Which of these words in the answer also refer to people in general?</p>
+      <div class="card" id="t8-gen"><div class="q-item" id="t8-gen-1">
+          <p>1. others</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-gen-1" data-correct="true"> Yes — people in general</label><label><input type="radio" value="1" name="t8-gen-1" data-correct="false"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-gen-2">
+          <p>2. you're / you'll (if you're really busy, you'll…)</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-gen-2" data-correct="true"> Yes — people in general</label><label><input type="radio" value="1" name="t8-gen-2" data-correct="false"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-gen-3">
+          <p>3. phone</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-gen-3" data-correct="false"> Yes — people in general</label><label><input type="radio" value="1" name="t8-gen-3" data-correct="true"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-gen-4">
+          <p>4. someone's</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-gen-4" data-correct="true"> Yes — people in general</label><label><input type="radio" value="1" name="t8-gen-4" data-correct="false"> No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-gen-5">
+          <p>5. a note</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-gen-5" data-correct="false"> Yes — people in general</label><label><input type="radio" value="1" name="t8-gen-5" data-correct="true"> No</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-gen', 't8-gen-score')">Check answers</button>
+          <span id="t8-gen-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Listen to Anna Maria, an IELTS candidate.</strong> Which question is she answering? Then complete her answer with the things people forget.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 02 — Anna Maria</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track02.mp3"></audio></div>
+      <div class="card" id="t8-am"><div class="q-item" id="t8-am-1">
+          <p>1. Which question is Anna Maria answering?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-am-1" data-correct="true"> A. What sort of things do people forget?</label><label><input type="radio" value="1" name="t8-am-1" data-correct="false"> B. What can people do if they forget something important, like meeting a relative for lunch?</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-am', 't8-am-score')">Check answers</button>
+          <span id="t8-am-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t8-amg" style="line-height:2.6;"><p>“I think <b>1</b> <input type="text" class="text-answer" id="t8-a1" data-correct="birthdays" autocomplete="off" style="width:120px;"> are very easy to forget. You have to write the dates in a diary if you want to remember them! Um – and some older people can't remember where they put their <b>2</b> <input type="text" class="text-answer" id="t8-a2" data-correct="keys" autocomplete="off" style="width:100px;"> or their <b>3</b> <input type="text" class="text-answer" id="t8-a3" data-correct="phone/mobile phone/mobile" autocomplete="off" style="width:110px;">. Oh, and, er, if something unexpected happens, you might forget a <b>4</b> <input type="text" class="text-answer" id="t8-a4" data-correct="lunch date" autocomplete="off" style="width:120px;"> or a <b>5</b> <input type="text" class="text-answer" id="t8-a5" data-correct="meeting" autocomplete="off" style="width:110px;"> – there are lots of things …”</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-amg', 't8-amg-score')">Check answers</button>
+          <span id="t8-amg-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card advice-card"><p class="prompt-label">Exam advice — Speaking Part 3</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li>Listen carefully to the question so that you know <b>what to include</b> in your answer.</li>
+  <li>Talk about <b>people in general</b>: <i>some people…, others…, you…, if you're…, most people…, older people…</i></li>
+  <li>Give more than one idea, with reasons and examples — there is no right or wrong answer.</li></ul></div>
+      <p style="margin-top:26px;"><strong>Your turn.</strong> Record an answer to each question. Talk about people in general, and give at least two ideas.</p>
+      <div class="question-box" data-field="t8-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">What sort of things do people forget?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Some people…, while others…”</li><li>“If you're…, you might…”</li><li>“Most people / Older people / Young people…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">What can people do if they forget something important, like meeting a relative for lunch?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The best thing to do is…”</li><li>“They could also…”</li><li>“Some people…, while others…”</li><li>“If you're…, you might…”</li><li>“Most people / Older people / Young people…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Sleep — In what places can people fall asleep?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Some people…, while others…”</li><li>“If you're…, you might…”</li><li>“Most people / Older people / Young people…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Sleep — What things can make people fall asleep?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Some people…, while others…”</li><li>“If you're…, you might…”</li><li>“Most people / Older people / Young people…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-5">
+        <div class="q-num">Question 5</div>
+        <div class="q-text">Sleep — Why do some people not get enough sleep?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“One reason is that…”</li><li>“Another reason might be…”</li><li>“Some people…, while others…”</li><li>“If you're…, you might…”</li><li>“Most people / Older people / Young people…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-6">
+        <div class="q-num">Question 6</div>
+        <div class="q-text">Memory — What sort of things do people need to remember every day?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Some people…, while others…”</li><li>“If you're…, you might…”</li><li>“Most people / Older people / Young people…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-7">
+        <div class="q-num">Question 7</div>
+        <div class="q-text">Memory — Why do people sometimes forget important things?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This usually happens when…”</li><li>“Some people…, while others…”</li><li>“If you're…, you might…”</li><li>“Most people / Older people / Young people…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-8">
+        <div class="q-num">Question 8</div>
+        <div class="q-text">Memory — What activities can help improve people's memory?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Activities like … can help because…”</li><li>“Some people…, while others…”</li><li>“If you're…, you might…”</li><li>“Most people / Older people / Young people…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 12</div>
+      <h2>Pronunciation — Intonation When You List Things</h2>
+      <p class="task-sub">When we list things, our voice <b>rises</b> to show the listener that we haven't finished, and <b>falls</b> to show that we are finishing. This makes Part 3 answers sound natural and easy to follow.</p>
+      <div class="card advice-card"><p style="margin:0;">Example: <i>apples ↗, bread ↗, coffee ↗ and toothpaste ↘</i> — rise, rise, rise … fall at the end.</p></div>
+      <p style="margin-top:26px;"><strong>Listen to two extracts from Anna Maria's answer.</strong> Does her voice rise ↗ or fall ↘ on each word?</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 03 — two extracts</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track03.mp3"></audio></div>
+<div class="card"><p style="margin:0;"><i>You have to write the dates in a <u>diary</u> if you want to <u>remember</u> them!</i><br><i>… you might forget a <u>lunch date</u> or a <u>meeting</u> …</i></p></div>
+      <div class="card" id="t9-a"><div class="q-item" id="t9-a-1">
+          <p>1. diary</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-a-1" data-correct="true"> Rises ↗</label><label><input type="radio" value="1" name="t9-a-1" data-correct="false"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-a-2">
+          <p>2. remember</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-a-2" data-correct="false"> Rises ↗</label><label><input type="radio" value="1" name="t9-a-2" data-correct="true"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-a-3">
+          <p>3. lunch date</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-a-3" data-correct="true"> Rises ↗</label><label><input type="radio" value="1" name="t9-a-3" data-correct="false"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-a-4">
+          <p>4. meeting</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-a-4" data-correct="false"> Rises ↗</label><label><input type="radio" value="1" name="t9-a-4" data-correct="true"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-a', 't9-a-score')">Check answers</button>
+          <span id="t9-a-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Read these sentences.</strong> Decide whether the voice rises ↗ (not finished) or falls ↘ (finished) on each word. Then listen and check.</p>
+      <div class="card"><ol style="margin:0; padding-left:20px; line-height:1.9;">
+  <li>Sometimes people forget their dentist or doctor's appointment and things like that.</li>
+  <li>If a friend waits a long time for you, you should say you're sorry and pay next time you go out.</li>
+  <li>People don't usually fall asleep at work unless they're very tired.</li>
+  <li>A boring meeting or a long car journey can make people go to sleep!</li></ol></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 04 — check your answers</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track04.mp3"></audio></div>
+      <div class="card" id="t9-b"><div class="q-item" id="t9-b-1">
+          <p>1. Sentence 1 — <i>dentist</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-b-1" data-correct="true"> Rises ↗</label><label><input type="radio" value="1" name="t9-b-1" data-correct="false"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-b-2">
+          <p>2. Sentence 1 — <i>appointment</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-b-2" data-correct="true"> Rises ↗</label><label><input type="radio" value="1" name="t9-b-2" data-correct="false"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-b-3">
+          <p>3. Sentence 1 — <i>things like that</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-b-3" data-correct="false"> Rises ↗</label><label><input type="radio" value="1" name="t9-b-3" data-correct="true"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-b-4">
+          <p>4. Sentence 2 — <i>sorry</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-b-4" data-correct="true"> Rises ↗</label><label><input type="radio" value="1" name="t9-b-4" data-correct="false"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-b-5">
+          <p>5. Sentence 2 — <i>go out</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-b-5" data-correct="false"> Rises ↗</label><label><input type="radio" value="1" name="t9-b-5" data-correct="true"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-b-6">
+          <p>6. Sentence 3 — <i>work</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-b-6" data-correct="true"> Rises ↗</label><label><input type="radio" value="1" name="t9-b-6" data-correct="false"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-b-7">
+          <p>7. Sentence 3 — <i>tired</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-b-7" data-correct="false"> Rises ↗</label><label><input type="radio" value="1" name="t9-b-7" data-correct="true"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-b-8">
+          <p>8. Sentence 4 — <i>meeting</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-b-8" data-correct="true"> Rises ↗</label><label><input type="radio" value="1" name="t9-b-8" data-correct="false"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-b-9">
+          <p>9. Sentence 4 — <i>car journey</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-b-9" data-correct="true"> Rises ↗</label><label><input type="radio" value="1" name="t9-b-9" data-correct="false"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-b-10">
+          <p>10. Sentence 4 — <i>sleep</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-b-10" data-correct="false"> Rises ↗</label><label><input type="radio" value="1" name="t9-b-10" data-correct="true"> Falls ↘</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-b', 't9-b-score')">Check answers</button>
+          <span id="t9-b-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-read">
+        <div class="q-num">Read aloud</div>
+        <div class="q-text">Read sentences 1–4 aloud. Make your voice <b>rise</b> where you haven't finished and <b>fall</b> at the end. Then make your own shopping list of four things and say it with the same intonation.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“…, …, … and … ↘”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 12</div>
+      <h2>Lead-in 3 — Video: Grit, the Power of Passion and Perseverance</h2>
+      <p class="task-sub">Before the listening (about what makes people successful), watch this TED talk by psychologist Angela Lee Duckworth (about 6 minutes). Turn on English subtitles if you need them. Answer the questions, then summarise the talk in writing and aloud.</p>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="position:relative; padding-bottom:56.25%; height:0;">
+          <iframe src="https://embed.ted.com/talks/angela_lee_duckworth_grit_the_power_of_passion_and_perseverance" title="Angela Lee Duckworth — Grit: the power of passion and perseverance" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe>
+        </div></div>
+      <div class="card" id="t10-mc"><div class="q-item" id="t10-mc-1">
+          <p>1. What job did Duckworth leave in order to become a teacher?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-1" data-correct="false"> A. a job in a hospital</label><label><input type="radio" value="1" name="t10-mc-1" data-correct="true"> B. a very demanding job in consulting</label><label><input type="radio" value="2" name="t10-mc-1" data-correct="false"> C. a job as a journalist</label><label><input type="radio" value="3" name="t10-mc-1" data-correct="false"> D. a job in a bank in London</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-2">
+          <p>2. What did she teach, and to whom?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-2" data-correct="false"> A. English to university students</label><label><input type="radio" value="1" name="t10-mc-2" data-correct="true"> B. maths to seventh graders (about 12–13 years old)</label><label><input type="radio" value="2" name="t10-mc-2" data-correct="false"> C. science to adults</label><label><input type="radio" value="3" name="t10-mc-2" data-correct="false"> D. psychology to teachers</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-3">
+          <p>3. What did she notice about her students?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-3" data-correct="false"> A. The cleverest students always got the best grades.</label><label><input type="radio" value="1" name="t10-mc-3" data-correct="true"> B. IQ was not the only difference between the best and the worst students.</label><label><input type="radio" value="2" name="t10-mc-3" data-correct="false"> C. Students who slept more did better.</label><label><input type="radio" value="3" name="t10-mc-3" data-correct="false"> D. Older students worked harder.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-4">
+          <p>4. How does she define <i>grit</i>?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-4" data-correct="false"> A. being very intelligent</label><label><input type="radio" value="1" name="t10-mc-4" data-correct="true"> B. passion and perseverance for very long-term goals</label><label><input type="radio" value="2" name="t10-mc-4" data-correct="false"> C. being lucky in life</label><label><input type="radio" value="3" name="t10-mc-4" data-correct="false"> D. working fast under pressure</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-5">
+          <p>5. What does she say about grit and talent?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-5" data-correct="false"> A. Talented people are always grittier.</label><label><input type="radio" value="1" name="t10-mc-5" data-correct="true"> B. Talent does not make you gritty — grit is often unrelated to talent.</label><label><input type="radio" value="2" name="t10-mc-5" data-correct="false"> C. Grit is a kind of talent you are born with.</label><label><input type="radio" value="3" name="t10-mc-5" data-correct="false"> D. Only talent predicts success.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-6">
+          <p>6. Which idea does she mention as one helpful way to build grit?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-6" data-correct="true"> A. a "growth mindset" — the belief that the ability to learn is not fixed</label><label><input type="radio" value="1" name="t10-mc-6" data-correct="false"> B. giving children more homework</label><label><input type="radio" value="2" name="t10-mc-6" data-correct="false"> C. studying in a quiet room</label><label><input type="radio" value="3" name="t10-mc-6" data-correct="false"> D. doing more exams</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-mc', 't10-mc-score')">Check answers</button>
+          <span id="t10-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the talk in your own words — <b>at least 80 words</b>. Say what it is about, give the two or three most important points, and finish with one sentence about what you think.</p>
+      <div class="card"><p class="mini-q">Your summary of the talk (at least 80 words):</p><textarea class="no-check mini-answer" id="t10-sum-1" data-min-words="80" placeholder="Write your summary here..." style="min-height:150px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t10-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t10-sum-ans"><p>In this talk, psychologist Angela Lee Duckworth explains what she calls grit. As a maths teacher, she noticed that IQ was not the only difference between her best and worst students, so she began to study success in many groups, such as military cadets, spelling competitors, new teachers and salespeople. She found that grit — passion and perseverance for very long-term goals — was a strong predictor of success, and that it is not the same as talent. She suggests that a growth mindset can help people become grittier. I agree that hard work over a long time matters more than talent. (≈ 105 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t10-speaking-summary">
+        <div class="q-num">Spoken summary (at least 30 seconds)</div>
+        <div class="q-text">Now summarise the talk <b>aloud</b> without reading your written summary — speak for <b>at least 30 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This text is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“For example,…”</li><li>“Personally, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 12</div>
+      <h2>Listening — What Makes People Successful?</h2>
+      <p class="task-sub">IELTS question types: <b>matching</b> and <b>pick from a list</b>. You will hear a conversation between two students about successful people. Before each recording, read the questions and think about what the options mean — you will <b>not</b> hear exactly the same words.</p>
+      <div class="card"><p class="mini-q">Complete this sentence with your own idea: <i>The key to success is …</i></p><textarea class="no-check mini-answer" id="t11-key-1" placeholder="The key to success is…" style="min-height:50px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t11-key-btn">Show some ideas</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t11-key-ans"><p>Ideas from other students: <i>talent, skill, luck, money, hard work, studying, family support, never giving up</i>. Keep your sentence in mind — you will compare it with the students in the recording.</p></div>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Before you listen — what do the options mean?</strong> Match each option in Questions 1–4 to its meaning. This is exactly how the recording will say it: in <i>other words</i>.</p>
+      <div class="card" id="t11-op">
+        <div class="line-match" id="t11-op-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. A personal style</button><button type="button" class="lm-item" data-key="2">2. a lot of money</button><button type="button" class="lm-item" data-key="3">3. a relative's influence</button><button type="button" class="lm-item" data-key="4">4. an invention</button><button type="button" class="lm-item" data-key="5">5. a wise decision</button><button type="button" class="lm-item" data-key="6">6. a change of job</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. help from a family member, e.g. an uncle</button><button type="button" class="lm-item" data-key="b">b. being individual, not like others</button><button type="button" class="lm-item" data-key="c">c. a sensible, clever choice</button><button type="button" class="lm-item" data-key="d">d. being wealthy or rich</button><button type="button" class="lm-item" data-key="e">e. starting a new job or position</button><button type="button" class="lm-item" data-key="f">f. something new that someone created or designed</button></div>
+          <select class="lm-hidden-select select" id="t11-op-1" data-lm-key="1" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t11-op-2" data-lm-key="2" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t11-op-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t11-op-4" data-lm-key="4" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t11-op-5" data-lm-key="5" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t11-op-6" data-lm-key="6" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-op', 't11-op-score'); markLineMatchResult('t11-op-lm');">Check answers</button>
+          <span id="t11-op-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card"><p class="prompt-label">Questions 1–4</p>
+        <p style="margin:0 0 6px;">What helped each person to become successful? Choose <b>FOUR</b> answers from the box. There are two extra options.</p>
+        <div class="opt-legend"><span><b>A</b> a personal style</span><span><b>B</b> a lot of money</span><span><b>C</b> a relative's influence</span><span><b>D</b> an invention</span><span><b>E</b> a wise decision</span><span><b>F</b> a change of job</span></div></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 05 — Questions 1–4 (exam rule: you hear the answers in the same order as the questions)</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track05.mp3"></audio></div>
+      <div class="card" id="t11-m"><div class="sel-row"><select class="select" id="t11-m-1" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>1.</b> the film maker</span></div><div class="sel-row"><select class="select" id="t11-m-2" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>2.</b> the ballet dancer</span></div><div class="sel-row"><select class="select" id="t11-m-3" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>3.</b> the scientist</span></div><div class="sel-row"><select class="select" id="t11-m-4" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>4.</b> the chef</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-m', 't11-m-score')">Check answers</button>
+          <span id="t11-m-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Listen again.</strong> Note down a few words that give you each answer (like the example).</p>
+      <div class="card"><p class="mini-q">1 So what made him successful? — <i>example: uncle / film student</i></p><textarea class="no-check mini-answer" id="t11-notes-1" placeholder="Key words you heard..." style="min-height:40px;"></textarea><p class="mini-q">2 Was she very talented?</p><textarea class="no-check mini-answer" id="t11-notes-2" placeholder="Key words you heard..." style="min-height:40px;"></textarea><p class="mini-q">3 So why did she do better?</p><textarea class="no-check mini-answer" id="t11-notes-3" placeholder="Key words you heard..." style="min-height:40px;"></textarea><p class="mini-q">4 Did he make a famous dish?</p><textarea class="no-check mini-answer" id="t11-notes-4" placeholder="Key words you heard..." style="min-height:40px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t11-notes-btn">Show the key words</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t11-notes-ans"><ol><li>uncle / film student → <b>C</b></li><li>yes, she was / didn't follow the rules / individual → <b>A</b></li><li>sensibly published her ideas straight away / clever → <b>E</b></li><li>without him, we wouldn't have … / a new snack was created → <b>D</b></li></ol></div>
+        </div></div>
+      <div class="card advice-card"><p class="prompt-label">Exam advice — pick from a list</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Underline</b> the key idea in each question.</li><li>Quickly read the options before you listen.</li><li>Remember to choose <b>TWO</b> answers for each question.</li></ul></div>
+      <p style="margin-top:26px;"><strong>Questions 5–10 — choose TWO letters for each pair.</strong> For every option, mark whether it is one of the two correct answers.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 06 — Questions 5–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit6-track06.mp3"></audio></div>
+      <div class="qgroup"><p class="qg-title">Questions 5–6</p><p class="qg-instr">Which <b>TWO</b> criteria will the students use to choose a successful person?</p></div>
+      <div class="card" id="t11-a"><div class="q-item" id="t11-a-1">
+          <p>1. A age</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-a-1" data-correct="false"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-a-1" data-correct="true"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-a-2">
+          <p>2. B gender</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-a-2" data-correct="true"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-a-2" data-correct="false"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-a-3">
+          <p>3. C individual talent</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-a-3" data-correct="false"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-a-3" data-correct="true"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-a-4">
+          <p>4. D fame</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-a-4" data-correct="false"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-a-4" data-correct="true"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-a-5">
+          <p>5. E global importance</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-a-5" data-correct="true"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-a-5" data-correct="false"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-a', 't11-a-score')">Check answers</button>
+          <span id="t11-a-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–8</p><p class="qg-instr">Which <b>TWO</b> things do the students agree to do before they meet again?</p></div>
+      <div class="card" id="t11-b"><div class="q-item" id="t11-b-1">
+          <p>1. A write a biography</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-b-1" data-correct="false"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-b-1" data-correct="true"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-b-2">
+          <p>2. B conduct more research</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-b-2" data-correct="true"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-b-2" data-correct="false"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-b-3">
+          <p>3. C find photographs</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-b-3" data-correct="true"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-b-3" data-correct="false"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-b-4">
+          <p>4. D write a talk</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-b-4" data-correct="false"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-b-4" data-correct="true"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-b-5">
+          <p>5. E plan a seminar</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-b-5" data-correct="false"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-b-5" data-correct="true"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-b', 't11-b-score')">Check answers</button>
+          <span id="t11-b-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 9–10</p><p class="qg-instr">Which <b>TWO</b> things do the students agree are linked to success?</p></div>
+      <div class="card" id="t11-c"><div class="q-item" id="t11-c-1">
+          <p>1. A wealth</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-c-1" data-correct="false"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-c-1" data-correct="true"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-c-2">
+          <p>2. B experience</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-c-2" data-correct="false"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-c-2" data-correct="true"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-c-3">
+          <p>3. C talent</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-c-3" data-correct="true"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-c-3" data-correct="false"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-c-4">
+          <p>4. D effort</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-c-4" data-correct="true"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-c-4" data-correct="false"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-c-5">
+          <p>5. E location</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-c-5" data-correct="false"> ✓ One of the TWO</label><label><input type="radio" value="1" name="t11-c-5" data-correct="true"> ✗ No</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-c', 't11-c-score')">Check answers</button>
+          <span id="t11-c-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t11-speaking-success">
+        <div class="q-num">Speaking — the keys to success</div>
+        <div class="q-text">Look again at the options in Questions 5–6 and 9–10. Which <b>three</b> do you think are most important for success? Explain why, with an example of a successful person you know or admire.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“In my opinion, the most important thing is…”</li><li>“…is also important because…”</li><li>“A good example is…, who…”</li><li>“I don't think … matters as much, because…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 12</div>
+      <h2>Vocabulary and Spelling — Word Building</h2>
+      <p class="task-sub">IELTS candidates often lose marks in Writing when they change the <b>form</b> of a word (noun, adjective, verb, adverb) or misspell a suffix. Complete the table, choose the right forms, then fix the spelling mistakes.</p>
+      <p style="margin-top:26px;"><strong>Word families — the topic of success.</strong> Complete the table.</p>
+<div class="card" style="overflow-x:auto;"><table class="data-table" id="t12-tbl-view" style="width:100%;"><tr><th>noun (phrase)</th><th>adjective</th><th>verb</th><th>adverb</th></tr><tr><td><i>success</i></td><td>successful</td><td>(2)</td><td>successfully</td></tr><tr><td>(3)</td><td>hard-working</td><td>work hard</td><td>—</td></tr><tr><td>talent</td><td>(4)</td><td>—</td><td>—</td></tr><tr><td>practice</td><td>practical</td><td>(5)</td><td>practically</td></tr><tr><td>—</td><td>regular</td><td>—</td><td>(6)</td></tr><tr><td>nature</td><td>natural</td><td>—</td><td>(7)</td></tr><tr><td>(8)</td><td>skilful / skillful</td><td>—</td><td>skilfully</td></tr><tr><td>achievement</td><td>—</td><td>(9)</td><td>—</td></tr><tr><td>fame</td><td>(10)</td><td>—</td><td>famously</td></tr></table></div>
+      <div class="card" id="t12-wb" style="line-height:2.6;"><p>2. verb of success: <input type="text" class="text-answer" id="t12-2" data-correct="succeed" autocomplete="off" style="width:120px;"> &nbsp;&nbsp; 3. noun of hard-working: <input type="text" class="text-answer" id="t12-3" data-correct="hard work" autocomplete="off" style="width:120px;"> &nbsp;&nbsp; 4. adjective of talent: <input type="text" class="text-answer" id="t12-4" data-correct="talented" autocomplete="off" style="width:120px;"></p><p>5. verb of practice: <input type="text" class="text-answer" id="t12-5" data-correct="practise/practice" autocomplete="off" style="width:120px;"> &nbsp;&nbsp; 6. adverb of regular: <input type="text" class="text-answer" id="t12-6" data-correct="regularly" autocomplete="off" style="width:120px;"> &nbsp;&nbsp; 7. adverb of natural: <input type="text" class="text-answer" id="t12-7" data-correct="naturally" autocomplete="off" style="width:120px;"></p><p>8. noun of skilful: <input type="text" class="text-answer" id="t12-8" data-correct="skill" autocomplete="off" style="width:120px;"> &nbsp;&nbsp; 9. verb of achievement: <input type="text" class="text-answer" id="t12-9" data-correct="achieve" autocomplete="off" style="width:120px;"> &nbsp;&nbsp; 10. adjective of fame: <input type="text" class="text-answer" id="t12-10" data-correct="famous" autocomplete="off" style="width:120px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-wb', 't12-wb-score')">Check answers</button>
+          <span id="t12-wb-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Choose the correct word.</strong> Look at the position of the word in the sentence: what type of word is needed?</p>
+      <div class="card" id="t12-ch"><div class="q-item" id="t12-ch-1">
+          <p>1. Some people have a ______ ability to play music.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-ch-1" data-correct="true"> natural</label><label><input type="radio" value="1" name="t12-ch-1" data-correct="false"> naturally</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-ch-2">
+          <p>2. We had a party to celebrate my uncle's unexpected ______.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-ch-2" data-correct="true"> fame</label><label><input type="radio" value="1" name="t12-ch-2" data-correct="false"> famous</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-ch-3">
+          <p>3. Not all ______ actors become famous.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-ch-3" data-correct="false"> talent</label><label><input type="radio" value="1" name="t12-ch-3" data-correct="true"> talented</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-ch-4">
+          <p>4. Winning a sporting competition is a great ______.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-ch-4" data-correct="false"> achieve</label><label><input type="radio" value="1" name="t12-ch-4" data-correct="true"> achievement</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-ch-5">
+          <p>5. If you are determined to ______, you will.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-ch-5" data-correct="false"> success</label><label><input type="radio" value="1" name="t12-ch-5" data-correct="true"> succeed</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-ch-6">
+          <p>6. I ______ attend a choir practice.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-ch-6" data-correct="false"> regular</label><label><input type="radio" value="1" name="t12-ch-6" data-correct="true"> regularly</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-ch-7">
+          <p>7. Only people who are ______ can do two things at the same time.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-ch-7" data-correct="false"> skill</label><label><input type="radio" value="1" name="t12-ch-7" data-correct="true"> skilful</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-ch', 't12-ch-score')">Check answers</button>
+          <span id="t12-ch-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Spelling — suffixes.</strong> IELTS candidates often make these mistakes. Write each word correctly.</p>
+      <div class="card" id="t12-sp" style="line-height:2.6;"><p>1. attendence → <input type="text" class="text-answer" id="t12-s1" data-correct="attendance" autocomplete="off" style="width:130px;"> &nbsp; 2. begining → <input type="text" class="text-answer" id="t12-s2" data-correct="beginning" autocomplete="off" style="width:130px;"> &nbsp; 3. developement → <input type="text" class="text-answer" id="t12-s3" data-correct="development" autocomplete="off" style="width:130px;"></p><p>4. unecessary → <input type="text" class="text-answer" id="t12-s4" data-correct="unnecessary" autocomplete="off" style="width:130px;"> &nbsp; 5. lazyness → <input type="text" class="text-answer" id="t12-s5" data-correct="laziness" autocomplete="off" style="width:130px;"> &nbsp; 6. achivement → <input type="text" class="text-answer" id="t12-s6" data-correct="achievement" autocomplete="off" style="width:130px;"></p><p>7. successfull → <input type="text" class="text-answer" id="t12-s7" data-correct="successful" autocomplete="off" style="width:130px;"> &nbsp; 8. developping → <input type="text" class="text-answer" id="t12-s8" data-correct="developing" autocomplete="off" style="width:130px;"> &nbsp; 9. happenned → <input type="text" class="text-answer" id="t12-s9" data-correct="happened" autocomplete="off" style="width:130px;"></p><p>10. realy → <input type="text" class="text-answer" id="t12-s10" data-correct="really" autocomplete="off" style="width:130px;"> &nbsp; 11. carful → <input type="text" class="text-answer" id="t12-s11" data-correct="careful" autocomplete="off" style="width:130px;"> &nbsp; 12. arguement → <input type="text" class="text-answer" id="t12-s12" data-correct="argument" autocomplete="off" style="width:130px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-sp', 't12-sp-score')">Check answers</button>
+          <span id="t12-sp-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 12</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 24 of 45</div>
+    <h1>Day 24 complete! 🎉</h1>
+    <p>Day 24 done — Unit 6, Being Human: two readings, Speaking Part 3, intonation, listening, word building and spelling, each with its own lead-in.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t4-v-lm');
+    initLineMatch('t7-v-lm');
+    initLineMatch('t11-op-lm');
+
+
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t2-speaking-summary"]'); if (b) initRecordControl(b, user.id, 24, 2, 't2-speaking-summary', 30); }
+    { const b = document.querySelector('.question-box[data-field="t4-speaking-change"]'); if (b) initRecordControl(b, user.id, 24, 4, 't4-speaking-change', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-summary"]'); if (b) initRecordControl(b, user.id, 24, 5, 't5-speaking-summary', 30); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-study"]'); if (b) initRecordControl(b, user.id, 24, 7, 't7-speaking-study', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-1"]'); if (b) initRecordControl(b, user.id, 24, 8, 't8-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-2"]'); if (b) initRecordControl(b, user.id, 24, 8, 't8-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-3"]'); if (b) initRecordControl(b, user.id, 24, 8, 't8-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-4"]'); if (b) initRecordControl(b, user.id, 24, 8, 't8-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-5"]'); if (b) initRecordControl(b, user.id, 24, 8, 't8-speaking-5', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-6"]'); if (b) initRecordControl(b, user.id, 24, 8, 't8-speaking-6', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-7"]'); if (b) initRecordControl(b, user.id, 24, 8, 't8-speaking-7', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-8"]'); if (b) initRecordControl(b, user.id, 24, 8, 't8-speaking-8', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-read"]'); if (b) initRecordControl(b, user.id, 24, 9, 't9-speaking-read', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-summary"]'); if (b) initRecordControl(b, user.id, 24, 10, 't10-speaking-summary', 30); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-success"]'); if (b) initRecordControl(b, user.id, 24, 11, 't11-speaking-success', 0); }
+
+    await initTaskFlow(24, 12, user.id, {
+      1: () => { checkAllAnswers('t1-sb', 't1-sb-score'); checkAllAnswers('t1-op', 't1-op-score'); },
+      2: () => { checkAllAnswers('t2-mc', 't2-mc-score'); },
+      3: () => { checkAllAnswers('t3-yn', 't3-yn-score'); checkAllAnswers('t3-mi', 't3-mi-score'); },
+      4: () => { checkAllAnswers('t4-v', 't4-v-score'); markLineMatchResult('t4-v-lm'); },
+      5: () => { checkAllAnswers('t5-tf', 't5-tf-score'); },
+      6: () => { checkAllAnswers('t6-s', 't6-s-score'); checkAllAnswers('t6-tf', 't6-tf-score'); checkAllAnswers('t6-mc', 't6-mc-score'); },
+      7: () => { checkAllAnswers('t7-v', 't7-v-score'); markLineMatchResult('t7-v-lm'); },
+      8: () => { checkAllAnswers('t8-kim', 't8-kim-score'); checkAllAnswers('t8-better', 't8-better-score'); checkAllAnswers('t8-gen', 't8-gen-score'); checkAllAnswers('t8-am', 't8-am-score'); checkAllAnswers('t8-amg', 't8-amg-score'); },
+      9: () => { checkAllAnswers('t9-a', 't9-a-score'); checkAllAnswers('t9-b', 't9-b-score'); },
+      10: () => { checkAllAnswers('t10-mc', 't10-mc-score'); },
+      11: () => { checkAllAnswers('t11-op', 't11-op-score'); markLineMatchResult('t11-op-lm'); checkAllAnswers('t11-m', 't11-m-score'); checkAllAnswers('t11-a', 't11-a-score'); checkAllAnswers('t11-b', 't11-b-score'); checkAllAnswers('t11-c', 't11-c-score'); },
+      12: () => { checkAllAnswers('t12-wb', 't12-wb-score'); checkAllAnswers('t12-ch', 't12-ch-score'); checkAllAnswers('t12-sp', 't12-sp-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t1-why-btn', 't1-why-ans', '[id^="t1-why-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t2-sum-btn', 't2-sum-ans', '[id^="t2-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t5-sum-btn', 't5-sum-ans', '[id^="t5-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t10-sum-btn', 't10-sum-ans', '[id^="t10-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t11-key-btn', 't11-key-ans', '[id^="t11-key-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t11-notes-btn', 't11-notes-ans', '[id^="t11-notes-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>
