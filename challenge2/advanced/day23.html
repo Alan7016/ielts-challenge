@@ -49,7 +49,7 @@
   .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
   .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
   @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
-  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1280px, calc(100vw - 32px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
   .split-right .card { padding: 14px 16px; }
   .split-right .q-item { margin-bottom: 10px; }
   .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
@@ -165,7 +165,7 @@
           <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
         </div></div>
       <p style="margin-top:26px;"><strong>Written summary.</strong> Cover the main idea and the key supporting points. Do not copy whole sentences — paraphrase.</p>
-      <div class="card"><p class="mini-q">Write a summary of the article in 3–4 sentences (about 80–100 words) in your own words.</p><textarea class="no-check mini-answer" id="t2-sum-1" placeholder="Your summary..." style="min-height:120px;"></textarea><div style="margin-top:14px;">
+      <div class="card"><p class="mini-q">Write a summary of the article in 3–4 sentences (about 80–100 words) in your own words.</p><textarea class="no-check mini-answer" id="t2-sum-1" data-min-words="70" placeholder="Your summary..." style="min-height:120px;"></textarea><div style="margin-top:14px;">
           <button type="button" class="ghost" id="t2-sum-btn">Show a model summary</button>
           <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
           <div class="answer-reveal" id="t2-sum-ans"><p style="margin:0;">The article explains that during the twentieth century, cheap factory goods pushed many traditional crafts out of existence. Recently, however, handmade objects have regained popularity, because buyers appreciate their individuality and the stories behind them, and because online selling and tourism give artisans new ways to reach customers. The writer notes that reviving a craft which has died out is difficult, since the method may have to be rebuilt through research and experiment, and the results are expensive. Nevertheless, supporters believe such crafts are worth saving because they preserve knowledge that would otherwise disappear. <span class="alt">(≈ 95 words)</span></p></div>
@@ -288,7 +288,7 @@
           <span id="t5-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
         </div></div>
       <p style="margin-top:26px;"><strong>Written summary.</strong> Explain both cooling methods and at least one practical point.</p>
-      <div class="card"><p class="mini-q">Write a summary of the article in 3–4 sentences (about 80–100 words) in your own words.</p><textarea class="no-check mini-answer" id="t5-sum-1" placeholder="Your summary..." style="min-height:120px;"></textarea><div style="margin-top:14px;">
+      <div class="card"><p class="mini-q">Write a summary of the article in 3–4 sentences (about 80–100 words) in your own words.</p><textarea class="no-check mini-answer" id="t5-sum-1" data-min-words="70" placeholder="Your summary..." style="min-height:120px;"></textarea><div style="margin-top:14px;">
           <button type="button" class="ghost" id="t5-sum-btn">Show a model summary</button>
           <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
           <div class="answer-reveal" id="t5-sum-ans"><p style="margin:0;">The article explains that trees lower the temperature of a street in two ways. First, their leaves block sunlight, so the ground and buildings beneath them absorb less heat and therefore release less in the evening. Second, trees pull water from the soil and release it as vapour through their leaves, and because this process uses energy from the air, the air becomes cooler. As this only works when water is available, trees in dry soil are less effective, so the choice of species and their location in a city are both important. <span class="alt">(≈ 95 words)</span></p></div>
@@ -396,7 +396,7 @@
           <span id="t8-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
         </div></div>
       <p style="margin-top:26px;"><strong>Written summary.</strong> Show both sides: what children do better and what adults do better.</p>
-      <div class="card"><p class="mini-q">Write a summary of the article in 3–4 sentences (about 80–100 words) in your own words.</p><textarea class="no-check mini-answer" id="t8-sum-1" placeholder="Your summary..." style="min-height:120px;"></textarea><div style="margin-top:14px;">
+      <div class="card"><p class="mini-q">Write a summary of the article in 3–4 sentences (about 80–100 words) in your own words.</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="70" placeholder="Your summary..." style="min-height:120px;"></textarea><div style="margin-top:14px;">
           <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
           <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
           <div class="answer-reveal" id="t8-sum-ans"><p style="margin:0;">The article questions the common belief that children are always better language learners than adults. It accepts that people who start young and hear a language every day usually develop a more native-like accent and a natural sense of grammar. However, adults tend to progress faster at the beginning because they can study deliberately and use learning strategies. The writer concludes that the learning situation, especially the amount of exposure and practice, matters more than age in many cases, and that clear, confident communication is a realistic goal at any age. <span class="alt">(≈ 95 words)</span></p></div>
@@ -590,9 +590,9 @@
       const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
       btn.textContent = open ? 'Close all' : 'Open all';
     }));
-    { const b = document.querySelector('.question-box[data-field="t2-speaking-summary"]'); if (b) initRecordControl(b, user.id, 23, 2, 't2-speaking-summary', 0); }
-    { const b = document.querySelector('.question-box[data-field="t5-speaking-summary"]'); if (b) initRecordControl(b, user.id, 23, 5, 't5-speaking-summary', 0); }
-    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 23, 8, 't8-speaking-summary', 0); }
+    { const b = document.querySelector('.question-box[data-field="t2-speaking-summary"]'); if (b) initRecordControl(b, user.id, 23, 2, 't2-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-summary"]'); if (b) initRecordControl(b, user.id, 23, 5, 't5-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 23, 8, 't8-speaking-summary', 45); }
 
     await initTaskFlow(23, 10, user.id, {
       1: () => { checkAllAnswers('t1-m', 't1-m-score'); markLineMatchResult('t1-m-lm'); checkAllAnswers('t1-g', 't1-g-score'); },
