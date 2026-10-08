@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 25 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+  .ph-card { width: min(1100px, calc(100vw - 32px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .ph-grid { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 14px; }
+  .ph { margin: 0; }
+  .ph-img { position: relative; aspect-ratio: 3 / 2; border-radius: 10px; overflow: hidden; background: var(--surface-2); border: 1px solid var(--border); }
+  .ph-img img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; transition: transform .2s ease; }
+  .ph-img:hover img { transform: scale(1.04); }
+  .ph-tip { font-size: 0.82rem; color: var(--muted); margin: 0 0 10px; }
+  .ph-zoom { position: fixed; inset: 0; z-index: 9999; background: rgba(10, 12, 24, 0.88); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: zoom-out; padding: 20px; }
+  .ph-zoom[hidden] { display: none; }
+  .ph-zoom img { max-width: 94vw; max-height: 86vh; border-radius: 10px; box-shadow: 0 20px 60px rgba(0,0,0,.5); animation: phIn .2s ease; }
+  .ph-zoom-hint { color: #fff; opacity: .7; font-family: var(--mono); font-size: 0.78rem; margin-top: 12px; }
+  @keyframes phIn { from { transform: scale(.92); opacity: 0; } to { transform: none; opacity: 1; } }
+  .ph-n { position: absolute; top: 8px; left: 8px; background: var(--accent); color: #fff; font-family: var(--mono); font-weight: 700; font-size: 0.85rem; border-radius: 50%; width: 26px; height: 26px; display: grid; place-items: center; z-index: 1; }
+  .ph figcaption { font-size: 0.95rem; color: var(--ink-soft); margin-top: 6px; line-height: 1.45; }
+  .ph-src { display: block; font-family: var(--mono); font-size: 0.66rem; color: var(--muted); margin-top: 2px; }
+  @media (max-width: 760px) { .ph-grid { grid-template-columns: 1fr; } .ph-card { width: 100%; left: 0; transform: none; } }
+  .opt-legend { margin-bottom: 8px; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 25 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 14</div>
+      <h2>Starting Off — Feeding the Planet</h2>
+      <p class="task-sub">Today is about the future of food: how cities are fed, whether farms can move indoors, and whether insects belong on our plates. Look at the six photos and discuss them, then learn the precise vocabulary of food systems.</p>
+<div class="card ph-card"><p class="ph-tip">🔍 Click a photo to see it full size.</p><div class="ph-grid" style="--cols:3"><figure class="ph"><div class="ph-img"><span class="ph-n">1</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/HYDROPONICS%20%28vertical%20farming%20%29.jpg?width=960" alt="Photo 1" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>crops growing in stacked indoor layers<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:HYDROPONICS_%28vertical_farming_%29.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure><figure class="ph"><div class="ph-img"><span class="ph-n">2</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Rice%20terraces%2C%20Bali.jpg?width=960" alt="Photo 2" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>rice terraces built on a hillside<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:Rice_terraces%2C_Bali.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure><figure class="ph"><div class="ph-img"><span class="ph-n">3</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Long%20fields%20with%20farm%20in%20California.jpg?width=960" alt="Photo 3" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>large-scale industrial farmland<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:Long_fields_with_farm_in_California.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure><figure class="ph"><div class="ph-img"><span class="ph-n">4</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fried%20grasshoppers%20in%20Bangkok.jpg?width=960" alt="Photo 4" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>fried grasshoppers sold as street food<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:Fried_grasshoppers_in_Bangkok.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure><figure class="ph"><div class="ph-img"><span class="ph-n">5</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Entrance%20tunnel%20for%20Svalbard%20Global%20Seed%20Vault.jpg?width=960" alt="Photo 5" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>the entrance to a seed vault built into a mountain<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:Entrance_tunnel_for_Svalbard_Global_Seed_Vault.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure><figure class="ph"><div class="ph-img"><span class="ph-n">6</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vertical%20farm2.jpg?width=960" alt="Photo 6" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>a vertical farm<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:Vertical_farm2.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure></div></div><div class="ph-zoom" id="phZoom" hidden><img alt=""><p class="ph-zoom-hint">Click anywhere to close</p></div><script>(function(){var z=document.getElementById("phZoom");if(!z||z.dataset.ready)return;z.dataset.ready=1;var zi=z.querySelector("img");document.addEventListener("click",function(e){var im=e.target.closest(".ph-img img");if(im){zi.src=im.currentSrc||im.src;z.hidden=false;document.body.style.overflow="hidden";return;}if(!z.hidden&&z.contains(e.target)){z.hidden=true;zi.removeAttribute("src");document.body.style.overflow="";}});document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!z.hidden){z.hidden=true;document.body.style.overflow="";}});})();</script>
+      <div class="card"><p class="mini-q">1. Rank photos 1–6 from the <b>most</b> to the <b>least</b> sustainable way of securing food, and justify your top and bottom choices.</p><textarea class="no-check mini-answer" id="t1-sp-1" placeholder="Write here..." style="min-height:70px;"></textarea><p class="mini-q">2. Which photo represents the oldest form of food technology, and which the newest? What problem was each designed to solve?</p><textarea class="no-check mini-answer" id="t1-sp-2" placeholder="Write here..." style="min-height:70px;"></textarea><p class="mini-q">3. Photo 4 shows insects sold as food. Is the reaction of many Europeans or Uzbeks to this image rational, cultural or both? Explain.</p><textarea class="no-check mini-answer" id="t1-sp-3" placeholder="Write here..." style="min-height:70px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t1-sp-btn">Show an example answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t1-sp-ans"><p>A Band 8 answer qualifies its claims and weighs criteria explicitly: <i>“Sustainability depends on what we measure — land, water or energy. Terraces are arguably the most sustainable in terms of soil conservation, whereas the vertical farm saves land and water but is extremely energy-intensive…”</i></p></div>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Precision vocabulary.</strong> Match each term to its definition.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. food security</button><button type="button" class="lm-item" data-key="2">2. supply chain</button><button type="button" class="lm-item" data-key="3">3. yield</button><button type="button" class="lm-item" data-key="4">4. staple crop</button><button type="button" class="lm-item" data-key="5">5. arable land</button><button type="button" class="lm-item" data-key="6">6. livestock</button><button type="button" class="lm-item" data-key="7">7. hydroponics</button><button type="button" class="lm-item" data-key="8">8. resilience</button><button type="button" class="lm-item" data-key="9">9. perishable</button><button type="button" class="lm-item" data-key="10">10. self-sufficiency</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. land suitable for growing crops</button><button type="button" class="lm-item" data-key="b">b. the amount of a crop produced from a given area of land</button><button type="button" class="lm-item" data-key="c">c. reliable access for everyone to enough safe, nutritious food</button><button type="button" class="lm-item" data-key="d">d. likely to decay or go bad quickly</button><button type="button" class="lm-item" data-key="e">e. the sequence of processes involved in producing and delivering a product</button><button type="button" class="lm-item" data-key="f">f. growing plants in nutrient-rich water instead of soil</button><button type="button" class="lm-item" data-key="g">g. the ability to provide everything you need without outside help</button><button type="button" class="lm-item" data-key="h">h. farm animals kept for food or other products</button><button type="button" class="lm-item" data-key="i">i. a food that forms the basic part of a population’s diet</button><button type="button" class="lm-item" data-key="j">j. the ability to recover quickly from a disruption</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="i" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="j" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-9" data-lm-key="9" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-10" data-lm-key="10" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Collocations.</strong> Complete each sentence with one word from the box. There are two extra words.</p>
+      <div class="word-bank">disrupt · boost · subsidise · places · goes · achieve · curb · consume · grow</div><div class="card" id="t1-c" style="line-height:2.3;"><p>1. Drought and floods are expected to <input type="text" class="text-answer" id="t1-1" data-correct="disrupt" autocomplete="off" style="width:110px;"> food supplies in many regions.</p><p>2. New varieties of wheat have helped farmers to <input type="text" class="text-answer" id="t1-2" data-correct="boost" autocomplete="off" style="width:110px;"> yields significantly.</p><p>3. Some governments <input type="text" class="text-answer" id="t1-3" data-correct="subsidise" autocomplete="off" style="width:110px;"> farmers to keep food prices low.</p><p>4. Rising demand for meat <input type="text" class="text-answer" id="t1-4" data-correct="places" autocomplete="off" style="width:110px;"> enormous pressure on land and water.</p><p>5. Poor storage means that a large share of the harvest <input type="text" class="text-answer" id="t1-5" data-correct="goes" autocomplete="off" style="width:110px;"> to waste.</p><p>6. The country aims to <input type="text" class="text-answer" id="t1-6" data-correct="achieve" autocomplete="off" style="width:110px;"> self-sufficiency in grain within a decade.</p><p>7. Changing diets could significantly <input type="text" class="text-answer" id="t1-7" data-correct="curb" autocomplete="off" style="width:110px;"> greenhouse gas emissions.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-c', 't1-c-score')">Check answers</button>
+          <span id="t1-c-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 14</div>
+      <h2>Lead-in 1 — Three Days from Hunger? How Cities Are Fed</h2>
+      <p class="task-sub">Before Reading Section 2 (on vertical farming), read this article about how cities are supplied with food. Pay attention to the argument structure: claim → evidence → counter-argument. About 15 minutes.</p>
+      <div class="card article">
+        <h3 class="article-title">Three Days from Hunger? How Cities Are Fed</h3>
+        <p class="article-meta">Economics · Food systems · 387 words</p>
+        <p>It is sometimes said that every large city is only a few days away from running out of food. The claim sounds alarmist, but it contains an uncomfortable truth. A modern supermarket keeps remarkably little stock on its premises. Rather than filling warehouses, retailers rely on what is known as just-in-time delivery: computer systems track what is sold, and replacement stock arrives, often overnight, in precisely the quantities required. Storage is expensive, and fresh food is perishable, so holding large reserves makes little commercial sense.</p><p>The result is a system of extraordinary efficiency. The food in an ordinary city kitchen may have passed through farms on several continents, processing plants, packaging centres, ports, distribution hubs and a fleet of refrigerated lorries before reaching the shelf. Thanks to this chain, urban consumers enjoy a variety of food, at a range of prices, that would have astonished their grandparents. Tomatoes in winter and tropical fruit in northern cities are no longer luxuries.</p><p>Efficiency, however, comes at a cost. A chain is only as strong as its weakest link, and a system designed to carry almost no spare capacity has little ability to absorb a shock. A fuel strike, a storm that closes a major road, a blocked shipping route or a wave of panic buying can empty shelves within days. Such events are usually temporary — the chains have, on the whole, proved remarkably reliable — but they reveal how dependent cities are on systems that most of their inhabitants never see.</p><p>Some analysts argue that cities have traded resilience for convenience, and that they should rebuild a degree of local food production: market gardens on the urban fringe, rooftop farms, community growing schemes and, more ambitiously, high-tech indoor farms. Others reply that local production can never feed a large city, which may require the output of an area of farmland many times its own size, and that a diverse global supply is itself a form of resilience, since a poor harvest in one region can be offset by imports from another.</p><p>Both sides agree on one point: the question is no longer simply how to produce more food, but how to produce and move it in ways that can withstand disruption. As the next passage shows, some of the proposed answers involve moving farms not outwards, but upwards.</p>
+      </div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-1">
+          <p>1. Why do supermarkets keep relatively little stock?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-1" data-correct="false"> A. Customers prefer smaller shops.</label><label><input type="radio" value="1" name="t2-mc-1" data-correct="true"> B. Storage is expensive and fresh food does not last.</label><label><input type="radio" value="2" name="t2-mc-1" data-correct="false"> C. Governments limit the amount they may store.</label><label><input type="radio" value="3" name="t2-mc-1" data-correct="false"> D. Computers cannot track large stocks.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-2">
+          <p>2. What does the writer mean by “a system designed to carry almost no spare capacity”?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-2" data-correct="false"> A. The system is too small for modern cities.</label><label><input type="radio" value="1" name="t2-mc-2" data-correct="true"> B. The system has very little in reserve to cope with sudden problems.</label><label><input type="radio" value="2" name="t2-mc-2" data-correct="false"> C. Lorries are always full.</label><label><input type="radio" value="3" name="t2-mc-2" data-correct="false"> D. Farms produce too little food.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-3">
+          <p>3. How does the writer characterise disruptions to supply chains?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-3" data-correct="false"> A. frequent and long-lasting</label><label><input type="radio" value="1" name="t2-mc-3" data-correct="true"> B. usually temporary, but revealing</label><label><input type="radio" value="2" name="t2-mc-3" data-correct="false"> C. impossible to prevent</label><label><input type="radio" value="3" name="t2-mc-3" data-correct="false"> D. mainly caused by panic buying</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-4">
+          <p>4. What counter-argument is made against local food production?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-4" data-correct="false"> A. Local food is always more expensive.</label><label><input type="radio" value="1" name="t2-mc-4" data-correct="true"> B. Cities cannot feed themselves locally, and global supply spreads risk.</label><label><input type="radio" value="2" name="t2-mc-4" data-correct="false"> C. Rooftop farms are dangerous.</label><label><input type="radio" value="3" name="t2-mc-4" data-correct="false"> D. Imports are more nutritious.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. The writer completely rejects the claim that cities are a few days from running out of food.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="false"> True</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. Global supply chains have made a wider variety of food available to city dwellers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="true"> True</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. Supply-chain disruptions have usually lasted for several months.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="false"> True</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. Some people see a varied global supply as a source of resilience.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="true"> True</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-5">
+          <p>5. According to the writer, the only goal of food policy should be to increase production.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-5" data-correct="false"> True</label><label><input type="radio" value="1" name="t2-tf-5" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 130 words</b>. Identify the central claim, the strongest supporting evidence and any limitation the writer acknowledges, then add a sentence of critical evaluation. Do not copy any phrase of four or more words.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 130 words):</p><textarea class="no-check mini-answer" id="t2-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:200px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t2-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t2-sum-ans"><p>The article examines how modern cities are fed and why their food systems are more fragile than they appear. A large city holds only a few days’ supply of fresh food at any time, because supermarkets rely on ‘just-in-time’ deliveries that keep storage costs low. Food therefore travels long distances through complex chains of farms, processors, warehouses and lorries, and a disruption at any point — a strike, a storm or a pandemic — can empty shelves within days. The writer notes that this efficiency has made food cheaper and more varied than ever, but argues that cities have traded resilience for convenience, and that interest in local and urban food production is partly a response to that risk. The argument is persuasive, although it perhaps underestimates how reliable these chains have usually proved. (≈ 135 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t2-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without your notes — speak for <b>at least 60 seconds</b> (aim for 90), and finish with a critical comment.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central claim is that…”</li><li>“The most compelling evidence is…”</li><li>“The writer concedes, however, that…”</li><li>“What the argument overlooks, I think, is…”</li><li>“On balance, I find it…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 14</div>
+      <h2>Reading Section 2 — Farming Upwards: The Promise and Limits of Vertical Farms</h2>
+      <p class="task-sub">Suggested time: 20 minutes. Three IELTS question types: <b>matching headings</b>, <b>TRUE / FALSE / NOT GIVEN</b> and <b>summary completion (no word bank)</b>. 14 questions, real IELTS difficulty. Passage on the left, questions on the right. Answers are checked when you press <b>Next</b> — you cannot change them afterwards.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li><b>Matching headings:</b> identify the paragraph’s <b>function</b> (problem? limitation? response? evaluation?) as well as its topic. Headings that repeat a striking word from the paragraph are often traps.</li>
+  <li><b>T/F/NG:</b> at Band 8 level, the difference is often in a qualifier: <i>generally, only, most, unless</i>.</li>
+  <li><b>Summary without a word bank:</b> the summary is a paraphrase — locate the section by meaning, then copy the exact word, checking grammar (singular/plural).</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Farming Upwards: The Promise and Limits of Vertical Farms<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Indoor farms stacked floor upon floor were hailed as the future of agriculture. A decade of commercial experience has produced a more complicated picture.</small></h3>
+            <p class="article-meta">Reading Passage 2 · Agriculture and technology · 685 words</p>
+            <p><span class="para-label">A</span>The idea is disarmingly simple. Instead of spreading crops across fields exposed to drought, frost and pests, why not grow them indoors, in stacked layers, under artificial light, in a building that could stand in the middle of a city? The concept was popularised by an American professor in the late 1990s, who asked his students to design a skyscraper that could feed a city’s population. For years it remained largely theoretical. Then, in the 2010s, falling prices for light-emitting diodes (LEDs) and a surge of investment turned it into an industry, with companies building ever larger facilities on several continents.</p><p><span class="para-label">B</span>Most vertical farms dispense with soil altogether. In hydroponic systems, the roots of the plants sit in water enriched with precisely measured nutrients; in aeroponic systems, they hang in the air and are sprayed with a nutrient mist. Temperature, humidity, carbon dioxide and the colour and intensity of light are all controlled by computer, and sensors monitor the plants continuously. Because the environment is sealed, pests are rare and pesticides are generally unnecessary, and because water is recirculated rather than lost to evaporation or drainage, a vertical farm can use only a small fraction of the water that the same crop would need in a field.</p><p><span class="para-label">C</span>The advantages extend beyond resource use. Crops can be grown all year round, regardless of the season or the weather outside, and harvests are highly predictable. Since the farms can be located close to — or inside — the cities they supply, produce can reach shops within hours of being picked, which reduces spoilage and allows growers to select varieties for flavour rather than for their ability to survive long journeys. In regions with little fertile land or water, such as parts of the Middle East, the appeal is obvious.</p><p><span class="para-label">D</span>Yet the list of crops actually grown in vertical farms is strikingly short. The great majority produce leafy greens such as lettuce, spinach and kale, together with herbs such as basil. The reason is economic. These plants grow quickly, are mostly edible, and command a relatively high price per kilogram, so the high cost of each square metre of growing space can be recovered. Staple crops present a very different calculation. Wheat, rice and maize require large amounts of light to produce grain that sells for very little; a field of wheat receives its sunlight free of charge, whereas an indoor farm must pay for every photon. Analysts who have attempted the calculation conclude that growing staple grains indoors would be prohibitively expensive at current energy prices.</p><p><span class="para-label">E</span>Energy, in fact, is the industry’s central weakness. Replacing the sun is costly, and a large vertical farm can consume as much electricity as a small town. When energy prices rose sharply in the early 2020s, the consequences were severe: several well-funded companies scaled back their operations or went out of business altogether. Critics also point out that unless the electricity comes from low-carbon sources, the emissions associated with lighting a vertical farm may outweigh the savings from shorter transport, particularly since transport accounts for a relatively modest share of the emissions associated with most foods.</p><p><span class="para-label">F</span>Supporters respond that the industry is still young and that costs will fall as it matures. LEDs continue to become more efficient, automation is reducing the need for labour, and plant scientists are developing varieties specifically suited to indoor conditions — compact plants that need less light and can be harvested sooner. Some farms are being built next to sources of cheap renewable or waste energy, and others are experimenting with crops of higher value, such as strawberries, or with plants grown to produce medicines.</p><p><span class="para-label">G</span>A realistic assessment probably lies somewhere between the early enthusiasm and the recent pessimism. Vertical farms are unlikely ever to feed the world’s cities with bread or rice. They can, however, supply fresh, perishable produce reliably in places where conventional farming is difficult, and they may prove valuable as one component of a more diverse and resilient food system. The mistake, perhaps, was ever to imagine that a single technology could transform something as vast and varied as global agriculture.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–7</p><p class="qg-instr">The passage has seven paragraphs, <b>A–G</b>. Choose the correct heading for each paragraph from the list below. There are more headings than paragraphs.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;">
+<b>i</b>&nbsp; Benefits that go beyond saving resources<br><b>ii</b>&nbsp; From classroom exercise to commercial reality<br><b>iii</b>&nbsp; Why profitable crops are so limited<br>
+<b>iv</b>&nbsp; The rising cost of farmland near cities<br><b>v</b>&nbsp; A measured verdict<br><b>vi</b>&nbsp; How the growing environment is managed<br>
+<b>vii</b>&nbsp; Reasons for optimism about the industry’s future<br><b>viii</b>&nbsp; The consumer’s preference for organic food<br><b>ix</b>&nbsp; A costly dependence on electricity<br><b>x</b>&nbsp; The global shortage of fresh water</p></div>
+      <div class="card" id="t3-h"><div class="sel-row"><select class="select" id="t3-h-1" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>1.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t3-h-2" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>2.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t3-h-3" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>3.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t3-h-4" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>4.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t3-h-5" data-answer="ix"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>5.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t3-h-6" data-answer="vii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>6.</b> Paragraph F</span></div><div class="sel-row"><select class="select" id="t3-h-7" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option><option value="x">x</option></select><span><b>7.</b> Paragraph G</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-h', 't3-h-score')">Check answers</button>
+          <span id="t3-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 8–11</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t3-tf"><div class="q-item" id="t3-tf-8">
+          <p>8. Cheaper lighting technology contributed to the growth of the vertical farming industry.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-8" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t3-tf-8" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-8" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-9">
+          <p>9. Vertical farms usually need to use pesticides to control insects.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-9" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-9" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-9" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-10">
+          <p>10. Consumers have been shown to prefer the taste of vertically farmed vegetables.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-10" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-10" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-10" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-11">
+          <p>11. Transport is responsible for most of the emissions linked to the majority of foods.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-11" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-11" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-11" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-tf', 't3-tf-score')">Check answers</button>
+          <span id="t3-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 12–14</p><p class="qg-instr">Complete the summary below. Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p></div>
+<div class="card"><p class="prompt-label" style="text-align:center;">The economics of indoor crops</p>
+      <div class="card" id="t3-s" style="line-height:2.6;"><p>Leafy greens suit vertical farms because they grow fast and sell at a high price, so the cost of growing space can be recovered. Grains, by contrast, need a lot of light but are cheap, and producing them indoors would be (12) <input type="text" class="text-answer" id="t3-12" data-correct="prohibitively" autocomplete="off" style="width:140px;"> expensive. To reduce costs, scientists are breeding (13) <input type="text" class="text-answer" id="t3-13" data-correct="compact" autocomplete="off" style="width:140px;"> plants that need less light, while some farms have turned to more valuable crops such as (14) <input type="text" class="text-answer" id="t3-14" data-correct="strawberries" autocomplete="off" style="width:140px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-s', 't3-s-score')">Check answers</button>
+          <span id="t3-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 14</div>
+      <h2>Reading Section 2 — Answer Analysis</h2>
+      <p class="task-sub">Open each answer. For the headings, notice how each correct heading names the paragraph’s <b>function</b>, while the traps (iv, viii, x) pick up a single word or a plausible but unstated idea.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Farming Upwards: The Promise and Limits of Vertical Farms</summary>
+        <p><span class="para-label">A</span>The idea is disarmingly simple. Instead of spreading crops across fields exposed to drought, frost and pests, why not grow them indoors, in stacked layers, under artificial light, in a building that could stand in the middle of a city? The concept was popularised by an American professor in the late 1990s, who asked his students to design a skyscraper that could feed a city’s population. For years it remained largely theoretical. Then, in the 2010s, falling prices for light-emitting diodes (LEDs) and a surge of investment turned it into an industry, with companies building ever larger facilities on several continents.</p><p><span class="para-label">B</span>Most vertical farms dispense with soil altogether. In hydroponic systems, the roots of the plants sit in water enriched with precisely measured nutrients; in aeroponic systems, they hang in the air and are sprayed with a nutrient mist. Temperature, humidity, carbon dioxide and the colour and intensity of light are all controlled by computer, and sensors monitor the plants continuously. Because the environment is sealed, pests are rare and pesticides are generally unnecessary, and because water is recirculated rather than lost to evaporation or drainage, a vertical farm can use only a small fraction of the water that the same crop would need in a field.</p><p><span class="para-label">C</span>The advantages extend beyond resource use. Crops can be grown all year round, regardless of the season or the weather outside, and harvests are highly predictable. Since the farms can be located close to — or inside — the cities they supply, produce can reach shops within hours of being picked, which reduces spoilage and allows growers to select varieties for flavour rather than for their ability to survive long journeys. In regions with little fertile land or water, such as parts of the Middle East, the appeal is obvious.</p><p><span class="para-label">D</span>Yet the list of crops actually grown in vertical farms is strikingly short. The great majority produce leafy greens such as lettuce, spinach and kale, together with herbs such as basil. The reason is economic. These plants grow quickly, are mostly edible, and command a relatively high price per kilogram, so the high cost of each square metre of growing space can be recovered. Staple crops present a very different calculation. Wheat, rice and maize require large amounts of light to produce grain that sells for very little; a field of wheat receives its sunlight free of charge, whereas an indoor farm must pay for every photon. Analysts who have attempted the calculation conclude that growing staple grains indoors would be prohibitively expensive at current energy prices.</p><p><span class="para-label">E</span>Energy, in fact, is the industry’s central weakness. Replacing the sun is costly, and a large vertical farm can consume as much electricity as a small town. When energy prices rose sharply in the early 2020s, the consequences were severe: several well-funded companies scaled back their operations or went out of business altogether. Critics also point out that unless the electricity comes from low-carbon sources, the emissions associated with lighting a vertical farm may outweigh the savings from shorter transport, particularly since transport accounts for a relatively modest share of the emissions associated with most foods.</p><p><span class="para-label">F</span>Supporters respond that the industry is still young and that costs will fall as it matures. LEDs continue to become more efficient, automation is reducing the need for labour, and plant scientists are developing varieties specifically suited to indoor conditions — compact plants that need less light and can be harvested sooner. Some farms are being built next to sources of cheap renewable or waste energy, and others are experimenting with crops of higher value, such as strawberries, or with plants grown to produce medicines.</p><p><span class="para-label">G</span>A realistic assessment probably lies somewhere between the early enthusiasm and the recent pessimism. Vertical farms are unlikely ever to feed the world’s cities with bread or rice. They can, however, supply fresh, perishable produce reliably in places where conventional farming is difficult, and they may prove valuable as one component of a more diverse and resilient food system. The mistake, perhaps, was ever to imagine that a single technology could transform something as vast and varied as global agriculture.</p>
+      </details>
+      <div class="card an-card"><p class="an-intro">Q10 is the classic Band 8 trap: the passage gives a reason why something <i>might</i> be true (flavour), but never states that it <i>has been shown</i>.</p><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">ii</span><span class="an-where">Para A</span></summary><div class="an-body"><p>The paragraph moves from <span class="ev">asked his students to design a skyscraper</span> (a <b>classroom exercise</b>) to <span class="ev">turned it into an industry</span> (<b>commercial reality</b>).</p><p><span class="trap">Trap:</span> <i>iv (cost of farmland near cities)</i> — cities are mentioned, but land prices are not.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">vi</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Temperature, humidity, carbon dioxide and the colour and intensity of light are all controlled by computer</span> — the paragraph explains <b>how</b> the environment is managed.</p><p><span class="trap">Trap:</span> <i>x (shortage of fresh water)</i>: water use is mentioned as a benefit of recirculation, not as a global shortage.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">i</span><span class="an-where">Para C</span></summary><div class="an-body"><p>Opening sentence: <span class="ev">The advantages extend beyond resource use</span>. <i>Beyond saving resources</i> is a direct paraphrase — Para B dealt with water and pesticides, Para C with year-round growing, freshness and location.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">iii</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">the list of crops actually grown in vertical farms is strikingly short … The reason is economic</span>.</p><p><i>Why profitable crops are so limited</i> = the economic reason for the short list.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">ix</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Energy, in fact, is the industry’s central weakness</span> … <span class="ev">as much electricity as a small town</span>.</p><p><i>Costly dependence on electricity</i> = central weakness + electricity consumption + bankruptcies when prices rose.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">vii</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Supporters respond that the industry is still young and that costs will fall as it matures</span>. The whole paragraph lists reasons for optimism.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">v</span><span class="an-where">Para G</span></summary><div class="an-body"><p><span class="ev">A realistic assessment probably lies somewhere between the early enthusiasm and the recent pessimism</span>. <i>Measured verdict</i> = balanced, realistic assessment.</p><p><span class="trap">Trap:</span> <i>viii (organic food)</i> is never discussed — it is a plausible-sounding distractor.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">falling prices for light-emitting diodes (LEDs) and a surge of investment turned it into an industry</span>. <i>Cheaper lighting technology</i> = <i>falling prices for LEDs</i>; <i>contributed</i> is right because investment was a second cause.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">pests are rare and pesticides are generally unnecessary</span>.</p><p><i>Usually need</i> ↔ <i>generally unnecessary</i> — a direct contradiction.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para C</span></summary><div class="an-body"><p>The passage says growers can <span class="ev">select varieties for flavour</span>, but there is no evidence about what consumers <b>prefer</b>.</p><p><span class="trap">Trap:</span> it is a reasonable inference — but IELTS NOT GIVEN punishes inference. <i>Have been shown</i> requires evidence that is not there.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">FALSE</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">transport accounts for a relatively modest share of the emissions associated with most foods</span>.</p><p><i>Most of the emissions</i> ↔ <i>a relatively modest share</i> → contradiction.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">prohibitively</span><span class="an-where">Para D, last sentence</span></summary><div class="an-body"><p><span class="ev">growing staple grains indoors would be prohibitively expensive at current energy prices</span>. The gap is before an adjective, so an adverb is needed. <i>Prohibitively expensive</i> = so expensive that it cannot be done.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">compact</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">compact plants that need less light and can be harvested sooner</span>. The summary repeats <i>need less light</i> — the word right before <i>plants</i> is the answer.</p><p><span class="trap">Trap:</span> <i>varieties</i> is nearby but does not fit before <i>plants</i>.</p></div></details><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">strawberries</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">crops of higher value, such as strawberries</span>. <i>More valuable</i> = <i>higher value</i>. Plural is required after <i>such as</i>.</p><p><span class="trap">Trap:</span> <i>medicines</i> are mentioned, but they are not a crop.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Hedging and qualification.</strong> Band 8 writing hedges carefully. Choose the word or phrase the passage uses to make each claim more precise.</p>
+      <div class="card" id="t4-hedge"><div class="q-item" id="t4-hedge-1">
+          <p>1. “pesticides are ______ unnecessary”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-hedge-1" data-correct="false"> always</label><label><input type="radio" value="1" name="t4-hedge-1" data-correct="true"> generally</label><label><input type="radio" value="2" name="t4-hedge-1" data-correct="false"> never</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-hedge-2">
+          <p>2. “A realistic assessment ______ lies somewhere between the early enthusiasm and the recent pessimism.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-hedge-2" data-correct="false"> certainly</label><label><input type="radio" value="1" name="t4-hedge-2" data-correct="true"> probably</label><label><input type="radio" value="2" name="t4-hedge-2" data-correct="false"> clearly</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-hedge-3">
+          <p>3. “Vertical farms are ______ ever to feed the world’s cities with bread or rice.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-hedge-3" data-correct="true"> unlikely</label><label><input type="radio" value="1" name="t4-hedge-3" data-correct="false"> unable</label><label><input type="radio" value="2" name="t4-hedge-3" data-correct="false"> impossible</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-hedge-4">
+          <p>4. “The mistake, ______, was ever to imagine that a single technology could transform…”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-hedge-4" data-correct="false"> obviously</label><label><input type="radio" value="1" name="t4-hedge-4" data-correct="true"> perhaps</label><label><input type="radio" value="2" name="t4-hedge-4" data-correct="false"> undoubtedly</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-hedge-5">
+          <p>5. “transport accounts for a ______ modest share of the emissions”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-hedge-5" data-correct="true"> relatively</label><label><input type="radio" value="1" name="t4-hedge-5" data-correct="false"> extremely</label><label><input type="radio" value="2" name="t4-hedge-5" data-correct="false"> completely</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-hedge', 't4-hedge-score')">Check answers</button>
+          <span id="t4-hedge-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 14</div>
+      <h2>Lead-in 2 — The Protein Problem</h2>
+      <p class="task-sub">Before Reading Section 3 (an argument about eating insects), read this article on why protein production is at the centre of the food debate. Note the key concept of <b>feed conversion</b> — the passage relies on it. About 15 minutes.</p>
+      <div class="card article">
+        <h3 class="article-title">The Protein Problem</h3>
+        <p class="article-meta">Environment · Nutrition · 376 words</p>
+        <p>Of all the choices that shape the environmental impact of the food system, few matter as much as how we obtain protein. Meat, milk and eggs are rich, convenient sources of it, and as incomes rise around the world, demand for them tends to rise too. Yet livestock farming makes extraordinary demands on the planet’s resources. Taken together, pasture for grazing animals and cropland used to grow their feed account for a very large share of all agricultural land, while cattle in particular release methane, a greenhouse gas far more potent in the short term than carbon dioxide.</p><p>The root of the problem is efficiency. An animal uses most of the energy in its feed simply to stay alive — to move, to keep warm and to grow bones, skin and organs that people do not eat. Only a fraction of what it consumes ends up as edible meat. The ratio varies widely: chickens and farmed fish convert feed relatively efficiently, pigs less so, and beef cattle least efficiently of all. In effect, much of the grain grown on the world’s farms is fed to animals rather than to people.</p><p>None of this means that livestock has no place in a sustainable food system. Grazing animals can turn grass growing on land unsuitable for crops into food, and in many poorer communities animals provide not only protein but income, insurance and essential micronutrients. The debate is less about whether we should keep animals than about how many, of which kinds, and how they are raised.</p><p>Several responses are being pursued at once. Some campaigns encourage consumers in wealthy countries to eat less meat. Researchers are working on feed additives that reduce methane emissions and on more productive breeds. A growing industry produces plant-based imitations of meat, while scientists are attempting to grow meat from animal cells in laboratories, though producing it cheaply at scale has proved difficult. And there is a further, older option that many people find much harder to accept — eating insects.</p><p>Each of these approaches has its champions and its critics, and none is likely to solve the problem alone. What they share is a recognition that the world cannot simply multiply its current way of producing protein to meet future demand.</p>
+      </div>
+      <div class="card" id="t5-mc"><div class="q-item" id="t5-mc-1">
+          <p>1. According to the article, what tends to happen as people’s incomes rise?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-1" data-correct="false"> A. They eat less meat.</label><label><input type="radio" value="1" name="t5-mc-1" data-correct="true"> B. Demand for animal products tends to increase.</label><label><input type="radio" value="2" name="t5-mc-1" data-correct="false"> C. They buy more plant-based food.</label><label><input type="radio" value="3" name="t5-mc-1" data-correct="false"> D. They spend less on food.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-2">
+          <p>2. Why do animals convert feed into meat inefficiently?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-2" data-correct="false"> A. Their feed is of poor quality.</label><label><input type="radio" value="1" name="t5-mc-2" data-correct="true"> B. Most of the energy is used to keep the animal alive and build inedible parts.</label><label><input type="radio" value="2" name="t5-mc-2" data-correct="false"> C. Farmers give them too little food.</label><label><input type="radio" value="3" name="t5-mc-2" data-correct="false"> D. Meat loses energy during cooking.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-3">
+          <p>3. Which animals are described as converting feed least efficiently?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-3" data-correct="false"> A. chickens</label><label><input type="radio" value="1" name="t5-mc-3" data-correct="false"> B. farmed fish</label><label><input type="radio" value="2" name="t5-mc-3" data-correct="false"> C. pigs</label><label><input type="radio" value="3" name="t5-mc-3" data-correct="true"> D. beef cattle</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-4">
+          <p>4. What is the writer’s view of livestock in a sustainable food system?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-4" data-correct="false"> A. It should be eliminated entirely.</label><label><input type="radio" value="1" name="t5-mc-4" data-correct="true"> B. It can play a role; the question is how much and how it is raised.</label><label><input type="radio" value="2" name="t5-mc-4" data-correct="false"> C. It is the most sustainable source of protein.</label><label><input type="radio" value="3" name="t5-mc-4" data-correct="false"> D. It matters only in poor countries.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-5">
+          <p>5. What difficulty is mentioned regarding meat grown from cells?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-5" data-correct="false"> A. It tastes unpleasant.</label><label><input type="radio" value="1" name="t5-mc-5" data-correct="true"> B. It is hard to produce cheaply on a large scale.</label><label><input type="radio" value="2" name="t5-mc-5" data-correct="false"> C. It is illegal everywhere.</label><label><input type="radio" value="3" name="t5-mc-5" data-correct="false"> D. It contains no protein.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-mc', 't5-mc-score')">Check answers</button>
+          <span id="t5-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t5-tf"><div class="q-item" id="t5-tf-1">
+          <p>1. Methane has a stronger short-term warming effect than carbon dioxide.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-1" data-correct="true"> True</label><label><input type="radio" value="1" name="t5-tf-1" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-2">
+          <p>2. Grazing animals can produce food from land that cannot be used for crops.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-2" data-correct="true"> True</label><label><input type="radio" value="1" name="t5-tf-2" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-3">
+          <p>3. The writer believes plant-based meat will solve the protein problem on its own.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-3" data-correct="false"> True</label><label><input type="radio" value="1" name="t5-tf-3" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-4">
+          <p>4. Many people find the idea of eating insects difficult to accept.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-4" data-correct="true"> True</label><label><input type="radio" value="1" name="t5-tf-4" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-tf', 't5-tf-score')">Check answers</button>
+          <span id="t5-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 130 words</b>. Identify the central claim, the strongest supporting evidence and any limitation the writer acknowledges, then add a sentence of critical evaluation. Do not copy any phrase of four or more words.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 130 words):</p><textarea class="no-check mini-answer" id="t5-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:200px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t5-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t5-sum-ans"><p>The article explains why the way we produce protein, and particularly meat, has become central to debates about the future of food. Livestock farming uses a very large share of the world’s agricultural land, both for grazing and for growing animal feed, and it is a significant source of greenhouse gases, especially methane from cattle. The underlying problem is efficiency: animals convert only a fraction of the energy and protein in their feed into edible meat. As incomes rise around the world, demand for meat is expected to keep growing. The writer outlines several responses — eating less meat, improving farming practices, and developing alternatives such as plant-based products, cultivated meat and insects — while stressing that none is a complete solution. I found the explanation of feed conversion especially clear. (≈ 135 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t5-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without your notes — speak for <b>at least 60 seconds</b> (aim for 90), and finish with a critical comment.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central claim is that…”</li><li>“The most compelling evidence is…”</li><li>“The writer concedes, however, that…”</li><li>“What the argument overlooks, I think, is…”</li><li>“On balance, I find it…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 14</div>
+      <h2>Reading Section 3 — The Case for Eating Insects — and Its Limits</h2>
+      <p class="task-sub">Suggested time: 20 minutes. An argumentative Section 3 passage. Three IELTS question types: <b>YES / NO / NOT GIVEN</b>, <b>multiple choice</b> and <b>matching sentence endings</b>. Questions 15–28. Passage on the left, questions on the right. Answers are checked when you press <b>Next</b>.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li>Section 3 writers <b>report</b> others’ claims and then <b>evaluate</b> them. Track the writer’s voice: <i>I would suggest, I am sceptical, in my view</i> — and the concession markers <i>None of this makes…, Nor should we…</i></li>
+  <li><b>Multiple choice on purpose/attitude:</b> ask “why does the writer mention this?” — the answer is a function (to illustrate, to challenge, to concede), not a fact.</li>
+  <li><b>Sentence endings:</b> eliminate endings that are true in the passage but attached to the wrong subject.</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Case for Eating Insects — and Its Limits<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Insects are hailed as the protein of the future. A closer look suggests they may matter most where few people expect.</small></h3>
+            <p class="article-meta">Reading Passage 3 · Food and environment · 698 words</p>
+            <p><span class="para-label">A</span>For a large part of the world’s population, the suggestion that insects should be eaten is not a provocative idea but a description of an ordinary meal. A widely cited report by the United Nations’ Food and Agriculture Organization estimated that insects form part of the traditional diet of around two billion people, and that well over a thousand species are eaten in one place or another — from grasshoppers in Mexico and Thailand to caterpillars in parts of southern Africa. It is chiefly in Europe and North America, and in many other places where the habit has died out, that the idea provokes disgust. That disgust, I would suggest, tells us more about culture than about food: few Europeans hesitate to eat prawns, which are, biologically speaking, not so very different.</p><p><span class="para-label">B</span>The environmental argument for insects rests above all on efficiency. Because insects are cold-blooded, they do not spend energy keeping their bodies warm, and so they convert feed into body mass far more efficiently than cattle — by most estimates several times more efficiently. A much greater proportion of an insect is edible, too: almost the whole of a cricket can be eaten, compared with well under half of a cow. Insect farming also appears to require far less land and water, and to produce far fewer greenhouse gases, per kilogram of protein than conventional livestock. Nutritionally, many species are rich not only in protein but in fats, fibre and minerals such as iron and zinc.</p><p><span class="para-label">C</span>These figures have inspired an enthusiastic literature predicting that insects will soon take their place alongside beef and chicken in Western supermarkets. I am sceptical. Regulators in the European Union have now approved several insect species for human consumption, and products ranging from cricket-flour pasta to mealworm burgers have appeared. Yet sales have remained modest, and a number of start-ups that set out to persuade Western consumers have struggled. Disgust is not easily overcome by statistics, and the most successful products tend to be those in which the insect is ground into an invisible powder — which rather undermines the claim that consumers have embraced insects as food.</p><p><span class="para-label">D</span>There are also legitimate concerns that enthusiasts sometimes pass over too quickly. Some people who are allergic to shellfish may also react to insects, which share certain proteins, so clear labelling is essential. The efficiency figures, moreover, depend heavily on what the insects are fed: insects raised on the same grain that could feed chickens offer a much smaller advantage than those raised on waste. And the question of whether insects can suffer, though uncertain, deserves to be taken seriously by an industry that may one day farm them in the trillions.</p><p><span class="para-label">E</span>Where insects may matter most, in my view, is not on the human plate at all, but in the feed trough. A large share of the soya and fishmeal fed to farmed fish and poultry is produced at considerable environmental cost — soya plantations are associated with deforestation, and fishmeal depends on catching wild fish. Certain insects, notably the larvae of the black soldier fly, can be raised on food waste and agricultural by-products and then processed into a high-protein feed. Fish and chickens, unlike Western consumers, need no persuading: insects are part of their natural diet. Converting waste into feed in this way addresses two problems at once.</p><p><span class="para-label">F</span>None of this makes the case for human consumption worthless. In regions where insects are already eaten, supporting traditional harvesting and developing safe, small-scale farming could improve nutrition and incomes considerably, and that, rather than winning over sceptical Europeans, may be the more important goal. Nor should we assume that Western tastes will never change: sushi was once regarded with suspicion in many countries where it is now commonplace.</p><p><span class="para-label">G</span>The danger lies in expecting too much. Insects will not, on their own, solve the problems created by the world’s growing appetite for meat; no single food can. But as a feed that turns waste into protein, as a traditional food worth protecting, and perhaps eventually as an ingredient in Western diets, they deserve a far more serious place in the conversation than the jokes and dares that have usually accompanied them.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 15–20</p><p class="qg-instr">Do the following statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-15">
+          <p>15. Western disgust towards eating insects is mainly a matter of cultural habit.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-15" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-15" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-15" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-16">
+          <p>16. Insects will soon become as common as chicken in Western supermarkets.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-16" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-16" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-16" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-17">
+          <p>17. The popularity of insect powders shows that Western consumers have accepted insects as food.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-17" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-17" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-17" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-18">
+          <p>18. Insect farms should be required to use only organic feed.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-18" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-18" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-18" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-19">
+          <p>19. Whether insects can suffer is a question the industry should consider.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-19" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-19" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-19" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-20">
+          <p>20. Supporting insect eating where it is already traditional may be more valuable than persuading Europeans.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-20" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-20" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-20" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 21–24</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-21">
+          <p>21. Why does the writer mention prawns in the first paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-21" data-correct="false"> A. to suggest that prawns should replace insects</label><label><input type="radio" value="1" name="t6-mc-21" data-correct="true"> B. to show an inconsistency in European attitudes</label><label><input type="radio" value="2" name="t6-mc-21" data-correct="false"> C. to give an example of an insect eaten in Europe</label><label><input type="radio" value="3" name="t6-mc-21" data-correct="false"> D. to argue that shellfish are unhealthy</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-22">
+          <p>22. According to the second paragraph, why are insects efficient at converting feed?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-22" data-correct="false"> A. They eat very little.</label><label><input type="radio" value="1" name="t6-mc-22" data-correct="true"> B. They do not use energy to maintain their body temperature.</label><label><input type="radio" value="2" name="t6-mc-22" data-correct="false"> C. They grow in large groups.</label><label><input type="radio" value="3" name="t6-mc-22" data-correct="false"> D. They are raised on waste.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-23">
+          <p>23. What point does the writer make about the efficiency figures in the fourth paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-23" data-correct="false"> A. They have been exaggerated by the industry.</label><label><input type="radio" value="1" name="t6-mc-23" data-correct="true"> B. They depend on whether insects are fed on waste or on grain.</label><label><input type="radio" value="2" name="t6-mc-23" data-correct="false"> C. They apply only to crickets.</label><label><input type="radio" value="3" name="t6-mc-23" data-correct="false"> D. They are lower than those for chickens.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-24">
+          <p>24. Why does the writer refer to sushi in the sixth paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-24" data-correct="true"> A. to show that food tastes can change over time</label><label><input type="radio" value="1" name="t6-mc-24" data-correct="false"> B. to compare the nutritional value of fish and insects</label><label><input type="radio" value="2" name="t6-mc-24" data-correct="false"> C. to illustrate the popularity of Japanese food</label><label><input type="radio" value="3" name="t6-mc-24" data-correct="false"> D. to argue that raw food is risky</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 25–28</p><p class="qg-instr">Complete each sentence with the correct ending, <b>A–G</b>, below.</p></div>
+<div class="card"><p class="prompt-label">Endings</p><p style="line-height:1.85; margin:0;">
+<b>A</b>&nbsp; are associated with the loss of forests.<br>
+<b>B</b>&nbsp; may also react to certain insects.<br>
+<b>C</b>&nbsp; can be fed on food waste and turned into animal feed.<br>
+<b>D</b>&nbsp; have generally been successful in Western markets.<br>
+<b>E</b>&nbsp; have found it difficult to persuade Western consumers.<br>
+<b>F</b>&nbsp; require more land than conventional livestock.<br>
+<b>G</b>&nbsp; naturally include insects in their diet.</p></div>
+      <div class="card" id="t6-se"><div class="sel-row"><select class="select" id="t6-se-25" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select><span><b>25.</b> Several companies aiming to sell insect food in the West</span></div><div class="sel-row"><select class="select" id="t6-se-26" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select><span><b>26.</b> Some people with a shellfish allergy</span></div><div class="sel-row"><select class="select" id="t6-se-27" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select><span><b>27.</b> Soya plantations</span></div><div class="sel-row"><select class="select" id="t6-se-28" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select><span><b>28.</b> The larvae of the black soldier fly</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-se', 't6-se-score')">Check answers</button>
+          <span id="t6-se-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 14</div>
+      <h2>Reading Section 3 — Answer Analysis</h2>
+      <p class="task-sub">This passage is a model of Band 9 argumentation: report → evaluate → concede → conclude. Open each answer and notice how the questions target the writer’s <b>stance</b>, not just the facts.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Case for Eating Insects — and Its Limits</summary>
+        <p><span class="para-label">A</span>For a large part of the world’s population, the suggestion that insects should be eaten is not a provocative idea but a description of an ordinary meal. A widely cited report by the United Nations’ Food and Agriculture Organization estimated that insects form part of the traditional diet of around two billion people, and that well over a thousand species are eaten in one place or another — from grasshoppers in Mexico and Thailand to caterpillars in parts of southern Africa. It is chiefly in Europe and North America, and in many other places where the habit has died out, that the idea provokes disgust. That disgust, I would suggest, tells us more about culture than about food: few Europeans hesitate to eat prawns, which are, biologically speaking, not so very different.</p><p><span class="para-label">B</span>The environmental argument for insects rests above all on efficiency. Because insects are cold-blooded, they do not spend energy keeping their bodies warm, and so they convert feed into body mass far more efficiently than cattle — by most estimates several times more efficiently. A much greater proportion of an insect is edible, too: almost the whole of a cricket can be eaten, compared with well under half of a cow. Insect farming also appears to require far less land and water, and to produce far fewer greenhouse gases, per kilogram of protein than conventional livestock. Nutritionally, many species are rich not only in protein but in fats, fibre and minerals such as iron and zinc.</p><p><span class="para-label">C</span>These figures have inspired an enthusiastic literature predicting that insects will soon take their place alongside beef and chicken in Western supermarkets. I am sceptical. Regulators in the European Union have now approved several insect species for human consumption, and products ranging from cricket-flour pasta to mealworm burgers have appeared. Yet sales have remained modest, and a number of start-ups that set out to persuade Western consumers have struggled. Disgust is not easily overcome by statistics, and the most successful products tend to be those in which the insect is ground into an invisible powder — which rather undermines the claim that consumers have embraced insects as food.</p><p><span class="para-label">D</span>There are also legitimate concerns that enthusiasts sometimes pass over too quickly. Some people who are allergic to shellfish may also react to insects, which share certain proteins, so clear labelling is essential. The efficiency figures, moreover, depend heavily on what the insects are fed: insects raised on the same grain that could feed chickens offer a much smaller advantage than those raised on waste. And the question of whether insects can suffer, though uncertain, deserves to be taken seriously by an industry that may one day farm them in the trillions.</p><p><span class="para-label">E</span>Where insects may matter most, in my view, is not on the human plate at all, but in the feed trough. A large share of the soya and fishmeal fed to farmed fish and poultry is produced at considerable environmental cost — soya plantations are associated with deforestation, and fishmeal depends on catching wild fish. Certain insects, notably the larvae of the black soldier fly, can be raised on food waste and agricultural by-products and then processed into a high-protein feed. Fish and chickens, unlike Western consumers, need no persuading: insects are part of their natural diet. Converting waste into feed in this way addresses two problems at once.</p><p><span class="para-label">F</span>None of this makes the case for human consumption worthless. In regions where insects are already eaten, supporting traditional harvesting and developing safe, small-scale farming could improve nutrition and incomes considerably, and that, rather than winning over sceptical Europeans, may be the more important goal. Nor should we assume that Western tastes will never change: sushi was once regarded with suspicion in many countries where it is now commonplace.</p><p><span class="para-label">G</span>The danger lies in expecting too much. Insects will not, on their own, solve the problems created by the world’s growing appetite for meat; no single food can. But as a feed that turns waste into protein, as a traditional food worth protecting, and perhaps eventually as an ingredient in Western diets, they deserve a far more serious place in the conversation than the jokes and dares that have usually accompanied them.</p>
+      </details>
+      <div class="card an-card"><p class="an-intro">Q16 and Q17 are both NO, but in different ways: Q16 contradicts a prediction the writer reports and rejects; Q17 contradicts an inference the writer explicitly undermines.</p><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">YES</span><span class="an-where">Para A, last sentence</span></summary><div class="an-body"><p><span class="ev">That disgust, I would suggest, tells us more about culture than about food</span>.</p><p><i>Mainly a matter of cultural habit</i> ↔ <i>more about culture than about food</i>. The hedge <i>I would suggest</i> still expresses the writer’s view.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">NO</span><span class="an-where">Para C</span></summary><div class="an-body"><p>The enthusiasts predict this; the writer replies <span class="ev">I am sceptical</span> and gives evidence (<span class="ev">sales have remained modest</span>).</p><p><span class="trap">Trap:</span> the first sentence of Para C reports the prediction — reading only that sentence leads to YES.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">NO</span><span class="an-where">Para C, last sentence</span></summary><div class="an-body"><p><span class="ev">which rather undermines the claim that consumers have embraced insects as food</span>. The writer argues the opposite: powders <b>hide</b> the insect.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para D</span></summary><div class="an-body"><p>The writer says efficiency <span class="ev">depend[s] heavily on what the insects are fed</span> and favours waste, but never mentions <b>organic</b> feed or any legal requirement.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">YES</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">the question of whether insects can suffer, though uncertain, deserves to be taken seriously by an industry…</span>. <i>Should consider</i> = <i>deserves to be taken seriously</i>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">that, rather than winning over sceptical Europeans, may be the more important goal</span>. <i>May be more valuable</i> ↔ <i>may be the more important goal</i>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">B</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">few Europeans hesitate to eat prawns, which are, biologically speaking, not so very different</span>. Europeans eat prawns but reject insects → an <b>inconsistency</b>.</p><p><span class="trap">Trap:</span> C: prawns are not insects.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Because insects are cold-blooded, they do not spend energy keeping their bodies warm</span>.</p><p><span class="trap">Trap:</span> D: waste-feeding is discussed later (Para E), and it concerns the environmental benefit, not why conversion is efficient.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">The efficiency figures, moreover, depend heavily on what the insects are fed: insects raised on the same grain … offer a much smaller advantage than those raised on waste</span>.</p><p><span class="trap">Trap:</span> A: the writer qualifies the figures but never says they were <b>exaggerated</b>.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">A</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">sushi was once regarded with suspicion in many countries where it is now commonplace</span> — introduced by <span class="ev">Nor should we assume that Western tastes will never change</span>.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">E</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">a number of start-ups that set out to persuade Western consumers have struggled</span>. <i>Struggled</i> = <i>found it difficult</i>.</p><p><span class="trap">Trap:</span> D says the opposite.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Some people who are allergic to shellfish may also react to insects</span>.</p></div></details><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">A</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">soya plantations are associated with deforestation</span>. <i>Loss of forests</i> = <i>deforestation</i>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">C</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">the larvae of the black soldier fly, can be raised on food waste … and then processed into a high-protein feed</span>.</p><p><span class="trap">Trap:</span> G (natural diet) is true of <b>fish and chickens</b>, not of the larvae — right idea, wrong subject.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Stance language.</strong> Match each phrase from the passage to the function it performs.</p>
+      <div class="card" id="t7-st"><div class="sel-row"><select class="select" id="t7-st-1" data-answer="tentative opinion"><option value="">—</option><option value="tentative opinion">tentative opinion</option><option value="disagreeing with a claim">disagreeing with a claim</option><option value="criticising the other side">criticising the other side</option><option value="concession">concession</option><option value="warning / qualification">warning / qualification</option></select><span><b>1.</b> “That disgust, I would suggest, …”</span></div><div class="sel-row"><select class="select" id="t7-st-2" data-answer="disagreeing with a claim"><option value="">—</option><option value="tentative opinion">tentative opinion</option><option value="disagreeing with a claim">disagreeing with a claim</option><option value="criticising the other side">criticising the other side</option><option value="concession">concession</option><option value="warning / qualification">warning / qualification</option></select><span><b>2.</b> “I am sceptical.”</span></div><div class="sel-row"><select class="select" id="t7-st-3" data-answer="criticising the other side"><option value="">—</option><option value="tentative opinion">tentative opinion</option><option value="disagreeing with a claim">disagreeing with a claim</option><option value="criticising the other side">criticising the other side</option><option value="concession">concession</option><option value="warning / qualification">warning / qualification</option></select><span><b>3.</b> “There are also legitimate concerns that enthusiasts sometimes pass over too quickly.”</span></div><div class="sel-row"><select class="select" id="t7-st-4" data-answer="concession"><option value="">—</option><option value="tentative opinion">tentative opinion</option><option value="disagreeing with a claim">disagreeing with a claim</option><option value="criticising the other side">criticising the other side</option><option value="concession">concession</option><option value="warning / qualification">warning / qualification</option></select><span><b>4.</b> “None of this makes the case for human consumption worthless.”</span></div><div class="sel-row"><select class="select" id="t7-st-5" data-answer="warning / qualification"><option value="">—</option><option value="tentative opinion">tentative opinion</option><option value="disagreeing with a claim">disagreeing with a claim</option><option value="criticising the other side">criticising the other side</option><option value="concession">concession</option><option value="warning / qualification">warning / qualification</option></select><span><b>5.</b> “The danger lies in expecting too much.”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-st', 't7-st-score')">Check answers</button>
+          <span id="t7-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 14</div>
+      <h2>Reading Skills — Reference, Cohesion and Implication</h2>
+      <p class="task-sub">At Band 8+, many questions depend on following <b>reference words</b> (<i>this, these, that, which, such</i>) across sentences, and on understanding what the writer <b>implies</b>. All items below come from today’s two passages.</p>
+      <p style="margin-top:26px;"><strong>Part 1 — What does the underlined word refer to?</strong></p>
+      <div class="card" id="t8-ref"><div class="q-item" id="t8-ref-1">
+          <p>1. Vertical farms, Para D: “<u>These</u> plants grow quickly, are mostly edible…”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-ref-1" data-correct="false"> A. staple crops</label><label><input type="radio" value="1" name="t8-ref-1" data-correct="true"> B. leafy greens and herbs</label><label><input type="radio" value="2" name="t8-ref-1" data-correct="false"> C. all crops grown indoors</label><label><input type="radio" value="3" name="t8-ref-1" data-correct="false"> D. wheat, rice and maize</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-ref-2">
+          <p>2. Vertical farms, Para E: “When energy prices rose sharply…, the consequences were severe” — whose consequences?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-ref-2" data-correct="true"> A. the consequences of rising energy prices for vertical farm companies</label><label><input type="radio" value="1" name="t8-ref-2" data-correct="false"> B. the consequences of LED technology</label><label><input type="radio" value="2" name="t8-ref-2" data-correct="false"> C. the consequences for consumers in the Middle East</label><label><input type="radio" value="3" name="t8-ref-2" data-correct="false"> D. the consequences of shorter transport</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-ref-3">
+          <p>3. Insects, Para C: “…<u>which</u> rather undermines the claim…” — what undermines the claim?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-ref-3" data-correct="false"> A. the approval of insects by regulators</label><label><input type="radio" value="1" name="t8-ref-3" data-correct="true"> B. the fact that the most successful products hide the insect in a powder</label><label><input type="radio" value="2" name="t8-ref-3" data-correct="false"> C. the struggle of start-ups</label><label><input type="radio" value="3" name="t8-ref-3" data-correct="false"> D. the price of mealworm burgers</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-ref-4">
+          <p>4. Insects, Para E: “Converting waste into feed in this way addresses two problems at once.” Which two?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-ref-4" data-correct="false"> A. allergies and animal welfare</label><label><input type="radio" value="1" name="t8-ref-4" data-correct="true"> B. food waste and the environmental cost of soya and fishmeal</label><label><input type="radio" value="2" name="t8-ref-4" data-correct="false"> C. Western disgust and high prices</label><label><input type="radio" value="3" name="t8-ref-4" data-correct="false"> D. deforestation and overfishing only</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-ref-5">
+          <p>5. Insects, Para F: “…and <u>that</u>, rather than winning over sceptical Europeans, may be the more important goal.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-ref-5" data-correct="true"> A. improving nutrition and incomes where insects are already eaten</label><label><input type="radio" value="1" name="t8-ref-5" data-correct="false"> B. changing Western tastes</label><label><input type="radio" value="2" name="t8-ref-5" data-correct="false"> C. producing sushi</label><label><input type="radio" value="3" name="t8-ref-5" data-correct="false"> D. farming insects in the trillions</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-ref', 't8-ref-score')">Check answers</button>
+          <span id="t8-ref-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Implication.</strong> Which statement can be <b>inferred</b> from the passages? (Only one option is a valid inference; the others go beyond the text or contradict it.)</p>
+      <div class="card" id="t8-inf"><div class="q-item" id="t8-inf-1">
+          <p>1. From the vertical-farm passage:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-inf-1" data-correct="false"> Vertical farms will soon replace field agriculture.</label><label><input type="radio" value="1" name="t8-inf-1" data-correct="true"> The commercial success of a vertical farm depends heavily on the cost of electricity.</label><label><input type="radio" value="2" name="t8-inf-1" data-correct="false"> LED lighting has stopped improving.</label><label><input type="radio" value="3" name="t8-inf-1" data-correct="false"> Vertical farms have failed everywhere.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-inf-2">
+          <p>2. From the vertical-farm passage:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-inf-2" data-correct="true"> Early supporters of vertical farming overestimated what it could achieve.</label><label><input type="radio" value="1" name="t8-inf-2" data-correct="false"> The professor who proposed the idea opposed commercial farming.</label><label><input type="radio" value="2" name="t8-inf-2" data-correct="false"> Most vertical farms grow grain.</label><label><input type="radio" value="3" name="t8-inf-2" data-correct="false"> Vertical farms produce more emissions than any other farm.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-inf-3">
+          <p>3. From the insects passage:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-inf-3" data-correct="false"> The writer has personally eaten insects.</label><label><input type="radio" value="1" name="t8-inf-3" data-correct="true"> Insects raised on waste are more environmentally beneficial than those raised on grain.</label><label><input type="radio" value="2" name="t8-inf-3" data-correct="false"> All insect start-ups have closed.</label><label><input type="radio" value="3" name="t8-inf-3" data-correct="false"> Shellfish allergies are caused by insects.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-inf', 't8-inf-score')">Check answers</button>
+          <span id="t8-inf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 3 — Linking words.</strong> Complete each sentence with the linking word from the passages that fits. Choose from: <i>moreover · yet · whereas · notably · unless · rather than</i>.</p>
+      <div class="card" id="t8-link" style="line-height:2.5;"><p>1. A field of wheat receives its sunlight free of charge, <input type="text" class="text-answer" id="t8-1" data-correct="whereas" autocomplete="off" style="width:120px;"> an indoor farm must pay for every photon.</p><p>2. Emissions from lighting may outweigh savings from transport <input type="text" class="text-answer" id="t8-2" data-correct="unless" autocomplete="off" style="width:120px;"> the electricity comes from low-carbon sources.</p><p>3. The figures have inspired great enthusiasm. <input type="text" class="text-answer" id="t8-3" data-correct="Yet" autocomplete="off" style="width:120px;"> sales have remained modest.</p><p>4. Certain insects, <input type="text" class="text-answer" id="t8-4" data-correct="notably" autocomplete="off" style="width:120px;"> the black soldier fly, can be raised on waste.</p><p>5. The efficiency figures, <input type="text" class="text-answer" id="t8-5" data-correct="moreover" autocomplete="off" style="width:120px;">, depend heavily on what the insects are fed.</p><p>6. Water is recirculated <input type="text" class="text-answer" id="t8-6" data-correct="rather than" autocomplete="off" style="width:120px;"> lost to evaporation.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-link', 't8-link-score')">Check answers</button>
+          <span id="t8-link-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 14</div>
+      <h2>Lead-in 3 — Video: Why Not Eat Insects?</h2>
+      <p class="task-sub">Watch this TED talk by Dutch entomologist Marcel Dicke (about 16 minutes). He argues, with plenty of humour, that insects deserve a place on our plates. Watch without subtitles. Then compare his argument with the more cautious writer of Reading Section 3.</p>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="position:relative; padding-bottom:56.25%; height:0;">
+          <iframe src="https://embed.ted.com/talks/marcel_dicke_why_not_eat_insects" title="Marcel Dicke — Why not eat insects?" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe>
+        </div></div>
+      <div class="card" id="t9-mc"><div class="q-item" id="t9-mc-1">
+          <p>1. What is Dicke’s profession?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-1" data-correct="false"> A. a chef</label><label><input type="radio" value="1" name="t9-mc-1" data-correct="true"> B. an entomologist — a scientist who studies insects</label><label><input type="radio" value="2" name="t9-mc-1" data-correct="false"> C. a farmer</label><label><input type="radio" value="3" name="t9-mc-1" data-correct="false"> D. an economist</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-2">
+          <p>2. What point does he make about the number of insects?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-2" data-correct="false"> A. They are becoming extinct.</label><label><input type="radio" value="1" name="t9-mc-2" data-correct="true"> B. They are by far the most numerous animals on Earth.</label><label><input type="radio" value="2" name="t9-mc-2" data-correct="false"> C. There are fewer insects than mammals.</label><label><input type="radio" value="3" name="t9-mc-2" data-correct="false"> D. Most insects live in Europe.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-3">
+          <p>3. How does he present the Western reaction of disgust?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-3" data-correct="false"> A. as a natural, universal instinct</label><label><input type="radio" value="1" name="t9-mc-3" data-correct="true"> B. as a cultural habit, since insects are normal food in many places</label><label><input type="radio" value="2" name="t9-mc-3" data-correct="false"> C. as a sensible health precaution</label><label><input type="radio" value="3" name="t9-mc-3" data-correct="false"> D. as a result of religious rules</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-4">
+          <p>4. What is his main environmental argument?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-4" data-correct="false"> A. Insects need no food at all.</label><label><input type="radio" value="1" name="t9-mc-4" data-correct="true"> B. Insects convert feed into edible protein far more efficiently than cattle.</label><label><input type="radio" value="2" name="t9-mc-4" data-correct="false"> C. Insects can be grown in space.</label><label><input type="radio" value="3" name="t9-mc-4" data-correct="false"> D. Insects improve soil quality.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-5">
+          <p>5. What does he say about people in Western countries who think they never eat insects?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-5" data-correct="false"> A. They are right.</label><label><input type="radio" value="1" name="t9-mc-5" data-correct="true"> B. They already eat insect parts unknowingly in processed foods.</label><label><input type="radio" value="2" name="t9-mc-5" data-correct="false"> C. They eat insects only in restaurants.</label><label><input type="radio" value="3" name="t9-mc-5" data-correct="false"> D. They are allergic to insects.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-6">
+          <p>6. How does his position compare with the writer of Reading Section 3?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-6" data-correct="true"> A. Dicke is more enthusiastic about insects as human food; the writer sees their main role in animal feed.</label><label><input type="radio" value="1" name="t9-mc-6" data-correct="false"> B. Both oppose eating insects.</label><label><input type="radio" value="2" name="t9-mc-6" data-correct="false"> C. The writer is more enthusiastic than Dicke.</label><label><input type="radio" value="3" name="t9-mc-6" data-correct="false"> D. They agree in every respect.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-mc', 't9-mc-score')">Check answers</button>
+          <span id="t9-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the talk in your own words — <b>at least 130 words</b>. Identify the central claim, the strongest supporting evidence and any limitation the writer acknowledges, then add a sentence of critical evaluation. Do not copy any phrase of four or more words.</p>
+      <div class="card"><p class="mini-q">Your summary of the talk (at least 130 words):</p><textarea class="no-check mini-answer" id="t9-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:200px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-sum-ans"><p>In this talk, Dutch entomologist Marcel Dicke makes the case for eating insects. He points out that insects are by far the most numerous animals on the planet and are already eaten as normal food, even as delicacies, in many parts of the world, so Western disgust is a cultural habit rather than a natural reaction. He argues that insects are far more efficient than cattle at converting feed into edible protein, and that this matters because global demand for meat is rising while land is limited. He also notes, with some humour, that people in Western countries already eat insect parts without knowing it in processed foods. His conclusion is that insects deserve a place on our plates. The argument is lively, though he says less about practical obstacles such as cost and regulation. (≈ 140 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the talk <b>aloud</b> without your notes — speak for <b>at least 60 seconds</b> (aim for 90), and finish with a critical comment.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central claim is that…”</li><li>“The most compelling evidence is…”</li><li>“The writer concedes, however, that…”</li><li>“What the argument overlooks, I think, is…”</li><li>“On balance, I find it…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 14</div>
+      <h2>Vocabulary — Academic Collocations and Word Families</h2>
+      <p class="task-sub">Precise collocation and word-form control separate Band 7 from Band 8+. This task draws on today’s texts but practises language you can use across Writing Task 2 topics.</p>
+      <p style="margin-top:26px;"><strong>Part 1 — Adjective + noun.</strong> Choose the adjective that collocates most naturally.</p>
+      <div class="card" id="t10-an"><div class="q-item" id="t10-an-1">
+          <p>1. a ______ challenge</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-an-1" data-correct="true"> formidable</label><label><input type="radio" value="1" name="t10-an-1" data-correct="false"> tall</label><label><input type="radio" value="2" name="t10-an-1" data-correct="false"> wide</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-an-2">
+          <p>2. ______ evidence</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-an-2" data-correct="true"> compelling</label><label><input type="radio" value="1" name="t10-an-2" data-correct="false"> heavy</label><label><input type="radio" value="2" name="t10-an-2" data-correct="false"> deep</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-an-3">
+          <p>3. a ______ share of emissions</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-an-3" data-correct="true"> modest</label><label><input type="radio" value="1" name="t10-an-3" data-correct="false"> humble</label><label><input type="radio" value="2" name="t10-an-3" data-correct="false"> short</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-an-4">
+          <p>4. ______ concerns</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-an-4" data-correct="true"> legitimate</label><label><input type="radio" value="1" name="t10-an-4" data-correct="false"> lawful</label><label><input type="radio" value="2" name="t10-an-4" data-correct="false"> licensed</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-an-5">
+          <p>5. an ______ literature</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-an-5" data-correct="true"> enthusiastic</label><label><input type="radio" value="1" name="t10-an-5" data-correct="false"> eager</label><label><input type="radio" value="2" name="t10-an-5" data-correct="false"> excited</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-an-6">
+          <p>6. ______ expensive</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-an-6" data-correct="true"> prohibitively</label><label><input type="radio" value="1" name="t10-an-6" data-correct="false"> refusingly</label><label><input type="radio" value="2" name="t10-an-6" data-correct="false"> denyingly</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-an-7">
+          <p>7. a ______ assessment</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-an-7" data-correct="true"> realistic</label><label><input type="radio" value="1" name="t10-an-7" data-correct="false"> real</label><label><input type="radio" value="2" name="t10-an-7" data-correct="false"> really</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-an-8">
+          <p>8. ______ growth in demand</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-an-8" data-correct="true"> sustained</label><label><input type="radio" value="1" name="t10-an-8" data-correct="false"> kept</label><label><input type="radio" value="2" name="t10-an-8" data-correct="false"> held</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-an', 't10-an-score')">Check answers</button>
+          <span id="t10-an-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Word families.</strong> Complete each sentence with the correct form of the word in brackets.</p>
+      <div class="card" id="t10-wf" style="line-height:2.5;"><p>1. The <input type="text" class="text-answer" id="t10-1" data-correct="viability" autocomplete="off" style="width:140px;"> of vertical farming depends on energy prices. (viable)</p><p>2. Crop <input type="text" class="text-answer" id="t10-2" data-correct="diversification" autocomplete="off" style="width:160px;"> reduces the risk of a total harvest failure. (diverse)</p><p>3. Insects are a highly <input type="text" class="text-answer" id="t10-3" data-correct="nutritious" autocomplete="off" style="width:140px;"> food. (nutrition)</p><p>4. The <input type="text" class="text-answer" id="t10-4" data-correct="scarcity" autocomplete="off" style="width:140px;"> of fresh water limits farming in arid regions. (scarce)</p><p>5. Food prices are <input type="text" class="text-answer" id="t10-5" data-correct="notoriously" autocomplete="off" style="width:140px;"> sensitive to energy costs. (notorious)</p><p>6. Supply chains have proved <input type="text" class="text-answer" id="t10-6" data-correct="remarkably" autocomplete="off" style="width:140px;"> reliable. (remark)</p><p>7. Rising consumption has <input type="text" class="text-answer" id="t10-7" data-correct="intensified" autocomplete="off" style="width:140px;"> pressure on land. (intense)</p><p>8. The <input type="text" class="text-answer" id="t10-8" data-correct="proliferation" autocomplete="off" style="width:140px;"> of start-ups slowed when investment dried up. (proliferate)</p><p>9. Many consumers remain <input type="text" class="text-answer" id="t10-9" data-correct="sceptical/skeptical" autocomplete="off" style="width:140px;"> about insect-based products. (sceptic)</p><p>10. Overfishing has <input type="text" class="text-answer" id="t10-10" data-correct="depleted" autocomplete="off" style="width:140px;"> wild fish stocks. (deplete)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-wf', 't10-wf-score')">Check answers</button>
+          <span id="t10-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 3 — Paraphrase.</strong> Rewrite each phrase using the word given, so that it means the same. Write <b>one word</b> only.</p>
+      <div class="card" id="t10-pp" style="line-height:2.4;"><p>1. so expensive that it cannot be done → <input type="text" class="text-answer" id="t10-p1" data-correct="prohibitively" autocomplete="off" style="width:140px;"> expensive</p><p>2. food that goes bad quickly → <input type="text" class="text-answer" id="t10-p2" data-correct="perishable" autocomplete="off" style="width:140px;"> food</p><p>3. land on which crops can be grown → <input type="text" class="text-answer" id="t10-p3" data-correct="arable" autocomplete="off" style="width:140px;"> land</p><p>4. the basic food of a population → a <input type="text" class="text-answer" id="t10-p4" data-correct="staple" autocomplete="off" style="width:140px;"> food</p><p>5. able to recover quickly from disruption → <input type="text" class="text-answer" id="t10-p5" data-correct="resilient" autocomplete="off" style="width:140px;"></p><p>6. the amount produced per hectare → crop <input type="text" class="text-answer" id="t10-p6" data-correct="yield/yields" autocomplete="off" style="width:140px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-pp', 't10-pp-score')">Check answers</button>
+          <span id="t10-pp-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 14</div>
+      <h2>Speaking Part 2 — A Food Tradition</h2>
+      <p class="task-sub">You have <b>1 minute</b> to prepare and must speak for the full <b>2 minutes</b>. Read the Band 8.5 model, notice its range of structures (cleft sentences, participle clauses, inversion), then do the task.</p>
+      <div class="card task-prompt"><p class="prompt-label">Part 2 task card</p><p><b>Describe a meal or food tradition that is important in your culture.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what it is<br>&nbsp;&nbsp;when and where it is eaten or practised<br>&nbsp;&nbsp;how it is prepared<br>and explain why it is important to people.</p></div>
+      <div class="card"><p class="prompt-label">Model answer — Jasur (Band 8.5)</p>
+<p style="line-height:1.8;">The tradition I’d like to describe is the preparation of osh — or plov, as it’s known elsewhere — which is far more than a dish in Uzbekistan; it’s practically a social institution. It’s eaten at weddings, at funerals, on Thursdays and Fridays in many families, and at virtually any gathering where a large number of people need to be fed.</p>
+<p style="line-height:1.8;">What makes it distinctive is the way it’s cooked. Traditionally it’s men who prepare it for big events, often starting before dawn, in an enormous cast-iron pot called a kazan set over an open fire. Having heated the oil until it’s almost smoking, the oshpaz — the cook — fries the meat and onions, adds carrots cut into long thin strips, and then layers the rice on top, leaving it to steam without stirring. Get the timing wrong and the whole thing is ruined, which is why a good oshpaz is genuinely respected.</p>
+<p style="line-height:1.8;">At weddings there’s a custom called the morning osh, held at dawn for the men of the neighbourhood, and what always strikes me is that hundreds of people can be fed within an hour, with remarkably little fuss.</p>
+<p style="line-height:1.8;">As for why it matters, I’d say it’s because osh embodies hospitality. Not only does it feed people, but it signals that a family is ready to share whatever it has. Sitting around a shared plate also flattens social differences to some extent — the neighbour and the visiting official eat from the same dish. So in a sense, it’s less about the food itself than about what sharing it represents.</p></div>
+      <p style="margin-top:26px;"><strong>Identify the structures.</strong> Which advanced structure does each extract illustrate?</p>
+      <div class="card" id="t11-gr"><div class="sel-row"><select class="select" id="t11-gr-1" data-answer="cleft sentence"><option value="">—</option><option value="cleft sentence">cleft sentence</option><option value="participle clause">participle clause</option><option value="imperative as a condition">imperative as a condition</option><option value="negative inversion">negative inversion</option><option value="comparative contrast">comparative contrast</option></select><span><b>1.</b> “Traditionally it’s men who prepare it for big events”</span></div><div class="sel-row"><select class="select" id="t11-gr-2" data-answer="participle clause"><option value="">—</option><option value="cleft sentence">cleft sentence</option><option value="participle clause">participle clause</option><option value="imperative as a condition">imperative as a condition</option><option value="negative inversion">negative inversion</option><option value="comparative contrast">comparative contrast</option></select><span><b>2.</b> “Having heated the oil until it’s almost smoking, the oshpaz fries…”</span></div><div class="sel-row"><select class="select" id="t11-gr-3" data-answer="imperative as a condition"><option value="">—</option><option value="cleft sentence">cleft sentence</option><option value="participle clause">participle clause</option><option value="imperative as a condition">imperative as a condition</option><option value="negative inversion">negative inversion</option><option value="comparative contrast">comparative contrast</option></select><span><b>3.</b> “Get the timing wrong and the whole thing is ruined”</span></div><div class="sel-row"><select class="select" id="t11-gr-4" data-answer="negative inversion"><option value="">—</option><option value="cleft sentence">cleft sentence</option><option value="participle clause">participle clause</option><option value="imperative as a condition">imperative as a condition</option><option value="negative inversion">negative inversion</option><option value="comparative contrast">comparative contrast</option></select><span><b>4.</b> “Not only does it feed people, but it signals…”</span></div><div class="sel-row"><select class="select" id="t11-gr-5" data-answer="comparative contrast"><option value="">—</option><option value="cleft sentence">cleft sentence</option><option value="participle clause">participle clause</option><option value="imperative as a condition">imperative as a condition</option><option value="negative inversion">negative inversion</option><option value="comparative contrast">comparative contrast</option></select><span><b>5.</b> “it’s less about the food itself than about what sharing it represents”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-gr', 't11-gr-score')">Check answers</button>
+          <span id="t11-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Lexical precision.</strong> Find the word or phrase in the model that means…</p>
+      <div class="card" id="t11-lx" style="line-height:2.4;"><p>1. an established custom or organisation central to society → a social <input type="text" class="text-answer" id="t11-1" data-correct="institution" autocomplete="off" style="width:140px;"></p><p>2. almost; nearly all → <input type="text" class="text-answer" id="t11-2" data-correct="virtually" autocomplete="off" style="width:140px;"> any gathering</p><p>3. different from others in a way that makes it easy to recognise → <input type="text" class="text-answer" id="t11-3" data-correct="distinctive" autocomplete="off" style="width:140px;"></p><p>4. unnecessary excitement or trouble → with remarkably little <input type="text" class="text-answer" id="t11-4" data-correct="fuss" autocomplete="off" style="width:140px;"></p><p>5. is a perfect example of an idea or quality → osh <input type="text" class="text-answer" id="t11-5" data-correct="embodies" autocomplete="off" style="width:140px;"> hospitality</p><p>6. reduces differences between levels → <input type="text" class="text-answer" id="t11-6" data-correct="flattens" autocomplete="off" style="width:140px;"> social differences</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-lx', 't11-lx-score')">Check answers</button>
+          <span id="t11-lx-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t11-speaking-tradition">
+        <div class="q-num">Your Part 2 talk — a food tradition</div>
+        <div class="q-text">Now do the task yourself. Prepare for 1 minute, then speak for the full <b>2 minutes</b>. Choose a different tradition from Jasur’s if you can (e.g. sumalak, Navruz food, bread-making, a family meal). Use at least <b>three</b> of the structures above.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The tradition I’d like to describe is…”</li><li>“What makes it distinctive is…”</li><li>“Having…, they then…”</li><li>“Not only does it…, but it also…”</li><li>“In a sense, it’s less about… than about…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="card task-prompt" style="margin-top:22px;"><p class="prompt-label">Part 2 task card — extra practice</p><p><b>Describe a time when you tried a food for the first time.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what the food was<br>&nbsp;&nbsp;where and when you tried it<br>&nbsp;&nbsp;who you were with<br>and explain how you felt about it.</p></div>
+      <div class="question-box" data-field="t11-speaking-new-food">
+        <div class="q-num">Your Part 2 talk — a new food</div>
+        <div class="q-text">Prepare for 1 minute, then speak for <b>2 minutes</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It must have been about… years ago when…”</li><li>“I was rather hesitant at first, since…”</li><li>“To my surprise,…”</li><li>“Looking back,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 14</div>
+      <h2>Speaking Part 3 — Food, Technology and the Future</h2>
+      <p class="task-sub">Band 8 Part 3 answers are <b>analytical</b>: they distinguish between cases, speculate with appropriate hedging, and evaluate. Study the model, then answer twelve questions.</p>
+      <div class="card"><p class="prompt-label">Model Part 3 answer</p><p><b>Examiner:</b> Do you think technology can solve the problem of feeding a growing world population?</p>
+<p style="line-height:1.8;"><b>Candidate:</b> I think it can go a long way, but I’d be wary of seeing it as the whole answer. If you look at the last century, technologies like fertilisers and higher-yielding crop varieties did dramatically increase production, so there’s a strong track record. The difficulty is that hunger today is arguably less about producing too little than about distribution and poverty — enough food is grown globally, yet a lot of it is wasted while some people can’t afford it. So I’d say technology is a necessary condition but not a sufficient one; without changes in policy and in how food is shared, even a breakthrough in, say, vertical farming wouldn’t reach the people who need it most.</p></div>
+      <p style="margin-top:26px;"><strong>Analyse the model.</strong> Match each phrase to the analytical move it makes.</p>
+      <div class="card" id="t12-fn"><div class="sel-row"><select class="select" id="t12-fn-1" data-answer="qualified position"><option value="">—</option><option value="qualified position">qualified position</option><option value="evidence from the past">evidence from the past</option><option value="reframing the problem">reframing the problem</option><option value="precise distinction">precise distinction</option><option value="hypothetical consequence">hypothetical consequence</option></select><span><b>1.</b> “it can go a long way, but I’d be wary of seeing it as the whole answer”</span></div><div class="sel-row"><select class="select" id="t12-fn-2" data-answer="evidence from the past"><option value="">—</option><option value="qualified position">qualified position</option><option value="evidence from the past">evidence from the past</option><option value="reframing the problem">reframing the problem</option><option value="precise distinction">precise distinction</option><option value="hypothetical consequence">hypothetical consequence</option></select><span><b>2.</b> “so there’s a strong track record”</span></div><div class="sel-row"><select class="select" id="t12-fn-3" data-answer="reframing the problem"><option value="">—</option><option value="qualified position">qualified position</option><option value="evidence from the past">evidence from the past</option><option value="reframing the problem">reframing the problem</option><option value="precise distinction">precise distinction</option><option value="hypothetical consequence">hypothetical consequence</option></select><span><b>3.</b> “hunger today is arguably less about producing too little than about distribution”</span></div><div class="sel-row"><select class="select" id="t12-fn-4" data-answer="precise distinction"><option value="">—</option><option value="qualified position">qualified position</option><option value="evidence from the past">evidence from the past</option><option value="reframing the problem">reframing the problem</option><option value="precise distinction">precise distinction</option><option value="hypothetical consequence">hypothetical consequence</option></select><span><b>4.</b> “technology is a necessary condition but not a sufficient one”</span></div><div class="sel-row"><select class="select" id="t12-fn-5" data-answer="hypothetical consequence"><option value="">—</option><option value="qualified position">qualified position</option><option value="evidence from the past">evidence from the past</option><option value="reframing the problem">reframing the problem</option><option value="precise distinction">precise distinction</option><option value="hypothetical consequence">hypothetical consequence</option></select><span><b>5.</b> “even a breakthrough in, say, vertical farming wouldn’t reach…”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-fn', 't12-fn-score')">Check answers</button>
+          <span id="t12-fn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Your turn.</strong> Record an answer to each question (45–75 seconds each).</p>
+      <div class="question-box" data-field="t12-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Do you think technology can solve the problem of feeding a growing world population?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“That’s a necessary condition, but not a sufficient one.”</li><li>“If…, it would…”</li><li>“It depends to a large extent on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Why do some people resist new kinds of food, such as insects or laboratory-grown meat?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“That’s a necessary condition, but not a sufficient one.”</li><li>“If…, it would…”</li><li>“It depends to a large extent on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Should governments use taxes to discourage unhealthy or environmentally damaging food?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“That’s a necessary condition, but not a sufficient one.”</li><li>“If…, it would…”</li><li>“It depends to a large extent on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">How have eating habits in your country changed over the last generation?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“That’s a necessary condition, but not a sufficient one.”</li><li>“If…, it would…”</li><li>“It depends to a large extent on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-5">
+        <div class="q-num">Question 5</div>
+        <div class="q-text">Is it better for a country to grow its own food or to import it?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“That’s a necessary condition, but not a sufficient one.”</li><li>“If…, it would…”</li><li>“It depends to a large extent on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-6">
+        <div class="q-num">Question 6</div>
+        <div class="q-text">Who bears more responsibility for food waste — consumers, retailers or governments?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“That’s a necessary condition, but not a sufficient one.”</li><li>“If…, it would…”</li><li>“It depends to a large extent on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-7">
+        <div class="q-num">Question 7</div>
+        <div class="q-text">Will traditional cuisines survive globalisation, or will food become more uniform?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“That’s a necessary condition, but not a sufficient one.”</li><li>“If…, it would…”</li><li>“It depends to a large extent on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-8">
+        <div class="q-num">Question 8</div>
+        <div class="q-text">Should schools teach children to cook?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“That’s a necessary condition, but not a sufficient one.”</li><li>“If…, it would…”</li><li>“It depends to a large extent on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-9">
+        <div class="q-num">Question 9</div>
+        <div class="q-text">To what extent should people be free to eat whatever they like, even if it is harmful?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“That’s a necessary condition, but not a sufficient one.”</li><li>“If…, it would…”</li><li>“It depends to a large extent on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-10">
+        <div class="q-num">Question 10</div>
+        <div class="q-text">How might climate change affect what people eat in the future?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“That’s a necessary condition, but not a sufficient one.”</li><li>“If…, it would…”</li><li>“It depends to a large extent on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-11">
+        <div class="q-num">Question 11</div>
+        <div class="q-text">Are food labels an effective way of changing people’s behaviour?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“That’s a necessary condition, but not a sufficient one.”</li><li>“If…, it would…”</li><li>“It depends to a large extent on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-12">
+        <div class="q-num">Question 12</div>
+        <div class="q-text">What role, if any, should scientists play in deciding what we eat?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“That’s a necessary condition, but not a sufficient one.”</li><li>“If…, it would…”</li><li>“It depends to a large extent on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 14</div>
+      <h2>Pronunciation — Weak Forms and Contrastive Stress</h2>
+      <p class="task-sub">Natural, fluent English (Band 8 for Pronunciation) uses <b>weak forms</b> for grammar words and <b>contrastive stress</b> to highlight the key idea. Overusing strong forms makes speech sound robotic; misplacing stress can change the meaning.</p>
+<div class="card advice-card"><p style="margin:0;"><b>Weak forms:</b> unstressed <i>of, to, for, and, can, was, than, a, the</i> are reduced to /ə/: <i>a cup of tea</i> → /ə kʌp əv tiː/. They become <b>strong</b> when stressed for contrast or at the end of a sentence: <i>“What’s it made of?”</i> /ɒv/.</p></div>
+      <p style="margin-top:26px;"><strong>Part 1 — Strong or weak?</strong> Is the underlined word normally pronounced in its strong or weak form here?</p>
+      <div class="card" id="t13-w"><div class="q-item" id="t13-w-1">
+          <p>1. Insects are a source <u>of</u> protein.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-w-1" data-correct="false"> strong</label><label><input type="radio" value="1" name="t13-w-1" data-correct="true"> weak</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-w-2">
+          <p>2. What is this burger made <u>of</u>?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-w-2" data-correct="true"> strong</label><label><input type="radio" value="1" name="t13-w-2" data-correct="false"> weak</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-w-3">
+          <p>3. It’s cheaper <u>than</u> beef.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-w-3" data-correct="false"> strong</label><label><input type="radio" value="1" name="t13-w-3" data-correct="true"> weak</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-w-4">
+          <p>4. “Can you cook osh?” “Yes, I <u>can</u>.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-w-4" data-correct="true"> strong</label><label><input type="radio" value="1" name="t13-w-4" data-correct="false"> weak</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-w-5">
+          <p>5. Vertical farms <u>can</u> grow lettuce all year round.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-w-5" data-correct="false"> strong</label><label><input type="radio" value="1" name="t13-w-5" data-correct="true"> weak</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-w-6">
+          <p>6. Who was it grown <u>for</u>?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-w-6" data-correct="true"> strong</label><label><input type="radio" value="1" name="t13-w-6" data-correct="false"> weak</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-w-7">
+          <p>7. I’d like fish <u>and</u> chips.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-w-7" data-correct="false"> strong</label><label><input type="radio" value="1" name="t13-w-7" data-correct="true"> weak</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-w-8">
+          <p>8. It <u>was</u> expensive.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-w-8" data-correct="false"> strong</label><label><input type="radio" value="1" name="t13-w-8" data-correct="true"> weak</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-w-9">
+          <p>9. Yes, it <u>was</u>.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-w-9" data-correct="true"> strong</label><label><input type="radio" value="1" name="t13-w-9" data-correct="false"> weak</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-w', 't13-w-score')">Check answers</button>
+          <span id="t13-w-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Contrastive stress.</strong> Which word should carry the main stress to give the meaning in brackets?</p>
+      <div class="card" id="t13-cs"><div class="q-item" id="t13-cs-1">
+          <p>1. “Insects are eaten by <i>two billion</i> people.” (correcting someone who said two <b>million</b>)</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-cs-1" data-correct="false"> Insects</label><label><input type="radio" value="1" name="t13-cs-1" data-correct="true"> billion</label><label><input type="radio" value="2" name="t13-cs-1" data-correct="false"> people</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-cs-2">
+          <p>2. “I said <i>vertical</i> farms, not organic farms.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-cs-2" data-correct="false"> said</label><label><input type="radio" value="1" name="t13-cs-2" data-correct="true"> vertical</label><label><input type="radio" value="2" name="t13-cs-2" data-correct="false"> farms</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-cs-3">
+          <p>3. “The problem isn’t production — it’s <i>distribution</i>.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-cs-3" data-correct="false"> problem</label><label><input type="radio" value="1" name="t13-cs-3" data-correct="false"> production</label><label><input type="radio" value="2" name="t13-cs-3" data-correct="true"> distribution</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-cs-4">
+          <p>4. “<i>Fish</i> need no persuading — consumers do.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-cs-4" data-correct="true"> Fish</label><label><input type="radio" value="1" name="t13-cs-4" data-correct="false"> need</label><label><input type="radio" value="2" name="t13-cs-4" data-correct="false"> persuading</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-cs-5">
+          <p>5. “It’s not cheap to grow <i>wheat</i> indoors, but lettuce is fine.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-cs-5" data-correct="false"> cheap</label><label><input type="radio" value="1" name="t13-cs-5" data-correct="true"> wheat</label><label><input type="radio" value="2" name="t13-cs-5" data-correct="false"> indoors</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-cs', 't13-cs-score')">Check answers</button>
+          <span id="t13-cs-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t13-speaking-contrast">
+        <div class="q-num">Read aloud</div>
+        <div class="q-text">Read these aloud with weak forms and clear contrastive stress: <i>“The problem isn’t how MUCH food we grow — it’s how we DISTRIBUTE it. Vertical farms can grow LETTUCE, but not WHEAT. And insects may matter more as ANIMAL feed than as HUMAN food.”</i></div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>Reduce: can /kən/, as /əz/, than /ðən/</li><li>Stress the capitalised words strongly</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 14</div>
+      <h2>Consolidation — The Language of Food Futures</h2>
+      <p class="task-sub">A final, demanding check of today’s lexis, followed by a timed extended answer. Spelling counts.</p>
+      <p style="margin-top:26px;"><strong>Part 1 — Complete the text.</strong> Write <b>one word</b> in each gap. The first letter is given.</p>
+      <div class="card" id="t14-txt" style="line-height:2.8;"><p>Modern cities depend on (1) j<input type="text" class="text-answer" id="t14-1" data-correct="ust-in-time/just-in-time" autocomplete="off" style="width:120px;"> deliveries that keep almost no spare stock, which makes them efficient but less (2) r<input type="text" class="text-answer" id="t14-2" data-correct="esilient/resilient" autocomplete="off" style="width:120px;">. Vertical farms promise year-round harvests and use a fraction of the water of conventional farms, but their dependence on electricity makes staple grains (3) p<input type="text" class="text-answer" id="t14-3" data-correct="rohibitively/prohibitively" autocomplete="off" style="width:120px;"> expensive to grow indoors. Insects, meanwhile, convert feed far more (4) e<input type="text" class="text-answer" id="t14-4" data-correct="fficiently/efficiently" autocomplete="off" style="width:120px;"> than cattle, yet Western consumers remain (5) s<input type="text" class="text-answer" id="t14-5" data-correct="ceptical/sceptical/keptical/skeptical" autocomplete="off" style="width:120px;">. Perhaps their greatest potential lies in animal feed, where larvae raised on waste could replace soya, whose cultivation is associated with (6) d<input type="text" class="text-answer" id="t14-6" data-correct="eforestation/deforestation" autocomplete="off" style="width:140px;">. No single technology, however, can guarantee food (7) s<input type="text" class="text-answer" id="t14-7" data-correct="ecurity/security" autocomplete="off" style="width:110px;">; what is needed is a more (8) d<input type="text" class="text-answer" id="t14-8" data-correct="iverse/diverse" autocomplete="off" style="width:110px;"> and resilient system.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-txt', 't14-txt-score')">Check answers</button>
+          <span id="t14-txt-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Prepositions in academic collocations.</strong></p>
+      <div class="card" id="t14-prep" style="line-height:2.6;"><p>1. account <input type="text" class="text-answer" id="t14-p1" data-correct="for" autocomplete="off" style="width:70px;"> a large share &nbsp; 2. be associated <input type="text" class="text-answer" id="t14-p2" data-correct="with" autocomplete="off" style="width:70px;"> deforestation &nbsp; 3. depend heavily <input type="text" class="text-answer" id="t14-p3" data-correct="on" autocomplete="off" style="width:70px;"> energy prices</p><p>4. dispense <input type="text" class="text-answer" id="t14-p4" data-correct="with" autocomplete="off" style="width:70px;"> soil &nbsp; 5. at the expense <input type="text" class="text-answer" id="t14-p5" data-correct="of" autocomplete="off" style="width:70px;"> resilience &nbsp; 6. be regarded <input type="text" class="text-answer" id="t14-p6" data-correct="with" autocomplete="off" style="width:70px;"> suspicion</p><p>7. convert feed <input type="text" class="text-answer" id="t14-p7" data-correct="into" autocomplete="off" style="width:70px;"> protein &nbsp; 8. be rich <input type="text" class="text-answer" id="t14-p8" data-correct="in" autocomplete="off" style="width:70px;"> iron &nbsp; 9. <input type="text" class="text-answer" id="t14-p9" data-correct="at" autocomplete="off" style="width:70px;"> current energy prices</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-prep', 't14-prep-score')">Check answers</button>
+          <span id="t14-prep-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t14-speaking-final">
+        <div class="q-num">Extended answer</div>
+        <div class="q-text">Timed extended answer (2–3 minutes): <i>“Within twenty years, technology will have transformed what people eat.”</i> To what extent do you agree? Use at least <b>eight</b> words or structures from today, including one cleft sentence and one example of negative inversion.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“What’s often overlooked is…”</li><li>“Not only will…, but…”</li><li>“I’d be wary of…”</li><li>“It’s a necessary but not sufficient condition…”</li><li>“On balance,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 14</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 25 of 45</div>
+    <h1>Day 25 complete! 🎉</h1>
+    <p>Day 25 done — The Future of Food: vertical farms and the insect debate (28 reading questions), reading skills, three lead-ins, a TED talk, Speaking Parts 2 and 3, weak forms and contrastive stress.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t2-speaking-summary"]'); if (b) initRecordControl(b, user.id, 25, 2, 't2-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-summary"]'); if (b) initRecordControl(b, user.id, 25, 5, 't5-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-summary"]'); if (b) initRecordControl(b, user.id, 25, 9, 't9-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-tradition"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-tradition', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-new-food"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-new-food', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-1"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-2"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-3"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-4"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-5"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-5', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-6"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-6', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-7"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-7', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-8"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-8', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-9"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-9', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-10"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-10', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-11"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-11', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-12"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-12', 0); }
+    { const b = document.querySelector('.question-box[data-field="t13-speaking-contrast"]'); if (b) initRecordControl(b, user.id, 25, 13, 't13-speaking-contrast', 0); }
+    { const b = document.querySelector('.question-box[data-field="t14-speaking-final"]'); if (b) initRecordControl(b, user.id, 25, 14, 't14-speaking-final', 0); }
+
+    await initTaskFlow(25, 14, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-c', 't1-c-score'); },
+      2: () => { checkAllAnswers('t2-mc', 't2-mc-score'); checkAllAnswers('t2-tf', 't2-tf-score'); },
+      3: () => { checkAllAnswers('t3-h', 't3-h-score'); checkAllAnswers('t3-tf', 't3-tf-score'); checkAllAnswers('t3-s', 't3-s-score'); },
+      4: () => { checkAllAnswers('t4-hedge', 't4-hedge-score'); },
+      5: () => { checkAllAnswers('t5-mc', 't5-mc-score'); checkAllAnswers('t5-tf', 't5-tf-score'); },
+      6: () => { checkAllAnswers('t6-yn', 't6-yn-score'); checkAllAnswers('t6-mc', 't6-mc-score'); checkAllAnswers('t6-se', 't6-se-score'); },
+      7: () => { checkAllAnswers('t7-st', 't7-st-score'); },
+      8: () => { checkAllAnswers('t8-ref', 't8-ref-score'); checkAllAnswers('t8-inf', 't8-inf-score'); checkAllAnswers('t8-link', 't8-link-score'); },
+      9: () => { checkAllAnswers('t9-mc', 't9-mc-score'); },
+      10: () => { checkAllAnswers('t10-an', 't10-an-score'); checkAllAnswers('t10-wf', 't10-wf-score'); checkAllAnswers('t10-pp', 't10-pp-score'); },
+      11: () => { checkAllAnswers('t11-gr', 't11-gr-score'); checkAllAnswers('t11-lx', 't11-lx-score'); },
+      12: () => { checkAllAnswers('t12-fn', 't12-fn-score'); },
+      13: () => { checkAllAnswers('t13-w', 't13-w-score'); checkAllAnswers('t13-cs', 't13-cs-score'); },
+      14: () => { checkAllAnswers('t14-txt', 't14-txt-score'); checkAllAnswers('t14-prep', 't14-prep-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t1-sp-btn', 't1-sp-ans', '[id^="t1-sp-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t2-sum-btn', 't2-sum-ans', '[id^="t2-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t5-sum-btn', 't5-sum-ans', '[id^="t5-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-sum-btn', 't9-sum-ans', '[id^="t9-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>
