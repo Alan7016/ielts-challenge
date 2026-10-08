@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 25 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+  .ph-card { width: min(1100px, calc(100vw - 32px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .ph-grid { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 14px; }
+  .ph { margin: 0; }
+  .ph-img { position: relative; aspect-ratio: 3 / 2; border-radius: 10px; overflow: hidden; background: var(--surface-2); border: 1px solid var(--border); }
+  .ph-img img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; transition: transform .2s ease; }
+  .ph-img:hover img { transform: scale(1.04); }
+  .ph-tip { font-size: 0.82rem; color: var(--muted); margin: 0 0 10px; }
+  .ph-zoom { position: fixed; inset: 0; z-index: 9999; background: rgba(10, 12, 24, 0.88); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: zoom-out; padding: 20px; }
+  .ph-zoom[hidden] { display: none; }
+  .ph-zoom img { max-width: 94vw; max-height: 86vh; border-radius: 10px; box-shadow: 0 20px 60px rgba(0,0,0,.5); animation: phIn .2s ease; }
+  .ph-zoom-hint { color: #fff; opacity: .7; font-family: var(--mono); font-size: 0.78rem; margin-top: 12px; }
+  @keyframes phIn { from { transform: scale(.92); opacity: 0; } to { transform: none; opacity: 1; } }
+  .ph-n { position: absolute; top: 8px; left: 8px; background: var(--accent); color: #fff; font-family: var(--mono); font-weight: 700; font-size: 0.85rem; border-radius: 50%; width: 26px; height: 26px; display: grid; place-items: center; z-index: 1; }
+  .ph figcaption { font-size: 0.95rem; color: var(--ink-soft); margin-top: 6px; line-height: 1.45; }
+  .ph-src { display: block; font-family: var(--mono); font-size: 0.66rem; color: var(--muted); margin-top: 2px; }
+  @media (max-width: 760px) { .ph-grid { grid-template-columns: 1fr; } .ph-card { width: 100%; left: 0; transform: none; } }
+  .opt-legend { margin-bottom: 8px; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 25 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 13</div>
+      <h2>Starting Off — Space</h2>
+      <p class="task-sub">Today is about space: life aboard a space station, the growing problem of rubbish in orbit, and the debate over sending humans to Mars. Start by discussing the photos, then learn the core vocabulary of space exploration.</p>
+<div class="card ph-card"><p class="ph-tip">🔍 Click a photo to see it full size.</p><div class="ph-grid" style="--cols:2"><figure class="ph"><div class="ph-img"><span class="ph-n">1</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/STS-134%20International%20Space%20Station%20after%20undocking.jpg?width=960" alt="Photo 1" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>the International Space Station<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:STS-134_International_Space_Station_after_undocking.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure><figure class="ph"><div class="ph-img"><span class="ph-n">2</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Falcon%209%20-%20Starlink%2010-41%20Launch%20%289544575%29.jpg?width=960" alt="Photo 2" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>a rocket launch<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:Falcon_9_-_Starlink_10-41_Launch_%289544575%29.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure><figure class="ph"><div class="ph-img"><span class="ph-n">3</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/PIA24543-MarsCuriosityRover-SelfPortrait-20210316.jpg?width=960" alt="Photo 3" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>a rover on the surface of Mars<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:PIA24543-MarsCuriosityRover-SelfPortrait-20210316.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure><figure class="ph"><div class="ph-img"><span class="ph-n">4</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Very%20Large%20Array%2C%202012.jpg?width=960" alt="Photo 4" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>radio telescopes<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:Very_Large_Array%2C_2012.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure></div></div><div class="ph-zoom" id="phZoom" hidden><img alt=""><p class="ph-zoom-hint">Click anywhere to close</p></div><script>(function(){var z=document.getElementById("phZoom");if(!z||z.dataset.ready)return;z.dataset.ready=1;var zi=z.querySelector("img");document.addEventListener("click",function(e){var im=e.target.closest(".ph-img img");if(im){zi.src=im.currentSrc||im.src;z.hidden=false;document.body.style.overflow="hidden";return;}if(!z.hidden&&z.contains(e.target)){z.hidden=true;zi.removeAttribute("src");document.body.style.overflow="";}});document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!z.hidden){z.hidden=true;document.body.style.overflow="";}});})();</script>
+      <div class="card"><p class="mini-q">1. Which of these photos shows the most important kind of space activity, in your opinion? Why?</p><textarea class="no-check mini-answer" id="t1-sp-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. Space exploration is extremely expensive. Give <b>three</b> benefits that might justify the cost, and <b>one</b> argument against it.</p><textarea class="no-check mini-answer" id="t1-sp-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Would you go to space if you had the chance — on a short trip, a six-month stay on a space station, or a one-way trip to Mars? Explain.</p><textarea class="no-check mini-answer" id="t1-sp-3" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t1-sp-btn">Show an example answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t1-sp-ans"><p>Strong answers give <b>reasons</b> and <b>concrete examples</b>: <i>“Satellites are arguably the most important, since we rely on them for weather forecasts, GPS and communication…”</i></p></div>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Space vocabulary.</strong> Match each word or phrase to its meaning. You will meet all of them today.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. orbit</button><button type="button" class="lm-item" data-key="2">2. satellite</button><button type="button" class="lm-item" data-key="3">3. astronaut</button><button type="button" class="lm-item" data-key="4">4. launch</button><button type="button" class="lm-item" data-key="5">5. debris</button><button type="button" class="lm-item" data-key="6">6. atmosphere</button><button type="button" class="lm-item" data-key="7">7. gravity</button><button type="button" class="lm-item" data-key="8">8. rover</button><button type="button" class="lm-item" data-key="9">9. mission</button><button type="button" class="lm-item" data-key="10">10. crew</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. broken pieces left after something has been destroyed</button><button type="button" class="lm-item" data-key="b">b. a person trained to travel in a spacecraft</button><button type="button" class="lm-item" data-key="c">c. the curved path of one object around another in space</button><button type="button" class="lm-item" data-key="d">d. an important journey or task, especially into space</button><button type="button" class="lm-item" data-key="e">e. an object sent into space to travel round the Earth</button><button type="button" class="lm-item" data-key="f">f. the force that pulls objects towards each other</button><button type="button" class="lm-item" data-key="g">g. the people who work on a ship, plane or spacecraft</button><button type="button" class="lm-item" data-key="h">h. the layer of gases surrounding a planet</button><button type="button" class="lm-item" data-key="i">i. the sending of a rocket or spacecraft into the sky</button><button type="button" class="lm-item" data-key="j">j. a vehicle designed to explore the surface of a planet</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="i" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="j" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-9" data-lm-key="9" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-10" data-lm-key="10" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Collocations.</strong> Complete each sentence with one word from the box. There is one extra word.</p>
+      <div class="word-bank">launched · orbit · lifted · experiments · splashed · contact · aborted · landed</div><div class="card" id="t1-c" style="line-height:2.3;"><p>1. The satellite was <input type="text" class="text-answer" id="t1-1" data-correct="launched" autocomplete="off" style="width:110px;"> into orbit last year.</p><p>2. The spacecraft will <input type="text" class="text-answer" id="t1-2" data-correct="orbit" autocomplete="off" style="width:110px;"> the Moon three times before landing.</p><p>3. The rocket <input type="text" class="text-answer" id="t1-3" data-correct="lifted" autocomplete="off" style="width:110px;"> off exactly on time.</p><p>4. The crew carried out dozens of scientific <input type="text" class="text-answer" id="t1-4" data-correct="experiments" autocomplete="off" style="width:110px;">.</p><p>5. The capsule <input type="text" class="text-answer" id="t1-5" data-correct="splashed" autocomplete="off" style="width:110px;"> down safely in the ocean.</p><p>6. Engineers lost <input type="text" class="text-answer" id="t1-6" data-correct="contact" autocomplete="off" style="width:110px;"> with the probe for several hours.</p><p>7. The mission was <input type="text" class="text-answer" id="t1-7" data-correct="aborted" autocomplete="off" style="width:110px;"> because of a technical fault.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-c', 't1-c-score')">Check answers</button>
+          <span id="t1-c-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 13</div>
+      <h2>Lead-in 1 — Ninety-Minute Days: Life Aboard the Space Station</h2>
+      <p class="task-sub">Before Reading 1 (about the rubbish that now surrounds our planet), read this article about life on the International Space Station. It introduces vocabulary about orbits, crews and missions. About 15 minutes.</p>
+      <div class="card article">
+        <h3 class="article-title">Ninety-Minute Days: Life Aboard the Space Station</h3>
+        <p class="article-meta">Science · Space · 362 words</p>
+        <p>Around four hundred kilometres above our heads, a structure roughly the size of a football pitch circles the Earth about every ninety minutes. The International Space Station has been continuously occupied since the year 2000, which means that for more than two decades there has always been at least one human being living off the planet. Its crews, drawn from several countries, typically stay for around six months at a time.</p><p>Life on the station is shaped above all by weightlessness. Nothing stays where you put it, so tools, food packets and even pens must be attached to surfaces with straps or Velcro. Astronauts sleep in small bags fixed to the wall, since in the absence of gravity there is no difference between lying down and standing up. Food is designed not to produce crumbs, which could float into equipment or into someone’s eyes, and the toilets use a flow of air rather than gravity to carry waste away.</p><p>The working day is planned almost to the minute by teams on the ground. Much of it is devoted to scientific experiments — on materials, plants, the human body and much else — together with the constant maintenance that a complex machine requires. A surprisingly large share of each day, about two hours, goes on exercise. Without gravity to work against, muscles shrink and bones lose density, and the treadmill, exercise bike and resistance machine on board are the main defence against this.</p><p>There is a psychological side, too. Crew members live in a confined, noisy environment, far from their families, with sixteen sunrises and sunsets every twenty-four hours. Agencies select astronauts partly for their ability to cope with these conditions, and they keep a close watch on crew members’ mental well-being throughout a mission.</p><p>Much of what has been learned on the station will matter for longer journeys. A return trip to Mars would last far longer than a stay on the station, with no possibility of a quick return home, and every problem the station has solved — from recycling water to keeping a crew healthy and getting along — will have to be solved again, on a much larger scale.</p>
+      </div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-1">
+          <p>1. How long do crews typically stay on the station?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-1" data-correct="false"> A. about ninety minutes</label><label><input type="radio" value="1" name="t2-mc-1" data-correct="true"> B. around six months</label><label><input type="radio" value="2" name="t2-mc-1" data-correct="false"> C. more than two decades</label><label><input type="radio" value="3" name="t2-mc-1" data-correct="false"> D. about two years</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-2">
+          <p>2. Why is food designed not to produce crumbs?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-2" data-correct="true"> A. Crumbs are difficult to clean in weightlessness and could damage equipment.</label><label><input type="radio" value="1" name="t2-mc-2" data-correct="false"> B. Astronauts dislike dry food.</label><label><input type="radio" value="2" name="t2-mc-2" data-correct="false"> C. Crumbs would make the food too heavy.</label><label><input type="radio" value="3" name="t2-mc-2" data-correct="false"> D. It saves money on the ground.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-3">
+          <p>3. Why do astronauts exercise for about two hours a day?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-3" data-correct="false"> A. to fill their free time</label><label><input type="radio" value="1" name="t2-mc-3" data-correct="true"> B. to prevent the loss of muscle and bone</label><label><input type="radio" value="2" name="t2-mc-3" data-correct="false"> C. to produce electricity for the station</label><label><input type="radio" value="3" name="t2-mc-3" data-correct="false"> D. to prepare for the journey home</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-4">
+          <p>4. What does the writer suggest about a mission to Mars?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-4" data-correct="false"> A. It would be shorter than a stay on the station.</label><label><input type="radio" value="1" name="t2-mc-4" data-correct="true"> B. The problems solved on the station would have to be solved again on a larger scale.</label><label><input type="radio" value="2" name="t2-mc-4" data-correct="false"> C. It would not need any exercise equipment.</label><label><input type="radio" value="3" name="t2-mc-4" data-correct="false"> D. Crews would be able to return quickly in an emergency.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. The station has had people on board continuously since 2000.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="true"> True</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. Astronauts on the station sleep lying on beds.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="false"> True</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. The crew decide their own daily schedule.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="false"> True</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. Crew members see more than one sunrise each day.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="true"> True</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-5">
+          <p>5. Astronauts are chosen partly for their ability to cope psychologically.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-5" data-correct="true"> True</label><label><input type="radio" value="1" name="t2-tf-5" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 110 words</b>. Cover the central idea, the key evidence or examples, and finish with your own evaluation. Do not copy phrases of four or more words.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 110 words):</p><textarea class="no-check mini-answer" id="t2-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:180px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t2-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t2-sum-ans"><p>The article describes everyday life aboard the International Space Station, where a small international crew lives and works while orbiting the Earth roughly every ninety minutes. Because everything is weightless, routine tasks become complicated: astronauts sleep in bags attached to the wall, eat food that will not float away, and use specially designed toilets. Their working day is tightly scheduled and includes scientific experiments, maintenance and about two hours of exercise, which is essential because muscles and bones weaken without gravity. The writer also notes the psychological side: isolation, noise and the absence of a normal day and night. I found it striking that exercise takes up such a large part of the day. (≈ 115 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t2-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your notes — speak for <b>at least 45 seconds</b> (aim for a minute), and finish with your own opinion.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central argument is that…”</li><li>“This is supported by…”</li><li>“What I found most striking was…”</li><li>“That said, I'm not entirely convinced that…”</li><li>“On balance, I'd say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 13</div>
+      <h2>Reading 1 — Cleaning Up Orbit: The Problem of Space Junk</h2>
+      <p class="task-sub">Suggested time: 20 minutes. Three IELTS question types: <b>matching information</b>, <b>TRUE / FALSE / NOT GIVEN</b> and <b>summary completion</b>. 14 questions. Passage on the left, questions on the right. Answers are checked when you press <b>Next</b> — you cannot change them afterwards.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li><b>Matching information</b> (“Which paragraph contains…?”): the answers are <b>not</b> in passage order, and the statements describe the <b>type</b> of information (<i>an example of…, a reason for…, a comparison…</i>). Do this task <b>after</b> the others, when you know the passage better.</li>
+  <li><b>TRUE / FALSE / NOT GIVEN:</b> watch the small words — <i>all, only, first, never, still</i>.</li>
+  <li><b>Summary completion:</b> the summary may paraphrase several paragraphs; find the section first, then the exact word.</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Cleaning Up Orbit: The Problem of Space Junk<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">The space around our planet is filling up with rubbish travelling faster than a bullet. Can anything be done before it is too late?</small></h3>
+            <p class="article-meta">Reading Passage 1 · Space technology · 745 words</p>
+            <p><span class="para-label">A</span>When the Soviet Union launched Sputnik 1 in 1957, the space around the Earth was empty. Since then, thousands of rockets have carried satellites into orbit, and much of what they left behind is still up there. Dead satellites, discarded rocket stages, flakes of paint and fragments from explosions now circle the planet alongside the working satellites on which modern life depends. Collectively, this material is known as space debris or, less formally, space junk.</p><p><span class="para-label">B</span>The scale of the problem is difficult to picture. Tracking networks on the ground follow tens of thousands of objects larger than about ten centimetres. Below that size, objects are too small to track reliably, but statistical models suggest that there are roughly a million pieces between one and ten centimetres across, and well over a hundred million smaller ones. Most of this material is concentrated in low Earth orbit, the busy region within about two thousand kilometres of the surface where the International Space Station and most observation satellites operate.</p><p><span class="para-label">C</span>What makes even tiny fragments dangerous is their speed. An object in low Earth orbit travels at around 28,000 kilometres per hour — roughly ten times faster than a bullet — and when two objects collide, their combined speed can be higher still. At such velocities, a fragment the size of a marble can strike with the energy of a small car crash, and a flake of paint has been known to chip a window on a spacecraft. Satellites can be shielded against the smallest particles, but no practical shield can protect against a piece the size of a tennis ball.</p><p><span class="para-label">D</span>Two events in particular made the dangers impossible to ignore. In 2007, a missile test deliberately destroyed an old weather satellite, creating thousands of trackable fragments in a single moment. Two years later, an active communications satellite and a defunct Russian satellite collided accidentally over Siberia — the first such collision between two whole satellites — scattering another cloud of debris. Most of the pieces produced by these two events are still in orbit today.</p><p><span class="para-label">E</span>Scientists have long warned of a worse scenario. As early as the late 1970s, researchers suggested that once the amount of debris passed a certain point, collisions would produce fragments faster than natural processes could remove them, and each collision would make further collisions more likely. The result, in theory, would be a chain reaction that could make some orbits unusable for generations. Whether this point has already been reached in certain orbits is still a matter of debate among experts, but few dispute that the risk is growing.</p><p><span class="para-label">F</span>Nature does provide some help. Objects in the lowest orbits are gradually slowed by the thin upper atmosphere, and eventually they fall and burn up, often within a few years. Higher up, however, the air is so thin that debris can remain in orbit for centuries. This is why international guidelines have for many years recommended that satellites in low orbit should be removed within twenty-five years of the end of their mission, either by lowering them so that they burn up or, for higher satellites, by moving them into a so-called graveyard orbit away from busy regions. Compliance with these guidelines, however, has been far from complete, and some regulators have recently demanded much shorter deadlines.</p><p><span class="para-label">G</span>Meanwhile, the number of satellites is rising faster than ever. Several companies are launching constellations of thousands of small satellites to provide internet access from space, and the number of active satellites has multiplied within a few years. Supporters argue that these satellites operate in low orbits, are designed to remove themselves at the end of their lives and can steer automatically to avoid collisions. Critics reply that even a small failure rate, multiplied across thousands of satellites, could add significantly to the problem.</p><p><span class="para-label">H</span>Preventing new debris is cheaper than removing old debris, but removal may eventually be unavoidable. Engineers have experimented with a range of methods for capturing dead objects, including nets, harpoons, robotic arms and magnetic docking plates fitted to satellites before launch. An experimental mission in 2018, for example, successfully tested both a net and a harpoon on targets it had released itself. None of these methods is yet cheap enough to use on a large scale, and there is a further obstacle that is legal rather than technical: under international law, every object in space still belongs to the country that launched it, and no one may remove another nation’s debris without permission.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–5</p><p class="qg-instr">The passage has eight paragraphs, <b>A–H</b>. Which paragraph contains the following information? <b>NB</b> You may use any letter more than once.</p></div>
+      <div class="card" id="t3-mi"><div class="sel-row"><select class="select" id="t3-mi-1" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>1.</b> a comparison between the speed of orbiting objects and a familiar object</span></div><div class="sel-row"><select class="select" id="t3-mi-2" data-answer="H"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>2.</b> a reason why removing debris may be legally difficult</span></div><div class="sel-row"><select class="select" id="t3-mi-3" data-answer="F"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>3.</b> a description of how some debris disappears without human action</span></div><div class="sel-row"><select class="select" id="t3-mi-4" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>4.</b> an estimate of the number of objects too small to be followed</span></div><div class="sel-row"><select class="select" id="t3-mi-5" data-answer="G"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>5.</b> arguments for and against large groups of new satellites</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-mi', 't3-mi-score')">Check answers</button>
+          <span id="t3-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 6–10</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t3-tf"><div class="q-item" id="t3-tf-6">
+          <p>6. Shields can protect satellites from objects as large as a tennis ball.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-6" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-6" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-7">
+          <p>7. The 2009 collision was the first accidental collision between two complete satellites.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-7" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t3-tf-7" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-7" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-8">
+          <p>8. Most of the fragments created in 2007 have now fallen back to Earth.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-8" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-8" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-8" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-9">
+          <p>9. Experts agree that a chain reaction of collisions has already begun in some orbits.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-9" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-9" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-9" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-10">
+          <p>10. The 2018 experimental mission was funded by several different countries.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-10" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-10" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-10" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-tf', 't3-tf-score')">Check answers</button>
+          <span id="t3-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–14</p><p class="qg-instr">Complete the summary below. Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p></div>
+<div class="card"><p class="prompt-label" style="text-align:center;">Getting rid of old satellites</p>
+      <div class="card" id="t3-s" style="line-height:2.6;"><p>In the lowest orbits, debris is slowed down by the upper (11) <input type="text" class="text-answer" id="t3-11" data-correct="atmosphere" autocomplete="off" style="width:130px;"> and burns up, but higher up it can stay in orbit for (12) <input type="text" class="text-answer" id="t3-12" data-correct="centuries" autocomplete="off" style="width:130px;">. For this reason, satellites are supposed to be removed within twenty-five years, while higher satellites can be moved into a (13) <input type="text" class="text-answer" id="t3-13" data-correct="graveyard" autocomplete="off" style="width:130px;"> orbit. However, (14) <input type="text" class="text-answer" id="t3-14" data-correct="compliance" autocomplete="off" style="width:130px;"> with these rules has not been complete.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-s', 't3-s-score')">Check answers</button>
+          <span id="t3-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 13</div>
+      <h2>Reading 1 — Answer Analysis and Language Focus</h2>
+      <p class="task-sub">Open each question to see exactly where the answer is and why the tempting wrong answer is wrong. Matching information is one of the hardest IELTS tasks — notice how each statement describes the <b>function</b> of a piece of text. Then practise the passive and noun phrases the passage uses.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Cleaning Up Orbit: The Problem of Space Junk</summary>
+        <p><span class="para-label">A</span>When the Soviet Union launched Sputnik 1 in 1957, the space around the Earth was empty. Since then, thousands of rockets have carried satellites into orbit, and much of what they left behind is still up there. Dead satellites, discarded rocket stages, flakes of paint and fragments from explosions now circle the planet alongside the working satellites on which modern life depends. Collectively, this material is known as space debris or, less formally, space junk.</p><p><span class="para-label">B</span>The scale of the problem is difficult to picture. Tracking networks on the ground follow tens of thousands of objects larger than about ten centimetres. Below that size, objects are too small to track reliably, but statistical models suggest that there are roughly a million pieces between one and ten centimetres across, and well over a hundred million smaller ones. Most of this material is concentrated in low Earth orbit, the busy region within about two thousand kilometres of the surface where the International Space Station and most observation satellites operate.</p><p><span class="para-label">C</span>What makes even tiny fragments dangerous is their speed. An object in low Earth orbit travels at around 28,000 kilometres per hour — roughly ten times faster than a bullet — and when two objects collide, their combined speed can be higher still. At such velocities, a fragment the size of a marble can strike with the energy of a small car crash, and a flake of paint has been known to chip a window on a spacecraft. Satellites can be shielded against the smallest particles, but no practical shield can protect against a piece the size of a tennis ball.</p><p><span class="para-label">D</span>Two events in particular made the dangers impossible to ignore. In 2007, a missile test deliberately destroyed an old weather satellite, creating thousands of trackable fragments in a single moment. Two years later, an active communications satellite and a defunct Russian satellite collided accidentally over Siberia — the first such collision between two whole satellites — scattering another cloud of debris. Most of the pieces produced by these two events are still in orbit today.</p><p><span class="para-label">E</span>Scientists have long warned of a worse scenario. As early as the late 1970s, researchers suggested that once the amount of debris passed a certain point, collisions would produce fragments faster than natural processes could remove them, and each collision would make further collisions more likely. The result, in theory, would be a chain reaction that could make some orbits unusable for generations. Whether this point has already been reached in certain orbits is still a matter of debate among experts, but few dispute that the risk is growing.</p><p><span class="para-label">F</span>Nature does provide some help. Objects in the lowest orbits are gradually slowed by the thin upper atmosphere, and eventually they fall and burn up, often within a few years. Higher up, however, the air is so thin that debris can remain in orbit for centuries. This is why international guidelines have for many years recommended that satellites in low orbit should be removed within twenty-five years of the end of their mission, either by lowering them so that they burn up or, for higher satellites, by moving them into a so-called graveyard orbit away from busy regions. Compliance with these guidelines, however, has been far from complete, and some regulators have recently demanded much shorter deadlines.</p><p><span class="para-label">G</span>Meanwhile, the number of satellites is rising faster than ever. Several companies are launching constellations of thousands of small satellites to provide internet access from space, and the number of active satellites has multiplied within a few years. Supporters argue that these satellites operate in low orbits, are designed to remove themselves at the end of their lives and can steer automatically to avoid collisions. Critics reply that even a small failure rate, multiplied across thousands of satellites, could add significantly to the problem.</p><p><span class="para-label">H</span>Preventing new debris is cheaper than removing old debris, but removal may eventually be unavoidable. Engineers have experimented with a range of methods for capturing dead objects, including nets, harpoons, robotic arms and magnetic docking plates fitted to satellites before launch. An experimental mission in 2018, for example, successfully tested both a net and a harpoon on targets it had released itself. None of these methods is yet cheap enough to use on a large scale, and there is a further obstacle that is legal rather than technical: under international law, every object in space still belongs to the country that launched it, and no one may remove another nation’s debris without permission.</p>
+      </details>
+      <div class="card an-card"><p class="an-intro">Q8 and Q9 are both FALSE because of one or two small words: <i>still</i> and <i>a matter of debate</i>. In T/F/NG, qualifying words often decide the answer.</p><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">C</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="q">a comparison … familiar object</span> ↔ <span class="ev">roughly ten times faster than a bullet</span>.</p><p>A bullet is the familiar object. <span class="trap">Trap:</span> Para C also compares a marble to a car crash — but that compares <b>energy</b>, not speed. Either way, the answer is C.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">H</span><span class="an-where">Para H, last sentence</span></summary><div class="an-body"><p><span class="ev">there is a further obstacle that is legal rather than technical: under international law, every object in space still belongs to the country that launched it</span>.</p><p><i>Legally difficult</i> ↔ <i>legal obstacle</i>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">F</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="q">without human action</span> ↔ <span class="ev">Nature does provide some help … slowed by the thin upper atmosphere … they fall and burn up</span>.</p><p><span class="trap">Trap:</span> Para H describes removal by humans (nets, harpoons) — the opposite of <i>without human action</i>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Below that size, objects are too small to track reliably, but statistical models suggest that there are roughly a million pieces</span>.</p><p><i>Followed</i> = <i>tracked</i>; <i>estimate</i> = <i>statistical models suggest … roughly</i>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">G</span><span class="an-where">Para G</span></summary><div class="an-body"><p><span class="ev">Supporters argue that…</span> / <span class="ev">Critics reply that…</span> — about <span class="ev">constellations of thousands of small satellites</span>.</p><p><i>Large groups</i> = <i>constellations</i>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">FALSE</span><span class="an-where">Para C, last sentence</span></summary><div class="an-body"><p><span class="ev">no practical shield can protect against a piece the size of a tennis ball</span>. The passage says the opposite → FALSE.</p><p><span class="trap">Trap:</span> <i>Satellites can be shielded</i> — but only <span class="ev">against the smallest particles</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">TRUE</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">collided accidentally over Siberia — the first such collision between two whole satellites</span>. <i>Complete</i> = <i>whole</i>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">FALSE</span><span class="an-where">Para D, last sentence</span></summary><div class="an-body"><p><span class="ev">Most of the pieces produced by these two events are still in orbit today</span>. If most are still in orbit, most cannot have fallen.</p><p>Grammar note: <i>still</i> signals continuation — a strong clue for FALSE.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">FALSE</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Whether this point has already been reached in certain orbits is still a matter of debate among experts</span>.</p><p><i>Experts agree</i> ↔ <i>a matter of debate</i> → contradiction → FALSE.</p><p><span class="trap">Trap:</span> <span class="ev">few dispute that the risk is growing</span> — experts agree the <b>risk</b> is growing, not that the chain reaction has <b>begun</b>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para H</span></summary><div class="an-body"><p>The passage says the mission <span class="ev">successfully tested both a net and a harpoon</span> but says nothing about who paid for it.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">atmosphere</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">slowed by the thin upper atmosphere</span>. The summary gives <i>upper</i>, so the gap is the noun.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">centuries</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">debris can remain in orbit for centuries</span>. <i>Stay</i> = <i>remain</i>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">graveyard</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">moving them into a so-called graveyard orbit</span>. One word only — <i>so-called</i> is not part of the answer.</p></div></details><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">compliance</span><span class="an-where">Para F, last sentence</span></summary><div class="an-body"><p><span class="ev">Compliance with these guidelines, however, has been far from complete</span>. <i>Has not been complete</i> = <i>far from complete</i>.</p><p>Note the collocation: <b>compliance with</b> rules / guidelines.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Language focus 1 — the passive in scientific writing.</strong> Rewrite the underlined part in the passive, using the verb in brackets. Write only the missing words.</p>
+      <div class="card" id="t4-pa" style="line-height:2.5;"><p>1. Tracking networks follow tens of thousands of objects. → Tens of thousands of objects <input type="text" class="text-answer" id="t4-1" data-correct="are followed" autocomplete="off" style="width:150px;"> by tracking networks. (follow)</p><p>2. A missile test destroyed an old satellite in 2007. → An old satellite <input type="text" class="text-answer" id="t4-2" data-correct="was destroyed" autocomplete="off" style="width:150px;"> by a missile test in 2007. (destroy)</p><p>3. Engineers have tested nets and harpoons. → Nets and harpoons <input type="text" class="text-answer" id="t4-3" data-correct="have been tested" autocomplete="off" style="width:150px;"> by engineers. (test)</p><p>4. Companies will launch thousands more satellites. → Thousands more satellites <input type="text" class="text-answer" id="t4-4" data-correct="will be launched" autocomplete="off" style="width:150px;">. (launch)</p><p>5. Operators should remove satellites within 25 years. → Satellites <input type="text" class="text-answer" id="t4-5" data-correct="should be removed" autocomplete="off" style="width:150px;"> within 25 years. (remove)</p><p>6. The atmosphere is slowing the fragments down. → The fragments <input type="text" class="text-answer" id="t4-6" data-correct="are being slowed" autocomplete="off" style="width:150px;"> down by the atmosphere. (slow)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-pa', 't4-pa-score')">Check answers</button>
+          <span id="t4-pa-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Language focus 2 — noun phrases.</strong> Academic writing often turns a verb into a noun. Complete each noun phrase from the passage.</p>
+      <div class="card" id="t4-np" style="line-height:2.4;"><p>1. objects collide → a <input type="text" class="text-answer" id="t4-n1" data-correct="collision" autocomplete="off" style="width:130px;"> between objects</p><p>2. countries comply with guidelines → <input type="text" class="text-answer" id="t4-n2" data-correct="compliance" autocomplete="off" style="width:130px;"> with guidelines</p><p>3. engineers remove debris → the <input type="text" class="text-answer" id="t4-n3" data-correct="removal" autocomplete="off" style="width:130px;"> of debris</p><p>4. satellites are launched → the <input type="text" class="text-answer" id="t4-n4" data-correct="launch" autocomplete="off" style="width:130px;"> of satellites</p><p>5. something explodes → an <input type="text" class="text-answer" id="t4-n5" data-correct="explosion" autocomplete="off" style="width:130px;"></p><p>6. we observe the Earth → Earth <input type="text" class="text-answer" id="t4-n6" data-correct="observation" autocomplete="off" style="width:130px;"> satellites</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-np', 't4-np-score')">Check answers</button>
+          <span id="t4-np-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 13</div>
+      <h2>Lead-in 2 — Why Mars?</h2>
+      <p class="task-sub">Before Reading 2 (an argument about sending humans to Mars), read this article about why Mars matters to scientists. About 15 minutes.</p>
+      <div class="card article">
+        <h3 class="article-title">Why Mars?</h3>
+        <p class="article-meta">Science · Planetary exploration · 348 words</p>
+        <p>Of all the planets in the solar system, why has Mars attracted so much attention? Venus is closer to us, but its surface is hot enough to melt lead and lies beneath a crushing atmosphere of carbon dioxide and clouds of acid. The giant outer planets have no solid surface to land on at all. Mars, by contrast, is cold and dry, but it has a solid surface, a day only a little longer than ours, and seasons. Of all our neighbours, it is the one that looks most like a place where people might one day live.</p><p>It is also reachable. Depending on the positions of the two planets, a spacecraft can travel from Earth to Mars in roughly six to nine months. Because both planets are moving, the best opportunities to launch come only about once every two years, which is why missions to Mars tend to leave in groups.</p><p>The main scientific reason for interest, however, is water. Images from orbiting spacecraft show what look like dried-up river valleys and deltas, and rovers on the surface have found rocks that could only have formed in the presence of liquid water. Billions of years ago, scientists believe, Mars was warmer and wetter, with lakes and possibly even a shallow sea. Where there was liquid water, there may have been life.</p><p>That is why today’s rovers are equipped not just with cameras but with drills and chemical laboratories. They are searching for traces of the kinds of molecules that living things leave behind, and one rover has been collecting rock samples in sealed tubes so that a future mission might bring them back to Earth, where they can be studied with far more powerful instruments.</p><p>No one expects to find animals or plants. If life ever existed on Mars, it was almost certainly microscopic, and it may have died out long ago. But the discovery of even the simplest past life on another planet would be one of the most important findings in the history of science — evidence that life is not unique to the Earth.</p>
+      </div>
+      <div class="card" id="t5-mc"><div class="q-item" id="t5-mc-1">
+          <p>1. Why is Venus unsuitable for human visitors, according to the article?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-1" data-correct="false"> A. It is too far away.</label><label><input type="radio" value="1" name="t5-mc-1" data-correct="true"> B. Its surface is extremely hot and its atmosphere is dangerous.</label><label><input type="radio" value="2" name="t5-mc-1" data-correct="false"> C. It has no solid surface.</label><label><input type="radio" value="3" name="t5-mc-1" data-correct="false"> D. It is too cold.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-2">
+          <p>2. Why do missions to Mars often leave at around the same time?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-2" data-correct="false"> A. Agencies like to share costs.</label><label><input type="radio" value="1" name="t5-mc-2" data-correct="true"> B. Good launch opportunities occur only about every two years.</label><label><input type="radio" value="2" name="t5-mc-2" data-correct="false"> C. The weather on Earth is better then.</label><label><input type="radio" value="3" name="t5-mc-2" data-correct="false"> D. Rockets are cheaper at certain times of year.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-3">
+          <p>3. What evidence suggests that Mars once had liquid water?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-3" data-correct="false"> A. photographs of living plants</label><label><input type="radio" value="1" name="t5-mc-3" data-correct="true"> B. river valleys, deltas and rocks that formed in water</label><label><input type="radio" value="2" name="t5-mc-3" data-correct="false"> C. ice clouds in the atmosphere</label><label><input type="radio" value="3" name="t5-mc-3" data-correct="false"> D. samples brought back to Earth</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-4">
+          <p>4. What kind of life, if any, do scientists expect to find?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-4" data-correct="false"> A. small animals</label><label><input type="radio" value="1" name="t5-mc-4" data-correct="false"> B. plants under the surface</label><label><input type="radio" value="2" name="t5-mc-4" data-correct="true"> C. microscopic life from the distant past</label><label><input type="radio" value="3" name="t5-mc-4" data-correct="false"> D. intelligent life</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-mc', 't5-mc-score')">Check answers</button>
+          <span id="t5-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t5-tf"><div class="q-item" id="t5-tf-1">
+          <p>1. A day on Mars is slightly longer than a day on Earth.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-1" data-correct="true"> True</label><label><input type="radio" value="1" name="t5-tf-1" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-2">
+          <p>2. Rock samples from Mars have already been studied in laboratories on Earth.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-2" data-correct="false"> True</label><label><input type="radio" value="1" name="t5-tf-2" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-3">
+          <p>3. Mars was probably warmer in the distant past than it is now.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-3" data-correct="true"> True</label><label><input type="radio" value="1" name="t5-tf-3" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-4">
+          <p>4. The writer believes finding past life on Mars would be of little importance.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-4" data-correct="false"> True</label><label><input type="radio" value="1" name="t5-tf-4" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-tf', 't5-tf-score')">Check answers</button>
+          <span id="t5-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 110 words</b>. Cover the central idea, the key evidence or examples, and finish with your own evaluation. Do not copy phrases of four or more words.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 110 words):</p><textarea class="no-check mini-answer" id="t5-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:180px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t5-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t5-sum-ans"><p>The article explains why Mars, rather than any other planet, has become the main target of space exploration. Although it is cold, dry and has a very thin atmosphere, it is the most Earth-like of our neighbours, and it is close enough to reach in a matter of months. Robotic missions have found strong evidence that liquid water once flowed on its surface, forming rivers and lakes, which raises the question of whether simple life ever existed there. Current rovers are therefore searching for chemical traces of ancient life and collecting rock samples that may one day be returned to Earth. I think the search for past life is the most compelling reason to go. (≈ 120 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t5-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your notes — speak for <b>at least 45 seconds</b> (aim for a minute), and finish with your own opinion.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central argument is that…”</li><li>“This is supported by…”</li><li>“What I found most striking was…”</li><li>“That said, I'm not entirely convinced that…”</li><li>“On balance, I'd say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 13</div>
+      <h2>Reading 2 — Should Humans Go to Mars?</h2>
+      <p class="task-sub">Suggested time: 20 minutes. This is an <b>argumentative</b> passage — the writer gives opinions. Three IELTS question types: <b>multiple choice</b>, <b>YES / NO / NOT GIVEN</b> and <b>matching sentence endings</b>. Questions 15–28. Passage on the left, questions on the right. Answers are checked when you press <b>Next</b>.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li><b>YES / NO / NOT GIVEN</b> tests the <b>writer’s</b> views. Separate what <i>other people</i> argue (<i>critics argue…, the most popular argument is…</i>) from what the writer thinks (<i>I find…, in my view…, I believe…</i>).</li>
+  <li><b>Sentence endings:</b> the beginnings follow passage order. Every ending must make a grammatical sentence <b>and</b> match the meaning — several endings will fit grammatically.</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Should Humans Go to Mars?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Sending people to another planet would be the greatest adventure in human history. But is it the right priority — and are we ready?</small></h3>
+            <p class="article-meta">Reading Passage 2 · Space and society · 656 words</p>
+            <p><span class="para-label">A</span>For more than half a century, a human landing on Mars has been described as being about twenty years away. Today, with several space agencies and private companies announcing ambitious plans, the goal seems closer than ever. Yet the question of whether we should go deserves more careful thought than it usually receives, because the case for a crewed mission is weaker in some respects, and stronger in others, than either its enthusiasts or its critics tend to admit.</p><p><span class="para-label">B</span>The most popular argument for going is that humanity needs a ‘second home’. If an asteroid strike, a pandemic or a nuclear war were to make the Earth uninhabitable, a settlement on Mars would allow our species to survive. I find this argument unconvincing. Even after a catastrophe, the Earth would remain far more habitable than Mars, which has almost no atmosphere, no protection from radiation and an average surface temperature far below freezing. It would be easier, and much cheaper, to build shelters in Antarctica or under the sea than to create a self-sufficient city on another planet.</p><p><span class="para-label">C</span>The scientific argument is more persuasive. Robotic rovers have achieved remarkable things, but they are slow and cautious. Because radio signals take up to about twenty minutes to travel between the planets in each direction, rovers cannot be driven in real time, and a task that a trained geologist could complete in an afternoon may take a rover weeks. Many scientists believe that if traces of ancient life exist on Mars, a human explorer, able to judge where to look and to react instantly, would be far more likely to find them.</p><p><span class="para-label">D</span>The difficulties, however, are formidable. A round trip, including the time spent waiting on the surface for the planets to line up again for the journey home, would probably last between two and three years. During that time the crew would be exposed to cosmic radiation at levels well above those considered safe on Earth, and long periods in weightlessness would weaken their muscles, bones and possibly their eyesight. Unlike astronauts on the space station, they could not be rescued or sent home if something went wrong. Every piece of equipment, every medicine and every meal would have to be brought from Earth or produced on Mars.</p><p><span class="para-label">E</span>Then there is the cost. Estimates for a crewed Mars programme vary enormously, but all of them run into many tens of billions of dollars. Critics argue that this money would be better spent on urgent problems on Earth, such as climate change or poverty. This objection is understandable, but in my view it rests on a false choice. Space budgets are small compared with most areas of government spending, and the technologies developed for space — in materials, medicine, recycling and computing — have often brought benefits far beyond the space industry.</p><p><span class="para-label">F</span>A further concern is rarely discussed outside scientific circles: contamination. Humans carry enormous numbers of microbes, and no spacesuit or habitat is perfectly sealed. If Earth microbes were released on Mars, they might make it impossible to tell whether any life later discovered there was truly Martian. Some scientists therefore argue that humans should not land until robotic missions have studied the most promising sites thoroughly. I believe this caution is justified.</p><p><span class="para-label">G</span>What, then, should we do? My own conclusion is that a human mission to Mars is worth attempting, but not yet, and not for the reasons usually given. The idea of Mars as a lifeboat for humanity is a distraction. The real prize is knowledge: the chance to answer whether life has ever arisen anywhere other than on Earth. That prize is best pursued by first sending more capable robots, returning rock samples for study, and solving the problems of radiation and long-term health. When — and only when — those steps have been taken, the first human footprint on Mars will be not a stunt, but the beginning of a serious scientific undertaking.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 15–18</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-15">
+          <p>15. What point does the writer make in the first paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-15" data-correct="false"> A. A landing on Mars will definitely happen within twenty years.</label><label><input type="radio" value="1" name="t6-mc-15" data-correct="true"> B. Both supporters and opponents of a Mars mission tend to oversimplify the issue.</label><label><input type="radio" value="2" name="t6-mc-15" data-correct="false"> C. Private companies are better prepared than space agencies.</label><label><input type="radio" value="3" name="t6-mc-15" data-correct="false"> D. The question of whether to go to Mars has been fully discussed.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-16">
+          <p>16. Why does the writer reject the ‘second home’ argument?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-16" data-correct="false"> A. Mars is too far away to reach in an emergency.</label><label><input type="radio" value="1" name="t6-mc-16" data-correct="true"> B. Even a badly damaged Earth would be easier to live on than Mars.</label><label><input type="radio" value="2" name="t6-mc-16" data-correct="false"> C. Asteroid strikes are extremely unlikely.</label><label><input type="radio" value="3" name="t6-mc-16" data-correct="false"> D. Antarctica is already overpopulated.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-17">
+          <p>17. According to the third paragraph, why are rovers slow?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-17" data-correct="false"> A. Their engines are not powerful enough.</label><label><input type="radio" value="1" name="t6-mc-17" data-correct="true"> B. Communication delays mean they cannot be controlled in real time.</label><label><input type="radio" value="2" name="t6-mc-17" data-correct="false"> C. The surface of Mars is too rocky.</label><label><input type="radio" value="3" name="t6-mc-17" data-correct="false"> D. They are designed by geologists.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-18">
+          <p>18. What is the writer’s main purpose in the final paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-18" data-correct="false"> A. to argue that Mars missions should be cancelled</label><label><input type="radio" value="1" name="t6-mc-18" data-correct="true"> B. to recommend a gradual approach led by scientific goals</label><label><input type="radio" value="2" name="t6-mc-18" data-correct="false"> C. to praise private space companies</label><label><input type="radio" value="3" name="t6-mc-18" data-correct="false"> D. to describe the first human landing</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 19–23</p><p class="qg-instr">Do the following statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-19">
+          <p>19. Building protected shelters on Earth would be a cheaper way to survive a global disaster than settling Mars.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-19" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-19" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-19" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-20">
+          <p>20. Human explorers would probably be better than robots at finding evidence of past life.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-20" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-20" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-20" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-21">
+          <p>21. Money spent on space exploration would be better used to tackle problems on Earth.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-21" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-21" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-21" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-22">
+          <p>22. Private companies will reach Mars before government space agencies.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-22" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-22" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-22" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-23">
+          <p>23. Humans should not land on Mars until the best sites have been carefully studied by robots.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-23" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-23" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-23" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 24–28</p><p class="qg-instr">Complete each sentence with the correct ending, <b>A–H</b>, below.</p></div>
+<div class="card"><p class="prompt-label">Endings</p><p style="line-height:1.85; margin:0;">
+<b>A</b>&nbsp; because they could not be rescued if something went wrong.<br>
+<b>B</b>&nbsp; would weaken the crew’s bodies.<br>
+<b>C</b>&nbsp; have often been useful outside the space industry.<br>
+<b>D</b>&nbsp; could make it impossible to identify genuine Martian life.<br>
+<b>E</b>&nbsp; would protect the crew from radiation.<br>
+<b>F</b>&nbsp; is to discover whether life has existed beyond the Earth.<br>
+<b>G</b>&nbsp; are larger than most areas of government spending.<br>
+<b>H</b>&nbsp; would allow the crew to return home quickly.</p></div>
+      <div class="card" id="t6-se"><div class="sel-row"><select class="select" id="t6-se-24" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>24.</b> Long periods spent in weightlessness</span></div><div class="sel-row"><select class="select" id="t6-se-25" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>25.</b> A Mars crew would face greater risks than astronauts on the space station</span></div><div class="sel-row"><select class="select" id="t6-se-26" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>26.</b> Technologies developed for space programmes</span></div><div class="sel-row"><select class="select" id="t6-se-27" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>27.</b> Microbes carried by human explorers</span></div><div class="sel-row"><select class="select" id="t6-se-28" data-answer="F"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>28.</b> According to the writer, the true value of a Mars mission</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-se', 't6-se-score')">Check answers</button>
+          <span id="t6-se-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 13</div>
+      <h2>Reading 2 — Answer Analysis and Collocations</h2>
+      <p class="task-sub">The key skill in this passage is separating <b>other people’s</b> opinions from the <b>writer’s</b>. Open each answer, then practise the academic collocations the writer uses to argue.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Should Humans Go to Mars?</summary>
+        <p><span class="para-label">A</span>For more than half a century, a human landing on Mars has been described as being about twenty years away. Today, with several space agencies and private companies announcing ambitious plans, the goal seems closer than ever. Yet the question of whether we should go deserves more careful thought than it usually receives, because the case for a crewed mission is weaker in some respects, and stronger in others, than either its enthusiasts or its critics tend to admit.</p><p><span class="para-label">B</span>The most popular argument for going is that humanity needs a ‘second home’. If an asteroid strike, a pandemic or a nuclear war were to make the Earth uninhabitable, a settlement on Mars would allow our species to survive. I find this argument unconvincing. Even after a catastrophe, the Earth would remain far more habitable than Mars, which has almost no atmosphere, no protection from radiation and an average surface temperature far below freezing. It would be easier, and much cheaper, to build shelters in Antarctica or under the sea than to create a self-sufficient city on another planet.</p><p><span class="para-label">C</span>The scientific argument is more persuasive. Robotic rovers have achieved remarkable things, but they are slow and cautious. Because radio signals take up to about twenty minutes to travel between the planets in each direction, rovers cannot be driven in real time, and a task that a trained geologist could complete in an afternoon may take a rover weeks. Many scientists believe that if traces of ancient life exist on Mars, a human explorer, able to judge where to look and to react instantly, would be far more likely to find them.</p><p><span class="para-label">D</span>The difficulties, however, are formidable. A round trip, including the time spent waiting on the surface for the planets to line up again for the journey home, would probably last between two and three years. During that time the crew would be exposed to cosmic radiation at levels well above those considered safe on Earth, and long periods in weightlessness would weaken their muscles, bones and possibly their eyesight. Unlike astronauts on the space station, they could not be rescued or sent home if something went wrong. Every piece of equipment, every medicine and every meal would have to be brought from Earth or produced on Mars.</p><p><span class="para-label">E</span>Then there is the cost. Estimates for a crewed Mars programme vary enormously, but all of them run into many tens of billions of dollars. Critics argue that this money would be better spent on urgent problems on Earth, such as climate change or poverty. This objection is understandable, but in my view it rests on a false choice. Space budgets are small compared with most areas of government spending, and the technologies developed for space — in materials, medicine, recycling and computing — have often brought benefits far beyond the space industry.</p><p><span class="para-label">F</span>A further concern is rarely discussed outside scientific circles: contamination. Humans carry enormous numbers of microbes, and no spacesuit or habitat is perfectly sealed. If Earth microbes were released on Mars, they might make it impossible to tell whether any life later discovered there was truly Martian. Some scientists therefore argue that humans should not land until robotic missions have studied the most promising sites thoroughly. I believe this caution is justified.</p><p><span class="para-label">G</span>What, then, should we do? My own conclusion is that a human mission to Mars is worth attempting, but not yet, and not for the reasons usually given. The idea of Mars as a lifeboat for humanity is a distraction. The real prize is knowledge: the chance to answer whether life has ever arisen anywhere other than on Earth. That prize is best pursued by first sending more capable robots, returning rock samples for study, and solving the problems of radiation and long-term health. When — and only when — those steps have been taken, the first human footprint on Mars will be not a stunt, but the beginning of a serious scientific undertaking.</p>
+      </details>
+      <div class="card an-card"><p class="an-intro">The writer’s voice is marked by <i>I find…, in my view…, I believe…, my own conclusion</i>. Every NO and YES answer in Questions 19–23 is next to one of these markers.</p><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">B</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">the case for a crewed mission is weaker in some respects, and stronger in others, than either its enthusiasts or its critics tend to admit</span>.</p><p><i>Oversimplify</i> = fail to admit the complexity. <span class="trap">Trap:</span> A: the passage says a landing has been <i>described as</i> twenty years away for half a century — an ironic point, not a prediction.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Even after a catastrophe, the Earth would remain far more habitable than Mars</span>.</p><p><span class="trap">Trap:</span> D twists the mention of Antarctica, which is offered as a cheaper alternative, not described as overpopulated.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Because radio signals take up to about twenty minutes … rovers cannot be driven in real time</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">B</span><span class="an-where">Para G</span></summary><div class="an-body"><p><span class="ev">worth attempting, but not yet … best pursued by first sending more capable robots, returning rock samples … When — and only when — those steps have been taken</span>. A step-by-step approach with a scientific aim (<i>The real prize is knowledge</i>).</p><p><span class="trap">Trap:</span> A: the writer says <i>worth attempting</i> — the opposite of cancelling.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">YES</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">It would be easier, and much cheaper, to build shelters in Antarctica or under the sea than to create a self-sufficient city on another planet</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">YES</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">a human explorer … would be far more likely to find them</span>. The paragraph begins <span class="ev">The scientific argument is more persuasive</span> — the writer accepts it.</p><p>Hedging note: the sentence is introduced by <i>Many scientists believe</i>, but the writer’s own judgement <i>more persuasive</i> shows agreement.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">NO</span><span class="an-where">Para E</span></summary><div class="an-body"><p>This is the <b>critics’</b> view: <span class="ev">Critics argue that this money would be better spent on urgent problems on Earth</span>. The writer replies: <span class="ev">in my view it rests on a false choice</span>.</p><p><span class="trap">Trap:</span> the statement repeats the critics’ words — but YES/NO/NG asks about the <b>writer</b>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para A</span></summary><div class="an-body"><p>The writer mentions <span class="ev">several space agencies and private companies announcing ambitious plans</span> but never predicts which will arrive first.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Some scientists therefore argue that humans should not land until robotic missions have studied the most promising sites thoroughly. I believe this caution is justified</span>.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">long periods in weightlessness would weaken their muscles, bones and possibly their eyesight</span>.</p><p><span class="trap">Trap:</span> E (radiation) is in the same paragraph, but weightlessness does not <i>protect</i> anyone.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">A</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Unlike astronauts on the space station, they could not be rescued or sent home if something went wrong</span>.</p><p><span class="trap">Trap:</span> H says the opposite.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">C</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">the technologies developed for space … have often brought benefits far beyond the space industry</span>.</p><p><span class="trap">Trap:</span> G: the passage says space budgets are <b>small</b> compared with other spending.</p></div></details><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">D</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">they might make it impossible to tell whether any life later discovered there was truly Martian</span>. <i>Identify</i> = <i>tell</i>; <i>genuine</i> = <i>truly</i>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">F</span><span class="an-where">Para G</span></summary><div class="an-body"><p><span class="ev">The real prize is knowledge: the chance to answer whether life has ever arisen anywhere other than on Earth</span>. <i>True value</i> = <i>real prize</i>.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Argument collocations.</strong> Complete each phrase with the word the writer uses.</p>
+      <div class="card" id="t7-col" style="line-height:2.5;"><p>1. The case for a mission <input type="text" class="text-answer" id="t7-1" data-correct="deserves" autocomplete="off" style="width:120px;"> more careful thought. (= should receive)</p><p>2. I find this argument <input type="text" class="text-answer" id="t7-2" data-correct="unconvincing" autocomplete="off" style="width:140px;">. (= not persuasive)</p><p>3. The difficulties are <input type="text" class="text-answer" id="t7-3" data-correct="formidable" autocomplete="off" style="width:140px;">. (= very great and frightening)</p><p>4. The objection <input type="text" class="text-answer" id="t7-4" data-correct="rests" autocomplete="off" style="width:120px;"> on a false choice. (= is based)</p><p>5. This caution is <input type="text" class="text-answer" id="t7-5" data-correct="justified" autocomplete="off" style="width:120px;">. (= reasonable, right)</p><p>6. The idea of Mars as a lifeboat is a <input type="text" class="text-answer" id="t7-6" data-correct="distraction" autocomplete="off" style="width:140px;">. (= takes attention from what matters)</p><p>7. The prize is best <input type="text" class="text-answer" id="t7-7" data-correct="pursued" autocomplete="off" style="width:120px;"> by sending robots first. (= tried to achieve)</p><p>8. Costs run <input type="text" class="text-answer" id="t7-8" data-correct="into" autocomplete="off" style="width:100px;"> many tens of billions of dollars. (= reach)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-col', 't7-col-score')">Check answers</button>
+          <span id="t7-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Use them.</strong> Choose the best word to complete each sentence about a different topic.</p>
+      <div class="card" id="t7-use"><div class="q-item" id="t7-use-1">
+          <p>1. The government’s claim that the new airport will create 10,000 jobs is, in my view, ______ — no evidence has been offered.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-use-1" data-correct="false"> formidable</label><label><input type="radio" value="1" name="t7-use-1" data-correct="true"> unconvincing</label><label><input type="radio" value="2" name="t7-use-1" data-correct="false"> justified</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-use-2">
+          <p>2. Given the risks, the decision to delay the launch was entirely ______.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-use-2" data-correct="true"> justified</label><label><input type="radio" value="1" name="t7-use-2" data-correct="false"> distracted</label><label><input type="radio" value="2" name="t7-use-2" data-correct="false"> formidable</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-use-3">
+          <p>3. The debate about the stadium’s name is a ______ from the real issue: who will pay for it.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-use-3" data-correct="false"> caution</label><label><input type="radio" value="1" name="t7-use-3" data-correct="true"> distraction</label><label><input type="radio" value="2" name="t7-use-3" data-correct="false"> prize</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-use-4">
+          <p>4. The engineers faced ______ obstacles, but they finished the bridge on time.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-use-4" data-correct="false"> unconvincing</label><label><input type="radio" value="1" name="t7-use-4" data-correct="true"> formidable</label><label><input type="radio" value="2" name="t7-use-4" data-correct="false"> justified</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-use', 't7-use-score')">Check answers</button>
+          <span id="t7-use-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 13</div>
+      <h2>Lead-in 3 — Video: What I Learned from Going Blind in Space</h2>
+      <p class="task-sub">Watch this TED talk by Canadian astronaut Chris Hadfield, a former commander of the International Space Station (about 18 minutes). He describes a frightening moment during a spacewalk and what it taught him about fear. Watch once without subtitles if you can.</p>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="position:relative; padding-bottom:56.25%; height:0;">
+          <iframe src="https://embed.ted.com/talks/chris_hadfield_what_i_learned_from_going_blind_in_space" title="Chris Hadfield — What I learned from going blind in space" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Before you watch.</strong> Match the words from the talk to their meanings.</p>
+      <div class="card" id="t8-v">
+        <div class="line-match" id="t8-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. spacewalk</button><button type="button" class="lm-item" data-key="2">2. spacesuit</button><button type="button" class="lm-item" data-key="3">3. weightlessness</button><button type="button" class="lm-item" data-key="4">4. danger</button><button type="button" class="lm-item" data-key="5">5. fear</button><button type="button" class="lm-item" data-key="6">6. recalibrate</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. protective clothing worn by astronauts outside the spacecraft</button><button type="button" class="lm-item" data-key="b">b. the unpleasant feeling that harm will happen</button><button type="button" class="lm-item" data-key="c">c. a period when an astronaut works outside a spacecraft</button><button type="button" class="lm-item" data-key="d">d. the state of having no weight, for example in orbit</button><button type="button" class="lm-item" data-key="e">e. adjust something so that it measures correctly again</button><button type="button" class="lm-item" data-key="f">f. the real possibility that harm will happen</button></div>
+          <select class="lm-hidden-select select" id="t8-v-1" data-lm-key="1" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t8-v-2" data-lm-key="2" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t8-v-3" data-lm-key="3" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t8-v-4" data-lm-key="4" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t8-v-5" data-lm-key="5" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t8-v-6" data-lm-key="6" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-v', 't8-v-score'); markLineMatchResult('t8-v-lm');">Check answers</button>
+          <span id="t8-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t8-mc"><div class="q-item" id="t8-mc-1">
+          <p>1. What is the main distinction Hadfield makes in the talk?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-1" data-correct="false"> A. between science and art</label><label><input type="radio" value="1" name="t8-mc-1" data-correct="true"> B. between fear and real danger</label><label><input type="radio" value="2" name="t8-mc-1" data-correct="false"> C. between Canada and other countries</label><label><input type="radio" value="3" name="t8-mc-1" data-correct="false"> D. between rockets and planes</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-2">
+          <p>2. What happened to Hadfield during the spacewalk?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-2" data-correct="false"> A. His suit lost air.</label><label><input type="radio" value="1" name="t8-mc-2" data-correct="true"> B. Something got into his eye and he temporarily lost his sight.</label><label><input type="radio" value="2" name="t8-mc-2" data-correct="false"> C. He drifted away from the station.</label><label><input type="radio" value="3" name="t8-mc-2" data-correct="false"> D. His radio stopped working.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-3">
+          <p>3. Why did the problem spread to his other eye?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-3" data-correct="false"> A. He rubbed his eyes with his glove.</label><label><input type="radio" value="1" name="t8-mc-3" data-correct="true"> B. In weightlessness, tears do not fall but collect and spread.</label><label><input type="radio" value="2" name="t8-mc-3" data-correct="false"> C. The sun was too bright.</label><label><input type="radio" value="3" name="t8-mc-3" data-correct="false"> D. He was not wearing a helmet.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-4">
+          <p>4. Why was he able to stay calm?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-4" data-correct="false"> A. He did not realise anything was wrong.</label><label><input type="radio" value="1" name="t8-mc-4" data-correct="true"> B. He had trained for years to deal with problems like this.</label><label><input type="radio" value="2" name="t8-mc-4" data-correct="false"> C. His colleagues told him it was normal.</label><label><input type="radio" value="3" name="t8-mc-4" data-correct="false"> D. He was close to the end of the spacewalk.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-5">
+          <p>5. What point does he make with the example of spiders?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-5" data-correct="false"> A. Spiders are dangerous and should be avoided.</label><label><input type="radio" value="1" name="t8-mc-5" data-correct="true"> B. Our fear of something can be much greater than the real risk, and we can change our reaction.</label><label><input type="radio" value="2" name="t8-mc-5" data-correct="false"> C. Spiders can live in space.</label><label><input type="radio" value="3" name="t8-mc-5" data-correct="false"> D. Children are more afraid than adults.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-6">
+          <p>6. What is the overall message of the talk?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-6" data-correct="false"> A. Space travel is too dangerous for humans.</label><label><input type="radio" value="1" name="t8-mc-6" data-correct="true"> B. By understanding real risks and preparing, we can manage fear and do things we thought impossible.</label><label><input type="radio" value="2" name="t8-mc-6" data-correct="false"> C. Astronauts never feel afraid.</label><label><input type="radio" value="3" name="t8-mc-6" data-correct="false"> D. Training is less important than talent.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-mc', 't8-mc-score')">Check answers</button>
+          <span id="t8-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the talk in your own words — <b>at least 110 words</b>. Cover the central idea, the key evidence or examples, and finish with your own evaluation. Do not copy phrases of four or more words.</p>
+      <div class="card"><p class="mini-q">Your summary of the talk (at least 110 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:180px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>In this talk, astronaut Chris Hadfield uses his experience of space flight to explain the difference between fear and danger. He describes the extraordinary power of a rocket launch and then tells the story of a spacewalk during which something got into his eye. Because tears do not fall in weightlessness, the liquid spread until he could not see with either eye, yet he stayed calm and kept working, because years of training had prepared him for problems like this. He then uses the example of spiders to show that many fears are out of proportion to the real risk, and argues that we can change how we respond to fear through practice and preparation. I found his calmness inspiring. (≈ 125 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the talk <b>aloud</b> without reading your notes — speak for <b>at least 45 seconds</b> (aim for a minute), and finish with your own opinion.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central argument is that…”</li><li>“This is supported by…”</li><li>“What I found most striking was…”</li><li>“That said, I'm not entirely convinced that…”</li><li>“On balance, I'd say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 13</div>
+      <h2>Vocabulary — Science Collocations and Word Families</h2>
+      <p class="task-sub">At Band 7, examiners reward <b>precise collocations</b> and <b>accurate word forms</b>. This task combines the language of science from today’s texts with words you can use in any IELTS essay.</p>
+      <p style="margin-top:26px;"><strong>Part 1 — Verb + noun collocations.</strong> Choose the verb that collocates with each noun.</p>
+      <div class="card" id="t9-vn"><div class="sel-row"><select class="select" id="t9-vn-1" data-answer="conduct"><option value="">—</option><option value="conduct">conduct</option><option value="pose">pose</option><option value="reach">reach</option><option value="raise">raise</option><option value="draw">draw</option><option value="make">make</option></select><span><b>1.</b> ___ an experiment / research / a survey</span></div><div class="sel-row"><select class="select" id="t9-vn-2" data-answer="pose"><option value="">—</option><option value="conduct">conduct</option><option value="pose">pose</option><option value="reach">reach</option><option value="raise">raise</option><option value="draw">draw</option><option value="make">make</option></select><span><b>2.</b> ___ a threat / a risk / a challenge</span></div><div class="sel-row"><select class="select" id="t9-vn-3" data-answer="draw"><option value="">—</option><option value="conduct">conduct</option><option value="pose">pose</option><option value="reach">reach</option><option value="raise">raise</option><option value="draw">draw</option><option value="make">make</option></select><span><b>3.</b> ___ a conclusion / a comparison / attention to</span></div><div class="sel-row"><select class="select" id="t9-vn-4" data-answer="make"><option value="">—</option><option value="conduct">conduct</option><option value="pose">pose</option><option value="reach">reach</option><option value="raise">raise</option><option value="draw">draw</option><option value="make">make</option></select><span><b>4.</b> ___ a breakthrough / a discovery / progress</span></div><div class="sel-row"><select class="select" id="t9-vn-5" data-answer="raise"><option value="">—</option><option value="conduct">conduct</option><option value="pose">pose</option><option value="reach">reach</option><option value="raise">raise</option><option value="draw">draw</option><option value="make">make</option></select><span><b>5.</b> ___ a question / concerns / awareness</span></div><div class="sel-row"><select class="select" id="t9-vn-6" data-answer="reach"><option value="">—</option><option value="conduct">conduct</option><option value="pose">pose</option><option value="reach">reach</option><option value="raise">raise</option><option value="draw">draw</option><option value="make">make</option></select><span><b>6.</b> ___ an agreement / a consensus / a turning point</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-vn', 't9-vn-score')">Check answers</button>
+          <span id="t9-vn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Word families.</strong> Complete each sentence with the correct form of the word in brackets.</p>
+      <div class="card" id="t9-wf" style="line-height:2.5;"><p>1. Living on Mars would be extremely <input type="text" class="text-answer" id="t9-1" data-correct="hazardous" autocomplete="off" style="width:140px;">. (hazard)</p><p>2. The <input type="text" class="text-answer" id="t9-2" data-correct="feasibility" autocomplete="off" style="width:140px;"> of a crewed mission is still being studied. (feasible)</p><p>3. Rovers have made a number of remarkable <input type="text" class="text-answer" id="t9-3" data-correct="discoveries" autocomplete="off" style="width:140px;">. (discover)</p><p>4. The surface of Mars is almost completely <input type="text" class="text-answer" id="t9-4" data-correct="uninhabitable" autocomplete="off" style="width:140px;">. (inhabit)</p><p>5. Space debris is a growing threat to <input type="text" class="text-answer" id="t9-5" data-correct="commercial" autocomplete="off" style="width:140px;"> satellites. (commerce)</p><p>6. Some fragments will remain in orbit <input type="text" class="text-answer" id="t9-6" data-correct="indefinitely" autocomplete="off" style="width:140px;">. (definite)</p><p>7. The mission was a triumph of international <input type="text" class="text-answer" id="t9-7" data-correct="collaboration/cooperation" autocomplete="off" style="width:140px;">. (collaborate)</p><p>8. Scientists are <input type="text" class="text-answer" id="t9-8" data-correct="increasingly" autocomplete="off" style="width:140px;"> concerned about collisions. (increase)</p><p>9. A self-<input type="text" class="text-answer" id="t9-9" data-correct="sufficient" autocomplete="off" style="width:140px;"> colony would need to grow its own food. (suffice)</p><p>10. Without gravity, bones gradually lose <input type="text" class="text-answer" id="t9-10" data-correct="density" autocomplete="off" style="width:140px;">. (dense)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-wf', 't9-wf-score')">Check answers</button>
+          <span id="t9-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 3 — Error correction.</strong> Each sentence was written by an IELTS candidate. Write the correct form of the underlined word.</p>
+      <div class="card" id="t9-err" style="line-height:2.5;"><p>1. Space exploration has a huge <u>affect</u> on technology. → <input type="text" class="text-answer" id="t9-e1" data-correct="effect" autocomplete="off" style="width:120px;"></p><p>2. Governments should invest <u>on</u> science education. → <input type="text" class="text-answer" id="t9-e2" data-correct="in" autocomplete="off" style="width:120px;"></p><p>3. The <u>researches</u> show that the risk is increasing. → <input type="text" class="text-answer" id="t9-e3" data-correct="research" autocomplete="off" style="width:120px;"></p><p>4. Astronauts must be <u>able of</u> coping with stress. → <input type="text" class="text-answer" id="t9-e4" data-correct="capable of/able to" autocomplete="off" style="width:140px;"></p><p>5. The cost of the mission is too <u>expensive</u>. → <input type="text" class="text-answer" id="t9-e5" data-correct="high/great" autocomplete="off" style="width:120px;"></p><p>6. Many people are <u>interesting</u> in space travel. → <input type="text" class="text-answer" id="t9-e6" data-correct="interested" autocomplete="off" style="width:120px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-err', 't9-err-score')">Check answers</button>
+          <span id="t9-err-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 13</div>
+      <h2>Speaking Part 2 — Something You Saw in the Sky</h2>
+      <p class="task-sub">You have <b>1 minute</b> to prepare and should speak for <b>1–2 minutes</b>. Read the model answer first and notice how the candidate uses <b>narrative tenses</b>, <b>vivid vocabulary</b> and a <b>reflective ending</b>.</p>
+      <div class="card task-prompt"><p class="prompt-label">Part 2 task card</p><p><b>Describe a time when you saw something interesting in the sky.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what you saw<br>&nbsp;&nbsp;when and where you saw it<br>&nbsp;&nbsp;who you were with<br>and explain why it was interesting.</p></div>
+      <div class="card"><p class="prompt-label">Model answer — Malika (Band 7.5)</p>
+<p style="line-height:1.8;">I’d like to talk about the night I saw a meteor shower for the first time, which was about three summers ago. My family had rented a small house in the mountains near Chimgan, and one evening my uncle, who’s a bit of an amateur astronomer, announced that there would be a meteor shower around midnight.</p>
+<p style="line-height:1.8;">To be honest, I wasn’t particularly enthusiastic at first — I was tired and I assumed we’d see one or two faint lights at most. But we carried blankets out into a field away from the houses, and once our eyes had adjusted to the darkness, the sky was simply breathtaking. I’d never seen so many stars; you could actually make out the Milky Way stretching across the sky.</p>
+<p style="line-height:1.8;">Then the meteors started. Some were tiny streaks that vanished almost instantly, but every few minutes a really bright one would shoot right across the sky, and the whole family would gasp at the same moment. We ended up staying out until nearly three in the morning.</p>
+<p style="line-height:1.8;">What made it so memorable, I think, was the contrast with city life. In Tashkent, light pollution means you can barely see a handful of stars, so it was humbling to realise how much we normally miss. It actually sparked my interest in astronomy — I’ve downloaded a star-map app since then — and it reminded me how small we are compared with what’s out there.</p></div>
+      <div class="card" id="t10-mc"><div class="q-item" id="t10-mc-1">
+          <p>1. How did Malika feel about the meteor shower at first?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-1" data-correct="false"> A. very excited</label><label><input type="radio" value="1" name="t10-mc-1" data-correct="true"> B. not particularly enthusiastic</label><label><input type="radio" value="2" name="t10-mc-1" data-correct="false"> C. frightened</label><label><input type="radio" value="3" name="t10-mc-1" data-correct="false"> D. confused</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-2">
+          <p>2. Why did the family go into a field?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-2" data-correct="true"> A. to get away from the lights of the houses</label><label><input type="radio" value="1" name="t10-mc-2" data-correct="false"> B. because the house had no windows</label><label><input type="radio" value="2" name="t10-mc-2" data-correct="false"> C. to meet other astronomers</label><label><input type="radio" value="3" name="t10-mc-2" data-correct="false"> D. because it was too hot inside</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-3">
+          <p>3. What does Malika say about the sky in Tashkent?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-3" data-correct="false"> A. It is usually cloudy.</label><label><input type="radio" value="1" name="t10-mc-3" data-correct="true"> B. Light pollution means few stars are visible.</label><label><input type="radio" value="2" name="t10-mc-3" data-correct="false"> C. It is perfect for astronomy.</label><label><input type="radio" value="3" name="t10-mc-3" data-correct="false"> D. Meteors are common there.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-4">
+          <p>4. How does she end her talk?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-4" data-correct="false"> A. by describing the journey home</label><label><input type="radio" value="1" name="t10-mc-4" data-correct="true"> B. with a reflection on what the experience meant to her</label><label><input type="radio" value="2" name="t10-mc-4" data-correct="false"> C. by recommending a hotel</label><label><input type="radio" value="3" name="t10-mc-4" data-correct="false"> D. with a question to the examiner</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-mc', 't10-mc-score')">Check answers</button>
+          <span id="t10-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Band 7+ language.</strong> Find the word or phrase in the model that means…</p>
+      <div class="card" id="t10-ph" style="line-height:2.4;"><p>1. extremely beautiful or impressive → <input type="text" class="text-answer" id="t10-1" data-correct="breathtaking" autocomplete="off" style="width:140px;"></p><p>2. see with difficulty → <input type="text" class="text-answer" id="t10-2" data-correct="make out" autocomplete="off" style="width:140px;"></p><p>3. disappeared → <input type="text" class="text-answer" id="t10-3" data-correct="vanished" autocomplete="off" style="width:140px;"></p><p>4. made you feel less important → <input type="text" class="text-answer" id="t10-4" data-correct="humbling" autocomplete="off" style="width:140px;"></p><p>5. caused (an interest) to start → <input type="text" class="text-answer" id="t10-5" data-correct="sparked" autocomplete="off" style="width:140px;"></p><p>6. breathe in suddenly because of surprise → <input type="text" class="text-answer" id="t10-6" data-correct="gasp" autocomplete="off" style="width:140px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-ph', 't10-ph-score')">Check answers</button>
+          <span id="t10-ph-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t10-speaking-sky">
+        <div class="q-num">Your Part 2 talk — something in the sky</div>
+        <div class="q-text">Now do the task yourself. Prepare for 1 minute, then speak for <b>1–2 minutes</b>. If you have never seen anything special in the sky, describe a sunset, a full moon, a storm, a plane or fireworks.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d like to talk about the time I saw…”</li><li>“It must have been about… years ago.”</li><li>“Once our eyes had adjusted…”</li><li>“What made it so memorable was…”</li><li>“Looking back, it made me realise…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="card task-prompt" style="margin-top:22px;"><p class="prompt-label">Part 2 task card — extra practice</p><p><b>Describe a scientific discovery or invention that you think has been very important.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what it is<br>&nbsp;&nbsp;how you learned about it<br>&nbsp;&nbsp;how it is used<br>and explain why you think it is so important.</p></div>
+      <div class="question-box" data-field="t10-speaking-discovery">
+        <div class="q-num">Your Part 2 talk — a discovery</div>
+        <div class="q-text">Prepare for 1 minute, then speak for <b>1–2 minutes</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The discovery I’d like to talk about is…”</li><li>“I first came across it when…”</li><li>“Nowadays it’s used for…”</li><li>“It’s hard to overstate how important…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 13</div>
+      <h2>Speaking Part 3 — Space Exploration and Society</h2>
+      <p class="task-sub">Part 3 rewards <b>developed, balanced</b> answers. A Band 7 answer usually has a position, a reason, an example or consequence, and a <b>concession</b> (<i>admittedly…, that said…</i>). Read the model, then answer ten questions.</p>
+      <div class="card"><p class="prompt-label">Model Part 3 answer</p><p><b>Examiner:</b> Do you think governments should spend money on space exploration?</p>
+<p style="line-height:1.8;"><b>Candidate:</b> On the whole, yes, I think they should, although perhaps not unlimited amounts. The main reason is that space research tends to produce technologies we end up relying on every day — satellite navigation and weather forecasting are obvious examples. Admittedly, when people are struggling with basic problems like housing, a rocket launch can look like a luxury. That said, space budgets are actually tiny compared with what governments spend on, say, healthcare or defence, so I’d argue it isn’t really an either-or choice.</p></div>
+      <p style="margin-top:26px;"><strong>Analyse the model.</strong> Match each phrase to its function.</p>
+      <div class="card" id="t11-fn"><div class="sel-row"><select class="select" id="t11-fn-1" data-answer="giving a balanced position"><option value="">—</option><option value="giving a balanced position">giving a balanced position</option><option value="limiting the claim">limiting the claim</option><option value="supporting with examples">supporting with examples</option><option value="conceding the other side">conceding the other side</option><option value="answering the concession">answering the concession</option><option value="concluding">concluding</option></select><span><b>1.</b> “On the whole, yes, I think they should”</span></div><div class="sel-row"><select class="select" id="t11-fn-2" data-answer="limiting the claim"><option value="">—</option><option value="giving a balanced position">giving a balanced position</option><option value="limiting the claim">limiting the claim</option><option value="supporting with examples">supporting with examples</option><option value="conceding the other side">conceding the other side</option><option value="answering the concession">answering the concession</option><option value="concluding">concluding</option></select><span><b>2.</b> “although perhaps not unlimited amounts”</span></div><div class="sel-row"><select class="select" id="t11-fn-3" data-answer="supporting with examples"><option value="">—</option><option value="giving a balanced position">giving a balanced position</option><option value="limiting the claim">limiting the claim</option><option value="supporting with examples">supporting with examples</option><option value="conceding the other side">conceding the other side</option><option value="answering the concession">answering the concession</option><option value="concluding">concluding</option></select><span><b>3.</b> “satellite navigation and weather forecasting are obvious examples”</span></div><div class="sel-row"><select class="select" id="t11-fn-4" data-answer="conceding the other side"><option value="">—</option><option value="giving a balanced position">giving a balanced position</option><option value="limiting the claim">limiting the claim</option><option value="supporting with examples">supporting with examples</option><option value="conceding the other side">conceding the other side</option><option value="answering the concession">answering the concession</option><option value="concluding">concluding</option></select><span><b>4.</b> “Admittedly, … a rocket launch can look like a luxury”</span></div><div class="sel-row"><select class="select" id="t11-fn-5" data-answer="answering the concession"><option value="">—</option><option value="giving a balanced position">giving a balanced position</option><option value="limiting the claim">limiting the claim</option><option value="supporting with examples">supporting with examples</option><option value="conceding the other side">conceding the other side</option><option value="answering the concession">answering the concession</option><option value="concluding">concluding</option></select><span><b>5.</b> “That said, space budgets are actually tiny…”</span></div><div class="sel-row"><select class="select" id="t11-fn-6" data-answer="concluding"><option value="">—</option><option value="giving a balanced position">giving a balanced position</option><option value="limiting the claim">limiting the claim</option><option value="supporting with examples">supporting with examples</option><option value="conceding the other side">conceding the other side</option><option value="answering the concession">answering the concession</option><option value="concluding">concluding</option></select><span><b>6.</b> “so I’d argue it isn’t really an either-or choice”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-fn', 't11-fn-score')">Check answers</button>
+          <span id="t11-fn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Your turn.</strong> Record an answer to each question. Use the position → reason → example → concession structure.</p>
+      <div class="question-box" data-field="t11-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Do you think governments should spend money on space exploration?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example of this is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Should space exploration be left to private companies?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example of this is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Why do you think space travel fascinates so many people?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example of this is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Do you think ordinary people will be able to travel into space in the future?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example of this is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-5">
+        <div class="q-num">Question 5</div>
+        <div class="q-text">What are the advantages of international cooperation in space?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example of this is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-6">
+        <div class="q-num">Question 6</div>
+        <div class="q-text">Who should be responsible for cleaning up space debris?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example of this is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-7">
+        <div class="q-num">Question 7</div>
+        <div class="q-text">Is it more important to explore space or the deep ocean?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example of this is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-8">
+        <div class="q-num">Question 8</div>
+        <div class="q-text">How has satellite technology changed everyday life?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example of this is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-9">
+        <div class="q-num">Question 9</div>
+        <div class="q-text">Should children learn more about astronomy at school?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example of this is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-10">
+        <div class="q-num">Question 10</div>
+        <div class="q-text">Do you think humans will ever live permanently on another planet?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example of this is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 13</div>
+      <h2>Pronunciation — Word Stress in Word Families</h2>
+      <p class="task-sub">Many academic words <b>change their stress</b> when you add a suffix: <i>PHOtograph → phoTOgraphy → photoGRAphic</i>. Getting this wrong is a common reason Band 6 speakers sound less fluent than they are. Say each word aloud before you answer.</p>
+<div class="card advice-card"><p style="margin:0;"><b>Useful patterns:</b> <i>-tion, -sion, -ic, -ical, -ity</i> → stress on the syllable <b>just before</b> the suffix (<i>exploRAtion, scienTIFic, GRAVity</i>). <i>-ous, -al, -ment, -er</i> usually do <b>not</b> move the stress (<i>HAZard → HAZardous</i>).</p></div>
+      <p style="margin-top:26px;"><strong>Which syllable is stressed?</strong></p>
+      <div class="card" id="t12-s"><div class="q-item" id="t12-s-1">
+          <p>1. <b>ex·plore</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-1" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-1" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t12-s-1" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-2">
+          <p>2. <b>ex·plo·ra·tion</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-2" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-2" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-2" data-correct="true"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-3">
+          <p>3. <b>sci·ence</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-3" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-3" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-3" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-4">
+          <p>4. <b>sci·en·tif·ic</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-4" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-4" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-4" data-correct="true"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-5">
+          <p>5. <b>as·tro·naut</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-5" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-5" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-5" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-6">
+          <p>6. <b>as·tron·o·my</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-6" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-6" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t12-s-6" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-7">
+          <p>7. <b>as·tro·nom·i·cal</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-7" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-7" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-7" data-correct="true"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-8">
+          <p>8. <b>sat·el·lite</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-8" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-8" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-8" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-9">
+          <p>9. <b>at·mos·phere</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-9" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-9" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-9" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-10">
+          <p>10. <b>at·mos·pher·ic</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-10" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-10" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-10" data-correct="true"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-11">
+          <p>11. <b>grav·i·ty</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-11" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-11" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-11" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-12">
+          <p>12. <b>or·bit</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-12" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-12" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-12" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-13">
+          <p>13. <b>or·bit·al</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-13" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-13" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-13" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-14">
+          <p>14. <b>com·mer·cial</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-14" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-14" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t12-s-14" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-15">
+          <p>15. <b>tech·nol·o·gy</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-15" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-15" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t12-s-15" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-16">
+          <p>16. <b>tech·no·log·i·cal</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-16" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-16" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-16" data-correct="true"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-17">
+          <p>17. <b>po·lit·i·cal</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-17" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-17" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t12-s-17" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-18">
+          <p>18. <b>pol·i·tics</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-18" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-18" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-18" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-s', 't12-s-score')">Check answers</button>
+          <span id="t12-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t12-q"><div class="q-item" id="t12-q-1">
+          <p>1. In which pair does the stress move to a different syllable?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-q-1" data-correct="false"> A. orbit → orbital</label><label><input type="radio" value="1" name="t12-q-1" data-correct="true"> B. astronomy → astronomical</label><label><input type="radio" value="2" name="t12-q-1" data-correct="false"> C. hazard → hazardous</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-q-2">
+          <p>2. Where is the stress in <i>photography</i>?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-q-2" data-correct="false"> A. PHO·tog·ra·phy</label><label><input type="radio" value="1" name="t12-q-2" data-correct="true"> B. pho·TOG·ra·phy</label><label><input type="radio" value="2" name="t12-q-2" data-correct="false"> C. pho·tog·RA·phy</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-q-3">
+          <p>3. Which word does NOT follow the “-ic → stress before -ic” pattern?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-q-3" data-correct="false"> A. scientific</label><label><input type="radio" value="1" name="t12-q-3" data-correct="false"> B. atmospheric</label><label><input type="radio" value="2" name="t12-q-3" data-correct="true"> C. politics</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-q', 't12-q-score')">Check answers</button>
+          <span id="t12-q-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Chunking.</strong> Fluent speakers divide long sentences into <b>thought groups</b> with a small pause between them. Where is the most natural pause in each sentence?</p>
+      <div class="card" id="t12-ch"><div class="q-item" id="t12-ch-1">
+          <p>1. Because radio signals take up to twenty minutes / rovers cannot be driven in real time.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-ch-1" data-correct="false"> after “Because”</label><label><input type="radio" value="1" name="t12-ch-1" data-correct="true"> after “twenty minutes”</label><label><input type="radio" value="2" name="t12-ch-1" data-correct="false"> after “rovers”</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-ch-2">
+          <p>2. The idea of Mars as a lifeboat for humanity / is a distraction.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-ch-2" data-correct="false"> after “Mars”</label><label><input type="radio" value="1" name="t12-ch-2" data-correct="true"> after “humanity”</label><label><input type="radio" value="2" name="t12-ch-2" data-correct="false"> after “a”</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-ch-3">
+          <p>3. Objects in the lowest orbits / are gradually slowed / by the thin upper atmosphere.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-ch-3" data-correct="false"> after “lowest”</label><label><input type="radio" value="1" name="t12-ch-3" data-correct="true"> after “orbits”</label><label><input type="radio" value="2" name="t12-ch-3" data-correct="false"> after “thin”</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-ch', 't12-ch-score')">Check answers</button>
+          <span id="t12-ch-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t12-speaking-chunk">
+        <div class="q-num">Read aloud</div>
+        <div class="q-text">Read this short paragraph aloud with natural thought groups and correct word stress: <i>“Space exploration is enormously expensive. But the technological benefits — from satellite communication to atmospheric science — have been astronomical. In my opinion, scientific curiosity is reason enough to explore.”</i></div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>Pause after each comma and dash</li><li>Stress: ex·plo·RA·tion, tech·no·LOG·i·cal, at·mos·PHER·ic, as·tro·NOM·i·cal, sci·en·TIF·ic</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 13</div>
+      <h2>Consolidation — Today’s Language in Use</h2>
+      <p class="task-sub">A final check of today’s key vocabulary from all the texts. Then a two-minute speaking challenge to put it all together.</p>
+      <p style="margin-top:26px;"><strong>Part 1 — Complete the text.</strong> Use words from today. The first letter is given.</p>
+      <div class="card" id="t13-txt" style="line-height:2.7;"><p>Since the first satellite was launched in 1957, the space around the Earth has filled with (1) d<input type="text" class="text-answer" id="t13-1" data-correct="ebris/debris" autocomplete="off" style="width:90px;">: dead satellites and fragments that (2) o<input type="text" class="text-answer" id="t13-2" data-correct="rbit/orbit" autocomplete="off" style="width:90px;"> the planet at enormous speed. Experts warn that collisions could trigger a chain (3) r<input type="text" class="text-answer" id="t13-3" data-correct="eaction/reaction" autocomplete="off" style="width:100px;">, making some regions unusable. Meanwhile, agencies are planning crewed (4) m<input type="text" class="text-answer" id="t13-4" data-correct="issions/missions" autocomplete="off" style="width:100px;"> to Mars, though the difficulties are (5) f<input type="text" class="text-answer" id="t13-5" data-correct="ormidable/formidable" autocomplete="off" style="width:110px;">: radiation, weightlessness and the impossibility of (6) r<input type="text" class="text-answer" id="t13-6" data-correct="escue/rescue" autocomplete="off" style="width:90px;">. Critics argue that the money would be better spent on Earth, but supporters reply that space technology has brought (7) b<input type="text" class="text-answer" id="t13-7" data-correct="enefits/benefits" autocomplete="off" style="width:100px;"> far beyond the space industry. Whatever happens, the search for life beyond the Earth remains one of science’s greatest (8) p<input type="text" class="text-answer" id="t13-8" data-correct="rizes/prizes" autocomplete="off" style="width:100px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-txt', 't13-txt-score')">Check answers</button>
+          <span id="t13-txt-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Prepositions.</strong> Complete each phrase with the correct preposition.</p>
+      <div class="card" id="t13-prep" style="line-height:2.6;"><p>1. <input type="text" class="text-answer" id="t13-p1" data-correct="in" autocomplete="off" style="width:70px;"> orbit &nbsp; 2. a threat <input type="text" class="text-answer" id="t13-p2" data-correct="to" autocomplete="off" style="width:70px;"> satellites &nbsp; 3. compliance <input type="text" class="text-answer" id="t13-p3" data-correct="with" autocomplete="off" style="width:70px;"> the rules</p><p>4. exposed <input type="text" class="text-answer" id="t13-p4" data-correct="to" autocomplete="off" style="width:70px;"> radiation &nbsp; 5. <input type="text" class="text-answer" id="t13-p5" data-correct="in" autocomplete="off" style="width:70px;"> the absence of gravity &nbsp; 6. evidence <input type="text" class="text-answer" id="t13-p6" data-correct="of" autocomplete="off" style="width:70px;"> ancient life</p><p>7. invest <input type="text" class="text-answer" id="t13-p7" data-correct="in" autocomplete="off" style="width:70px;"> research &nbsp; 8. far <input type="text" class="text-answer" id="t13-p8" data-correct="from" autocomplete="off" style="width:70px;"> complete &nbsp; 9. <input type="text" class="text-answer" id="t13-p9" data-correct="on" autocomplete="off" style="width:70px;"> a large scale</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-prep', 't13-prep-score')">Check answers</button>
+          <span id="t13-prep-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t13-speaking-final">
+        <div class="q-num">Two-minute challenge</div>
+        <div class="q-text">Two-minute challenge: “The money spent on space would be better spent on solving problems on Earth.” Give your view for <b>two minutes</b>, using at least <b>six</b> words or phrases from today (e.g. <i>formidable, justified, a false choice, pose a threat, far from complete, on a large scale</i>).</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I can see why some people believe…”</li><li>“However, in my view this rests on…”</li><li>“Admittedly,…”</li><li>“On balance,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 13</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 25 of 45</div>
+    <h1>Day 25 complete! 🎉</h1>
+    <p>Day 25 done — Space: space junk and the Mars debate (28 reading questions), three lead-ins, a TED talk, Speaking Parts 2 and 3, word stress and chunking.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t8-v-lm');
+
+
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t2-speaking-summary"]'); if (b) initRecordControl(b, user.id, 25, 2, 't2-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-summary"]'); if (b) initRecordControl(b, user.id, 25, 5, 't5-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 25, 8, 't8-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-sky"]'); if (b) initRecordControl(b, user.id, 25, 10, 't10-speaking-sky', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-discovery"]'); if (b) initRecordControl(b, user.id, 25, 10, 't10-speaking-discovery', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-1"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-2"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-3"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-4"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-5"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-5', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-6"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-6', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-7"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-7', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-8"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-8', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-9"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-9', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-10"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-10', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-chunk"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-chunk', 0); }
+    { const b = document.querySelector('.question-box[data-field="t13-speaking-final"]'); if (b) initRecordControl(b, user.id, 25, 13, 't13-speaking-final', 0); }
+
+    await initTaskFlow(25, 13, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-c', 't1-c-score'); },
+      2: () => { checkAllAnswers('t2-mc', 't2-mc-score'); checkAllAnswers('t2-tf', 't2-tf-score'); },
+      3: () => { checkAllAnswers('t3-mi', 't3-mi-score'); checkAllAnswers('t3-tf', 't3-tf-score'); checkAllAnswers('t3-s', 't3-s-score'); },
+      4: () => { checkAllAnswers('t4-pa', 't4-pa-score'); checkAllAnswers('t4-np', 't4-np-score'); },
+      5: () => { checkAllAnswers('t5-mc', 't5-mc-score'); checkAllAnswers('t5-tf', 't5-tf-score'); },
+      6: () => { checkAllAnswers('t6-mc', 't6-mc-score'); checkAllAnswers('t6-yn', 't6-yn-score'); checkAllAnswers('t6-se', 't6-se-score'); },
+      7: () => { checkAllAnswers('t7-col', 't7-col-score'); checkAllAnswers('t7-use', 't7-use-score'); },
+      8: () => { checkAllAnswers('t8-v', 't8-v-score'); markLineMatchResult('t8-v-lm'); checkAllAnswers('t8-mc', 't8-mc-score'); },
+      9: () => { checkAllAnswers('t9-vn', 't9-vn-score'); checkAllAnswers('t9-wf', 't9-wf-score'); checkAllAnswers('t9-err', 't9-err-score'); },
+      10: () => { checkAllAnswers('t10-mc', 't10-mc-score'); checkAllAnswers('t10-ph', 't10-ph-score'); },
+      11: () => { checkAllAnswers('t11-fn', 't11-fn-score'); },
+      12: () => { checkAllAnswers('t12-s', 't12-s-score'); checkAllAnswers('t12-q', 't12-q-score'); checkAllAnswers('t12-ch', 't12-ch-score'); },
+      13: () => { checkAllAnswers('t13-txt', 't13-txt-score'); checkAllAnswers('t13-prep', 't13-prep-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t1-sp-btn', 't1-sp-ans', '[id^="t1-sp-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t2-sum-btn', 't2-sum-ans', '[id^="t2-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t5-sum-btn', 't5-sum-ans', '[id^="t5-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>
