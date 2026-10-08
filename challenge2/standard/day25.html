@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 25 — Standard — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+  .ph-card { width: min(1100px, calc(100vw - 32px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .ph-grid { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 14px; }
+  .ph { margin: 0; }
+  .ph-img { position: relative; aspect-ratio: 3 / 2; border-radius: 10px; overflow: hidden; background: var(--surface-2); border: 1px solid var(--border); }
+  .ph-img img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; transition: transform .2s ease; }
+  .ph-img:hover img { transform: scale(1.04); }
+  .ph-tip { font-size: 0.82rem; color: var(--muted); margin: 0 0 10px; }
+  .ph-zoom { position: fixed; inset: 0; z-index: 9999; background: rgba(10, 12, 24, 0.88); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: zoom-out; padding: 20px; }
+  .ph-zoom[hidden] { display: none; }
+  .ph-zoom img { max-width: 94vw; max-height: 86vh; border-radius: 10px; box-shadow: 0 20px 60px rgba(0,0,0,.5); animation: phIn .2s ease; }
+  .ph-zoom-hint { color: #fff; opacity: .7; font-family: var(--mono); font-size: 0.78rem; margin-top: 12px; }
+  @keyframes phIn { from { transform: scale(.92); opacity: 0; } to { transform: none; opacity: 1; } }
+  .ph-n { position: absolute; top: 8px; left: 8px; background: var(--accent); color: #fff; font-family: var(--mono); font-weight: 700; font-size: 0.85rem; border-radius: 50%; width: 26px; height: 26px; display: grid; place-items: center; z-index: 1; }
+  .ph figcaption { font-size: 0.95rem; color: var(--ink-soft); margin-top: 6px; line-height: 1.45; }
+  .ph-src { display: block; font-family: var(--mono); font-size: 0.66rem; color: var(--muted); margin-top: 2px; }
+  @media (max-width: 760px) { .ph-grid { grid-template-columns: 1fr; } .ph-card { width: 100%; left: 0; transform: none; } }
+  .opt-legend { margin-bottom: 8px; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 25 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 13</div>
+      <h2>Starting Off — Sport and Fitness</h2>
+      <p class="task-sub">Today is about sport and keeping fit: what exercise does to your body and brain, a free running event that spread around the world, and why so many teenagers give up sport. Start with the photos, then learn the key vocabulary.</p>
+<div class="card ph-card"><p class="ph-tip">🔍 Click a photo to see it full size.</p><div class="ph-grid" style="--cols:2"><figure class="ph"><div class="ph-img"><span class="ph-n">1</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Football%20match.jpg?width=960" alt="Photo 1" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>a football match<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:Football_match.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure><figure class="ph"><div class="ph-img"><span class="ph-n">2</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Swimming%20pool%20srcc.jpg?width=960" alt="Photo 2" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>an indoor swimming pool<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:Swimming_pool_srcc.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure><figure class="ph"><div class="ph-img"><span class="ph-n">3</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gym%20Free-weights%20Area.jpg?width=960" alt="Photo 3" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>the free-weights area of a gym<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:Gym_Free-weights_Area.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure><figure class="ph"><div class="ph-img"><span class="ph-n">4</span><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Parkrun%20start%20in%20Tsujido%20Seaside%20Park%2C%20Japan.jpg?width=960" alt="Photo 4" loading="lazy" referrerpolicy="no-referrer"></div><figcaption>the start of a weekly community run<a class="ph-src" href="https://commons.wikimedia.org/wiki/File:Parkrun_start_in_Tsujido_Seaside_Park%2C_Japan.jpg" target="_blank" rel="noopener">photo: Wikimedia Commons</a></figcaption></figure></div></div><div class="ph-zoom" id="phZoom" hidden><img alt=""><p class="ph-zoom-hint">Click anywhere to close</p></div><script>(function(){var z=document.getElementById("phZoom");if(!z||z.dataset.ready)return;z.dataset.ready=1;var zi=z.querySelector("img");document.addEventListener("click",function(e){var im=e.target.closest(".ph-img img");if(im){zi.src=im.currentSrc||im.src;z.hidden=false;document.body.style.overflow="hidden";return;}if(!z.hidden&&z.contains(e.target)){z.hidden=true;zi.removeAttribute("src");document.body.style.overflow="";}});document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!z.hidden){z.hidden=true;document.body.style.overflow="";}});})();</script>
+      <div class="card"><p class="mini-q">1. Which of these activities have you tried? Which would you most like to try, and why?</p><textarea class="no-check mini-answer" id="t1-sp-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. Which activity in the photos is best for (a) making friends, (b) getting fit, (c) relaxing? Give a reason for each.</p><textarea class="no-check mini-answer" id="t1-sp-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Which sentence describes you best — and why? <i>“I do some exercise almost every day.” / “I only do sport when I have to.” / “I prefer watching sport to playing it.”</i></p><textarea class="no-check mini-answer" id="t1-sp-3" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t1-sp-btn">Show an example answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t1-sp-ans"><p>There are no right answers, but strong answers give <b>reasons</b> and <b>examples</b>: <i>“For making friends I would choose the community run, because people chat before and after it…”</i></p></div>
+        </div></div>
+      <p style="margin-top:26px;"><strong>play, go or do?</strong> Choose the correct verb for each sport or activity.</p>
+      <div class="card" id="t1-pgd"><div class="opt-legend"><p style="margin:0;"><b>play</b> + ball games and competitive games · <b>go</b> + activities ending in <i>-ing</i> · <b>do</b> + individual activities, martial arts and exercise</p></div><div class="sel-row"><select class="select" id="t1-pgd-1" data-answer="play"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>1.</b> ___ football</span></div><div class="sel-row"><select class="select" id="t1-pgd-2" data-answer="go"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>2.</b> ___ swimming</span></div><div class="sel-row"><select class="select" id="t1-pgd-3" data-answer="do"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>3.</b> ___ yoga</span></div><div class="sel-row"><select class="select" id="t1-pgd-4" data-answer="play"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>4.</b> ___ tennis</span></div><div class="sel-row"><select class="select" id="t1-pgd-5" data-answer="go"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>5.</b> ___ running</span></div><div class="sel-row"><select class="select" id="t1-pgd-6" data-answer="do"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>6.</b> ___ karate</span></div><div class="sel-row"><select class="select" id="t1-pgd-7" data-answer="go"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>7.</b> ___ cycling</span></div><div class="sel-row"><select class="select" id="t1-pgd-8" data-answer="play"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>8.</b> ___ basketball</span></div><div class="sel-row"><select class="select" id="t1-pgd-9" data-answer="do"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>9.</b> ___ gymnastics</span></div><div class="sel-row"><select class="select" id="t1-pgd-10" data-answer="go"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>10.</b> ___ skiing</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-pgd', 't1-pgd-score')">Check answers</button>
+          <span id="t1-pgd-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Sport and fitness vocabulary.</strong> Match each word or phrase to its meaning. You will meet all of them today.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. opponent</button><button type="button" class="lm-item" data-key="2">2. referee</button><button type="button" class="lm-item" data-key="3">3. stamina</button><button type="button" class="lm-item" data-key="4">4. work out</button><button type="button" class="lm-item" data-key="5">5. warm up</button><button type="button" class="lm-item" data-key="6">6. get in shape</button><button type="button" class="lm-item" data-key="7">7. participant</button><button type="button" class="lm-item" data-key="8">8. spectator</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. someone who watches a sports event</button><button type="button" class="lm-item" data-key="b">b. to become fit and healthy</button><button type="button" class="lm-item" data-key="c">c. the official who controls a football match</button><button type="button" class="lm-item" data-key="d">d. to do gentle exercise before a sport or race</button><button type="button" class="lm-item" data-key="e">e. the ability to keep going for a long time</button><button type="button" class="lm-item" data-key="f">f. someone who takes part in an event</button><button type="button" class="lm-item" data-key="g">g. the person or team you play against</button><button type="button" class="lm-item" data-key="h">h. to do physical exercise, especially in a gym</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Collocations.</strong> Complete each sentence with one word from the box.</p>
+      <div class="word-bank">won · beat · broken · take · joined · stretch · losers</div><div class="card" id="t1-c" style="line-height:2.3;"><p>1. Our team <input type="text" class="text-answer" id="t1-1" data-correct="won" autocomplete="off" style="width:90px;"> the match 3–1.</p><p>2. He <input type="text" class="text-answer" id="t1-2" data-correct="beat" autocomplete="off" style="width:90px;"> his brother at tennis for the first time.</p><p>3. She has <input type="text" class="text-answer" id="t1-3" data-correct="broken" autocomplete="off" style="width:90px;"> the school record for the 100 metres.</p><p>4. If you want to lose weight, you need to <input type="text" class="text-answer" id="t1-4" data-correct="take" autocomplete="off" style="width:90px;"> more exercise.</p><p>5. I <input type="text" class="text-answer" id="t1-5" data-correct="joined" autocomplete="off" style="width:90px;"> a gym last month, but I have only been twice!</p><p>6. You should always <input type="text" class="text-answer" id="t1-6" data-correct="stretch" autocomplete="off" style="width:90px;"> your muscles after a long run.</p><p>7. They lost the final, but they were good <input type="text" class="text-answer" id="t1-7" data-correct="losers" autocomplete="off" style="width:90px;"> and congratulated the winners.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-c', 't1-c-score')">Check answers</button>
+          <span id="t1-c-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 13</div>
+      <h2>Lead-in 1 — What Happens to Your Body When You Exercise?</h2>
+      <p class="task-sub">Before Reading 1 (about a weekly running event), read this article about what exercise does to the body. Answer the questions, then summarise the article in writing and aloud. About 15 minutes.</p>
+      <div class="card article">
+        <h3 class="article-title">What Happens to Your Body When You Exercise?</h3>
+        <p class="article-meta">Health · Science · 316 words</p>
+        <p>Imagine you have just started running for a bus. Within a few seconds, your heart is beating faster and you are breathing more quickly. This is your body responding to a simple message from your muscles: we need more oxygen. Muscles use oxygen to turn the food we eat into energy, so the harder they work, the more oxygen they need, and the heart and lungs must work harder to deliver it.</p><p>If you keep going, other changes follow. Your body temperature rises, because working muscles produce heat. To stop you from overheating, your skin starts to sweat: as the sweat dries, it carries heat away from the body. This is why it is important to drink water during and after exercise, especially on a hot day.</p><p>Exercise does not only affect the body. Many people say they feel calmer and happier after a game of football or a long walk, and scientists believe that this is because exercise changes the chemicals in the brain. For some people, a short run is the best way to stop worrying about an exam.</p><p>The biggest changes, however, come with regular exercise over weeks and months. The heart is a muscle, and like other muscles it becomes stronger when it is used. A stronger heart can pump more blood with each beat, so it does not need to beat as often. This is why fit people often have a lower heart rate when they are resting.</p><p>There is one more surprise. Muscles do not actually become stronger during exercise — they become stronger while they recover afterwards. Hard training causes tiny amounts of damage, and the body repairs the muscle so that it is a little stronger than before. For this reason, coaches say that rest days are as important as training days. Doing too much, too often, is one of the most common reasons why people get injured.</p>
+      </div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-1">
+          <p>1. Why do we breathe faster when we start to run?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-1" data-correct="false"> A. because we are frightened</label><label><input type="radio" value="1" name="t2-mc-1" data-correct="true"> B. because our muscles need more oxygen</label><label><input type="radio" value="2" name="t2-mc-1" data-correct="false"> C. because our body temperature falls</label><label><input type="radio" value="3" name="t2-mc-1" data-correct="false"> D. because we have eaten too much</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-2">
+          <p>2. What is the purpose of sweating?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-2" data-correct="false"> A. to give the muscles more energy</label><label><input type="radio" value="1" name="t2-mc-2" data-correct="true"> B. to help the body to cool down</label><label><input type="radio" value="2" name="t2-mc-2" data-correct="false"> C. to remove water from the body</label><label><input type="radio" value="3" name="t2-mc-2" data-correct="false"> D. to make the heart beat faster</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-3">
+          <p>3. Why do fit people often have a lower resting heart rate?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-3" data-correct="true"> A. Their hearts pump more blood with each beat.</label><label><input type="radio" value="1" name="t2-mc-3" data-correct="false"> B. They breathe more slowly.</label><label><input type="radio" value="2" name="t2-mc-3" data-correct="false"> C. They drink more water.</label><label><input type="radio" value="3" name="t2-mc-3" data-correct="false"> D. Their muscles need less oxygen.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-4">
+          <p>4. When do muscles actually become stronger?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-4" data-correct="false"> A. while we are exercising</label><label><input type="radio" value="1" name="t2-mc-4" data-correct="true"> B. while they recover after exercise</label><label><input type="radio" value="2" name="t2-mc-4" data-correct="false"> C. when we drink water</label><label><input type="radio" value="3" name="t2-mc-4" data-correct="false"> D. only when we train every day</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. Working muscles produce heat.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="true"> True</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. The article says that exercise has no effect on the brain.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="false"> True</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. The heart is a muscle.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="true"> True</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. According to coaches, training every day without rest is the best way to get stronger.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="false"> True</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-5">
+          <p>5. Doing too much exercise can lead to injuries.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-5" data-correct="true"> True</label><label><input type="radio" value="1" name="t2-tf-5" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 90 words</b>. Say what it is about, give the three most important points, and finish with one sentence about what you think.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 90 words):</p><textarea class="no-check mini-answer" id="t2-sum-1" data-min-words="80" placeholder="Write your summary here..." style="min-height:160px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t2-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t2-sum-ans"><p>This article explains what happens inside the body when we exercise. Within seconds, the heart beats faster and we breathe more quickly, because the muscles need more oxygen. As we continue, the body heats up and starts to sweat in order to cool down. Exercise also affects the brain: many people feel calmer and happier afterwards. If we exercise regularly, the heart becomes stronger, so it pumps more blood with each beat and our resting heart rate can fall. The writer warns that rest days matter, because muscles get stronger while they recover. I was surprised that the benefits for mood begin so quickly. (≈ 110 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t2-speaking-summary">
+        <div class="q-num">Spoken summary (at least 30 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 30 seconds</b> (try for 45).</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This text is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“For example,…”</li><li>“Personally, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 13</div>
+      <h2>Reading 1 — The Park Run Phenomenon</h2>
+      <p class="task-sub">Three IELTS question types: <b>TRUE / FALSE / NOT GIVEN</b>, <b>sentence completion</b> and <b>multiple choice</b>. Suggested time: 20 minutes. The passage is on the left and the questions are on the right. Your answers are checked when you press <b>Next</b> — you can't change them after that.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li><b>TRUE / FALSE / NOT GIVEN:</b> FALSE = the passage says the <b>opposite</b>; NOT GIVEN = the passage says <b>nothing</b> about it.</li>
+  <li><b>Sentence completion:</b> check the word limit, copy words <b>exactly</b> from the passage, and make sure the sentence is grammatical.</li>
+  <li>Answers usually come in passage order inside each group of questions.</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Park Run Phenomenon<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">How a small Saturday-morning run in one London park became a weekly event for people all over the world.</small></h3>
+            <p class="article-meta">Reading Passage 1 · Sport and community · 577 words</p>
+            <p><span class="para-label">A</span>Every Saturday morning, in parks across the world, crowds of people gather to run five kilometres together. Nobody pays to take part, nobody wins a medal, and many of the participants do not even run — they walk, jog or push a baby in a buggy. A few hours later, each finisher receives a message with their time. The event is called parkrun, and in about twenty years it has grown from a small gathering in a single park into one of the largest regular sporting events on the planet.</p><p><span class="para-label">B</span>The story began in October 2004 in Bushy Park, in south-west London. Its founder was an experienced club runner who had been injured and could no longer race. Missing both running and his running friends, he decided to organise a weekly timed run that anyone could join. Only thirteen people took part in the first event. The times were recorded with a stopwatch, and the results were typed into a computer afterwards and sent out to the runners.</p><p><span class="para-label">C</span>At first, the idea spread slowly, mainly because people who had enjoyed the run told their friends about it. There was no advertising campaign. Gradually, runners in other parts of Britain asked whether they could start an event in their own local park, and later the idea travelled abroad. Today there are events in more than twenty countries, from Australia and South Africa to Japan. A shorter version, a two-kilometre run for children aged four to fourteen, now takes place on Sunday mornings.</p><p><span class="para-label">D</span>The rules are deliberately simple. Before your first run, you register once on the website and print a personal barcode. At the finish, a volunteer scans this barcode together with a token that shows your finishing position, and that is how your time is calculated. The organisers insist that taking part will always be free; the costs are covered by sponsors and donations. They also insist that it is 'a run, not a race'. Every event has a volunteer called the tail walker, who stays at the back, so no participant ever finishes in last place.</p><p><span class="para-label">E</span>Volunteers are, in fact, at the heart of the whole idea. There are no paid staff at the events themselves: marshals stand at corners to point the way, timekeepers record the finishing times, and other helpers set out the course and pack it away again. Many regular runners volunteer several times a year, and some people help every week without ever running at all. For them, the attraction is the friendly atmosphere and the feeling of belonging to a community.</p><p><span class="para-label">F</span>Parkrun also seems to have health benefits, and not only for keen runners. When researchers surveyed participants, a large number described themselves as inactive before they started, and many said that their fitness and mood had improved since then. Because of results like these, some doctors in Britain now encourage patients to try their local parkrun, either by running or by volunteering.</p><p><span class="para-label">G</span>Not everyone has welcomed the events. In some busy parks, people have complained about crowds of runners on narrow paths or about damage to the grass. In one well-known case, a local council proposed charging a fee for the use of its park, and the event closed rather than give up its free principle. For most people, however, the event is something to look forward to at the end of the week — and the coffee and conversation afterwards are, for many, almost as important as the run.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t3-tf"><div class="q-item" id="t3-tf-1">
+          <p>1. Participants receive their results as soon as they cross the finish line.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-1" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-1" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-2">
+          <p>2. The founder started the event because an injury stopped him from racing.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t3-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-3">
+          <p>3. More than a hundred people took part in the first event.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-4">
+          <p>4. The children’s event takes place on the same day as the adult event.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-4" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-5">
+          <p>5. Most participants live within walking distance of their local event.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-5" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-6">
+          <p>6. Some volunteers never take part in the run themselves.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-6" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t3-tf-6" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-tf', 't3-tf-score')">Check answers</button>
+          <span id="t3-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–10</p><p class="qg-instr">Complete the sentences below. Choose <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.</p></div>
+      <div class="card" id="t3-sc" style="line-height:2.4;"><p>7. At the first event, the times were recorded using a <input type="text" class="text-answer" id="t3-7" data-correct="stopwatch" autocomplete="off" style="width:140px;">.</p><p>8. At the finish, each participant’s personal <input type="text" class="text-answer" id="t3-8" data-correct="barcode" autocomplete="off" style="width:140px;"> is scanned.</p><p>9. The volunteer who stays at the back of the run is called the <input type="text" class="text-answer" id="t3-9" data-correct="tail walker" autocomplete="off" style="width:140px;">.</p><p>10. The costs of the event are paid for by sponsors and <input type="text" class="text-answer" id="t3-10" data-correct="donations" autocomplete="off" style="width:140px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-sc', 't3-sc-score')">Check answers</button>
+          <span id="t3-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–13</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t3-mc"><div class="q-item" id="t3-mc-11">
+          <p>11. How did the idea first spread?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-11" data-correct="false"> A. through an advertising campaign</label><label><input type="radio" value="1" name="t3-mc-11" data-correct="true"> B. through people telling their friends about it</label><label><input type="radio" value="2" name="t3-mc-11" data-correct="false"> C. through the help of the government</label><label><input type="radio" value="3" name="t3-mc-11" data-correct="false"> D. through reports on television</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-mc-12">
+          <p>12. What does the writer say about many participants in the research survey?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-12" data-correct="false"> A. They were already keen runners.</label><label><input type="radio" value="1" name="t3-mc-12" data-correct="false"> B. They did not enjoy the run.</label><label><input type="radio" value="2" name="t3-mc-12" data-correct="true"> C. They had not been active before they started.</label><label><input type="radio" value="3" name="t3-mc-12" data-correct="false"> D. They had been sent by their doctors.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-mc-13">
+          <p>13. What happened when a local council wanted to charge a fee?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-13" data-correct="false"> A. The organisers agreed to pay it.</label><label><input type="radio" value="1" name="t3-mc-13" data-correct="false"> B. The runners paid the fee themselves.</label><label><input type="radio" value="2" name="t3-mc-13" data-correct="false"> C. The event moved to a different park.</label><label><input type="radio" value="3" name="t3-mc-13" data-correct="true"> D. The event stopped.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-mc', 't3-mc-score')">Check answers</button>
+          <span id="t3-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 13</div>
+      <h2>Reading 1 — Answer Analysis and Vocabulary</h2>
+      <p class="task-sub">Open each question and check your thinking: where the answer is, which words in the question match which words in the passage, and why the tempting wrong answer is wrong. Then learn the key words from the passage.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Park Run Phenomenon</summary>
+        <p><span class="para-label">A</span>Every Saturday morning, in parks across the world, crowds of people gather to run five kilometres together. Nobody pays to take part, nobody wins a medal, and many of the participants do not even run — they walk, jog or push a baby in a buggy. A few hours later, each finisher receives a message with their time. The event is called parkrun, and in about twenty years it has grown from a small gathering in a single park into one of the largest regular sporting events on the planet.</p><p><span class="para-label">B</span>The story began in October 2004 in Bushy Park, in south-west London. Its founder was an experienced club runner who had been injured and could no longer race. Missing both running and his running friends, he decided to organise a weekly timed run that anyone could join. Only thirteen people took part in the first event. The times were recorded with a stopwatch, and the results were typed into a computer afterwards and sent out to the runners.</p><p><span class="para-label">C</span>At first, the idea spread slowly, mainly because people who had enjoyed the run told their friends about it. There was no advertising campaign. Gradually, runners in other parts of Britain asked whether they could start an event in their own local park, and later the idea travelled abroad. Today there are events in more than twenty countries, from Australia and South Africa to Japan. A shorter version, a two-kilometre run for children aged four to fourteen, now takes place on Sunday mornings.</p><p><span class="para-label">D</span>The rules are deliberately simple. Before your first run, you register once on the website and print a personal barcode. At the finish, a volunteer scans this barcode together with a token that shows your finishing position, and that is how your time is calculated. The organisers insist that taking part will always be free; the costs are covered by sponsors and donations. They also insist that it is 'a run, not a race'. Every event has a volunteer called the tail walker, who stays at the back, so no participant ever finishes in last place.</p><p><span class="para-label">E</span>Volunteers are, in fact, at the heart of the whole idea. There are no paid staff at the events themselves: marshals stand at corners to point the way, timekeepers record the finishing times, and other helpers set out the course and pack it away again. Many regular runners volunteer several times a year, and some people help every week without ever running at all. For them, the attraction is the friendly atmosphere and the feeling of belonging to a community.</p><p><span class="para-label">F</span>Parkrun also seems to have health benefits, and not only for keen runners. When researchers surveyed participants, a large number described themselves as inactive before they started, and many said that their fitness and mood had improved since then. Because of results like these, some doctors in Britain now encourage patients to try their local parkrun, either by running or by volunteering.</p><p><span class="para-label">G</span>Not everyone has welcomed the events. In some busy parks, people have complained about crowds of runners on narrow paths or about damage to the grass. In one well-known case, a local council proposed charging a fee for the use of its park, and the event closed rather than give up its free principle. For most people, however, the event is something to look forward to at the end of the week — and the coffee and conversation afterwards are, for many, almost as important as the run.</p>
+      </details>
+      <div class="card an-card"><p class="an-intro">Q4 needs information from two different paragraphs — Saturday is in Para A and Sunday in Para C. Don’t stop reading too early!</p><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">FALSE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="q">as soon as they cross the finish line</span> ↔ <span class="ev">A few hours later, each finisher receives a message with their time</span>.</p><p><i>As soon as</i> and <i>a few hours later</i> are opposites → FALSE.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">TRUE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">an experienced club runner who had been injured and could no longer race</span>.</p><p><i>An injury stopped him from racing</i> = <i>had been injured and could no longer race</i>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Only thirteen people took part in the first event</span>. Thirteen is not more than a hundred → FALSE.</p><p><span class="trap">Trap:</span> the word <i>only</i> tells you the number was small.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">FALSE</span><span class="an-where">Para A + C</span></summary><div class="an-body"><p>The adult event is on <b>Saturday</b> (<span class="ev">Every Saturday morning</span>), the children’s event on <b>Sunday</b> (<span class="ev">now takes place on Sunday mornings</span>). Different days → FALSE.</p><p>You needed information from two paragraphs.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>The passage talks about <i>local</i> parks, but it never says where the participants live or how they travel to the event.</p><p><span class="trap">Trap:</span> the word <i>local</i> in Para C makes the statement feel true, but there is no information about distance → NOT GIVEN.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">TRUE</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">some people help every week without ever running at all</span>. <i>Never take part in the run</i> = <i>without ever running</i>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">stopwatch</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">The times were recorded with a stopwatch</span>. <i>Using a</i> ↔ <i>with a</i>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">barcode</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">a volunteer scans this barcode</span> — and earlier <span class="ev">print a personal barcode</span>.</p><p><span class="trap">Trap:</span> <i>token</i> is also scanned, but the sentence says <i>personal</i>, and the passage says <i>personal barcode</i>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">tail walker</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">a volunteer called the tail walker, who stays at the back</span>. Two words — exactly the word limit.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">donations</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">the costs are covered by sponsors and donations</span>. <i>Paid for by</i> ↔ <i>covered by</i>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">mainly because people who had enjoyed the run told their friends about it. There was no advertising campaign</span>.</p><p><span class="trap">Trap:</span> A uses the word <i>advertising</i> from the passage, but the passage says there was <b>no</b> campaign.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">C</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">a large number described themselves as inactive before they started</span>. <i>Inactive</i> = <i>had not been active</i>.</p><p><span class="trap">Trap:</span> D: doctors encourage patients <b>now</b>, but the passage does not say these participants were sent by doctors.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">D</span><span class="an-where">Para G</span></summary><div class="an-body"><p><span class="ev">the event closed rather than give up its free principle</span>. <i>Closed</i> = <i>stopped</i>.</p><p><span class="trap">Trap:</span> C sounds sensible, but the passage never says the event moved.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Vocabulary from the passage.</strong> Match each word or phrase to its meaning.</p>
+      <div class="card" id="t4-v">
+        <div class="line-match" id="t4-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. gather</button><button type="button" class="lm-item" data-key="2">2. deliberately</button><button type="button" class="lm-item" data-key="3">3. register</button><button type="button" class="lm-item" data-key="4">4. insist</button><button type="button" class="lm-item" data-key="5">5. marshal</button><button type="button" class="lm-item" data-key="6">6. sense of belonging</button><button type="button" class="lm-item" data-key="7">7. principle</button><button type="button" class="lm-item" data-key="8">8. keen</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. the feeling that you are part of a group</button><button type="button" class="lm-item" data-key="b">b. very interested in something; enthusiastic</button><button type="button" class="lm-item" data-key="c">c. say firmly that something must happen or is true</button><button type="button" class="lm-item" data-key="d">d. on purpose; intentionally</button><button type="button" class="lm-item" data-key="e">e. a basic rule or belief</button><button type="button" class="lm-item" data-key="f">f. a person who helps to control a crowd or show the way at an event</button><button type="button" class="lm-item" data-key="g">g. put your name on an official list</button><button type="button" class="lm-item" data-key="h">h. come together in one place</button></div>
+          <select class="lm-hidden-select select" id="t4-v-1" data-lm-key="1" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t4-v-2" data-lm-key="2" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t4-v-3" data-lm-key="3" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t4-v-4" data-lm-key="4" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t4-v-5" data-lm-key="5" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t4-v-6" data-lm-key="6" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t4-v-7" data-lm-key="7" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t4-v-8" data-lm-key="8" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-v', 't4-v-score'); markLineMatchResult('t4-v-lm');">Check answers</button>
+          <span id="t4-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Use the words.</strong> Complete each sentence with a word from the box. There are two extra words.</p>
+      <div class="word-bank">gathered · register · insists · deliberately · keen · marshal · principle</div><div class="card" id="t4-g" style="line-height:2.3;"><p>1. Hundreds of fans <input type="text" class="text-answer" id="t4-1" data-correct="gathered" autocomplete="off" style="width:110px;"> outside the stadium to welcome the team home.</p><p>2. You must <input type="text" class="text-answer" id="t4-2" data-correct="register" autocomplete="off" style="width:110px;"> online before you can join the club.</p><p>3. My coach <input type="text" class="text-answer" id="t4-3" data-correct="insists" autocomplete="off" style="width:110px;"> that we warm up for at least ten minutes before every match.</p><p>4. The course was <input type="text" class="text-answer" id="t4-4" data-correct="deliberately" autocomplete="off" style="width:110px;"> designed to be flat so that beginners could enjoy it.</p><p>5. She is a <input type="text" class="text-answer" id="t4-5" data-correct="keen" autocomplete="off" style="width:110px;"> cyclist — she rides to the mountains every weekend.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-g', 't4-g-score')">Check answers</button>
+          <span id="t4-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t4-speaking-event">
+        <div class="q-num">Speaking — a free weekly run</div>
+        <div class="q-text">Would you like to take part in an event like parkrun in your city? Would you prefer to <b>run</b> or to <b>volunteer</b>? Why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think I would rather… because…”</li><li>“The thing that attracts me most is…”</li><li>“One problem might be that…”</li><li>“In my city, a good place for this would be…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 13</div>
+      <h2>Lead-in 2 — PE Lessons: More Than Just Games?</h2>
+      <p class="task-sub">Before Reading 2 (about why teenagers give up sport), read this article about PE at school. It introduces several ideas you will meet in the passage. About 15 minutes.</p>
+      <div class="card article">
+        <h3 class="article-title">PE Lessons: More Than Just Games?</h3>
+        <p class="article-meta">Education · Sport · 304 words</p>
+        <p>In many schools, physical education — PE — is treated as a less serious subject than maths, science or languages. There are no difficult exams, students rarely get homework, and when the timetable is full, PE is often the first lesson to lose time. Some parents even ask for their children to miss PE so that they can study for other subjects.</p><p>Supporters of PE say this is a serious mistake. A good PE programme does far more than let children run around. It teaches basic movement skills, such as throwing, catching, balancing and swimming, which children need if they are going to enjoy sport later in life. It also teaches them how to work in a team, how to follow rules, and how to win and lose with dignity.</p><p>There is a health argument too. For some children, especially those whose families cannot pay for sports clubs, PE lessons may be the only regular exercise they get. Doctors in many countries are worried that children today are less active than children in the past, and a weekly PE lesson is one of the few times when every child moves.</p><p>However, PE has its critics among students themselves. Many adults remember PE with horror: being chosen last for a team, feeling embarrassed in front of classmates, or standing in the cold on a football pitch for an hour. Students who are not naturally sporty can come to believe that exercise is simply not for them.</p><p>For this reason, some schools are changing the way they teach PE. Instead of focusing only on competitive team games, they offer a wider choice, such as dance, yoga, climbing or cycling. The idea is that every student should find at least one activity they enjoy — because, as the next passage shows, many teenagers stop doing sport altogether.</p>
+      </div>
+      <div class="card" id="t5-mc"><div class="q-item" id="t5-mc-1">
+          <p>1. According to the article, how is PE often treated in schools?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-1" data-correct="false"> A. as the most important subject</label><label><input type="radio" value="1" name="t5-mc-1" data-correct="true"> B. as less serious than other subjects</label><label><input type="radio" value="2" name="t5-mc-1" data-correct="false"> C. as a subject with difficult exams</label><label><input type="radio" value="3" name="t5-mc-1" data-correct="false"> D. as a subject only for good athletes</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-2">
+          <p>2. Which skill is NOT mentioned as something good PE teaches?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-2" data-correct="false"> A. catching</label><label><input type="radio" value="1" name="t5-mc-2" data-correct="false"> B. working in a team</label><label><input type="radio" value="2" name="t5-mc-2" data-correct="true"> C. cooking healthy food</label><label><input type="radio" value="3" name="t5-mc-2" data-correct="false"> D. losing with dignity</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-3">
+          <p>3. Why may PE be especially important for some children?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-3" data-correct="true"> A. It may be the only regular exercise they get.</label><label><input type="radio" value="1" name="t5-mc-3" data-correct="false"> B. It helps them pass their exams.</label><label><input type="radio" value="2" name="t5-mc-3" data-correct="false"> C. Their parents are PE teachers.</label><label><input type="radio" value="3" name="t5-mc-3" data-correct="false"> D. They want to become professional athletes.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-4">
+          <p>4. What change are some schools making?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-4" data-correct="false"> A. They are cutting PE lessons.</label><label><input type="radio" value="1" name="t5-mc-4" data-correct="true"> B. They are offering a wider choice of activities.</label><label><input type="radio" value="2" name="t5-mc-4" data-correct="false"> C. They are making PE more competitive.</label><label><input type="radio" value="3" name="t5-mc-4" data-correct="false"> D. They are giving PE homework.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-mc', 't5-mc-score')">Check answers</button>
+          <span id="t5-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t5-tf"><div class="q-item" id="t5-tf-1">
+          <p>1. Some parents ask for their children to miss PE.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-1" data-correct="true"> True</label><label><input type="radio" value="1" name="t5-tf-1" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-2">
+          <p>2. Doctors believe children today are more active than in the past.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-2" data-correct="false"> True</label><label><input type="radio" value="1" name="t5-tf-2" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-3">
+          <p>3. Some adults have bad memories of PE lessons.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-3" data-correct="true"> True</label><label><input type="radio" value="1" name="t5-tf-3" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-4">
+          <p>4. The writer says competitive team games should be banned.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-4" data-correct="false"> True</label><label><input type="radio" value="1" name="t5-tf-4" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-tf', 't5-tf-score')">Check answers</button>
+          <span id="t5-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 90 words</b>. Say what it is about, give the three most important points, and finish with one sentence about what you think.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 90 words):</p><textarea class="no-check mini-answer" id="t5-sum-1" data-min-words="80" placeholder="Write your summary here..." style="min-height:160px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t5-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t5-sum-ans"><p>This article argues that physical education at school is more important than many people think. Some parents and schools see PE as less serious than subjects such as maths, and when timetables are full it is often the first lesson to be cut. The writer explains that good PE teaches children basic movement skills, teamwork and how to win and lose, and that it may be the only regular exercise some children get. However, the article also admits that some students hate PE because of competitive team games, and suggests that schools should offer a wider choice of activities. I agree that PE should not be cut. (≈ 110 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t5-speaking-summary">
+        <div class="q-num">Spoken summary (at least 30 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 30 seconds</b> (try for 45).</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This text is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“For example,…”</li><li>“Personally, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 13</div>
+      <h2>Reading 2 — Why Do Teenagers Give Up Sport?</h2>
+      <p class="task-sub">Three IELTS question types: <b>matching headings</b>, <b>YES / NO / NOT GIVEN</b> and <b>summary completion with a word bank</b>. Suggested time: 20 minutes. This is Reading Passage 2, so the questions are numbered 14–27. Passage on the left, questions on the right. Answers are checked when you press <b>Next</b>.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;">
+  <li><b>Matching headings:</b> read the <b>first and last sentences</b> of each paragraph first — they usually contain the main idea. Be careful with headings that match only one detail.</li>
+  <li><b>YES / NO / NOT GIVEN</b> is about the writer’s <b>opinions</b> — look for <i>I believe</i>, <i>in my view</i>, <i>I strongly agree</i>.</li>
+  <li><b>Summary with a word bank:</b> decide what kind of word is missing (noun? adjective?) before you look at the box.</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Why Do Teenagers Give Up Sport?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Children love to play — so why do so many stop when they reach their teens? A youth coach looks at the evidence.</small></h3>
+            <p class="article-meta">Reading Passage 2 · Sport and young people · 500 words</p>
+            <p><span class="para-label">A</span>Watch any primary school playground and you will see children running, jumping and chasing balls with enormous energy. Visit the same children six or seven years later, and the picture is often very different. Surveys carried out in several countries suggest that participation in sport falls sharply between the ages of about eleven and sixteen, and that the fall is often steeper among girls than among boys. For a coach like me, this is one of the most worrying trends in youth sport.</p><p><span class="para-label">B</span>The first reason is simple: for many young people, sport stops being fun. As children get older, sport becomes more organised and more serious. Adults start keeping league tables, coaches pick their strongest players for important matches, and weaker players spend more and more time on the bench. I believe that adults are often responsible for this. When winning becomes more important than enjoyment, the children who are not winning soon find something else to do.</p><p><span class="para-label">C</span>A second reason is time. Teenagers have more homework, more exams and, often, part-time jobs. They also have a busier social life, much of it on their phones. Sport has to compete with all of these things, and it often loses. Some students tell me that they have stopped training 'just until the exams are over' — but very few come back. In my view, exams are not a good reason to give up exercise completely. Even a short run can help students to concentrate, and they need that more than ever when they are revising.</p><p><span class="para-label">D</span>For many teenagers, and especially for girls, the problem is also how they feel about their bodies. At an age when young people are very aware of how they look, wearing tight sports clothes or getting changed in front of others can be extremely uncomfortable. Some schools have reported that more students took part in PE after they were allowed to choose their own sports clothes.</p><p><span class="para-label">E</span>A fourth reason may surprise some parents. Children who are talented at a sport are sometimes pushed to focus on that one sport from a very young age, training several times a week all year round. This can lead to injuries caused by repeating the same movements, and to 'burnout' — a feeling of being so tired of a sport that the young person never wants to play it again. Many experts now recommend that children should try a range of different sports before they specialise, and I strongly agree.</p><p><span class="para-label">F</span>So what can be done? Clubs and schools can offer activities that are not competitive, such as dance, climbing or cycling, for teenagers who do not want to compete. They can give teenagers a say in what they do and when they do it. And they can train coaches to praise effort rather than results, so that every player feels valued. The aim of youth sport should not be to produce a few champions; it should be to produce adults who are still active at forty, sixty and eighty.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–19</p><p class="qg-instr">The passage has six paragraphs, <b>A–F</b>. Choose the correct heading for each paragraph from the list of headings below. There are more headings than paragraphs.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;">
+<b>i</b>&nbsp; Pushed too hard, too soon<br><b>ii</b>&nbsp; A worrying change in the teenage years<br><b>iii</b>&nbsp; When winning matters more than enjoyment<br>
+<b>iv</b>&nbsp; The high cost of sports equipment<br><b>v</b>&nbsp; Feeling uncomfortable about how you look<br><b>vi</b>&nbsp; Too many other things to do<br>
+<b>vii</b>&nbsp; A new aim for youth sport<br><b>viii</b>&nbsp; Why professional athletes retire early<br><b>ix</b>&nbsp; Girls’ sport on television</p></div>
+      <div class="card" id="t6-h"><div class="sel-row"><select class="select" id="t6-h-14" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>14.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t6-h-15" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>15.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t6-h-16" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>16.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t6-h-17" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>17.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t6-h-18" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>18.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t6-h-19" data-answer="vii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>19.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-h', 't6-h-score')">Check answers</button>
+          <span id="t6-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 20–24</p><p class="qg-instr">Do the following statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-20">
+          <p>20. Adults are often to blame when young people lose interest in sport.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-20" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-20" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-20" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-21">
+          <p>21. Students should stop doing sport until their exams are finished.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-21" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-21" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-21" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-22">
+          <p>22. Getting changed in front of others is the main reason why girls give up sport.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-22" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-22" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-22" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-23">
+          <p>23. Young children should be encouraged to try several different sports.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-23" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-23" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-23" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-24">
+          <p>24. Team sports are better for teenagers’ health than individual activities.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-24" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-24" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-24" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 25–27</p><p class="qg-instr">Complete the summary below. Choose <b>ONE WORD</b> from the box for each answer.</p></div>
+      <div class="word-bank">competitive · say · effort · talent · expensive · medals · popular · team</div><div class="card" id="t6-s" style="line-height:2.6;"><p>To keep teenagers active, clubs and schools can offer activities which are not (25) <input type="text" class="text-answer" id="t6-25" data-correct="competitive" autocomplete="off" style="width:130px;">, such as dance or climbing. They can also give teenagers a (26) <input type="text" class="text-answer" id="t6-26" data-correct="say" autocomplete="off" style="width:130px;"> in what they do. Finally, coaches should be trained to praise (27) <input type="text" class="text-answer" id="t6-27" data-correct="effort" autocomplete="off" style="width:130px;"> rather than results.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-s', 't6-s-score')">Check answers</button>
+          <span id="t6-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 13</div>
+      <h2>Reading 2 — Answer Analysis and Word Forms</h2>
+      <p class="task-sub">Check every answer, especially the headings: why is the right heading right, and why are the trap headings wrong? Then practise the word forms that IELTS loves to test.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Why Do Teenagers Give Up Sport?</summary>
+        <p><span class="para-label">A</span>Watch any primary school playground and you will see children running, jumping and chasing balls with enormous energy. Visit the same children six or seven years later, and the picture is often very different. Surveys carried out in several countries suggest that participation in sport falls sharply between the ages of about eleven and sixteen, and that the fall is often steeper among girls than among boys. For a coach like me, this is one of the most worrying trends in youth sport.</p><p><span class="para-label">B</span>The first reason is simple: for many young people, sport stops being fun. As children get older, sport becomes more organised and more serious. Adults start keeping league tables, coaches pick their strongest players for important matches, and weaker players spend more and more time on the bench. I believe that adults are often responsible for this. When winning becomes more important than enjoyment, the children who are not winning soon find something else to do.</p><p><span class="para-label">C</span>A second reason is time. Teenagers have more homework, more exams and, often, part-time jobs. They also have a busier social life, much of it on their phones. Sport has to compete with all of these things, and it often loses. Some students tell me that they have stopped training 'just until the exams are over' — but very few come back. In my view, exams are not a good reason to give up exercise completely. Even a short run can help students to concentrate, and they need that more than ever when they are revising.</p><p><span class="para-label">D</span>For many teenagers, and especially for girls, the problem is also how they feel about their bodies. At an age when young people are very aware of how they look, wearing tight sports clothes or getting changed in front of others can be extremely uncomfortable. Some schools have reported that more students took part in PE after they were allowed to choose their own sports clothes.</p><p><span class="para-label">E</span>A fourth reason may surprise some parents. Children who are talented at a sport are sometimes pushed to focus on that one sport from a very young age, training several times a week all year round. This can lead to injuries caused by repeating the same movements, and to 'burnout' — a feeling of being so tired of a sport that the young person never wants to play it again. Many experts now recommend that children should try a range of different sports before they specialise, and I strongly agree.</p><p><span class="para-label">F</span>So what can be done? Clubs and schools can offer activities that are not competitive, such as dance, climbing or cycling, for teenagers who do not want to compete. They can give teenagers a say in what they do and when they do it. And they can train coaches to praise effort rather than results, so that every player feels valued. The aim of youth sport should not be to produce a few champions; it should be to produce adults who are still active at forty, sixty and eighty.</p>
+      </details>
+      <div class="card an-card"><p class="an-intro">Matching headings: a heading must match the <b>whole</b> paragraph, not one word in it. Three of the trap headings (iv, viii, ix) each pick up a single detail.</p><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">ii</span><span class="an-where">Para A</span></summary><div class="an-body"><p>Main idea: <span class="ev">participation in sport falls sharply between the ages of about eleven and sixteen</span> and <span class="ev">one of the most worrying trends</span>.</p><p><i>Worrying change</i> ↔ <i>worrying trend</i>; <i>teenage years</i> ↔ <i>eleven and sixteen</i>.</p><p><span class="trap">Trap:</span> <i>ix (girls)</i>: girls are mentioned, but only as a detail, and nothing is said about television.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">iii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">When winning becomes more important than enjoyment, the children who are not winning soon find something else to do</span>.</p><p>The heading paraphrases the paragraph’s last sentence almost exactly.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">vi</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Sport has to compete with all of these things</span> — homework, exams, jobs, social life. <i>Too many other things to do</i> = all of these.</p><p><span class="trap">Trap:</span> exams are only one of the things; a heading about exams alone would be too narrow.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">v</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">the problem is also how they feel about their bodies … very aware of how they look</span>.</p><p><span class="trap">Trap:</span> <i>iv (cost of equipment)</i>: sports clothes are mentioned, but the problem is how they <b>look</b>, not what they <b>cost</b>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">i</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">pushed to focus on that one sport from a very young age</span> → <i>pushed … too soon</i>; training <span class="ev">several times a week all year round</span> → <i>too hard</i>.</p><p><span class="trap">Trap:</span> <i>viii (athletes retire)</i>: <i>burnout</i> might remind you of retirement, but the paragraph is about children, not professionals.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">vii</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">The aim of youth sport should not be to produce a few champions</span> — the writer suggests a new aim: active adults.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">YES</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">I believe that adults are often responsible for this</span>. <i>To blame</i> = <i>responsible</i>. The writer agrees → YES.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">NO</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">In my view, exams are not a good reason to give up exercise completely</span>. The writer says the opposite → NO.</p><p><span class="trap">Trap:</span> students say they stopped <i>just until the exams are over</i> — that is the <b>students’</b> view, not the writer’s.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para D</span></summary><div class="an-body"><p>The writer says that changing in front of others <span class="ev">can be extremely uncomfortable</span>, but never says it is the <b>main</b> reason.</p><p><span class="trap">Trap:</span> words like <i>main</i>, <i>most</i>, <i>only</i> need clear evidence. No ranking of reasons → NOT GIVEN.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">YES</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Many experts now recommend that children should try a range of different sports before they specialise, and I strongly agree</span>.</p><p>The experts recommend it, and <i>I strongly agree</i> makes it the writer’s view too.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>The writer never compares team sports and individual activities for health.</p><p><span class="trap">Trap:</span> Para F lists individual activities (dance, climbing, cycling), but only as non-competitive options, not as healthier ones.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">competitive</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">activities that are not competitive, such as dance, climbing or cycling</span>. After <i>are not</i> we need an adjective.</p><p><span class="trap">Trap:</span> <i>popular</i> and <i>expensive</i> are also adjectives, but only <i>competitive</i> matches the passage.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">say</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">give teenagers a say in what they do</span>. <i>Have / give someone a say in something</i> = let them help decide.</p></div></details><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">effort</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">praise effort rather than results</span>.</p><p><span class="trap">Trap:</span> <i>talent</i> fits the grammar, but the passage’s point is that talent should <b>not</b> be the focus.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Word forms.</strong> Complete each sentence with the correct form of the word in brackets.</p>
+      <div class="card" id="t7-wf" style="line-height:2.5;"><p>1. <input type="text" class="text-answer" id="t7-1" data-correct="Participation" autocomplete="off" style="width:140px;"> in sport falls sharply in the teenage years. (participate)</p><p>2. Many teenagers find competitive sport very <input type="text" class="text-answer" id="t7-2" data-correct="stressful" autocomplete="off" style="width:140px;">. (stress)</p><p>3. Young players need <input type="text" class="text-answer" id="t7-3" data-correct="encouragement" autocomplete="off" style="width:140px;"> more than criticism. (encourage)</p><p>4. The fall in activity is a <input type="text" class="text-answer" id="t7-4" data-correct="worrying" autocomplete="off" style="width:140px;"> trend. (worry)</p><p>5. Training too hard can lead to serious <input type="text" class="text-answer" id="t7-5" data-correct="injuries/injury" autocomplete="off" style="width:140px;">. (injure)</p><p>6. Our coach always praises our <input type="text" class="text-answer" id="t7-6" data-correct="effort/efforts" autocomplete="off" style="width:140px;">, not just our results. (effort)</p><p>7. Sport helps students to <input type="text" class="text-answer" id="t7-7" data-correct="concentrate" autocomplete="off" style="width:140px;"> when they are revising. (concentration)</p><p>8. She became a <input type="text" class="text-answer" id="t7-8" data-correct="professional" autocomplete="off" style="width:140px;"> tennis player at the age of eighteen. (profession)</p><p>9. Exercise can make you feel more <input type="text" class="text-answer" id="t7-9" data-correct="energetic" autocomplete="off" style="width:140px;">. (energy)</p><p>10. Not every child is <input type="text" class="text-answer" id="t7-10" data-correct="naturally" autocomplete="off" style="width:140px;"> sporty. (nature)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-wf', 't7-wf-score')">Check answers</button>
+          <span id="t7-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t7-speaking-quit">
+        <div class="q-num">Speaking — giving up (or not)</div>
+        <div class="q-text">Have you ever given up a sport or activity? Why? Would anything have made you continue? If not, why do you think you have kept going?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I used to…, but I gave it up when…”</li><li>“The main reason was that…”</li><li>“If…, I would probably have continued.”</li><li>“What keeps me going is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 13</div>
+      <h2>Lead-in 3 — Video: The Brain-Changing Benefits of Exercise</h2>
+      <p class="task-sub">Watch this TED talk by neuroscientist Wendy Suzuki (about 13 minutes). She explains what exercise does to the brain — and how it changed her own life. Watch once without subtitles; turn on English subtitles the second time if you need them. Then answer the questions and summarise the talk.</p>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="position:relative; padding-bottom:56.25%; height:0;">
+          <iframe src="https://embed.ted.com/talks/wendy_suzuki_the_brain_changing_benefits_of_exercise" title="Wendy Suzuki — The brain-changing benefits of exercise" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Key words from the talk.</strong> Match each word to its meaning before you watch.</p>
+      <div class="card" id="t8-v">
+        <div class="line-match" id="t8-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. neuroscientist</button><button type="button" class="lm-item" data-key="2">2. hippocampus</button><button type="button" class="lm-item" data-key="3">3. mood</button><button type="button" class="lm-item" data-key="4">4. attention</button><button type="button" class="lm-item" data-key="5">5. long-term memory</button><button type="button" class="lm-item" data-key="6">6. protect</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. a part of the brain that is important for long-term memory</button><button type="button" class="lm-item" data-key="b">b. the ability to remember facts and events for a long time</button><button type="button" class="lm-item" data-key="c">c. a scientist who studies the brain and nervous system</button><button type="button" class="lm-item" data-key="d">d. the way you feel at a particular time</button><button type="button" class="lm-item" data-key="e">e. keep something safe from harm</button><button type="button" class="lm-item" data-key="f">f. the ability to focus on something</button></div>
+          <select class="lm-hidden-select select" id="t8-v-1" data-lm-key="1" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t8-v-2" data-lm-key="2" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t8-v-3" data-lm-key="3" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t8-v-4" data-lm-key="4" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t8-v-5" data-lm-key="5" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t8-v-6" data-lm-key="6" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-v', 't8-v-score'); markLineMatchResult('t8-v-lm');">Check answers</button>
+          <span id="t8-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t8-mc"><div class="q-item" id="t8-mc-1">
+          <p>1. What is Wendy Suzuki’s job?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-1" data-correct="false"> A. a fitness instructor</label><label><input type="radio" value="1" name="t8-mc-1" data-correct="true"> B. a neuroscientist who studies memory</label><label><input type="radio" value="2" name="t8-mc-1" data-correct="false"> C. a professional athlete</label><label><input type="radio" value="3" name="t8-mc-1" data-correct="false"> D. a doctor in a hospital</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-2">
+          <p>2. What made her start exercising regularly?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-2" data-correct="false"> A. A doctor told her to.</label><label><input type="radio" value="1" name="t8-mc-2" data-correct="true"> B. She realised she was out of shape and had almost no life outside her work.</label><label><input type="radio" value="2" name="t8-mc-2" data-correct="false"> C. She wanted to win a competition.</label><label><input type="radio" value="3" name="t8-mc-2" data-correct="false"> D. Her students asked her to.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-3">
+          <p>3. According to the talk, what does a single workout do?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-3" data-correct="false"> A. It has no effect until you have exercised for months.</label><label><input type="radio" value="1" name="t8-mc-3" data-correct="true"> B. It improves your mood and your ability to focus attention straight away.</label><label><input type="radio" value="2" name="t8-mc-3" data-correct="false"> C. It makes you feel tired for the rest of the day.</label><label><input type="radio" value="3" name="t8-mc-3" data-correct="false"> D. It only affects your muscles, not your brain.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-4">
+          <p>4. What can regular exercise over a long period do?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-4" data-correct="true"> A. produce new brain cells in the hippocampus and improve long-term memory</label><label><input type="radio" value="1" name="t8-mc-4" data-correct="false"> B. make the brain smaller but faster</label><label><input type="radio" value="2" name="t8-mc-4" data-correct="false"> C. replace the need for sleep</label><label><input type="radio" value="3" name="t8-mc-4" data-correct="false"> D. make you more intelligent overnight</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-5">
+          <p>5. Why does she say exercise can protect the brain?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-5" data-correct="true"> A. It makes the parts of the brain linked to memory and decision-making stronger.</label><label><input type="radio" value="1" name="t8-mc-5" data-correct="false"> B. It stops all illnesses.</label><label><input type="radio" value="2" name="t8-mc-5" data-correct="false"> C. It makes people sleep longer.</label><label><input type="radio" value="3" name="t8-mc-5" data-correct="false"> D. It removes stress completely.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-6">
+          <p>6. How much exercise does she recommend?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-6" data-correct="false"> A. two hours every day</label><label><input type="radio" value="1" name="t8-mc-6" data-correct="true"> B. three to four times a week, at least thirty minutes each time</label><label><input type="radio" value="2" name="t8-mc-6" data-correct="false"> C. once a month</label><label><input type="radio" value="3" name="t8-mc-6" data-correct="false"> D. only at weekends</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-mc', 't8-mc-score')">Check answers</button>
+          <span id="t8-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the talk in your own words — <b>at least 90 words</b>. Say what it is about, give the three most important points, and finish with one sentence about what you think.</p>
+      <div class="card"><p class="mini-q">Your summary of the talk (at least 90 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="80" placeholder="Write your summary here..." style="min-height:160px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>In this talk, neuroscientist Wendy Suzuki explains how exercise changes the brain. She describes how she started exercising herself after realising she was out of shape and had almost no life outside her laboratory, and how her mood, energy and memory improved. She explains that a single workout immediately releases chemicals that improve mood and helps us focus attention, while regular exercise over a long time can produce new brain cells in the hippocampus and improve long-term memory. She says exercise can protect the brain against diseases and recommends three to four sessions a week of at least thirty minutes. I found her personal story very motivating. (≈ 110 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 30 seconds)</div>
+        <div class="q-text">Now summarise the talk <b>aloud</b> without reading your written summary — speak for <b>at least 30 seconds</b> (try for 45).</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This text is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“For example,…”</li><li>“Personally, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 13</div>
+      <h2>Speaking Part 1 — Sport and Exercise</h2>
+      <p class="task-sub">In Part 1 the examiner asks short questions about familiar topics. Good answers are <b>2–4 sentences</b>: answer the question, then add a reason, an example or a detail. Read the two example answers first.</p>
+      <div class="card advice-card"><p class="prompt-label">Weak vs strong</p>
+<p><b>Q: Do you like sport?</b></p><p>✗ <i>“Yes, I like sport.”</i> (too short — no reason, no detail)</p>
+<p>✓ <i>“Yes, I do, especially football. I play with my friends near my house almost every weekend, and I really enjoy the feeling of being part of a team.”</i></p></div>
+      <p style="margin-top:26px;"><strong>Which technique?</strong> Each answer below extends the first sentence in a different way. Choose the technique used.</p>
+      <div class="card" id="t9-tech"><div class="sel-row"><select class="select" id="t9-tech-1" data-answer="a reason"><option value="">—</option><option value="a reason">a reason</option><option value="an example">an example</option><option value="a contrast (past vs now)">a contrast (past vs now)</option><option value="a future plan">a future plan</option></select><span><b>1.</b> “I don’t go to the gym very often. I find it quite boring to exercise indoors.”</span></div><div class="sel-row"><select class="select" id="t9-tech-2" data-answer="an example"><option value="">—</option><option value="a reason">a reason</option><option value="an example">an example</option><option value="a contrast (past vs now)">a contrast (past vs now)</option><option value="a future plan">a future plan</option></select><span><b>2.</b> “I watch a lot of sport on TV — for instance, I never miss a Champions League match.”</span></div><div class="sel-row"><select class="select" id="t9-tech-3" data-answer="a contrast (past vs now)"><option value="">—</option><option value="a reason">a reason</option><option value="an example">an example</option><option value="a contrast (past vs now)">a contrast (past vs now)</option><option value="a future plan">a future plan</option></select><span><b>3.</b> “When I was a child I swam every day, but these days I hardly have time.”</span></div><div class="sel-row"><select class="select" id="t9-tech-4" data-answer="a future plan"><option value="">—</option><option value="a reason">a reason</option><option value="an example">an example</option><option value="a contrast (past vs now)">a contrast (past vs now)</option><option value="a future plan">a future plan</option></select><span><b>4.</b> “I’m not very fit at the moment, but I’m going to start running next month.”</span></div><div class="sel-row"><select class="select" id="t9-tech-5" data-answer="a reason"><option value="">—</option><option value="a reason">a reason</option><option value="an example">an example</option><option value="a contrast (past vs now)">a contrast (past vs now)</option><option value="a future plan">a future plan</option></select><span><b>5.</b> “I prefer team sports because I enjoy spending time with other people.”</span></div><div class="sel-row"><select class="select" id="t9-tech-6" data-answer="a contrast (past vs now)"><option value="">—</option><option value="a reason">a reason</option><option value="an example">an example</option><option value="a contrast (past vs now)">a contrast (past vs now)</option><option value="a future plan">a future plan</option></select><span><b>6.</b> “Most of my friends used to play basketball, whereas now they mostly play computer games.”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-tech', 't9-tech-score')">Check answers</button>
+          <span id="t9-tech-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Do you like sport? Why / Why not?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Yes, I do, especially…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“When I was younger…, but now…”</li><li>“I’m planning to…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">What sports are popular in your country?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Yes, I do, especially…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“When I was younger…, but now…”</li><li>“I’m planning to…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Did you do much sport when you were a child?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Yes, I do, especially…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“When I was younger…, but now…”</li><li>“I’m planning to…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Do you prefer playing sport or watching it?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Yes, I do, especially…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“When I was younger…, but now…”</li><li>“I’m planning to…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-5">
+        <div class="q-num">Question 5</div>
+        <div class="q-text">What do you do to keep fit?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Yes, I do, especially…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“When I was younger…, but now…”</li><li>“I’m planning to…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-6">
+        <div class="q-num">Question 6</div>
+        <div class="q-text">Is there a sport you would like to try in the future?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Yes, I do, especially…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“When I was younger…, but now…”</li><li>“I’m planning to…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 13</div>
+      <h2>Speaking Part 2 — A Sport or Activity You Enjoy</h2>
+      <p class="task-sub">In Part 2 you have <b>1 minute</b> to prepare and should speak for <b>1–2 minutes</b>. First read a model answer and notice how it is organised, then do the task yourself.</p>
+      <div class="card task-prompt"><p class="prompt-label">Part 2 task card</p><p><b>Describe a sport or physical activity that you enjoy doing.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what the sport or activity is<br>&nbsp;&nbsp;when and where you do it<br>&nbsp;&nbsp;who you do it with<br>and explain why you enjoy it.</p></div>
+      <div class="card"><p class="prompt-label">Model answer — Aziz</p>
+<p style="line-height:1.8;">I’d like to talk about swimming, which is something I’ve been doing since I was about eight years old. My father took me to the pool near our house one summer, and at first I was terrified of the water, but after a few lessons I was hooked.</p>
+<p style="line-height:1.8;">These days I go swimming two or three times a week, usually early in the morning before university, because the pool is almost empty at that time. It’s an indoor pool, so I can go all year round, even in January when it’s freezing outside.</p>
+<p style="line-height:1.8;">I normally go with my cousin, Sardor. We push each other to swim a little further each week — at the moment we’re trying to swim two kilometres without stopping, and we’re nearly there.</p>
+<p style="line-height:1.8;">As for why I enjoy it so much, I think there are two main reasons. First, it’s great for my fitness — it works almost every muscle in the body, and it doesn’t hurt my knees like running does. But the main reason is that it clears my head. When I’m in the water, I can’t look at my phone or think about exams, so after half an hour I feel completely relaxed. To be honest, I can’t imagine my week without it.</p></div>
+      <p style="margin-top:26px;"><strong>Analyse the model.</strong> Answer the questions about Aziz’s talk.</p>
+      <div class="card" id="t10-mc"><div class="q-item" id="t10-mc-1">
+          <p>1. How did Aziz feel about water when he first started?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-1" data-correct="false"> A. excited</label><label><input type="radio" value="1" name="t10-mc-1" data-correct="true"> B. very frightened</label><label><input type="radio" value="2" name="t10-mc-1" data-correct="false"> C. bored</label><label><input type="radio" value="3" name="t10-mc-1" data-correct="false"> D. confident</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-2">
+          <p>2. Why does he go swimming early in the morning?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-2" data-correct="false"> A. It is cheaper.</label><label><input type="radio" value="1" name="t10-mc-2" data-correct="true"> B. The pool is almost empty.</label><label><input type="radio" value="2" name="t10-mc-2" data-correct="false"> C. His cousin works later.</label><label><input type="radio" value="3" name="t10-mc-2" data-correct="false"> D. The water is warmer.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-3">
+          <p>3. What is Aziz’s current goal?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-3" data-correct="false"> A. to win a competition</label><label><input type="radio" value="1" name="t10-mc-3" data-correct="true"> B. to swim two kilometres without stopping</label><label><input type="radio" value="2" name="t10-mc-3" data-correct="false"> C. to swim every day</label><label><input type="radio" value="3" name="t10-mc-3" data-correct="false"> D. to teach his cousin to swim</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-4">
+          <p>4. What is the MAIN reason he enjoys swimming?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-4" data-correct="false"> A. It is good for his knees.</label><label><input type="radio" value="1" name="t10-mc-4" data-correct="true"> B. It helps him to relax and clear his head.</label><label><input type="radio" value="2" name="t10-mc-4" data-correct="false"> C. He can use his phone.</label><label><input type="radio" value="3" name="t10-mc-4" data-correct="false"> D. He meets new people.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-mc', 't10-mc-score')">Check answers</button>
+          <span id="t10-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Useful language.</strong> Find a phrase in the model answer that means…</p>
+      <div class="card" id="t10-ph" style="line-height:2.4;"><p>1. very enthusiastic about something, unable to stop → I was <input type="text" class="text-answer" id="t10-1" data-correct="hooked" autocomplete="off" style="width:120px;"></p><p>2. extremely cold → it’s <input type="text" class="text-answer" id="t10-2" data-correct="freezing" autocomplete="off" style="width:120px;"> outside</p><p>3. encourage each other to try harder → we <input type="text" class="text-answer" id="t10-3" data-correct="push" autocomplete="off" style="width:120px;"> each other</p><p>4. stops you thinking about your worries → it <input type="text" class="text-answer" id="t10-4" data-correct="clears" autocomplete="off" style="width:120px;"> my head</p><p>5. introducing the reasons part of the talk → As <input type="text" class="text-answer" id="t10-5" data-correct="for" autocomplete="off" style="width:120px;"> why I enjoy it…</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-ph', 't10-ph-score')">Check answers</button>
+          <span id="t10-ph-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t10-speaking-sport">
+        <div class="q-num">Your Part 2 talk — a sport you enjoy</div>
+        <div class="q-text">Now do the task yourself. Prepare for 1 minute (use the notes box), then speak for <b>1–2 minutes</b> without stopping. Cover all four points on the card.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d like to talk about…, which I’ve been doing since…”</li><li>“I usually… at/in…”</li><li>“I normally do it with…”</li><li>“As for why I enjoy it, there are two main reasons.”</li><li>“To be honest, I can’t imagine my week without it.”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="card task-prompt" style="margin-top:22px;"><p class="prompt-label">Part 2 task card — extra practice</p><p><b>Describe a sports event you watched, either live or on TV.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what the event was<br>&nbsp;&nbsp;where and when you watched it<br>&nbsp;&nbsp;who you watched it with<br>and explain how you felt while watching it.</p></div>
+      <div class="question-box" data-field="t10-speaking-event">
+        <div class="q-num">Your Part 2 talk — a sports event</div>
+        <div class="q-text">Prepare for 1 minute, then speak for <b>1–2 minutes</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The event I’d like to describe is…”</li><li>“I watched it at… with…”</li><li>“The most exciting moment was when…”</li><li>“I felt… because…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 13</div>
+      <h2>Speaking Part 3 — Sport and Society</h2>
+      <p class="task-sub">Part 3 questions are more general and more abstract: you talk about <b>people</b> and <b>society</b>, not just yourself. Strong answers give an <b>opinion</b>, a <b>reason</b> and an <b>example</b>, and often look at <b>both sides</b>.</p>
+      <div class="card"><p class="prompt-label">Model Part 3 answer</p><p><b>Examiner:</b> Why do you think some people don’t do any exercise?</p>
+<p style="line-height:1.8;"><b>Candidate:</b> I think the main reason is lack of time. Many adults work long hours, and when they get home they’re simply too tired to go to a gym. Another reason might be money — in my city, for example, gym memberships are quite expensive. On the other hand, I’d say some people just haven’t found an activity they enjoy. If they tried something like dancing or hiking instead of running on a machine, they might actually like it.</p></div>
+      <p style="margin-top:26px;"><strong>Find the parts.</strong> Which phrase in the model answer does each job?</p>
+      <div class="card" id="t11-parts"><div class="sel-row"><select class="select" id="t11-parts-1" data-answer="I think the main reason is"><option value="">—</option><option value="I think the main reason is">I think the main reason is</option><option value="Another reason might be">Another reason might be</option><option value="for example">for example</option><option value="On the other hand">On the other hand</option><option value="they might actually like it">they might actually like it</option></select><span><b>1.</b> gives the first opinion</span></div><div class="sel-row"><select class="select" id="t11-parts-2" data-answer="Another reason might be"><option value="">—</option><option value="I think the main reason is">I think the main reason is</option><option value="Another reason might be">Another reason might be</option><option value="for example">for example</option><option value="On the other hand">On the other hand</option><option value="they might actually like it">they might actually like it</option></select><span><b>2.</b> adds a second reason</span></div><div class="sel-row"><select class="select" id="t11-parts-3" data-answer="for example"><option value="">—</option><option value="I think the main reason is">I think the main reason is</option><option value="Another reason might be">Another reason might be</option><option value="for example">for example</option><option value="On the other hand">On the other hand</option><option value="they might actually like it">they might actually like it</option></select><span><b>3.</b> introduces an example</span></div><div class="sel-row"><select class="select" id="t11-parts-4" data-answer="On the other hand"><option value="">—</option><option value="I think the main reason is">I think the main reason is</option><option value="Another reason might be">Another reason might be</option><option value="for example">for example</option><option value="On the other hand">On the other hand</option><option value="they might actually like it">they might actually like it</option></select><span><b>4.</b> introduces the other side</span></div><div class="sel-row"><select class="select" id="t11-parts-5" data-answer="they might actually like it"><option value="">—</option><option value="I think the main reason is">I think the main reason is</option><option value="Another reason might be">Another reason might be</option><option value="for example">for example</option><option value="On the other hand">On the other hand</option><option value="they might actually like it">they might actually like it</option></select><span><b>5.</b> speculates about a possible result</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-parts', 't11-parts-score')">Check answers</button>
+          <span id="t11-parts-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Your turn.</strong> Record an answer to each question. Aim for <b>4–6 sentences</b>: opinion → reason → example → other side.</p>
+      <div class="question-box" data-field="t11-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Why do you think some people don’t do any exercise?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“Another reason might be…”</li><li>“For example, in my country…”</li><li>“On the other hand,…”</li><li>“If…, they might…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Should PE be a compulsory subject at school? Why / Why not?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“Another reason might be…”</li><li>“For example, in my country…”</li><li>“On the other hand,…”</li><li>“If…, they might…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Are team sports better for children than individual sports?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“Another reason might be…”</li><li>“For example, in my country…”</li><li>“On the other hand,…”</li><li>“If…, they might…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Why do you think professional footballers earn so much money?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“Another reason might be…”</li><li>“For example, in my country…”</li><li>“On the other hand,…”</li><li>“If…, they might…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-5">
+        <div class="q-num">Question 5</div>
+        <div class="q-text">How has the way people keep fit changed compared to the past?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“Another reason might be…”</li><li>“For example, in my country…”</li><li>“On the other hand,…”</li><li>“If…, they might…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-6">
+        <div class="q-num">Question 6</div>
+        <div class="q-text">Is it better to exercise alone or with other people?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“Another reason might be…”</li><li>“For example, in my country…”</li><li>“On the other hand,…”</li><li>“If…, they might…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-7">
+        <div class="q-num">Question 7</div>
+        <div class="q-text">What can the government do to encourage people to be more active?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“Another reason might be…”</li><li>“For example, in my country…”</li><li>“On the other hand,…”</li><li>“If…, they might…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-8">
+        <div class="q-num">Question 8</div>
+        <div class="q-text">Do you think famous sportspeople are good role models for young people?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“Another reason might be…”</li><li>“For example, in my country…”</li><li>“On the other hand,…”</li><li>“If…, they might…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-9">
+        <div class="q-num">Question 9</div>
+        <div class="q-text">Why do some people prefer watching sport to playing it?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“Another reason might be…”</li><li>“For example, in my country…”</li><li>“On the other hand,…”</li><li>“If…, they might…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-10">
+        <div class="q-num">Question 10</div>
+        <div class="q-text">Will people be more or less active in the future? Why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“Another reason might be…”</li><li>“For example, in my country…”</li><li>“On the other hand,…”</li><li>“If…, they might…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 13</div>
+      <h2>Pronunciation — Word Stress in Sport and Health Words</h2>
+      <p class="task-sub">In words with more than one syllable, one syllable is stressed more strongly than the others. Wrong stress is a big reason why listeners misunderstand a speaker, even when every sound is correct. Say each word aloud, clapping on the stressed syllable.</p>
+<div class="card advice-card"><p style="margin:0;"><b>Rules of thumb</b> (not perfect, but useful): most two-syllable <b>nouns and adjectives</b> are stressed on the 1st syllable (<i>FOOT·ball, HEAL·thy</i>); words ending in <b>-tion / -sion</b> are stressed just before the ending (<i>com·pe·TI·tion</i>); words ending in <b>-ic</b> are stressed just before <i>-ic</i> (<i>a·THLE·tic</i>).</p></div>
+      <p style="margin-top:26px;"><strong>How many syllables?</strong> Write the number of syllables in each word.</p>
+      <div class="card" id="t12-n" style="line-height:2.6;"><p>1. football <input type="text" class="text-answer" id="t12-n1" data-correct="2" autocomplete="off" style="width:50px;"> &nbsp; 2. exercise <input type="text" class="text-answer" id="t12-n2" data-correct="3" autocomplete="off" style="width:50px;"> &nbsp; 3. competition <input type="text" class="text-answer" id="t12-n3" data-correct="4" autocomplete="off" style="width:50px;"> &nbsp; 4. athletic <input type="text" class="text-answer" id="t12-n4" data-correct="3" autocomplete="off" style="width:50px;"> &nbsp; 5. volunteer <input type="text" class="text-answer" id="t12-n5" data-correct="3" autocomplete="off" style="width:50px;"></p><p>6. energy <input type="text" class="text-answer" id="t12-n6" data-correct="3" autocomplete="off" style="width:50px;"> &nbsp; 7. marathon <input type="text" class="text-answer" id="t12-n7" data-correct="3" autocomplete="off" style="width:50px;"> &nbsp; 8. participant <input type="text" class="text-answer" id="t12-n8" data-correct="4" autocomplete="off" style="width:50px;"> &nbsp; 9. stadium <input type="text" class="text-answer" id="t12-n9" data-correct="3" autocomplete="off" style="width:50px;"> &nbsp; 10. champion <input type="text" class="text-answer" id="t12-n10" data-correct="3" autocomplete="off" style="width:50px;"></p><p>11. gymnastics <input type="text" class="text-answer" id="t12-n11" data-correct="3" autocomplete="off" style="width:50px;"> &nbsp; 12. opponent <input type="text" class="text-answer" id="t12-n12" data-correct="3" autocomplete="off" style="width:50px;"> &nbsp; 13. physical <input type="text" class="text-answer" id="t12-n13" data-correct="3" autocomplete="off" style="width:50px;"> &nbsp; 14. education <input type="text" class="text-answer" id="t12-n14" data-correct="4" autocomplete="off" style="width:50px;"> &nbsp; 15. referee <input type="text" class="text-answer" id="t12-n15" data-correct="3" autocomplete="off" style="width:50px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-n', 't12-n-score')">Check answers</button>
+          <span id="t12-n-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Which syllable has the main stress?</strong></p>
+      <div class="card" id="t12-s"><div class="q-item" id="t12-s-1">
+          <p>1. <b>foot·ball</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-1" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-1" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-1" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-2">
+          <p>2. <b>ex·er·cise</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-2" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-2" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-2" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-3">
+          <p>3. <b>com·pe·ti·tion</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-3" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-3" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-3" data-correct="true"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-4">
+          <p>4. <b>ath·let·ic</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-4" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-4" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t12-s-4" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-5">
+          <p>5. <b>vol·un·teer</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-5" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-5" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-5" data-correct="true"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-6">
+          <p>6. <b>en·er·gy</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-6" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-6" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-6" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-7">
+          <p>7. <b>mar·a·thon</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-7" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-7" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-7" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-8">
+          <p>8. <b>par·tic·i·pant</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-8" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-8" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t12-s-8" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-9">
+          <p>9. <b>sta·di·um</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-9" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-9" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-9" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-10">
+          <p>10. <b>cham·pi·on</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-10" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-10" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-10" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-11">
+          <p>11. <b>gym·nas·tics</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-11" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-11" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t12-s-11" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-12">
+          <p>12. <b>op·po·nent</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-12" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-12" data-correct="true"> 2nd</label><label><input type="radio" value="2" name="t12-s-12" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-13">
+          <p>13. <b>phys·i·cal</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-13" data-correct="true"> 1st</label><label><input type="radio" value="1" name="t12-s-13" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-13" data-correct="false"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-14">
+          <p>14. <b>ed·u·ca·tion</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-14" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-14" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-14" data-correct="true"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-s-15">
+          <p>15. <b>ref·er·ee</b></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-s-15" data-correct="false"> 1st</label><label><input type="radio" value="1" name="t12-s-15" data-correct="false"> 2nd</label><label><input type="radio" value="2" name="t12-s-15" data-correct="true"> 3rd</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-s', 't12-s-score')">Check answers</button>
+          <span id="t12-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t12-q"><div class="q-item" id="t12-q-1">
+          <p>1. Which two words break the “two-syllable nouns are stressed on the 1st syllable” pattern because they are stressed at the END?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-q-1" data-correct="true"> A. volunteer and referee</label><label><input type="radio" value="1" name="t12-q-1" data-correct="false"> B. football and energy</label><label><input type="radio" value="2" name="t12-q-1" data-correct="false"> C. stadium and champion</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-q-2">
+          <p>2. <i>compete</i> → <i>competition</i>. What happens to the stress?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-q-2" data-correct="false"> A. It stays on the same syllable.</label><label><input type="radio" value="1" name="t12-q-2" data-correct="true"> B. It moves to the syllable before -tion.</label><label><input type="radio" value="2" name="t12-q-2" data-correct="false"> C. It moves to the first syllable.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-q', 't12-q-score')">Check answers</button>
+          <span id="t12-q-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t12-speaking-stress">
+        <div class="q-num">Word stress practice</div>
+        <div class="q-text">Choose <b>six</b> words from the list and use them in three sentences about sport. Say them aloud, stressing the correct syllable. Example: <i>“The <b>REF</b>eree… no — ref·er·<b>EE</b>… stopped the com·pe·<b>TI</b>·tion.”</i></div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The referee…”</li><li>“The marathon…”</li><li>“Every participant…”</li><li>“Physical education…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 13</div>
+      <h2>Vocabulary and Spelling — Word Building and Tricky Words</h2>
+      <p class="task-sub">IELTS completion answers must be spelt correctly — a spelling mistake means the answer is wrong. Practise the word families and the sport and health words that students most often misspell.</p>
+      <p style="margin-top:26px;"><strong>Word families.</strong> Complete the table.</p>
+      <div class="card" id="t13-wf" style="line-height:2.5;"><p>1. compete (verb) → <input type="text" class="text-answer" id="t13-1" data-correct="competition" autocomplete="off" style="width:130px;"> (noun: the event) → <input type="text" class="text-answer" id="t13-2" data-correct="competitive" autocomplete="off" style="width:130px;"> (adjective)</p><p>2. succeed (verb) → <input type="text" class="text-answer" id="t13-3" data-correct="success" autocomplete="off" style="width:130px;"> (noun) → <input type="text" class="text-answer" id="t13-4" data-correct="successful" autocomplete="off" style="width:130px;"> (adjective)</p><p>3. perform (verb) → <input type="text" class="text-answer" id="t13-5" data-correct="performance" autocomplete="off" style="width:130px;"> (noun) → <input type="text" class="text-answer" id="t13-6" data-correct="performer" autocomplete="off" style="width:130px;"> (person)</p><p>4. achieve (verb) → <input type="text" class="text-answer" id="t13-7" data-correct="achievement" autocomplete="off" style="width:130px;"> (noun)</p><p>5. health (noun) → <input type="text" class="text-answer" id="t13-8" data-correct="healthy" autocomplete="off" style="width:130px;"> (adjective) → <input type="text" class="text-answer" id="t13-9" data-correct="unhealthy" autocomplete="off" style="width:130px;"> (opposite adjective)</p><p>6. strong (adjective) → <input type="text" class="text-answer" id="t13-10" data-correct="strength" autocomplete="off" style="width:130px;"> (noun) → <input type="text" class="text-answer" id="t13-11" data-correct="strengthen" autocomplete="off" style="width:130px;"> (verb)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-wf', 't13-wf-score')">Check answers</button>
+          <span id="t13-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Spot the spelling mistake.</strong> Each word is spelt wrongly. Write it correctly.</p>
+      <div class="card" id="t13-sp" style="line-height:2.6;"><p>1. excercise → <input type="text" class="text-answer" id="t13-s1" data-correct="exercise" autocomplete="off" style="width:130px;"> &nbsp; 2. atheletic → <input type="text" class="text-answer" id="t13-s2" data-correct="athletic" autocomplete="off" style="width:130px;"> &nbsp; 3. begining → <input type="text" class="text-answer" id="t13-s3" data-correct="beginning" autocomplete="off" style="width:130px;"></p><p>4. sucessful → <input type="text" class="text-answer" id="t13-s4" data-correct="successful" autocomplete="off" style="width:130px;"> &nbsp; 5. stamena → <input type="text" class="text-answer" id="t13-s5" data-correct="stamina" autocomplete="off" style="width:130px;"> &nbsp; 6. referree → <input type="text" class="text-answer" id="t13-s6" data-correct="referee" autocomplete="off" style="width:130px;"></p><p>7. tournement → <input type="text" class="text-answer" id="t13-s7" data-correct="tournament" autocomplete="off" style="width:130px;"> &nbsp; 8. equipement → <input type="text" class="text-answer" id="t13-s8" data-correct="equipment" autocomplete="off" style="width:130px;"> &nbsp; 9. muscels → <input type="text" class="text-answer" id="t13-s9" data-correct="muscles" autocomplete="off" style="width:130px;"></p><p>10. recieve → <input type="text" class="text-answer" id="t13-s10" data-correct="receive" autocomplete="off" style="width:130px;"> &nbsp; 11. definately → <input type="text" class="text-answer" id="t13-s11" data-correct="definitely" autocomplete="off" style="width:130px;"> &nbsp; 12. oportunity → <input type="text" class="text-answer" id="t13-s12" data-correct="opportunity" autocomplete="off" style="width:130px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-sp', 't13-sp-score')">Check answers</button>
+          <span id="t13-sp-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Phrasal verbs for fitness.</strong> Complete each sentence with the correct particle.</p>
+      <div class="card" id="t13-pv" style="line-height:2.5;"><p>1. I work <input type="text" class="text-answer" id="t13-p1" data-correct="out" autocomplete="off" style="width:80px;"> at the gym three times a week.</p><p>2. Always warm <input type="text" class="text-answer" id="t13-p2" data-correct="up" autocomplete="off" style="width:80px;"> before you start running fast.</p><p>3. He took <input type="text" class="text-answer" id="t13-p3" data-correct="up" autocomplete="off" style="width:80px;"> tennis when he retired.</p><p>4. She gave <input type="text" class="text-answer" id="t13-p4" data-correct="up" autocomplete="off" style="width:80px;"> football after she hurt her knee.</p><p>5. After the race, the runners cooled <input type="text" class="text-answer" id="t13-p5" data-correct="down" autocomplete="off" style="width:80px;"> by walking slowly.</p><p>6. Our team was knocked <input type="text" class="text-answer" id="t13-p6" data-correct="out" autocomplete="off" style="width:80px;"> of the cup in the semi-final.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-pv', 't13-pv-score')">Check answers</button>
+          <span id="t13-pv-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t13-speaking-recap">
+        <div class="q-num">One-minute challenge</div>
+        <div class="q-text">Final challenge: talk for <b>one minute</b> about how you could become fitter in the next three months. Use at least <b>five</b> words or phrasal verbs from today.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“First, I’m going to take up…”</li><li>“I’ll work out…”</li><li>“I need more stamina, so…”</li><li>“My biggest achievement would be…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 13</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 25 of 45</div>
+    <h1>Day 25 complete! 🎉</h1>
+    <p>Day 25 done — Sport and Fitness: two full IELTS readings, three lead-ins, a TED talk, Speaking Parts 1, 2 and 3, word stress and spelling.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t4-v-lm');
+    initLineMatch('t8-v-lm');
+
+
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t2-speaking-summary"]'); if (b) initRecordControl(b, user.id, 25, 2, 't2-speaking-summary', 30); }
+    { const b = document.querySelector('.question-box[data-field="t4-speaking-event"]'); if (b) initRecordControl(b, user.id, 25, 4, 't4-speaking-event', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-summary"]'); if (b) initRecordControl(b, user.id, 25, 5, 't5-speaking-summary', 30); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-quit"]'); if (b) initRecordControl(b, user.id, 25, 7, 't7-speaking-quit', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 25, 8, 't8-speaking-summary', 30); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-1"]'); if (b) initRecordControl(b, user.id, 25, 9, 't9-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-2"]'); if (b) initRecordControl(b, user.id, 25, 9, 't9-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-3"]'); if (b) initRecordControl(b, user.id, 25, 9, 't9-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-4"]'); if (b) initRecordControl(b, user.id, 25, 9, 't9-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-5"]'); if (b) initRecordControl(b, user.id, 25, 9, 't9-speaking-5', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-6"]'); if (b) initRecordControl(b, user.id, 25, 9, 't9-speaking-6', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-sport"]'); if (b) initRecordControl(b, user.id, 25, 10, 't10-speaking-sport', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-event"]'); if (b) initRecordControl(b, user.id, 25, 10, 't10-speaking-event', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-1"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-2"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-3"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-4"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-5"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-5', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-6"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-6', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-7"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-7', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-8"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-8', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-9"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-9', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-10"]'); if (b) initRecordControl(b, user.id, 25, 11, 't11-speaking-10', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-stress"]'); if (b) initRecordControl(b, user.id, 25, 12, 't12-speaking-stress', 0); }
+    { const b = document.querySelector('.question-box[data-field="t13-speaking-recap"]'); if (b) initRecordControl(b, user.id, 25, 13, 't13-speaking-recap', 0); }
+
+    await initTaskFlow(25, 13, user.id, {
+      1: () => { checkAllAnswers('t1-pgd', 't1-pgd-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-c', 't1-c-score'); },
+      2: () => { checkAllAnswers('t2-mc', 't2-mc-score'); checkAllAnswers('t2-tf', 't2-tf-score'); },
+      3: () => { checkAllAnswers('t3-tf', 't3-tf-score'); checkAllAnswers('t3-sc', 't3-sc-score'); checkAllAnswers('t3-mc', 't3-mc-score'); },
+      4: () => { checkAllAnswers('t4-v', 't4-v-score'); markLineMatchResult('t4-v-lm'); checkAllAnswers('t4-g', 't4-g-score'); },
+      5: () => { checkAllAnswers('t5-mc', 't5-mc-score'); checkAllAnswers('t5-tf', 't5-tf-score'); },
+      6: () => { checkAllAnswers('t6-h', 't6-h-score'); checkAllAnswers('t6-yn', 't6-yn-score'); checkAllAnswers('t6-s', 't6-s-score'); },
+      7: () => { checkAllAnswers('t7-wf', 't7-wf-score'); },
+      8: () => { checkAllAnswers('t8-v', 't8-v-score'); markLineMatchResult('t8-v-lm'); checkAllAnswers('t8-mc', 't8-mc-score'); },
+      9: () => { checkAllAnswers('t9-tech', 't9-tech-score'); },
+      10: () => { checkAllAnswers('t10-mc', 't10-mc-score'); checkAllAnswers('t10-ph', 't10-ph-score'); },
+      11: () => { checkAllAnswers('t11-parts', 't11-parts-score'); },
+      12: () => { checkAllAnswers('t12-n', 't12-n-score'); checkAllAnswers('t12-s', 't12-s-score'); checkAllAnswers('t12-q', 't12-q-score'); },
+      13: () => { checkAllAnswers('t13-wf', 't13-wf-score'); checkAllAnswers('t13-sp', 't13-sp-score'); checkAllAnswers('t13-pv', 't13-pv-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t1-sp-btn', 't1-sp-ans', '[id^="t1-sp-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t2-sum-btn', 't2-sum-ans', '[id^="t2-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t5-sum-btn', 't5-sum-ans', '[id^="t5-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>
