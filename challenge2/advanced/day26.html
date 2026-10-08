@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 26 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 26 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 5</div>
+      <h2>Catch-Up — Academic Vocabulary From This Week</h2>
+      <p class="task-sub">A short catch-up day. Check the key vocabulary from Days 21–25: Ulugh Beg and old cities, car-free cities, paper, urban heat and bilingualism, retail psychology, and space. About 10 minutes.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. legacy</button><button type="button" class="lm-item" data-key="2">2. conjecture</button><button type="button" class="lm-item" data-key="3">3. backlash</button><button type="button" class="lm-item" data-key="4">4. trade-off</button><button type="button" class="lm-item" data-key="5">5. intercept</button><button type="button" class="lm-item" data-key="6">6. replicate</button><button type="button" class="lm-item" data-key="7">7. impulse buy</button><button type="button" class="lm-item" data-key="8">8. debris</button><button type="button" class="lm-item" data-key="9">9. formidable</button><button type="button" class="lm-item" data-key="10">10. compensate for</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. stop something before it reaches its destination</button><button type="button" class="lm-item" data-key="b">b. a strong negative reaction to a change</button><button type="button" class="lm-item" data-key="c">c. something handed down from the past</button><button type="button" class="lm-item" data-key="d">d. very great and difficult to deal with</button><button type="button" class="lm-item" data-key="e">e. an opinion formed without full evidence</button><button type="button" class="lm-item" data-key="f">f. something bought suddenly, without planning</button><button type="button" class="lm-item" data-key="g">g. reduce the bad effect of something</button><button type="button" class="lm-item" data-key="h">h. repeat a study and get the same result</button><button type="button" class="lm-item" data-key="i">i. a balance between two things you cannot have at the same time</button><button type="button" class="lm-item" data-key="j">j. broken pieces left after something has been destroyed</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="i" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="j" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-9" data-lm-key="9" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-10" data-lm-key="10" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Collocations.</strong> Complete each sentence with a word from the box. There are two extra words.</p>
+      <div class="word-bank">backlash · intercept · replicate · anchor · poses · legacy · trade-off · conjecture · raises · revive</div><div class="card" id="t1-g" style="line-height:2.3;"><p>1. Closing the city centre to cars led to a fierce <input type="text" class="text-answer" id="t1-1" data-correct="backlash" autocomplete="off" style="width:120px;"> from shop owners.</p><p>2. Trees reduce street temperatures because their leaves <input type="text" class="text-answer" id="t1-2" data-correct="intercept" autocomplete="off" style="width:120px;"> sunlight.</p><p>3. Later studies failed to <input type="text" class="text-answer" id="t1-3" data-correct="replicate" autocomplete="off" style="width:120px;"> the so-called bilingual advantage.</p><p>4. Shoppers tend to judge prices against the first number they see, which acts as an <input type="text" class="text-answer" id="t1-4" data-correct="anchor" autocomplete="off" style="width:120px;">.</p><p>5. Space debris <input type="text" class="text-answer" id="t1-5" data-correct="poses" autocomplete="off" style="width:120px;"> a growing threat to working satellites.</p><p>6. The observatory is the most famous <input type="text" class="text-answer" id="t1-6" data-correct="legacy" autocomplete="off" style="width:120px;"> of Ulugh Beg’s reign.</p><p>7. Every policy involves a <input type="text" class="text-answer" id="t1-7" data-correct="trade-off" autocomplete="off" style="width:120px;"> between costs and benefits.</p><p>8. Whether life ever existed on Mars remains a matter of <input type="text" class="text-answer" id="t1-8" data-correct="conjecture" autocomplete="off" style="width:120px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-g', 't1-g-score')">Check answers</button>
+          <span id="t1-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 5</div>
+      <h2>Catch-Up Reading — Losing the Night</h2>
+      <p class="task-sub">One short passage with this week’s key question types: <b>TRUE / FALSE / NOT GIVEN</b>, <b>YES / NO / NOT GIVEN</b> and <b>summary completion</b>. Suggested time: 12 minutes. Passage on the left, questions on the right. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Losing the Night</h3>
+            <p class="article-meta">Catch-up passage · Environment and space · 337 words</p>
+            <p><span class="para-label">A</span>For most of human history, a clear night sky offered a spectacular view: thousands of stars and the pale band of the Milky Way stretching from horizon to horizon. Today, a large proportion of the world’s population — and the great majority of people in Europe and North America — live under skies so bright that the Milky Way is no longer visible. The cause is light pollution: the artificial light from streets, buildings, vehicles and advertising that spills upwards and outwards and is scattered by the atmosphere into a dull orange glow.</p><p><span class="para-label">B</span>Astronomers were the first to complain. As cities expanded in the twentieth century, observatories built on the edges of towns found themselves increasingly unable to observe faint objects, and new telescopes have had to be built in remote mountains and deserts. Yet the effects of artificial light go well beyond science. Many animals depend on darkness. Newly hatched sea turtles, for example, find the sea by moving towards the brightest horizon, which on an undeveloped beach is the moonlit water, but on a developed coast may be a road or hotel. Migrating birds can become disoriented by brightly lit buildings, and night-flying insects are drawn to street lamps in vast numbers.</p><p><span class="para-label">C</span>There may also be consequences for human health. Light at night can suppress the hormone melatonin, which helps to regulate sleep, and some researchers suspect that long-term exposure may be linked to other health problems, although the evidence on this point is still far from conclusive.</p><p><span class="para-label">D</span>Unlike most forms of pollution, light pollution can be reversed almost instantly. Shielded lamps that direct light downwards, lower brightness, warmer colours and simply switching lights off when they are not needed can all make a dramatic difference. A number of places have been recognised as ‘dark sky’ reserves or communities, where lighting is carefully controlled. The problem, in my view, is not technical but one of awareness: most people have simply never seen a truly dark sky, and so do not realise what has been lost.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–4</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. Most people in Europe can no longer see the Milky Way from where they live.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. Light pollution has forced astronomers to build new telescopes in remote areas.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. Sea turtles move towards the darkest part of the horizon.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. Street lamps kill more insects than any other human structure.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-4" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 5–6</p><p class="qg-instr">Do the following statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-yn"><div class="q-item" id="t2-yn-5">
+          <p>5. Scientists have proved that light at night causes serious illness.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-yn-5" data-correct="false"> YES</label><label><input type="radio" value="1" name="t2-yn-5" data-correct="true"> NO</label><label><input type="radio" value="2" name="t2-yn-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-yn-6">
+          <p>6. Lack of public awareness is a bigger obstacle than technology.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-yn-6" data-correct="true"> YES</label><label><input type="radio" value="1" name="t2-yn-6" data-correct="false"> NO</label><label><input type="radio" value="2" name="t2-yn-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-yn', 't2-yn-score')">Check answers</button>
+          <span id="t2-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–9</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p></div>
+      <div class="card" id="t2-s" style="line-height:2.6;"><p>Light pollution can be reduced very quickly, for example by using (7) <input type="text" class="text-answer" id="t2-7" data-correct="shielded" autocomplete="off" style="width:120px;"> lamps that point light downwards, reducing brightness and choosing (8) <input type="text" class="text-answer" id="t2-8" data-correct="warmer" autocomplete="off" style="width:120px;"> colours. Some areas have become dark sky (9) <input type="text" class="text-answer" id="t2-9" data-correct="reserves/communities" autocomplete="off" style="width:140px;"> with strict control of lighting.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-s', 't2-s-score')">Check answers</button>
+          <span id="t2-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 5</div>
+      <h2>Catch-Up Reading — Answer Analysis</h2>
+      <p class="task-sub">Check each answer. Three lessons from the week appear again: qualifiers decide T/F/NG; Y/N/NG is about the <b>writer’s</b> voice; summaries paraphrase, so find the section by meaning.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Losing the Night</summary>
+        <p><span class="para-label">A</span>For most of human history, a clear night sky offered a spectacular view: thousands of stars and the pale band of the Milky Way stretching from horizon to horizon. Today, a large proportion of the world’s population — and the great majority of people in Europe and North America — live under skies so bright that the Milky Way is no longer visible. The cause is light pollution: the artificial light from streets, buildings, vehicles and advertising that spills upwards and outwards and is scattered by the atmosphere into a dull orange glow.</p><p><span class="para-label">B</span>Astronomers were the first to complain. As cities expanded in the twentieth century, observatories built on the edges of towns found themselves increasingly unable to observe faint objects, and new telescopes have had to be built in remote mountains and deserts. Yet the effects of artificial light go well beyond science. Many animals depend on darkness. Newly hatched sea turtles, for example, find the sea by moving towards the brightest horizon, which on an undeveloped beach is the moonlit water, but on a developed coast may be a road or hotel. Migrating birds can become disoriented by brightly lit buildings, and night-flying insects are drawn to street lamps in vast numbers.</p><p><span class="para-label">C</span>There may also be consequences for human health. Light at night can suppress the hormone melatonin, which helps to regulate sleep, and some researchers suspect that long-term exposure may be linked to other health problems, although the evidence on this point is still far from conclusive.</p><p><span class="para-label">D</span>Unlike most forms of pollution, light pollution can be reversed almost instantly. Shielded lamps that direct light downwards, lower brightness, warmer colours and simply switching lights off when they are not needed can all make a dramatic difference. A number of places have been recognised as ‘dark sky’ reserves or communities, where lighting is carefully controlled. The problem, in my view, is not technical but one of awareness: most people have simply never seen a truly dark sky, and so do not realise what has been lost.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">the great majority of people in Europe and North America — live under skies so bright that the Milky Way is no longer visible</span>. <i>Most</i> = <i>the great majority</i>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">TRUE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">new telescopes have had to be built in remote mountains and deserts</span>. <i>Forced</i> ↔ <i>have had to</i>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">moving towards the brightest horizon</span>. <i>Darkest</i> is the opposite → FALSE.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para B</span></summary><div class="an-body"><p>Insects are <span class="ev">drawn to street lamps in vast numbers</span>, but there is no comparison with other structures.</p><p><span class="trap">Trap:</span> superlatives (<i>more than any other</i>) need explicit evidence.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">NO</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">the evidence on this point is still far from conclusive</span>. <i>Proved</i> contradicts <i>far from conclusive</i> → NO.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">YES</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">The problem, in my view, is not technical but one of awareness</span>. The writer’s voice: <i>in my view</i>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">shielded</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Shielded lamps that direct light downwards</span>. <i>Point light downwards</i> = <i>direct light downwards</i>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">warmer</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">warmer colours</span>. Copy the comparative exactly.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">reserves / communities</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">recognised as ‘dark sky’ reserves or communities</span>. Either word is accepted.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 5</div>
+      <h2>Language Revision — Days 21–25</h2>
+      <p class="task-sub">Revise the key structures of the week: verb patterns (Day 24), the passive (Day 25), concession (Day 22) and word forms.</p>
+      <p style="margin-top:26px;"><strong>Verb patterns.</strong> Choose the correct form.</p>
+      <div class="card" id="t4-vp"><div class="q-item" id="t4-vp-1">
+          <p>1. Shoppers often end up ______ more than they planned.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-vp-1" data-correct="false"> to spend</label><label><input type="radio" value="1" name="t4-vp-1" data-correct="true"> spending</label><label><input type="radio" value="2" name="t4-vp-1" data-correct="false"> spend</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-vp-2">
+          <p>2. The council refused ______ the old buildings.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-vp-2" data-correct="false"> demolishing</label><label><input type="radio" value="1" name="t4-vp-2" data-correct="true"> to demolish</label><label><input type="radio" value="2" name="t4-vp-2" data-correct="false"> demolish</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-vp-3">
+          <p>3. It is worth ______ that the evidence is limited.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-vp-3" data-correct="false"> to note</label><label><input type="radio" value="1" name="t4-vp-3" data-correct="true"> noting</label><label><input type="radio" value="2" name="t4-vp-3" data-correct="false"> note</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-vp-4">
+          <p>4. The tutor persuaded him ______ a different topic.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-vp-4" data-correct="false"> choosing</label><label><input type="radio" value="1" name="t4-vp-4" data-correct="true"> to choose</label><label><input type="radio" value="2" name="t4-vp-4" data-correct="false"> choose</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-vp-5">
+          <p>5. I’ll never forget ______ the Milky Way for the first time.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-vp-5" data-correct="false"> to see</label><label><input type="radio" value="1" name="t4-vp-5" data-correct="true"> seeing</label><label><input type="radio" value="2" name="t4-vp-5" data-correct="false"> see</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-vp', 't4-vp-score')">Check answers</button>
+          <span id="t4-vp-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>The passive.</strong> Write the missing words.</p>
+      <div class="card" id="t4-pa" style="line-height:2.5;"><p>1. People built the observatory in the 1420s. → The observatory <input type="text" class="text-answer" id="t4-1" data-correct="was built" autocomplete="off" style="width:140px;"> in the 1420s.</p><p>2. Regulators have approved several new rules. → Several new rules <input type="text" class="text-answer" id="t4-2" data-correct="have been approved" autocomplete="off" style="width:170px;">.</p><p>3. Planners should consider the needs of disabled people. → The needs of disabled people <input type="text" class="text-answer" id="t4-3" data-correct="should be considered" autocomplete="off" style="width:170px;">.</p><p>4. Artificial light is scattering the starlight. → Starlight <input type="text" class="text-answer" id="t4-4" data-correct="is being scattered" autocomplete="off" style="width:170px;"> by artificial light.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-pa', 't4-pa-score')">Check answers</button>
+          <span id="t4-pa-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Concession.</strong> Choose the best linking word.</p>
+      <div class="card" id="t4-con"><div class="q-item" id="t4-con-1">
+          <p>1. ______ car-free centres reduce pollution, they can hurt small shops.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-con-1" data-correct="true"> Although</label><label><input type="radio" value="1" name="t4-con-1" data-correct="false"> Despite</label><label><input type="radio" value="2" name="t4-con-1" data-correct="false"> However</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-con-2">
+          <p>2. ______ the high cost, many experts support a Mars mission.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-con-2" data-correct="false"> Although</label><label><input type="radio" value="1" name="t4-con-2" data-correct="true"> Despite</label><label><input type="radio" value="2" name="t4-con-2" data-correct="false"> Whereas</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-con-3">
+          <p>3. Robots are cheaper. ______, humans are far better at making quick decisions.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-con-3" data-correct="false"> Although</label><label><input type="radio" value="1" name="t4-con-3" data-correct="false"> Despite</label><label><input type="radio" value="2" name="t4-con-3" data-correct="true"> That said</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-con', 't4-con-score')">Check answers</button>
+          <span id="t4-con-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Word forms.</strong></p>
+      <div class="card" id="t4-wf" style="line-height:2.4;"><p>1. The <input type="text" class="text-answer" id="t4-w1" data-correct="feasibility" autocomplete="off" style="width:140px;"> of the plan is doubtful. (feasible)</p><p>2. Many ancient <input type="text" class="text-answer" id="t4-w2" data-correct="manuscripts" autocomplete="off" style="width:140px;"> were copied by hand. (manuscript)</p><p>3. The policy was criticised as <input type="text" class="text-answer" id="t4-w3" data-correct="inequitable" autocomplete="off" style="width:140px;">. (equity)</p><p>4. Light at night can <input type="text" class="text-answer" id="t4-w4" data-correct="disorient" autocomplete="off" style="width:140px;"> migrating birds. (orientation)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-wf', 't4-wf-score')">Check answers</button>
+          <span id="t4-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 5</div>
+      <h2>Speaking — Your Week in Review</h2>
+      <p class="task-sub">Finish the week with four Part 3-style questions linking this week’s topics. Answer for 45–60 seconds each, with a position, a reason, an example and a concession.</p>
+      <div class="question-box" data-field="t5-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Should historic city centres be preserved as they were, or adapted to modern needs?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Is it fair to ban cars from city centres?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Do shops have a responsibility not to manipulate their customers?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Which is a better use of public money: exploring space or reducing light and air pollution on Earth?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the whole, I’d say…”</li><li>“The main reason is that…”</li><li>“A good example is…”</li><li>“Admittedly,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 5</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 26 of 45</div>
+    <h1>Day 26 complete! 🎉</h1>
+    <p>Day 26 done — catch-up: the week’s academic vocabulary, one short reading, grammar revision and a speaking review.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-1"]'); if (b) initRecordControl(b, user.id, 26, 5, 't5-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-2"]'); if (b) initRecordControl(b, user.id, 26, 5, 't5-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-3"]'); if (b) initRecordControl(b, user.id, 26, 5, 't5-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-4"]'); if (b) initRecordControl(b, user.id, 26, 5, 't5-speaking-4', 0); }
+
+    await initTaskFlow(26, 5, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-g', 't1-g-score'); },
+      2: () => { checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-yn', 't2-yn-score'); checkAllAnswers('t2-s', 't2-s-score'); },
+      4: () => { checkAllAnswers('t4-vp', 't4-vp-score'); checkAllAnswers('t4-pa', 't4-pa-score'); checkAllAnswers('t4-con', 't4-con-score'); checkAllAnswers('t4-wf', 't4-wf-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+
+  });
+</script>
+</body>
+</html>

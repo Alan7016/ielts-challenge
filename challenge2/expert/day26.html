@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 26 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 26 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 5</div>
+      <h2>Catch-Up — Precision Vocabulary From This Week</h2>
+      <p class="task-sub">A short catch-up day. Check the precision vocabulary from Days 21–25: al-Khwarizmi and the lone genius, museum restitution, railway time, animal navigation and placebos, education technology, and the future of food. About 10 minutes.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. qualify (a claim)</button><button type="button" class="lm-item" data-key="2">2. provenance</button><button type="button" class="lm-item" data-key="3">3. under duress</button><button type="button" class="lm-item" data-key="4">4. entrenched</button><button type="button" class="lm-item" data-key="5">5. discrepancy</button><button type="button" class="lm-item" data-key="6">6. elusive</button><button type="button" class="lm-item" data-key="7">7. misconception</button><button type="button" class="lm-item" data-key="8">8. resilience</button><button type="button" class="lm-item" data-key="9">9. perishable</button><button type="button" class="lm-item" data-key="10">10. prohibitively</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. a difference between things that should match</button><button type="button" class="lm-item" data-key="b">b. because of threats or force</button><button type="button" class="lm-item" data-key="c">c. make a statement less absolute by adding limits</button><button type="button" class="lm-item" data-key="d">d. likely to decay quickly</button><button type="button" class="lm-item" data-key="e">e. the documented history of an object’s ownership</button><button type="button" class="lm-item" data-key="f">f. a widely held but mistaken belief</button><button type="button" class="lm-item" data-key="g">g. to a degree that prevents something being done</button><button type="button" class="lm-item" data-key="h">h. difficult to find, define or achieve</button><button type="button" class="lm-item" data-key="i">i. firmly established and difficult to change</button><button type="button" class="lm-item" data-key="j">j. the ability to recover quickly from a disruption</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="i" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="j" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-9" data-lm-key="9" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-10" data-lm-key="10" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Collocations in context.</strong> Complete each sentence with a word from the box. There are two extra words.</p>
+      <div class="word-bank">provenance · qualify · elusive · discrepancy · accounts · prohibitively · under · entrenched · attributes · resilient</div><div class="card" id="t1-g" style="line-height:2.3;"><p>1. The museum could not establish the <input type="text" class="text-answer" id="t1-1" data-correct="provenance" autocomplete="off" style="width:120px;"> of the bronze, so its legal status remained contested.</p><p>2. Attributing algebra to a single scholar is an oversimplification that historians would <input type="text" class="text-answer" id="t1-2" data-correct="qualify" autocomplete="off" style="width:120px;">.</p><p>3. The mechanism by which birds sense magnetic fields remains <input type="text" class="text-answer" id="t1-3" data-correct="elusive" autocomplete="off" style="width:120px;">.</p><p>4. There was a <input type="text" class="text-answer" id="t1-4" data-correct="discrepancy" autocomplete="off" style="width:120px;"> of several minutes between the clocks of neighbouring towns.</p><p>5. Livestock farming <input type="text" class="text-answer" id="t1-5" data-correct="accounts" autocomplete="off" style="width:120px;"> for a very large share of agricultural land.</p><p>6. Growing staple grains indoors would be <input type="text" class="text-answer" id="t1-6" data-correct="prohibitively" autocomplete="off" style="width:120px;"> expensive.</p><p>7. The objects were acquired <input type="text" class="text-answer" id="t1-7" data-correct="under" autocomplete="off" style="width:120px;"> duress during a colonial expedition.</p><p>8. Attitudes to eating insects are deeply <input type="text" class="text-answer" id="t1-8" data-correct="entrenched" autocomplete="off" style="width:120px;"> in many cultures.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-g', 't1-g-score')">Check answers</button>
+          <span id="t1-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 5</div>
+      <h2>Catch-Up Reading — Insurance for the Harvest: The Global Seed Vault</h2>
+      <p class="task-sub">One dense passage with this week’s hardest question types: <b>TRUE / FALSE / NOT GIVEN</b>, <b>YES / NO / NOT GIVEN</b>, <b>purpose MCQ</b> and <b>summary completion without a word bank</b>. Suggested time: 12 minutes. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Insurance for the Harvest: The Global Seed Vault</h3>
+            <p class="article-meta">Catch-up passage · Food security · 339 words</p>
+            <p><span class="para-label">A</span>Deep inside a mountain on the Norwegian archipelago of Svalbard, far north of the Arctic Circle, lies a facility designed to survive almost any catastrophe. Opened in 2008, the Svalbard Global Seed Vault holds duplicate samples of seeds from gene banks around the world — many hundreds of thousands of varieties of crops such as wheat, rice, barley and beans. Its purpose is not to replace those national and regional collections but to back them up: should a gene bank be destroyed by war, natural disaster or simple mismanagement, its seeds could be retrieved from Svalbard.</p><p><span class="para-label">B</span>The choice of location was deliberate. The surrounding permafrost and thick rock provide natural insulation, so that even if the cooling system failed, the samples would remain frozen for a considerable time. The site is remote, geologically stable and well above sea level. Crucially, the depositing institutions retain ownership of their seeds; the vault acts, in effect, as a safe-deposit box, and only the depositor may withdraw them.</p><p><span class="para-label">C</span>For several years the vault’s value was largely theoretical. That changed when an agricultural research centre that had been based near Aleppo was forced to relocate because of the conflict in Syria and could no longer maintain its collection. In 2015, it made the first ever withdrawal, using the duplicates to regenerate its collection elsewhere — and later returned fresh samples to Svalbard. Supporters regarded this as a vindication of the entire project.</p><p><span class="para-label">D</span>The vault is not without its critics. Some argue that freezing seeds preserves genetic material but not the living relationship between crops and the farmers who adapt them, generation after generation, to changing conditions; on this view, diversity is best conserved in farmers’ fields rather than in vaults. Others point out that a seed bank is only as useful as the documentation that accompanies its samples. These objections strike me as complementary rather than contradictory: a vault cannot substitute for living agricultural diversity, but nor can farmers’ fields guarantee survival in the face of war. The prudent course is to pursue both.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–4</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. The vault was designed to replace national seed collections.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. The samples would stay frozen for some time even without the cooling system.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. Any member government may withdraw seeds deposited by another country.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. The first withdrawal was made by an institution forced to move because of war.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 5–6</p><p class="qg-instr">Do the following statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-yn"><div class="q-item" id="t2-yn-5">
+          <p>5. The two main criticisms of the vault undermine each other.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-yn-5" data-correct="false"> YES</label><label><input type="radio" value="1" name="t2-yn-5" data-correct="true"> NO</label><label><input type="radio" value="2" name="t2-yn-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-yn-6">
+          <p>6. Gene banks should receive more government funding.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-yn-6" data-correct="false"> YES</label><label><input type="radio" value="1" name="t2-yn-6" data-correct="false"> NO</label><label><input type="radio" value="2" name="t2-yn-6" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-yn', 't2-yn-score')">Check answers</button>
+          <span id="t2-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Question 7</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-7">
+          <p>7. Why does the writer describe the 2015 withdrawal?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-7" data-correct="false"> A. to show that the vault had been poorly managed</label><label><input type="radio" value="1" name="t2-mc-7" data-correct="true"> B. to illustrate the moment when the vault’s purpose was put into practice</label><label><input type="radio" value="2" name="t2-mc-7" data-correct="false"> C. to criticise the research centre</label><label><input type="radio" value="3" name="t2-mc-7" data-correct="false"> D. to argue that seeds should be stored in Syria</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 8–10</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p></div>
+      <div class="card" id="t2-s" style="line-height:2.6;"><p>Critics claim that seed banks fail to preserve the evolving relationship between crops and (8) <input type="text" class="text-answer" id="t2-8" data-correct="farmers" autocomplete="off" style="width:120px;">, and that their usefulness depends on the quality of their (9) <input type="text" class="text-answer" id="t2-9" data-correct="documentation" autocomplete="off" style="width:140px;">. The writer regards these two objections as (10) <input type="text" class="text-answer" id="t2-10" data-correct="complementary" autocomplete="off" style="width:140px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-s', 't2-s-score')">Check answers</button>
+          <span id="t2-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 5</div>
+      <h2>Catch-Up Reading — Answer Analysis</h2>
+      <p class="task-sub">Check each answer. The recurring Band 8 lessons of the week: track who is speaking, respect qualifiers, and identify the <b>function</b> of a paragraph.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Insurance for the Harvest: The Global Seed Vault</summary>
+        <p><span class="para-label">A</span>Deep inside a mountain on the Norwegian archipelago of Svalbard, far north of the Arctic Circle, lies a facility designed to survive almost any catastrophe. Opened in 2008, the Svalbard Global Seed Vault holds duplicate samples of seeds from gene banks around the world — many hundreds of thousands of varieties of crops such as wheat, rice, barley and beans. Its purpose is not to replace those national and regional collections but to back them up: should a gene bank be destroyed by war, natural disaster or simple mismanagement, its seeds could be retrieved from Svalbard.</p><p><span class="para-label">B</span>The choice of location was deliberate. The surrounding permafrost and thick rock provide natural insulation, so that even if the cooling system failed, the samples would remain frozen for a considerable time. The site is remote, geologically stable and well above sea level. Crucially, the depositing institutions retain ownership of their seeds; the vault acts, in effect, as a safe-deposit box, and only the depositor may withdraw them.</p><p><span class="para-label">C</span>For several years the vault’s value was largely theoretical. That changed when an agricultural research centre that had been based near Aleppo was forced to relocate because of the conflict in Syria and could no longer maintain its collection. In 2015, it made the first ever withdrawal, using the duplicates to regenerate its collection elsewhere — and later returned fresh samples to Svalbard. Supporters regarded this as a vindication of the entire project.</p><p><span class="para-label">D</span>The vault is not without its critics. Some argue that freezing seeds preserves genetic material but not the living relationship between crops and the farmers who adapt them, generation after generation, to changing conditions; on this view, diversity is best conserved in farmers’ fields rather than in vaults. Others point out that a seed bank is only as useful as the documentation that accompanies its samples. These objections strike me as complementary rather than contradictory: a vault cannot substitute for living agricultural diversity, but nor can farmers’ fields guarantee survival in the face of war. The prudent course is to pursue both.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">FALSE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Its purpose is not to replace those national and regional collections but to back them up</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">TRUE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">even if the cooling system failed, the samples would remain frozen for a considerable time</span>. <i>Some time</i> ↔ <i>a considerable time</i>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">only the depositor may withdraw them</span>. <i>Any member government</i> contradicts <i>only the depositor</i>.</p><p><span class="trap">Trap:</span> <i>member government</i> is not mentioned at all, which tempts NOT GIVEN — but the word <i>only</i> excludes everyone else, so the statement is contradicted.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">TRUE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">forced to relocate because of the conflict in Syria … In 2015, it made the first ever withdrawal</span>. <i>Move</i> = <i>relocate</i>; <i>war</i> = <i>conflict</i>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">NO</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">These objections strike me as complementary rather than contradictory</span>. <i>Undermine each other</i> = contradictory → the writer says the opposite.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>Funding is never discussed. <span class="trap">Trap:</span> the writer’s pro-vault conclusion might suggest support for funding, but that is inference.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">That changed … Supporters regarded this as a vindication of the entire project</span>. The paragraph shows the purpose in action — <i>its value was largely theoretical</i> until then.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">farmers</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">the living relationship between crops and the farmers who adapt them</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">documentation</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">only as useful as the documentation that accompanies its samples</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">complementary</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">complementary rather than contradictory</span>. The writer’s own word for the two objections; it leads to the conclusion that vaults and fields should be pursued <b>together</b>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 5</div>
+      <h2>Language Revision — Days 21–25</h2>
+      <p class="task-sub">Revise the structures that distinguish Band 8 writing and speaking: hedging, nominalisation, advanced structures from the Part 2 model (Day 25), and prepositions in academic collocations.</p>
+      <p style="margin-top:26px;"><strong>Hedging.</strong> Choose the option that hedges the claim most appropriately for academic writing.</p>
+      <div class="card" id="t4-h"><div class="q-item" id="t4-h-1">
+          <p>1. Light at night ______ to long-term health problems.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-h-1" data-correct="false"> is linked</label><label><input type="radio" value="1" name="t4-h-1" data-correct="true"> may be linked</label><label><input type="radio" value="2" name="t4-h-1" data-correct="false"> is definitely linked</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-h-2">
+          <p>2. The bilingual advantage ______ smaller than early studies claimed.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-h-2" data-correct="true"> appears to be</label><label><input type="radio" value="1" name="t4-h-2" data-correct="false"> is obviously</label><label><input type="radio" value="2" name="t4-h-2" data-correct="false"> must be</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-h-3">
+          <p>3. Vertical farms are ______ ever to feed cities with grain.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-h-3" data-correct="false"> unable</label><label><input type="radio" value="1" name="t4-h-3" data-correct="true"> unlikely</label><label><input type="radio" value="2" name="t4-h-3" data-correct="false"> never going</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-h', 't4-h-score')">Check answers</button>
+          <span id="t4-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Nominalisation.</strong> Complete the noun phrase.</p>
+      <div class="card" id="t4-n" style="line-height:2.5;"><p>1. Museums returned the objects. → the <input type="text" class="text-answer" id="t4-n1" data-correct="return/restitution/repatriation" autocomplete="off" style="width:140px;"> of the objects</p><p>2. Railways standardised time. → the <input type="text" class="text-answer" id="t4-n2" data-correct="standardisation/standardization" autocomplete="off" style="width:170px;"> of time</p><p>3. Insects convert feed efficiently. → the efficient <input type="text" class="text-answer" id="t4-n3" data-correct="conversion" autocomplete="off" style="width:140px;"> of feed</p><p>4. Researchers failed to replicate the results. → the failure to <input type="text" class="text-answer" id="t4-n4" data-correct="replicate" autocomplete="off" style="width:140px;"> the results</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-n', 't4-n-score')">Check answers</button>
+          <span id="t4-n-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Advanced structures.</strong> Rewrite using the structure given. Write the missing words only.</p>
+      <div class="card" id="t4-st" style="line-height:2.6;"><p>1. (negative inversion) It feeds people, and it also signals hospitality. → Not only <input type="text" class="text-answer" id="t4-s1" data-correct="does it feed" autocomplete="off" style="width:140px;"> people, but it also signals hospitality.</p><p>2. (cleft) The cost worries critics most. → What worries critics most <input type="text" class="text-answer" id="t4-s2" data-correct="is the cost" autocomplete="off" style="width:140px;">.</p><p>3. (participle clause) After the cook has heated the oil, he adds the meat. → <input type="text" class="text-answer" id="t4-s3" data-correct="Having heated" autocomplete="off" style="width:140px;"> the oil, the cook adds the meat.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-st', 't4-st-score')">Check answers</button>
+          <span id="t4-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Prepositions.</strong></p>
+      <div class="card" id="t4-pr" style="line-height:2.6;"><p>1. attributed <input type="text" class="text-answer" id="t4-p1" data-correct="to" autocomplete="off" style="width:70px;"> a single scholar &nbsp; 2. in step <input type="text" class="text-answer" id="t4-p2" data-correct="with" autocomplete="off" style="width:70px;"> the railway &nbsp; 3. compensate <input type="text" class="text-answer" id="t4-p3" data-correct="for" autocomplete="off" style="width:70px;"> a deficit</p><p>4. associated <input type="text" class="text-answer" id="t4-p4" data-correct="with" autocomplete="off" style="width:70px;"> deforestation &nbsp; 5. at the expense <input type="text" class="text-answer" id="t4-p5" data-correct="of" autocomplete="off" style="width:70px;"> resilience &nbsp; 6. rich <input type="text" class="text-answer" id="t4-p6" data-correct="in" autocomplete="off" style="width:70px;"> minerals</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-pr', 't4-pr-score')">Check answers</button>
+          <span id="t4-pr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 5</div>
+      <h2>Speaking — Your Week in Review</h2>
+      <p class="task-sub">Four analytical Part 3 questions linking the week’s topics. Answer each for 60–75 seconds: qualified position, evidence, distinction, hypothetical consequence.</p>
+      <div class="question-box" data-field="t5-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Is it ever right to credit a single person with a major scientific discovery?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“A necessary but not sufficient condition…”</li><li>“If…, it would…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Should museums return objects that were taken during colonial times, even if they are better protected where they are?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“A necessary but not sufficient condition…”</li><li>“If…, it would…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Does technology make learning more effective, or just more convenient?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“A necessary but not sufficient condition…”</li><li>“If…, it would…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Will the food people eat in fifty years be very different from what they eat now?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be wary of…”</li><li>“It’s arguably less about… than about…”</li><li>“A necessary but not sufficient condition…”</li><li>“If…, it would…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 5</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 26 of 45</div>
+    <h1>Day 26 complete! 🎉</h1>
+    <p>Day 26 done — catch-up: the week’s precision vocabulary, one dense reading, Band 8 language revision and a speaking review.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-1"]'); if (b) initRecordControl(b, user.id, 26, 5, 't5-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-2"]'); if (b) initRecordControl(b, user.id, 26, 5, 't5-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-3"]'); if (b) initRecordControl(b, user.id, 26, 5, 't5-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-4"]'); if (b) initRecordControl(b, user.id, 26, 5, 't5-speaking-4', 0); }
+
+    await initTaskFlow(26, 5, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-g', 't1-g-score'); },
+      2: () => { checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-yn', 't2-yn-score'); checkAllAnswers('t2-mc', 't2-mc-score'); checkAllAnswers('t2-s', 't2-s-score'); },
+      4: () => { checkAllAnswers('t4-h', 't4-h-score'); checkAllAnswers('t4-n', 't4-n-score'); checkAllAnswers('t4-st', 't4-st-score'); checkAllAnswers('t4-pr', 't4-pr-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+
+  });
+</script>
+</body>
+</html>

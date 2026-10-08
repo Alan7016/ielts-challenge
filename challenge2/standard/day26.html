@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 26 — Standard — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 26 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 5</div>
+      <h2>Catch-Up — Words From This Week</h2>
+      <p class="task-sub">A short catch-up day. First, check that you still remember the key words from Days 21–25: the Aral Sea, fast fashion, tea and sleep, habits and memory, and sport. About 10 minutes.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. irrigation</button><button type="button" class="lm-item" data-key="2">2. evaporate</button><button type="button" class="lm-item" data-key="3">3. disposable</button><button type="button" class="lm-item" data-key="4">4. durable</button><button type="button" class="lm-item" data-key="5">5. adolescence</button><button type="button" class="lm-item" data-key="6">6. dehydration</button><button type="button" class="lm-item" data-key="7">7. routine</button><button type="button" class="lm-item" data-key="8">8. reassuring</button><button type="button" class="lm-item" data-key="9">9. stamina</button><button type="button" class="lm-item" data-key="10">10. participant</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. the period between being a child and an adult</button><button type="button" class="lm-item" data-key="b">b. made to be thrown away after a short time</button><button type="button" class="lm-item" data-key="c">c. supplying water to crops through canals or pipes</button><button type="button" class="lm-item" data-key="d">d. the ability to keep going for a long time</button><button type="button" class="lm-item" data-key="e">e. change from water into gas and disappear</button><button type="button" class="lm-item" data-key="f">f. the usual order in which you do things</button><button type="button" class="lm-item" data-key="g">g. someone who takes part in an event</button><button type="button" class="lm-item" data-key="h">h. a dangerous lack of water in the body</button><button type="button" class="lm-item" data-key="i">i. lasting for a long time</button><button type="button" class="lm-item" data-key="j">j. making you feel calmer and less worried</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="i" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="j" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-9" data-lm-key="9" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select><select class="lm-hidden-select select" id="t1-v-10" data-lm-key="10" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Use the words.</strong> Complete each sentence with a word from the box. There are two extra words.</p>
+      <div class="word-bank">diverted · landfill · adaptation · automatic · beat · event · second-hand · warm · won · smuggled</div><div class="card" id="t1-g" style="line-height:2.3;"><p>1. The river was <input type="text" class="text-answer" id="t1-1" data-correct="diverted" autocomplete="off" style="width:120px;"> to water the cotton fields, so the sea began to shrink.</p><p>2. Cheap clothes often end up in <input type="text" class="text-answer" id="t1-2" data-correct="landfill" autocomplete="off" style="width:120px;"> after only a few months.</p><p>3. Camels can travel for days without water — a perfect <input type="text" class="text-answer" id="t1-3" data-correct="adaptation" autocomplete="off" style="width:120px;"> to the desert.</p><p>4. It is hard to break a habit once it has become <input type="text" class="text-answer" id="t1-4" data-correct="automatic" autocomplete="off" style="width:120px;">.</p><p>5. Our team <input type="text" class="text-answer" id="t1-5" data-correct="beat" autocomplete="off" style="width:120px;"> the best school in the city 2–0.</p><p>6. Thirteen people took part in the very first <input type="text" class="text-answer" id="t1-6" data-correct="event" autocomplete="off" style="width:120px;">.</p><p>7. I bought this jacket <input type="text" class="text-answer" id="t1-7" data-correct="second-hand" autocomplete="off" style="width:120px;">, so it was very cheap.</p><p>8. You should always <input type="text" class="text-answer" id="t1-8" data-correct="warm" autocomplete="off" style="width:120px;"> up before you play.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-g', 't1-g-score')">Check answers</button>
+          <span id="t1-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 5</div>
+      <h2>Catch-Up Reading — Walking Football: The Slow Game</h2>
+      <p class="task-sub">One short passage with the question types you practised this week: <b>TRUE / FALSE / NOT GIVEN</b>, <b>sentence completion</b> and <b>multiple choice</b>. Suggested time: 10 minutes. Passage on the left, questions on the right. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Walking Football: The Slow Game</h3>
+            <p class="article-meta">Catch-up passage · Sport · 273 words</p>
+            <p><span class="para-label">A</span>Football is usually a game for the young and fast. But in sports halls and parks across Britain, and now in many other countries, a different version is becoming popular. It is called walking football, and the most important rule is simple: nobody is allowed to run. If a player runs, the referee gives a free kick to the other team.</p><p><span class="para-label">B</span>The game was first played in England in 2011. It was designed for men and women over fifty who loved football but could no longer play the normal game because of their age or injuries. Other rules make the game safer as well. Players may not kick the ball above head height, and hard tackles are not allowed.</p><p><span class="para-label">C</span>At first, some people laughed at the idea. However, the game has grown quickly. There are now thousands of players, local leagues and even international matches between national teams of older players. Some clubs report that their oldest players are over eighty.</p><p><span class="para-label">D</span>Doctors say that the benefits are not only physical. Walking football improves balance and fitness, but many players say that the best part is the social side. For people who have retired or who live alone, a weekly match is a chance to make friends and feel part of a team again. After the game, most players stay for a cup of tea and a chat.</p><p><span class="para-label">E</span>Walking football is not easy, though. Players who are used to the normal game often find it very difficult not to run, especially when the ball is near the goal. As one coach put it, the hardest skill in walking football is controlling your own legs.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–4</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. A player who runs gives the other team a free kick.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. Walking football was first played in Scotland.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. The game is more popular with women than with men.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-3" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. Some players are more than eighty years old.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 5–6</p><p class="qg-instr">Complete the sentences. Choose <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.</p></div>
+      <div class="card" id="t2-sc" style="line-height:2.4;"><p>5. Players must not kick the ball above <input type="text" class="text-answer" id="t2-5" data-correct="head height" autocomplete="off" style="width:140px;">.</p><p>6. Many players say the best part of the game is the <input type="text" class="text-answer" id="t2-6" data-correct="social side" autocomplete="off" style="width:140px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-sc', 't2-sc-score')">Check answers</button>
+          <span id="t2-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–8</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-7">
+          <p>7. Who was walking football designed for?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-7" data-correct="false"> A. young players with injuries</label><label><input type="radio" value="1" name="t2-mc-7" data-correct="true"> B. people over fifty who could no longer play the normal game</label><label><input type="radio" value="2" name="t2-mc-7" data-correct="false"> C. children learning football</label><label><input type="radio" value="3" name="t2-mc-7" data-correct="false"> D. professional players</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-8">
+          <p>8. What is the hardest skill, according to one coach?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-8" data-correct="false"> A. kicking the ball accurately</label><label><input type="radio" value="1" name="t2-mc-8" data-correct="true"> B. not running</label><label><input type="radio" value="2" name="t2-mc-8" data-correct="false"> C. scoring goals</label><label><input type="radio" value="3" name="t2-mc-8" data-correct="false"> D. making friends</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 5</div>
+      <h2>Catch-Up Reading — Answer Analysis</h2>
+      <p class="task-sub">Check your answers and remember the three lessons of the week: FALSE means the passage says the opposite; NOT GIVEN means it says nothing; and completion answers must be copied exactly.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Walking Football: The Slow Game</summary>
+        <p><span class="para-label">A</span>Football is usually a game for the young and fast. But in sports halls and parks across Britain, and now in many other countries, a different version is becoming popular. It is called walking football, and the most important rule is simple: nobody is allowed to run. If a player runs, the referee gives a free kick to the other team.</p><p><span class="para-label">B</span>The game was first played in England in 2011. It was designed for men and women over fifty who loved football but could no longer play the normal game because of their age or injuries. Other rules make the game safer as well. Players may not kick the ball above head height, and hard tackles are not allowed.</p><p><span class="para-label">C</span>At first, some people laughed at the idea. However, the game has grown quickly. There are now thousands of players, local leagues and even international matches between national teams of older players. Some clubs report that their oldest players are over eighty.</p><p><span class="para-label">D</span>Doctors say that the benefits are not only physical. Walking football improves balance and fitness, but many players say that the best part is the social side. For people who have retired or who live alone, a weekly match is a chance to make friends and feel part of a team again. After the game, most players stay for a cup of tea and a chat.</p><p><span class="para-label">E</span>Walking football is not easy, though. Players who are used to the normal game often find it very difficult not to run, especially when the ball is near the goal. As one coach put it, the hardest skill in walking football is controlling your own legs.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">If a player runs, the referee gives a free kick to the other team</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">The game was first played in England in 2011</span>. England, not Scotland → FALSE.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para B</span></summary><div class="an-body"><p>The passage says the game is for <span class="ev">men and women over fifty</span> but never compares how popular it is with each group.</p><p><span class="trap">Trap:</span> both men and women are mentioned, so it feels as if there is information — but there is no comparison.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">TRUE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">their oldest players are over eighty</span>. <i>More than</i> = <i>over</i>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">head height</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">may not kick the ball above head height</span>. Two words — exactly the limit.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">social side</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">the best part is the social side</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">designed for men and women over fifty who loved football but could no longer play the normal game</span>.</p><p><span class="trap">Trap:</span> A: injuries are mentioned, but the players are not young.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">B</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">the hardest skill in walking football is controlling your own legs</span> — i.e. not running.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 5</div>
+      <h2>Language Revision — Days 21–25</h2>
+      <p class="task-sub">Quick revision of the language points from this week: word forms, opposites, <i>play / go / do</i> and phrasal verbs.</p>
+      <p style="margin-top:26px;"><strong>Word forms.</strong> Complete each sentence with the correct form of the word in brackets.</p>
+      <div class="card" id="t4-wf" style="line-height:2.4;"><p>1. The Aral Sea is one of the worst environmental <input type="text" class="text-answer" id="t4-1" data-correct="disasters" autocomplete="off" style="width:130px;"> of the 20th century. (disaster)</p><p>2. Fast fashion causes a lot of <input type="text" class="text-answer" id="t4-2" data-correct="pollution" autocomplete="off" style="width:130px;">. (pollute)</p><p>3. Teenagers need more sleep to <input type="text" class="text-answer" id="t4-3" data-correct="concentrate" autocomplete="off" style="width:130px;"> at school. (concentration)</p><p>4. <input type="text" class="text-answer" id="t4-4" data-correct="Participation" autocomplete="off" style="width:130px;"> in sport falls in the teenage years. (participate)</p><p>5. She is a very <input type="text" class="text-answer" id="t4-5" data-correct="successful" autocomplete="off" style="width:130px;"> runner. (success)</p><p>6. Getting enough water is very <input type="text" class="text-answer" id="t4-6" data-correct="important" autocomplete="off" style="width:130px;"> on a hot day. (importance)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-wf', 't4-wf-score')">Check answers</button>
+          <span id="t4-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>play, go or do?</strong></p>
+      <div class="card" id="t4-pgd"><div class="sel-row"><select class="select" id="t4-pgd-1" data-answer="play"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>1.</b> ___ volleyball</span></div><div class="sel-row"><select class="select" id="t4-pgd-2" data-answer="go"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>2.</b> ___ jogging</span></div><div class="sel-row"><select class="select" id="t4-pgd-3" data-answer="do"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>3.</b> ___ judo</span></div><div class="sel-row"><select class="select" id="t4-pgd-4" data-answer="play"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>4.</b> ___ chess</span></div><div class="sel-row"><select class="select" id="t4-pgd-5" data-answer="do"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>5.</b> ___ exercise</span></div><div class="sel-row"><select class="select" id="t4-pgd-6" data-answer="go"><option value="">—</option><option value="play">play</option><option value="go">go</option><option value="do">do</option></select><span><b>6.</b> ___ hiking</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-pgd', 't4-pgd-score')">Check answers</button>
+          <span id="t4-pgd-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Phrasal verbs.</strong> Complete each sentence with the correct particle.</p>
+      <div class="card" id="t4-pv" style="line-height:2.4;"><p>1. I gave <input type="text" class="text-answer" id="t4-p1" data-correct="up" autocomplete="off" style="width:70px;"> sugar in my tea last year.</p><p>2. He took <input type="text" class="text-answer" id="t4-p2" data-correct="up" autocomplete="off" style="width:70px;"> swimming when he was forty.</p><p>3. Many people end <input type="text" class="text-answer" id="t4-p3" data-correct="up" autocomplete="off" style="width:70px;"> buying things they don’t need.</p><p>4. Always cool <input type="text" class="text-answer" id="t4-p4" data-correct="down" autocomplete="off" style="width:70px;"> after a hard training session.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-pv', 't4-pv-score')">Check answers</button>
+          <span id="t4-pv-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 5</div>
+      <h2>Speaking — Your Week in Review</h2>
+      <p class="task-sub">Finish the week by talking. Answer each question for about 30–45 seconds, using words from this week.</p>
+      <div class="question-box" data-field="t5-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Which topic from this week did you find most interesting — the Aral Sea, fast fashion, tea, sleep, habits or sport? Why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The topic I found most interesting was…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“Personally, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Do you think people should buy fewer clothes? Why / Why not?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The topic I found most interesting was…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“Personally, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Is it easy for you to change a habit? Give an example.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The topic I found most interesting was…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“Personally, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Would you try walking football or parkrun with someone in your family? Who, and why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The topic I found most interesting was…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“Personally, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 5</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 26 of 45</div>
+    <h1>Day 26 complete! 🎉</h1>
+    <p>Day 26 done — catch-up: the week’s vocabulary, one short reading, language revision and a speaking review.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-1"]'); if (b) initRecordControl(b, user.id, 26, 5, 't5-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-2"]'); if (b) initRecordControl(b, user.id, 26, 5, 't5-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-3"]'); if (b) initRecordControl(b, user.id, 26, 5, 't5-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-4"]'); if (b) initRecordControl(b, user.id, 26, 5, 't5-speaking-4', 0); }
+
+    await initTaskFlow(26, 5, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-g', 't1-g-score'); },
+      2: () => { checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-sc', 't2-sc-score'); checkAllAnswers('t2-mc', 't2-mc-score'); },
+      4: () => { checkAllAnswers('t4-wf', 't4-wf-score'); checkAllAnswers('t4-pgd', 't4-pgd-score'); checkAllAnswers('t4-pv', 't4-pv-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+
+  });
+</script>
+</body>
+</html>
