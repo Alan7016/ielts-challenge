@@ -474,10 +474,10 @@
 
     const studentIds = students.map(s => s.id);
     const [{ data: progress }, { data: answers }, { data: pointsRows }, { data: mentorComments }] = await Promise.all([
-      sb.from('progress').select('student_id, task, completed').eq('day', selectedDay).in('student_id', studentIds),
-      sb.from('answers').select('student_id, task, field_id, value, is_correct').eq('day', selectedDay).in('student_id', studentIds),
-      sb.from('points').select('student_id, category, points, comment').eq('day', selectedDay).in('student_id', studentIds),
-      sb.from('mentor_comments').select('student_id, task, field_id, comment').eq('day', selectedDay).in('student_id', studentIds)
+      fetchAllRows(() => sb.from('progress').select('student_id, task, completed').eq('day', selectedDay).in('student_id', studentIds).order('student_id').order('task')).then(data => ({ data })),
+      fetchAllRows(() => sb.from('answers').select('student_id, task, field_id, value, is_correct').eq('day', selectedDay).in('student_id', studentIds).order('student_id').order('task').order('field_id')).then(data => ({ data })),
+      fetchAllRows(() => sb.from('points').select('student_id, category, points, comment').eq('day', selectedDay).in('student_id', studentIds).order('student_id').order('category')).then(data => ({ data })),
+      fetchAllRows(() => sb.from('mentor_comments').select('student_id, task, field_id, comment').eq('day', selectedDay).in('student_id', studentIds).order('student_id').order('task').order('field_id')).then(data => ({ data }))
     ]);
 
     const commentByField = {};
