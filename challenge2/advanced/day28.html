@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 28 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 28 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 9</div>
+      <h2>Starting Off — Relationships</h2>
+      <p class="task-sub">Unit 7 is about <b>relationships</b>: honesty, friendship and family. Today is a reading and writing day — <b>three reading passages</b> with seven IELTS question types, then Writing Task 1 with two charts and a key grammar point. Allow <b>at least 75 minutes</b>.</p>
+      <p style="margin-top:26px;"><strong>How much do you remember about the IELTS Reading test?</strong> Decide whether each statement is true or false.</p>
+      <div class="card" id="t1-rt"><div class="q-item" id="t1-rt-1">
+          <p>1. The Academic Reading test has three sections and 40 questions in total.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rt-1" data-correct="true"> True</label><label><input type="radio" value="1" name="t1-rt-1" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-rt-2">
+          <p>2. You need to understand the whole passage before you answer any questions.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rt-2" data-correct="false"> True</label><label><input type="radio" value="1" name="t1-rt-2" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-rt-3">
+          <p>3. Spelling does not matter in your answers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rt-3" data-correct="false"> True</label><label><input type="radio" value="1" name="t1-rt-3" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-rt-4">
+          <p>4. The passages generally become more difficult as the test goes on.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rt-4" data-correct="true"> True</label><label><input type="radio" value="1" name="t1-rt-4" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-rt-5">
+          <p>5. In the paper-based test you get extra time to transfer your answers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rt-5" data-correct="false"> True</label><label><input type="radio" value="1" name="t1-rt-5" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-rt-6">
+          <p>6. Words in completion answers must be copied exactly from the passage.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rt-6" data-correct="true"> True</label><label><input type="radio" value="1" name="t1-rt-6" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-rt', 't1-rt-score')">Check answers</button>
+          <span id="t1-rt-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Relationship vocabulary.</strong> Match each phrase to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. get on (well) with</button><button type="button" class="lm-item" data-key="2">2. fall out with</button><button type="button" class="lm-item" data-key="3">3. look up to</button><button type="button" class="lm-item" data-key="4">4. rely on</button><button type="button" class="lm-item" data-key="5">5. acquaintance</button><button type="button" class="lm-item" data-key="6">6. sibling</button><button type="button" class="lm-item" data-key="7">7. bring up</button><button type="button" class="lm-item" data-key="8">8. deceive</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. make someone believe something that is not true</button><button type="button" class="lm-item" data-key="b">b. a brother or sister</button><button type="button" class="lm-item" data-key="c">c. argue and stop being friendly with someone</button><button type="button" class="lm-item" data-key="d">d. someone you know but not well</button><button type="button" class="lm-item" data-key="e">e. admire and respect someone</button><button type="button" class="lm-item" data-key="f">f. look after a child until it is an adult</button><button type="button" class="lm-item" data-key="g">g. have a friendly relationship with someone</button><button type="button" class="lm-item" data-key="h">h. trust someone to help or support you</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card"><p class="mini-q">1. What things do people generally lie about?</p><textarea class="no-check mini-answer" id="t1-lie-1" placeholder="Write here..." style="min-height:50px;"></textarea><p class="mini-q">2. Why do people lie? What do they gain from it?</p><textarea class="no-check mini-answer" id="t1-lie-2" placeholder="Write here..." style="min-height:50px;"></textarea><p class="mini-q">3. How can you tell when someone is lying?</p><textarea class="no-check mini-answer" id="t1-lie-3" placeholder="Write here..." style="min-height:50px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t1-lie-btn">Show a note</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t1-lie-ans"><p>Keep your answer to Question 3 — you will find out in the first passage whether the most common answers are actually right!</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 9</div>
+      <h2>Reading Passage 1 — The Truth About Lying</h2>
+      <p class="task-sub">Three IELTS question types: <b>matching headings</b>, <b>matching features</b> and <b>sentence completion</b> (as in Complete IELTS Unit 7). Suggested time: <b>20 minutes</b>. Passage on the left, questions on the right. Answers are checked when you press <b>Next</b>.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Headings:</b> read the headings first; for each paragraph decide the <b>main idea</b>, not just one detail.</li><li><b>Matching features:</b> the statements are paraphrased and are <b>not</b> always in passage order; you may not need every option.</li><li><b>Sentence completion:</b> copy the words exactly, keep to the word limit, and check that the sentence is grammatical.</li><li>If a question is too hard, note a possible answer and come back to it — leave time for the other questions.</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Truth About Lying</h3>
+            <p class="article-meta">Reading Passage 1 · Psychology · 503 words</p>
+            <p><span class="para-label">A</span>Most of us like to think of ourselves as honest, yet lying appears to be a normal part of everyday life. When researchers have asked volunteers to keep a diary of their conversations, many participants recorded at least one lie a day. The majority of these are so-called white lies — small untruths told to protect someone’s feelings or to avoid an awkward moment, such as praising a meal we did not enjoy. Serious, damaging lies are far less common.</p><p><span class="para-label">B</span>Lying is also something we learn surprisingly early. Studies of young children suggest that many begin to tell simple lies at around the age of two or three, for example denying that they have eaten a forbidden sweet. Rather than being a cause for alarm, psychologists regard this as a sign of normal development: to lie successfully, a child must understand that other people have minds of their own and do not automatically know what the child knows.</p><p><span class="para-label">C</span>Deception is not limited to our own species. Some birds give false alarm calls, warning other animals of a predator that is not there, and then steal the food the frightened animals leave behind. Certain primates have been observed hiding food from more powerful members of their group. Whether these animals ‘know’ they are lying in the way humans do remains an open question, but the behaviour is undeniably deceptive.</p><p><span class="para-label">D</span>Ask people how to spot a liar and you will hear remarkably similar answers. In one international survey carried out in dozens of countries, the most common belief by far was that liars avoid eye contact; many people also mentioned nervous movements of the hands and shifting about in a chair. The problem is that careful comparisons of filmed liars and truth-tellers have found little support for these ideas. Liars do not reliably look away, and an honest person who is nervous about being disbelieved may fidget just as much as a liar.</p><p><span class="para-label">E</span>Not surprisingly, then, most of us are poor lie detectors. When the results of many laboratory experiments are combined, people turn out to identify lies correctly only slightly more often than they would by tossing a coin. Perhaps more surprisingly, police officers, customs staff and other professionals whose job involves judging honesty generally perform little better than ordinary members of the public, although they tend to be far more confident in their judgements.</p><p><span class="para-label">F</span>So are there any clues worth looking for? The most promising evidence suggests that we should pay attention to what people say rather than how they look. Liars often give shorter accounts with fewer details, perhaps because every extra detail is another thing that could be checked, and they tend to make fewer references to themselves. Some researchers have also found that lying becomes harder when a speaker’s mind is busy: asking someone to tell their story in reverse order, for instance, can make an invented account fall apart. In short, if you want to catch a liar, it may be better to listen carefully than to watch closely.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">The passage has six paragraphs, <b>A–F</b>. Choose the correct heading for each paragraph from the list below.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;">
+<b>i</b>&nbsp; A widely held belief that the evidence does not support<br><b>ii</b>&nbsp; An early stage in a child’s development<br><b>iii</b>&nbsp; Beyond the human species<br>
+<b>iv</b>&nbsp; How often do we lie, and why?<br><b>v</b>&nbsp; Little better than chance<br><b>vi</b>&nbsp; Listening rather than watching<br>
+<b>vii</b>&nbsp; Lies that cause serious harm<br><b>viii</b>&nbsp; Machines that detect deception</p></div>
+      <div class="card" id="t2-h"><div class="sel-row"><select class="select" id="t2-h-1" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>1.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t2-h-2" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>2.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t2-h-3" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>3.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t2-h-4" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>4.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t2-h-5" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>5.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t2-h-6" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>6.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-h', 't2-h-score')">Check answers</button>
+          <span id="t2-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–10</p><p class="qg-instr">Look at the following statements and the list of groups below. Match each statement with the correct group, <b>A–E</b>.</p></div>
+<div class="card"><p class="prompt-label">List of Groups</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; young children<br><b>B</b>&nbsp; some birds<br><b>C</b>&nbsp; professionals who judge honesty<br><b>D</b>&nbsp; people in many countries<br><b>E</b>&nbsp; people who are lying</p></div>
+      <div class="card" id="t2-f"><div class="sel-row"><select class="select" id="t2-f-7" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>7.</b> are more confident than accurate when judging lies</span></div><div class="sel-row"><select class="select" id="t2-f-8" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>8.</b> believe that lack of eye contact shows dishonesty</span></div><div class="sel-row"><select class="select" id="t2-f-9" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>9.</b> tend to describe events in less detail</span></div><div class="sel-row"><select class="select" id="t2-f-10" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>10.</b> trick others in order to get something to eat</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-f', 't2-f-score')">Check answers</button>
+          <span id="t2-f-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–13</p><p class="qg-instr">Complete the sentences. Choose <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.</p></div>
+      <div class="card" id="t2-sc" style="line-height:2.5;"><p>11. Small lies told to avoid hurting someone are known as <input type="text" class="text-answer" id="t2-11" data-correct="white lies" autocomplete="off" style="width:140px;">.</p><p>12. Liars usually make fewer references to <input type="text" class="text-answer" id="t2-12" data-correct="themselves" autocomplete="off" style="width:140px;"> than truth-tellers.</p><p>13. Telling a story in <input type="text" class="text-answer" id="t2-13" data-correct="reverse order" autocomplete="off" style="width:140px;"> can make a lie harder to maintain.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-sc', 't2-sc-score')">Check answers</button>
+          <span id="t2-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 9</div>
+      <h2>Reading Passage 1 — Answer Analysis and Avoiding Lost Marks</h2>
+      <p class="task-sub">Check each answer. Then look at real kinds of mistakes candidates make in completion tasks — and make sure you never lose marks this way.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Truth About Lying</summary>
+        <p><span class="para-label">A</span>Most of us like to think of ourselves as honest, yet lying appears to be a normal part of everyday life. When researchers have asked volunteers to keep a diary of their conversations, many participants recorded at least one lie a day. The majority of these are so-called white lies — small untruths told to protect someone’s feelings or to avoid an awkward moment, such as praising a meal we did not enjoy. Serious, damaging lies are far less common.</p><p><span class="para-label">B</span>Lying is also something we learn surprisingly early. Studies of young children suggest that many begin to tell simple lies at around the age of two or three, for example denying that they have eaten a forbidden sweet. Rather than being a cause for alarm, psychologists regard this as a sign of normal development: to lie successfully, a child must understand that other people have minds of their own and do not automatically know what the child knows.</p><p><span class="para-label">C</span>Deception is not limited to our own species. Some birds give false alarm calls, warning other animals of a predator that is not there, and then steal the food the frightened animals leave behind. Certain primates have been observed hiding food from more powerful members of their group. Whether these animals ‘know’ they are lying in the way humans do remains an open question, but the behaviour is undeniably deceptive.</p><p><span class="para-label">D</span>Ask people how to spot a liar and you will hear remarkably similar answers. In one international survey carried out in dozens of countries, the most common belief by far was that liars avoid eye contact; many people also mentioned nervous movements of the hands and shifting about in a chair. The problem is that careful comparisons of filmed liars and truth-tellers have found little support for these ideas. Liars do not reliably look away, and an honest person who is nervous about being disbelieved may fidget just as much as a liar.</p><p><span class="para-label">E</span>Not surprisingly, then, most of us are poor lie detectors. When the results of many laboratory experiments are combined, people turn out to identify lies correctly only slightly more often than they would by tossing a coin. Perhaps more surprisingly, police officers, customs staff and other professionals whose job involves judging honesty generally perform little better than ordinary members of the public, although they tend to be far more confident in their judgements.</p><p><span class="para-label">F</span>So are there any clues worth looking for? The most promising evidence suggests that we should pay attention to what people say rather than how they look. Liars often give shorter accounts with fewer details, perhaps because every extra detail is another thing that could be checked, and they tend to make fewer references to themselves. Some researchers have also found that lying becomes harder when a speaker’s mind is busy: asking someone to tell their story in reverse order, for instance, can make an invented account fall apart. In short, if you want to catch a liar, it may be better to listen carefully than to watch closely.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">iv</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">lying appears to be a normal part of everyday life … at least one lie a day … The majority of these are so-called white lies</span> — <b>how often</b> and <b>why</b>.</p><p><span class="trap">Trap:</span> <i>vii (serious harm)</i>: the paragraph says serious lies are <b>less common</b> — only a detail.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">ii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">psychologists regard this as a sign of normal development</span>. <i>Early stage</i> ↔ <i>age of two or three</i>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">iii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Deception is not limited to our own species</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">i</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">the most common belief by far was that liars avoid eye contact … found little support for these ideas</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">v</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">only slightly more often than they would by tossing a coin</span> — <i>chance</i>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">vi</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">pay attention to what people say rather than how they look … better to listen carefully than to watch closely</span>.</p><p><span class="trap">Trap:</span> <i>viii (machines)</i> — no machines are mentioned anywhere.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">C</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">generally perform little better … although they tend to be far more confident in their judgements</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">D</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">In one international survey carried out in dozens of countries, the most common belief by far was that liars avoid eye contact</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">E</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Liars often give shorter accounts with fewer details</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">give false alarm calls … and then steal the food</span>. <i>Trick</i> = false alarm; <i>something to eat</i> = food.</p><p><span class="trap">Trap:</span> primates hide food — they do not trick others to <b>get</b> it.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">white lies</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">so-called white lies — small untruths told to protect someone’s feelings</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">themselves</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">they tend to make fewer references to themselves</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">reverse order</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">tell their story in reverse order</span>. Two words — exactly the limit.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Why were these answers marked wrong?</strong> Each answer below was written by a candidate for Questions 11–13. Choose the reason.</p>
+      <div class="card" id="t3-why"><div class="sel-row"><select class="select" id="t3-why-1" data-answer="too many words"><option value="">—</option><option value="too many words">too many words</option><option value="spelling mistake">spelling mistake</option><option value="word not from the passage">word not from the passage</option><option value="makes the sentence ungrammatical">makes the sentence ungrammatical</option></select><span><b>1.</b> Q11: <i>small white lies</i></span></div><div class="sel-row"><select class="select" id="t3-why-2" data-answer="word not from the passage"><option value="">—</option><option value="too many words">too many words</option><option value="spelling mistake">spelling mistake</option><option value="word not from the passage">word not from the passage</option><option value="makes the sentence ungrammatical">makes the sentence ungrammatical</option></select><span><b>2.</b> Q11: <i>polite lies</i></span></div><div class="sel-row"><select class="select" id="t3-why-3" data-answer="spelling mistake"><option value="">—</option><option value="too many words">too many words</option><option value="spelling mistake">spelling mistake</option><option value="word not from the passage">word not from the passage</option><option value="makes the sentence ungrammatical">makes the sentence ungrammatical</option></select><span><b>3.</b> Q12: <i>themselfs</i></span></div><div class="sel-row"><select class="select" id="t3-why-4" data-answer="makes the sentence ungrammatical"><option value="">—</option><option value="too many words">too many words</option><option value="spelling mistake">spelling mistake</option><option value="word not from the passage">word not from the passage</option><option value="makes the sentence ungrammatical">makes the sentence ungrammatical</option></select><span><b>4.</b> Q12: <i>their</i></span></div><div class="sel-row"><select class="select" id="t3-why-5" data-answer="too many words"><option value="">—</option><option value="too many words">too many words</option><option value="spelling mistake">spelling mistake</option><option value="word not from the passage">word not from the passage</option><option value="makes the sentence ungrammatical">makes the sentence ungrammatical</option></select><span><b>5.</b> Q13: <i>the reverse order</i></span></div><div class="sel-row"><select class="select" id="t3-why-6" data-answer="word not from the passage"><option value="">—</option><option value="too many words">too many words</option><option value="spelling mistake">spelling mistake</option><option value="word not from the passage">word not from the passage</option><option value="makes the sentence ungrammatical">makes the sentence ungrammatical</option></select><span><b>6.</b> Q13: <i>backwards</i></span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-why', 't3-why-score')">Check answers</button>
+          <span id="t3-why-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">1. How do you feel when someone lies to you?</p><textarea class="no-check mini-answer" id="t3-disc-1" placeholder="Write here..." style="min-height:56px;"></textarea><p class="mini-q">2. Are all lies equally bad, or is lying sometimes justified? Give an example.</p><textarea class="no-check mini-answer" id="t3-disc-2" placeholder="Write here..." style="min-height:56px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t3-disc-btn">Show a tip</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t3-disc-ans"><p>Strong answers use <b>concession</b>: <i>“Although honesty is generally best, a white lie can sometimes be kinder, for example…”</i></p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 9</div>
+      <h2>Reading Passage 2 — Why Friendship Is Good for You</h2>
+      <p class="task-sub">An opinion passage. Question types: <b>YES / NO / NOT GIVEN</b>, <b>summary completion with a word bank</b> and <b>multiple choice</b>. Suggested time: <b>15 minutes</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Why Friendship Is Good for You</h3>
+            <p class="article-meta">Reading Passage 2 · Society and health · 407 words</p>
+            <p><span class="para-label">A</span>For most of human history, survival depended on belonging to a group, and our need for friends may be a legacy of that past. Today, a growing body of research suggests that friendship is not merely pleasant but has a measurable effect on health. People with strong social ties tend to recover more quickly from illness and to live longer, while loneliness has been linked to higher blood pressure, poorer sleep and a weaker immune system. Some researchers have even compared the health risks of long-term loneliness to those of smoking. Such comparisons are open to debate, but in my view the general message is hard to ignore: friendship is a health issue, not just a social one.</p><p><span class="para-label">B</span>How many friends can a person have? One influential idea, proposed by an anthropologist in the 1990s, is that the human brain can manage only around 150 meaningful relationships. Within this number, he argued, relationships form layers: perhaps five very close friends, around fifteen good friends, and larger circles of people we know less well. The exact figures are disputed, and some studies have found much wider variation between individuals, but the idea that our closest circle is small seems well supported.</p><p><span class="para-label">C</span>Friendships also take time to build. One study that followed adults who had recently moved to a new city estimated that it took around fifty hours spent together to turn an acquaintance into a casual friend, and over two hundred hours to become close friends. This helps to explain why adults often find it harder than children to make new friends: work and family leave far less free time, and opportunities to meet the same people repeatedly are rarer.</p><p><span class="para-label">D</span>What about social media? It is often claimed that online contact has made us lonelier, but I think the reality is more complicated. Messaging apps clearly help people to stay in touch with friends who live far away, and for some isolated groups they are a lifeline. However, I am not convinced that a stream of likes and comments can replace the shared experiences that deepen a friendship. Time spent face to face, it seems, still matters most.</p><p><span class="para-label">E</span>If friendship is so valuable, should we treat it as seriously as diet or exercise? I believe we should. Making time for friends, answering that message, or accepting an invitation when we would rather stay at home may be among the best investments we can make in our own wellbeing.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–18</p><p class="qg-instr">Do the following statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t4-yn"><div class="q-item" id="t4-yn-14">
+          <p>14. Friendship should be regarded as a health matter.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-yn-14" data-correct="true"> YES</label><label><input type="radio" value="1" name="t4-yn-14" data-correct="false"> NO</label><label><input type="radio" value="2" name="t4-yn-14" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-yn-15">
+          <p>15. The comparison between loneliness and smoking has been proved beyond doubt.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-yn-15" data-correct="false"> YES</label><label><input type="radio" value="1" name="t4-yn-15" data-correct="true"> NO</label><label><input type="radio" value="2" name="t4-yn-15" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-yn-16">
+          <p>16. Social media has made everyone lonelier.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-yn-16" data-correct="false"> YES</label><label><input type="radio" value="1" name="t4-yn-16" data-correct="true"> NO</label><label><input type="radio" value="2" name="t4-yn-16" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-yn-17">
+          <p>17. People who live in cities have more friends than people in the countryside.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-yn-17" data-correct="false"> YES</label><label><input type="radio" value="1" name="t4-yn-17" data-correct="false"> NO</label><label><input type="radio" value="2" name="t4-yn-17" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-yn-18">
+          <p>18. People should give friendship the same priority as healthy eating and exercise.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-yn-18" data-correct="true"> YES</label><label><input type="radio" value="1" name="t4-yn-18" data-correct="false"> NO</label><label><input type="radio" value="2" name="t4-yn-18" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-yn', 't4-yn-score')">Check answers</button>
+          <span id="t4-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 19–22</p><p class="qg-instr">Complete the summary using the list of words below. Write the correct word in each gap.</p></div>
+      <div class="word-bank">layers · disputed · time · adults · children · money · proved · circles</div><div class="card" id="t4-s" style="line-height:2.6;"><p>An anthropologist suggested that people can maintain about 150 meaningful relationships, arranged in (19) <input type="text" class="text-answer" id="t4-19" data-correct="layers" autocomplete="off" style="width:120px;">. Although the exact numbers are (20) <input type="text" class="text-answer" id="t4-20" data-correct="disputed" autocomplete="off" style="width:120px;">, it seems that our closest group of friends is small. Building friendships also requires (21) <input type="text" class="text-answer" id="t4-21" data-correct="time" autocomplete="off" style="width:120px;">: one study found that more than 200 hours were needed to become close friends, which may explain why (22) <input type="text" class="text-answer" id="t4-22" data-correct="adults" autocomplete="off" style="width:120px;"> find it difficult to make new friends.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-s', 't4-s-score')">Check answers</button>
+          <span id="t4-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 23–24</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t4-mc"><div class="q-item" id="t4-mc-23">
+          <p>23. What is the writer’s view of social media?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-23" data-correct="false"> A. It has no benefits for friendship.</label><label><input type="radio" value="1" name="t4-mc-23" data-correct="true"> B. It is useful but cannot fully replace time together.</label><label><input type="radio" value="2" name="t4-mc-23" data-correct="false"> C. It is better than meeting face to face.</label><label><input type="radio" value="3" name="t4-mc-23" data-correct="false"> D. It is the main cause of loneliness.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-24">
+          <p>24. What is the writer’s main purpose?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-24" data-correct="false"> A. to describe how social media works</label><label><input type="radio" value="1" name="t4-mc-24" data-correct="true"> B. to argue that friendship deserves to be taken seriously</label><label><input type="radio" value="2" name="t4-mc-24" data-correct="false"> C. to explain how to make friends in a new city</label><label><input type="radio" value="3" name="t4-mc-24" data-correct="false"> D. to criticise research on loneliness</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mc', 't4-mc-score')">Check answers</button>
+          <span id="t4-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 9</div>
+      <h2>Reading Passage 3 — Does Birth Order Shape Who We Are?</h2>
+      <p class="task-sub">Question types: <b>TRUE / FALSE / NOT GIVEN</b>, <b>matching information</b> and <b>short-answer questions</b>. Suggested time: <b>15 minutes</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Does Birth Order Shape Who We Are?</h3>
+            <p class="article-meta">Reading Passage 3 · Family · 348 words</p>
+            <p><span class="para-label">A</span>Few ideas about family life are as popular as the belief that our position among our brothers and sisters shapes our personality. According to this view, first-born children are responsible and ambitious, youngest children are charming and rebellious, and those in the middle are diplomatic peacemakers. The idea was made famous in the early twentieth century by a psychologist who argued that each position in the family brings its own challenges, and it has remained a favourite topic of magazines and parenting books ever since.</p><p><span class="para-label">B</span>Early research seemed to support it. However, many of these studies had a serious weakness: they compared children from different families, and families differ in many ways besides birth order, such as size and income. Larger families, for example, are more common in some social groups than others, so any difference between first-born and last-born children might have been caused by family background rather than by birth order itself.</p><p><span class="para-label">C</span>More recent studies have tried to avoid this problem by using very large samples, sometimes involving tens of thousands of people, and by comparing brothers and sisters within the same family. Their conclusion is striking: once family background is taken into account, birth order has little or no measurable effect on personality traits such as confidence, emotional stability or imagination.</p><p><span class="para-label">D</span>There is one area where a small difference does appear. On average, first-born children score slightly higher on intelligence tests than their younger siblings. The gap is small — a few points — and far too small to predict anything about an individual. Researchers suggest it may arise because first-borns enjoy their parents’ undivided attention for a time, or because they benefit from explaining things to younger brothers and sisters.</p><p><span class="para-label">E</span>Why, then, does the belief remain so strong? One explanation is that within a family, older children are always older: they are bigger, more capable and given more responsibility than their siblings at any given moment. Parents may mistake these differences of age for differences of personality. Popular beliefs, once established, are also easily confirmed by memorable examples and rarely tested against the evidence.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 25–29</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t5-tf"><div class="q-item" id="t5-tf-25">
+          <p>25. The idea that birth order affects personality became well known in the early twentieth century.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-25" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t5-tf-25" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t5-tf-25" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-26">
+          <p>26. Early studies usually compared brothers and sisters in the same family.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-26" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t5-tf-26" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t5-tf-26" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-27">
+          <p>27. Recent studies have found that birth order strongly affects confidence.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-27" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t5-tf-27" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t5-tf-27" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-28">
+          <p>28. First-born children usually earn higher salaries as adults.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-28" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t5-tf-28" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t5-tf-28" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-29">
+          <p>29. The difference in intelligence scores is too small to make predictions about one person.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-29" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t5-tf-29" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t5-tf-29" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-tf', 't5-tf-score')">Check answers</button>
+          <span id="t5-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 30–32</p><p class="qg-instr">The passage has five paragraphs, <b>A–E</b>. Which paragraph contains the following information?</p></div>
+      <div class="card" id="t5-mi"><div class="sel-row"><select class="select" id="t5-mi-30" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>30.</b> a reason why parents may misjudge their children’s personalities</span></div><div class="sel-row"><select class="select" id="t5-mi-31" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>31.</b> a weakness in the design of early research</span></div><div class="sel-row"><select class="select" id="t5-mi-32" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>32.</b> possible explanations for a difference in test scores</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-mi', 't5-mi-score')">Check answers</button>
+          <span id="t5-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 33–34</p><p class="qg-instr">Answer the questions. Choose <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.</p></div>
+      <div class="card" id="t5-sa" style="line-height:2.5;"><p>33. Which two factors, apart from birth order, are mentioned as differences between families? <input type="text" class="text-answer" id="t5-33" data-correct="size and income/size, income/income and size" autocomplete="off" style="width:180px;"></p><p>34. What do first-borns enjoy for a time, according to one suggestion? their parents’ <input type="text" class="text-answer" id="t5-34" data-correct="undivided attention" autocomplete="off" style="width:170px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-sa', 't5-sa-score')">Check answers</button>
+          <span id="t5-sa-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 9</div>
+      <h2>Reading Passages 2 and 3 — Answer Analysis</h2>
+      <p class="task-sub">Check your answers for both passages. Pay special attention to Questions 15 and 16 (the writer’s views) and Question 33 (short answers).</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Why Friendship Is Good for You</summary>
+        <p><span class="para-label">A</span>For most of human history, survival depended on belonging to a group, and our need for friends may be a legacy of that past. Today, a growing body of research suggests that friendship is not merely pleasant but has a measurable effect on health. People with strong social ties tend to recover more quickly from illness and to live longer, while loneliness has been linked to higher blood pressure, poorer sleep and a weaker immune system. Some researchers have even compared the health risks of long-term loneliness to those of smoking. Such comparisons are open to debate, but in my view the general message is hard to ignore: friendship is a health issue, not just a social one.</p><p><span class="para-label">B</span>How many friends can a person have? One influential idea, proposed by an anthropologist in the 1990s, is that the human brain can manage only around 150 meaningful relationships. Within this number, he argued, relationships form layers: perhaps five very close friends, around fifteen good friends, and larger circles of people we know less well. The exact figures are disputed, and some studies have found much wider variation between individuals, but the idea that our closest circle is small seems well supported.</p><p><span class="para-label">C</span>Friendships also take time to build. One study that followed adults who had recently moved to a new city estimated that it took around fifty hours spent together to turn an acquaintance into a casual friend, and over two hundred hours to become close friends. This helps to explain why adults often find it harder than children to make new friends: work and family leave far less free time, and opportunities to meet the same people repeatedly are rarer.</p><p><span class="para-label">D</span>What about social media? It is often claimed that online contact has made us lonelier, but I think the reality is more complicated. Messaging apps clearly help people to stay in touch with friends who live far away, and for some isolated groups they are a lifeline. However, I am not convinced that a stream of likes and comments can replace the shared experiences that deepen a friendship. Time spent face to face, it seems, still matters most.</p><p><span class="para-label">E</span>If friendship is so valuable, should we treat it as seriously as diet or exercise? I believe we should. Making time for friends, answering that message, or accepting an invitation when we would rather stay at home may be among the best investments we can make in our own wellbeing.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">YES</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">in my view the general message is hard to ignore: friendship is a health issue, not just a social one</span>.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">NO</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Such comparisons are open to debate</span>. <i>Proved beyond doubt</i> contradicts <i>open to debate</i>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">NO</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">It is often claimed that online contact has made us lonelier, but I think the reality is more complicated</span>. The writer rejects the simple claim — and <i>everyone</i> is far too absolute.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>The passage mentions people who moved to a new city, but never compares city and country dwellers.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">YES</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">should we treat it as seriously as diet or exercise? I believe we should</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">layers</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">relationships form layers</span>. <span class="trap">Trap:</span> <i>circles</i> also appears in the paragraph, but it describes the outer groups, not how all 150 relationships are arranged.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">disputed</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">The exact figures are disputed</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">time</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Friendships also take time to build</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">adults</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">adults often find it harder than children to make new friends</span>.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">help people to stay in touch … However, I am not convinced that a stream of likes and comments can replace the shared experiences</span>.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">B</span><span class="an-where">whole passage</span></summary><div class="an-body"><p>The writer argues throughout that friendship affects health and ends: <span class="ev">may be among the best investments we can make</span>.</p></div></details></div>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Does Birth Order Shape Who We Are?</summary>
+        <p><span class="para-label">A</span>Few ideas about family life are as popular as the belief that our position among our brothers and sisters shapes our personality. According to this view, first-born children are responsible and ambitious, youngest children are charming and rebellious, and those in the middle are diplomatic peacemakers. The idea was made famous in the early twentieth century by a psychologist who argued that each position in the family brings its own challenges, and it has remained a favourite topic of magazines and parenting books ever since.</p><p><span class="para-label">B</span>Early research seemed to support it. However, many of these studies had a serious weakness: they compared children from different families, and families differ in many ways besides birth order, such as size and income. Larger families, for example, are more common in some social groups than others, so any difference between first-born and last-born children might have been caused by family background rather than by birth order itself.</p><p><span class="para-label">C</span>More recent studies have tried to avoid this problem by using very large samples, sometimes involving tens of thousands of people, and by comparing brothers and sisters within the same family. Their conclusion is striking: once family background is taken into account, birth order has little or no measurable effect on personality traits such as confidence, emotional stability or imagination.</p><p><span class="para-label">D</span>There is one area where a small difference does appear. On average, first-born children score slightly higher on intelligence tests than their younger siblings. The gap is small — a few points — and far too small to predict anything about an individual. Researchers suggest it may arise because first-borns enjoy their parents’ undivided attention for a time, or because they benefit from explaining things to younger brothers and sisters.</p><p><span class="para-label">E</span>Why, then, does the belief remain so strong? One explanation is that within a family, older children are always older: they are bigger, more capable and given more responsibility than their siblings at any given moment. Parents may mistake these differences of age for differences of personality. Popular beliefs, once established, are also easily confirmed by memorable examples and rarely tested against the evidence.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">The idea was made famous in the early twentieth century</span>.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">they compared children from different families</span> — the opposite of the same family.</p></div></details><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">FALSE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">birth order has little or no measurable effect on personality traits such as confidence</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>Salaries are never mentioned. <span class="trap">Trap:</span> the passage discusses intelligence scores, which tempts some readers to assume career success.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">TRUE</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">far too small to predict anything about an individual</span>.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">E</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Parents may mistake these differences of age for differences of personality</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">many of these studies had a serious weakness</span>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">D</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Researchers suggest it may arise because…</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">size and income</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">families differ in many ways besides birth order, such as size and income</span>. Both words are needed — writing only one loses the mark.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">undivided attention</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">first-borns enjoy their parents’ undivided attention for a time</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 9</div>
+      <h2>Writing Task 1 — Two Charts: Introductions and Reference</h2>
+      <p class="task-sub">In Task 1 you may get <b>two</b> charts. You must introduce both, compare them where possible, and use <b>reference words</b> (<i>it, they, this, these, their</i>) so you do not repeat the same nouns again and again.</p>
+<div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Average hours per week spent with friends, by age" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Average hours per week spent with friends, by age</text><line x1="64" y1="290.0" x2="620" y2="290.0" stroke="#e3e5ec"/><text x="56" y="294.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="249.3" x2="620" y2="249.3" stroke="#e3e5ec"/><text x="56" y="253.3" text-anchor="end" font-size="11" fill="#4b4e5c">4</text><line x1="64" y1="208.7" x2="620" y2="208.7" stroke="#e3e5ec"/><text x="56" y="212.7" text-anchor="end" font-size="11" fill="#4b4e5c">8</text><line x1="64" y1="168.0" x2="620" y2="168.0" stroke="#e3e5ec"/><text x="56" y="172.0" text-anchor="end" font-size="11" fill="#4b4e5c">12</text><line x1="64" y1="127.3" x2="620" y2="127.3" stroke="#e3e5ec"/><text x="56" y="131.3" text-anchor="end" font-size="11" fill="#4b4e5c">16</text><line x1="64" y1="86.7" x2="620" y2="86.7" stroke="#e3e5ec"/><text x="56" y="90.7" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">24</text><text x="64.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">16–20</text><text x="175.2" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">21–30</text><text x="286.4" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">31–40</text><text x="397.6" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">41–50</text><text x="508.8" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">51–60</text><text x="620.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">61–70</text><text x="14" y="168.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 168.0)">hours per week</text><polyline fill="none" stroke="#2c6bed" stroke-width="2.6" points="64.0,107.0 175.2,168.0 286.4,218.8 397.6,229.0 508.8,208.7 620.0,178.2"/><circle cx="64.0" cy="107.0" r="3.6" fill="#2c6bed"/><circle cx="175.2" cy="168.0" r="3.6" fill="#2c6bed"/><circle cx="286.4" cy="218.8" r="3.6" fill="#2c6bed"/><circle cx="397.6" cy="229.0" r="3.6" fill="#2c6bed"/><circle cx="508.8" cy="208.7" r="3.6" fill="#2c6bed"/><circle cx="620.0" cy="178.2" r="3.6" fill="#2c6bed"/><rect x="64" y="334" width="14" height="4" fill="#2c6bed"/><text x="84" y="339" font-size="12" fill="#14162b">men</text><polyline fill="none" stroke="#d9480f" stroke-width="2.6" points="64.0,86.7 175.2,157.8 286.4,229.0 397.6,239.2 508.8,198.5 620.0,157.8"/><circle cx="64.0" cy="86.7" r="3.6" fill="#d9480f"/><circle cx="175.2" cy="157.8" r="3.6" fill="#d9480f"/><circle cx="286.4" cy="229.0" r="3.6" fill="#d9480f"/><circle cx="397.6" cy="239.2" r="3.6" fill="#d9480f"/><circle cx="508.8" cy="198.5" r="3.6" fill="#d9480f"/><circle cx="620.0" cy="157.8" r="3.6" fill="#d9480f"/><rect x="115.6" y="334" width="14" height="4" fill="#d9480f"/><text x="135.6" y="339" font-size="12" fill="#14162b">women</text></svg></div><div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Who do you turn to first for support? (% of each age group)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Who do you turn to first for support? (% of each age group)</text><line x1="64" y1="284.0" x2="620" y2="284.0" stroke="#e3e5ec"/><text x="56" y="288.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="250.0" x2="620" y2="250.0" stroke="#e3e5ec"/><text x="56" y="254.0" text-anchor="end" font-size="11" fill="#4b4e5c">10</text><line x1="64" y1="216.0" x2="620" y2="216.0" stroke="#e3e5ec"/><text x="56" y="220.0" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="182.0" x2="620" y2="182.0" stroke="#e3e5ec"/><text x="56" y="186.0" text-anchor="end" font-size="11" fill="#4b4e5c">30</text><line x1="64" y1="148.0" x2="620" y2="148.0" stroke="#e3e5ec"/><text x="56" y="152.0" text-anchor="end" font-size="11" fill="#4b4e5c">40</text><line x1="64" y1="114.0" x2="620" y2="114.0" stroke="#e3e5ec"/><text x="56" y="118.0" text-anchor="end" font-size="11" fill="#4b4e5c">50</text><line x1="64" y1="80.0" x2="620" y2="80.0" stroke="#e3e5ec"/><text x="56" y="84.0" text-anchor="end" font-size="11" fill="#4b4e5c">60</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">70</text><text x="14" y="165.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 165.0)">%</text><rect x="99.5" y="86.8" width="32.0" height="197.2" fill="#2c6bed"/><text x="115.5" y="82.8" text-anchor="middle" font-size="10" fill="#14162b">58</text><rect x="133.5" y="175.2" width="32.0" height="108.8" fill="#d9480f"/><text x="149.5" y="171.2" text-anchor="middle" font-size="10" fill="#14162b">32</text><text x="133.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">16–24</text><rect x="238.5" y="148.0" width="32.0" height="136.0" fill="#2c6bed"/><text x="254.5" y="144.0" text-anchor="middle" font-size="10" fill="#14162b">40</text><rect x="272.5" y="114.0" width="32.0" height="170.0" fill="#d9480f"/><text x="288.5" y="110.0" text-anchor="middle" font-size="10" fill="#14162b">50</text><text x="272.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">25–44</text><rect x="377.5" y="182.0" width="32.0" height="102.0" fill="#2c6bed"/><text x="393.5" y="178.0" text-anchor="middle" font-size="10" fill="#14162b">30</text><rect x="411.5" y="86.8" width="32.0" height="197.2" fill="#d9480f"/><text x="427.5" y="82.8" text-anchor="middle" font-size="10" fill="#14162b">58</text><text x="411.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">45–64</text><rect x="516.5" y="195.6" width="32.0" height="88.4" fill="#2c6bed"/><text x="532.5" y="191.6" text-anchor="middle" font-size="10" fill="#14162b">26</text><rect x="550.5" y="66.4" width="32.0" height="217.6" fill="#d9480f"/><text x="566.5" y="62.4" text-anchor="middle" font-size="10" fill="#14162b">64</text><text x="550.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">65+</text><rect x="64" y="330" width="12" height="12" fill="#2c6bed"/><text x="82" y="340" font-size="12" fill="#14162b">friends</text><rect x="144.4" y="330" width="12" height="12" fill="#d9480f"/><text x="162.4" y="340" font-size="12" fill="#14162b">family</text></svg></div>
+      <p style="margin-top:26px;"><strong>Part 1 — Which introduction is best?</strong></p>
+      <div class="card" id="t7-in"><div class="q-item" id="t7-in-1">
+          <p>1. Choose the best introduction for these two charts.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-in-1" data-correct="false"> A. There are two charts. They show friends and family. People like friends.</label><label><input type="radio" value="1" name="t7-in-1" data-correct="true"> B. The line graph shows how many hours per week men and women of different ages spend with friends, while the bar chart compares the proportion of each age group who turn first to friends or to family for support.</label><label><input type="radio" value="2" name="t7-in-1" data-correct="false"> C. The graph is about friends. It shows the data in hours. The chart is about support. It shows the data in percentages.</label><label><input type="radio" value="3" name="t7-in-1" data-correct="false"> D. Friends are very important for everyone, especially young people, as these charts clearly prove.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-in', 't7-in-score')">Check answers</button>
+          <span id="t7-in-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Which chart?</strong> Does each sentence describe the line graph (A) or the bar chart (B)?</p>
+      <div class="card" id="t7-wc"><div class="sel-row"><select class="select" id="t7-wc-1" data-answer="A (line graph)"><option value="">—</option><option value="A (line graph)">A (line graph)</option><option value="B (bar chart)">B (bar chart)</option></select><span><b>1.</b> Time spent with friends falls to its lowest point in middle age.</span></div><div class="sel-row"><select class="select" id="t7-wc-2" data-answer="B (bar chart)"><option value="">—</option><option value="A (line graph)">A (line graph)</option><option value="B (bar chart)">B (bar chart)</option></select><span><b>2.</b> The older people are, the more likely they are to rely on family first.</span></div><div class="sel-row"><select class="select" id="t7-wc-3" data-answer="A (line graph)"><option value="">—</option><option value="A (line graph)">A (line graph)</option><option value="B (bar chart)">B (bar chart)</option></select><span><b>3.</b> Women aged 16–20 spend slightly more time with friends than men of the same age.</span></div><div class="sel-row"><select class="select" id="t7-wc-4" data-answer="B (bar chart)"><option value="">—</option><option value="A (line graph)">A (line graph)</option><option value="B (bar chart)">B (bar chart)</option></select><span><b>4.</b> Among the youngest group, friends are preferred to family by 58% to 32%.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-wc', 't7-wc-score')">Check answers</button>
+          <span id="t7-wc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 3 — Reference words.</strong> Complete the paragraph with words from the box. You may use some words more than once.</p>
+      <div class="word-bank">them · this · these · they · that · their</div><div class="card" id="t7-ref" style="line-height:2.7;"><p>Young people spend the most time with friends: men aged 16–20 spend 18 hours a week with (1) <input type="text" class="text-answer" id="t7-r1" data-correct="them" autocomplete="off" style="width:90px;">, and women in (2) <input type="text" class="text-answer" id="t7-r2" data-correct="this" autocomplete="off" style="width:90px;"> age group spend slightly more. (3) <input type="text" class="text-answer" id="t7-r3" data-correct="These" autocomplete="off" style="width:90px;"> figures fall steadily until middle age, when (4) <input type="text" class="text-answer" id="t7-r4" data-correct="they" autocomplete="off" style="width:90px;"> reach a low of five to six hours. After (5) <input type="text" class="text-answer" id="t7-r5" data-correct="that/this" autocomplete="off" style="width:90px;">, both lines rise again. Older people are also the group most likely to rely on (6) <input type="text" class="text-answer" id="t7-r6" data-correct="their" autocomplete="off" style="width:90px;"> families for support.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-ref', 't7-ref-score')">Check answers</button>
+          <span id="t7-ref-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 4 — What does the word refer to?</strong></p>
+      <div class="card" id="t7-rt"><div class="q-item" id="t7-rt-1">
+          <p>1. In sentence 1 of the paragraph, <i>them</i> refers to…</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-rt-1" data-correct="false"> men</label><label><input type="radio" value="1" name="t7-rt-1" data-correct="true"> friends</label><label><input type="radio" value="2" name="t7-rt-1" data-correct="false"> hours</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-rt-2">
+          <p>2. <i>These figures</i> refers to…</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-rt-2" data-correct="true"> the hours spent with friends</label><label><input type="radio" value="1" name="t7-rt-2" data-correct="false"> the percentages in the bar chart</label><label><input type="radio" value="2" name="t7-rt-2" data-correct="false"> the ages of the people</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-rt', 't7-rt-score')">Check answers</button>
+          <span id="t7-rt-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 9</div>
+      <h2>Key Grammar — Zero, First and Second Conditionals</h2>
+      <p class="task-sub">Conditionals are essential for Speaking and Writing Task 2. Band 7 candidates use them accurately and choose the right type for what they mean.</p>
+<div class="card advice-card"><table class="data-table" style="width:100%;"><tr><th>type</th><th>use</th><th>form</th></tr>
+<tr><td>zero</td><td>always true / general habits</td><td><i>If</i> + present, present: <i>If I’m tired, I don’t go out.</i></td></tr>
+<tr><td>first</td><td>a real, likely future situation</td><td><i>If</i> + present, <i>will</i> + verb: <i>If it rains, we’ll stay in.</i></td></tr>
+<tr><td>second</td><td>an unlikely or imaginary situation</td><td><i>If</i> + past, <i>would</i> + verb: <i>If I were rich, I’d travel.</i></td></tr></table>
+<p style="margin:8px 0 0;">Never use <i>will</i> or <i>would</i> in the <i>if</i>-clause.</p></div>
+      <p style="margin-top:26px;"><strong>Part 1 — Which type?</strong></p>
+      <div class="card" id="t8-ty"><div class="sel-row"><select class="select" id="t8-ty-1" data-answer="zero"><option value="">—</option><option value="zero">zero</option><option value="first">first</option><option value="second">second</option></select><span><b>1.</b> We meet up in town if there’s a birthday.</span></div><div class="sel-row"><select class="select" id="t8-ty-2" data-answer="first"><option value="">—</option><option value="zero">zero</option><option value="first">first</option><option value="second">second</option></select><span><b>2.</b> If I don’t go out tonight, I’ll call my grandmother.</span></div><div class="sel-row"><select class="select" id="t8-ty-3" data-answer="second"><option value="">—</option><option value="zero">zero</option><option value="first">first</option><option value="second">second</option></select><span><b>3.</b> I’d do better at school if I worked harder.</span></div><div class="sel-row"><select class="select" id="t8-ty-4" data-answer="zero"><option value="">—</option><option value="zero">zero</option><option value="first">first</option><option value="second">second</option></select><span><b>4.</b> If you heat ice, it melts.</span></div><div class="sel-row"><select class="select" id="t8-ty-5" data-answer="second"><option value="">—</option><option value="zero">zero</option><option value="first">first</option><option value="second">second</option></select><span><b>5.</b> If I had more free time, I would see my friends more often.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-ty', 't8-ty-score')">Check answers</button>
+          <span id="t8-ty-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Complete the sentences</strong> with the correct form of the verb in brackets.</p>
+      <div class="card" id="t8-f" style="line-height:2.5;"><p>1. My father always keeps his promises — if he says he’ll do something, he <input type="text" class="text-answer" id="t8-1" data-correct="does" autocomplete="off" style="width:120px;"> it. (do)</p><p>2. If Jamila told the truth more often, people <input type="text" class="text-answer" id="t8-2" data-correct="would trust" autocomplete="off" style="width:150px;"> her more. (trust)</p><p>3. If I <input type="text" class="text-answer" id="t8-3" data-correct="were/was" autocomplete="off" style="width:120px;"> rich, I’d give a lot of money to charity. (be)</p><p>4. You’ll find it hard to write a good essay if you <input type="text" class="text-answer" id="t8-4" data-correct="don’t plan/do not plan/don&#x27;t plan" autocomplete="off" style="width:150px;"> it first. (not plan)</p><p>5. Where would you live if you <input type="text" class="text-answer" id="t8-5" data-correct="had" autocomplete="off" style="width:120px;"> the choice? (have)</p><p>6. If I keep quiet about the mistake, no one <input type="text" class="text-answer" id="t8-6" data-correct="will find" autocomplete="off" style="width:150px;"> out. (find)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-f', 't8-f-score')">Check answers</button>
+          <span id="t8-f-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 3 — Correct the mistakes.</strong> Each sentence contains an error made by an IELTS candidate. Write the correct form of the underlined words.</p>
+      <div class="card" id="t8-e" style="line-height:2.5;"><p>1. Friendships can only last if people <u>will make</u> an effort. → <input type="text" class="text-answer" id="t8-e1" data-correct="make" autocomplete="off" style="width:130px;"></p><p>2. If people <u>would agree</u> all the time, life would be boring. → <input type="text" class="text-answer" id="t8-e2" data-correct="agreed" autocomplete="off" style="width:130px;"></p><p>3. Some teenagers think that if they leave home, they <u>would be</u> unhappy. → <input type="text" class="text-answer" id="t8-e3" data-correct="will be/they&#x27;ll be/they will be" autocomplete="off" style="width:130px;"></p><p>4. People have more friends if they <u>were</u> rich. → <input type="text" class="text-answer" id="t8-e4" data-correct="are" autocomplete="off" style="width:130px;"></p><p>5. If I <u>will see</u> him tomorrow, I’ll tell him. → <input type="text" class="text-answer" id="t8-e5" data-correct="see" autocomplete="off" style="width:130px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-e', 't8-e-score')">Check answers</button>
+          <span id="t8-e-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking">
+        <div class="q-num">Speaking — conditionals</div>
+        <div class="q-text">Answer using conditionals: <i>What would you do if a close friend lied to you? What do you usually do if you fall out with a friend?</i></div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“If a friend lied to me, I’d…”</li><li>“If I fall out with someone, I usually…”</li><li>“If they apologised, I would…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 9</div>
+      <h2>Writing Task 1 — Your Two-Chart Report</h2>
+      <p class="task-sub">Write a full Task 1 report on two charts. Spend about <b>20 minutes</b> and write <b>at least 150 words</b>. Introduce both charts, give one overview that covers both, and use reference words.</p>
+<div class="card advice-card"><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Paragraph 1:</b> introduce both charts in your own words.</li><li><b>Paragraph 2:</b> overview — the main change in chart 1 and the main feature of chart 2.</li><li><b>Paragraph 3:</b> chart 1 details (compare 2005 and 2025; young vs old).</li><li><b>Paragraph 4:</b> chart 2 details (largest vs smallest categories).</li></ul></div>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The first chart compares the percentage of people in one country who said they had at least one close friend in 2005 and 2025, by age group. The second chart shows how adults in the same country mainly contacted their friends in 2025.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Percentage of people with at least one close friend, by age" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Percentage of people with at least one close friend, by age</text><line x1="64" y1="284.0" x2="620" y2="284.0" stroke="#e3e5ec"/><text x="56" y="288.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="236.4" x2="620" y2="236.4" stroke="#e3e5ec"/><text x="56" y="240.4" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="188.8" x2="620" y2="188.8" stroke="#e3e5ec"/><text x="56" y="192.8" text-anchor="end" font-size="11" fill="#4b4e5c">40</text><line x1="64" y1="141.2" x2="620" y2="141.2" stroke="#e3e5ec"/><text x="56" y="145.2" text-anchor="end" font-size="11" fill="#4b4e5c">60</text><line x1="64" y1="93.6" x2="620" y2="93.6" stroke="#e3e5ec"/><text x="56" y="97.6" text-anchor="end" font-size="11" fill="#4b4e5c">80</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">100</text><text x="14" y="165.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 165.0)">%</text><rect x="99.5" y="74.6" width="32.0" height="209.4" fill="#2c6bed"/><text x="115.5" y="70.6" text-anchor="middle" font-size="10" fill="#14162b">88</text><rect x="133.5" y="112.6" width="32.0" height="171.4" fill="#d9480f"/><text x="149.5" y="108.6" text-anchor="middle" font-size="10" fill="#14162b">72</text><text x="133.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">18–29</text><rect x="238.5" y="84.1" width="32.0" height="199.9" fill="#2c6bed"/><text x="254.5" y="80.1" text-anchor="middle" font-size="10" fill="#14162b">84</text><rect x="272.5" y="103.1" width="32.0" height="180.9" fill="#d9480f"/><text x="288.5" y="99.1" text-anchor="middle" font-size="10" fill="#14162b">76</text><text x="272.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">30–44</text><rect x="377.5" y="93.6" width="32.0" height="190.4" fill="#2c6bed"/><text x="393.5" y="89.6" text-anchor="middle" font-size="10" fill="#14162b">80</text><rect x="411.5" y="96.0" width="32.0" height="188.0" fill="#d9480f"/><text x="427.5" y="92.0" text-anchor="middle" font-size="10" fill="#14162b">79</text><text x="411.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">45–59</text><rect x="516.5" y="98.4" width="32.0" height="185.6" fill="#2c6bed"/><text x="532.5" y="94.4" text-anchor="middle" font-size="10" fill="#14162b">78</text><rect x="550.5" y="88.8" width="32.0" height="195.2" fill="#d9480f"/><text x="566.5" y="84.8" text-anchor="middle" font-size="10" fill="#14162b">82</text><text x="550.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">60+</text><rect x="64" y="330" width="12" height="12" fill="#2c6bed"/><text x="82" y="340" font-size="12" fill="#14162b">2005</text><rect x="122.8" y="330" width="12" height="12" fill="#d9480f"/><text x="140.8" y="340" font-size="12" fill="#14162b">2025</text></svg><div style="height:16px;"></div><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Main way of contacting friends, 2025 (% of all adults)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Main way of contacting friends, 2025 (% of all adults)</text><line x1="64" y1="284.0" x2="620" y2="284.0" stroke="#e3e5ec"/><text x="56" y="288.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="236.4" x2="620" y2="236.4" stroke="#e3e5ec"/><text x="56" y="240.4" text-anchor="end" font-size="11" fill="#4b4e5c">10</text><line x1="64" y1="188.8" x2="620" y2="188.8" stroke="#e3e5ec"/><text x="56" y="192.8" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="141.2" x2="620" y2="141.2" stroke="#e3e5ec"/><text x="56" y="145.2" text-anchor="end" font-size="11" fill="#4b4e5c">30</text><line x1="64" y1="93.6" x2="620" y2="93.6" stroke="#e3e5ec"/><text x="56" y="97.6" text-anchor="end" font-size="11" fill="#4b4e5c">40</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">50</text><text x="14" y="165.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 165.0)">%</text><rect x="102.6" y="74.6" width="32.0" height="209.4" fill="#2c6bed"/><text x="118.6" y="70.6" text-anchor="middle" font-size="10" fill="#14162b">44</text><text x="119.6" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">messaging apps</text><rect x="213.8" y="188.8" width="32.0" height="95.2" fill="#2c6bed"/><text x="229.8" y="184.8" text-anchor="middle" font-size="10" fill="#14162b">20</text><text x="230.8" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">phone calls</text><rect x="325.0" y="198.3" width="32.0" height="85.7" fill="#2c6bed"/><text x="341.0" y="194.3" text-anchor="middle" font-size="10" fill="#14162b">18</text><text x="342.0" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">meeting in person</text><rect x="436.2" y="222.1" width="32.0" height="61.9" fill="#2c6bed"/><text x="452.2" y="218.1" text-anchor="middle" font-size="10" fill="#14162b">13</text><text x="453.2" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">social media</text><rect x="547.4" y="260.2" width="32.0" height="23.8" fill="#2c6bed"/><text x="563.4" y="256.2" text-anchor="middle" font-size="10" fill="#14162b">5</text><text x="564.4" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">email</text><rect x="64" y="330" width="12" height="12" fill="#2c6bed"/><text x="82" y="340" font-size="12" fill="#14162b">adults</text></svg></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t9-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-essay-model"><div class="model-text" style="padding:2px 0;">
+  <p>The bar chart compares the proportion of people in four age groups who reported having at least one close friend in 2005 and 2025, while the second chart shows the main methods adults used to keep in touch with their friends in 2025.</p>
+  <p>Overall, the share of younger adults with a close friend fell over the twenty-year period, whereas it rose slightly among the oldest group. In 2025, messaging apps were by far the most common way of contacting friends.</p>
+  <p>In 2005, the youngest group (18–29) was the most likely to have a close friend, at 88%, and the figure declined with age to 78% for those over 60. By 2025, this pattern had reversed. The figure for 18–29-year-olds dropped to 72%, the lowest of any group, while it increased to 82% among people aged 60 and over. The figures for the two middle groups changed relatively little.</p>
+  <p>As for contact methods, 44% of adults mainly used messaging apps, more than twice the proportion who preferred phone calls (20%). Meeting in person was the main method for 18%, followed by social media at 13%, and only 5% relied mainly on email.</p>
+  <p class="alt">≈ 205 words</p>
+</div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 9</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 28 of 45</div>
+    <h1>Day 28 complete! 🎉</h1>
+    <p>Day 28 done — Unit 7, Relationships: three readings with seven question types, Writing Task 1 with two charts, and conditionals.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+    initWritingCoach('t9-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The first chart compares the percentage of people in one country who said they had at least one close friend in 2005 and 2025, by age group. The second chart shows how adults in the same country mainly contacted their friends in 2025.' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking"]'); if (b) initRecordControl(b, user.id, 28, 8, 't8-speaking', 0); }
+
+    await initTaskFlow(28, 9, user.id, {
+      1: () => { checkAllAnswers('t1-rt', 't1-rt-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-h', 't2-h-score'); checkAllAnswers('t2-f', 't2-f-score'); checkAllAnswers('t2-sc', 't2-sc-score'); },
+      3: () => { checkAllAnswers('t3-why', 't3-why-score'); },
+      4: () => { checkAllAnswers('t4-yn', 't4-yn-score'); checkAllAnswers('t4-s', 't4-s-score'); checkAllAnswers('t4-mc', 't4-mc-score'); },
+      5: () => { checkAllAnswers('t5-tf', 't5-tf-score'); checkAllAnswers('t5-mi', 't5-mi-score'); checkAllAnswers('t5-sa', 't5-sa-score'); },
+      7: () => { checkAllAnswers('t7-in', 't7-in-score'); checkAllAnswers('t7-wc', 't7-wc-score'); checkAllAnswers('t7-ref', 't7-ref-score'); checkAllAnswers('t7-rt', 't7-rt-score'); },
+      8: () => { checkAllAnswers('t8-ty', 't8-ty-score'); checkAllAnswers('t8-f', 't8-f-score'); checkAllAnswers('t8-e', 't8-e-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t1-lie-btn', 't1-lie-ans', '[id^="t1-lie-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t3-disc-btn', 't3-disc-ans', '[id^="t3-disc-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-essay-model-btn', 't9-essay-model', '#t9-essay');
+  });
+</script>
+</body>
+</html>

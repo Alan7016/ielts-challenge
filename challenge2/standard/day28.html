@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 28 — Standard — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 28 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 8</div>
+      <h2>Starting Off — Literacy Skills</h2>
+      <p class="task-sub">Unit 7 is about <b>literacy skills</b>: reading and writing. Today is a reading and writing day — two reading passages with different IELTS question types, then three Writing Task 1 tasks about graphs. It will take you <b>at least an hour</b>. Start by thinking about how you read.</p>
+      <div class="card"><p class="mini-q">1. What problems do you have when you read in English? (e.g. new words, long sentences, reading too slowly)</p><textarea class="no-check mini-answer" id="t1-q-1" placeholder="Write here..." style="min-height:56px;"></textarea><p class="mini-q">2. What can you do to improve your reading? Give at least two ideas.</p><textarea class="no-check mini-answer" id="t1-q-2" placeholder="Write here..." style="min-height:56px;"></textarea><p class="mini-q">3. What do you read in your own language, and what do you read in English?</p><textarea class="no-check mini-answer" id="t1-q-3" placeholder="Write here..." style="min-height:56px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t1-q-btn">Show an example answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t1-q-ans"><p>There are no right answers — but strong answers give <b>examples</b>: <i>“I read too slowly because I stop at every new word. I could try guessing the meaning from the sentence instead.”</i></p></div>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Reading vocabulary.</strong> Match each word to its meaning. You will meet all of them in today’s passages.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. skim</button><button type="button" class="lm-item" data-key="2">2. scan</button><button type="button" class="lm-item" data-key="3">3. literacy</button><button type="button" class="lm-item" data-key="4">4. illiterate</button><button type="button" class="lm-item" data-key="5">5. concentrate</button><button type="button" class="lm-item" data-key="6">6. comprehend</button><button type="button" class="lm-item" data-key="7">7. irrelevant</button><button type="button" class="lm-item" data-key="8">8. volume</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. the amount of something</button><button type="button" class="lm-item" data-key="b">b. understand</button><button type="button" class="lm-item" data-key="c">c. look quickly through a text to find a particular piece of information</button><button type="button" class="lm-item" data-key="d">d. give all your attention to something</button><button type="button" class="lm-item" data-key="e">e. the ability to read and write</button><button type="button" class="lm-item" data-key="f">f. not connected with what you are discussing</button><button type="button" class="lm-item" data-key="g">g. read quickly to get the general idea</button><button type="button" class="lm-item" data-key="h">h. not able to read or write</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>raise or rise?</strong> IELTS candidates often confuse these two verbs. <i>Raise</i> needs an object (<i>raise the price</i>); <i>rise</i> has no object (<i>prices rise</i>). <i>Rise</i> is irregular: <i>rise – rose – risen</i>.</p>
+      <div class="card" id="t1-rr"><div class="q-item" id="t1-rr-1">
+          <p>1. I want to ______ the standard of my writing.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rr-1" data-correct="true"> raise</label><label><input type="radio" value="1" name="t1-rr-1" data-correct="false"> rise</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-rr-2">
+          <p>2. The number of students has ______ every year since 2015.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rr-2" data-correct="false"> raised</label><label><input type="radio" value="1" name="t1-rr-2" data-correct="true"> risen</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-rr-3">
+          <p>3. The college has just ______ its fees.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rr-3" data-correct="true"> raised</label><label><input type="radio" value="1" name="t1-rr-3" data-correct="false"> risen</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-rr-4">
+          <p>4. Fees ______ by 10% last year.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rr-4" data-correct="false"> raised</label><label><input type="radio" value="1" name="t1-rr-4" data-correct="true"> rose</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-rr-5">
+          <p>5. The government is trying to ______ standards of literacy.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rr-5" data-correct="true"> raise</label><label><input type="radio" value="1" name="t1-rr-5" data-correct="false"> rise</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-rr-6">
+          <p>6. Reading speed usually ______ with practice.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rr-6" data-correct="false"> raises</label><label><input type="radio" value="1" name="t1-rr-6" data-correct="true"> rises</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-rr', 't1-rr-score')">Check answers</button>
+          <span id="t1-rr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 8</div>
+      <h2>Reading Passage 1 — Reading Faster Without Understanding Less</h2>
+      <p class="task-sub">IELTS question types: <b>matching information</b> and <b>table completion</b> (the same types as Complete IELTS Unit 7). Suggested time: <b>20 minutes</b>. Passage on the left, questions on the right. Your answers are checked when you press <b>Next</b>.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Matching information:</b> underline the key idea in each question. Start with paragraph A and decide if it matches any question; if not, go on to the next paragraph. You may use a letter more than once.</li><li><b>Table completion:</b> use the table heading to find the right part of the passage, read around each gap to predict the missing word, and copy words <b>exactly</b>.</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Reading Faster Without Understanding Less<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Can we train ourselves to read more quickly — and still remember what we have read?</small></h3>
+            <p class="article-meta">Reading Passage 1 · Literacy skills · 589 words</p>
+            <p><span class="para-label">A</span>Most people think that speed reading simply means moving your eyes across a page very quickly. In fact, reading fast is only half of it. The other half is how much you understand and remember once you have finished. A reader who races through a chapter but cannot say what it was about has not really read it at all. For this reason, the best speed readers are judged not only on how many words they read in a minute but also on how many questions about the text they can answer correctly afterwards.</p><p><span class="para-label">B</span>Why is this skill becoming so important? Modern life produces enormous amounts of written information. Office workers may have dozens of emails, reports and documents to deal with every day, and university students often have long reading lists for every assignment. People in these situations often feel that they need to read more, and read faster, just to keep up.</p><p><span class="para-label">C</span>Before trying to read faster, however, it is worth stopping to think about why you are reading. If you only need a general idea of a topic, you can skim the text quickly, looking mainly at headings and the first sentence of each paragraph. If you need to find one particular fact, such as a date or a name, you can scan for it and ignore everything else. But if you have to understand every detail, for example in instructions or an exam question, you should slow down. Choosing the right speed for the purpose is the first skill of an efficient reader.</p><p><span class="para-label">D</span>One simple change can make a big difference: reading silently. Many people, especially children, move their lips or say the words in their head as they read. This habit slows them down, because the brain has to wait for each word to be 'spoken' before moving on. Readers who learn to take in the meaning without saying every word can often read considerably faster.</p><p><span class="para-label">E</span>A second technique is known as chunking. Beginners tend to read one letter or one word at a time. As readers become more experienced, their eyes start to take in small groups of words — 'chunks' — in a single look, such as 'at the end of' or 'in the morning'. Instead of stopping on every word, the eyes jump from one chunk to the next.</p><p><span class="para-label">F</span>Skilled readers take in large chunks, and their eyes rest on each one for only a fraction of a second. They hardly ever look back at words they have already read. As a result, their eyes do less work, and they can process far more information in the same amount of time.</p><p><span class="para-label">G</span>Slow readers, on the other hand, look at very small chunks, sometimes single words, and they often go back to re-read earlier parts of a sentence. Each time they do this, they lose the thread of the text, and their understanding becomes confused. This stop-start movement is also tiring for the eyes, which is one reason why many slow readers say that they find reading boring and hard to concentrate on.</p><p><span class="para-label">H</span>So what is the best way to improve? Experts agree that there is no substitute for regular practice. However, practice only works if you want to keep reading. If you keep finding yourself reading the same paragraph again and again, it may be a sign that the material is not right for you. Choose texts that you find genuinely interesting — magazines, stories or articles about your hobbies — and you will be surprised how quickly your speed improves.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">The passage has eight paragraphs, <b>A–H</b>. Which paragraph contains the following information? <b>NB</b> You may use any letter more than once.</p></div>
+      <div class="card" id="t2-mi"><div class="sel-row"><select class="select" id="t2-mi-1" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>1.</b> the kinds of people who need to read more quickly</span></div><div class="sel-row"><select class="select" id="t2-mi-2" data-answer="G"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>2.</b> how a reader can become confused</span></div><div class="sel-row"><select class="select" id="t2-mi-3" data-answer="H"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>3.</b> why it is important to enjoy what you read</span></div><div class="sel-row"><select class="select" id="t2-mi-4" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>4.</b> what speed reading really means</span></div><div class="sel-row"><select class="select" id="t2-mi-5" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>5.</b> what you should think about before you start reading</span></div><div class="sel-row"><select class="select" id="t2-mi-6" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select><span><b>6.</b> a habit that many children have when they read</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mi', 't2-mi-score')">Check answers</button>
+          <span id="t2-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–13</p><p class="qg-instr">Complete the table. Choose <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.</p></div>
+<div class="card" style="overflow-x:auto;"><p class="prompt-label">Chunking</p>
+<table class="data-table" style="width:100%;"><tr><th>type of reader</th><th>reading method</th><th>effect of method on reader</th></tr>
+<tr><td>skilled reader</td><td>• reads (7) ______ chunks<br>• rests eyes on each chunk for a (8) ______ of a second<br>• hardly ever looks back</td><td>• eyes do (9) ______<br>• can (10) ______ far more information in the same time</td></tr>
+<tr><td>slow reader</td><td>• reads very small chunks<br>• often (11) ______ earlier parts</td><td>• understanding becomes (12) ______<br>• finds it hard to (13) ______</td></tr></table></div>
+      <div class="card" id="t2-t" style="line-height:2.6;"><p>7. <input type="text" class="text-answer" id="t2-7" data-correct="large" autocomplete="off" style="width:140px;"> &nbsp; 8. <input type="text" class="text-answer" id="t2-8" data-correct="fraction" autocomplete="off" style="width:140px;"> &nbsp; 9. <input type="text" class="text-answer" id="t2-9" data-correct="less work" autocomplete="off" style="width:140px;"></p><p>10. <input type="text" class="text-answer" id="t2-10" data-correct="process" autocomplete="off" style="width:140px;"> &nbsp; 11. <input type="text" class="text-answer" id="t2-11" data-correct="re-read/reread" autocomplete="off" style="width:140px;"> &nbsp; 12. <input type="text" class="text-answer" id="t2-12" data-correct="confused" autocomplete="off" style="width:140px;"></p><p>13. <input type="text" class="text-answer" id="t2-13" data-correct="concentrate" autocomplete="off" style="width:140px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-t', 't2-t-score')">Check answers</button>
+          <span id="t2-t-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 8</div>
+      <h2>Reading Passage 1 — Answer Analysis</h2>
+      <p class="task-sub">Check every answer. For matching information, notice that the question describes the <b>type</b> of information (a reason, a definition, a habit), not the exact words.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Reading Faster Without Understanding Less</summary>
+        <p><span class="para-label">A</span>Most people think that speed reading simply means moving your eyes across a page very quickly. In fact, reading fast is only half of it. The other half is how much you understand and remember once you have finished. A reader who races through a chapter but cannot say what it was about has not really read it at all. For this reason, the best speed readers are judged not only on how many words they read in a minute but also on how many questions about the text they can answer correctly afterwards.</p><p><span class="para-label">B</span>Why is this skill becoming so important? Modern life produces enormous amounts of written information. Office workers may have dozens of emails, reports and documents to deal with every day, and university students often have long reading lists for every assignment. People in these situations often feel that they need to read more, and read faster, just to keep up.</p><p><span class="para-label">C</span>Before trying to read faster, however, it is worth stopping to think about why you are reading. If you only need a general idea of a topic, you can skim the text quickly, looking mainly at headings and the first sentence of each paragraph. If you need to find one particular fact, such as a date or a name, you can scan for it and ignore everything else. But if you have to understand every detail, for example in instructions or an exam question, you should slow down. Choosing the right speed for the purpose is the first skill of an efficient reader.</p><p><span class="para-label">D</span>One simple change can make a big difference: reading silently. Many people, especially children, move their lips or say the words in their head as they read. This habit slows them down, because the brain has to wait for each word to be 'spoken' before moving on. Readers who learn to take in the meaning without saying every word can often read considerably faster.</p><p><span class="para-label">E</span>A second technique is known as chunking. Beginners tend to read one letter or one word at a time. As readers become more experienced, their eyes start to take in small groups of words — 'chunks' — in a single look, such as 'at the end of' or 'in the morning'. Instead of stopping on every word, the eyes jump from one chunk to the next.</p><p><span class="para-label">F</span>Skilled readers take in large chunks, and their eyes rest on each one for only a fraction of a second. They hardly ever look back at words they have already read. As a result, their eyes do less work, and they can process far more information in the same amount of time.</p><p><span class="para-label">G</span>Slow readers, on the other hand, look at very small chunks, sometimes single words, and they often go back to re-read earlier parts of a sentence. Each time they do this, they lose the thread of the text, and their understanding becomes confused. This stop-start movement is also tiring for the eyes, which is one reason why many slow readers say that they find reading boring and hard to concentrate on.</p><p><span class="para-label">H</span>So what is the best way to improve? Experts agree that there is no substitute for regular practice. However, practice only works if you want to keep reading. If you keep finding yourself reading the same paragraph again and again, it may be a sign that the material is not right for you. Choose texts that you find genuinely interesting — magazines, stories or articles about your hobbies — and you will be surprised how quickly your speed improves.</p>
+      </details>
+      <div class="card an-card"><p class="an-intro">Questions 8 and 10 test grammar as well as reading: the completed table must make sense. Always read the gap with your answer in it.</p><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Office workers … university students … feel that they need to read more, and read faster</span>. <i>Kinds of people</i> = office workers and students.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">G</span><span class="an-where">Para G</span></summary><div class="an-body"><p><span class="ev">they lose the thread of the text, and their understanding becomes confused</span>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">H</span><span class="an-where">Para H</span></summary><div class="an-body"><p><span class="ev">practice only works if you want to keep reading … Choose texts that you find genuinely interesting</span>. <i>Enjoy</i> ↔ <i>genuinely interesting</i>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">A</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">reading fast is only half of it. The other half is how much you understand and remember</span> — the passage explains what speed reading really is.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">C</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Before trying to read faster, however, it is worth stopping to think about why you are reading</span>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">D</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Many people, especially children, move their lips or say the words in their head</span>.</p><p><span class="trap">Trap:</span> Para E also mentions <i>beginners</i>, but the habit of saying words is in D.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">large</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Skilled readers take in large chunks</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">fraction</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">their eyes rest on each one for only a fraction of a second</span>. <i>Rests eyes … briefly</i> is paraphrased in the table; the gap needs a noun after <i>a</i>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">less work</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">their eyes do less work</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">process</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">they can process far more information in the same amount of time</span>. After <i>can</i> we need the base form — and it is exactly the word in the passage.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">re-read</span><span class="an-where">Para G</span></summary><div class="an-body"><p><span class="ev">they often go back to re-read earlier parts</span>. <i>reread</i> without the hyphen is also accepted.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">confused</span><span class="an-where">Para G</span></summary><div class="an-body"><p><span class="ev">their understanding becomes confused</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">concentrate</span><span class="an-where">Para G</span></summary><div class="an-body"><p><span class="ev">they find reading boring and hard to concentrate on</span>. <i>finds it hard to</i> + verb → <b>concentrate</b>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 8</div>
+      <h2>Reading Passage 2 — Libraries That Come to You</h2>
+      <p class="task-sub">A second passage with <b>different question types</b>: <b>TRUE / FALSE / NOT GIVEN</b>, <b>sentence completion</b> and <b>multiple choice</b>. Suggested time: <b>15 minutes</b>. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Libraries That Come to You<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Where there is no library building, some communities have found other ways to bring books to readers.</small></h3>
+            <p class="article-meta">Reading Passage 2 · Literacy around the world · 388 words</p>
+            <p><span class="para-label">A</span>In most towns, a library is a building that readers visit. But in some parts of the world, distance, poor roads or a lack of money mean that many people cannot reach a library at all. For these communities, the solution has been to take the library to the readers instead.</p><p><span class="para-label">B</span>One of the best-known examples is in north-eastern Kenya, where many families are nomadic herders who move with their animals in search of water and grass. Because roads are rare and vehicles often cannot cross the sandy ground, the national library service began using camels in the 1990s. Each camel can carry boxes of books, together with a tent that serves as a reading room, to settlements far from the nearest town. Librarians stay for a while, lend books, and return some time later to collect them and bring new ones.</p><p><span class="para-label">C</span>Other countries have used different animals. In some rural areas of Zimbabwe, donkeys have pulled carts loaded with books to schools and villages. The carts are slow, but they are cheap to run and can travel along narrow paths where a van would get stuck. Some of the carts have even carried simple equipment, such as solar panels, so that villagers can use other learning materials too.</p><p><span class="para-label">D</span>Water can also be a route to reading. In Norway, where many people live on small islands or in villages along the long coastline, a book boat has visited coastal communities for decades. It stops at small harbours for a short time, and families come on board to choose books. For many children, the boat's arrival is one of the highlights of the year.</p><p><span class="para-label">E</span>These projects face real difficulties. Books can be damaged by dust, rain or sea air, and lending is difficult to organise when the borrowers move from place to place. Funding is also a constant worry, because mobile libraries depend on government support or donations. Some critics argue that the money would be better spent on building permanent schools.</p><p><span class="para-label">F</span>Supporters, however, point out that mobile libraries do more than lend books. Librarians often run reading activities for children, help adults who are learning to read, and bring newspapers and information about health. In places where literacy rates are low, they believe, even a few boxes of books can make a real difference to a child's future.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–18</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t4-tf"><div class="q-item" id="t4-tf-14">
+          <p>14. In north-eastern Kenya, many families move from place to place with their animals.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-14" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t4-tf-14" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-14" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-15">
+          <p>15. The Kenyan camel libraries started in the 2010s.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-15" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-15" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t4-tf-15" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-16">
+          <p>16. Donkey carts are more expensive to run than vans.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-16" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-16" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t4-tf-16" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-17">
+          <p>17. The Norwegian book boat visits each harbour once a month.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-17" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-17" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-17" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-18">
+          <p>18. Mobile libraries depend on money from governments or donors.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-18" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t4-tf-18" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-18" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-tf', 't4-tf-score')">Check answers</button>
+          <span id="t4-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 19–22</p><p class="qg-instr">Complete the sentences. Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p></div>
+      <div class="card" id="t4-sc" style="line-height:2.4;"><p>19. In Kenya, a <input type="text" class="text-answer" id="t4-19" data-correct="tent" autocomplete="off" style="width:120px;"> is used as a reading room.</p><p>20. Some donkey carts have carried <input type="text" class="text-answer" id="t4-20" data-correct="solar" autocomplete="off" style="width:120px;"> panels.</p><p>21. Books in mobile libraries can be damaged by dust, rain or sea <input type="text" class="text-answer" id="t4-21" data-correct="air" autocomplete="off" style="width:120px;">.</p><p>22. Some critics think the money should be spent on permanent <input type="text" class="text-answer" id="t4-22" data-correct="schools" autocomplete="off" style="width:120px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-sc', 't4-sc-score')">Check answers</button>
+          <span id="t4-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 23–25</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t4-mc"><div class="q-item" id="t4-mc-23">
+          <p>23. Why did the Kenyan library service choose camels?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-23" data-correct="false"> A. They are faster than vehicles.</label><label><input type="radio" value="1" name="t4-mc-23" data-correct="true"> B. Vehicles often cannot cross the sandy ground.</label><label><input type="radio" value="2" name="t4-mc-23" data-correct="false"> C. Herders asked for them.</label><label><input type="radio" value="3" name="t4-mc-23" data-correct="false"> D. They can carry more books than vans.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-24">
+          <p>24. What does the writer say about the Norwegian book boat?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-24" data-correct="false"> A. It is a new project.</label><label><input type="radio" value="1" name="t4-mc-24" data-correct="true"> B. Children look forward to its visits.</label><label><input type="radio" value="2" name="t4-mc-24" data-correct="false"> C. It only carries books for adults.</label><label><input type="radio" value="3" name="t4-mc-24" data-correct="false"> D. It visits large cities.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-25">
+          <p>25. What is the main point of the last paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-25" data-correct="false"> A. Mobile libraries are too expensive.</label><label><input type="radio" value="1" name="t4-mc-25" data-correct="true"> B. Mobile libraries offer much more than books.</label><label><input type="radio" value="2" name="t4-mc-25" data-correct="false"> C. Adults do not use mobile libraries.</label><label><input type="radio" value="3" name="t4-mc-25" data-correct="false"> D. Newspapers are more useful than books.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mc', 't4-mc-score')">Check answers</button>
+          <span id="t4-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 8</div>
+      <h2>Reading Passage 2 — Answer Analysis and Vocabulary</h2>
+      <p class="task-sub">Check your answers, then learn the useful words from the passage.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Libraries That Come to You</summary>
+        <p><span class="para-label">A</span>In most towns, a library is a building that readers visit. But in some parts of the world, distance, poor roads or a lack of money mean that many people cannot reach a library at all. For these communities, the solution has been to take the library to the readers instead.</p><p><span class="para-label">B</span>One of the best-known examples is in north-eastern Kenya, where many families are nomadic herders who move with their animals in search of water and grass. Because roads are rare and vehicles often cannot cross the sandy ground, the national library service began using camels in the 1990s. Each camel can carry boxes of books, together with a tent that serves as a reading room, to settlements far from the nearest town. Librarians stay for a while, lend books, and return some time later to collect them and bring new ones.</p><p><span class="para-label">C</span>Other countries have used different animals. In some rural areas of Zimbabwe, donkeys have pulled carts loaded with books to schools and villages. The carts are slow, but they are cheap to run and can travel along narrow paths where a van would get stuck. Some of the carts have even carried simple equipment, such as solar panels, so that villagers can use other learning materials too.</p><p><span class="para-label">D</span>Water can also be a route to reading. In Norway, where many people live on small islands or in villages along the long coastline, a book boat has visited coastal communities for decades. It stops at small harbours for a short time, and families come on board to choose books. For many children, the boat's arrival is one of the highlights of the year.</p><p><span class="para-label">E</span>These projects face real difficulties. Books can be damaged by dust, rain or sea air, and lending is difficult to organise when the borrowers move from place to place. Funding is also a constant worry, because mobile libraries depend on government support or donations. Some critics argue that the money would be better spent on building permanent schools.</p><p><span class="para-label">F</span>Supporters, however, point out that mobile libraries do more than lend books. Librarians often run reading activities for children, help adults who are learning to read, and bring newspapers and information about health. In places where literacy rates are low, they believe, even a few boxes of books can make a real difference to a child's future.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">TRUE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">many families are nomadic herders who move with their animals</span>.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">began using camels in the 1990s</span> — not the 2010s.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">FALSE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">they are cheap to run</span>. Cheap ↔ more expensive → FALSE.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para D</span></summary><div class="an-body"><p>The boat <span class="ev">stops at small harbours for a short time</span>, but the passage never says <b>how often</b>.</p><p><span class="trap">Trap:</span> <i>one of the highlights of the year</i> suggests it is not frequent, but “once a month” is not stated.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">TRUE</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">mobile libraries depend on government support or donations</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">tent</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">a tent that serves as a reading room</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">solar</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">simple equipment, such as solar panels</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">air</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">damaged by dust, rain or sea air</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">schools</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">better spent on building permanent schools</span>.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">vehicles often cannot cross the sandy ground</span>.</p><p><span class="trap">Trap:</span> D sounds logical, but the passage never compares how many books camels and vans carry.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">For many children, the boat’s arrival is one of the highlights of the year</span> → children look forward to it.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">mobile libraries do more than lend books</span>.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Vocabulary.</strong> Complete each sentence with a word from the passage.</p>
+      <div class="card" id="t5-v" style="line-height:2.4;"><p>1. People who move from place to place with their animals are <input type="text" class="text-answer" id="t5-1" data-correct="nomadic" autocomplete="off" style="width:120px;">.</p><p>2. A small village or group of houses is a <input type="text" class="text-answer" id="t5-2" data-correct="settlement" autocomplete="off" style="width:120px;">.</p><p>3. Money given by people or organisations to help a project is a <input type="text" class="text-answer" id="t5-3" data-correct="donation/donations" autocomplete="off" style="width:120px;">.</p><p>4. Something that lasts for a long time, not temporary, is <input type="text" class="text-answer" id="t5-4" data-correct="permanent" autocomplete="off" style="width:120px;">.</p><p>5. The ability to read and write is called <input type="text" class="text-answer" id="t5-5" data-correct="literacy" autocomplete="off" style="width:120px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-v', 't5-v-score')">Check answers</button>
+          <span id="t5-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t5-speaking">
+        <div class="q-num">Speaking — your opinion</div>
+        <div class="q-text">Should governments spend money on mobile libraries or on building new schools? Give your opinion and one reason.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“In my opinion,…”</li><li>“The main reason is that…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 8</div>
+      <h2>Writing Task 1 — Describing Trends</h2>
+      <p class="task-sub">In Writing Task 1 you often describe how numbers change over time. Learn the key words for trends, then practise using them in <b>noun phrases</b> and <b>verb phrases</b>.</p>
+<div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Visitors to Riverside City Library, 2024" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Visitors to Riverside City Library, 2024</text><line x1="64" y1="290.0" x2="620" y2="290.0" stroke="#e3e5ec"/><text x="56" y="294.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="241.2" x2="620" y2="241.2" stroke="#e3e5ec"/><text x="56" y="245.2" text-anchor="end" font-size="11" fill="#4b4e5c">50</text><line x1="64" y1="192.4" x2="620" y2="192.4" stroke="#e3e5ec"/><text x="56" y="196.4" text-anchor="end" font-size="11" fill="#4b4e5c">100</text><line x1="64" y1="143.6" x2="620" y2="143.6" stroke="#e3e5ec"/><text x="56" y="147.6" text-anchor="end" font-size="11" fill="#4b4e5c">150</text><line x1="64" y1="94.8" x2="620" y2="94.8" stroke="#e3e5ec"/><text x="56" y="98.8" text-anchor="end" font-size="11" fill="#4b4e5c">200</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">250</text><text x="64.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">Jan</text><text x="114.5" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">Feb</text><text x="165.1" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">Mar</text><text x="215.6" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">Apr</text><text x="266.2" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">May</text><text x="316.7" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">Jun</text><text x="367.3" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">Jul</text><text x="417.8" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">Aug</text><text x="468.4" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">Sep</text><text x="518.9" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">Oct</text><text x="569.5" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">Nov</text><text x="620.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">Dec</text><text x="14" y="168.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 168.0)">visitors (hundreds)</text><polyline fill="none" stroke="#2c6bed" stroke-width="2.6" points="64.0,231.4 114.5,227.5 165.1,221.7 215.6,172.9 266.2,124.1 316.7,85.0 367.3,143.6 417.8,182.6 468.4,192.4 518.9,202.2 569.5,210.0 620.0,216.8"/><circle cx="64.0" cy="231.4" r="3.6" fill="#2c6bed"/><circle cx="114.5" cy="227.5" r="3.6" fill="#2c6bed"/><circle cx="165.1" cy="221.7" r="3.6" fill="#2c6bed"/><circle cx="215.6" cy="172.9" r="3.6" fill="#2c6bed"/><circle cx="266.2" cy="124.1" r="3.6" fill="#2c6bed"/><circle cx="316.7" cy="85.0" r="3.6" fill="#2c6bed"/><circle cx="367.3" cy="143.6" r="3.6" fill="#2c6bed"/><circle cx="417.8" cy="182.6" r="3.6" fill="#2c6bed"/><circle cx="468.4" cy="192.4" r="3.6" fill="#2c6bed"/><circle cx="518.9" cy="202.2" r="3.6" fill="#2c6bed"/><circle cx="569.5" cy="210.0" r="3.6" fill="#2c6bed"/><circle cx="620.0" cy="216.8" r="3.6" fill="#2c6bed"/><rect x="64" y="334" width="14" height="4" fill="#2c6bed"/><text x="84" y="339" font-size="12" fill="#14162b">visitors (hundreds)</text></svg></div>
+      <p style="margin-top:26px;"><strong>Part 1 — Which phrase describes each period?</strong></p>
+      <div class="card" id="t6-tr"><div class="sel-row"><select class="select" id="t6-tr-1" data-answer="a slight increase"><option value="">—</option><option value="a slight increase">a slight increase</option><option value="a dramatic rise">a dramatic rise</option><option value="a peak">a peak</option><option value="a sharp fall">a sharp fall</option><option value="a gradual decrease">a gradual decrease</option></select><span><b>1.</b> January – March</span></div><div class="sel-row"><select class="select" id="t6-tr-2" data-answer="a dramatic rise"><option value="">—</option><option value="a slight increase">a slight increase</option><option value="a dramatic rise">a dramatic rise</option><option value="a peak">a peak</option><option value="a sharp fall">a sharp fall</option><option value="a gradual decrease">a gradual decrease</option></select><span><b>2.</b> March – June</span></div><div class="sel-row"><select class="select" id="t6-tr-3" data-answer="a peak"><option value="">—</option><option value="a slight increase">a slight increase</option><option value="a dramatic rise">a dramatic rise</option><option value="a peak">a peak</option><option value="a sharp fall">a sharp fall</option><option value="a gradual decrease">a gradual decrease</option></select><span><b>3.</b> June</span></div><div class="sel-row"><select class="select" id="t6-tr-4" data-answer="a sharp fall"><option value="">—</option><option value="a slight increase">a slight increase</option><option value="a dramatic rise">a dramatic rise</option><option value="a peak">a peak</option><option value="a sharp fall">a sharp fall</option><option value="a gradual decrease">a gradual decrease</option></select><span><b>4.</b> June – August</span></div><div class="sel-row"><select class="select" id="t6-tr-5" data-answer="a gradual decrease"><option value="">—</option><option value="a slight increase">a slight increase</option><option value="a dramatic rise">a dramatic rise</option><option value="a peak">a peak</option><option value="a sharp fall">a sharp fall</option><option value="a gradual decrease">a gradual decrease</option></select><span><b>5.</b> August – December</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-tr', 't6-tr-score')">Check answers</button>
+          <span id="t6-tr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Noun phrases.</strong> Complete the description with ONE word in each gap.</p>
+      <div class="card" id="t6-np" style="line-height:2.7;"><p>The graph shows the number of visitors to Riverside City Library over a one-year period. Between January and March, there was a slight <input type="text" class="text-answer" id="t6-1" data-correct="increase/rise" autocomplete="off" style="width:110px;"> in visitor numbers. This was followed by a dramatic <input type="text" class="text-answer" id="t6-2" data-correct="rise/increase" autocomplete="off" style="width:110px;"> over the next three months, and in June the number of visitors reached a <input type="text" class="text-answer" id="t6-3" data-correct="peak" autocomplete="off" style="width:110px;"> of 21,000. After that, there was a sharp <input type="text" class="text-answer" id="t6-4" data-correct="fall/drop/decrease" autocomplete="off" style="width:110px;">, and finally a gradual <input type="text" class="text-answer" id="t6-5" data-correct="decrease/decline/fall" autocomplete="off" style="width:110px;"> from August to December.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-np', 't6-np-score')">Check answers</button>
+          <span id="t6-np-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 3 — Verb phrases.</strong> Rewrite each idea with a verb + adverb. Write the missing words.</p>
+      <div class="card" id="t6-vp" style="line-height:2.4;"><p>1. There was a slight increase. → Visitor numbers increased <input type="text" class="text-answer" id="t6-v1" data-correct="slightly" autocomplete="off" style="width:120px;">.</p><p>2. There was a dramatic rise. → Numbers <input type="text" class="text-answer" id="t6-v2" data-correct="rose" autocomplete="off" style="width:100px;"> dramatically.</p><p>3. Numbers reached a peak in June. → Numbers <input type="text" class="text-answer" id="t6-v3" data-correct="peaked" autocomplete="off" style="width:100px;"> in June.</p><p>4. There was a sharp fall. → Numbers fell <input type="text" class="text-answer" id="t6-v4" data-correct="sharply" autocomplete="off" style="width:120px;">.</p><p>5. There was a gradual decrease. → Numbers decreased <input type="text" class="text-answer" id="t6-v5" data-correct="gradually" autocomplete="off" style="width:120px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-vp', 't6-vp-score')">Check answers</button>
+          <span id="t6-vp-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 4 — Prepositions.</strong> Complete with <i>from, to, of, at</i> or <i>by</i>.</p>
+      <div class="card" id="t6-pr" style="line-height:2.4;"><p>1. Numbers rose <input type="text" class="text-answer" id="t6-p1" data-correct="from" autocomplete="off" style="width:70px;"> 7,000 <input type="text" class="text-answer" id="t6-p2" data-correct="to" autocomplete="off" style="width:70px;"> 21,000.</p><p>2. There was a rise <input type="text" class="text-answer" id="t6-p3" data-correct="of" autocomplete="off" style="width:70px;"> 5,000 visitors between April and May.</p><p>3. Numbers peaked <input type="text" class="text-answer" id="t6-p4" data-correct="at" autocomplete="off" style="width:70px;"> 21,000 in June.</p><p>4. Between June and August, visitor numbers fell <input type="text" class="text-answer" id="t6-p5" data-correct="by" autocomplete="off" style="width:70px;"> 10,000.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-pr', 't6-pr-score')">Check answers</button>
+          <span id="t6-pr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 8</div>
+      <h2>Writing Task 1 — Tenses, Overview and Spelling</h2>
+      <p class="task-sub">Choose the right tense for the time period on the graph, always include an <b>overview</b>, and spell your adverbs correctly — examiners notice all three.</p>
+<div class="card advice-card"><p style="margin:0;"><b>Past simple</b> for a finished period in the past: <i>Numbers <b>rose</b> between 2010 and 2015.</i><br>
+<b>Present perfect</b> for a trend that continues to now: <i>Since 2020, numbers <b>have risen</b> steadily.</i><br>
+<b>Overview</b>: one or two sentences giving the main trend, with no small details: <i>Overall, there was an upward trend…</i></p></div>
+      <p style="margin-top:26px;"><strong>Part 1 — Choose the correct tense.</strong></p>
+      <div class="card" id="t7-t"><div class="q-item" id="t7-t-1">
+          <p>1. In 2010, the number of e-books sold ______ very low.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-t-1" data-correct="true"> was</label><label><input type="radio" value="1" name="t7-t-1" data-correct="false"> has been</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-t-2">
+          <p>2. Since 2015, sales of e-books ______ steadily.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-t-2" data-correct="false"> rose</label><label><input type="radio" value="1" name="t7-t-2" data-correct="true"> have risen</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-t-3">
+          <p>3. Between 2016 and 2018, library membership ______ by 20%.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-t-3" data-correct="true"> fell</label><label><input type="radio" value="1" name="t7-t-3" data-correct="false"> has fallen</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-t-4">
+          <p>4. The percentage of adults who cannot read ______ from 30% in 1980 to 14% today.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-t-4" data-correct="false"> dropped</label><label><input type="radio" value="1" name="t7-t-4" data-correct="true"> has dropped</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-t-5">
+          <p>5. In 2019, numbers ______ stable for a year.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-t-5" data-correct="true"> remained</label><label><input type="radio" value="1" name="t7-t-5" data-correct="false"> have remained</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-t', 't7-t-score')">Check answers</button>
+          <span id="t7-t-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Overview.</strong> Look again at the library graph in the previous task. Which sentence is the best overview?</p>
+      <div class="card" id="t7-ov"><div class="q-item" id="t7-ov-1">
+          <p>1. Choose the best overview of the Riverside Library graph.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-ov-1" data-correct="false"> A. In June there were 21,000 visitors and in December there were 7,500.</label><label><input type="radio" value="1" name="t7-ov-1" data-correct="true"> B. Overall, visitor numbers rose to a peak in the early summer and then declined for the rest of the year.</label><label><input type="radio" value="2" name="t7-ov-1" data-correct="false"> C. The library is a good place and many people visit it.</label><label><input type="radio" value="3" name="t7-ov-1" data-correct="false"> D. Visitor numbers changed every month.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-ov', 't7-ov-score')">Check answers</button>
+          <span id="t7-ov-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 3 — Adverbs.</strong> Write the adverb form of the adjective in brackets.</p>
+      <div class="card" id="t7-adv" style="line-height:2.4;"><p>1. Always read the question <input type="text" class="text-answer" id="t7-a1" data-correct="carefully" autocomplete="off" style="width:130px;">. (careful)</p><p>2. The key points should be <input type="text" class="text-answer" id="t7-a2" data-correct="clearly" autocomplete="off" style="width:130px;"> stated. (clear)</p><p>3. Numbers rose <input type="text" class="text-answer" id="t7-a3" data-correct="dramatically" autocomplete="off" style="width:130px;"> after 2020. (dramatic)</p><p>4. It is <input type="text" class="text-answer" id="t7-a4" data-correct="extremely" autocomplete="off" style="width:130px;"> important to include an overview. (extreme)</p><p>5. Your reader should follow your points <input type="text" class="text-answer" id="t7-a5" data-correct="easily" autocomplete="off" style="width:130px;">. (easy)</p><p>6. Check your spelling <input type="text" class="text-answer" id="t7-a6" data-correct="thoroughly" autocomplete="off" style="width:130px;">. (thorough)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-adv', 't7-adv-score')">Check answers</button>
+          <span id="t7-adv-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 4 — Correct the mistakes.</strong> Each sentence was written by an IELTS candidate. Write the correct word.</p>
+      <div class="card" id="t7-err" style="line-height:2.4;"><p>1. It then increased <u>gradualy</u> until 1996. → <input type="text" class="text-answer" id="t7-e1" data-correct="gradually" autocomplete="off" style="width:130px;"></p><p>2. The number <u>rised</u> from 1.1 to 1.5 million. → <input type="text" class="text-answer" id="t7-e2" data-correct="rose" autocomplete="off" style="width:130px;"></p><p>3. The trend fell <u>steadly</u> from 1990 to 2010. → <input type="text" class="text-answer" id="t7-e3" data-correct="steadily" autocomplete="off" style="width:130px;"></p><p>4. Spending on books rose <u>rapid</u>. → <input type="text" class="text-answer" id="t7-e4" data-correct="rapidly" autocomplete="off" style="width:130px;"></p><p>5. The government is trying to <u>rise</u> standards. → <input type="text" class="text-answer" id="t7-e5" data-correct="raise" autocomplete="off" style="width:130px;"></p><p>6. There was a <u>gentley</u> decrease. → <input type="text" class="text-answer" id="t7-e6" data-correct="gentle" autocomplete="off" style="width:130px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-err', 't7-err-score')">Check answers</button>
+          <span id="t7-err-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 8</div>
+      <h2>Writing Task 1 — Your Report</h2>
+      <p class="task-sub">Now write a full Task 1 report. Spend about <b>20 minutes</b> and write <b>at least 150 words</b>. Use the trend language, tenses and overview skills from the last two tasks. When you finish, compare your report with the model answer.</p>
+<div class="card advice-card"><p class="prompt-label">Before you write — checklist</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Introduction:</b> paraphrase the task (<i>shows → compares</i>; <i>between 2018 and 2024 → over a seven-year period</i>).</li><li><b>Overview:</b> the two main trends — boys up dramatically, girls fairly stable.</li><li><b>Two detail paragraphs:</b> one for each line, with numbers and trend words from today.</li><li>Use <b>past simple</b> — the period is finished. Do not give your opinion.</li></ul></div>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The graph below shows the number of books borrowed by boys and girls from the library of Northfield School between 2018 and 2024.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Books borrowed from Northfield School library, 2018–2024" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Books borrowed from Northfield School library, 2018–2024</text><line x1="64" y1="290.0" x2="620" y2="290.0" stroke="#e3e5ec"/><text x="56" y="294.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="255.1" x2="620" y2="255.1" stroke="#e3e5ec"/><text x="56" y="259.1" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="220.3" x2="620" y2="220.3" stroke="#e3e5ec"/><text x="56" y="224.3" text-anchor="end" font-size="11" fill="#4b4e5c">40</text><line x1="64" y1="185.4" x2="620" y2="185.4" stroke="#e3e5ec"/><text x="56" y="189.4" text-anchor="end" font-size="11" fill="#4b4e5c">60</text><line x1="64" y1="150.6" x2="620" y2="150.6" stroke="#e3e5ec"/><text x="56" y="154.6" text-anchor="end" font-size="11" fill="#4b4e5c">80</text><line x1="64" y1="115.7" x2="620" y2="115.7" stroke="#e3e5ec"/><text x="56" y="119.7" text-anchor="end" font-size="11" fill="#4b4e5c">100</text><line x1="64" y1="80.9" x2="620" y2="80.9" stroke="#e3e5ec"/><text x="56" y="84.9" text-anchor="end" font-size="11" fill="#4b4e5c">120</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">140</text><text x="64.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2018</text><text x="156.7" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2019</text><text x="249.3" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2020</text><text x="342.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2021</text><text x="434.7" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2022</text><text x="527.3" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2023</text><text x="620.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2024</text><text x="14" y="168.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 168.0)">books (hundreds)</text><polyline fill="none" stroke="#2c6bed" stroke-width="2.6" points="64.0,220.3 156.7,211.6 249.3,229.0 342.0,185.4 434.7,150.6 527.3,124.4 620.0,98.3"/><circle cx="64.0" cy="220.3" r="3.6" fill="#2c6bed"/><circle cx="156.7" cy="211.6" r="3.6" fill="#2c6bed"/><circle cx="249.3" cy="229.0" r="3.6" fill="#2c6bed"/><circle cx="342.0" cy="185.4" r="3.6" fill="#2c6bed"/><circle cx="434.7" cy="150.6" r="3.6" fill="#2c6bed"/><circle cx="527.3" cy="124.4" r="3.6" fill="#2c6bed"/><circle cx="620.0" cy="98.3" r="3.6" fill="#2c6bed"/><rect x="64" y="334" width="14" height="4" fill="#2c6bed"/><text x="84" y="339" font-size="12" fill="#14162b">boys</text><polyline fill="none" stroke="#d9480f" stroke-width="2.6" points="64.0,80.9 156.7,72.1 249.3,98.3 342.0,89.6 434.7,84.3 527.3,94.8 620.0,101.8"/><circle cx="64.0" cy="80.9" r="3.6" fill="#d9480f"/><circle cx="156.7" cy="72.1" r="3.6" fill="#d9480f"/><circle cx="249.3" cy="98.3" r="3.6" fill="#d9480f"/><circle cx="342.0" cy="89.6" r="3.6" fill="#d9480f"/><circle cx="434.7" cy="84.3" r="3.6" fill="#d9480f"/><circle cx="527.3" cy="94.8" r="3.6" fill="#d9480f"/><circle cx="620.0" cy="101.8" r="3.6" fill="#d9480f"/><rect x="122.8" y="334" width="14" height="4" fill="#d9480f"/><text x="142.8" y="339" font-size="12" fill="#14162b">girls</text></svg></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t8-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-essay-model"><div class="model-text" style="padding:2px 0;">
+  <p>The line graph compares the number of library books borrowed by boys and girls at Northfield School over a seven-year period from 2018 to 2024.</p>
+  <p>Overall, borrowing by boys increased dramatically, while the figure for girls remained fairly stable. By the end of the period, boys were borrowing slightly more books than girls.</p>
+  <p>In 2018, girls borrowed about 12,000 books, three times as many as boys, who borrowed only 4,000. Both figures fell slightly in 2020, to 11,000 and 3,500 respectively. After that, the number of books borrowed by girls stayed between 11,000 and 12,000, and then decreased gradually to about 10,800 in 2024.</p>
+  <p>In contrast, borrowing by boys rose sharply from 2020 onwards. It reached 8,000 in 2022 and continued to climb, reaching a peak of 11,000 in 2024. As a result, the two lines crossed in the final year of the period.</p>
+  <p class="alt">≈ 170 words</p>
+</div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 8</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 28 of 45</div>
+    <h1>Day 28 complete! 🎉</h1>
+    <p>Day 28 done — Unit 7, Literacy skills: two readings with five question types, and three Writing Task 1 tasks on describing trends.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+    initWritingCoach('t8-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The graph below shows the number of books borrowed by boys and girls from the library of Northfield School between 2018 and 2024.' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t5-speaking"]'); if (b) initRecordControl(b, user.id, 28, 5, 't5-speaking', 0); }
+
+    await initTaskFlow(28, 8, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-rr', 't1-rr-score'); },
+      2: () => { checkAllAnswers('t2-mi', 't2-mi-score'); checkAllAnswers('t2-t', 't2-t-score'); },
+      4: () => { checkAllAnswers('t4-tf', 't4-tf-score'); checkAllAnswers('t4-sc', 't4-sc-score'); checkAllAnswers('t4-mc', 't4-mc-score'); },
+      5: () => { checkAllAnswers('t5-v', 't5-v-score'); },
+      6: () => { checkAllAnswers('t6-tr', 't6-tr-score'); checkAllAnswers('t6-np', 't6-np-score'); checkAllAnswers('t6-vp', 't6-vp-score'); checkAllAnswers('t6-pr', 't6-pr-score'); },
+      7: () => { checkAllAnswers('t7-t', 't7-t-score'); checkAllAnswers('t7-ov', 't7-ov-score'); checkAllAnswers('t7-adv', 't7-adv-score'); checkAllAnswers('t7-err', 't7-err-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t1-q-btn', 't1-q-ans', '[id^="t1-q-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t8-essay-model-btn', 't8-essay-model', '#t8-essay');
+  });
+</script>
+</body>
+</html>
