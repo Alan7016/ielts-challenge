@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 30 — Standard — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 30 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 8</div>
+      <h2>Starting Off — What Every Task 1 Answer Needs</h2>
+      <p class="task-sub">Today is a <b>Writing Task 1 and Speaking</b> day. You will work with pie charts and tables, write a full Task 1 report, and practise all three parts of the Speaking test. Allow <b>at least an hour</b>.</p>
+      <p style="margin-top:26px;"><strong>Task 1 types.</strong> Match each type of Task 1 to its description.</p>
+      <div class="card" id="t1-ty">
+        <div class="line-match" id="t1-ty-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. line graph</button><button type="button" class="lm-item" data-key="2">2. bar chart</button><button type="button" class="lm-item" data-key="3">3. pie chart</button><button type="button" class="lm-item" data-key="4">4. table</button><button type="button" class="lm-item" data-key="5">5. process diagram</button><button type="button" class="lm-item" data-key="6">6. map</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. shows how a total is divided into parts</button><button type="button" class="lm-item" data-key="b">b. shows the stages in how something is made or happens</button><button type="button" class="lm-item" data-key="c">c. compares amounts using columns or bars</button><button type="button" class="lm-item" data-key="d">d. shows how a place has changed or is planned to change</button><button type="button" class="lm-item" data-key="e">e. shows how numbers change over time</button><button type="button" class="lm-item" data-key="f">f. gives exact numbers in rows and columns</button></div>
+          <select class="lm-hidden-select select" id="t1-ty-1" data-lm-key="1" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t1-ty-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t1-ty-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t1-ty-4" data-lm-key="4" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t1-ty-5" data-lm-key="5" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select><select class="lm-hidden-select select" id="t1-ty-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-ty', 't1-ty-score'); markLineMatchResult('t1-ty-lm');">Check answers</button>
+          <span id="t1-ty-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>The four parts of a Task 1 answer.</strong> Put them in the right order.</p>
+      <div class="card" id="t1-ord"><div class="sel-row"><select class="select" id="t1-ord-1" data-answer="1st"><option value="">—</option><option value="1st">1st</option><option value="2nd">2nd</option><option value="3rd">3rd</option><option value="4th">4th</option></select><span><b>1.</b> Introduction: paraphrase the task</span></div><div class="sel-row"><select class="select" id="t1-ord-2" data-answer="2nd"><option value="">—</option><option value="1st">1st</option><option value="2nd">2nd</option><option value="3rd">3rd</option><option value="4th">4th</option></select><span><b>2.</b> Overview: the two or three main features</span></div><div class="sel-row"><select class="select" id="t1-ord-3" data-answer="3rd"><option value="">—</option><option value="1st">1st</option><option value="2nd">2nd</option><option value="3rd">3rd</option><option value="4th">4th</option></select><span><b>3.</b> Details paragraph 1</span></div><div class="sel-row"><select class="select" id="t1-ord-4" data-answer="4th"><option value="">—</option><option value="1st">1st</option><option value="2nd">2nd</option><option value="3rd">3rd</option><option value="4th">4th</option></select><span><b>4.</b> Details paragraph 2</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-ord', 't1-ord-score')">Check answers</button>
+          <span id="t1-ord-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>True or false?</strong></p>
+      <div class="card" id="t1-tf"><div class="q-item" id="t1-tf-1">
+          <p>1. You should give your opinion about the information.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-tf-1" data-correct="false"> True</label><label><input type="radio" value="1" name="t1-tf-1" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-tf-2">
+          <p>2. You need to mention every number in the chart.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-tf-2" data-correct="false"> True</label><label><input type="radio" value="1" name="t1-tf-2" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-tf-3">
+          <p>3. An overview is one of the most important parts of the answer.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-tf-3" data-correct="true"> True</label><label><input type="radio" value="1" name="t1-tf-3" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-tf-4">
+          <p>4. You should write at least 150 words.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-tf-4" data-correct="true"> True</label><label><input type="radio" value="1" name="t1-tf-4" data-correct="false"> False</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-tf-5">
+          <p>5. You can copy the task sentence exactly as your introduction.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-tf-5" data-correct="false"> True</label><label><input type="radio" value="1" name="t1-tf-5" data-correct="true"> False</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-tf', 't1-tf-score')">Check answers</button>
+          <span id="t1-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 8</div>
+      <h2>Pie Charts — Proportions and Fractions</h2>
+      <p class="task-sub">Pie charts show <b>parts of a whole</b>. To get a good score you should describe the biggest and smallest parts, compare the two years, and use <b>fractions and proportions</b> as well as percentages.</p>
+<div class="card"><p class="prompt-label" style="text-align:center;">How students at a college spent their weekly budget, 2005 and 2025</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;"><div><svg viewBox="0 0 320 396" class="svg-chart" role="img" aria-label="2005" style="width:100%;max-width:320px;display:block;margin:0 auto;font-family:inherit;"><text x="160.0" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">2005</text><path d="M160.0,165 L160.0,60.0 A105,105 0 0 1 244.9,226.7 Z" fill="#2c6bed" stroke="#fff" stroke-width="1.5"/><text x="223.6" y="136.6" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">35%</text><path d="M160.0,165 L244.9,226.7 A105,105 0 0 1 160.0,270.0 Z" fill="#d9480f" stroke="#fff" stroke-width="1.5"/><text x="192.4" y="232.6" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">15%</text><path d="M160.0,165 L160.0,270.0 A105,105 0 0 1 60.1,197.4 Z" fill="#2b8a3e" stroke="#fff" stroke-width="1.5"/><text x="118.0" y="226.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">20%</text><path d="M160.0,165 L60.1,197.4 A105,105 0 0 1 98.3,80.1 Z" fill="#7048e8" stroke="#fff" stroke-width="1.5"/><text x="92.1" y="146.9" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">20%</text><path d="M160.0,165 L98.3,80.1 A105,105 0 0 1 127.6,65.1 Z" fill="#c2255c" stroke="#fff" stroke-width="1.5"/><text x="127.6" y="105.4" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">5%</text><path d="M160.0,165 L127.6,65.1 A105,105 0 0 1 160.0,60.0 Z" fill="#e8a400" stroke="#fff" stroke-width="1.5"/><text x="148.8" y="98.5" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">5%</text><rect x="14.0" y="286" width="12" height="12" fill="#2c6bed"/><text x="32.0" y="296" font-size="12" fill="#14162b">food</text><rect x="174.0" y="286" width="12" height="12" fill="#d9480f"/><text x="192.0" y="296" font-size="12" fill="#14162b">transport</text><rect x="14.0" y="308" width="12" height="12" fill="#2b8a3e"/><text x="32.0" y="318" font-size="12" fill="#14162b">books & materials</text><rect x="174.0" y="308" width="12" height="12" fill="#7048e8"/><text x="192.0" y="318" font-size="12" fill="#14162b">entertainment</text><rect x="14.0" y="330" width="12" height="12" fill="#c2255c"/><text x="32.0" y="340" font-size="12" fill="#14162b">phone & internet</text><rect x="174.0" y="330" width="12" height="12" fill="#e8a400"/><text x="192.0" y="340" font-size="12" fill="#14162b">other</text></svg></div><div><svg viewBox="0 0 320 396" class="svg-chart" role="img" aria-label="2025" style="width:100%;max-width:320px;display:block;margin:0 auto;font-family:inherit;"><text x="160.0" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">2025</text><path d="M160.0,165 L160.0,60.0 A105,105 0 0 1 259.9,197.4 Z" fill="#2c6bed" stroke="#fff" stroke-width="1.5"/><text x="217.8" y="127.0" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">30%</text><path d="M160.0,165 L259.9,197.4 A105,105 0 0 1 221.7,249.9 Z" fill="#d9480f" stroke="#fff" stroke-width="1.5"/><text x="217.8" y="211.0" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">10%</text><path d="M160.0,165 L221.7,249.9 A105,105 0 0 1 192.4,264.9 Z" fill="#2b8a3e" stroke="#fff" stroke-width="1.5"/><text x="192.4" y="232.6" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">5%</text><path d="M160.0,165 L192.4,264.9 A105,105 0 0 1 75.1,226.7 Z" fill="#7048e8" stroke="#fff" stroke-width="1.5"/><text x="137.9" y="236.9" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">20%</text><path d="M160.0,165 L75.1,226.7 A105,105 0 0 1 98.3,80.1 Z" fill="#c2255c" stroke="#fff" stroke-width="1.5"/><text x="89.5" y="157.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">25%</text><path d="M160.0,165 L98.3,80.1 A105,105 0 0 1 160.0,60.0 Z" fill="#e8a400" stroke="#fff" stroke-width="1.5"/><text x="137.9" y="101.1" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">10%</text><rect x="14.0" y="286" width="12" height="12" fill="#2c6bed"/><text x="32.0" y="296" font-size="12" fill="#14162b">food</text><rect x="174.0" y="286" width="12" height="12" fill="#d9480f"/><text x="192.0" y="296" font-size="12" fill="#14162b">transport</text><rect x="14.0" y="308" width="12" height="12" fill="#2b8a3e"/><text x="32.0" y="318" font-size="12" fill="#14162b">books & materials</text><rect x="174.0" y="308" width="12" height="12" fill="#7048e8"/><text x="192.0" y="318" font-size="12" fill="#14162b">entertainment</text><rect x="14.0" y="330" width="12" height="12" fill="#c2255c"/><text x="32.0" y="340" font-size="12" fill="#14162b">phone & internet</text><rect x="174.0" y="330" width="12" height="12" fill="#e8a400"/><text x="192.0" y="340" font-size="12" fill="#14162b">other</text></svg></div></div></div>
+      <p style="margin-top:26px;"><strong>Fractions.</strong> Match each percentage to another way of saying it.</p>
+      <div class="card" id="t2-fr"><div class="sel-row"><select class="select" id="t2-fr-1" data-answer="a quarter"><option value="">—</option><option value="a quarter">a quarter</option><option value="half">half</option><option value="a third">a third</option><option value="a fifth">a fifth</option><option value="one in ten">one in ten</option><option value="three quarters">three quarters</option><option value="one in twenty">one in twenty</option></select><span><b>1.</b> 25%</span></div><div class="sel-row"><select class="select" id="t2-fr-2" data-answer="half"><option value="">—</option><option value="a quarter">a quarter</option><option value="half">half</option><option value="a third">a third</option><option value="a fifth">a fifth</option><option value="one in ten">one in ten</option><option value="three quarters">three quarters</option><option value="one in twenty">one in twenty</option></select><span><b>2.</b> 50%</span></div><div class="sel-row"><select class="select" id="t2-fr-3" data-answer="a third"><option value="">—</option><option value="a quarter">a quarter</option><option value="half">half</option><option value="a third">a third</option><option value="a fifth">a fifth</option><option value="one in ten">one in ten</option><option value="three quarters">three quarters</option><option value="one in twenty">one in twenty</option></select><span><b>3.</b> 33%</span></div><div class="sel-row"><select class="select" id="t2-fr-4" data-answer="a fifth"><option value="">—</option><option value="a quarter">a quarter</option><option value="half">half</option><option value="a third">a third</option><option value="a fifth">a fifth</option><option value="one in ten">one in ten</option><option value="three quarters">three quarters</option><option value="one in twenty">one in twenty</option></select><span><b>4.</b> 20%</span></div><div class="sel-row"><select class="select" id="t2-fr-5" data-answer="one in ten"><option value="">—</option><option value="a quarter">a quarter</option><option value="half">half</option><option value="a third">a third</option><option value="a fifth">a fifth</option><option value="one in ten">one in ten</option><option value="three quarters">three quarters</option><option value="one in twenty">one in twenty</option></select><span><b>5.</b> 10%</span></div><div class="sel-row"><select class="select" id="t2-fr-6" data-answer="three quarters"><option value="">—</option><option value="a quarter">a quarter</option><option value="half">half</option><option value="a third">a third</option><option value="a fifth">a fifth</option><option value="one in ten">one in ten</option><option value="three quarters">three quarters</option><option value="one in twenty">one in twenty</option></select><span><b>6.</b> 75%</span></div><div class="sel-row"><select class="select" id="t2-fr-7" data-answer="one in twenty"><option value="">—</option><option value="a quarter">a quarter</option><option value="half">half</option><option value="a third">a third</option><option value="a fifth">a fifth</option><option value="one in ten">one in ten</option><option value="three quarters">three quarters</option><option value="one in twenty">one in twenty</option></select><span><b>7.</b> 5%</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-fr', 't2-fr-score')">Check answers</button>
+          <span id="t2-fr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Read the charts.</strong> Choose the correct answer.</p>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-1">
+          <p>1. What was the largest category in both years?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-1" data-correct="false"> A. entertainment</label><label><input type="radio" value="1" name="t2-mc-1" data-correct="true"> B. food</label><label><input type="radio" value="2" name="t2-mc-1" data-correct="false"> C. phone & internet</label><label><input type="radio" value="3" name="t2-mc-1" data-correct="false"> D. books & materials</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-2">
+          <p>2. Which category grew the most?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-2" data-correct="true"> A. phone & internet</label><label><input type="radio" value="1" name="t2-mc-2" data-correct="false"> B. other</label><label><input type="radio" value="2" name="t2-mc-2" data-correct="false"> C. food</label><label><input type="radio" value="3" name="t2-mc-2" data-correct="false"> D. entertainment</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-3">
+          <p>3. Which category stayed the same?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-3" data-correct="false"> A. transport</label><label><input type="radio" value="1" name="t2-mc-3" data-correct="true"> B. entertainment</label><label><input type="radio" value="2" name="t2-mc-3" data-correct="false"> C. food</label><label><input type="radio" value="3" name="t2-mc-3" data-correct="false"> D. other</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-4">
+          <p>4. How did spending on books and materials change?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-4" data-correct="false"> A. It rose from a fifth to a quarter.</label><label><input type="radio" value="1" name="t2-mc-4" data-correct="true"> B. It fell from a fifth to one in twenty.</label><label><input type="radio" value="2" name="t2-mc-4" data-correct="false"> C. It stayed at a fifth.</label><label><input type="radio" value="3" name="t2-mc-4" data-correct="false"> D. It fell from a quarter to a tenth.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Complete the sentences</strong> with ONE word or number.</p>
+      <div class="card" id="t2-g" style="line-height:2.5;"><p>1. In 2005, food accounted for just over a <input type="text" class="text-answer" id="t2-1" data-correct="third" autocomplete="off" style="width:110px;"> of the budget.</p><p>2. Spending on phone and internet was <input type="text" class="text-answer" id="t2-2" data-correct="five" autocomplete="off" style="width:110px;"> times higher in 2025 than in 2005.</p><p>3. The proportion spent on transport <input type="text" class="text-answer" id="t2-3" data-correct="fell/dropped/decreased/declined" autocomplete="off" style="width:110px;"> from 15% to 10%.</p><p>4. Entertainment remained <input type="text" class="text-answer" id="t2-4" data-correct="stable/unchanged/constant" autocomplete="off" style="width:110px;"> at 20%.</p><p>5. By 2025, phone and internet was the <input type="text" class="text-answer" id="t2-5" data-correct="second" autocomplete="off" style="width:110px;"> largest category.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-g', 't2-g-score')">Check answers</button>
+          <span id="t2-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Which is the best overview?</strong></p>
+      <div class="card" id="t2-ov"><div class="q-item" id="t2-ov-1">
+          <p>1. Choose the best overview for the two pie charts.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-ov-1" data-correct="false"> A. In 2005 food was 35% and transport was 15% and books were 20%.</label><label><input type="radio" value="1" name="t2-ov-1" data-correct="true"> B. Overall, food remained the biggest expense, while the share spent on phone and internet rose dramatically and spending on books fell sharply.</label><label><input type="radio" value="2" name="t2-ov-1" data-correct="false"> C. Students spend too much money on their phones nowadays.</label><label><input type="radio" value="3" name="t2-ov-1" data-correct="false"> D. The two charts are about money.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-ov', 't2-ov-score')">Check answers</button>
+          <span id="t2-ov-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 8</div>
+      <h2>Tables — Choosing Key Features and Comparing</h2>
+      <p class="task-sub">A table gives many exact numbers. You cannot describe them all: choose the <b>biggest changes</b> and the <b>highest and lowest</b> figures, and use comparison language.</p>
+<div class="card"><p class="prompt-label" style="text-align:center;">Average minutes per day spent on activities by teenagers in one country</p><div style="overflow-x:auto;"><table class="data-table" style="width:100%;"><tr><th>activity</th><th>2015</th><th>2025</th></tr><tr><td>watching TV</td><td>120</td><td>45</td></tr><tr><td>social media</td><td>30</td><td>150</td></tr><tr><td>sport</td><td>60</td><td>40</td></tr><tr><td>reading for pleasure</td><td>35</td><td>20</td></tr><tr><td>homework</td><td>70</td><td>75</td></tr></table></div></div>
+<div class="card advice-card"><p style="margin:0; line-height:1.8;"><b>Comparison language:</b> <i>more / less time than…</i> · <i>twice / three times as much as…</i> · <i>X times higher than…</i> · <i>the highest / the lowest figure</i> · <i>fell by 75 minutes</i> · <i>rose from 30 to 150 minutes</i></p></div>
+      <div class="card" id="t3-g" style="line-height:2.5;"><p>1. Time spent on social media was <input type="text" class="text-answer" id="t3-1" data-correct="five" autocomplete="off" style="width:110px;"> times higher in 2025 than in 2015.</p><p>2. Time spent watching TV fell <input type="text" class="text-answer" id="t3-2" data-correct="by" autocomplete="off" style="width:80px;"> 75 minutes.</p><p>3. In 2025, teenagers spent <input type="text" class="text-answer" id="t3-3" data-correct="twice" autocomplete="off" style="width:110px;"> as much time on social media as on homework.</p><p>4. Apart from social media, <input type="text" class="text-answer" id="t3-4" data-correct="homework" autocomplete="off" style="width:120px;"> was the only activity that increased.</p><p>5. In 2025, reading for pleasure had the <input type="text" class="text-answer" id="t3-5" data-correct="lowest" autocomplete="off" style="width:110px;"> figure of all.</p><p>6. In 2015, teenagers spent <input type="text" class="text-answer" id="t3-6" data-correct="more" autocomplete="off" style="width:90px;"> time watching TV than on any other activity.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-g', 't3-g-score')">Check answers</button>
+          <span id="t3-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Which are key features?</strong> Choose the two most important features to include in the overview.</p>
+      <div class="card" id="t3-kf"><div class="q-item" id="t3-kf-1">
+          <p>1. Most important feature 1:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-kf-1" data-correct="true"> Social media time increased dramatically and became the biggest activity.</label><label><input type="radio" value="1" name="t3-kf-1" data-correct="false"> Homework rose by five minutes.</label><label><input type="radio" value="2" name="t3-kf-1" data-correct="false"> Sport was 60 minutes in 2015.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-kf-2">
+          <p>2. Most important feature 2:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-kf-2" data-correct="false"> Reading was 35 minutes in 2015.</label><label><input type="radio" value="1" name="t3-kf-2" data-correct="true"> TV time fell sharply, while the other activities changed only a little.</label><label><input type="radio" value="2" name="t3-kf-2" data-correct="false"> The table has five rows.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-kf', 't3-kf-score')">Check answers</button>
+          <span id="t3-kf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write an <b>overview</b> of the table (2 sentences).</p><textarea class="no-check mini-answer" id="t3-w-1" placeholder="Write here..." style="min-height:90px;"></textarea><p class="mini-q">Write one <b>details</b> paragraph comparing social media and TV (3–4 sentences, with numbers).</p><textarea class="no-check mini-answer" id="t3-w-2" placeholder="Write here..." style="min-height:90px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t3-w-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t3-w-ans"><div class="model-text" style="padding:2px 0;"><p>Overall, the time teenagers spent on social media rose dramatically, and it became the main activity in 2025, while time spent watching TV fell sharply.</p><p>In 2015, teenagers watched TV for 120 minutes a day, four times as long as they spent on social media (30 minutes). By 2025, however, the situation had reversed: social media time had increased fivefold to 150 minutes, whereas TV time had dropped by 75 minutes to just 45 minutes.</p><p class="alt">≈ 85 words</p></div></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 8</div>
+      <h2>Writing Task 1 — Your Full Report</h2>
+      <p class="task-sub">Now write a full Task 1 report on the pie charts. Spend about <b>20 minutes</b> and write <b>at least 150 words</b>. Use fractions and comparison language from today.</p>
+<div class="card advice-card"><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Introduction:</b> <i>show → illustrate / compare</i>; <i>weekly budget → how … spent their money each week</i>.</li><li><b>Overview:</b> food = largest; phone & internet ↑↑; books ↓↓.</li><li><b>Paragraph 3:</b> categories that fell (food, transport, books).</li><li><b>Paragraph 4:</b> categories that rose or stayed the same (phone, other, entertainment).</li></ul></div>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The pie charts below show how students at one college spent their weekly budget in 2005 and 2025.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;"><div><svg viewBox="0 0 320 396" class="svg-chart" role="img" aria-label="2005" style="width:100%;max-width:320px;display:block;margin:0 auto;font-family:inherit;"><text x="160.0" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">2005</text><path d="M160.0,165 L160.0,60.0 A105,105 0 0 1 244.9,226.7 Z" fill="#2c6bed" stroke="#fff" stroke-width="1.5"/><text x="223.6" y="136.6" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">35%</text><path d="M160.0,165 L244.9,226.7 A105,105 0 0 1 160.0,270.0 Z" fill="#d9480f" stroke="#fff" stroke-width="1.5"/><text x="192.4" y="232.6" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">15%</text><path d="M160.0,165 L160.0,270.0 A105,105 0 0 1 60.1,197.4 Z" fill="#2b8a3e" stroke="#fff" stroke-width="1.5"/><text x="118.0" y="226.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">20%</text><path d="M160.0,165 L60.1,197.4 A105,105 0 0 1 98.3,80.1 Z" fill="#7048e8" stroke="#fff" stroke-width="1.5"/><text x="92.1" y="146.9" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">20%</text><path d="M160.0,165 L98.3,80.1 A105,105 0 0 1 127.6,65.1 Z" fill="#c2255c" stroke="#fff" stroke-width="1.5"/><text x="127.6" y="105.4" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">5%</text><path d="M160.0,165 L127.6,65.1 A105,105 0 0 1 160.0,60.0 Z" fill="#e8a400" stroke="#fff" stroke-width="1.5"/><text x="148.8" y="98.5" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">5%</text><rect x="14.0" y="286" width="12" height="12" fill="#2c6bed"/><text x="32.0" y="296" font-size="12" fill="#14162b">food</text><rect x="174.0" y="286" width="12" height="12" fill="#d9480f"/><text x="192.0" y="296" font-size="12" fill="#14162b">transport</text><rect x="14.0" y="308" width="12" height="12" fill="#2b8a3e"/><text x="32.0" y="318" font-size="12" fill="#14162b">books & materials</text><rect x="174.0" y="308" width="12" height="12" fill="#7048e8"/><text x="192.0" y="318" font-size="12" fill="#14162b">entertainment</text><rect x="14.0" y="330" width="12" height="12" fill="#c2255c"/><text x="32.0" y="340" font-size="12" fill="#14162b">phone & internet</text><rect x="174.0" y="330" width="12" height="12" fill="#e8a400"/><text x="192.0" y="340" font-size="12" fill="#14162b">other</text></svg></div><div><svg viewBox="0 0 320 396" class="svg-chart" role="img" aria-label="2025" style="width:100%;max-width:320px;display:block;margin:0 auto;font-family:inherit;"><text x="160.0" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">2025</text><path d="M160.0,165 L160.0,60.0 A105,105 0 0 1 259.9,197.4 Z" fill="#2c6bed" stroke="#fff" stroke-width="1.5"/><text x="217.8" y="127.0" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">30%</text><path d="M160.0,165 L259.9,197.4 A105,105 0 0 1 221.7,249.9 Z" fill="#d9480f" stroke="#fff" stroke-width="1.5"/><text x="217.8" y="211.0" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">10%</text><path d="M160.0,165 L221.7,249.9 A105,105 0 0 1 192.4,264.9 Z" fill="#2b8a3e" stroke="#fff" stroke-width="1.5"/><text x="192.4" y="232.6" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">5%</text><path d="M160.0,165 L192.4,264.9 A105,105 0 0 1 75.1,226.7 Z" fill="#7048e8" stroke="#fff" stroke-width="1.5"/><text x="137.9" y="236.9" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">20%</text><path d="M160.0,165 L75.1,226.7 A105,105 0 0 1 98.3,80.1 Z" fill="#c2255c" stroke="#fff" stroke-width="1.5"/><text x="89.5" y="157.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">25%</text><path d="M160.0,165 L98.3,80.1 A105,105 0 0 1 160.0,60.0 Z" fill="#e8a400" stroke="#fff" stroke-width="1.5"/><text x="137.9" y="101.1" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">10%</text><rect x="14.0" y="286" width="12" height="12" fill="#2c6bed"/><text x="32.0" y="296" font-size="12" fill="#14162b">food</text><rect x="174.0" y="286" width="12" height="12" fill="#d9480f"/><text x="192.0" y="296" font-size="12" fill="#14162b">transport</text><rect x="14.0" y="308" width="12" height="12" fill="#2b8a3e"/><text x="32.0" y="318" font-size="12" fill="#14162b">books & materials</text><rect x="174.0" y="308" width="12" height="12" fill="#7048e8"/><text x="192.0" y="318" font-size="12" fill="#14162b">entertainment</text><rect x="14.0" y="330" width="12" height="12" fill="#c2255c"/><text x="32.0" y="340" font-size="12" fill="#14162b">phone & internet</text><rect x="174.0" y="330" width="12" height="12" fill="#e8a400"/><text x="192.0" y="340" font-size="12" fill="#14162b">other</text></svg></div></div></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t4-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t4-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t4-essay-model"><div class="model-text" style="padding:2px 0;"><p>The two pie charts compare how students at a college divided their weekly spending in 2005 and 2025.</p><p>Overall, food was the largest expense in both years. However, the proportion spent on phone and internet increased dramatically, while spending on books and materials fell sharply.</p><p>In 2005, food accounted for just over a third of the budget (35%), and this fell slightly to 30% in 2025. Books and materials made up a fifth of spending in 2005, but by 2025 this figure had dropped to only 5%, or one in twenty. The share spent on transport also decreased, from 15% to 10%.</p><p>In contrast, spending on phone and internet rose from just 5% to a quarter of the budget, making it the second largest category in 2025. The proportion spent on other items doubled from 5% to 10%, while entertainment remained unchanged at 20% in both years.</p><p class="alt">≈ 165 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 8</div>
+      <h2>Speaking Part 1 — Free Time, Technology and Money</h2>
+      <p class="task-sub">In Part 1, answer in <b>2–4 sentences</b>: answer the question, then add a reason, an example or a detail. Record an answer to each question.</p>
+<div class="card advice-card"><p style="margin:0;"><b>Weak:</b> <i>“Yes, I like my phone.”</i><br><b>Strong:</b> <i>“Yes, I use it all the time, mainly for messaging my friends and watching videos. To be honest, I probably spend too long on it in the evenings.”</i></p></div>
+      <div class="card" id="t5-mc"><div class="q-item" id="t5-mc-1">
+          <p>1. Which answer is best for Part 1? <i>“Do you spend a lot of money on books?”</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-1" data-correct="false"> A. “No.”</label><label><input type="radio" value="1" name="t5-mc-1" data-correct="true"> B. “Not really. I usually read online or borrow books from the library, because new books are quite expensive here.”</label><label><input type="radio" value="2" name="t5-mc-1" data-correct="false"> C. “Books are an important part of education in every country, and governments should make them cheaper for all citizens.”</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-mc', 't5-mc-score')">Check answers</button>
+          <span id="t5-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t5-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">How do you usually spend your free time?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Well, I usually…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“To be honest,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">How much time do you spend on your phone every day?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Well, I usually…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“To be honest,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Do you prefer watching TV or videos online? Why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Well, I usually…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“To be honest,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">What do you spend most of your money on?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Well, I usually…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“To be honest,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-5">
+        <div class="q-num">Question 5</div>
+        <div class="q-text">Do you think you will read more or less in the future?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Well, I usually…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“To be honest,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-6">
+        <div class="q-num">Question 6</div>
+        <div class="q-text">Did you do much sport when you were younger?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Well, I usually…”</li><li>“The main reason is that…”</li><li>“For example,…”</li><li>“To be honest,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 8</div>
+      <h2>Speaking Part 2 — A Piece of Technology</h2>
+      <p class="task-sub">You have <b>1 minute</b> to prepare and should speak for <b>1–2 minutes</b>. Read the model answer first and notice how it covers every point on the card.</p>
+      <div class="card task-prompt"><p class="prompt-label">Part 2 task card</p><p><b>Describe a piece of technology that you use every day.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what it is<br>&nbsp;&nbsp;when you got it<br>&nbsp;&nbsp;what you use it for<br>and explain how your life would be different without it.</p></div>
+      <div class="card"><p class="prompt-label">Model answer</p>
+<p style="line-height:1.8;">I’d like to talk about my laptop. It’s quite an old one — I got it about three years ago as a present from my parents when I started preparing for university exams.</p>
+<p style="line-height:1.8;">I use it every single day. In the mornings I usually do online lessons and practice tests on it, and in the evenings I watch films or talk to my cousins who live abroad. I also use it to type my essays, because it’s much faster than writing by hand.</p>
+<p style="line-height:1.8;">If I didn’t have it, my life would be much more difficult. I would have to go to an internet café to study, which takes time and money, and I wouldn’t be able to see my cousins’ faces when we talk. So although it’s a bit slow now, I really can’t imagine my day without it.</p></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-1">
+          <p>1. When did the speaker get the laptop?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-1" data-correct="false"> A. last month</label><label><input type="radio" value="1" name="t6-mc-1" data-correct="true"> B. about three years ago</label><label><input type="radio" value="2" name="t6-mc-1" data-correct="false"> C. when she was a child</label><label><input type="radio" value="3" name="t6-mc-1" data-correct="false"> D. at university</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-2">
+          <p>2. Which grammar structure does she use to explain how life would be different?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-2" data-correct="false"> A. the past continuous</label><label><input type="radio" value="1" name="t6-mc-2" data-correct="true"> B. the second conditional (If I didn’t have…, I would…)</label><label><input type="radio" value="2" name="t6-mc-2" data-correct="false"> C. the present perfect</label><label><input type="radio" value="3" name="t6-mc-2" data-correct="false"> D. the passive</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t6-speaking-tech">
+        <div class="q-num">Your Part 2 talk — technology</div>
+        <div class="q-text">Now do the task yourself. Prepare for 1 minute, then speak for <b>1–2 minutes</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d like to talk about my…”</li><li>“I got it…”</li><li>“I mainly use it for…”</li><li>“If I didn’t have it, I would…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="card task-prompt" style="margin-top:22px;"><p class="prompt-label">Part 2 task card — extra practice</p><p><b>Describe something you saved money to buy.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what it was<br>&nbsp;&nbsp;how long you saved for it<br>&nbsp;&nbsp;how you saved the money<br>and explain how you felt when you bought it.</p></div>
+      <div class="question-box" data-field="t6-speaking-save">
+        <div class="q-num">Your Part 2 talk — saving money</div>
+        <div class="q-text">Prepare for 1 minute, then speak for <b>1–2 minutes</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Something I saved up for was…”</li><li>“It took me about…”</li><li>“I saved by…”</li><li>“When I finally bought it, I felt…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 8</div>
+      <h2>Speaking Part 3 — Technology and Young People</h2>
+      <p class="task-sub">Part 3 questions are about people and society in general. Give an <b>opinion</b>, a <b>reason</b> and an <b>example</b>, and if you can, look at the <b>other side</b>.</p>
+      <p style="margin-top:26px;"><strong>Build an answer.</strong> Put the parts of this answer in order: <i>“Do young people spend too much time on social media?”</i></p>
+      <div class="card" id="t7-ord"><div class="sel-row"><select class="select" id="t7-ord-1" data-answer="opinion"><option value="">—</option><option value="opinion">opinion</option><option value="reason">reason</option><option value="example">example</option><option value="other side">other side</option></select><span><b>1.</b> “Yes, I think most of them probably do.”</span></div><div class="sel-row"><select class="select" id="t7-ord-2" data-answer="reason"><option value="">—</option><option value="opinion">opinion</option><option value="reason">reason</option><option value="example">example</option><option value="other side">other side</option></select><span><b>2.</b> “This is because social media apps are designed to keep people scrolling.”</span></div><div class="sel-row"><select class="select" id="t7-ord-3" data-answer="example"><option value="">—</option><option value="opinion">opinion</option><option value="reason">reason</option><option value="example">example</option><option value="other side">other side</option></select><span><b>3.</b> “For example, my younger brother can spend three hours a day on his phone.”</span></div><div class="sel-row"><select class="select" id="t7-ord-4" data-answer="other side"><option value="">—</option><option value="opinion">opinion</option><option value="reason">reason</option><option value="example">example</option><option value="other side">other side</option></select><span><b>4.</b> “On the other hand, it does help them stay in touch with friends.”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-ord', 't7-ord-score')">Check answers</button>
+          <span id="t7-ord-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t7-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Do young people spend too much time on social media?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think…”</li><li>“This is because…”</li><li>“For example,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Why do you think fewer teenagers read books for pleasure?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think…”</li><li>“This is because…”</li><li>“For example,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Should schools teach students how to manage their money?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think…”</li><li>“This is because…”</li><li>“For example,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">How has technology changed the way people spend their free time?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think…”</li><li>“This is because…”</li><li>“For example,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-5">
+        <div class="q-num">Question 5</div>
+        <div class="q-text">Is it better to spend money on experiences or on things?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think…”</li><li>“This is because…”</li><li>“For example,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-6">
+        <div class="q-num">Question 6</div>
+        <div class="q-text">Will people watch TV in the future?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think…”</li><li>“This is because…”</li><li>“For example,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 8</div>
+      <h2>Speaking About Data — Describe the Table Aloud</h2>
+      <p class="task-sub">This task links Task 1 and Speaking. Describe the teenagers’ table <b>aloud</b> for one minute, as if you were explaining it to a friend. Then answer two opinion questions about it.</p>
+<div class="card"><p class="prompt-label" style="text-align:center;">Average minutes per day spent on activities by teenagers in one country</p><div style="overflow-x:auto;"><table class="data-table" style="width:100%;"><tr><th>activity</th><th>2015</th><th>2025</th></tr><tr><td>watching TV</td><td>120</td><td>45</td></tr><tr><td>social media</td><td>30</td><td>150</td></tr><tr><td>sport</td><td>60</td><td>40</td></tr><tr><td>reading for pleasure</td><td>35</td><td>20</td></tr><tr><td>homework</td><td>70</td><td>75</td></tr></table></div></div>
+      <div class="question-box" data-field="t8-speaking-data">
+        <div class="q-num">Describe the data</div>
+        <div class="q-text">Describe the main changes in the table for <b>about one minute</b>. Start with the biggest change.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The table shows…”</li><li>“The biggest change was in…, which rose from… to…”</li><li>“In contrast,…”</li><li>“Overall,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-why">
+        <div class="q-num">Your opinion</div>
+        <div class="q-text">Why do you think teenagers spend so much more time on social media now? Is this a problem?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“It could be a problem because…”</li><li>“However,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-you">
+        <div class="q-num">Compare with yourself</div>
+        <div class="q-text">Compare the table with your own life. Which activities do you spend more or less time on than the teenagers in 2025?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Personally, I spend more time on…”</li><li>“Unlike most teenagers,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 8</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 30 of 45</div>
+    <h1>Day 30 complete! 🎉</h1>
+    <p>Day 30 done — Writing Task 1 (pie charts and tables) and all three parts of the Speaking test.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-ty-lm');
+
+    initWritingCoach('t4-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The pie charts below show how students at one college spent their weekly budget in 2005 and 2025.' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-1"]'); if (b) initRecordControl(b, user.id, 30, 5, 't5-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-2"]'); if (b) initRecordControl(b, user.id, 30, 5, 't5-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-3"]'); if (b) initRecordControl(b, user.id, 30, 5, 't5-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-4"]'); if (b) initRecordControl(b, user.id, 30, 5, 't5-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-5"]'); if (b) initRecordControl(b, user.id, 30, 5, 't5-speaking-5', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-6"]'); if (b) initRecordControl(b, user.id, 30, 5, 't5-speaking-6', 0); }
+    { const b = document.querySelector('.question-box[data-field="t6-speaking-tech"]'); if (b) initRecordControl(b, user.id, 30, 6, 't6-speaking-tech', 0); }
+    { const b = document.querySelector('.question-box[data-field="t6-speaking-save"]'); if (b) initRecordControl(b, user.id, 30, 6, 't6-speaking-save', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-1"]'); if (b) initRecordControl(b, user.id, 30, 7, 't7-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-2"]'); if (b) initRecordControl(b, user.id, 30, 7, 't7-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-3"]'); if (b) initRecordControl(b, user.id, 30, 7, 't7-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-4"]'); if (b) initRecordControl(b, user.id, 30, 7, 't7-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-5"]'); if (b) initRecordControl(b, user.id, 30, 7, 't7-speaking-5', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-6"]'); if (b) initRecordControl(b, user.id, 30, 7, 't7-speaking-6', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-data"]'); if (b) initRecordControl(b, user.id, 30, 8, 't8-speaking-data', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-why"]'); if (b) initRecordControl(b, user.id, 30, 8, 't8-speaking-why', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-you"]'); if (b) initRecordControl(b, user.id, 30, 8, 't8-speaking-you', 0); }
+
+    await initTaskFlow(30, 8, user.id, {
+      1: () => { checkAllAnswers('t1-ty', 't1-ty-score'); markLineMatchResult('t1-ty-lm'); checkAllAnswers('t1-ord', 't1-ord-score'); checkAllAnswers('t1-tf', 't1-tf-score'); },
+      2: () => { checkAllAnswers('t2-fr', 't2-fr-score'); checkAllAnswers('t2-mc', 't2-mc-score'); checkAllAnswers('t2-g', 't2-g-score'); checkAllAnswers('t2-ov', 't2-ov-score'); },
+      3: () => { checkAllAnswers('t3-g', 't3-g-score'); checkAllAnswers('t3-kf', 't3-kf-score'); },
+      5: () => { checkAllAnswers('t5-mc', 't5-mc-score'); },
+      6: () => { checkAllAnswers('t6-mc', 't6-mc-score'); },
+      7: () => { checkAllAnswers('t7-ord', 't7-ord-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t3-w-btn', 't3-w-ans', '[id^="t3-w-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t4-essay-model-btn', 't4-essay-model', '#t4-essay');
+  });
+</script>
+</body>
+</html>

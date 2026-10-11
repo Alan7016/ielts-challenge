@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 30 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 30 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 10</div>
+      <h2>Starting Off — Thinking Like an Examiner</h2>
+      <p class="task-sub">Today is a <b>Writing Task 1 and Speaking</b> day: pie charts, a table, a process diagram, a full Task 1, and all three parts of the Speaking test. Allow <b>about 80 minutes</b>. Start by thinking like an examiner.</p>
+      <p style="margin-top:26px;"><strong>Task 1 is marked on four criteria.</strong> Match each one to what it means.</p>
+      <div class="card" id="t1-cr">
+        <div class="line-match" id="t1-cr-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. Task Achievement</button><button type="button" class="lm-item" data-key="2">2. Coherence and Cohesion</button><button type="button" class="lm-item" data-key="3">3. Lexical Resource</button><button type="button" class="lm-item" data-key="4">4. Grammatical Range and Accuracy</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. using a range of accurate vocabulary</button><button type="button" class="lm-item" data-key="b">b. covering the key features and giving a clear overview</button><button type="button" class="lm-item" data-key="c">c. using varied, correct sentence structures</button><button type="button" class="lm-item" data-key="d">d. organising paragraphs logically and linking ideas</button></div>
+          <select class="lm-hidden-select select" id="t1-cr-1" data-lm-key="1" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option></select><select class="lm-hidden-select select" id="t1-cr-2" data-lm-key="2" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option></select><select class="lm-hidden-select select" id="t1-cr-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option></select><select class="lm-hidden-select select" id="t1-cr-4" data-lm-key="4" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-cr', 't1-cr-score'); markLineMatchResult('t1-cr-lm');">Check answers</button>
+          <span id="t1-cr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Which choice would a Band 7 candidate make?</strong></p>
+      <div class="card" id="t1-mc"><div class="q-item" id="t1-mc-1">
+          <p>1. With six categories in a pie chart, you should…</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-1" data-correct="false"> describe each one in the same amount of detail</label><label><input type="radio" value="1" name="t1-mc-1" data-correct="true"> focus on the biggest, smallest and most changed categories</label><label><input type="radio" value="2" name="t1-mc-1" data-correct="false"> only describe the largest one</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-2">
+          <p>2. Where should the overview usually go?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-2" data-correct="true"> after the introduction (or at the end)</label><label><input type="radio" value="1" name="t1-mc-2" data-correct="false"> in the middle of a details paragraph</label><label><input type="radio" value="2" name="t1-mc-2" data-correct="false"> nowhere — it is optional</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-3">
+          <p>3. For a process diagram, the overview should mention…</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-3" data-correct="false"> every stage</label><label><input type="radio" value="1" name="t1-mc-3" data-correct="true"> the number of stages and the start and end of the process</label><label><input type="radio" value="2" name="t1-mc-3" data-correct="false"> your opinion of the process</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-4">
+          <p>4. Which tense is usually used for a process diagram?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-4" data-correct="true"> present simple passive</label><label><input type="radio" value="1" name="t1-mc-4" data-correct="false"> past continuous</label><label><input type="radio" value="2" name="t1-mc-4" data-correct="false"> future perfect</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-mc', 't1-mc-score')">Check answers</button>
+          <span id="t1-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 10</div>
+      <h2>Pie Charts — Proportions, Shares and Approximation</h2>
+      <p class="task-sub">Band 7 answers vary the way they express numbers: percentages, fractions, <i>proportion</i>, <i>share</i>, and approximations such as <i>just under a third</i> or <i>roughly half</i>.</p>
+<div class="card"><p class="prompt-label" style="text-align:center;">Sources of electricity in one country, 2000 and 2025</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;"><div><svg viewBox="0 0 320 396" class="svg-chart" role="img" aria-label="2000" style="width:100%;max-width:320px;display:block;margin:0 auto;font-family:inherit;"><text x="160.0" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">2000</text><path d="M160.0,165 L160.0,60.0 A105,105 0 0 1 192.4,264.9 Z" fill="#2c6bed" stroke="#fff" stroke-width="1.5"/><text x="230.5" y="157.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">45%</text><path d="M160.0,165 L192.4,264.9 A105,105 0 0 1 60.1,197.4 Z" fill="#d9480f" stroke="#fff" stroke-width="1.5"/><text x="127.6" y="232.6" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">25%</text><path d="M160.0,165 L60.1,197.4 A105,105 0 0 1 75.1,103.3 Z" fill="#2b8a3e" stroke="#fff" stroke-width="1.5"/><text x="89.5" y="157.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">15%</text><path d="M160.0,165 L75.1,103.3 A105,105 0 0 1 127.6,65.1 Z" fill="#7048e8" stroke="#fff" stroke-width="1.5"/><text x="118.0" y="111.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">10%</text><path d="M160.0,165 L127.6,65.1 A105,105 0 0 1 146.8,60.8 Z" fill="#c2255c" stroke="#fff" stroke-width="1.5"/><path d="M160.0,165 L146.8,60.8 A105,105 0 0 1 160.0,60.0 Z" fill="#e8a400" stroke="#fff" stroke-width="1.5"/><rect x="14.0" y="286" width="12" height="12" fill="#2c6bed"/><text x="32.0" y="296" font-size="12" fill="#14162b">coal</text><rect x="174.0" y="286" width="12" height="12" fill="#d9480f"/><text x="192.0" y="296" font-size="12" fill="#14162b">gas</text><rect x="14.0" y="308" width="12" height="12" fill="#2b8a3e"/><text x="32.0" y="318" font-size="12" fill="#14162b">nuclear</text><rect x="174.0" y="308" width="12" height="12" fill="#7048e8"/><text x="192.0" y="318" font-size="12" fill="#14162b">hydro</text><rect x="14.0" y="330" width="12" height="12" fill="#c2255c"/><text x="32.0" y="340" font-size="12" fill="#14162b">wind & solar (3%)</text><rect x="174.0" y="330" width="12" height="12" fill="#e8a400"/><text x="192.0" y="340" font-size="12" fill="#14162b">other (2%)</text></svg></div><div><svg viewBox="0 0 320 396" class="svg-chart" role="img" aria-label="2025" style="width:100%;max-width:320px;display:block;margin:0 auto;font-family:inherit;"><text x="160.0" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">2025</text><path d="M160.0,165 L160.0,60.0 A105,105 0 0 1 244.9,103.3 Z" fill="#2c6bed" stroke="#fff" stroke-width="1.5"/><text x="192.4" y="105.4" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">15%</text><path d="M160.0,165 L244.9,103.3 A105,105 0 0 1 192.4,264.9 Z" fill="#d9480f" stroke="#fff" stroke-width="1.5"/><text x="227.9" y="191.1" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">30%</text><path d="M160.0,165 L192.4,264.9 A105,105 0 0 1 115.3,260.0 Z" fill="#2b8a3e" stroke="#fff" stroke-width="1.5"/><text x="155.5" y="240.3" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">12%</text><path d="M160.0,165 L115.3,260.0 A105,105 0 0 1 68.0,215.6 Z" fill="#7048e8" stroke="#fff" stroke-width="1.5"/><text x="111.1" y="221.0" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">10%</text><path d="M160.0,165 L68.0,215.6 A105,105 0 0 1 140.3,61.9 Z" fill="#c2255c" stroke="#fff" stroke-width="1.5"/><text x="95.4" y="138.6" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">30%</text><path d="M160.0,165 L140.3,61.9 A105,105 0 0 1 160.0,60.0 Z" fill="#e8a400" stroke="#fff" stroke-width="1.5"/><rect x="14.0" y="286" width="12" height="12" fill="#2c6bed"/><text x="32.0" y="296" font-size="12" fill="#14162b">coal</text><rect x="174.0" y="286" width="12" height="12" fill="#d9480f"/><text x="192.0" y="296" font-size="12" fill="#14162b">gas</text><rect x="14.0" y="308" width="12" height="12" fill="#2b8a3e"/><text x="32.0" y="318" font-size="12" fill="#14162b">nuclear</text><rect x="174.0" y="308" width="12" height="12" fill="#7048e8"/><text x="192.0" y="318" font-size="12" fill="#14162b">hydro</text><rect x="14.0" y="330" width="12" height="12" fill="#c2255c"/><text x="32.0" y="340" font-size="12" fill="#14162b">wind & solar</text><rect x="174.0" y="330" width="12" height="12" fill="#e8a400"/><text x="192.0" y="340" font-size="12" fill="#14162b">other (3%)</text></svg></div></div></div>
+      <p style="margin-top:26px;"><strong>Approximation.</strong> Match each figure to the most accurate phrase.</p>
+      <div class="card" id="t2-ap"><div class="sel-row"><select class="select" id="t2-ap-1" data-answer="just under half"><option value="">—</option><option value="just under half">just under half</option><option value="a tenth">a tenth</option><option value="almost a third">almost a third</option><option value="roughly a quarter">roughly a quarter</option><option value="well under a fifth">well under a fifth</option><option value="a tiny fraction">a tiny fraction</option></select><span><b>1.</b> coal in 2000 (45%)</span></div><div class="sel-row"><select class="select" id="t2-ap-2" data-answer="roughly a quarter"><option value="">—</option><option value="just under half">just under half</option><option value="a tenth">a tenth</option><option value="almost a third">almost a third</option><option value="roughly a quarter">roughly a quarter</option><option value="well under a fifth">well under a fifth</option><option value="a tiny fraction">a tiny fraction</option></select><span><b>2.</b> gas in 2000 (25%)</span></div><div class="sel-row"><select class="select" id="t2-ap-3" data-answer="almost a third"><option value="">—</option><option value="just under half">just under half</option><option value="a tenth">a tenth</option><option value="almost a third">almost a third</option><option value="roughly a quarter">roughly a quarter</option><option value="well under a fifth">well under a fifth</option><option value="a tiny fraction">a tiny fraction</option></select><span><b>3.</b> wind & solar in 2025 (30%)</span></div><div class="sel-row"><select class="select" id="t2-ap-4" data-answer="a tenth"><option value="">—</option><option value="just under half">just under half</option><option value="a tenth">a tenth</option><option value="almost a third">almost a third</option><option value="roughly a quarter">roughly a quarter</option><option value="well under a fifth">well under a fifth</option><option value="a tiny fraction">a tiny fraction</option></select><span><b>4.</b> hydro in both years (10%)</span></div><div class="sel-row"><select class="select" id="t2-ap-5" data-answer="well under a fifth"><option value="">—</option><option value="just under half">just under half</option><option value="a tenth">a tenth</option><option value="almost a third">almost a third</option><option value="roughly a quarter">roughly a quarter</option><option value="well under a fifth">well under a fifth</option><option value="a tiny fraction">a tiny fraction</option></select><span><b>5.</b> nuclear in 2025 (12%)</span></div><div class="sel-row"><select class="select" id="t2-ap-6" data-answer="a tiny fraction"><option value="">—</option><option value="just under half">just under half</option><option value="a tenth">a tenth</option><option value="almost a third">almost a third</option><option value="roughly a quarter">roughly a quarter</option><option value="well under a fifth">well under a fifth</option><option value="a tiny fraction">a tiny fraction</option></select><span><b>6.</b> other in 2000 (2%)</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-ap', 't2-ap-score')">Check answers</button>
+          <span id="t2-ap-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Complete the sentences</strong> with ONE word.</p>
+      <div class="card" id="t2-g" style="line-height:2.5;"><p>1. Coal’s <input type="text" class="text-answer" id="t2-1" data-correct="share/proportion" autocomplete="off" style="width:110px;"> of electricity production fell from 45% to 15%.</p><p>2. Wind and solar power increased <input type="text" class="text-answer" id="t2-2" data-correct="tenfold" autocomplete="off" style="width:110px;">, from 3% to 30%.</p><p>3. The proportion generated by hydro remained <input type="text" class="text-answer" id="t2-3" data-correct="stable/unchanged/constant" autocomplete="off" style="width:110px;"> at 10%.</p><p>4. In 2000, coal was by <input type="text" class="text-answer" id="t2-4" data-correct="far" autocomplete="off" style="width:110px;"> the largest source.</p><p>5. By 2025, gas had <input type="text" class="text-answer" id="t2-5" data-correct="overtaken" autocomplete="off" style="width:110px;"> coal, sharing first place with wind and solar at 30%.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-g', 't2-g-score')">Check answers</button>
+          <span id="t2-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t2-ov"><div class="q-item" id="t2-ov-1">
+          <p>1. Choose the best overview.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-ov-1" data-correct="false"> A. In 2000 coal was 45%, gas 25%, nuclear 15%, hydro 10%, wind and solar 3% and other 2%.</label><label><input type="radio" value="1" name="t2-ov-1" data-correct="true"> B. Overall, the country moved away from coal over the period, and renewable sources such as wind and solar became a major part of the energy mix.</label><label><input type="radio" value="2" name="t2-ov-1" data-correct="false"> C. This is a good change because coal is bad for the environment.</label><label><input type="radio" value="3" name="t2-ov-1" data-correct="false"> D. The charts show many different sources of electricity.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-ov', 't2-ov-score')">Check answers</button>
+          <span id="t2-ov-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 10</div>
+      <h2>Tables — Selecting and Grouping Data</h2>
+      <p class="task-sub">With a table of 16 figures you must <b>group</b> information: which countries are similar? Where is each category highest and lowest? Use <i>whereas, while, compared with</i> and <i>respectively</i>.</p>
+<div class="card"><p class="prompt-label" style="text-align:center;">Household spending as a percentage of income in four countries, 2025</p><div style="overflow-x:auto;"><table class="data-table" style="width:100%;"><tr><th></th><th>Country A</th><th>Country B</th><th>Country C</th><th>Country D</th></tr><tr><td>housing</td><td>35%</td><td>28%</td><td>40%</td><td>25%</td></tr><tr><td>food</td><td>15%</td><td>25%</td><td>12%</td><td>30%</td></tr><tr><td>transport</td><td>12%</td><td>14%</td><td>10%</td><td>9%</td></tr><tr><td>leisure</td><td>10%</td><td>6%</td><td>14%</td><td>5%</td></tr></table></div></div>
+      <div class="card" id="t3-g" style="line-height:2.5;"><p>1. Housing was the largest expense in every country <input type="text" class="text-answer" id="t3-1" data-correct="except" autocomplete="off" style="width:110px;"> Country D, where food took the biggest share.</p><p>2. Country C spent the highest proportion on housing (40%), <input type="text" class="text-answer" id="t3-2" data-correct="whereas/while" autocomplete="off" style="width:110px;"> Country D spent the lowest (25%).</p><p>3. Countries B and D spent 25% and 30% <input type="text" class="text-answer" id="t3-3" data-correct="respectively" autocomplete="off" style="width:130px;"> on food.</p><p>4. Leisure accounted for 14% of spending in Country C, more than <input type="text" class="text-answer" id="t3-4" data-correct="twice" autocomplete="off" style="width:110px;"> the figure for Country B (6%).</p><p>5. Transport costs were fairly <input type="text" class="text-answer" id="t3-5" data-correct="similar" autocomplete="off" style="width:110px;"> across all four countries, ranging from 9% to 14%.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-g', 't3-g-score')">Check answers</button>
+          <span id="t3-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t3-gr"><div class="q-item" id="t3-gr-1">
+          <p>1. Which grouping best organises the details?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-gr-1" data-correct="false"> A. Paragraph 1: Country A; Paragraph 2: Country B; Paragraph 3: Country C; Paragraph 4: Country D.</label><label><input type="radio" value="1" name="t3-gr-1" data-correct="true"> B. Paragraph 1: housing and food (the biggest costs); Paragraph 2: transport and leisure (the smaller costs).</label><label><input type="radio" value="2" name="t3-gr-1" data-correct="false"> C. Paragraph 1: all the numbers above 20%; Paragraph 2: all the numbers below 20%.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-gr', 't3-gr-score')">Check answers</button>
+          <span id="t3-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write an <b>overview</b> of the table (2 sentences).</p><textarea class="no-check mini-answer" id="t3-w-1" placeholder="Write here..." style="min-height:90px;"></textarea><p class="mini-q">Write one <b>details</b> paragraph about housing and food (3–4 sentences).</p><textarea class="no-check mini-answer" id="t3-w-2" placeholder="Write here..." style="min-height:90px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t3-w-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t3-w-ans"><div class="model-text" style="padding:2px 0;"><p>Overall, housing was the biggest expense in three of the four countries, while Country D spent most on food. Transport costs varied little, but spending on leisure differed considerably.</p><p>Housing took the largest share of income in Countries A, B and C, peaking at 40% in Country C. Country D spent the least on housing (25%) but the most on food (30%), compared with just 12% in Country C. Countries A and B spent 15% and 25% respectively on food.</p><p class="alt">≈ 90 words</p></div></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 10</div>
+      <h2>Process Diagrams — The Passive and Sequencing</h2>
+      <p class="task-sub">A process diagram shows <b>stages</b>. Use the <b>present simple passive</b> (<i>the oranges are washed</i>) because the action matters more than who does it, and link the stages with <b>sequencers</b>.</p>
+<div class="card"><svg viewBox="0 0 722 250" class="svg-chart" role="img" aria-label="How orange juice is produced" style="width:100%;max-width:722px;display:block;margin:0 auto;font-family:inherit;"><defs><marker id="pa" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4b4e5c"/></marker></defs><text x="361.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">How orange juice is produced</text><rect x="10" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="24" cy="54" r="10" fill="#2c6bed"/><text x="24" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">1</text><text x="91.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Picking</text><text x="85.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">oranges picked by hand</text><rect x="194" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="208" cy="54" r="10" fill="#2c6bed"/><text x="208" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">2</text><text x="275.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Washing</text><text x="269.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">fruit washed</text><rect x="378" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="392" cy="54" r="10" fill="#2c6bed"/><text x="392" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">3</text><text x="459.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Squeezing</text><text x="453.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">juice extracted</text><rect x="562" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="576" cy="54" r="10" fill="#2c6bed"/><text x="576" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">4</text><text x="643.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Filtering</text><text x="637.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">pulp & seeds removed</text><rect x="562" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="576" cy="174" r="10" fill="#2c6bed"/><text x="576" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">5</text><text x="643.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Pasteurising</text><text x="637.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">heated to kill bacteria</text><rect x="378" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="392" cy="174" r="10" fill="#2c6bed"/><text x="392" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">6</text><text x="459.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Bottling</text><text x="453.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">poured into cartons</text><rect x="194" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="208" cy="174" r="10" fill="#2c6bed"/><text x="208" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">7</text><text x="275.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Storage</text><text x="269.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">kept chilled</text><rect x="10" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="24" cy="174" r="10" fill="#2c6bed"/><text x="24" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">8</text><text x="91.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Delivery</text><text x="85.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">taken to shops</text><line x1="160" y1="77.0" x2="191" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="344" y1="77.0" x2="375" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="528" y1="77.0" x2="559" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="637.0" y1="114" x2="637.0" y2="157" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="562" y1="197.0" x2="531" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="378" y1="197.0" x2="347" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="194" y1="197.0" x2="163" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/></svg></div>
+      <p style="margin-top:26px;"><strong>Part 1 — Passive forms.</strong> Complete each sentence with the passive form of the verb in brackets.</p>
+      <div class="card" id="t4-pa" style="line-height:2.6;"><p>1. First, the oranges <input type="text" class="text-answer" id="t4-1" data-correct="are picked" autocomplete="off" style="width:140px;"> by hand. (pick)</p><p>2. Next, they <input type="text" class="text-answer" id="t4-2" data-correct="are washed" autocomplete="off" style="width:140px;"> to remove dirt. (wash)</p><p>3. The juice <input type="text" class="text-answer" id="t4-3" data-correct="is extracted" autocomplete="off" style="width:140px;"> by squeezing the fruit. (extract)</p><p>4. The pulp and seeds <input type="text" class="text-answer" id="t4-4" data-correct="are removed" autocomplete="off" style="width:140px;"> during filtering. (remove)</p><p>5. After that, the juice <input type="text" class="text-answer" id="t4-5" data-correct="is heated" autocomplete="off" style="width:140px;"> to kill bacteria. (heat)</p><p>6. Finally, the cartons <input type="text" class="text-answer" id="t4-6" data-correct="are kept" autocomplete="off" style="width:140px;"> chilled before they <input type="text" class="text-answer" id="t4-7" data-correct="are taken/are delivered" autocomplete="off" style="width:150px;"> to shops. (keep / take)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-pa', 't4-pa-score')">Check answers</button>
+          <span id="t4-pa-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Sequencers.</strong> Choose the best linking word.</p>
+      <div class="card" id="t4-seq"><div class="q-item" id="t4-seq-1">
+          <p>1. ______, the oranges are picked by hand.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-seq-1" data-correct="false"> Finally</label><label><input type="radio" value="1" name="t4-seq-1" data-correct="true"> First</label><label><input type="radio" value="2" name="t4-seq-1" data-correct="false"> Following this</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-seq-2">
+          <p>2. ______ washing, the fruit is squeezed.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-seq-2" data-correct="true"> After</label><label><input type="radio" value="1" name="t4-seq-2" data-correct="false"> Then</label><label><input type="radio" value="2" name="t4-seq-2" data-correct="false"> Once</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-seq-3">
+          <p>3. ______ the juice has been filtered, it is pasteurised.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-seq-3" data-correct="true"> Once</label><label><input type="radio" value="1" name="t4-seq-3" data-correct="false"> Next</label><label><input type="radio" value="2" name="t4-seq-3" data-correct="false"> Firstly</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-seq-4">
+          <p>4. The juice is heated, ______ it is poured into cartons.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-seq-4" data-correct="false"> before which</label><label><input type="radio" value="1" name="t4-seq-4" data-correct="true"> after which</label><label><input type="radio" value="2" name="t4-seq-4" data-correct="false"> finally</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-seq-5">
+          <p>5. ______, the cartons are delivered to shops.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-seq-5" data-correct="false"> In the end of</label><label><input type="radio" value="1" name="t4-seq-5" data-correct="true"> Finally</label><label><input type="radio" value="2" name="t4-seq-5" data-correct="false"> Beginning</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-seq', 't4-seq-score')">Check answers</button>
+          <span id="t4-seq-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t4-ov"><div class="q-item" id="t4-ov-1">
+          <p>1. Choose the best overview for a process diagram.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-ov-1" data-correct="false"> A. Oranges are picked and then washed.</label><label><input type="radio" value="1" name="t4-ov-1" data-correct="true"> B. Overall, there are eight stages in the process, beginning with picking the oranges by hand and ending with the delivery of chilled juice to shops.</label><label><input type="radio" value="2" name="t4-ov-1" data-correct="false"> C. I think orange juice is very healthy.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-ov', 't4-ov-score')">Check answers</button>
+          <span id="t4-ov-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 10</div>
+      <h2>Writing Task 1 — Your Process Report</h2>
+      <p class="task-sub">Write a full Task 1 report on a process. Spend about <b>20 minutes</b> and write <b>at least 150 words</b>. Use the passive, a range of sequencers, and an overview that gives the number of stages.</p>
+<div class="card advice-card"><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Introduction:</b> <i>shows → illustrates</i>; <i>how … are recycled → the process by which … are recycled</i>.</li><li><b>Overview:</b> number of stages, first and last stage, and that it is a cycle.</li><li><b>Paragraph 3:</b> stages 1–4 (collection to cleaning).</li><li><b>Paragraph 4:</b> stages 5–8 (crushing to filling). Vary your sequencers.</li></ul></div>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The diagram below shows how glass bottles are recycled.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><svg viewBox="0 0 722 250" class="svg-chart" role="img" aria-label="Recycling glass bottles" style="width:100%;max-width:722px;display:block;margin:0 auto;font-family:inherit;"><defs><marker id="pa" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4b4e5c"/></marker></defs><text x="361.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Recycling glass bottles</text><rect x="10" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="24" cy="54" r="10" fill="#2c6bed"/><text x="24" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">1</text><text x="91.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Collection</text><text x="85.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">bottles left in bins</text><rect x="194" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="208" cy="54" r="10" fill="#2c6bed"/><text x="208" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">2</text><text x="275.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Transport</text><text x="269.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">taken to plant by truck</text><rect x="378" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="392" cy="54" r="10" fill="#2c6bed"/><text x="392" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">3</text><text x="459.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Sorting</text><text x="453.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">separated by colour</text><rect x="562" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="576" cy="54" r="10" fill="#2c6bed"/><text x="576" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">4</text><text x="643.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Cleaning</text><text x="637.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">labels & caps removed</text><rect x="562" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="576" cy="174" r="10" fill="#2c6bed"/><text x="576" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">5</text><text x="643.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Crushing</text><text x="637.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">broken into small pieces</text><rect x="378" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="392" cy="174" r="10" fill="#2c6bed"/><text x="392" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">6</text><text x="459.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Melting</text><text x="453.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">heated in a furnace</text><rect x="194" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="208" cy="174" r="10" fill="#2c6bed"/><text x="208" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">7</text><text x="275.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Moulding</text><text x="269.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">shaped into new bottles</text><rect x="10" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="24" cy="174" r="10" fill="#2c6bed"/><text x="24" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">8</text><text x="91.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Filling</text><text x="85.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">filled & sent to shops</text><line x1="160" y1="77.0" x2="191" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="344" y1="77.0" x2="375" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="528" y1="77.0" x2="559" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="637.0" y1="114" x2="637.0" y2="157" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="562" y1="197.0" x2="531" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="378" y1="197.0" x2="347" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="194" y1="197.0" x2="163" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/></svg></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t5-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t5-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t5-essay-model"><div class="model-text" style="padding:2px 0;"><p>The diagram illustrates the process by which used glass bottles are recycled to produce new ones.</p><p>Overall, there are eight stages in the process, which begins with the collection of used bottles and ends with new bottles being filled and sent to shops. It is therefore a cycle in which glass can be reused repeatedly.</p><p>First, used bottles are left in recycling bins, from where they are collected and transported by truck to a recycling plant. At the plant, the bottles are sorted according to their colour. Following this, they are cleaned, and any labels and caps are removed.</p><p>Once the bottles have been cleaned, they are crushed into small pieces. These pieces are then heated in a furnace until they melt, after which the liquid glass is moulded into new bottles. Finally, the new bottles are filled and delivered to shops, where they can be bought, used and recycled again.</p><p class="alt">≈ 175 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 10</div>
+      <h2>From Band 6 to Band 7 — Fixing Common Task 1 Errors</h2>
+      <p class="task-sub">Each sentence below was written by a candidate. Find and correct the error — these are among the most common reasons Task 1 scores stay at Band 6.</p>
+      <div class="card" id="t6-e" style="line-height:2.6;"><p>1. The pie charts <u>illustrates</u> the sources of electricity. → <input type="text" class="text-answer" id="t6-1" data-correct="illustrate" autocomplete="off" style="width:130px;"></p><p>2. The proportion of coal <u>decreased of</u> 30 percentage points. → <input type="text" class="text-answer" id="t6-2" data-correct="decreased by" autocomplete="off" style="width:130px;"></p><p>3. The oranges <u>are wash</u> to remove dirt. → <input type="text" class="text-answer" id="t6-3" data-correct="are washed" autocomplete="off" style="width:130px;"></p><p>4. In 2000, coal was <u>the most</u> large source. → <input type="text" class="text-answer" id="t6-4" data-correct="the largest" autocomplete="off" style="width:130px;"></p><p>5. Wind and solar <u>has risen</u> from 3% in 2000 to 30% in 2025. → <input type="text" class="text-answer" id="t6-5" data-correct="rose" autocomplete="off" style="width:130px;"></p><p>6. Country C spent 40% on housing, <u>however</u> Country D spent 25%. → <input type="text" class="text-answer" id="t6-6" data-correct="whereas/while" autocomplete="off" style="width:130px;"></p><p>7. The <u>amount</u> of countries that spent more than 20% on food was two. → <input type="text" class="text-answer" id="t6-7" data-correct="number" autocomplete="off" style="width:130px;"></p><p>8. <u>At</u> the end, the bottles are sent to shops. → <input type="text" class="text-answer" id="t6-8" data-correct="Finally/In the end" autocomplete="off" style="width:130px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-e', 't6-e-score')">Check answers</button>
+          <span id="t6-e-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t6-pp"><div class="q-item" id="t6-pp-1">
+          <p>1. Why is “decreased from 45% to 15%” better described as a fall of 30 <i>percentage points</i>, not 30 percent?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-pp-1" data-correct="true"> A. Because 30 percent of 45% would be 13.5 percentage points — the two are different.</label><label><input type="radio" value="1" name="t6-pp-1" data-correct="false"> B. There is no difference.</label><label><input type="radio" value="2" name="t6-pp-1" data-correct="false"> C. Because percentages cannot fall.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-pp', 't6-pp-score')">Check answers</button>
+          <span id="t6-pp-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 10</div>
+      <h2>Speaking Part 1 — Energy, Money and Daily Habits</h2>
+      <p class="task-sub">Band 7 Part 1 answers are natural and extended: a direct answer, then a reason, example or contrast, using some less common vocabulary.</p>
+      <div class="question-box" data-field="t7-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Do you try to save energy at home? How?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“To be honest,…”</li><li>“It depends — if…, then…, but…”</li><li>“I used to…, whereas now…”</li><li>“I tend to…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Do you prefer to shop online or in shops?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“To be honest,…”</li><li>“It depends — if…, then…, but…”</li><li>“I used to…, whereas now…”</li><li>“I tend to…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">What do you usually spend your money on?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“To be honest,…”</li><li>“It depends — if…, then…, but…”</li><li>“I used to…, whereas now…”</li><li>“I tend to…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Do you recycle? Why / Why not?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“To be honest,…”</li><li>“It depends — if…, then…, but…”</li><li>“I used to…, whereas now…”</li><li>“I tend to…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-5">
+        <div class="q-num">Question 5</div>
+        <div class="q-text">Has the way you use technology changed in recent years?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“To be honest,…”</li><li>“It depends — if…, then…, but…”</li><li>“I used to…, whereas now…”</li><li>“I tend to…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-6">
+        <div class="q-num">Question 6</div>
+        <div class="q-text">Would you like to work in a factory? Why / Why not?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“To be honest,…”</li><li>“It depends — if…, then…, but…”</li><li>“I used to…, whereas now…”</li><li>“I tend to…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 10</div>
+      <h2>Speaking Part 2 — Two Practice Cards</h2>
+      <p class="task-sub">Read the model answer and notice the range of tenses and the personal reflection at the end. Then do both cards: 1 minute to prepare, <b>up to 2 minutes</b> to speak.</p>
+      <div class="card task-prompt"><p class="prompt-label">Part 2 task card</p><p><b>Describe something you did to help the environment.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what you did<br>&nbsp;&nbsp;when and where you did it<br>&nbsp;&nbsp;who you did it with<br>and explain how you felt about doing it.</p></div>
+      <div class="card"><p class="prompt-label">Model answer (Band 7+)</p>
+<p style="line-height:1.8;">I’d like to describe a clean-up day I took part in last spring. A local volunteer group had organised it along the river near my neighbourhood, which, to be honest, had become pretty neglected — there were plastic bottles and bags caught in the bushes everywhere.</p>
+<p style="line-height:1.8;">I went with two friends from my course, and there must have been about forty of us altogether. We were given gloves and bags and spent the whole morning collecting rubbish. By lunchtime we’d filled over a hundred bags, and some of the bottles had obviously been there for years.</p>
+<p style="line-height:1.8;">As for how I felt, I was exhausted but genuinely proud. What struck me most was how quickly a place can be transformed when people work together. It also changed my own habits — since then I’ve stopped buying bottled water and carry a refillable bottle instead. So I’d say it had a bigger effect on me than on the river!</p></div>
+      <div class="card" id="t8-mc"><div class="q-item" id="t8-mc-1">
+          <p>1. Which features make this a strong Part 2 answer? Choose the best description.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-1" data-correct="false"> A. It uses only the present simple.</label><label><input type="radio" value="1" name="t8-mc-1" data-correct="true"> B. It uses a range of tenses (past simple, past perfect, present perfect) and ends with a personal reflection.</label><label><input type="radio" value="2" name="t8-mc-1" data-correct="false"> C. It is very short and avoids details.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-mc', 't8-mc-score')">Check answers</button>
+          <span id="t8-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-env">
+        <div class="q-num">Your Part 2 talk — environment</div>
+        <div class="q-text">Now do the task yourself. Prepare for 1 minute, then speak for up to <b>2 minutes</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d like to describe…”</li><li>“It had been…”</li><li>“What struck me most was…”</li><li>“Since then, I’ve…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="card task-prompt" style="margin-top:22px;"><p class="prompt-label">Part 2 task card</p><p><b>Describe a useful skill you learned online.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what the skill is<br>&nbsp;&nbsp;how you learned it<br>&nbsp;&nbsp;how long it took you<br>and explain why it has been useful.</p></div>
+      <div class="question-box" data-field="t8-speaking-skill">
+        <div class="q-num">Your Part 2 talk — a skill</div>
+        <div class="q-text">Prepare for 1 minute, then speak for up to <b>2 minutes</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“A skill I picked up online is…”</li><li>“I learned it mainly by…”</li><li>“It took me…”</li><li>“It’s come in handy when…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 10</div>
+      <h2>Speaking Part 3 — Energy, Consumption and Society</h2>
+      <p class="task-sub">Band 7 Part 3 answers are <b>developed and balanced</b>: position → reason → example → concession → conclusion. Use phrases for generalising and conceding.</p>
+      <p style="margin-top:26px;"><strong>Function check.</strong> What does each phrase do?</p>
+      <div class="card" id="t9-fn"><div class="sel-row"><select class="select" id="t9-fn-1" data-answer="generalising"><option value="">—</option><option value="generalising">generalising</option><option value="conceding">conceding</option><option value="giving an example">giving an example</option><option value="concluding">concluding</option></select><span><b>1.</b> “By and large,…”</span></div><div class="sel-row"><select class="select" id="t9-fn-2" data-answer="conceding"><option value="">—</option><option value="generalising">generalising</option><option value="conceding">conceding</option><option value="giving an example">giving an example</option><option value="concluding">concluding</option></select><span><b>2.</b> “Admittedly,…”</span></div><div class="sel-row"><select class="select" id="t9-fn-3" data-answer="giving an example"><option value="">—</option><option value="generalising">generalising</option><option value="conceding">conceding</option><option value="giving an example">giving an example</option><option value="concluding">concluding</option></select><span><b>3.</b> “A case in point is…”</span></div><div class="sel-row"><select class="select" id="t9-fn-4" data-answer="conceding"><option value="">—</option><option value="generalising">generalising</option><option value="conceding">conceding</option><option value="giving an example">giving an example</option><option value="concluding">concluding</option></select><span><b>4.</b> “That said,…”</span></div><div class="sel-row"><select class="select" id="t9-fn-5" data-answer="concluding"><option value="">—</option><option value="generalising">generalising</option><option value="conceding">conceding</option><option value="giving an example">giving an example</option><option value="concluding">concluding</option></select><span><b>5.</b> “So, all things considered,…”</span></div><div class="sel-row"><select class="select" id="t9-fn-6" data-answer="generalising"><option value="">—</option><option value="generalising">generalising</option><option value="conceding">conceding</option><option value="giving an example">giving an example</option><option value="concluding">concluding</option></select><span><b>6.</b> “As a rule,…”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-fn', 't9-fn-score')">Check answers</button>
+          <span id="t9-fn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Should governments force people to use less energy?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“By and large,…”</li><li>“The main reason is…”</li><li>“A case in point is…”</li><li>“Admittedly,…”</li><li>“So, all things considered,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Why do some countries still depend so much on coal?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“By and large,…”</li><li>“The main reason is…”</li><li>“A case in point is…”</li><li>“Admittedly,…”</li><li>“So, all things considered,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Is recycling enough to solve the problem of waste?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“By and large,…”</li><li>“The main reason is…”</li><li>“A case in point is…”</li><li>“Admittedly,…”</li><li>“So, all things considered,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Do people buy more things than they need nowadays? Why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“By and large,…”</li><li>“The main reason is…”</li><li>“A case in point is…”</li><li>“Admittedly,…”</li><li>“So, all things considered,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-5">
+        <div class="q-num">Question 5</div>
+        <div class="q-text">Who should pay for protecting the environment — individuals, companies or governments?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“By and large,…”</li><li>“The main reason is…”</li><li>“A case in point is…”</li><li>“Admittedly,…”</li><li>“So, all things considered,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-6">
+        <div class="q-num">Question 6</div>
+        <div class="q-text">How might the way we produce energy change in the next 20 years?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“By and large,…”</li><li>“The main reason is…”</li><li>“A case in point is…”</li><li>“Admittedly,…”</li><li>“So, all things considered,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t9-speaking-7">
+        <div class="q-num">Question 7</div>
+        <div class="q-text">Is it the responsibility of schools to teach children about the environment?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“By and large,…”</li><li>“The main reason is…”</li><li>“A case in point is…”</li><li>“Admittedly,…”</li><li>“So, all things considered,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 10</div>
+      <h2>Speaking About Data — Explain the Energy Charts</h2>
+      <p class="task-sub">A bridge between Task 1 and Speaking. Explain the electricity pie charts aloud as if you were presenting them in a seminar, then give your view on the change.</p>
+<div class="card"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;"><div><svg viewBox="0 0 320 396" class="svg-chart" role="img" aria-label="2000" style="width:100%;max-width:320px;display:block;margin:0 auto;font-family:inherit;"><text x="160.0" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">2000</text><path d="M160.0,165 L160.0,60.0 A105,105 0 0 1 192.4,264.9 Z" fill="#2c6bed" stroke="#fff" stroke-width="1.5"/><text x="230.5" y="157.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">45%</text><path d="M160.0,165 L192.4,264.9 A105,105 0 0 1 60.1,197.4 Z" fill="#d9480f" stroke="#fff" stroke-width="1.5"/><text x="127.6" y="232.6" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">25%</text><path d="M160.0,165 L60.1,197.4 A105,105 0 0 1 75.1,103.3 Z" fill="#2b8a3e" stroke="#fff" stroke-width="1.5"/><text x="89.5" y="157.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">15%</text><path d="M160.0,165 L75.1,103.3 A105,105 0 0 1 127.6,65.1 Z" fill="#7048e8" stroke="#fff" stroke-width="1.5"/><text x="118.0" y="111.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">10%</text><path d="M160.0,165 L127.6,65.1 A105,105 0 0 1 146.8,60.8 Z" fill="#c2255c" stroke="#fff" stroke-width="1.5"/><path d="M160.0,165 L146.8,60.8 A105,105 0 0 1 160.0,60.0 Z" fill="#e8a400" stroke="#fff" stroke-width="1.5"/><rect x="14.0" y="286" width="12" height="12" fill="#2c6bed"/><text x="32.0" y="296" font-size="12" fill="#14162b">coal</text><rect x="174.0" y="286" width="12" height="12" fill="#d9480f"/><text x="192.0" y="296" font-size="12" fill="#14162b">gas</text><rect x="14.0" y="308" width="12" height="12" fill="#2b8a3e"/><text x="32.0" y="318" font-size="12" fill="#14162b">nuclear</text><rect x="174.0" y="308" width="12" height="12" fill="#7048e8"/><text x="192.0" y="318" font-size="12" fill="#14162b">hydro</text><rect x="14.0" y="330" width="12" height="12" fill="#c2255c"/><text x="32.0" y="340" font-size="12" fill="#14162b">wind & solar (3%)</text><rect x="174.0" y="330" width="12" height="12" fill="#e8a400"/><text x="192.0" y="340" font-size="12" fill="#14162b">other (2%)</text></svg></div><div><svg viewBox="0 0 320 396" class="svg-chart" role="img" aria-label="2025" style="width:100%;max-width:320px;display:block;margin:0 auto;font-family:inherit;"><text x="160.0" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">2025</text><path d="M160.0,165 L160.0,60.0 A105,105 0 0 1 244.9,103.3 Z" fill="#2c6bed" stroke="#fff" stroke-width="1.5"/><text x="192.4" y="105.4" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">15%</text><path d="M160.0,165 L244.9,103.3 A105,105 0 0 1 192.4,264.9 Z" fill="#d9480f" stroke="#fff" stroke-width="1.5"/><text x="227.9" y="191.1" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">30%</text><path d="M160.0,165 L192.4,264.9 A105,105 0 0 1 115.3,260.0 Z" fill="#2b8a3e" stroke="#fff" stroke-width="1.5"/><text x="155.5" y="240.3" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">12%</text><path d="M160.0,165 L115.3,260.0 A105,105 0 0 1 68.0,215.6 Z" fill="#7048e8" stroke="#fff" stroke-width="1.5"/><text x="111.1" y="221.0" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">10%</text><path d="M160.0,165 L68.0,215.6 A105,105 0 0 1 140.3,61.9 Z" fill="#c2255c" stroke="#fff" stroke-width="1.5"/><text x="95.4" y="138.6" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">30%</text><path d="M160.0,165 L140.3,61.9 A105,105 0 0 1 160.0,60.0 Z" fill="#e8a400" stroke="#fff" stroke-width="1.5"/><rect x="14.0" y="286" width="12" height="12" fill="#2c6bed"/><text x="32.0" y="296" font-size="12" fill="#14162b">coal</text><rect x="174.0" y="286" width="12" height="12" fill="#d9480f"/><text x="192.0" y="296" font-size="12" fill="#14162b">gas</text><rect x="14.0" y="308" width="12" height="12" fill="#2b8a3e"/><text x="32.0" y="318" font-size="12" fill="#14162b">nuclear</text><rect x="174.0" y="308" width="12" height="12" fill="#7048e8"/><text x="192.0" y="318" font-size="12" fill="#14162b">hydro</text><rect x="14.0" y="330" width="12" height="12" fill="#c2255c"/><text x="32.0" y="340" font-size="12" fill="#14162b">wind & solar</text><rect x="174.0" y="330" width="12" height="12" fill="#e8a400"/><text x="192.0" y="340" font-size="12" fill="#14162b">other (3%)</text></svg></div></div></div>
+      <div class="question-box" data-field="t10-speaking-data">
+        <div class="q-num">Present the data</div>
+        <div class="q-text">Present the two pie charts for <b>about one minute</b>: give an overview first, then the most important changes, using approximations.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“These charts compare…”</li><li>“The most striking change is…”</li><li>“…fell from just under half to…”</li><li>“Overall,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-view">
+        <div class="q-num">Your view</div>
+        <div class="q-text">Is the change shown in the charts a positive one? What might have caused it, and what problems could it create?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d say it’s largely positive because…”</li><li>“One likely cause is…”</li><li>“Admittedly, renewable energy…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 10</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 30 of 45</div>
+    <h1>Day 30 complete! 🎉</h1>
+    <p>Day 30 done — Writing Task 1 (pie charts, tables, process diagrams) and all three parts of the Speaking test.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-cr-lm');
+
+    initWritingCoach('t5-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The diagram below shows how glass bottles are recycled.' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-1"]'); if (b) initRecordControl(b, user.id, 30, 7, 't7-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-2"]'); if (b) initRecordControl(b, user.id, 30, 7, 't7-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-3"]'); if (b) initRecordControl(b, user.id, 30, 7, 't7-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-4"]'); if (b) initRecordControl(b, user.id, 30, 7, 't7-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-5"]'); if (b) initRecordControl(b, user.id, 30, 7, 't7-speaking-5', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-6"]'); if (b) initRecordControl(b, user.id, 30, 7, 't7-speaking-6', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-env"]'); if (b) initRecordControl(b, user.id, 30, 8, 't8-speaking-env', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-skill"]'); if (b) initRecordControl(b, user.id, 30, 8, 't8-speaking-skill', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-1"]'); if (b) initRecordControl(b, user.id, 30, 9, 't9-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-2"]'); if (b) initRecordControl(b, user.id, 30, 9, 't9-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-3"]'); if (b) initRecordControl(b, user.id, 30, 9, 't9-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-4"]'); if (b) initRecordControl(b, user.id, 30, 9, 't9-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-5"]'); if (b) initRecordControl(b, user.id, 30, 9, 't9-speaking-5', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-6"]'); if (b) initRecordControl(b, user.id, 30, 9, 't9-speaking-6', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-7"]'); if (b) initRecordControl(b, user.id, 30, 9, 't9-speaking-7', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-data"]'); if (b) initRecordControl(b, user.id, 30, 10, 't10-speaking-data', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-view"]'); if (b) initRecordControl(b, user.id, 30, 10, 't10-speaking-view', 0); }
+
+    await initTaskFlow(30, 10, user.id, {
+      1: () => { checkAllAnswers('t1-cr', 't1-cr-score'); markLineMatchResult('t1-cr-lm'); checkAllAnswers('t1-mc', 't1-mc-score'); },
+      2: () => { checkAllAnswers('t2-ap', 't2-ap-score'); checkAllAnswers('t2-g', 't2-g-score'); checkAllAnswers('t2-ov', 't2-ov-score'); },
+      3: () => { checkAllAnswers('t3-g', 't3-g-score'); checkAllAnswers('t3-gr', 't3-gr-score'); },
+      4: () => { checkAllAnswers('t4-pa', 't4-pa-score'); checkAllAnswers('t4-seq', 't4-seq-score'); checkAllAnswers('t4-ov', 't4-ov-score'); },
+      6: () => { checkAllAnswers('t6-e', 't6-e-score'); checkAllAnswers('t6-pp', 't6-pp-score'); },
+      8: () => { checkAllAnswers('t8-mc', 't8-mc-score'); },
+      9: () => { checkAllAnswers('t9-fn', 't9-fn-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t3-w-btn', 't3-w-ans', '[id^="t3-w-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t5-essay-model-btn', 't5-essay-model', '#t5-essay');
+  });
+</script>
+</body>
+</html>

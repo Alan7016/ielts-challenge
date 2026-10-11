@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 30 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 30 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 12</div>
+      <h2>Starting Off — What Separates Band 6 from Band 8</h2>
+      <p class="task-sub">Today is an intensive <b>Writing Task 1 and Speaking</b> day: a pie chart and table, a natural process, two maps, a full map report, and all three parts of the Speaking test. Allow <b>about 100 minutes</b>.</p>
+      <p style="margin-top:26px;"><strong>Band 6 or Band 8?</strong> Decide which band each description of a Task 1 answer matches.</p>
+      <div class="card" id="t1-band"><div class="sel-row"><select class="select" id="t1-band-1" data-answer="Band 8"><option value="">—</option><option value="Band 6">Band 6</option><option value="Band 8">Band 8</option></select><span><b>1.</b> presents a clear overview of the main trends, differences or stages</span></div><div class="sel-row"><select class="select" id="t1-band-2" data-answer="Band 6"><option value="">—</option><option value="Band 6">Band 6</option><option value="Band 8">Band 8</option></select><span><b>2.</b> the overview is unclear, and details may be inaccurate or irrelevant</span></div><div class="sel-row"><select class="select" id="t1-band-3" data-answer="Band 8"><option value="">—</option><option value="Band 6">Band 6</option><option value="Band 8">Band 8</option></select><span><b>3.</b> sequences information logically and manages paragraphing well</span></div><div class="sel-row"><select class="select" id="t1-band-4" data-answer="Band 6"><option value="">—</option><option value="Band 6">Band 6</option><option value="Band 8">Band 8</option></select><span><b>4.</b> uses cohesive devices, but they may be faulty or mechanical</span></div><div class="sel-row"><select class="select" id="t1-band-5" data-answer="Band 8"><option value="">—</option><option value="Band 6">Band 6</option><option value="Band 8">Band 8</option></select><span><b>5.</b> uses uncommon vocabulary skilfully, with only occasional slips</span></div><div class="sel-row"><select class="select" id="t1-band-6" data-answer="Band 6"><option value="">—</option><option value="Band 6">Band 6</option><option value="Band 8">Band 8</option></select><span><b>6.</b> makes some errors in word choice and spelling, which do not stop communication</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-band', 't1-band-score')">Check answers</button>
+          <span id="t1-band-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Precision vocabulary for Task 1.</strong> Match each word to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. marginally</button><button type="button" class="lm-item" data-key="2">2. plummet</button><button type="button" class="lm-item" data-key="3">3. account for</button><button type="button" class="lm-item" data-key="4">4. negligible</button><button type="button" class="lm-item" data-key="5">5. respectively</button><button type="button" class="lm-item" data-key="6">6. converted into</button><button type="button" class="lm-item" data-key="7">7. make way for</button><button type="button" class="lm-item" data-key="8">8. in the vicinity of</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. near; in the area around</button><button type="button" class="lm-item" data-key="b">b. changed so that it is used for a different purpose</button><button type="button" class="lm-item" data-key="c">c. fall very quickly and by a large amount</button><button type="button" class="lm-item" data-key="d">d. in the same order as the things already mentioned</button><button type="button" class="lm-item" data-key="e">e. form a particular proportion of</button><button type="button" class="lm-item" data-key="f">f. be removed so that something else can replace it</button><button type="button" class="lm-item" data-key="g">g. by a very small amount</button><button type="button" class="lm-item" data-key="h">h. so small that it is not important</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 12</div>
+      <h2>Mixed Data — A Pie Chart and a Table</h2>
+      <p class="task-sub">When two different chart types appear together, Band 8 answers <b>link</b> them in the overview and choose details selectively. Precise approximation is essential.</p>
+<div class="card"><svg viewBox="0 0 360 396" class="svg-chart" role="img" aria-label="Household water use in one city, 2025" style="width:100%;max-width:360px;display:block;margin:0 auto;font-family:inherit;"><text x="180.0" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">Household water use in one city, 2025</text><path d="M180.0,165 L180.0,60.0 A105,105 0 0 1 272.0,215.6 Z" fill="#2c6bed" stroke="#fff" stroke-width="1.5"/><text x="241.5" y="132.7" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">33%</text><path d="M180.0,165 L272.0,215.6 A105,105 0 0 1 147.6,264.9 Z" fill="#d9480f" stroke="#fff" stroke-width="1.5"/><text x="206.3" y="235.4" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">22%</text><path d="M180.0,165 L147.6,264.9 A105,105 0 0 1 80.1,197.4 Z" fill="#2b8a3e" stroke="#fff" stroke-width="1.5"/><text x="129.5" y="219.5" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">15%</text><path d="M180.0,165 L80.1,197.4 A105,105 0 0 1 88.0,114.4 Z" fill="#7048e8" stroke="#fff" stroke-width="1.5"/><text x="108.9" y="162.3" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">13%</text><path d="M180.0,165 L88.0,114.4 A105,105 0 0 1 141.3,67.4 Z" fill="#c2255c" stroke="#fff" stroke-width="1.5"/><text x="132.8" y="115.4" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">11%</text><path d="M180.0,165 L141.3,67.4 A105,105 0 0 1 180.0,60.0 Z" fill="#e8a400" stroke="#fff" stroke-width="1.5"/><text x="166.6" y="98.9" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">6%</text><rect x="14.0" y="286" width="12" height="12" fill="#2c6bed"/><text x="32.0" y="296" font-size="12" fill="#14162b">showers & baths</text><rect x="194.0" y="286" width="12" height="12" fill="#d9480f"/><text x="212.0" y="296" font-size="12" fill="#14162b">toilets</text><rect x="14.0" y="308" width="12" height="12" fill="#2b8a3e"/><text x="32.0" y="318" font-size="12" fill="#14162b">garden</text><rect x="194.0" y="308" width="12" height="12" fill="#7048e8"/><text x="212.0" y="318" font-size="12" fill="#14162b">washing machines</text><rect x="14.0" y="330" width="12" height="12" fill="#c2255c"/><text x="32.0" y="340" font-size="12" fill="#14162b">kitchen taps</text><rect x="194.0" y="330" width="12" height="12" fill="#e8a400"/><text x="212.0" y="340" font-size="12" fill="#14162b">other</text></svg></div><div class="card"><p class="prompt-label" style="text-align:center;">Average daily water use per person (litres)</p><div style="overflow-x:auto;"><table class="data-table" style="width:100%;"><tr><th>city</th><th>2005</th><th>2025</th></tr><tr><td>Northport</td><td>180</td><td>135</td></tr><tr><td>Easton</td><td>150</td><td>148</td></tr><tr><td>Westvale</td><td>210</td><td>120</td></tr><tr><td>Southbay</td><td>95</td><td>130</td></tr><tr><td>Midton</td><td>160</td><td>110</td></tr></table></div></div>
+      <p style="margin-top:26px;"><strong>Approximation.</strong> Choose the phrase that matches the figure.</p>
+      <div class="card" id="t2-ap"><div class="sel-row"><select class="select" id="t2-ap-1" data-answer="precisely a third"><option value="">—</option><option value="precisely a third">precisely a third</option><option value="just over a fifth">just over a fifth</option><option value="roughly one in seven">roughly one in seven</option><option value="a negligible share">a negligible share</option></select><span><b>1.</b> showers & baths (33%)</span></div><div class="sel-row"><select class="select" id="t2-ap-2" data-answer="just over a fifth"><option value="">—</option><option value="precisely a third">precisely a third</option><option value="just over a fifth">just over a fifth</option><option value="roughly one in seven">roughly one in seven</option><option value="a negligible share">a negligible share</option></select><span><b>2.</b> toilets (22%)</span></div><div class="sel-row"><select class="select" id="t2-ap-3" data-answer="roughly one in seven"><option value="">—</option><option value="precisely a third">precisely a third</option><option value="just over a fifth">just over a fifth</option><option value="roughly one in seven">roughly one in seven</option><option value="a negligible share">a negligible share</option></select><span><b>3.</b> garden (15%)</span></div><div class="sel-row"><select class="select" id="t2-ap-4" data-answer="a negligible share"><option value="">—</option><option value="precisely a third">precisely a third</option><option value="just over a fifth">just over a fifth</option><option value="roughly one in seven">roughly one in seven</option><option value="a negligible share">a negligible share</option></select><span><b>4.</b> other (6%)</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-ap', 't2-ap-score')">Check answers</button>
+          <span id="t2-ap-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Complete the sentences</strong> with ONE word.</p>
+      <div class="card" id="t2-g" style="line-height:2.5;"><p>1. Showers and baths <input type="text" class="text-answer" id="t2-1" data-correct="accounted" autocomplete="off" style="width:120px;"> for a third of household water use.</p><p>2. Daily use in Westvale <input type="text" class="text-answer" id="t2-2" data-correct="plummeted/fell/dropped/decreased/declined" autocomplete="off" style="width:120px;"> from 210 to 120 litres, the largest fall of any city.</p><p>3. Consumption in Easton fell only <input type="text" class="text-answer" id="t2-3" data-correct="marginally/slightly" autocomplete="off" style="width:120px;">, from 150 to 148 litres.</p><p>4. Southbay was the only city where use <input type="text" class="text-answer" id="t2-4" data-correct="increased/rose/grew" autocomplete="off" style="width:120px;">.</p><p>5. In 2025, Southbay and Northport used 130 and 135 litres per person <input type="text" class="text-answer" id="t2-5" data-correct="respectively" autocomplete="off" style="width:130px;">.</p><p>6. Westvale went from the <input type="text" class="text-answer" id="t2-6" data-correct="highest" autocomplete="off" style="width:120px;"> consumer in 2005 to one of the lowest in 2025.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-g', 't2-g-score')">Check answers</button>
+          <span id="t2-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t2-ov"><div class="q-item" id="t2-ov-1">
+          <p>1. Which overview links the two charts most effectively?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-ov-1" data-correct="false"> A. The pie chart shows water use and the table shows cities.</label><label><input type="radio" value="1" name="t2-ov-1" data-correct="true"> B. Overall, bathing and toilets dominate household water use, and daily consumption per person fell in four of the five cities, with Southbay the only exception.</label><label><input type="radio" value="2" name="t2-ov-1" data-correct="false"> C. Overall, Westvale used 210 litres in 2005 and 120 litres in 2025.</label><label><input type="radio" value="3" name="t2-ov-1" data-correct="false"> D. People should use less water in the shower.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-ov', 't2-ov-score')">Check answers</button>
+          <span id="t2-ov-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 12</div>
+      <h2>Natural Processes — Active Verbs, Relative and Participle Clauses</h2>
+      <p class="task-sub">For a <b>natural</b> process (a life cycle), the active voice is often more natural than the passive. Band 8 answers combine stages with <b>relative clauses</b>, <b>participle clauses</b> and <b>having + past participle</b>.</p>
+<div class="card"><svg viewBox="0 0 722 250" class="svg-chart" role="img" aria-label="The life cycle of the Atlantic salmon" style="width:100%;max-width:722px;display:block;margin:0 auto;font-family:inherit;"><defs><marker id="pa" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4b4e5c"/></marker></defs><text x="361.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">The life cycle of the Atlantic salmon</text><rect x="10" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="24" cy="54" r="10" fill="#2c6bed"/><text x="24" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">1</text><text x="91.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Eggs</text><text x="85.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">laid in river gravel</text><rect x="194" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="208" cy="54" r="10" fill="#2c6bed"/><text x="208" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">2</text><text x="275.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Alevins</text><text x="269.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">hatch; feed on yolk sac</text><rect x="378" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="392" cy="54" r="10" fill="#2c6bed"/><text x="392" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">3</text><text x="459.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Fry</text><text x="453.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">leave gravel, start feeding</text><rect x="562" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="576" cy="54" r="10" fill="#2c6bed"/><text x="576" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">4</text><text x="643.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Parr</text><text x="637.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">1–3 years in the river</text><rect x="562" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="576" cy="174" r="10" fill="#2c6bed"/><text x="576" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">5</text><text x="643.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Smolts</text><text x="637.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">adapt to salt water, migrate</text><rect x="378" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="392" cy="174" r="10" fill="#2c6bed"/><text x="392" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">6</text><text x="459.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Adults at sea</text><text x="453.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">1–4 years feeding</text><rect x="194" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="208" cy="174" r="10" fill="#2c6bed"/><text x="208" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">7</text><text x="275.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Return</text><text x="269.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">swim back to birth river</text><rect x="10" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="24" cy="174" r="10" fill="#2c6bed"/><text x="24" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">8</text><text x="91.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Spawning</text><text x="85.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">lay eggs; cycle begins again</text><line x1="160" y1="77.0" x2="191" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="344" y1="77.0" x2="375" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="528" y1="77.0" x2="559" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="637.0" y1="114" x2="637.0" y2="157" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="562" y1="197.0" x2="531" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="378" y1="197.0" x2="347" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="194" y1="197.0" x2="163" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/></svg></div>
+      <p style="margin-top:26px;"><strong>Part 1 — Combine the stages.</strong> Complete each sentence.</p>
+      <div class="card" id="t3-c" style="line-height:2.6;"><p>1. The eggs are laid in river gravel, <input type="text" class="text-answer" id="t3-1" data-correct="where" autocomplete="off" style="width:100px;"> they develop until they hatch.</p><p>2. The young fish, <input type="text" class="text-answer" id="t3-2" data-correct="which/known" autocomplete="off" style="width:100px;"> are called alevins, feed on their yolk sac.</p><p>3. <input type="text" class="text-answer" id="t3-3" data-correct="Having" autocomplete="off" style="width:100px;"> left the gravel, the fry begin to feed.</p><p>4. The parr spend between one and three years in the river before <input type="text" class="text-answer" id="t3-4" data-correct="becoming/turning into" autocomplete="off" style="width:130px;"> smolts.</p><p>5. <input type="text" class="text-answer" id="t3-5" data-correct="Adapting" autocomplete="off" style="width:110px;"> to salt water, the smolts migrate to the sea.</p><p>6. After one to four years at sea, the adults return to the river <input type="text" class="text-answer" id="t3-6" data-correct="in" autocomplete="off" style="width:80px;"> which they were born.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-c', 't3-c-score')">Check answers</button>
+          <span id="t3-c-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Active or passive?</strong> Choose the more natural sentence for a Task 1 answer.</p>
+      <div class="card" id="t3-ap"><div class="q-item" id="t3-ap-1">
+          <p>1. Life cycle:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-ap-1" data-correct="false"> The adults are returned to the river.</label><label><input type="radio" value="1" name="t3-ap-1" data-correct="true"> The adults return to the river.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-ap-2">
+          <p>2. Manufacturing:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-ap-2" data-correct="true"> The bottles are crushed into small pieces.</label><label><input type="radio" value="1" name="t3-ap-2" data-correct="false"> Workers crush the bottles into small pieces.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-ap-3">
+          <p>3. Life cycle:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-ap-3" data-correct="true"> The eggs are laid in gravel by the female.</label><label><input type="radio" value="1" name="t3-ap-3" data-correct="false"> The female is laying eggs in gravel.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-ap', 't3-ap-score')">Check answers</button>
+          <span id="t3-ap-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write an <b>overview</b> of the salmon life cycle (1–2 sentences).</p><textarea class="no-check mini-answer" id="t3-w-1" placeholder="Write here..." style="min-height:90px;"></textarea><p class="mini-q">Write the paragraph describing stages 5–8 (3–4 sentences), using at least one participle clause.</p><textarea class="no-check mini-answer" id="t3-w-2" placeholder="Write here..." style="min-height:90px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t3-w-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t3-w-ans"><div class="model-text" style="padding:2px 0;"><p>Overall, the Atlantic salmon passes through eight distinct stages, beginning and ending in fresh water, with a period of several years spent feeding at sea in between.</p><p>Having spent up to three years in the river, the young fish become smolts, adapting to salt water before migrating to the sea. They then spend between one and four years feeding in the ocean, where they grow to adult size. Finally, the adults swim back to the river in which they were born, where they spawn, laying the eggs from which the next generation will emerge.</p><p class="alt">≈ 100 words</p></div></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 12</div>
+      <h2>Maps — The Language of Change</h2>
+      <p class="task-sub">Map tasks test a very specific vocabulary: what was <b>demolished</b>, <b>replaced</b>, <b>converted</b>, <b>extended</b> or <b>constructed</b>, and precise <b>location</b> language.</p>
+<div class="card"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;"><div><svg viewBox="0 0 460 330" class="svg-chart" role="img" aria-label="Riverside village, 1995" style="width:100%;max-width:460px;display:block;margin:0 auto;font-family:inherit;"><text x="230.0" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">Riverside village, 1995</text><rect x="10" y="30" width="440" height="290" fill="#f8f9fa" stroke="#868e96"/><rect x="10" y="150" width="205" height="26" rx="4" fill="#a5d8ff" stroke="#868e96" stroke-width="0.8"/><rect x="241" y="150" width="209" height="26" rx="4" fill="#a5d8ff" stroke="#868e96" stroke-width="0.8"/><text x="345.5" y="167.0" text-anchor="middle" font-size="11" fill="#14162b">River Ashe</text><rect x="215" y="30" width="26" height="290" rx="4" fill="#bfc3cc" stroke="#868e96" stroke-width="0.8"/><rect x="20" y="40" width="185" height="100" rx="4" fill="#f4e8c1" stroke="#868e96" stroke-width="0.8"/><text x="112.5" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">farmland</text><rect x="250" y="40" width="190" height="100" rx="4" fill="#8ce99a" stroke="#868e96" stroke-width="0.8"/><text x="345.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">woodland</text><rect x="25" y="190" width="110" height="50" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="80.0" y="219.0" text-anchor="middle" font-size="11" fill="#14162b">small shops</text><rect x="255" y="190" width="185" height="110" rx="4" fill="#fcc2d7" stroke="#868e96" stroke-width="0.8"/><text x="347.5" y="249.0" text-anchor="middle" font-size="11" fill="#14162b">houses</text><rect x="110" y="255" width="80" height="45" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="150.0" y="281.5" text-anchor="middle" font-size="11" fill="#14162b">school</text><text x="416" y="50" font-size="12" font-weight="700" fill="#14162b">N ↑</text></svg></div><div><svg viewBox="0 0 460 330" class="svg-chart" role="img" aria-label="Riverside village, today" style="width:100%;max-width:460px;display:block;margin:0 auto;font-family:inherit;"><text x="230.0" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">Riverside village, today</text><rect x="10" y="30" width="440" height="290" fill="#f8f9fa" stroke="#868e96"/><rect x="10" y="150" width="205" height="26" rx="4" fill="#a5d8ff" stroke="#868e96" stroke-width="0.8"/><rect x="241" y="150" width="209" height="26" rx="4" fill="#a5d8ff" stroke="#868e96" stroke-width="0.8"/><text x="345.5" y="167.0" text-anchor="middle" font-size="11" fill="#14162b">River Ashe</text><rect x="10" y="178" width="440" height="8" rx="4" fill="#d0bfff" stroke="#868e96" stroke-width="0.8"/><rect x="215" y="30" width="26" height="290" rx="4" fill="#bfc3cc" stroke="#868e96" stroke-width="0.8"/><rect x="95" y="140" width="16" height="50" rx="4" fill="#d0bfff" stroke="#868e96" stroke-width="0.8"/><rect x="20" y="40" width="185" height="100" rx="4" fill="#fcc2d7" stroke="#868e96" stroke-width="0.8"/><text x="112.5" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">housing estate</text><rect x="330" y="40" width="110" height="100" rx="4" fill="#8ce99a" stroke="#868e96" stroke-width="0.8"/><text x="385.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">woodland</text><rect x="250" y="40" width="72" height="100" rx="4" fill="#ced4da" stroke="#868e96" stroke-width="0.8"/><text x="286.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">car park</text><rect x="25" y="190" width="110" height="50" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="80.0" y="219.0" text-anchor="middle" font-size="11" fill="#14162b">supermarket</text><rect x="255" y="190" width="185" height="110" rx="4" fill="#fcc2d7" stroke="#868e96" stroke-width="0.8"/><text x="347.5" y="249.0" text-anchor="middle" font-size="11" fill="#14162b">houses</text><rect x="140" y="200" width="70" height="100" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="175.0" y="254.0" text-anchor="middle" font-size="11" fill="#14162b">school</text><text x="20" y="312" font-size="10.5" font-style="italic" fill="#5f3dc4">purple = new footbridge and cycle path</text><text x="416" y="50" font-size="12" font-weight="700" fill="#14162b">N ↑</text></svg></div></div></div>
+      <p style="margin-top:26px;"><strong>Part 1 — Which verb?</strong> Complete each sentence about the village maps with ONE word.</p>
+      <div class="card" id="t4-v" style="line-height:2.5;"><p>1. The farmland to the north-west of the main road has been <input type="text" class="text-answer" id="t4-1" data-correct="replaced" autocomplete="off" style="width:120px;"> by a housing estate.</p><p>2. The small shops have made <input type="text" class="text-answer" id="t4-2" data-correct="way" autocomplete="off" style="width:100px;"> for a supermarket.</p><p>3. The school has been <input type="text" class="text-answer" id="t4-3" data-correct="extended/enlarged/expanded" autocomplete="off" style="width:120px;"> northwards.</p><p>4. Part of the woodland has been <input type="text" class="text-answer" id="t4-4" data-correct="cleared/removed/converted" autocomplete="off" style="width:120px;"> to create a car park.</p><p>5. A footbridge has been <input type="text" class="text-answer" id="t4-5" data-correct="built/constructed" autocomplete="off" style="width:120px;"> across the river to the west of the road.</p><p>6. A cycle path now runs <input type="text" class="text-answer" id="t4-6" data-correct="alongside/along" autocomplete="off" style="width:120px;"> the southern bank of the river.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-v', 't4-v-score')">Check answers</button>
+          <span id="t4-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Location.</strong> Choose the correct description.</p>
+      <div class="card" id="t4-loc"><div class="q-item" id="t4-loc-1">
+          <p>1. Where is the car park?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-loc-1" data-correct="true"> to the east of the main road, north of the river</label><label><input type="radio" value="1" name="t4-loc-1" data-correct="false"> to the south of the river</label><label><input type="radio" value="2" name="t4-loc-1" data-correct="false"> in the north-west corner</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-loc-2">
+          <p>2. Where are the houses that have not changed?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-loc-2" data-correct="false"> in the north-east</label><label><input type="radio" value="1" name="t4-loc-2" data-correct="true"> in the south-east, east of the main road</label><label><input type="radio" value="2" name="t4-loc-2" data-correct="false"> next to the supermarket</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-loc-3">
+          <p>3. Which feature remained unchanged?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-loc-3" data-correct="false"> the school</label><label><input type="radio" value="1" name="t4-loc-3" data-correct="false"> the woodland</label><label><input type="radio" value="2" name="t4-loc-3" data-correct="true"> the houses to the south-east</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-loc', 't4-loc-score')">Check answers</button>
+          <span id="t4-loc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 12</div>
+      <h2>Maps — Overview and Organisation</h2>
+      <p class="task-sub">Map answers are usually organised by <b>area</b> (north / south of the river) or by <b>type of change</b> (removed / added / unchanged). The overview should summarise the overall character of the change.</p>
+<div class="card"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;"><div><svg viewBox="0 0 460 330" class="svg-chart" role="img" aria-label="Riverside village, 1995" style="width:100%;max-width:460px;display:block;margin:0 auto;font-family:inherit;"><text x="230.0" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">Riverside village, 1995</text><rect x="10" y="30" width="440" height="290" fill="#f8f9fa" stroke="#868e96"/><rect x="10" y="150" width="205" height="26" rx="4" fill="#a5d8ff" stroke="#868e96" stroke-width="0.8"/><rect x="241" y="150" width="209" height="26" rx="4" fill="#a5d8ff" stroke="#868e96" stroke-width="0.8"/><text x="345.5" y="167.0" text-anchor="middle" font-size="11" fill="#14162b">River Ashe</text><rect x="215" y="30" width="26" height="290" rx="4" fill="#bfc3cc" stroke="#868e96" stroke-width="0.8"/><rect x="20" y="40" width="185" height="100" rx="4" fill="#f4e8c1" stroke="#868e96" stroke-width="0.8"/><text x="112.5" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">farmland</text><rect x="250" y="40" width="190" height="100" rx="4" fill="#8ce99a" stroke="#868e96" stroke-width="0.8"/><text x="345.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">woodland</text><rect x="25" y="190" width="110" height="50" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="80.0" y="219.0" text-anchor="middle" font-size="11" fill="#14162b">small shops</text><rect x="255" y="190" width="185" height="110" rx="4" fill="#fcc2d7" stroke="#868e96" stroke-width="0.8"/><text x="347.5" y="249.0" text-anchor="middle" font-size="11" fill="#14162b">houses</text><rect x="110" y="255" width="80" height="45" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="150.0" y="281.5" text-anchor="middle" font-size="11" fill="#14162b">school</text><text x="416" y="50" font-size="12" font-weight="700" fill="#14162b">N ↑</text></svg></div><div><svg viewBox="0 0 460 330" class="svg-chart" role="img" aria-label="Riverside village, today" style="width:100%;max-width:460px;display:block;margin:0 auto;font-family:inherit;"><text x="230.0" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">Riverside village, today</text><rect x="10" y="30" width="440" height="290" fill="#f8f9fa" stroke="#868e96"/><rect x="10" y="150" width="205" height="26" rx="4" fill="#a5d8ff" stroke="#868e96" stroke-width="0.8"/><rect x="241" y="150" width="209" height="26" rx="4" fill="#a5d8ff" stroke="#868e96" stroke-width="0.8"/><text x="345.5" y="167.0" text-anchor="middle" font-size="11" fill="#14162b">River Ashe</text><rect x="10" y="178" width="440" height="8" rx="4" fill="#d0bfff" stroke="#868e96" stroke-width="0.8"/><rect x="215" y="30" width="26" height="290" rx="4" fill="#bfc3cc" stroke="#868e96" stroke-width="0.8"/><rect x="95" y="140" width="16" height="50" rx="4" fill="#d0bfff" stroke="#868e96" stroke-width="0.8"/><rect x="20" y="40" width="185" height="100" rx="4" fill="#fcc2d7" stroke="#868e96" stroke-width="0.8"/><text x="112.5" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">housing estate</text><rect x="330" y="40" width="110" height="100" rx="4" fill="#8ce99a" stroke="#868e96" stroke-width="0.8"/><text x="385.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">woodland</text><rect x="250" y="40" width="72" height="100" rx="4" fill="#ced4da" stroke="#868e96" stroke-width="0.8"/><text x="286.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">car park</text><rect x="25" y="190" width="110" height="50" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="80.0" y="219.0" text-anchor="middle" font-size="11" fill="#14162b">supermarket</text><rect x="255" y="190" width="185" height="110" rx="4" fill="#fcc2d7" stroke="#868e96" stroke-width="0.8"/><text x="347.5" y="249.0" text-anchor="middle" font-size="11" fill="#14162b">houses</text><rect x="140" y="200" width="70" height="100" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="175.0" y="254.0" text-anchor="middle" font-size="11" fill="#14162b">school</text><text x="20" y="312" font-size="10.5" font-style="italic" fill="#5f3dc4">purple = new footbridge and cycle path</text><text x="416" y="50" font-size="12" font-weight="700" fill="#14162b">N ↑</text></svg></div></div></div>
+      <div class="card" id="t5-ov"><div class="q-item" id="t5-ov-1">
+          <p>1. Which is the best overview?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-ov-1" data-correct="false"> A. Overall, the farmland was replaced by houses and the shops were replaced by a supermarket.</label><label><input type="radio" value="1" name="t5-ov-1" data-correct="true"> B. Overall, the village has become considerably more developed and residential, with leisure and transport facilities added, although the main road, the river and the houses in the south-east remain unchanged.</label><label><input type="radio" value="2" name="t5-ov-1" data-correct="false"> C. Overall, the village looks much nicer today than it did in 1995.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-ov', 't5-ov-score')">Check answers</button>
+          <span id="t5-ov-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write the <b>introduction</b> and <b>overview</b> (2–3 sentences).</p><textarea class="no-check mini-answer" id="t5-w-1" placeholder="Write here..." style="min-height:100px;"></textarea><p class="mini-q">Write one <b>details paragraph</b> about the area north of the river (3–4 sentences).</p><textarea class="no-check mini-answer" id="t5-w-2" placeholder="Write here..." style="min-height:100px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t5-w-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t5-w-ans"><div class="model-text" style="padding:2px 0;"><p>The maps illustrate how the village of Riverside has changed between 1995 and the present day. Overall, the village has become considerably more developed and residential, with new leisure and transport facilities, although the main road, the river and the houses in the south-east remain the same.</p><p>The most dramatic change has occurred to the north of the river. The farmland to the west of the main road has been replaced by a large housing estate. On the opposite side of the road, the woodland has been reduced to roughly half its former size, with the western part cleared to make way for a car park.</p><p class="alt">≈ 115 words</p></div></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 12</div>
+      <h2>From Band 6 to Band 8 — Upgrading Sentences</h2>
+      <p class="task-sub">Choose the Band 8 version of each sentence. Notice what makes it better: precision, concision, a more sophisticated structure, or accurate collocation.</p>
+      <div class="card" id="t6-up"><div class="q-item" id="t6-up-1">
+          <p>1. Choose the Band 8 version:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-up-1" data-correct="false"> A. The cinema was not there any more and a shopping centre was there.</label><label><input type="radio" value="1" name="t6-up-1" data-correct="true"> B. The cinema was demolished to make way for a shopping centre.</label><label><input type="radio" value="2" name="t6-up-1" data-correct="false"> C. The cinema became a shopping centre building place.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-up-2">
+          <p>2. Choose the Band 8 version:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-up-2" data-correct="false"> A. Water use went down a lot in Westvale.</label><label><input type="radio" value="1" name="t6-up-2" data-correct="true"> B. Water use in Westvale plummeted by over 40%, from 210 to 120 litres.</label><label><input type="radio" value="2" name="t6-up-2" data-correct="false"> C. Westvale’s water use was decreasing very much.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-up-3">
+          <p>3. Choose the Band 8 version:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-up-3" data-correct="false"> A. Showers are 33% and toilets are 22%.</label><label><input type="radio" value="1" name="t6-up-3" data-correct="true"> B. Showers and baths account for a third of household use, while toilets represent just over a fifth.</label><label><input type="radio" value="2" name="t6-up-3" data-correct="false"> C. Showers are the most and toilets are the second most.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-up-4">
+          <p>4. Choose the Band 8 version:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-up-4" data-correct="false"> A. First the eggs are laid, then they hatch, then they are alevins.</label><label><input type="radio" value="1" name="t6-up-4" data-correct="true"> B. Once the eggs have hatched, the young fish, known as alevins, feed on their yolk sac.</label><label><input type="radio" value="2" name="t6-up-4" data-correct="false"> C. The eggs are hatched and after it the alevins are there.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-up-5">
+          <p>5. Choose the Band 8 version:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-up-5" data-correct="false"> A. In conclusion, I think the town is better now.</label><label><input type="radio" value="1" name="t6-up-5" data-correct="true"> B. Overall, the town centre has been transformed from an industrial and traffic-dominated area into a pedestrian-friendly space for shopping, leisure and housing.</label><label><input type="radio" value="2" name="t6-up-5" data-correct="false"> C. Overall, there are many changes.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-up', 't6-up-score')">Check answers</button>
+          <span id="t6-up-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Correct the collocation.</strong> Write the correct word.</p>
+      <div class="card" id="t6-c" style="line-height:2.4;"><p>1. The figure <u>did</u> a peak of 40% in 2010. → <input type="text" class="text-answer" id="t6-1" data-correct="reached/hit" autocomplete="off" style="width:120px;"></p><p>2. There was a <u>strong</u> decrease in coal use. → <input type="text" class="text-answer" id="t6-2" data-correct="sharp/dramatic/significant/marked" autocomplete="off" style="width:120px;"></p><p>3. Showers <u>count</u> for a third of water use. → <input type="text" class="text-answer" id="t6-3" data-correct="account" autocomplete="off" style="width:120px;"></p><p>4. The factory was <u>changed</u> into apartments. → <input type="text" class="text-answer" id="t6-4" data-correct="converted" autocomplete="off" style="width:120px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-c', 't6-c-score')">Check answers</button>
+          <span id="t6-c-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 12</div>
+      <h2>Writing Task 1 — Your Map Report</h2>
+      <p class="task-sub">Write a full Band 8 map report. Spend about <b>20 minutes</b> and write <b>at least 150 words</b>. Organise by area or type of change, give a strong overview, and use the language of change and location.</p>
+<div class="card advice-card"><ul style="margin:0; padding-left:20px; line-height:1.8;"><li>Overview: the overall <b>character</b> of the change (from industry and traffic to pedestrians, shopping, housing and leisure).</li><li>Group changes: north of the High Street / south of the High Street — or: replaced / extended / unchanged.</li><li>Mention what did <b>not</b> change (the market square).</li></ul></div>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The maps below show the centre of the town of Hillbury in 2000 and in 2025.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;"><div><svg viewBox="0 0 460 330" class="svg-chart" role="img" aria-label="Hillbury town centre, 2000" style="width:100%;max-width:460px;display:block;margin:0 auto;font-family:inherit;"><text x="230.0" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">Hillbury town centre, 2000</text><rect x="10" y="30" width="440" height="290" fill="#f8f9fa" stroke="#868e96"/><rect x="10" y="160" width="440" height="26" rx="4" fill="#bfc3cc" stroke="#868e96" stroke-width="0.8"/><text x="230.0" y="177.0" text-anchor="middle" font-size="11" fill="#14162b">High Street (traffic)</text><rect x="20" y="40" width="120" height="100" rx="4" fill="#ced4da" stroke="#868e96" stroke-width="0.8"/><text x="80.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">car park</text><rect x="165" y="40" width="130" height="100" rx="4" fill="#f4e8c1" stroke="#868e96" stroke-width="0.8"/><text x="230.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">market square</text><rect x="320" y="40" width="120" height="100" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="380.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">bus station</text><rect x="20" y="205" width="130" height="105" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="85.0" y="261.5" text-anchor="middle" font-size="11" fill="#14162b">cinema</text><rect x="170" y="205" width="120" height="105" rx="4" fill="#8ce99a" stroke="#868e96" stroke-width="0.8"/><text x="230.0" y="261.5" text-anchor="middle" font-size="11" fill="#14162b">park</text><rect x="310" y="205" width="130" height="105" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="375.0" y="261.5" text-anchor="middle" font-size="11" fill="#14162b">factory</text><text x="416" y="50" font-size="12" font-weight="700" fill="#14162b">N ↑</text></svg></div><div><svg viewBox="0 0 460 330" class="svg-chart" role="img" aria-label="Hillbury town centre, 2025" style="width:100%;max-width:460px;display:block;margin:0 auto;font-family:inherit;"><text x="230.0" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">Hillbury town centre, 2025</text><rect x="10" y="30" width="440" height="290" fill="#f8f9fa" stroke="#868e96"/><rect x="10" y="160" width="440" height="26" rx="4" fill="#d0bfff" stroke="#868e96" stroke-width="0.8"/><text x="230.0" y="177.0" text-anchor="middle" font-size="11" fill="#14162b">High Street (pedestrian only)</text><rect x="20" y="40" width="120" height="100" rx="4" fill="#ced4da" stroke="#868e96" stroke-width="0.8"/><text x="80.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">multi-storey car park</text><rect x="165" y="40" width="130" height="100" rx="4" fill="#f4e8c1" stroke="#868e96" stroke-width="0.8"/><text x="230.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">market square</text><rect x="320" y="40" width="120" height="100" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="380.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">library & offices</text><rect x="20" y="205" width="130" height="105" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="85.0" y="261.5" text-anchor="middle" font-size="11" fill="#14162b">shopping centre</text><rect x="170" y="205" width="120" height="105" rx="4" fill="#8ce99a" stroke="#868e96" stroke-width="0.8"/><text x="230.0" y="261.5" text-anchor="middle" font-size="11" fill="#14162b">park + playground</text><rect x="310" y="205" width="130" height="50" rx="4" fill="#fcc2d7" stroke="#868e96" stroke-width="0.8"/><text x="375.0" y="234.0" text-anchor="middle" font-size="11" fill="#14162b">apartments</text><rect x="310" y="258" width="130" height="52" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="375.0" y="288.0" text-anchor="middle" font-size="11" fill="#14162b">cafés</text><text x="416" y="50" font-size="12" font-weight="700" fill="#14162b">N ↑</text></svg></div></div></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t7-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t7-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t7-essay-model"><div class="model-text" style="padding:2px 0;"><p>The two maps illustrate how the centre of Hillbury was redeveloped between 2000 and 2025.</p><p>Overall, the town centre has been transformed from an area dominated by traffic and industry into a pedestrian-friendly space focused on shopping, leisure and housing. Only the market square remained unchanged.</p><p>The most significant change concerns the High Street, which was once open to traffic but has now been pedestrianised. To the north of it, the car park in the north-west has been replaced by a multi-storey car park, while the bus station in the north-east has been converted into a library and offices. The market square between them has stayed exactly as it was.</p><p>South of the High Street, the cinema has been demolished to make way for a shopping centre, and the park has been retained but now includes a playground. The most striking transformation is in the south-east, where the factory has disappeared entirely, its site now divided between apartments and a row of cafés.</p><p class="alt">≈ 180 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 12</div>
+      <h2>Speaking Part 1 — Places, Change and Daily Life</h2>
+      <p class="task-sub">Band 8 Part 1 answers sound effortless: an immediate answer, natural extension, and idiomatic but accurate language. Avoid memorised-sounding speeches.</p>
+      <div class="question-box" data-field="t8-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">How has your hometown changed in recent years?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s changed almost beyond recognition…”</li><li>“If I could change one thing, it would be…”</li><li>“I’m quite torn, actually…”</li><li>“Funnily enough,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Is there anything you would like to change about the area where you live?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s changed almost beyond recognition…”</li><li>“If I could change one thing, it would be…”</li><li>“I’m quite torn, actually…”</li><li>“Funnily enough,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Do you think it is important to save water? Why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s changed almost beyond recognition…”</li><li>“If I could change one thing, it would be…”</li><li>“I’m quite torn, actually…”</li><li>“Funnily enough,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Do you prefer old buildings or modern ones?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s changed almost beyond recognition…”</li><li>“If I could change one thing, it would be…”</li><li>“I’m quite torn, actually…”</li><li>“Funnily enough,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-5">
+        <div class="q-num">Question 5</div>
+        <div class="q-text">How do you usually get around your city?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s changed almost beyond recognition…”</li><li>“If I could change one thing, it would be…”</li><li>“I’m quite torn, actually…”</li><li>“Funnily enough,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-6">
+        <div class="q-num">Question 6</div>
+        <div class="q-text">Have you ever visited a factory or seen how something is made?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s changed almost beyond recognition…”</li><li>“If I could change one thing, it would be…”</li><li>“I’m quite torn, actually…”</li><li>“Funnily enough,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 12</div>
+      <h2>Speaking Part 2 — Two Practice Cards</h2>
+      <p class="task-sub">Read the Band 8.5 model and notice its structure: a vivid opening, a clear sequence, precise vocabulary and a reflective ending. Then do both cards — 1 minute to prepare, the full <b>2 minutes</b> to speak.</p>
+      <div class="card task-prompt"><p class="prompt-label">Part 2 task card</p><p><b>Describe a place in your city that has changed a lot.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;where it is<br>&nbsp;&nbsp;what it was like before<br>&nbsp;&nbsp;how it has changed<br>and explain how you feel about the changes.</p></div>
+      <div class="card"><p class="prompt-label">Model answer (Band 8.5)</p>
+<p style="line-height:1.8;">The place I’d like to talk about is the area around the old textile factory near my grandparents’ house in Tashkent. When I was a child, it was a rather grim, noisy part of town — lorries coming and going all day, a high concrete wall, and hardly anywhere to walk.</p>
+<p style="line-height:1.8;">About five years ago, the factory closed and the whole site was redeveloped. The main building wasn’t demolished, interestingly; instead, it was converted into a kind of cultural centre with exhibition spaces and a café, and the land around it has been turned into a park with fountains and cycle paths. What used to be a car park is now a small market at weekends.</p>
+<p style="line-height:1.8;">As for how I feel, my reaction is broadly positive. The area is far greener and more welcoming, and you see families there every evening. That said, I do feel a slight pang of nostalgia — the factory was part of the city’s industrial history, and some of the people who worked there struggled to find new jobs. So I’d say it’s a change for the better, but not one without a cost.</p></div>
+      <div class="card" id="t9-mc"><div class="q-item" id="t9-mc-1">
+          <p>1. Which technique does the speaker use in the final paragraph to reach Band 8?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-1" data-correct="false"> A. She repeats the task card.</label><label><input type="radio" value="1" name="t9-mc-1" data-correct="true"> B. She gives a balanced, nuanced evaluation (“broadly positive… That said… not one without a cost”).</label><label><input type="radio" value="2" name="t9-mc-1" data-correct="false"> C. She changes the topic.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-mc', 't9-mc-score')">Check answers</button>
+          <span id="t9-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-place">
+        <div class="q-num">Your Part 2 talk — a changed place</div>
+        <div class="q-text">Now do the task yourself. Prepare for 1 minute, then speak for the full <b>2 minutes</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The place I’d like to talk about is…”</li><li>“What used to be… is now…”</li><li>“It was converted into…”</li><li>“My reaction is broadly…, that said…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="card task-prompt" style="margin-top:22px;"><p class="prompt-label">Part 2 task card</p><p><b>Describe a time you learned how something is made.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what it was<br>&nbsp;&nbsp;how you learned about it<br>&nbsp;&nbsp;what the process involved<br>and explain what you found most interesting about it.</p></div>
+      <div class="question-box" data-field="t9-speaking-made">
+        <div class="q-num">Your Part 2 talk — a process</div>
+        <div class="q-text">Prepare for 1 minute, then speak for the full <b>2 minutes</b>. Use sequencing language from today’s process diagrams.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I once found out how … is made when…”</li><li>“The first stage involves…”</li><li>“Once …, it is then…”</li><li>“What fascinated me most was…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 12</div>
+      <h2>Speaking Part 3 — Cities, Resources and the Future</h2>
+      <p class="task-sub">Band 8 Part 3 answers <b>speculate</b> and <b>hypothesise</b> with precision: <i>it’s conceivable that…, were governments to…, in all likelihood…, this would inevitably…</i></p>
+      <p style="margin-top:26px;"><strong>Match each structure to its function.</strong></p>
+      <div class="card" id="t10-fn"><div class="sel-row"><select class="select" id="t10-fn-1" data-answer="hypothesising"><option value="">—</option><option value="hypothesising">hypothesising</option><option value="speculating with confidence">speculating with confidence</option><option value="speculating with caution">speculating with caution</option><option value="predicting a consequence">predicting a consequence</option><option value="reframing the question">reframing the question</option></select><span><b>1.</b> “Were cities to ban cars entirely, …”</span></div><div class="sel-row"><select class="select" id="t10-fn-2" data-answer="speculating with confidence"><option value="">—</option><option value="hypothesising">hypothesising</option><option value="speculating with confidence">speculating with confidence</option><option value="speculating with caution">speculating with caution</option><option value="predicting a consequence">predicting a consequence</option><option value="reframing the question">reframing the question</option></select><span><b>2.</b> “In all likelihood, …”</span></div><div class="sel-row"><select class="select" id="t10-fn-3" data-answer="speculating with caution"><option value="">—</option><option value="hypothesising">hypothesising</option><option value="speculating with confidence">speculating with confidence</option><option value="speculating with caution">speculating with caution</option><option value="predicting a consequence">predicting a consequence</option><option value="reframing the question">reframing the question</option></select><span><b>3.</b> “It’s conceivable that …”</span></div><div class="sel-row"><select class="select" id="t10-fn-4" data-answer="predicting a consequence"><option value="">—</option><option value="hypothesising">hypothesising</option><option value="speculating with confidence">speculating with confidence</option><option value="speculating with caution">speculating with caution</option><option value="predicting a consequence">predicting a consequence</option><option value="reframing the question">reframing the question</option></select><span><b>4.</b> “This would inevitably lead to …”</span></div><div class="sel-row"><select class="select" id="t10-fn-5" data-answer="reframing the question"><option value="">—</option><option value="hypothesising">hypothesising</option><option value="speculating with confidence">speculating with confidence</option><option value="speculating with caution">speculating with caution</option><option value="predicting a consequence">predicting a consequence</option><option value="reframing the question">reframing the question</option></select><span><b>5.</b> “It’s not so much … as …”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-fn', 't10-fn-score')">Check answers</button>
+          <span id="t10-fn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t10-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Should historic buildings be preserved, or replaced with modern ones that meet current needs?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s not so much … as …”</li><li>“In all likelihood,…”</li><li>“Were governments to…, this would…”</li><li>“It’s conceivable that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Who should decide how a city centre is redeveloped — planners, businesses or residents?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s not so much … as …”</li><li>“In all likelihood,…”</li><li>“Were governments to…, this would…”</li><li>“It’s conceivable that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Why do people in some cities use far more water than in others?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s not so much … as …”</li><li>“In all likelihood,…”</li><li>“Were governments to…, this would…”</li><li>“It’s conceivable that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Should water be more expensive to encourage people to use less?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s not so much … as …”</li><li>“In all likelihood,…”</li><li>“Were governments to…, this would…”</li><li>“It’s conceivable that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-5">
+        <div class="q-num">Question 5</div>
+        <div class="q-text">What are the advantages and disadvantages of converting industrial areas into housing?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s not so much … as …”</li><li>“In all likelihood,…”</li><li>“Were governments to…, this would…”</li><li>“It’s conceivable that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-6">
+        <div class="q-num">Question 6</div>
+        <div class="q-text">How might cities look different in fifty years?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s not so much … as …”</li><li>“In all likelihood,…”</li><li>“Were governments to…, this would…”</li><li>“It’s conceivable that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-7">
+        <div class="q-num">Question 7</div>
+        <div class="q-text">Is it more important to protect the environment or to create jobs?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s not so much … as …”</li><li>“In all likelihood,…”</li><li>“Were governments to…, this would…”</li><li>“It’s conceivable that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-8">
+        <div class="q-num">Question 8</div>
+        <div class="q-text">To what extent can individuals make a difference to environmental problems?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s not so much … as …”</li><li>“In all likelihood,…”</li><li>“Were governments to…, this would…”</li><li>“It’s conceivable that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 12</div>
+      <h2>Speaking About Data — Present the Hillbury Maps</h2>
+      <p class="task-sub">Present the Hillbury maps aloud, as if briefing a town council, then argue for or against the changes.</p>
+<div class="card"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;"><div><svg viewBox="0 0 460 330" class="svg-chart" role="img" aria-label="Hillbury town centre, 2000" style="width:100%;max-width:460px;display:block;margin:0 auto;font-family:inherit;"><text x="230.0" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">Hillbury town centre, 2000</text><rect x="10" y="30" width="440" height="290" fill="#f8f9fa" stroke="#868e96"/><rect x="10" y="160" width="440" height="26" rx="4" fill="#bfc3cc" stroke="#868e96" stroke-width="0.8"/><text x="230.0" y="177.0" text-anchor="middle" font-size="11" fill="#14162b">High Street (traffic)</text><rect x="20" y="40" width="120" height="100" rx="4" fill="#ced4da" stroke="#868e96" stroke-width="0.8"/><text x="80.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">car park</text><rect x="165" y="40" width="130" height="100" rx="4" fill="#f4e8c1" stroke="#868e96" stroke-width="0.8"/><text x="230.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">market square</text><rect x="320" y="40" width="120" height="100" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="380.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">bus station</text><rect x="20" y="205" width="130" height="105" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="85.0" y="261.5" text-anchor="middle" font-size="11" fill="#14162b">cinema</text><rect x="170" y="205" width="120" height="105" rx="4" fill="#8ce99a" stroke="#868e96" stroke-width="0.8"/><text x="230.0" y="261.5" text-anchor="middle" font-size="11" fill="#14162b">park</text><rect x="310" y="205" width="130" height="105" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="375.0" y="261.5" text-anchor="middle" font-size="11" fill="#14162b">factory</text><text x="416" y="50" font-size="12" font-weight="700" fill="#14162b">N ↑</text></svg></div><div><svg viewBox="0 0 460 330" class="svg-chart" role="img" aria-label="Hillbury town centre, 2025" style="width:100%;max-width:460px;display:block;margin:0 auto;font-family:inherit;"><text x="230.0" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">Hillbury town centre, 2025</text><rect x="10" y="30" width="440" height="290" fill="#f8f9fa" stroke="#868e96"/><rect x="10" y="160" width="440" height="26" rx="4" fill="#d0bfff" stroke="#868e96" stroke-width="0.8"/><text x="230.0" y="177.0" text-anchor="middle" font-size="11" fill="#14162b">High Street (pedestrian only)</text><rect x="20" y="40" width="120" height="100" rx="4" fill="#ced4da" stroke="#868e96" stroke-width="0.8"/><text x="80.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">multi-storey car park</text><rect x="165" y="40" width="130" height="100" rx="4" fill="#f4e8c1" stroke="#868e96" stroke-width="0.8"/><text x="230.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">market square</text><rect x="320" y="40" width="120" height="100" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="380.0" y="94.0" text-anchor="middle" font-size="11" fill="#14162b">library & offices</text><rect x="20" y="205" width="130" height="105" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="85.0" y="261.5" text-anchor="middle" font-size="11" fill="#14162b">shopping centre</text><rect x="170" y="205" width="120" height="105" rx="4" fill="#8ce99a" stroke="#868e96" stroke-width="0.8"/><text x="230.0" y="261.5" text-anchor="middle" font-size="11" fill="#14162b">park + playground</text><rect x="310" y="205" width="130" height="50" rx="4" fill="#fcc2d7" stroke="#868e96" stroke-width="0.8"/><text x="375.0" y="234.0" text-anchor="middle" font-size="11" fill="#14162b">apartments</text><rect x="310" y="258" width="130" height="52" rx="4" fill="#ffd8a8" stroke="#868e96" stroke-width="0.8"/><text x="375.0" y="288.0" text-anchor="middle" font-size="11" fill="#14162b">cafés</text><text x="416" y="50" font-size="12" font-weight="700" fill="#14162b">N ↑</text></svg></div></div></div>
+      <div class="question-box" data-field="t11-speaking-data">
+        <div class="q-num">Present the maps</div>
+        <div class="q-text">Present the main changes in about <b>90 seconds</b>: overview first, then the changes grouped by area.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“In broad terms, the centre has been transformed from…”</li><li>“North of the High Street,…”</li><li>“The most striking change is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-eval">
+        <div class="q-num">Argue one side</div>
+        <div class="q-text">Imagine you are a resident who used to work in the factory. Argue for <b>one minute</b> that the redevelopment has been a mistake.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“While the centre may look more attractive,…”</li><li>“What the plans overlooked was…”</li><li>“Were the council to…, it would…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 12</div>
+      <h2>Speaking Part 3 — Defend, Concede, Rebut</h2>
+      <p class="task-sub">The highest Part 3 scores come from candidates who can hold a position under pressure. For each statement, give your view, concede a point to the other side, then rebut it.</p>
+<div class="card advice-card"><p style="margin:0; line-height:1.8;"><b>Position:</b> <i>I’m firmly of the view that…</i> → <b>Concession:</b> <i>Granted, …</i> / <i>I accept that…</i> → <b>Rebuttal:</b> <i>But that overlooks the fact that…</i> / <i>Even so, …</i> → <b>Conclusion:</b> <i>So, on balance, …</i></p></div>
+      <div class="card" id="t12-st"><div class="sel-row"><select class="select" id="t12-st-1" data-answer="concession"><option value="">—</option><option value="position">position</option><option value="concession">concession</option><option value="rebuttal">rebuttal</option><option value="conclusion">conclusion</option></select><span><b>1.</b> “Granted, renewable energy is expensive at first.”</span></div><div class="sel-row"><select class="select" id="t12-st-2" data-answer="rebuttal"><option value="">—</option><option value="position">position</option><option value="concession">concession</option><option value="rebuttal">rebuttal</option><option value="conclusion">conclusion</option></select><span><b>2.</b> “But that overlooks the fact that running costs are far lower.”</span></div><div class="sel-row"><select class="select" id="t12-st-3" data-answer="position"><option value="">—</option><option value="position">position</option><option value="concession">concession</option><option value="rebuttal">rebuttal</option><option value="conclusion">conclusion</option></select><span><b>3.</b> “I’m firmly of the view that cities should invest in renewables.”</span></div><div class="sel-row"><select class="select" id="t12-st-4" data-answer="conclusion"><option value="">—</option><option value="position">position</option><option value="concession">concession</option><option value="rebuttal">rebuttal</option><option value="conclusion">conclusion</option></select><span><b>4.</b> “So, on balance, the long-term benefits outweigh the costs.”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-st', 't12-st-score')">Check answers</button>
+          <span id="t12-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t12-speaking-1">
+        <div class="q-num">Statement 1</div>
+        <div class="q-text">Respond to this statement: “Cities should ban private cars from their centres.”</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’m firmly of the view that…”</li><li>“Granted,…”</li><li>“But that overlooks the fact that…”</li><li>“So, on balance,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-2">
+        <div class="q-num">Statement 2</div>
+        <div class="q-text">Respond to this statement: “Water should be free for everyone.”</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’m firmly of the view that…”</li><li>“Granted,…”</li><li>“But that overlooks the fact that…”</li><li>“So, on balance,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-3">
+        <div class="q-num">Statement 3</div>
+        <div class="q-text">Respond to this statement: “Old factories should be preserved as part of a country’s heritage.”</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’m firmly of the view that…”</li><li>“Granted,…”</li><li>“But that overlooks the fact that…”</li><li>“So, on balance,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-4">
+        <div class="q-num">Statement 4</div>
+        <div class="q-text">Respond to this statement: “Economic growth matters more than protecting the environment.”</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’m firmly of the view that…”</li><li>“Granted,…”</li><li>“But that overlooks the fact that…”</li><li>“So, on balance,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 12</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 30 of 45</div>
+    <h1>Day 30 complete! 🎉</h1>
+    <p>Day 30 done — Writing Task 1 (mixed data, a natural process, maps) at Band 8, and all three parts of the Speaking test.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+    initWritingCoach('t7-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The maps below show the centre of the town of Hillbury in 2000 and in 2025.' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-1"]'); if (b) initRecordControl(b, user.id, 30, 8, 't8-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-2"]'); if (b) initRecordControl(b, user.id, 30, 8, 't8-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-3"]'); if (b) initRecordControl(b, user.id, 30, 8, 't8-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-4"]'); if (b) initRecordControl(b, user.id, 30, 8, 't8-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-5"]'); if (b) initRecordControl(b, user.id, 30, 8, 't8-speaking-5', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-6"]'); if (b) initRecordControl(b, user.id, 30, 8, 't8-speaking-6', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-place"]'); if (b) initRecordControl(b, user.id, 30, 9, 't9-speaking-place', 0); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-made"]'); if (b) initRecordControl(b, user.id, 30, 9, 't9-speaking-made', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-1"]'); if (b) initRecordControl(b, user.id, 30, 10, 't10-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-2"]'); if (b) initRecordControl(b, user.id, 30, 10, 't10-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-3"]'); if (b) initRecordControl(b, user.id, 30, 10, 't10-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-4"]'); if (b) initRecordControl(b, user.id, 30, 10, 't10-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-5"]'); if (b) initRecordControl(b, user.id, 30, 10, 't10-speaking-5', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-6"]'); if (b) initRecordControl(b, user.id, 30, 10, 't10-speaking-6', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-7"]'); if (b) initRecordControl(b, user.id, 30, 10, 't10-speaking-7', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-8"]'); if (b) initRecordControl(b, user.id, 30, 10, 't10-speaking-8', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-data"]'); if (b) initRecordControl(b, user.id, 30, 11, 't11-speaking-data', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-eval"]'); if (b) initRecordControl(b, user.id, 30, 11, 't11-speaking-eval', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-1"]'); if (b) initRecordControl(b, user.id, 30, 12, 't12-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-2"]'); if (b) initRecordControl(b, user.id, 30, 12, 't12-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-3"]'); if (b) initRecordControl(b, user.id, 30, 12, 't12-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-4"]'); if (b) initRecordControl(b, user.id, 30, 12, 't12-speaking-4', 0); }
+
+    await initTaskFlow(30, 12, user.id, {
+      1: () => { checkAllAnswers('t1-band', 't1-band-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-ap', 't2-ap-score'); checkAllAnswers('t2-g', 't2-g-score'); checkAllAnswers('t2-ov', 't2-ov-score'); },
+      3: () => { checkAllAnswers('t3-c', 't3-c-score'); checkAllAnswers('t3-ap', 't3-ap-score'); },
+      4: () => { checkAllAnswers('t4-v', 't4-v-score'); checkAllAnswers('t4-loc', 't4-loc-score'); },
+      5: () => { checkAllAnswers('t5-ov', 't5-ov-score'); },
+      6: () => { checkAllAnswers('t6-up', 't6-up-score'); checkAllAnswers('t6-c', 't6-c-score'); },
+      9: () => { checkAllAnswers('t9-mc', 't9-mc-score'); },
+      10: () => { checkAllAnswers('t10-fn', 't10-fn-score'); },
+      12: () => { checkAllAnswers('t12-st', 't12-st-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t3-w-btn', 't3-w-ans', '[id^="t3-w-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t5-w-btn', 't5-w-ans', '[id^="t5-w-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t7-essay-model-btn', 't7-essay-model', '#t7-essay');
+  });
+</script>
+</body>
+</html>
