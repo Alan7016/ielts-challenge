@@ -3212,3 +3212,43 @@ async function fetchLevelStandings(level, dayFrom, dayTo) {
   ranked.forEach((r, i) => { r.r = (i > 0 && r.p === ranked[i - 1].p) ? ranked[i - 1].r : i + 1; });
   return ranked;
 }
+
+// ---------- Live word counter for written summaries ----------
+// Every summary box (ids like "t2-sum-1", "article-summary", or any field
+// with data-min-words) gets a live "N words" line under it. When the box
+// has a minimum, the counter shows it and turns green once it is reached.
+(function () {
+  function countWords(v) { v = (v || '').trim(); return v ? v.split(/\s+/).length : 0; }
+  function isSummaryBox(t) {
+    return t.hasAttribute('data-min-words') || /(^|-)sum-\d+$|summary/i.test(t.id || '');
+  }
+  function attach() {
+    document.querySelectorAll('textarea').forEach(function (t) {
+      if (t.dataset.wcAttached || !isSummaryBox(t)) return;
+      t.dataset.wcAttached = '1';
+      var min = parseInt(t.getAttribute('data-min-words'), 10) || 0;
+      var el = document.createElement('div');
+      el.className = 'wc-live';
+      el.style.cssText = 'font-size:13px;font-weight:600;margin:6px 2px 0;color:#6b6f80;text-align:right;';
+      t.insertAdjacentElement('afterend', el);
+      function update() {
+        var n = countWords(t.value);
+        if (min) {
+          el.textContent = n + ' / ' + min + ' words' + (n >= min ? ' ✓' : ' — ' + (min - n) + ' more needed');
+          el.style.color = n >= min ? '#1e8e5a' : '#c0392b';
+        } else {
+          el.textContent = n + (n === 1 ? ' word' : ' words');
+        }
+      }
+      t.addEventListener('input', update);
+      t._wcUpdate = update;
+      update();
+    });
+  }
+  function refreshAll() {
+    document.querySelectorAll('textarea[data-wc-attached]').forEach(function (t) { if (t._wcUpdate) t._wcUpdate(); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attach); else attach();
+  // Saved answers are filled in after page load, so keep counters in sync.
+  setInterval(function () { attach(); refreshAll(); }, 1500);
+})();
