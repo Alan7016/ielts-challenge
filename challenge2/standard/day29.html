@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 29 — Standard — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 29 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 7</div>
+      <h2>Lead-in — Podcast: Why Read Books, Not Screens?</h2>
+      <p class="task-sub">Today is a listening and reading day (Unit 7, Literacy skills). Start with a free podcast from <b>BBC Learning English — 6 Minute English</b>. Listen once without subtitles, then once with subtitles if you need them. About 15 minutes.</p>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="position:relative; padding-bottom:56.25%; height:0;">
+          <iframe src="https://www.youtube.com/embed/h_pvijqmolQ" title="Why read books, not screens? — 6 Minute English" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Before you listen.</strong> Match the words to their meanings.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. deep reading</button><button type="button" class="lm-item" data-key="2">2. skim</button><button type="button" class="lm-item" data-key="3">3. screen</button><button type="button" class="lm-item" data-key="4">4. empathy</button><button type="button" class="lm-item" data-key="5">5. critical thinking</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. the flat surface of a phone, tablet or computer</button><button type="button" class="lm-item" data-key="b">b. reading slowly and carefully, thinking about the text</button><button type="button" class="lm-item" data-key="c">c. judging ideas carefully instead of simply accepting them</button><button type="button" class="lm-item" data-key="d">d. read quickly to get the general idea</button><button type="button" class="lm-item" data-key="e">e. the ability to understand how other people feel</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t1-mc"><div class="q-item" id="t1-mc-1">
+          <p>1. What is the main topic of the podcast?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-1" data-correct="false"> A. how to read faster</label><label><input type="radio" value="1" name="t1-mc-1" data-correct="true"> B. whether reading printed books is different from reading on screens</label><label><input type="radio" value="2" name="t1-mc-1" data-correct="false"> C. how to write a book</label><label><input type="radio" value="3" name="t1-mc-1" data-correct="false"> D. why people have stopped reading</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-2">
+          <p>2. What kind of reading do the speakers say is most valuable?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-2" data-correct="true"> A. deep reading</label><label><input type="radio" value="1" name="t1-mc-2" data-correct="false"> B. reading aloud</label><label><input type="radio" value="2" name="t1-mc-2" data-correct="false"> C. speed reading</label><label><input type="radio" value="3" name="t1-mc-2" data-correct="false"> D. reading news headlines</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-3">
+          <p>3. What do people often do when they read on a screen?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-3" data-correct="false"> A. They read more slowly.</label><label><input type="radio" value="1" name="t1-mc-3" data-correct="true"> B. They skim instead of reading carefully.</label><label><input type="radio" value="2" name="t1-mc-3" data-correct="false"> C. They remember more.</label><label><input type="radio" value="3" name="t1-mc-3" data-correct="false"> D. They read aloud.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-4">
+          <p>4. Which benefits of deep reading are mentioned?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-4" data-correct="false"> A. better eyesight and sleep</label><label><input type="radio" value="1" name="t1-mc-4" data-correct="true"> B. critical thinking and empathy</label><label><input type="radio" value="2" name="t1-mc-4" data-correct="false"> C. faster typing</label><label><input type="radio" value="3" name="t1-mc-4" data-correct="false"> D. better handwriting</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-mc', 't1-mc-score')">Check answers</button>
+          <span id="t1-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the podcast in your own words — <b>at least 80 words</b>. Say what it is about, give the most important points, and finish with one sentence about what you think.</p>
+      <div class="card"><p class="mini-q">Your summary of the podcast (at least 80 words):</p><textarea class="no-check mini-answer" id="t1-sum-1" data-min-words="80" placeholder="Write your summary here..." style="min-height:150px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t1-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t1-sum-ans"><p>This episode of 6 Minute English discusses whether reading on screens is as good as reading printed books. The presenters explain the idea of deep reading, which means reading slowly and thinking carefully about a text. Experts in the programme say that deep reading helps people to develop important skills such as critical thinking and empathy. However, when people read on screens, they often skim quickly and jump from one thing to another, so they may not read deeply. I agree that I read more carefully when I have a real book. (≈ 95 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t1-speaking-summary">
+        <div class="q-num">Spoken summary (at least 30 seconds)</div>
+        <div class="q-text">Now summarise the podcast <b>aloud</b> without reading your written summary — speak for <b>at least 30 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This podcast is about…”</li><li>“The main point is that…”</li><li>“They also explain that…”</li><li>“Personally, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 7</div>
+      <h2>Listening Part 1 — An Online Writing Course</h2>
+      <p class="task-sub">From Complete IELTS Unit 7. You will hear a student, Alex, phoning a writing school. Two IELTS question types: <b>form completion</b> and <b>multiple choice</b>. Read the questions before each recording.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Form completion:</b> use the words already on the form to help you listen for the answers. Check your spelling — names and postcodes are spelt out letter by letter.</li><li><b>Multiple choice:</b> underline the key idea in each question, listen for the same words or words with the same meaning, and match what you hear to the correct option.</li></ul></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 07 — Questions 1–5</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit7-track07.mp3"></audio></div>
+<div class="card"><p class="prompt-label">Questions 1–5 — Complete the form. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.</p>
+<table class="data-table" style="width:100%; max-width:560px;"><tr><th colspan="2">Online Writing Course — Request for brochure</th></tr>
+<tr><td>First name:</td><td><i>Alex</i> (example)</td></tr><tr><td>Last name:</td><td>(1) ______</td></tr><tr><td>Address:</td><td>Flat 4A, 396 (2) ______ Road</td></tr>
+<tr><td>Town/City:</td><td>Preston</td></tr><tr><td>Postcode:</td><td>(3) ______</td></tr><tr><td>Phone number:</td><td>(4) ______</td></tr>
+<tr><td>Email address:</td><td>alex7@ptu.com</td></tr><tr><td>Message box:</td><td>deliver brochure (5) ______</td></tr></table></div>
+      <div class="card" id="t2-f" style="line-height:2.6;"><p>1. <input type="text" class="text-answer" id="t2-1" data-correct="Sachdeva" autocomplete="off" style="width:150px;"> &nbsp; 2. <input type="text" class="text-answer" id="t2-2" data-correct="New Valley" autocomplete="off" style="width:150px;"> &nbsp; 3. <input type="text" class="text-answer" id="t2-3" data-correct="BN6 3BZ/BN63BZ" autocomplete="off" style="width:150px;"></p><p>4. <input type="text" class="text-answer" id="t2-4" data-correct="0787345077/07873 45077/0787 345 077/07873 450 77/0787345 077" autocomplete="off" style="width:170px;"> &nbsp; 5. <input type="text" class="text-answer" id="t2-5" data-correct="next week" autocomplete="off" style="width:150px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-f', 't2-f-score')">Check answers</button>
+          <span id="t2-f-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 08 — Questions 6–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit7-track08.mp3"></audio></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-6">
+          <p>6. The caller wants to do a writing course to help with</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-6" data-correct="false"> A. his hobby.</label><label><input type="radio" value="1" name="t2-mc-6" data-correct="true"> B. his job.</label><label><input type="radio" value="2" name="t2-mc-6" data-correct="false"> C. his children’s education.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-7">
+          <p>7. What does the course pack include?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-7" data-correct="true"> A. multimedia items</label><label><input type="radio" value="1" name="t2-mc-7" data-correct="false"> B. a list of books to buy</label><label><input type="radio" value="2" name="t2-mc-7" data-correct="false"> C. lesson and assignment dates</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-8">
+          <p>8. How much does the course cost?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-8" data-correct="false"> A. £340</label><label><input type="radio" value="1" name="t2-mc-8" data-correct="true"> B. £375</label><label><input type="radio" value="2" name="t2-mc-8" data-correct="false"> C. £400</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-9">
+          <p>9. Alex’s first assignment will be about his</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-9" data-correct="false"> A. family life.</label><label><input type="radio" value="1" name="t2-mc-9" data-correct="false"> B. school experiences.</label><label><input type="radio" value="2" name="t2-mc-9" data-correct="true"> C. expectations of the course.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-10">
+          <p>10. What does the feedback include?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-10" data-correct="false"> A. a tutorial</label><label><input type="radio" value="1" name="t2-mc-10" data-correct="false"> B. an exercise</label><label><input type="radio" value="2" name="t2-mc-10" data-correct="true"> C. a discussion group</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t2-speaking">
+        <div class="q-num">Speaking — online courses</div>
+        <div class="q-text">Would you like to do an online course? What would you study, and why? What are the advantages and disadvantages of learning online?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d really like to do an online course in…”</li><li>“The main advantage is that…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 7</div>
+      <h2>Speaking Part 3 — Talking About Reading</h2>
+      <p class="task-sub">Listen to two students, Pashta and Haroon, answering Part 3 questions about reading. Notice how they <b>introduce their opinions</b> and <b>give reasons</b>.</p>
+<div class="card advice-card"><p class="prompt-label">Listening Part 1 — why these answers?</p><ol start="1" style="margin:0; padding-left:22px; line-height:1.8;">
+<li><b>Sachdeva</b> — spelt S-A-C-H-D-E-V-A (the receptionist asks “Is that P?” — no, D).</li><li><b>New Valley</b> (Road).</li><li><b>BN6 3BZ</b> — not BS: “B-S? No, B-Z.”</li>
+<li><b>0787345077</b> — the receptionist repeats it wrongly (“3, 5, 4…”) and Alex corrects him: “No, 3, 4, 5.”</li><li><b>next week</b> — he is moving, so the brochure must not arrive too early.</li>
+<li><b>B</b> — he works in an advertising agency and wants a better salary. <i>Trap:</i> A — he does <b>not</b> want to write for fun.</li>
+<li><b>A</b> — books, an audio course on CDs and DVDs = multimedia items.</li><li><b>B</b> — “It was £340, but I think it’s £375 now.” <i>Trap:</i> £340 is the old price; £400 is the top of the range.</li>
+<li><b>C</b> — “No, it’s the future we’re interested in… what I want to get from the course.” <i>Trap:</i> B — Alex suggests his background, but he is corrected.</li>
+<li><b>C</b> — an online facility for all the students to get together and share ideas.</li></ol></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 09 — Pashta and Haroon</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit7-track09.mp3"></audio></div>
+      <p style="margin-top:26px;"><strong>Introducing an opinion or giving a reason?</strong> Decide what each phrase from the recording does.</p>
+      <div class="card" id="t3-ph"><div class="sel-row"><select class="select" id="t3-ph-1" data-answer="introducing an opinion"><option value="">—</option><option value="introducing an opinion">introducing an opinion</option><option value="giving a reason">giving a reason</option></select><span><b>1.</b> “I think…”</span></div><div class="sel-row"><select class="select" id="t3-ph-2" data-answer="introducing an opinion"><option value="">—</option><option value="introducing an opinion">introducing an opinion</option><option value="giving a reason">giving a reason</option></select><span><b>2.</b> “I’m not sure. I think it depends.”</span></div><div class="sel-row"><select class="select" id="t3-ph-3" data-answer="giving a reason"><option value="">—</option><option value="introducing an opinion">introducing an opinion</option><option value="giving a reason">giving a reason</option></select><span><b>3.</b> “Perhaps because…”</span></div><div class="sel-row"><select class="select" id="t3-ph-4" data-answer="introducing an opinion"><option value="">—</option><option value="introducing an opinion">introducing an opinion</option><option value="giving a reason">giving a reason</option></select><span><b>4.</b> “I would say that…”</span></div><div class="sel-row"><select class="select" id="t3-ph-5" data-answer="giving a reason"><option value="">—</option><option value="introducing an opinion">introducing an opinion</option><option value="giving a reason">giving a reason</option></select><span><b>5.</b> “The problem is…”</span></div><div class="sel-row"><select class="select" id="t3-ph-6" data-answer="introducing an opinion"><option value="">—</option><option value="introducing an opinion">introducing an opinion</option><option value="giving a reason">giving a reason</option></select><span><b>6.</b> “In my view, it’s essential.”</span></div><div class="sel-row"><select class="select" id="t3-ph-7" data-answer="giving a reason"><option value="">—</option><option value="introducing an opinion">introducing an opinion</option><option value="giving a reason">giving a reason</option></select><span><b>7.</b> “One reason is that…”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-ph', 't3-ph-score')">Check answers</button>
+          <span id="t3-ph-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t3-mc"><div class="q-item" id="t3-mc-1">
+          <p>1. According to the first speaker, why do some children stop reading books?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-1" data-correct="false"> A. Books are too expensive.</label><label><input type="radio" value="1" name="t3-mc-1" data-correct="true"> B. They find reading boring and prefer computers or chatting online.</label><label><input type="radio" value="2" name="t3-mc-1" data-correct="false"> C. Their parents do not read.</label><label><input type="radio" value="3" name="t3-mc-1" data-correct="false"> D. Schools do not have libraries.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-mc-2">
+          <p>2. What does the second speaker suggest to encourage teenagers to read?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-2" data-correct="false"> A. ban computers</label><label><input type="radio" value="1" name="t3-mc-2" data-correct="true"> B. show them that books give a lot of knowledge and make books more attractive</label><label><input type="radio" value="2" name="t3-mc-2" data-correct="false"> C. give them money for reading</label><label><input type="radio" value="3" name="t3-mc-2" data-correct="false"> D. make reading compulsory</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-mc', 't3-mc-score')">Check answers</button>
+          <span id="t3-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card advice-card"><p class="prompt-label">Exam advice — Speaking Part 3</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li>Introduce your opinion clearly.</li><li>Use appropriate words and phrases to introduce your reasons.</li></ul></div>
+      <div class="question-box" data-field="t3-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Why do some adults dislike reading?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“In my view,…”</li><li>“I would say that…”</li><li>“One reason is that…”</li><li>“The problem is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t3-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">What sort of problems do adults have if they can’t read or write?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“In my view,…”</li><li>“I would say that…”</li><li>“One reason is that…”</li><li>“The problem is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t3-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">How can people be encouraged to read more?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“In my view,…”</li><li>“I would say that…”</li><li>“One reason is that…”</li><li>“The problem is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t3-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Is it better for children to read books or to use the internet for learning?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“In my view,…”</li><li>“I would say that…”</li><li>“One reason is that…”</li><li>“The problem is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 7</div>
+      <h2>Reading Passage 1 — How Children Learn to Read</h2>
+      <p class="task-sub">Question types: <b>TRUE / FALSE / NOT GIVEN</b>, <b>sentence completion</b> and <b>multiple choice</b>. Suggested time: <b>15 minutes</b>. Passage on the left, questions on the right. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">How Children Learn to Read</h3>
+            <p class="article-meta">Reading Passage 1 · Education · 339 words</p>
+            <p><span class="para-label">A</span>Speaking is natural for human beings. Almost every child in the world learns to speak without formal lessons, simply by listening to the people around them. Reading is different. Writing was invented only around five thousand years ago — a very short time in human history — and so the brain has no special area that is designed for reading. Instead, every child who learns to read must train parts of the brain that were originally used for other jobs, such as recognising faces and objects.</p><p><span class="para-label">B</span>The first step is understanding that written marks stand for sounds. In languages that use an alphabet, children must learn that each letter, or group of letters, represents a sound, and that these sounds can be joined together to make words. Many teachers call this ‘phonics’. Research suggests that children who are taught phonics clearly and regularly usually learn to read more quickly than those who are expected to recognise whole words by sight.</p><p><span class="para-label">C</span>However, reading is not only about turning letters into sounds. Children also need a large vocabulary, because it is easier to read a word you already know when you hear it. This is one reason why reading aloud to young children is so valuable. Children who hear stories every day at home often start school knowing many more words than children who do not, and this difference can grow larger over time.</p><p><span class="para-label">D</span>The age at which children start formal reading lessons varies from country to country. In England, most children begin at about four or five years old, while in Finland formal reading lessons have traditionally started at seven. Interestingly, Finnish teenagers have often done very well in international reading tests, which suggests that an early start is not the only thing that matters.</p><p><span class="para-label">E</span>Finally, motivation plays a large part. Children who enjoy reading read more, and children who read more become better readers. Experts therefore advise parents to let children choose their own books, including comics and magazines, and to make reading a pleasure rather than a test.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–5</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t4-tf"><div class="q-item" id="t4-tf-1">
+          <p>1. Most children learn to speak without formal lessons.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t4-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-2">
+          <p>2. The human brain has a special area that was designed for reading.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-2" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t4-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-3">
+          <p>3. Children who learn phonics usually learn to read more quickly.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-3" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t4-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-4">
+          <p>4. Boys usually learn to read later than girls.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-4" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-5">
+          <p>5. In Finland, formal reading lessons have traditionally started at the age of five.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-5" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t4-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-tf', 't4-tf-score')">Check answers</button>
+          <span id="t4-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 6–9</p><p class="qg-instr">Complete the sentences. Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p></div>
+      <div class="card" id="t4-sc" style="line-height:2.4;"><p>6. Writing was invented around five <input type="text" class="text-answer" id="t4-6" data-correct="thousand" autocomplete="off" style="width:120px;"> years ago.</p><p>7. To read, children use parts of the brain that recognise faces and <input type="text" class="text-answer" id="t4-7" data-correct="objects" autocomplete="off" style="width:120px;">.</p><p>8. It is easier to read a word if it is already in your <input type="text" class="text-answer" id="t4-8" data-correct="vocabulary" autocomplete="off" style="width:120px;">.</p><p>9. Experts say parents should let children <input type="text" class="text-answer" id="t4-9" data-correct="choose" autocomplete="off" style="width:120px;"> their own books.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-sc', 't4-sc-score')">Check answers</button>
+          <span id="t4-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 10–11</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t4-mc"><div class="q-item" id="t4-mc-10">
+          <p>10. Why does the writer mention Finland?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-10" data-correct="true"> A. to show that starting early is not the only important factor</label><label><input type="radio" value="1" name="t4-mc-10" data-correct="false"> B. to show that Finnish schools are the best</label><label><input type="radio" value="2" name="t4-mc-10" data-correct="false"> C. to criticise English schools</label><label><input type="radio" value="3" name="t4-mc-10" data-correct="false"> D. to explain how phonics works</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-11">
+          <p>11. According to the last paragraph, what makes children better readers?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-11" data-correct="false"> A. harder books</label><label><input type="radio" value="1" name="t4-mc-11" data-correct="true"> B. reading more because they enjoy it</label><label><input type="radio" value="2" name="t4-mc-11" data-correct="false"> C. reading tests</label><label><input type="radio" value="3" name="t4-mc-11" data-correct="false"> D. reading only school books</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mc', 't4-mc-score')">Check answers</button>
+          <span id="t4-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 7</div>
+      <h2>Reading Passage 2 — Is Listening the Same as Reading?</h2>
+      <p class="task-sub">Question types: <b>matching headings</b>, <b>summary completion with a word bank</b> and <b>multiple choice</b>. Suggested time: <b>12 minutes</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Is Listening the Same as Reading?</h3>
+            <p class="article-meta">Reading Passage 2 · Literacy · 265 words</p>
+            <p><span class="para-label">A</span>Audiobooks are more popular than ever. People listen to them while driving, cooking or exercising, and many say that audiobooks have allowed them to ‘read’ far more books than before. But is listening to a book really the same as reading it? The question causes surprisingly strong arguments.</p><p><span class="para-label">B</span>Some research suggests that, for many simple texts, people understand and remember about the same amount whether they read or listen. This is not very surprising. Long before writing existed, people passed on stories, history and knowledge by speaking, and the brain processes the meaning of language in similar ways whatever its source.</p><p><span class="para-label">C</span>However, there are important differences. When you read, you control the speed: you can slow down at a difficult sentence, stop to think, or go back to check something. With an audiobook, the speaker sets the pace, and going back is less convenient. For this reason, many teachers believe that printed text is better for difficult material, such as a textbook you will be tested on.</p><p><span class="para-label">D</span>Listening also has advantages of its own. A good narrator can bring a story to life, showing emotion and humour through the voice. For people with sight problems or reading difficulties, audiobooks make literature available in a way that printed books cannot. And for language learners, listening to a book while following the printed text can improve both pronunciation and reading speed.</p><p><span class="para-label">E</span>Perhaps the best answer is that reading and listening are different tools for different purposes. A thriller on a long journey may be perfect as an audiobook; a chapter of a science textbook probably is not.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 12–16</p><p class="qg-instr">The passage has five paragraphs, <b>A–E</b>. Choose the correct heading for each paragraph from the list below.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;">
+<b>i</b>&nbsp; Who controls the speed?<br><b>ii</b>&nbsp; A popular way to enjoy books<br><b>iii</b>&nbsp; The right tool for the job<br><b>iv</b>&nbsp; The price of audiobooks<br>
+<b>v</b>&nbsp; Similar results for simple texts<br><b>vi</b>&nbsp; Special benefits of listening<br><b>vii</b>&nbsp; How audiobooks are recorded</p></div>
+      <div class="card" id="t5-h"><div class="sel-row"><select class="select" id="t5-h-12" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select><span><b>12.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t5-h-13" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select><span><b>13.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t5-h-14" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select><span><b>14.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t5-h-15" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select><span><b>15.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t5-h-16" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select><span><b>16.</b> Paragraph E</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-h', 't5-h-score')">Check answers</button>
+          <span id="t5-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 17–20</p><p class="qg-instr">Complete the summary with words from the box.</p></div>
+      <div class="word-bank">speed · difficult · narrator · sight · price · easy · teacher · memory</div><div class="card" id="t5-s" style="line-height:2.6;"><p>When you read a printed text, you can change the (17) <input type="text" class="text-answer" id="t5-17" data-correct="speed" autocomplete="off" style="width:110px;"> and go back to check things, so teachers prefer print for (18) <input type="text" class="text-answer" id="t5-18" data-correct="difficult" autocomplete="off" style="width:110px;"> material. On the other hand, a good (19) <input type="text" class="text-answer" id="t5-19" data-correct="narrator" autocomplete="off" style="width:110px;"> can make a story come alive, and audiobooks help people who have problems with their (20) <input type="text" class="text-answer" id="t5-20" data-correct="sight" autocomplete="off" style="width:110px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-s', 't5-s-score')">Check answers</button>
+          <span id="t5-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Question 21</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t5-mc"><div class="q-item" id="t5-mc-21">
+          <p>21. What is the writer’s conclusion?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-21" data-correct="false"> A. Audiobooks are always better than printed books.</label><label><input type="radio" value="1" name="t5-mc-21" data-correct="false"> B. Printed books are always better than audiobooks.</label><label><input type="radio" value="2" name="t5-mc-21" data-correct="true"> C. Each format is useful for different purposes.</label><label><input type="radio" value="3" name="t5-mc-21" data-correct="false"> D. Nobody should listen to textbooks.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-mc', 't5-mc-score')">Check answers</button>
+          <span id="t5-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 7</div>
+      <h2>Reading — Answer Analysis</h2>
+      <p class="task-sub">Check your answers for both passages and see exactly where each answer is.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — How Children Learn to Read</summary>
+        <p><span class="para-label">A</span>Speaking is natural for human beings. Almost every child in the world learns to speak without formal lessons, simply by listening to the people around them. Reading is different. Writing was invented only around five thousand years ago — a very short time in human history — and so the brain has no special area that is designed for reading. Instead, every child who learns to read must train parts of the brain that were originally used for other jobs, such as recognising faces and objects.</p><p><span class="para-label">B</span>The first step is understanding that written marks stand for sounds. In languages that use an alphabet, children must learn that each letter, or group of letters, represents a sound, and that these sounds can be joined together to make words. Many teachers call this ‘phonics’. Research suggests that children who are taught phonics clearly and regularly usually learn to read more quickly than those who are expected to recognise whole words by sight.</p><p><span class="para-label">C</span>However, reading is not only about turning letters into sounds. Children also need a large vocabulary, because it is easier to read a word you already know when you hear it. This is one reason why reading aloud to young children is so valuable. Children who hear stories every day at home often start school knowing many more words than children who do not, and this difference can grow larger over time.</p><p><span class="para-label">D</span>The age at which children start formal reading lessons varies from country to country. In England, most children begin at about four or five years old, while in Finland formal reading lessons have traditionally started at seven. Interestingly, Finnish teenagers have often done very well in international reading tests, which suggests that an early start is not the only thing that matters.</p><p><span class="para-label">E</span>Finally, motivation plays a large part. Children who enjoy reading read more, and children who read more become better readers. Experts therefore advise parents to let children choose their own books, including comics and magazines, and to make reading a pleasure rather than a test.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Almost every child in the world learns to speak without formal lessons</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">FALSE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">the brain has no special area that is designed for reading</span>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">TRUE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">children who are taught phonics clearly and regularly usually learn to read more quickly</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>Boys and girls are never compared.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">FALSE</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">in Finland formal reading lessons have traditionally started at seven</span>. <span class="trap">Trap:</span> five is the age in England.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">thousand</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">around five thousand years ago</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">objects</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">such as recognising faces and objects</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">vocabulary</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Children also need a large vocabulary, because it is easier to read a word you already know</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">choose</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">let children choose their own books</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">A</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">which suggests that an early start is not the only thing that matters</span>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">B</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Children who enjoy reading read more, and children who read more become better readers</span>.</p></div></details></div>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Is Listening the Same as Reading?</summary>
+        <p><span class="para-label">A</span>Audiobooks are more popular than ever. People listen to them while driving, cooking or exercising, and many say that audiobooks have allowed them to ‘read’ far more books than before. But is listening to a book really the same as reading it? The question causes surprisingly strong arguments.</p><p><span class="para-label">B</span>Some research suggests that, for many simple texts, people understand and remember about the same amount whether they read or listen. This is not very surprising. Long before writing existed, people passed on stories, history and knowledge by speaking, and the brain processes the meaning of language in similar ways whatever its source.</p><p><span class="para-label">C</span>However, there are important differences. When you read, you control the speed: you can slow down at a difficult sentence, stop to think, or go back to check something. With an audiobook, the speaker sets the pace, and going back is less convenient. For this reason, many teachers believe that printed text is better for difficult material, such as a textbook you will be tested on.</p><p><span class="para-label">D</span>Listening also has advantages of its own. A good narrator can bring a story to life, showing emotion and humour through the voice. For people with sight problems or reading difficulties, audiobooks make literature available in a way that printed books cannot. And for language learners, listening to a book while following the printed text can improve both pronunciation and reading speed.</p><p><span class="para-label">E</span>Perhaps the best answer is that reading and listening are different tools for different purposes. A thriller on a long journey may be perfect as an audiobook; a chapter of a science textbook probably is not.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">ii</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Audiobooks are more popular than ever</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">v</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">for many simple texts, people understand and remember about the same amount</span>.</p></div></details><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">i</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">When you read, you control the speed … With an audiobook, the speaker sets the pace</span>.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">vi</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Listening also has advantages of its own</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">iii</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">reading and listening are different tools for different purposes</span>. <span class="trap">Trap:</span> <i>iv (price)</i> and <i>vii (recording)</i> are never discussed.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">speed</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">you control the speed</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">difficult</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">printed text is better for difficult material</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">narrator</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">A good narrator can bring a story to life</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">sight</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">people with sight problems</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">C</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">different tools for different purposes</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 7</div>
+      <h2>Speaking Part 2 — A Book or Article You Enjoyed</h2>
+      <p class="task-sub">The Part 2 task from Complete IELTS Unit 7. Make brief notes for each part of the card and note down useful vocabulary, then speak for <b>two minutes</b>.</p>
+      <div class="card task-prompt"><p class="prompt-label">Part 2 task card</p><p><b>Describe a book or article that you enjoyed reading for your studies.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;what the book or article was about<br>&nbsp;&nbsp;why you read it<br>&nbsp;&nbsp;how long it took you to read<br>and explain why you enjoyed reading it.</p></div>
+      <div class="card"><p class="prompt-label">Model answer</p>
+<p style="line-height:1.8;">I’d like to talk about an article I read last year for my biology class. It was about how bees communicate with each other — they actually do a kind of dance to show other bees where to find flowers.</p>
+<p style="line-height:1.8;">I read it because our teacher asked us to choose an article and give a short presentation about it. At first I chose it just because it was short, to be honest! But it only took me about twenty minutes to read the first time, and then I read it again more carefully, making notes, which took another hour or so.</p>
+<p style="line-height:1.8;">The main reason I enjoyed it was that it was full of surprising facts. I had no idea that insects could share such detailed information. The writer also explained everything very clearly, with diagrams, so even the scientific parts were easy to follow. And when I gave my presentation, my classmates asked lots of questions, which made me feel like an expert. Since then, I’ve started reading more science articles in my free time.</p></div>
+      <div class="card" id="t7-mc"><div class="q-item" id="t7-mc-1">
+          <p>1. Why did the speaker first choose the article?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-1" data-correct="false"> A. because it was about bees</label><label><input type="radio" value="1" name="t7-mc-1" data-correct="true"> B. because it was short</label><label><input type="radio" value="2" name="t7-mc-1" data-correct="false"> C. because a friend recommended it</label><label><input type="radio" value="3" name="t7-mc-1" data-correct="false"> D. because it had diagrams</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-mc-2">
+          <p>2. What is the MAIN reason she enjoyed it?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-mc-2" data-correct="true"> A. It was full of surprising facts.</label><label><input type="radio" value="1" name="t7-mc-2" data-correct="false"> B. It was easy to finish.</label><label><input type="radio" value="2" name="t7-mc-2" data-correct="false"> C. Her teacher praised it.</label><label><input type="radio" value="3" name="t7-mc-2" data-correct="false"> D. It was in her own language.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-mc', 't7-mc-score')">Check answers</button>
+          <span id="t7-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t7-speaking-book">
+        <div class="q-num">Your Part 2 talk</div>
+        <div class="q-text">Now do the task yourself. Prepare for 1 minute, then speak for <b>1–2 minutes</b>. Cover all four points.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d like to talk about…”</li><li>“I read it because…”</li><li>“It took me about…”</li><li>“The main reason I enjoyed it was…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 7</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 29 of 45</div>
+    <h1>Day 29 complete! 🎉</h1>
+    <p>Day 29 done — Unit 7 listening and reading: a BBC podcast, the online writing course listening, Speaking Parts 2 and 3, and two more reading passages.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t1-speaking-summary"]'); if (b) initRecordControl(b, user.id, 29, 1, 't1-speaking-summary', 30); }
+    { const b = document.querySelector('.question-box[data-field="t2-speaking"]'); if (b) initRecordControl(b, user.id, 29, 2, 't2-speaking', 0); }
+    { const b = document.querySelector('.question-box[data-field="t3-speaking-1"]'); if (b) initRecordControl(b, user.id, 29, 3, 't3-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t3-speaking-2"]'); if (b) initRecordControl(b, user.id, 29, 3, 't3-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t3-speaking-3"]'); if (b) initRecordControl(b, user.id, 29, 3, 't3-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t3-speaking-4"]'); if (b) initRecordControl(b, user.id, 29, 3, 't3-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-book"]'); if (b) initRecordControl(b, user.id, 29, 7, 't7-speaking-book', 0); }
+
+    await initTaskFlow(29, 7, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-mc', 't1-mc-score'); },
+      2: () => { checkAllAnswers('t2-f', 't2-f-score'); checkAllAnswers('t2-mc', 't2-mc-score'); },
+      3: () => { checkAllAnswers('t3-ph', 't3-ph-score'); checkAllAnswers('t3-mc', 't3-mc-score'); },
+      4: () => { checkAllAnswers('t4-tf', 't4-tf-score'); checkAllAnswers('t4-sc', 't4-sc-score'); checkAllAnswers('t4-mc', 't4-mc-score'); },
+      5: () => { checkAllAnswers('t5-h', 't5-h-score'); checkAllAnswers('t5-s', 't5-s-score'); checkAllAnswers('t5-mc', 't5-mc-score'); },
+      7: () => { checkAllAnswers('t7-mc', 't7-mc-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t1-sum-btn', 't1-sum-ans', '[id^="t1-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 29 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 29 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 8</div>
+      <h2>Lead-in — Podcast: Is There a Future Without Bees?</h2>
+      <p class="task-sub">Today is a listening and reading day (Unit 7, Our relationship with nature). Start with a free podcast from <b>BBC Learning English — 6 Minute English</b>, which connects with yesterday’s passage on pollinators. Listen without subtitles. About 15 minutes.</p>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="position:relative; padding-bottom:56.25%; height:0;">
+          <iframe src="https://www.youtube.com/embed/gJ0BSnuX1GA" title="Is there a future without bees? — 6 Minute English" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Vocabulary.</strong> Match each term to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. pollination</button><button type="button" class="lm-item" data-key="2">2. staple crop</button><button type="button" class="lm-item" data-key="3">3. supply chain</button><button type="button" class="lm-item" data-key="4">4. extinction</button><button type="button" class="lm-item" data-key="5">5. drone</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. the sequence of stages by which food reaches consumers</button><button type="button" class="lm-item" data-key="b">b. moving pollen between plants so that seeds and fruit can form</button><button type="button" class="lm-item" data-key="c">c. a small aircraft with no pilot on board</button><button type="button" class="lm-item" data-key="d">d. a food crop that forms the basis of people’s diet</button><button type="button" class="lm-item" data-key="e">e. the disappearance of a species for ever</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t1-mc"><div class="q-item" id="t1-mc-1">
+          <p>1. Roughly what share of the food we eat depends on pollination by insects, according to the programme?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-1" data-correct="false"> A. about a tenth</label><label><input type="radio" value="1" name="t1-mc-1" data-correct="true"> B. about a third</label><label><input type="radio" value="2" name="t1-mc-1" data-correct="false"> C. about two thirds</label><label><input type="radio" value="3" name="t1-mc-1" data-correct="false"> D. almost all of it</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-2">
+          <p>2. What does the programme say about bee species in some European countries?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-2" data-correct="false"> A. They are increasing.</label><label><input type="radio" value="1" name="t1-mc-2" data-correct="true"> B. Up to half of them face extinction.</label><label><input type="radio" value="2" name="t1-mc-2" data-correct="false"> C. They have all been replaced by honeybees.</label><label><input type="radio" value="3" name="t1-mc-2" data-correct="false"> D. They no longer pollinate crops.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-3">
+          <p>3. Which crops are mentioned as being pollinated by the wind?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-3" data-correct="false"> A. apples and almonds</label><label><input type="radio" value="1" name="t1-mc-3" data-correct="true"> B. wheat, rice and corn</label><label><input type="radio" value="2" name="t1-mc-3" data-correct="false"> C. tomatoes and coffee</label><label><input type="radio" value="3" name="t1-mc-3" data-correct="false"> D. strawberries and melons</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-4">
+          <p>4. Why might drones be useful to farmers?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-4" data-correct="true"> A. Bees cannot be controlled and stay in the hive in rain or strong wind.</label><label><input type="radio" value="1" name="t1-mc-4" data-correct="false"> B. Drones are cheaper than seeds.</label><label><input type="radio" value="2" name="t1-mc-4" data-correct="false"> C. Bees damage fruit trees.</label><label><input type="radio" value="3" name="t1-mc-4" data-correct="false"> D. Drones can make honey.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-5">
+          <p>5. What is the answer to the programme’s quiz question?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-5" data-correct="false"> A. 10 of the world’s top 50 crops rely on insect pollination</label><label><input type="radio" value="1" name="t1-mc-5" data-correct="false"> B. 25 of the top 50</label><label><input type="radio" value="2" name="t1-mc-5" data-correct="true"> C. 40 of the top 50</label><label><input type="radio" value="3" name="t1-mc-5" data-correct="false"> D. all 50</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-mc', 't1-mc-score')">Check answers</button>
+          <span id="t1-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the podcast in your own words — <b>at least 120 words</b>. Identify the central issue, the key facts and the proposed solution, then add a sentence of critical evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the podcast (at least 120 words):</p><textarea class="no-check mini-answer" id="t1-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:190px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t1-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t1-sum-ans"><p>This episode of 6 Minute English examines the decline of bees and what it could mean for our food. The presenters explain that pollination — the transfer of pollen between plants — is essential for many crops, and that roughly a third of the food we eat depends on insects such as bees. Although staple crops like wheat, rice and corn are pollinated by the wind, many fruits and vegetables are not. In some European countries, up to half of bee species are threatened with extinction, which puts food supply chains at risk. Because bees cannot be controlled and do not fly in rain or strong wind, one company has developed drones that drop pollen onto orchards. Technology may help, but it seems a poor substitute for protecting the insects themselves. (≈ 130 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t1-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the podcast <b>aloud</b> without your notes — speak for <b>at least 60 seconds</b>, and finish with a critical comment.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central issue is…”</li><li>“The most striking figure is…”</li><li>“One proposed solution is…”</li><li>“What the programme doesn’t address is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 8</div>
+      <h2>Listening Section 3 — A Photography Assignment</h2>
+      <p class="task-sub">From Complete IELTS Unit 7. Two students on an environmental studies course talk to their tutor about a photography trip to Loch Affric in Scotland. Three question types: <b>labelling a plan</b>, <b>short answers</b> and <b>sentence completion</b>.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Labelling a plan:</b> look at the location of each option and think how it might be described (<i>where the two lochs meet, in the south-east corner, between the woodland and the river</i>). The answers come in order.</li><li><b>Short answers:</b> keep within the word limit and check spelling.</li><li><b>Sentence completion:</b> you will hear paraphrases of the questions, but the exact words you need.</li></ul></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 09 — Questions 1–5</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit7-track09.mp3"></audio></div>
+<div class="card"><p class="prompt-label">Questions 1–3 — Label the plan. Write the correct letter, A–F.</p><p style="margin:0 0 8px;"><b>Loch Affric in Scotland</b></p>
+<img src="img/loch-affric-map.png" alt="Map of Loch Affric with lochs, wooded and non-wooded areas, and letters A to F" style="max-width:100%; border-radius:8px; border:1px solid var(--border);"></div>
+      <div class="card" id="t2-map"><div class="sel-row"><select class="select" id="t2-map-1" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>1.</b> Oldest Scots pine trees</span></div><div class="sel-row"><select class="select" id="t2-map-2" data-answer="F"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>2.</b> Red deer</span></div><div class="sel-row"><select class="select" id="t2-map-3" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>3.</b> Red squirrels</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-map', 't2-map-score')">Check answers</button>
+          <span id="t2-map-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t2-sa" style="line-height:2.4;"><p><b>Questions 4–5 — Write ONE WORD ONLY for each answer.</b></p><p>4. What can cause someone to miss a good photograph? <input type="text" class="text-answer" id="t2-4" data-correct="hesitation/hesitating/waiting" autocomplete="off" style="width:150px;"></p><p>5. What personal quality do wildlife photographers particularly need? <input type="text" class="text-answer" id="t2-5" data-correct="patience" autocomplete="off" style="width:150px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-sa', 't2-sa-score')">Check answers</button>
+          <span id="t2-sa-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 10 — Questions 6–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit7-track10.mp3"></audio></div>
+      <div class="card" id="t2-sc" style="line-height:2.4;"><p><b>Questions 6–10 — Complete the sentences. Write NO MORE THAN TWO WORDS for each answer.</b></p><p>6. In bad weather, think more carefully about the <input type="text" class="text-answer" id="t2-6" data-correct="landscape" autocomplete="off" style="width:150px;">.</p><p>7. Take advantage of <input type="text" class="text-answer" id="t2-7" data-correct="reflections/the reflections/reflection/the reflection" autocomplete="off" style="width:150px;"> when photographing near water.</p><p>8. Use a piece of equipment called an ‘angle finder’ to avoid <input type="text" class="text-answer" id="t2-8" data-correct="neck pain/pain" autocomplete="off" style="width:150px;">.</p><p>9. Use the work of both artists and <input type="text" class="text-answer" id="t2-9" data-correct="designers" autocomplete="off" style="width:150px;"> to generate ideas.</p><p>10. Think about <input type="text" class="text-answer" id="t2-10" data-correct="conservation" autocomplete="off" style="width:150px;"> issues when deciding on what to photograph.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-sc', 't2-sc-score')">Check answers</button>
+          <span id="t2-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 8</div>
+      <h2>Vocabulary — Idiomatic Expressions from the Listening</h2>
+      <p class="task-sub">Band 8 requires some idiomatic language, used naturally and accurately. All of these expressions came from the conversation you have just heard. <i>Listening answers: 1 C · 2 F · 3 A · 4 hesitation · 5 patience · 6 landscape · 7 reflections · 8 neck pain · 9 designers · 10 conservation.</i></p>
+      <p style="margin-top:26px;"><strong>Part 1 — Complete the expressions</strong> with a word from the box.</p>
+      <div class="word-bank">account · bear · breath · experience · most · run · time</div><div class="card" id="t3-id" style="line-height:2.4;"><p>1. It’s like anything — you have to put it down to <input type="text" class="text-answer" id="t3-1" data-correct="experience" autocomplete="off" style="width:120px;">.</p><p>2. Suddenly something will take your <input type="text" class="text-answer" id="t3-2" data-correct="breath" autocomplete="off" style="width:120px;"> away and you’ll realise it’s all been worth it.</p><p>3. I wouldn’t worry — in the long <input type="text" class="text-answer" id="t3-3" data-correct="run" autocomplete="off" style="width:120px;">, you’ll still get your pictures.</p><p>4. It does mean that you need to take the landscape into <input type="text" class="text-answer" id="t3-4" data-correct="account" autocomplete="off" style="width:120px;">.</p><p>5. I want to make the <input type="text" class="text-answer" id="t3-5" data-correct="most" autocomplete="off" style="width:120px;"> of all the stunning reflections in the water.</p><p>6. Just take your <input type="text" class="text-answer" id="t3-6" data-correct="time" autocomplete="off" style="width:120px;">, and you might capture an amazing reflection.</p><p>7. It’s just something to <input type="text" class="text-answer" id="t3-7" data-correct="bear" autocomplete="off" style="width:120px;"> in mind.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-id', 't3-id-score')">Check answers</button>
+          <span id="t3-id-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Meanings.</strong> Which expression means…?</p>
+      <div class="card" id="t3-mean"><div class="sel-row"><select class="select" id="t3-mean-1" data-answer="make the most of"><option value="">—</option><option value="make the most of">make the most of</option><option value="put it down to experience">put it down to experience</option><option value="take your time">take your time</option><option value="in the long run">in the long run</option><option value="take your breath away">take your breath away</option><option value="take into account / bear in mind">take into account / bear in mind</option></select><span><b>1.</b> profit from something in a positive way</span></div><div class="sel-row"><select class="select" id="t3-mean-2" data-answer="put it down to experience"><option value="">—</option><option value="make the most of">make the most of</option><option value="put it down to experience">put it down to experience</option><option value="take your time">take your time</option><option value="in the long run">in the long run</option><option value="take your breath away">take your breath away</option><option value="take into account / bear in mind">take into account / bear in mind</option></select><span><b>2.</b> learn from something rather than get upset by it</span></div><div class="sel-row"><select class="select" id="t3-mean-3" data-answer="take your time"><option value="">—</option><option value="make the most of">make the most of</option><option value="put it down to experience">put it down to experience</option><option value="take your time">take your time</option><option value="in the long run">in the long run</option><option value="take your breath away">take your breath away</option><option value="take into account / bear in mind">take into account / bear in mind</option></select><span><b>3.</b> be patient; do not hurry</span></div><div class="sel-row"><select class="select" id="t3-mean-4" data-answer="in the long run"><option value="">—</option><option value="make the most of">make the most of</option><option value="put it down to experience">put it down to experience</option><option value="take your time">take your time</option><option value="in the long run">in the long run</option><option value="take your breath away">take your breath away</option><option value="take into account / bear in mind">take into account / bear in mind</option></select><span><b>4.</b> eventually</span></div><div class="sel-row"><select class="select" id="t3-mean-5" data-answer="take your breath away"><option value="">—</option><option value="make the most of">make the most of</option><option value="put it down to experience">put it down to experience</option><option value="take your time">take your time</option><option value="in the long run">in the long run</option><option value="take your breath away">take your breath away</option><option value="take into account / bear in mind">take into account / bear in mind</option></select><span><b>5.</b> surprise and amaze you</span></div><div class="sel-row"><select class="select" id="t3-mean-6" data-answer="take into account / bear in mind"><option value="">—</option><option value="make the most of">make the most of</option><option value="put it down to experience">put it down to experience</option><option value="take your time">take your time</option><option value="in the long run">in the long run</option><option value="take your breath away">take your breath away</option><option value="take into account / bear in mind">take into account / bear in mind</option></select><span><b>6.</b> consider; think about</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-mean', 't3-mean-score')">Check answers</button>
+          <span id="t3-mean-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t3-speaking">
+        <div class="q-num">Speaking — idioms in use</div>
+        <div class="q-text">Talk about an occasion when you had to <i>take someone’s age into account</i>, or when you saw something that <i>took your breath away</i>. Use at least three expressions from this task.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“In the long run,…”</li><li>“I decided to make the most of…”</li><li>“I just put it down to experience.”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 8</div>
+      <h2>Speaking Parts 2 and 3 — Animals, Conservation and the Future</h2>
+      <p class="task-sub">Listen to a Band 8 Part 2 talk from Thailand, then to three candidates speculating about the future in Part 3. Notice the language of <b>probability</b>.</p>
+      <div class="card task-prompt"><p class="prompt-label">Part 2 task card</p><p><b>Describe an animal or plant that is important in your country.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;where you can find it<br>&nbsp;&nbsp;whether people like or dislike it<br>&nbsp;&nbsp;what recent news there has been about it<br>and explain why it is important in your country.</p></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 11 — a candidate talks about elephants</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit7-track11.mp3"></audio></div>
+      <div class="card" id="t4-mc"><div class="q-item" id="t4-mc-1">
+          <p>1. Which of these is NOT given as evidence that elephants are important in Thai culture?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-1" data-correct="false"> A. They appeared on the national flag and on coins.</label><label><input type="radio" value="1" name="t4-mc-1" data-correct="false"> B. There is a national elephant day.</label><label><input type="radio" value="2" name="t4-mc-1" data-correct="true"> C. Elephants are used in the Thai army today.</label><label><input type="radio" value="3" name="t4-mc-1" data-correct="false"> D. Some temples were built where an elephant died.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-2">
+          <p>2. Why did working elephants come into the cities?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-2" data-correct="true"> A. There was less logging because of conservation programmes.</label><label><input type="radio" value="1" name="t4-mc-2" data-correct="false"> B. Tourists asked to see them.</label><label><input type="radio" value="2" name="t4-mc-2" data-correct="false"> C. The forests were flooded.</label><label><input type="radio" value="3" name="t4-mc-2" data-correct="false"> D. The government moved them there.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-3">
+          <p>3. What has the government done?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-3" data-correct="false"> A. It has encouraged more elephants into cities.</label><label><input type="radio" value="1" name="t4-mc-3" data-correct="true"> B. It has cracked down and set up a conservation centre.</label><label><input type="radio" value="2" name="t4-mc-3" data-correct="false"> C. It has banned elephant festivals.</label><label><input type="radio" value="3" name="t4-mc-3" data-correct="false"> D. It has stopped all logging.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mc', 't4-mc-score')">Check answers</button>
+          <span id="t4-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 3 — speculating.</strong> Listen to three candidates answering questions about the future.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 12 — Deng: keeping animals in captivity</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit7-track12.mp3"></audio></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 13 — wildlife preservation: a global or national issue?</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit7-track13.mp3"></audio></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 14 — Lucrecia: the role of governments</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit7-track14.mp3"></audio></div>
+      <p style="margin-top:26px;">Does each expression from the recordings suggest that something is <b>likely</b> or <b>unlikely</b>?</p>
+      <div class="card" id="t4-prob"><div class="sel-row"><select class="select" id="t4-prob-1" data-answer="likely"><option value="">—</option><option value="likely">likely</option><option value="unlikely">unlikely</option></select><span><b>1.</b> there’s a reasonable chance that…</span></div><div class="sel-row"><select class="select" id="t4-prob-2" data-answer="likely"><option value="">—</option><option value="likely">likely</option><option value="unlikely">unlikely</option></select><span><b>2.</b> it’s highly likely that…</span></div><div class="sel-row"><select class="select" id="t4-prob-3" data-answer="likely"><option value="">—</option><option value="likely">likely</option><option value="unlikely">unlikely</option></select><span><b>3.</b> we may well see…</span></div><div class="sel-row"><select class="select" id="t4-prob-4" data-answer="likely"><option value="">—</option><option value="likely">likely</option><option value="unlikely">unlikely</option></select><span><b>4.</b> there’s every possibility that…</span></div><div class="sel-row"><select class="select" id="t4-prob-5" data-answer="unlikely"><option value="">—</option><option value="likely">likely</option><option value="unlikely">unlikely</option></select><span><b>5.</b> there’s very little chance of…</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-prob', 't4-prob-score')">Check answers</button>
+          <span id="t4-prob-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t4-views"><div class="q-item" id="t4-views-1">
+          <p>1. What does Deng predict about zoos?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-views-1" data-correct="false"> A. They will close.</label><label><input type="radio" value="1" name="t4-views-1" data-correct="true"> B. They will probably continue, perhaps under a different name.</label><label><input type="radio" value="2" name="t4-views-1" data-correct="false"> C. They will only keep pandas.</label><label><input type="radio" value="3" name="t4-views-1" data-correct="false"> D. Children will stop visiting them.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-views-2">
+          <p>2. Why does the second speaker think wildlife preservation must be global?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-views-2" data-correct="true"> A. Animals and habitats do not recognise national borders.</label><label><input type="radio" value="1" name="t4-views-2" data-correct="false"> B. Governments are too weak.</label><label><input type="radio" value="2" name="t4-views-2" data-correct="false"> C. Only rich countries have wildlife.</label><label><input type="radio" value="3" name="t4-views-2" data-correct="false"> D. Insects are not important.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-views-3">
+          <p>3. Why does Lucrecia think governments must lead?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-views-3" data-correct="false"> A. Charities have no money.</label><label><input type="radio" value="1" name="t4-views-3" data-correct="true"> B. Only governments can enforce laws.</label><label><input type="radio" value="2" name="t4-views-3" data-correct="false"> C. People are not interested.</label><label><input type="radio" value="3" name="t4-views-3" data-correct="false"> D. Sponsored runs are unpopular.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-views', 't4-views-score')">Check answers</button>
+          <span id="t4-views-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t4-speaking-1">
+        <div class="q-num">Part 3 — Question 1</div>
+        <div class="q-text">Is there any justification for keeping animals in captivity?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“There’s every possibility that…”</li><li>“It’s highly likely that…”</li><li>“We may well see…”</li><li>“There’s very little chance of… unless…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t4-speaking-2">
+        <div class="q-num">Part 3 — Question 2</div>
+        <div class="q-text">Is wildlife preservation a global or a national issue?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“There’s every possibility that…”</li><li>“It’s highly likely that…”</li><li>“We may well see…”</li><li>“There’s very little chance of… unless…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t4-speaking-3">
+        <div class="q-num">Part 3 — Question 3</div>
+        <div class="q-text">What role should governments play in protecting their country’s wildlife?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“There’s every possibility that…”</li><li>“It’s highly likely that…”</li><li>“We may well see…”</li><li>“There’s very little chance of… unless…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t4-speaking-4">
+        <div class="q-num">Part 3 — Question 4</div>
+        <div class="q-text">Will people care more or less about nature in the future?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“There’s every possibility that…”</li><li>“It’s highly likely that…”</li><li>“We may well see…”</li><li>“There’s very little chance of… unless…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 8</div>
+      <h2>Reading Passage 1 — Through the Lens: The Ethics of Wildlife Photography</h2>
+      <p class="task-sub">Section 3 style. Question types: <b>YES / NO / NOT GIVEN</b>, <b>multiple choice</b> and <b>summary completion without a word bank</b>. Suggested time: <b>20 minutes</b>. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Through the Lens: The Ethics of Wildlife Photography</h3>
+            <p class="article-meta">Reading Passage 1 · Ethics and the environment · 425 words</p>
+            <p><span class="para-label">A</span>Wildlife photography has never been more popular. Affordable cameras, powerful zoom lenses and smartphones have turned millions of people into nature photographers, and social media allows a striking image of a fox or an owl to reach an audience of millions within hours. Many conservationists welcome this: photographs can awaken public concern for species and habitats far more effectively than statistics. Yet the boom has also raised uncomfortable questions about what photographers are prepared to do for the perfect shot.</p><p><span class="para-label">B</span>The most widely criticised practice is baiting — luring animals with food so that they appear in a convenient place. Supporters argue that it does little harm and allows close-up images that would otherwise be impossible. Critics point out that regularly fed animals may lose their fear of people, become dependent on handouts or gather in unnatural numbers, increasing the spread of disease. In my view, occasional baiting of common garden birds is hardly a scandal, but baiting predators such as owls with live mice, as some photographers have done, is indefensible.</p><p><span class="para-label">C</span>Disturbance is a subtler problem. A photographer who approaches a nest too closely may cause parent birds to abandon their eggs; a crowd of photographers waiting for a rare visitor can prevent it from feeding. Drones, increasingly used to capture aerial images, can alarm birds and mammals that perceive them as predators. Some countries have responded by restricting drone use in protected areas, and many photography organisations now publish codes of conduct.</p><p><span class="para-label">D</span>Social media has added a further complication. When a photograph is posted with its exact location, other photographers may follow, and a quiet site can be overwhelmed within days. For this reason, some conservation groups now ask photographers not to reveal the locations of sensitive species. I believe this request is entirely reasonable, even if it means sacrificing some of the attention a photograph might otherwise attract.</p><p><span class="para-label">E</span>Finally, there is the question of honesty. Major photography competitions have disqualified entries after judges concluded that animals had been captive or, in at least one widely reported case, stuffed. Such incidents damage public trust, because the power of a wildlife photograph depends on the viewer’s belief that the moment really happened.</p><p><span class="para-label">F</span>None of this means that wildlife photography should be discouraged. At its best, it is a form of witness that has helped to protect species and places. But the welfare of the subject must always come before the picture. A photographer who disturbs a nest in order to show the world how beautiful birds are has misunderstood the purpose of the work.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 11–15</p><p class="qg-instr">Do the following statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t5-yn"><div class="q-item" id="t5-yn-11">
+          <p>11. Wildlife photography has helped to protect species and places.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-yn-11" data-correct="true"> YES</label><label><input type="radio" value="1" name="t5-yn-11" data-correct="false"> NO</label><label><input type="radio" value="2" name="t5-yn-11" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-yn-12">
+          <p>12. All forms of baiting should be banned.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-yn-12" data-correct="false"> YES</label><label><input type="radio" value="1" name="t5-yn-12" data-correct="true"> NO</label><label><input type="radio" value="2" name="t5-yn-12" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-yn-13">
+          <p>13. Using live animals to bait predators can never be justified.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-yn-13" data-correct="true"> YES</label><label><input type="radio" value="1" name="t5-yn-13" data-correct="false"> NO</label><label><input type="radio" value="2" name="t5-yn-13" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-yn-14">
+          <p>14. Photographers should be asked not to reveal the locations of sensitive species.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-yn-14" data-correct="true"> YES</label><label><input type="radio" value="1" name="t5-yn-14" data-correct="false"> NO</label><label><input type="radio" value="2" name="t5-yn-14" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-yn-15">
+          <p>15. Smartphone photographs are less likely to disturb wildlife than professional cameras.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-yn-15" data-correct="false"> YES</label><label><input type="radio" value="1" name="t5-yn-15" data-correct="false"> NO</label><label><input type="radio" value="2" name="t5-yn-15" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-yn', 't5-yn-score')">Check answers</button>
+          <span id="t5-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 16–18</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t5-mc"><div class="q-item" id="t5-mc-16">
+          <p>16. According to the third paragraph, why can drones be a problem?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-16" data-correct="false"> A. They are expensive.</label><label><input type="radio" value="1" name="t5-mc-16" data-correct="true"> B. Animals may perceive them as predators.</label><label><input type="radio" value="2" name="t5-mc-16" data-correct="false"> C. They produce poor images.</label><label><input type="radio" value="3" name="t5-mc-16" data-correct="false"> D. They are banned everywhere.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-17">
+          <p>17. Why does the writer mention a stuffed animal in a competition?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-17" data-correct="true"> A. to illustrate how dishonesty undermines trust in wildlife images</label><label><input type="radio" value="1" name="t5-mc-17" data-correct="false"> B. to criticise museums</label><label><input type="radio" value="2" name="t5-mc-17" data-correct="false"> C. to show that competitions are too strict</label><label><input type="radio" value="3" name="t5-mc-17" data-correct="false"> D. to praise the photographer’s skill</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-18">
+          <p>18. What is the writer’s overall position?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-18" data-correct="false"> A. Wildlife photography does more harm than good.</label><label><input type="radio" value="1" name="t5-mc-18" data-correct="true"> B. Wildlife photography is valuable as long as animal welfare comes first.</label><label><input type="radio" value="2" name="t5-mc-18" data-correct="false"> C. Only professionals should photograph wildlife.</label><label><input type="radio" value="3" name="t5-mc-18" data-correct="false"> D. Social media should be banned for photographers.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-mc', 't5-mc-score')">Check answers</button>
+          <span id="t5-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 19–22</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p></div>
+      <div class="card" id="t5-s" style="line-height:2.7;"><p>Critics argue that animals which are regularly fed may lose their fear of people, become (19) <input type="text" class="text-answer" id="t5-19" data-correct="dependent" autocomplete="off" style="width:130px;"> on handouts, and gather in large numbers, which helps (20) <input type="text" class="text-answer" id="t5-20" data-correct="disease" autocomplete="off" style="width:130px;"> to spread. Approaching a nest too closely may make parent birds (21) <input type="text" class="text-answer" id="t5-21" data-correct="abandon" autocomplete="off" style="width:130px;"> their eggs, which is why many organisations now publish (22) <input type="text" class="text-answer" id="t5-22" data-correct="codes" autocomplete="off" style="width:130px;"> of conduct.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-s', 't5-s-score')">Check answers</button>
+          <span id="t5-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 8</div>
+      <h2>Reading Passage 2 — Nature Out of Place</h2>
+      <p class="task-sub">Question types: <b>matching headings</b>, <b>TRUE / FALSE / NOT GIVEN</b> and <b>sentence completion</b>. Suggested time: <b>18 minutes</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Nature Out of Place</h3>
+            <p class="article-meta">Reading Passage 2 · Ecology · 384 words</p>
+            <p><span class="para-label">A</span>When species are moved, deliberately or accidentally, beyond their natural range, most fail to survive in their new homes. A small proportion, however, not only survive but spread rapidly, with damaging consequences for native wildlife, agriculture and even human health. These so-called invasive species are now regarded by many ecologists as one of the leading causes of biodiversity loss worldwide.</p><p><span class="para-label">B</span>Some of the most notorious invasions began with good intentions. In 1935, cane toads were brought to north-eastern Australia in the hope that they would control beetles damaging sugar cane crops. They proved largely ineffective against the beetles but thrived in their new environment, spreading across thousands of kilometres. Because their skin contains a powerful poison, native predators such as snakes and lizards that attempt to eat them are frequently killed.</p><p><span class="para-label">C</span>Other introductions were entirely accidental. Ships take on water for stability, known as ballast water, and release it in distant ports, often carrying living organisms with it. The zebra mussel, native to the region around the Black and Caspian Seas, is thought to have reached the Great Lakes of North America in this way in the 1980s. It multiplied so quickly that it blocked water intake pipes and altered entire freshwater ecosystems.</p><p><span class="para-label">D</span>Islands are particularly vulnerable. Species that evolved without ground-dwelling predators often have no defence against them. On the Pacific island of Guam, the brown tree snake, which probably arrived in cargo after the Second World War, caused the disappearance of most of the island’s native forest birds. Rats, introduced to islands across the world by ships, have had similar effects on seabird colonies.</p><p><span class="para-label">E</span>The economic costs are enormous. A recent international assessment estimated that invasive species cost the global economy hundreds of billions of dollars a year, through damage to crops, fisheries, infrastructure and health, and that these costs have risen sharply in recent decades.</p><p><span class="para-label">F</span>Prevention is generally far cheaper than control. Stricter checks on imported goods, rules requiring ships to treat ballast water and rapid action when a new arrival is detected can all reduce the risk. On islands, removing invasive rats and other predators has allowed seabird populations to recover. Nevertheless, some scientists caution against treating every non-native species as an enemy, pointing out that many introduced plants and animals cause little harm and some even provide useful habitats.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 23–28</p><p class="qg-instr">The passage has six paragraphs, <b>A–F</b>. Choose the correct heading for each paragraph from the list below.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; A solution that became a problem<br><b>ii</b>&nbsp; Travelling unseen across the oceans<br><b>iii</b>&nbsp; Why most newcomers fail<br><b>iv</b>&nbsp; A global threat to biodiversity<br><b>v</b>&nbsp; Defenceless against new hunters<br><b>vi</b>&nbsp; Counting the cost<br><b>vii</b>&nbsp; Cheaper to stop than to cure<br><b>viii</b>&nbsp; Native species that became pests</p></div>
+      <div class="card" id="t6-h"><div class="sel-row"><select class="select" id="t6-h-23" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>23.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t6-h-24" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>24.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t6-h-25" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>25.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t6-h-26" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>26.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t6-h-27" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>27.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t6-h-28" data-answer="vii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>28.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-h', 't6-h-score')">Check answers</button>
+          <span id="t6-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 29–32</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-tf"><div class="q-item" id="t6-tf-29">
+          <p>29. Most species moved to a new area become invasive.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-tf-29" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t6-tf-29" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t6-tf-29" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-tf-30">
+          <p>30. Cane toads successfully controlled the beetles in sugar cane crops.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-tf-30" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t6-tf-30" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t6-tf-30" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-tf-31">
+          <p>31. Zebra mussels are believed to have arrived in the Great Lakes in ships’ ballast water.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-tf-31" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t6-tf-31" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t6-tf-31" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-tf-32">
+          <p>32. All non-native species cause serious harm, according to every scientist.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-tf-32" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t6-tf-32" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t6-tf-32" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-tf', 't6-tf-score')">Check answers</button>
+          <span id="t6-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 33–35</p><p class="qg-instr">Complete the sentences. Choose <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.</p></div>
+      <div class="card" id="t6-sc" style="line-height:2.4;"><p>33. Native predators often die after eating cane toads because of the poison in the toads’ <input type="text" class="text-answer" id="t6-33" data-correct="skin" autocomplete="off" style="width:130px;">.</p><p>34. Zebra mussels blocked water <input type="text" class="text-answer" id="t6-34" data-correct="intake pipes" autocomplete="off" style="width:150px;">.</p><p>35. The brown tree snake probably reached Guam in <input type="text" class="text-answer" id="t6-35" data-correct="cargo" autocomplete="off" style="width:130px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-sc', 't6-sc-score')">Check answers</button>
+          <span id="t6-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 8</div>
+      <h2>Reading Passage 3 — Do Animals Grieve?</h2>
+      <p class="task-sub">Question types: <b>matching features</b>, <b>sentence endings</b> and <b>short-answer questions</b>. Suggested time: <b>15 minutes</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Do Animals Grieve?</h3>
+            <p class="article-meta">Reading Passage 3 · Animal behaviour · 322 words</p>
+            <p><span class="para-label">A</span>For much of the twentieth century, scientists were wary of attributing emotions to animals. To describe an animal as ‘grieving’ was considered unscientific — an example of anthropomorphism, the tendency to project human feelings onto other species. In recent decades, however, a growing number of observations have led some researchers to reconsider.</p><p><span class="para-label">B</span>Elephants provide some of the most frequently cited examples. Field researchers have repeatedly recorded elephants approaching the remains of dead members of their species, touching the bones with their trunks and feet, and lingering beside them, behaviour they seldom show towards the remains of other animals. Some observers have interpreted this as a form of mourning; others suggest it may reflect curiosity or an attempt to gather information.</p><p><span class="para-label">C</span>Among primates, mother chimpanzees have occasionally been seen carrying the bodies of their dead infants for days or even weeks. Similar behaviour has been reported in some monkeys. Researchers remain divided over its meaning: it may express a strong bond that does not end immediately with death, or it may simply be that the mother does not yet recognise that the infant has died.</p><p><span class="para-label">D</span>One case attracted worldwide attention in 2018, when a female orca in the Pacific Northwest of North America carried her dead calf for around seventeen days, covering a distance of more than a thousand miles. For many members of the public, it was difficult to see this as anything other than grief. Scientists were more cautious, noting that pushing a dead calf for so long would have been physically demanding and must have had some significance, but that its emotional content could not be measured directly.</p><p><span class="para-label">E</span>Sceptics argue that, without access to an animal’s inner experience, claims about grief remain speculative. Supporters reply that refusing to recognise emotions in animals with complex social lives may be as unscientific as exaggerating them. What both sides increasingly agree on is the need for careful, systematic observation rather than isolated anecdotes.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 36–39</p><p class="qg-instr">Match each statement with the correct animal or group, <b>A–D</b>.</p></div>
+<div class="card"><p class="prompt-label">List</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; elephants<br><b>B</b>&nbsp; chimpanzees<br><b>C</b>&nbsp; an orca<br><b>D</b>&nbsp; sceptical scientists</p></div>
+      <div class="card" id="t7-f"><div class="sel-row"><select class="select" id="t7-f-36" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>36.</b> investigate the bones of their own species more than those of other animals</span></div><div class="sel-row"><select class="select" id="t7-f-37" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>37.</b> believe claims about grief cannot be proved</span></div><div class="sel-row"><select class="select" id="t7-f-38" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>38.</b> travelled a very long distance with a dead offspring</span></div><div class="sel-row"><select class="select" id="t7-f-39" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>39.</b> may not realise that their young have died</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-f', 't7-f-score')">Check answers</button>
+          <span id="t7-f-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 40–42</p><p class="qg-instr">Complete each sentence with the correct ending, <b>A–E</b>.</p></div>
+<div class="card"><p class="prompt-label">Endings</p><p style="line-height:1.85; margin:0;"><b>A</b>&nbsp; was regarded as unscientific for much of the twentieth century.<br><b>B</b>&nbsp; may be as unscientific as exaggerating them.<br><b>C</b>&nbsp; must have been physically demanding.<br><b>D</b>&nbsp; is now accepted by all researchers.<br><b>E</b>&nbsp; is more reliable than isolated anecdotes.</p></div>
+      <div class="card" id="t7-se"><div class="sel-row"><select class="select" id="t7-se-40" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>40.</b> Describing animals as grieving</span></div><div class="sel-row"><select class="select" id="t7-se-41" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>41.</b> Refusing to recognise emotions in socially complex animals</span></div><div class="sel-row"><select class="select" id="t7-se-42" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>42.</b> Careful, systematic observation</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-se', 't7-se-score')">Check answers</button>
+          <span id="t7-se-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 43–44</p><p class="qg-instr">Answer the questions. Choose <b>NO MORE THAN TWO WORDS AND/OR A NUMBER</b> from the passage.</p></div>
+      <div class="card" id="t7-sa" style="line-height:2.5;"><p>43. What is the name for projecting human feelings onto animals? <input type="text" class="text-answer" id="t7-43" data-correct="anthropomorphism" autocomplete="off" style="width:170px;"></p><p>44. For about how many days did the orca carry her calf? <input type="text" class="text-answer" id="t7-44" data-correct="seventeen/17/seventeen days/17 days" autocomplete="off" style="width:150px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-sa', 't7-sa-score')">Check answers</button>
+          <span id="t7-sa-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 8</div>
+      <h2>Reading — Answer Analysis</h2>
+      <p class="task-sub">Check all three passages. In Passage 1 track the writer’s voice; in Passages 2 and 3, watch qualifiers such as <i>most, all, every</i> and hedges such as <i>may, probably, is thought to</i>.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Through the Lens: The Ethics of Wildlife Photography</summary>
+        <p><span class="para-label">A</span>Wildlife photography has never been more popular. Affordable cameras, powerful zoom lenses and smartphones have turned millions of people into nature photographers, and social media allows a striking image of a fox or an owl to reach an audience of millions within hours. Many conservationists welcome this: photographs can awaken public concern for species and habitats far more effectively than statistics. Yet the boom has also raised uncomfortable questions about what photographers are prepared to do for the perfect shot.</p><p><span class="para-label">B</span>The most widely criticised practice is baiting — luring animals with food so that they appear in a convenient place. Supporters argue that it does little harm and allows close-up images that would otherwise be impossible. Critics point out that regularly fed animals may lose their fear of people, become dependent on handouts or gather in unnatural numbers, increasing the spread of disease. In my view, occasional baiting of common garden birds is hardly a scandal, but baiting predators such as owls with live mice, as some photographers have done, is indefensible.</p><p><span class="para-label">C</span>Disturbance is a subtler problem. A photographer who approaches a nest too closely may cause parent birds to abandon their eggs; a crowd of photographers waiting for a rare visitor can prevent it from feeding. Drones, increasingly used to capture aerial images, can alarm birds and mammals that perceive them as predators. Some countries have responded by restricting drone use in protected areas, and many photography organisations now publish codes of conduct.</p><p><span class="para-label">D</span>Social media has added a further complication. When a photograph is posted with its exact location, other photographers may follow, and a quiet site can be overwhelmed within days. For this reason, some conservation groups now ask photographers not to reveal the locations of sensitive species. I believe this request is entirely reasonable, even if it means sacrificing some of the attention a photograph might otherwise attract.</p><p><span class="para-label">E</span>Finally, there is the question of honesty. Major photography competitions have disqualified entries after judges concluded that animals had been captive or, in at least one widely reported case, stuffed. Such incidents damage public trust, because the power of a wildlife photograph depends on the viewer’s belief that the moment really happened.</p><p><span class="para-label">F</span>None of this means that wildlife photography should be discouraged. At its best, it is a form of witness that has helped to protect species and places. But the welfare of the subject must always come before the picture. A photographer who disturbs a nest in order to show the world how beautiful birds are has misunderstood the purpose of the work.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">At its best, it is a form of witness that has helped to protect species and places</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">NO</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">occasional baiting of common garden birds is hardly a scandal</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">YES</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">baiting predators such as owls with live mice … is indefensible</span>.</p></div></details><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">YES</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">I believe this request is entirely reasonable</span>.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>Smartphones and professional cameras are never compared for disturbance.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">birds and mammals that perceive them as predators</span>.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">A</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Such incidents damage public trust</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">the welfare of the subject must always come before the picture</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">dependent</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">become dependent on handouts</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">disease</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">increasing the spread of disease</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">abandon</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">may cause parent birds to abandon their eggs</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">codes</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">publish codes of conduct</span>. Plural.</p></div></details></div>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Nature Out of Place</summary>
+        <p><span class="para-label">A</span>When species are moved, deliberately or accidentally, beyond their natural range, most fail to survive in their new homes. A small proportion, however, not only survive but spread rapidly, with damaging consequences for native wildlife, agriculture and even human health. These so-called invasive species are now regarded by many ecologists as one of the leading causes of biodiversity loss worldwide.</p><p><span class="para-label">B</span>Some of the most notorious invasions began with good intentions. In 1935, cane toads were brought to north-eastern Australia in the hope that they would control beetles damaging sugar cane crops. They proved largely ineffective against the beetles but thrived in their new environment, spreading across thousands of kilometres. Because their skin contains a powerful poison, native predators such as snakes and lizards that attempt to eat them are frequently killed.</p><p><span class="para-label">C</span>Other introductions were entirely accidental. Ships take on water for stability, known as ballast water, and release it in distant ports, often carrying living organisms with it. The zebra mussel, native to the region around the Black and Caspian Seas, is thought to have reached the Great Lakes of North America in this way in the 1980s. It multiplied so quickly that it blocked water intake pipes and altered entire freshwater ecosystems.</p><p><span class="para-label">D</span>Islands are particularly vulnerable. Species that evolved without ground-dwelling predators often have no defence against them. On the Pacific island of Guam, the brown tree snake, which probably arrived in cargo after the Second World War, caused the disappearance of most of the island’s native forest birds. Rats, introduced to islands across the world by ships, have had similar effects on seabird colonies.</p><p><span class="para-label">E</span>The economic costs are enormous. A recent international assessment estimated that invasive species cost the global economy hundreds of billions of dollars a year, through damage to crops, fisheries, infrastructure and health, and that these costs have risen sharply in recent decades.</p><p><span class="para-label">F</span>Prevention is generally far cheaper than control. Stricter checks on imported goods, rules requiring ships to treat ballast water and rapid action when a new arrival is detected can all reduce the risk. On islands, removing invasive rats and other predators has allowed seabird populations to recover. Nevertheless, some scientists caution against treating every non-native species as an enemy, pointing out that many introduced plants and animals cause little harm and some even provide useful habitats.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">iv</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">one of the leading causes of biodiversity loss worldwide</span>.</p><p><span class="trap">Trap:</span> <i>iii (why most newcomers fail)</i> — the paragraph mentions that most fail, but its focus is the harm done by the few that succeed.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">i</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">began with good intentions … proved largely ineffective … but thrived</span>.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">ii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">release it in distant ports, often carrying living organisms with it</span>.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">v</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Species that evolved without ground-dwelling predators often have no defence against them</span>.</p></div></details><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">vi</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">The economic costs are enormous</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">vii</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Prevention is generally far cheaper than control</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">FALSE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">most fail to survive in their new homes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">They proved largely ineffective against the beetles</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">TRUE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">is thought to have reached the Great Lakes … in this way</span>. <i>Believed</i> = <i>thought</i>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">FALSE</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">some scientists caution against treating every non-native species as an enemy … many introduced plants and animals cause little harm</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">skin</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">their skin contains a powerful poison</span>.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">intake pipes</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">blocked water intake pipes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">cargo</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">probably arrived in cargo</span>.</p></div></details></div>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Do Animals Grieve?</summary>
+        <p><span class="para-label">A</span>For much of the twentieth century, scientists were wary of attributing emotions to animals. To describe an animal as ‘grieving’ was considered unscientific — an example of anthropomorphism, the tendency to project human feelings onto other species. In recent decades, however, a growing number of observations have led some researchers to reconsider.</p><p><span class="para-label">B</span>Elephants provide some of the most frequently cited examples. Field researchers have repeatedly recorded elephants approaching the remains of dead members of their species, touching the bones with their trunks and feet, and lingering beside them, behaviour they seldom show towards the remains of other animals. Some observers have interpreted this as a form of mourning; others suggest it may reflect curiosity or an attempt to gather information.</p><p><span class="para-label">C</span>Among primates, mother chimpanzees have occasionally been seen carrying the bodies of their dead infants for days or even weeks. Similar behaviour has been reported in some monkeys. Researchers remain divided over its meaning: it may express a strong bond that does not end immediately with death, or it may simply be that the mother does not yet recognise that the infant has died.</p><p><span class="para-label">D</span>One case attracted worldwide attention in 2018, when a female orca in the Pacific Northwest of North America carried her dead calf for around seventeen days, covering a distance of more than a thousand miles. For many members of the public, it was difficult to see this as anything other than grief. Scientists were more cautious, noting that pushing a dead calf for so long would have been physically demanding and must have had some significance, but that its emotional content could not be measured directly.</p><p><span class="para-label">E</span>Sceptics argue that, without access to an animal’s inner experience, claims about grief remain speculative. Supporters reply that refusing to recognise emotions in animals with complex social lives may be as unscientific as exaggerating them. What both sides increasingly agree on is the need for careful, systematic observation rather than isolated anecdotes.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">A</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">behaviour they seldom show towards the remains of other animals</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">D</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Sceptics argue that … claims about grief remain speculative</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">C</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">covering a distance of more than a thousand miles</span>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">it may simply be that the mother does not yet recognise that the infant has died</span>.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">A</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">To describe an animal as ‘grieving’ was considered unscientific</span>.</p></div></details><details class="an-item"><summary><span class="an-n">41</span><span class="an-ans">B</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">refusing to recognise emotions … may be as unscientific as exaggerating them</span>.</p></div></details><details class="an-item"><summary><span class="an-n">42</span><span class="an-ans">E</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">the need for careful, systematic observation rather than isolated anecdotes</span>. <span class="trap">Trap:</span> D — <i>all researchers</i> is never claimed.</p></div></details><details class="an-item"><summary><span class="an-n">43</span><span class="an-ans">anthropomorphism</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">anthropomorphism, the tendency to project human feelings onto other species</span>.</p></div></details><details class="an-item"><summary><span class="an-n">44</span><span class="an-ans">seventeen</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">around seventeen days</span>.</p></div></details></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 8</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 29 of 45</div>
+    <h1>Day 29 complete! 🎉</h1>
+    <p>Day 29 done — Unit 7 listening and reading: a BBC podcast, Listening Section 3, idioms, speculating in Part 3, and three more IELTS readings (34 questions).</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t1-speaking-summary"]'); if (b) initRecordControl(b, user.id, 29, 1, 't1-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t3-speaking"]'); if (b) initRecordControl(b, user.id, 29, 3, 't3-speaking', 0); }
+    { const b = document.querySelector('.question-box[data-field="t4-speaking-1"]'); if (b) initRecordControl(b, user.id, 29, 4, 't4-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t4-speaking-2"]'); if (b) initRecordControl(b, user.id, 29, 4, 't4-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t4-speaking-3"]'); if (b) initRecordControl(b, user.id, 29, 4, 't4-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t4-speaking-4"]'); if (b) initRecordControl(b, user.id, 29, 4, 't4-speaking-4', 0); }
+
+    await initTaskFlow(29, 8, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-mc', 't1-mc-score'); },
+      2: () => { checkAllAnswers('t2-map', 't2-map-score'); checkAllAnswers('t2-sa', 't2-sa-score'); checkAllAnswers('t2-sc', 't2-sc-score'); },
+      3: () => { checkAllAnswers('t3-id', 't3-id-score'); checkAllAnswers('t3-mean', 't3-mean-score'); },
+      4: () => { checkAllAnswers('t4-mc', 't4-mc-score'); checkAllAnswers('t4-prob', 't4-prob-score'); checkAllAnswers('t4-views', 't4-views-score'); },
+      5: () => { checkAllAnswers('t5-yn', 't5-yn-score'); checkAllAnswers('t5-mc', 't5-mc-score'); checkAllAnswers('t5-s', 't5-s-score'); },
+      6: () => { checkAllAnswers('t6-h', 't6-h-score'); checkAllAnswers('t6-tf', 't6-tf-score'); checkAllAnswers('t6-sc', 't6-sc-score'); },
+      7: () => { checkAllAnswers('t7-f', 't7-f-score'); checkAllAnswers('t7-se', 't7-se-score'); checkAllAnswers('t7-sa', 't7-sa-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t1-sum-btn', 't1-sum-ans', '[id^="t1-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>

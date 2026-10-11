@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 29 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 29 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 8</div>
+      <h2>Lead-in — Podcast: Can You Spot a Lie?</h2>
+      <p class="task-sub">Today is a listening and reading day (Unit 7, Relationships). Start with a free podcast from <b>BBC Learning English — 6 Minute English</b>, which connects with yesterday’s reading on lying. Listen once without subtitles. About 15 minutes.</p>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="position:relative; padding-bottom:56.25%; height:0;">
+          <iframe src="https://www.youtube.com/embed/91liS87P9CY" title="Can you spot a lie? — 6 Minute English" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Vocabulary from the podcast.</strong> Match each word or phrase to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. fib</button><button type="button" class="lm-item" data-key="2">2. white lie</button><button type="button" class="lm-item" data-key="3">3. deceive</button><button type="button" class="lm-item" data-key="4">4. at the heart of</button><button type="button" class="lm-item" data-key="5">5. response latency</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. make someone believe something that is not true</button><button type="button" class="lm-item" data-key="b">b. an informal word for a small, unimportant lie</button><button type="button" class="lm-item" data-key="c">c. the time someone takes before they answer</button><button type="button" class="lm-item" data-key="d">d. a harmless lie told to be polite or kind</button><button type="button" class="lm-item" data-key="e">e. at the centre of; the most important part of</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t1-mc"><div class="q-item" id="t1-mc-1">
+          <p>1. According to the neuroscientist in the programme, polite conversation often involves…</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-1" data-correct="false"> A. always saying exactly what we think</label><label><input type="radio" value="1" name="t1-mc-1" data-correct="true"> B. not saying exactly what we think</label><label><input type="radio" value="2" name="t1-mc-1" data-correct="false"> C. asking a lot of questions</label><label><input type="radio" value="3" name="t1-mc-1" data-correct="false"> D. speaking very slowly</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-2">
+          <p>2. How is deception described?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-2" data-correct="false"> A. telling a joke</label><label><input type="radio" value="1" name="t1-mc-2" data-correct="true"> B. hiding something in order to gain an advantage</label><label><input type="radio" value="2" name="t1-mc-2" data-correct="false"> C. forgetting the truth</label><label><input type="radio" value="3" name="t1-mc-2" data-correct="false"> D. refusing to answer</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-3">
+          <p>3. Which sign of lying does the psychologist mention?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-3" data-correct="false"> A. Liars talk more than usual.</label><label><input type="radio" value="1" name="t1-mc-3" data-correct="true"> B. Liars often say less and take longer before they answer.</label><label><input type="radio" value="2" name="t1-mc-3" data-correct="false"> C. Liars always look away.</label><label><input type="radio" value="3" name="t1-mc-3" data-correct="false"> D. Liars use more words like “I” and “my”.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-4">
+          <p>4. What is unusual about the competition mentioned in the programme?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-4" data-correct="false"> A. It is for children only.</label><label><input type="radio" value="1" name="t1-mc-4" data-correct="true"> B. Lawyers and politicians are not allowed to take part.</label><label><input type="radio" value="2" name="t1-mc-4" data-correct="false"> C. It takes place online.</label><label><input type="radio" value="3" name="t1-mc-4" data-correct="false"> D. The winner must tell the truth.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-mc', 't1-mc-score')">Check answers</button>
+          <span id="t1-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the podcast in your own words — <b>at least 100 words</b>. Cover the main argument, the key evidence, and finish with your own evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the podcast (at least 100 words):</p><textarea class="no-check mini-answer" id="t1-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t1-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t1-sum-ans"><p>This episode of 6 Minute English explores lying and whether we can detect it. The presenters distinguish between small, polite untruths, known as white lies, and deception, which involves hiding something in order to gain an advantage. A neuroscientist explains that ordinary polite conversation often depends on not saying exactly what we think. A psychologist then describes some signs that may reveal a lie: liars tend to say less, take longer before they reply — a delay called response latency — and refer to themselves less often. The programme also mentions a competition in England to find the world’s biggest liar. I found the point about response latency particularly useful. (≈ 115 words)</p></div>
+        </div></div>
+      <div class="question-box" data-field="t1-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the podcast <b>aloud</b> without reading your notes — speak for <b>at least 45 seconds</b>, and finish with your own opinion.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central idea is that…”</li><li>“According to…”</li><li>“What I found most striking was…”</li><li>“On balance, I’d say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 8</div>
+      <h2>Listening Section 3 — A Project on Human Relationships</h2>
+      <p class="task-sub">From Complete IELTS Unit 7. Two students, Fumiko and Victor, talk about Fumiko’s psychology project. Two question types: <b>multiple choice</b> and <b>flow-chart completion</b>. The recording plays once — the instructions and pauses are included.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice — Listening Sections 1–4</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li>Look quickly at the number of tasks and the number of questions in each task.</li><li>Underline the key ideas in each question (but not in the options).</li><li>Use the <b>signals</b> you hear (<i>The thing about… is…, That’s the trouble…</i>) to know an answer is coming.</li><li>Leave any questions you cannot do and try to answer them when the recording has finished.</li></ul></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 07 — Questions 1–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit7-track07.mp3"></audio></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-1">
+          <p>1. What problem does Fumiko have with her psychology project?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-1" data-correct="false"> A. She isn’t interested in the topic.</label><label><input type="radio" value="1" name="t2-mc-1" data-correct="false"> B. She can’t find enough information.</label><label><input type="radio" value="2" name="t2-mc-1" data-correct="true"> C. She doesn’t know what to focus on.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-2">
+          <p>2. What point does Victor make about Fumiko’s tutor?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-2" data-correct="true"> A. He explores his students’ key interests.</label><label><input type="radio" value="1" name="t2-mc-2" data-correct="false"> B. He is a very hard-working member of staff.</label><label><input type="radio" value="2" name="t2-mc-2" data-correct="false"> C. He uses a limited range of project titles.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-3">
+          <p>3. What has Fumiko already read on her topic?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-3" data-correct="false"> A. book extracts</label><label><input type="radio" value="1" name="t2-mc-3" data-correct="false"> B. journal articles</label><label><input type="radio" value="2" name="t2-mc-3" data-correct="true"> C. internet material</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-4">
+          <p>4. According to Mr Dresden, Fumiko’s project must include</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-4" data-correct="false"> A. some graphic data.</label><label><input type="radio" value="1" name="t2-mc-4" data-correct="true"> B. a bibliography.</label><label><input type="radio" value="2" name="t2-mc-4" data-correct="false"> C. a public survey.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-5">
+          <p>5. Victor and Fumiko arrange to</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-5" data-correct="true"> A. get in contact in half an hour.</label><label><input type="radio" value="1" name="t2-mc-5" data-correct="false"> B. meet up in the library.</label><label><input type="radio" value="2" name="t2-mc-5" data-correct="false"> C. have lunch together.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+<div class="card" style="text-align:center;"><p class="prompt-label" style="text-align:center;">Questions 6–10 — Fumiko’s plan (NO MORE THAN TWO WORDS for each answer)</p>
+<p>Define (6) ______ using a diagram</p><p>↓</p><p>Background: relationships in the (7) ______, e.g. apes</p><p>↓</p>
+<p>Present an overview of the (8) ______ for human relationships, e.g. work, home</p><p>↓</p>
+<p>Look at six (9) ______ involved in a friendship (plus survey)</p><p>↓</p><p>Predict the future (10) ______ on friendship</p></div>
+      <div class="card" id="t2-f" style="line-height:2.6;"><p>6. <input type="text" class="text-answer" id="t2-6" data-correct="key terms" autocomplete="off" style="width:150px;"> &nbsp; 7. <input type="text" class="text-answer" id="t2-7" data-correct="animal world" autocomplete="off" style="width:150px;"> &nbsp; 8. <input type="text" class="text-answer" id="t2-8" data-correct="contexts" autocomplete="off" style="width:150px;"></p><p>9. <input type="text" class="text-answer" id="t2-9" data-correct="stages" autocomplete="off" style="width:150px;"> &nbsp; 10. <input type="text" class="text-answer" id="t2-10" data-correct="influences" autocomplete="off" style="width:150px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-f', 't2-f-score')">Check answers</button>
+          <span id="t2-f-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 8</div>
+      <h2>Listening Signals and Speaking Part 1</h2>
+      <p class="task-sub">First, see how the speakers <b>signalled</b> each answer. Then listen to candidates doing Speaking Part 1 and learn two skills: starting with an <b>opener</b>, and <b>paraphrasing</b> words you do not know.</p>
+<div class="card advice-card"><p class="prompt-label">Section 3 — answers</p><p style="margin:0; line-height:1.8;">1 C · 2 A · 3 C · 4 B · 5 A · 6 key terms · 7 animal world · 8 contexts · 9 stages · 10 influences<br>
+<i>Q3 trap:</i> the tutor gave her journal articles, but she put them away “without looking at them” — she has only read <b>internet</b> reports. <i>Q4 trap:</i> Victor expected charts, but Mr Dresden “didn’t ask for data” — he wants “a list of all our sources” = a bibliography.</p></div>
+      <p style="margin-top:26px;"><strong>Signals.</strong> Which question (1–5) did each signal introduce?</p>
+      <div class="card" id="t3-sig"><div class="sel-row"><select class="select" id="t3-sig-1" data-answer="2"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><span><b>1.</b> “The thing about Mr Dresden is…”</span></div><div class="sel-row"><select class="select" id="t3-sig-2" data-answer="1"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><span><b>2.</b> “That’s the trouble…”</span></div><div class="sel-row"><select class="select" id="t3-sig-3" data-answer="4"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><span><b>3.</b> “He said that the important thing was…”</span></div><div class="sel-row"><select class="select" id="t3-sig-4" data-answer="5"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><span><b>4.</b> “Look, tell you what, I’ll text you…”</span></div><div class="sel-row"><select class="select" id="t3-sig-5" data-answer="3"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><span><b>5.</b> “So what reading have you done so far?”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-sig', 't3-sig-score')">Check answers</button>
+          <span id="t3-sig-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Openers.</strong> Listen to two candidates answering the same Part 1 question: <i>“Do you find it easy to make new friends?”</i></p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 09 — two candidates</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit7-track09.mp3"></audio></div>
+      <div class="card" id="t3-op"><div class="q-item" id="t3-op-1">
+          <p>1. Which candidate gives the better answer?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-op-1" data-correct="false"> the first, who repeats the question and hesitates</label><label><input type="radio" value="1" name="t3-op-1" data-correct="true"> the second, who begins with an opener and then gives an example</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-op-2">
+          <p>2. How does the opener (“I’m not sure. I’ve never thought about that, but…”) help the speaker?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-op-2" data-correct="true"> It gives time to think and introduces the answer naturally.</label><label><input type="radio" value="1" name="t3-op-2" data-correct="false"> It shows the speaker does not understand.</label><label><input type="radio" value="2" name="t3-op-2" data-correct="false"> It makes the answer shorter.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-op', 't3-op-score')">Check answers</button>
+          <span id="t3-op-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Dominic’s Part 1 interview.</strong> Listen and answer.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 10 — Dominic</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit7-track10.mp3"></audio></div>
+      <div class="card" id="t3-dom"><div class="q-item" id="t3-dom-1">
+          <p>1. How many brothers and sisters does Dominic have?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-dom-1" data-correct="true"> A. three brothers and two sisters</label><label><input type="radio" value="1" name="t3-dom-1" data-correct="false"> B. two brothers and three sisters</label><label><input type="radio" value="2" name="t3-dom-1" data-correct="false"> C. three brothers and one sister</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-dom-2">
+          <p>2. Dominic doesn’t know the word for the area where his relatives live. He says “a busy area around the city… not in the centre”. Which word does he need?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-dom-2" data-correct="true"> A. suburbs</label><label><input type="radio" value="1" name="t3-dom-2" data-correct="false"> B. countryside</label><label><input type="radio" value="2" name="t3-dom-2" data-correct="false"> C. underground</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-dom-3">
+          <p>3. His father “has many of the same type of shop”. What word is Dominic looking for?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-dom-3" data-correct="true"> A. a chain of shops</label><label><input type="radio" value="1" name="t3-dom-3" data-correct="false"> B. a market</label><label><input type="radio" value="2" name="t3-dom-3" data-correct="false"> C. a department store</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-dom-4">
+          <p>4. What does Dominic do when he doesn’t understand a question?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-dom-4" data-correct="false"> A. He guesses.</label><label><input type="radio" value="1" name="t3-dom-4" data-correct="true"> B. He asks the examiner to repeat it.</label><label><input type="radio" value="2" name="t3-dom-4" data-correct="false"> C. He stays silent.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-dom', 't3-dom-score')">Check answers</button>
+          <span id="t3-dom-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Paraphrasing.</strong> Four students describe words they have forgotten. Which word is each one trying to say?</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Track 11 — four students</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit7-track11.mp3"></audio></div>
+      <div class="card" id="t3-par"><div class="sel-row"><select class="select" id="t3-par-1" data-answer="treadmill / running machine"><option value="">—</option><option value="treadmill / running machine">treadmill / running machine</option><option value="vet">vet</option><option value="abstract art">abstract art</option><option value="relaxed / stress-free">relaxed / stress-free</option></select><span><b>1.</b> Student 1</span></div><div class="sel-row"><select class="select" id="t3-par-2" data-answer="vet"><option value="">—</option><option value="treadmill / running machine">treadmill / running machine</option><option value="vet">vet</option><option value="abstract art">abstract art</option><option value="relaxed / stress-free">relaxed / stress-free</option></select><span><b>2.</b> Student 2</span></div><div class="sel-row"><select class="select" id="t3-par-3" data-answer="abstract art"><option value="">—</option><option value="treadmill / running machine">treadmill / running machine</option><option value="vet">vet</option><option value="abstract art">abstract art</option><option value="relaxed / stress-free">relaxed / stress-free</option></select><span><b>3.</b> Student 3</span></div><div class="sel-row"><select class="select" id="t3-par-4" data-answer="relaxed / stress-free"><option value="">—</option><option value="treadmill / running machine">treadmill / running machine</option><option value="vet">vet</option><option value="abstract art">abstract art</option><option value="relaxed / stress-free">relaxed / stress-free</option></select><span><b>4.</b> Student 4</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-par', 't3-par-score')">Check answers</button>
+          <span id="t3-par-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card advice-card"><p class="prompt-label">Exam advice — Speaking Part 1</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li>Paraphrase when you can’t think of a word: say what it is <b>not</b>, describe what it <b>looks like</b> or <b>does</b>, or give a <b>definition</b>.</li><li>Use stress to emphasise points or make a contrast.</li><li>If you don’t understand a question, ask the examiner to repeat it.</li></ul></div>
+      <div class="question-box" data-field="t3-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Do you find it easy to make new friends?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Well, that’s an interesting question…”</li><li>“I’ve never thought about that, but…”</li><li>“I’m not sure what the word is, but it’s a kind of…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t3-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Do you come from a large or small family?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Well, that’s an interesting question…”</li><li>“I’ve never thought about that, but…”</li><li>“I’m not sure what the word is, but it’s a kind of…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t3-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">When did you last visit relatives?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Well, that’s an interesting question…”</li><li>“I’ve never thought about that, but…”</li><li>“I’m not sure what the word is, but it’s a kind of…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t3-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Who in your family are you most similar to?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Well, that’s an interesting question…”</li><li>“I’ve never thought about that, but…”</li><li>“I’m not sure what the word is, but it’s a kind of…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 8</div>
+      <h2>Reading Passage 1 — The Changing Shape of the Family</h2>
+      <p class="task-sub">Question types: <b>TRUE / FALSE / NOT GIVEN</b>, <b>matching information</b> and <b>sentence completion</b>. Suggested time: <b>15 minutes</b>. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Changing Shape of the Family</h3>
+            <p class="article-meta">Reading Passage 1 · Society · 338 words</p>
+            <p><span class="para-label">A</span>For much of the twentieth century, the typical household in many industrialised countries was imagined as a married couple living with their children. Today that picture describes a shrinking minority of homes. Across Europe, North America and much of East Asia, households have become smaller, more varied and more likely to change over a person’s lifetime.</p><p><span class="para-label">B</span>One of the most striking trends is the rise of people living alone. In some northern European cities, single-person households now make up close to half of all homes. This is not simply a sign of loneliness: many of those living alone are young professionals who value independence, or older people who have outlived a partner but wish to remain in their own homes.</p><p><span class="para-label">C</span>At the same time, people are forming couples and having children later. In many countries the average age at first marriage has risen by several years since the 1970s, and a growing proportion of couples live together without marrying at all. Smaller families are also the norm: in large parts of the world, the average number of children per woman has fallen below the level needed to keep the population stable.</p><p><span class="para-label">D</span>Yet one older pattern is making a surprising comeback. In several countries, the number of people living in multi-generational households — with grandparents, parents and adult children under one roof — has grown in recent years. Researchers point mainly to economic pressures, particularly the high cost of housing, which makes it difficult for young adults to leave home, together with the practical value of grandparents helping with childcare.</p><p><span class="para-label">E</span>Families created through remarriage, often called blended families or stepfamilies, are also increasingly common. Their members may have to negotiate new roles and loyalties, and research suggests that, with time and good communication, many such families function as well as any other.</p><p><span class="para-label">F</span>What do these changes mean? Some commentators warn that the decline of the traditional family weakens society. Others argue that the family is not disappearing but adapting, as it always has, to new economic and social conditions.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 11–15</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t4-tf"><div class="q-item" id="t4-tf-11">
+          <p>11. The married couple with children is now the most common type of household in industrialised countries.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-11" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-11" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t4-tf-11" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-12">
+          <p>12. Everyone who lives alone does so because they are lonely.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-12" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-12" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t4-tf-12" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-13">
+          <p>13. The average age at first marriage has increased in many countries since the 1970s.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-13" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t4-tf-13" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-13" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-14">
+          <p>14. Multi-generational households are more common in Asia than in Europe.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-14" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t4-tf-14" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-14" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-tf-15">
+          <p>15. Research suggests that many stepfamilies can work well over time.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-tf-15" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t4-tf-15" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t4-tf-15" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-tf', 't4-tf-score')">Check answers</button>
+          <span id="t4-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 16–19</p><p class="qg-instr">The passage has six paragraphs, <b>A–F</b>. Which paragraph contains the following information?</p></div>
+      <div class="card" id="t4-mi"><div class="sel-row"><select class="select" id="t4-mi-16" data-answer="F"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>16.</b> two opposing interpretations of family change</span></div><div class="sel-row"><select class="select" id="t4-mi-17" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>17.</b> reasons why an older way of living is returning</span></div><div class="sel-row"><select class="select" id="t4-mi-18" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>18.</b> examples of the kinds of people who choose to live alone</span></div><div class="sel-row"><select class="select" id="t4-mi-19" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>19.</b> a reference to the population no longer replacing itself</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mi', 't4-mi-score')">Check answers</button>
+          <span id="t4-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 20–22</p><p class="qg-instr">Complete the sentences. Choose <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.</p></div>
+      <div class="card" id="t4-sc" style="line-height:2.4;"><p>20. The main reason young adults stay at home longer is the high cost of <input type="text" class="text-answer" id="t4-20" data-correct="housing" autocomplete="off" style="width:140px;">.</p><p>21. Families formed through remarriage are also called blended families or <input type="text" class="text-answer" id="t4-21" data-correct="stepfamilies" autocomplete="off" style="width:140px;">.</p><p>22. Some people believe the family is not disappearing but <input type="text" class="text-answer" id="t4-22" data-correct="adapting" autocomplete="off" style="width:140px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-sc', 't4-sc-score')">Check answers</button>
+          <span id="t4-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 8</div>
+      <h2>Reading Passage 2 — The Hidden Childcare Army</h2>
+      <p class="task-sub">An opinion passage. Question types: <b>YES / NO / NOT GIVEN</b>, <b>matching headings</b> and <b>summary completion</b>. Suggested time: <b>15 minutes</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Hidden Childcare Army</h3>
+            <p class="article-meta">Reading Passage 2 · Family · 327 words</p>
+            <p><span class="para-label">A</span>In many countries, grandparents have quietly become one of the most important sources of childcare. When both parents work, and when professional childcare is expensive or hard to find, it is often grandmothers and grandfathers who collect children from school, look after them during holidays and step in when a child is ill. Surveys in several European countries suggest that a large proportion of grandparents provide some form of regular care for their grandchildren.</p><p><span class="para-label">B</span>The benefits for families are obvious. Parents save money, children are cared for by people who love them, and close relationships between generations can develop. For children, a strong bond with a grandparent can provide stability, especially during difficult periods such as a parents’ divorce. In my view, this contribution is seriously undervalued by governments, which rarely include it in their calculations of how childcare is provided.</p><p><span class="para-label">C</span>There may also be benefits for the grandparents themselves. Some studies suggest that older people who look after grandchildren for a moderate amount of time tend to stay mentally sharper than those who do not, perhaps because caring keeps them active and socially involved. However, the same research indicates that very heavy caring responsibilities can have the opposite effect, leading to exhaustion and stress.</p><p><span class="para-label">D</span>This is where I believe the current situation is unfair. Many grandparents feel unable to refuse when asked to help, and some have reduced their working hours or given up jobs entirely to provide care, with consequences for their own income and pensions. Unlike paid childminders, they receive no training, no holidays and, in most countries, no financial support.</p><p><span class="para-label">E</span>None of this means that grandparents should stop helping. But if societies depend on this hidden army of carers, they should at least recognise it — for example, by allowing grandparents to share parental leave or by offering credits towards their pensions. Such measures would not only be fair; they would make it more likely that this valuable form of care can continue.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 23–27</p><p class="qg-instr">Do the following statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t5-yn"><div class="q-item" id="t5-yn-23">
+          <p>23. Governments give enough recognition to the childcare that grandparents provide.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-yn-23" data-correct="false"> YES</label><label><input type="radio" value="1" name="t5-yn-23" data-correct="true"> NO</label><label><input type="radio" value="2" name="t5-yn-23" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-yn-24">
+          <p>24. Looking after grandchildren for many hours is always good for grandparents’ health.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-yn-24" data-correct="false"> YES</label><label><input type="radio" value="1" name="t5-yn-24" data-correct="true"> NO</label><label><input type="radio" value="2" name="t5-yn-24" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-yn-25">
+          <p>25. Grandparents are better at caring for children than professional childminders.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-yn-25" data-correct="false"> YES</label><label><input type="radio" value="1" name="t5-yn-25" data-correct="false"> NO</label><label><input type="radio" value="2" name="t5-yn-25" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-yn-26">
+          <p>26. The current situation is unfair to many grandparents.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-yn-26" data-correct="true"> YES</label><label><input type="radio" value="1" name="t5-yn-26" data-correct="false"> NO</label><label><input type="radio" value="2" name="t5-yn-26" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-yn-27">
+          <p>27. Grandparents should stop providing childcare.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-yn-27" data-correct="false"> YES</label><label><input type="radio" value="1" name="t5-yn-27" data-correct="true"> NO</label><label><input type="radio" value="2" name="t5-yn-27" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-yn', 't5-yn-score')">Check answers</button>
+          <span id="t5-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 28–31</p><p class="qg-instr">Choose the correct heading for paragraphs <b>B–E</b> from the list below.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; Good for the carers too — up to a point<br><b>ii</b>&nbsp; A hidden cost for the helpers<br><b>iii</b>&nbsp; What the family gains<br><b>iv</b>&nbsp; Proposals for fair recognition<br><b>v</b>&nbsp; Why grandparents live longer</p></div>
+      <div class="card" id="t5-h"><div class="sel-row"><select class="select" id="t5-h-28" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option></select><span><b>28.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t5-h-29" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option></select><span><b>29.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t5-h-30" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option></select><span><b>30.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t5-h-31" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option></select><span><b>31.</b> Paragraph E</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-h', 't5-h-score')">Check answers</button>
+          <span id="t5-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 32–34</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p></div>
+      <div class="card" id="t5-s" style="line-height:2.6;"><p>Some grandparents have cut their working hours, which affects their income and (32) <input type="text" class="text-answer" id="t5-32" data-correct="pensions" autocomplete="off" style="width:120px;">. Unlike paid childminders, they get no (33) <input type="text" class="text-answer" id="t5-33" data-correct="training" autocomplete="off" style="width:120px;"> or holidays. The writer suggests allowing grandparents to share parental (34) <input type="text" class="text-answer" id="t5-34" data-correct="leave" autocomplete="off" style="width:120px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-s', 't5-s-score')">Check answers</button>
+          <span id="t5-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 8</div>
+      <h2>Reading — Answer Analysis</h2>
+      <p class="task-sub">Check your answers for both passages. In Passage 2, notice how every YES/NO answer is next to the writer’s own voice: <i>In my view, I believe</i>.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Changing Shape of the Family</summary>
+        <p><span class="para-label">A</span>For much of the twentieth century, the typical household in many industrialised countries was imagined as a married couple living with their children. Today that picture describes a shrinking minority of homes. Across Europe, North America and much of East Asia, households have become smaller, more varied and more likely to change over a person’s lifetime.</p><p><span class="para-label">B</span>One of the most striking trends is the rise of people living alone. In some northern European cities, single-person households now make up close to half of all homes. This is not simply a sign of loneliness: many of those living alone are young professionals who value independence, or older people who have outlived a partner but wish to remain in their own homes.</p><p><span class="para-label">C</span>At the same time, people are forming couples and having children later. In many countries the average age at first marriage has risen by several years since the 1970s, and a growing proportion of couples live together without marrying at all. Smaller families are also the norm: in large parts of the world, the average number of children per woman has fallen below the level needed to keep the population stable.</p><p><span class="para-label">D</span>Yet one older pattern is making a surprising comeback. In several countries, the number of people living in multi-generational households — with grandparents, parents and adult children under one roof — has grown in recent years. Researchers point mainly to economic pressures, particularly the high cost of housing, which makes it difficult for young adults to leave home, together with the practical value of grandparents helping with childcare.</p><p><span class="para-label">E</span>Families created through remarriage, often called blended families or stepfamilies, are also increasingly common. Their members may have to negotiate new roles and loyalties, and research suggests that, with time and good communication, many such families function as well as any other.</p><p><span class="para-label">F</span>What do these changes mean? Some commentators warn that the decline of the traditional family weakens society. Others argue that the family is not disappearing but adapting, as it always has, to new economic and social conditions.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">FALSE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Today that picture describes a shrinking minority of homes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">This is not simply a sign of loneliness: many of those living alone are young professionals who value independence</span>. <i>Everyone</i> is contradicted.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">TRUE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">the average age at first marriage has risen by several years since the 1970s</span>.</p></div></details><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para D</span></summary><div class="an-body"><p>The passage says such households have grown in <i>several countries</i> but does not compare Asia and Europe.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">TRUE</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">with time and good communication, many such families function as well as any other</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">F</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Some commentators warn … Others argue</span>.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">D</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">one older pattern is making a surprising comeback … Researchers point mainly to economic pressures</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">young professionals who value independence, or older people who have outlived a partner</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">C</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">fallen below the level needed to keep the population stable</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">housing</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">particularly the high cost of housing</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">stepfamilies</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">often called blended families or stepfamilies</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">adapting</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">the family is not disappearing but adapting</span>.</p></div></details></div>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Hidden Childcare Army</summary>
+        <p><span class="para-label">A</span>In many countries, grandparents have quietly become one of the most important sources of childcare. When both parents work, and when professional childcare is expensive or hard to find, it is often grandmothers and grandfathers who collect children from school, look after them during holidays and step in when a child is ill. Surveys in several European countries suggest that a large proportion of grandparents provide some form of regular care for their grandchildren.</p><p><span class="para-label">B</span>The benefits for families are obvious. Parents save money, children are cared for by people who love them, and close relationships between generations can develop. For children, a strong bond with a grandparent can provide stability, especially during difficult periods such as a parents’ divorce. In my view, this contribution is seriously undervalued by governments, which rarely include it in their calculations of how childcare is provided.</p><p><span class="para-label">C</span>There may also be benefits for the grandparents themselves. Some studies suggest that older people who look after grandchildren for a moderate amount of time tend to stay mentally sharper than those who do not, perhaps because caring keeps them active and socially involved. However, the same research indicates that very heavy caring responsibilities can have the opposite effect, leading to exhaustion and stress.</p><p><span class="para-label">D</span>This is where I believe the current situation is unfair. Many grandparents feel unable to refuse when asked to help, and some have reduced their working hours or given up jobs entirely to provide care, with consequences for their own income and pensions. Unlike paid childminders, they receive no training, no holidays and, in most countries, no financial support.</p><p><span class="para-label">E</span>None of this means that grandparents should stop helping. But if societies depend on this hidden army of carers, they should at least recognise it — for example, by allowing grandparents to share parental leave or by offering credits towards their pensions. Such measures would not only be fair; they would make it more likely that this valuable form of care can continue.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">NO</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">In my view, this contribution is seriously undervalued by governments</span>.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">NO</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">very heavy caring responsibilities can have the opposite effect</span>. <i>Always</i> is contradicted.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>The writer compares the <i>conditions</i> of grandparents and childminders (training, holidays), not the quality of their care.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">YES</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">This is where I believe the current situation is unfair</span>.</p></div></details><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">NO</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">None of this means that grandparents should stop helping</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">iii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">The benefits for families are obvious</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">i</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">There may also be benefits for the grandparents themselves … However … very heavy caring responsibilities can have the opposite effect</span> — <i>up to a point</i>.</p><p><span class="trap">Trap:</span> <i>v (live longer)</i> — the paragraph is about staying mentally sharp, not lifespan.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">ii</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">some have reduced their working hours or given up jobs entirely … with consequences for their own income and pensions</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">iv</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">by allowing grandparents to share parental leave or by offering credits towards their pensions</span>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">pensions</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">consequences for their own income and pensions</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">training</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">they receive no training, no holidays</span>.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">leave</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">share parental leave</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 8</div>
+      <h2>Vocabulary — age(s), aged, age group and Relationship Collocations</h2>
+      <p class="task-sub">IELTS candidates often confuse <i>age(s)</i>, <i>aged</i> and <i>age group</i>. Then practise the relationship collocations from today’s texts.</p>
+<div class="card advice-card"><p style="margin:0; line-height:1.8;"><b>age</b> (noun): <i>children of different <b>ages</b>; at the <b>age</b> of 18</i><br><b>aged</b> (adjective, = with the age of): <i>people <b>aged</b> 21 to 30; toddlers <b>aged</b> 18 months or under</i><br>
+<b>age group</b> (noun): <i>the 21–30 <b>age group</b>; people in older <b>age groups</b></i></p></div>
+      <div class="card" id="t7-age"><div class="q-item" id="t7-age-1">
+          <p>1. I want to interview people ______ over 60.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-age-1" data-correct="false"> age</label><label><input type="radio" value="1" name="t7-age-1" data-correct="true"> aged</label><label><input type="radio" value="2" name="t7-age-1" data-correct="false"> age group</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-age-2">
+          <p>2. Fumiko could examine the 21–30 ______.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-age-2" data-correct="false"> age</label><label><input type="radio" value="1" name="t7-age-2" data-correct="false"> aged</label><label><input type="radio" value="2" name="t7-age-2" data-correct="true"> age group</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-age-3">
+          <p>3. Children start school at the ______ of five.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-age-3" data-correct="true"> age</label><label><input type="radio" value="1" name="t7-age-3" data-correct="false"> aged</label><label><input type="radio" value="2" name="t7-age-3" data-correct="false"> age group</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-age-4">
+          <p>4. The survey included people of all ______.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-age-4" data-correct="true"> ages</label><label><input type="radio" value="1" name="t7-age-4" data-correct="false"> aged</label><label><input type="radio" value="2" name="t7-age-4" data-correct="false"> age group</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-age-5">
+          <p>5. Even toddlers ______ 18 months have relationships.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-age-5" data-correct="false"> age</label><label><input type="radio" value="1" name="t7-age-5" data-correct="true"> aged</label><label><input type="radio" value="2" name="t7-age-5" data-correct="false"> age group</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-age-6">
+          <p>6. Which ______ is most likely to live alone?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-age-6" data-correct="false"> age</label><label><input type="radio" value="1" name="t7-age-6" data-correct="false"> aged</label><label><input type="radio" value="2" name="t7-age-6" data-correct="true"> age group</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-age', 't7-age-score')">Check answers</button>
+          <span id="t7-age-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Collocations.</strong> Complete each sentence with one word.</p>
+      <div class="card" id="t7-col" style="line-height:2.4;"><p>1. Children who <input type="text" class="text-answer" id="t7-1" data-correct="form" autocomplete="off" style="width:110px;"> close relationships with grandparents often feel more secure.</p><p>2. Many young adults cannot afford to <input type="text" class="text-answer" id="t7-2" data-correct="leave" autocomplete="off" style="width:110px;"> home.</p><p>3. Good communication helps stepfamilies to <input type="text" class="text-answer" id="t7-3" data-correct="function" autocomplete="off" style="width:110px;"> well.</p><p>4. Some grandparents have given <input type="text" class="text-answer" id="t7-4" data-correct="up" autocomplete="off" style="width:110px;"> their jobs to care for grandchildren.</p><p>5. The tutor wanted her to <input type="text" class="text-answer" id="t7-5" data-correct="narrow" autocomplete="off" style="width:110px;"> the topic down to something manageable.</p><p>6. You can <input type="text" class="text-answer" id="t7-6" data-correct="canvass/canvas" autocomplete="off" style="width:110px;"> people’s opinions with a survey.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-col', 't7-col-score')">Check answers</button>
+          <span id="t7-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 8</div>
+      <h2>Speaking Parts 2 and 3 — A Really Good Friend</h2>
+      <p class="task-sub">The speaking task from Complete IELTS Unit 7. Prepare for 1 minute and speak for 1–2 minutes, then answer the Part 3 questions using openers, emphasis and contrast.</p>
+      <div class="card task-prompt"><p class="prompt-label">Part 2 task card</p><p><b>Describe someone who is a really good friend.</b></p>
+        <p style="margin:0;">You should say:<br>&nbsp;&nbsp;who they are<br>&nbsp;&nbsp;how you met them<br>&nbsp;&nbsp;what you do together<br>and explain why they are such a good friend.</p></div>
+      <div class="question-box" data-field="t8-speaking-friend">
+        <div class="q-num">Your Part 2 talk</div>
+        <div class="q-text">Prepare for 1 minute, then speak for <b>1–2 minutes</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The friend I’d like to talk about is…”</li><li>“We first met when…”</li><li>“We tend to…”</li><li>“What makes her/him such a good friend is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-1">
+        <div class="q-num">Part 3 — Question 1</div>
+        <div class="q-text">Is it easier to make friends as a child or as an adult? Why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“That’s an interesting question…”</li><li>“On the whole, I’d say…”</li><li>“For instance,…”</li><li>“Admittedly,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-2">
+        <div class="q-num">Part 3 — Question 2</div>
+        <div class="q-text">Can people have real friendships online?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“That’s an interesting question…”</li><li>“On the whole, I’d say…”</li><li>“For instance,…”</li><li>“Admittedly,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-3">
+        <div class="q-num">Part 3 — Question 3</div>
+        <div class="q-text">Is it ever acceptable to lie to a friend?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“That’s an interesting question…”</li><li>“On the whole, I’d say…”</li><li>“For instance,…”</li><li>“Admittedly,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-4">
+        <div class="q-num">Part 3 — Question 4</div>
+        <div class="q-text">How have family relationships changed in your country in recent years?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“That’s an interesting question…”</li><li>“On the whole, I’d say…”</li><li>“For instance,…”</li><li>“Admittedly,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t8-speaking-5">
+        <div class="q-num">Part 3 — Question 5</div>
+        <div class="q-text">Should grandparents be paid for looking after their grandchildren?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“That’s an interesting question…”</li><li>“On the whole, I’d say…”</li><li>“For instance,…”</li><li>“Admittedly,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 8</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 29 of 45</div>
+    <h1>Day 29 complete! 🎉</h1>
+    <p>Day 29 done — Unit 7 listening and reading: a BBC podcast, Listening Section 3, Speaking Part 1 strategies, two more readings and the language of age and relationships.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t1-speaking-summary"]'); if (b) initRecordControl(b, user.id, 29, 1, 't1-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t3-speaking-1"]'); if (b) initRecordControl(b, user.id, 29, 3, 't3-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t3-speaking-2"]'); if (b) initRecordControl(b, user.id, 29, 3, 't3-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t3-speaking-3"]'); if (b) initRecordControl(b, user.id, 29, 3, 't3-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t3-speaking-4"]'); if (b) initRecordControl(b, user.id, 29, 3, 't3-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-friend"]'); if (b) initRecordControl(b, user.id, 29, 8, 't8-speaking-friend', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-1"]'); if (b) initRecordControl(b, user.id, 29, 8, 't8-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-2"]'); if (b) initRecordControl(b, user.id, 29, 8, 't8-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-3"]'); if (b) initRecordControl(b, user.id, 29, 8, 't8-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-4"]'); if (b) initRecordControl(b, user.id, 29, 8, 't8-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-5"]'); if (b) initRecordControl(b, user.id, 29, 8, 't8-speaking-5', 0); }
+
+    await initTaskFlow(29, 8, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-mc', 't1-mc-score'); },
+      2: () => { checkAllAnswers('t2-mc', 't2-mc-score'); checkAllAnswers('t2-f', 't2-f-score'); },
+      3: () => { checkAllAnswers('t3-sig', 't3-sig-score'); checkAllAnswers('t3-op', 't3-op-score'); checkAllAnswers('t3-dom', 't3-dom-score'); checkAllAnswers('t3-par', 't3-par-score'); },
+      4: () => { checkAllAnswers('t4-tf', 't4-tf-score'); checkAllAnswers('t4-mi', 't4-mi-score'); checkAllAnswers('t4-sc', 't4-sc-score'); },
+      5: () => { checkAllAnswers('t5-yn', 't5-yn-score'); checkAllAnswers('t5-h', 't5-h-score'); checkAllAnswers('t5-s', 't5-s-score'); },
+      7: () => { checkAllAnswers('t7-age', 't7-age-score'); checkAllAnswers('t7-col', 't7-col-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t1-sum-btn', 't1-sum-ans', '[id^="t1-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>
