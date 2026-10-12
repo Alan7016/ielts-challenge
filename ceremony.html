@@ -585,7 +585,7 @@ function yourResult(token) {
   sec.classList.remove('podium');
   if (!me) {
     $('yRank').textContent = '–'; $('ySup').textContent = ''; $('yBar').hidden = true; $('yStats').innerHTML = '';
-    if (!IS_STUDENT) { $('yOf').textContent = `${TRACK} track · Week ${CEREMONY.week}`; $('yLine').innerHTML = 'Preview mode. Staff accounts aren’t ranked.'; show('s-you'); return; }
+    if (!IS_STUDENT) { $('yOf').textContent = `${TRACK} track · Week ${CEREMONY.week}`; $('yLine').innerHTML = 'Preview mode. Staff accounts aren’t ranked.'; show('s-you'); markCeremonySeen(ME_ID); return; }
     $('yOf').textContent = `${TRACK} track · Week ${WEEK_WORD}`;
     $('yLine').innerHTML = `Your light isn’t on this week’s skyline. <b>Week ${CEREMONY.week + 1} has already started</b>, and every task counts.`;
   } else {
@@ -671,6 +671,8 @@ requireAuth(async function (profile, user) {
   }
   TRACK = level.charAt(0).toUpperCase() + level.slice(1);
   ME_ID = user.id;
+  // Staff are brought here once; after that they're never pulled in again this week.
+  if (!IS_STUDENT) markCeremonySeen(ME_ID);
   $('wKicker').textContent = `Week ${CEREMONY.week} · ${TRACK} track`;
   document.title = `Week ${CEREMONY.week} Ceremony — Neon Tashkent`;
   const tk = ms => { const d = new Date(ms + 5 * 3600000); return String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0'); };
