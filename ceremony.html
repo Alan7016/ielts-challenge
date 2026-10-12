@@ -301,10 +301,15 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--turq); outline-
 <script src="supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
-<script src="ceremony-audio.js"></script>
 <script>
 let DATA = [], PERFECT = [];
-const AUDIO = window.CEREMONY_AUDIO || {};
+// The music file is big, so it loads in the background: the page (countdown,
+// skyline, results) never waits for it, and sound joins in as soon as it arrives.
+const AUDIO_READY = new Promise(res => {
+  const sc = document.createElement('script'); sc.src = 'ceremony-audio.js'; sc.async = true;
+  sc.onload = () => res(window.CEREMONY_AUDIO || {}); sc.onerror = () => res({});
+  document.head.appendChild(sc);
+});
 let TRACK = 'Expert';
 const WEEK_WORD = ['One','Two','Three','Four','Five','Six','Seven'][CEREMONY.week - 1] || String(CEREMONY.week);
 let ME_ID = null, IS_STUDENT = false, autoTimer = null;
@@ -312,14 +317,14 @@ const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ================= sound (synthesised doira, karnay-style horn, dutar, bells) =================
 const Sfx = (() => {
-  let ctx = null, master = null, muted = true, loading = null, waitSrc = null, waitGain = null;
+  let ctx = null, master = null, muted = true, loading = null, waitSrc = null, waitGain = null, wantWait = false;
   const buf = {};
   function b64ToAB(b64) { const bin = atob(b64); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u.buffer; }
   function decode(ab) { return new Promise((res, rej) => ctx.decodeAudioData(ab, res, rej)); }
   function ensure() {
     if (!ctx) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return Promise.resolve(); ctx = new AC(); master = ctx.createGain(); master.connect(ctx.destination); }
     if (ctx.state === 'suspended') ctx.resume();
-    if (!loading) loading = Promise.all(Object.keys(AUDIO).map(k => decode(b64ToAB(AUDIO[k])).then(d => { buf[k] = d; }).catch(() => {})));
+    if (!loading) loading = AUDIO_READY.then(AUDIO => Promise.all(Object.keys(AUDIO).map(k => decode(b64ToAB(AUDIO[k])).then(d => { buf[k] = d; }).catch(() => {}))));
     return loading;
   }
   function play(name, opt) {
@@ -329,7 +334,12 @@ const Sfx = (() => {
     s.start(ctx.currentTime + (opt.delay || 0)); return s;
   }
   return {
-    async enable() { muted = false; await ensure(); master.gain.value = 1; },
+    async enable() {
+      muted = false; const all = ensure(); if (master) master.gain.value = 1;
+      // Don't hold the show for a slow download: wait at most 1.5 s, sound joins when ready.
+      all.then(() => { if (wantWait && !muted) Sfx.waitStart(); });
+      await Promise.race([all, new Promise(r => setTimeout(r, 1500))]);
+    },
     toggle() { muted = !muted; if (!muted) { ensure(); if (master) master.gain.value = 1; } else if (master) master.gain.value = 0; return !muted; },
     get on() { return !!ctx && !muted; },
     tick() { play('tick', { gain: 0.8 }); },
@@ -341,12 +351,14 @@ const Sfx = (() => {
     champion() { play('champion'); },
     result() { play('result', { gain: 0.9 }); },
     waitStart() {
+      wantWait = true;
       if (!ctx || muted || waitSrc || !buf.wait) return;
       waitSrc = ctx.createBufferSource(); waitSrc.buffer = buf.wait; waitSrc.loop = true;
       waitGain = ctx.createGain(); const t = ctx.currentTime; waitGain.gain.setValueAtTime(0.0001, t); waitGain.gain.exponentialRampToValueAtTime(0.6, t + 3);
       waitSrc.connect(waitGain); waitGain.connect(master); waitSrc.start();
     },
     waitStop(fade) {
+      wantWait = false;
       if (!waitSrc) return; const t = ctx.currentTime, s = waitSrc;
       waitGain.gain.cancelScheduledValues(t); waitGain.gain.setValueAtTime(waitGain.gain.value, t); waitGain.gain.exponentialRampToValueAtTime(0.0001, t + (fade || 1.5));
       setTimeout(() => { try { s.stop(); } catch (e) {} }, (fade || 1.5) * 1000 + 100); waitSrc = null;
@@ -456,11 +468,12 @@ function startWaiting() {
   run++; clearInterval(clockTimer); resetStage(); show('s-wait'); Sfx.waitStart();
   target = ceremonyStartMs(); lastTxt = ''; let shown321 = 0; let refetched = false;
   const token = run;
+  const refetchAt = 15 + Math.floor(Math.random() * 40); // last refresh of the points, spread over 15–55 s before the start
   clockTimer = setInterval(() => {
     if (token !== run) return clearInterval(clockTimer);
     const left = target - (Date.now() + (_serverOffsetMs || 0)); const s = renderClock(left);
     if (s <= 3 && s >= 1 && shown321 !== s) { shown321 = s; big321(s); }
-    if (s <= 6 && !refetched) { refetched = true; loadData().catch(() => {}); }
+    if (s <= refetchAt && !refetched) { refetched = true; loadData().catch(() => {}); }
     if (left <= 0) { clearInterval(clockTimer); ceremony(); }
   }, 100);
   renderClock(target - (Date.now() + (_serverOffsetMs || 0)));
@@ -595,7 +608,7 @@ function yourResult(token) {
     el.textContent = from; requestAnimationFrame(step);
   }
   show('s-you'); Sfx.result();
-  if (IS_STUDENT) markCeremonySeen(ME_ID);
+  markCeremonySeen(ME_ID);
   startAutoRedirect(token);
 }
 
@@ -603,17 +616,20 @@ function yourResult(token) {
 function setSnd() { $('snd').querySelector('span').textContent = Sfx.on ? 'Sound on' : 'Sound off'; }
 async function loadData() {
   const level = TRACK.toLowerCase();
-  const [ranked, perfectIds] = await Promise.all([
-    fetchLevelStandings(level, CEREMONY.dayFrom, CEREMONY.dayTo),
-    fetchPerfectWeek(level, CEREMONY.dayFrom, CEREMONY.dayTo).catch(() => [])
-  ]);
+  let got = null;
+  for (let i = 0; i < 4 && !got; i++) {
+    try { got = await fetchCeremonyData(level, CEREMONY.dayFrom, CEREMONY.dayTo); }
+    catch (e) { if (i === 3) throw e; await new Promise(r => setTimeout(r, 1500 + Math.random() * 2500)); }
+  }
+  const { ranked, perfectIds } = got;
+  if (!ranked.length && DATA.length) return DATA; // keep what we had rather than blanking the show
   DATA = ranked;
   const byId = {}; ranked.forEach(r => { byId[r.id] = r; });
   PERFECT = perfectIds.map(id => byId[id]).filter(Boolean).sort((a, b) => a.n.localeCompare(b.n));
   return DATA;
 }
 function startAutoRedirect(token) {
-  clearInterval(autoTimer); let n = 20;
+  clearInterval(autoTimer); let n = 20 + Math.floor(Math.random() * 25); // staggered so everyone doesn't hit the leaderboard at once
   $('yAuto').textContent = `Opening the leaderboard in ${n}s`;
   autoTimer = setInterval(() => {
     if (token !== run) { clearInterval(autoTimer); $('yAuto').textContent = ''; return; }
@@ -630,7 +646,29 @@ requireAuth(async function (profile, user) {
   IS_STUDENT = profile.role === 'student';
   if (IS_STUDENT && profile.challenge !== '2.0') { window.location.href = 'index.html'; return; }
   const qs = new URLSearchParams(window.location.search);
-  const level = IS_STUDENT ? (profile.level || 'standard') : (qs.get('level') || profile.level || 'expert');
+  let level = IS_STUDENT ? (profile.level || 'standard') : (qs.get('level') || profile.level || '');
+  if (!level && profile.role === 'mentor') {
+    // A mentor watches their own group's level.
+    try {
+      const sb = getSupabaseClient();
+      const { data: gm } = await sb.from('group_mentors').select('group_id').eq('mentor_id', user.id).limit(1).maybeSingle();
+      if (gm) { const { data: g } = await sb.from('groups').select('level').eq('id', gm.group_id).maybeSingle(); if (g && g.level) level = g.level; }
+    } catch (e) {}
+  }
+  level = ['standard', 'advanced', 'expert'].includes(String(level).toLowerCase()) ? String(level).toLowerCase() : 'standard';
+  if (!IS_STUDENT) {
+    // Staff can switch between the three levels' ceremonies.
+    const sw = document.createElement('div');
+    sw.style.cssText = 'position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:60;display:flex;gap:6px;font:600 12px/1 system-ui,sans-serif';
+    ['standard', 'advanced', 'expert'].forEach(l => {
+      const a = document.createElement('a');
+      const q = new URLSearchParams(window.location.search); q.set('level', l);
+      a.href = '?' + q.toString(); a.textContent = l.charAt(0).toUpperCase() + l.slice(1);
+      a.style.cssText = 'padding:7px 11px;border-radius:999px;text-decoration:none;border:1px solid rgba(46,230,255,.5);color:' + (l === level ? '#05020f;background:#2ee6ff' : '#2ee6ff;background:rgba(5,2,15,.6)');
+      sw.appendChild(a);
+    });
+    document.body.appendChild(sw);
+  }
   TRACK = level.charAt(0).toUpperCase() + level.slice(1);
   ME_ID = user.id;
   $('wKicker').textContent = `Week ${CEREMONY.week} · ${TRACK} track`;

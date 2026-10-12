@@ -3151,7 +3151,9 @@ function markCeremonySeen(userId) {
 // nobody loses an answer by being moved.
 async function scheduleCeremonyPull(profile, user) {
   try {
-    if (!profile || profile.role !== 'student' || profile.challenge !== '2.0' || !user) return;
+    // Everyone is taken to the ceremony: students, mentors, teachers, checkers, admin.
+    if (!profile || !user) return;
+    if (profile.role === 'student' && profile.challenge !== '2.0') return;
     if (/\/ceremony(\.html)?$/.test(window.location.pathname)) return;
     if (ceremonySeen(user.id)) return;
     const now = await serverNow();
@@ -3165,7 +3167,10 @@ async function scheduleCeremonyPull(profile, user) {
       setTimeout(() => { window.location.href = pathToRoot() + 'ceremony.html'; }, 900);
     };
     const wait = ceremonyLobbyMs() - now;
-    if (wait <= 0) go(); else setTimeout(go, wait);
+    // Spread the arrivals over ~20 s so hundreds of devices don't hit the
+    // site at the exact same second (the lobby opens 5 minutes early anyway).
+    const jitter = Math.floor(Math.random() * 20000);
+    if (wait <= 0) go(); else setTimeout(go, wait + jitter);
   } catch (e) { console.error('ceremony pull', e); }
 }
 
@@ -3192,6 +3197,33 @@ async function fetchPerfectWeek(level, dayFrom, dayTo) {
   const { data, error } = await getSupabaseClient().rpc('perfect_week_students', { lvl: level, req });
   if (error) throw error;
   return (data || []).map(r => r.student_id);
+}
+
+// Ceremony data in ONE request, from a 30-second shared cache in the database
+// (public.ceremony_data), so the whole platform opening the ceremony at once
+// doesn't overload it. Falls back to the direct queries if the cache call fails.
+async function fetchCeremonyData(level, dayFrom, dayTo) {
+  const req = {};
+  for (let d = dayFrom; d <= dayTo; d++) {
+    const n = (TRACK_DAY_TOTAL_TASKS['2.0-' + level] || {})[d];
+    if (n) req[d] = n;
+  }
+  try {
+    const { data, error } = await getSupabaseClient().rpc('ceremony_data', { lvl: level, day_from: dayFrom, day_to: dayTo, req });
+    if (error || !data || !Array.isArray(data.rows)) throw error || new Error('no data');
+    const ranked = data.rows.filter(p => Number(p.total) > 0 && !isTestAccount(p.full_name, p.group_name))
+      .map(p => ({ id: p.id, n: p.full_name || '—', a: p.avatar_url || null, g: p.group_name || null, p: Math.round(Number(p.total) * 10) / 10 }))
+      .sort((x, y) => y.p - x.p || String(x.n).localeCompare(String(y.n)));
+    ranked.forEach((r, i) => { r.r = (i > 0 && r.p === ranked[i - 1].p) ? ranked[i - 1].r : i + 1; });
+    return { ranked, perfectIds: data.perfect || [] };
+  } catch (e) {
+    console.warn('ceremony cache unavailable, using direct queries', e);
+    const [ranked, perfectIds] = await Promise.all([
+      fetchLevelStandings(level, dayFrom, dayTo),
+      fetchPerfectWeek(level, dayFrom, dayTo).catch(() => [])
+    ]);
+    return { ranked, perfectIds };
+  }
 }
 
 async function fetchLevelStandings(level, dayFrom, dayTo) {
