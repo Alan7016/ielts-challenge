@@ -3105,12 +3105,12 @@ async function getLiveDays(folder, maxDays) {
 // Next week: bump `week`, set the new day range and the new start time.
 // ============================================
 const CEREMONY = {
-  week: 3,
-  dayFrom: 14,
-  dayTo: 19,                        // Day 20 is the mock (no points), so the week's points are Days 14–19
-  startsAt: '2026-10-05T16:15:00Z', // Monday 5 October, 21:15 Tashkent (UTC+5) — re-run after the 21:00 database slowdown
+  week: 4,
+  dayFrom: 21,
+  dayTo: 26,                        // Day 27 is the mock (no points), so the week's points are Days 21–26
+  startsAt: '2026-10-12T16:30:00Z', // Monday 12 October, 21:30 Tashkent (UTC+5)
   lobbyMinutes: 5,                  // students get pulled in this long before the start
-  pullWindowMinutes: 25             // (no longer used: students are now sent to the ceremony any time after 21:00 until they have watched it)
+  pullWindowMinutes: 25             // (no longer used: students are now sent to the ceremony any time after the lobby opens until they have watched it)
 };
 
 // Students' phone clocks are often wrong, so the ceremony runs on the

@@ -262,13 +262,14 @@ body.night .watch .play { background: #04061a; } body.night .watch .play svg { f
   })();
 
   // ---------- closed state ----------
+  function tkTime(ms) { const d = new Date(ms + 5 * 3600000); return String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0'); }
   function showClosed() {
     document.getElementById('controls').hidden = true;
     const root = document.getElementById('board-root');
     root.innerHTML = `<div class="closed">
       <div class="k">WEEK ${CEREMONY.week} · COMPLETION CEREMONY</div>
       <h2>The leaderboard opens with the ceremony</h2>
-      <p>Tonight at 21:00 Tashkent time. At 20:55 you’ll be taken to the ceremony hall automatically, so keep the platform open.</p>
+      <p>Tonight at ${tkTime(ceremonyStartMs())} Tashkent time. At ${tkTime(ceremonyLobbyMs())} you’ll be taken to the ceremony hall automatically, so keep the platform open.</p>
       <div class="clk" id="clk">--:--:--</div>
       <p style="font-family:var(--mono); font-size:.75rem;">until the ceremony</p>
     </div>`;
