@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 32 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 32 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 15</div>
+      <h2>Starting Off — Listening Test Day</h2>
+      <p class="task-sub">Today is a long <b>listening day</b> — plan for about <b>3 hours</b>. You will do the Unit 8 lecture, a <b>full IELTS Listening test</b> (4 sections, 40 questions) from the Complete IELTS practice test, an extra recording, a dictation, a TED talk, speaking and a Task 2 essay. Use headphones and play every recording <b>once only</b>.</p>
+      <p style="margin-top:26px;"><strong>Listening strategy.</strong> Choose the best advice.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. Before Section 4 starts, you should</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. read only the first two questions.</label><label><input type="radio" value="1" name="t1-st-1" data-correct="true"> B. read all the notes and predict the type of word for each gap.</label><label><input type="radio" value="2" name="t1-st-1" data-correct="false"> C. write possible answers in every gap.</label><label><input type="radio" value="3" name="t1-st-1" data-correct="false"> D. look back at Section 3.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. In a form, the speaker spells a name and then corrects one letter. You should</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="false"> A. write the first version.</label><label><input type="radio" value="1" name="t1-st-2" data-correct="true"> B. write the corrected version.</label><label><input type="radio" value="2" name="t1-st-2" data-correct="false"> C. write both.</label><label><input type="radio" value="3" name="t1-st-2" data-correct="false"> D. leave it blank.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. Several numbers are mentioned close together (e.g. 26 miles, 42 kilometres, 12,000 runners). What helps most?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="false"> A. writing every number you hear</label><label><input type="radio" value="1" name="t1-st-3" data-correct="true"> B. knowing from the question which number you need</label><label><input type="radio" value="2" name="t1-st-3" data-correct="false"> C. waiting for the speaker to repeat it</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. guessing the largest number</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. In multiple choice, all three options are often mentioned. The correct option is usually</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="false"> A. the first one mentioned.</label><label><input type="radio" value="1" name="t1-st-4" data-correct="true"> B. the one that matches what the speaker finally says or decides.</label><label><input type="radio" value="2" name="t1-st-4" data-correct="false"> C. the longest one.</label><label><input type="radio" value="3" name="t1-st-4" data-correct="false"> D. the last word you hear.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Topic vocabulary.</strong> Match each word to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. stitch</button><button type="button" class="lm-item" data-key="2">2. functional</button><button type="button" class="lm-item" data-key="3">3. garment</button><button type="button" class="lm-item" data-key="4">4. revive</button><button type="button" class="lm-item" data-key="5">5. congested</button><button type="button" class="lm-item" data-key="6">6. punctual</button><button type="button" class="lm-item" data-key="7">7. adaptation</button><button type="button" class="lm-item" data-key="8">8. evaporate</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. change from liquid into gas</button><button type="button" class="lm-item" data-key="b">b. arriving or happening at the expected time</button><button type="button" class="lm-item" data-key="c">c. designed to be practical rather than attractive</button><button type="button" class="lm-item" data-key="d">d. too full of people or traffic</button><button type="button" class="lm-item" data-key="e">e. a piece of clothing</button><button type="button" class="lm-item" data-key="f">f. a feature that helps a living thing survive in its environment</button><button type="button" class="lm-item" data-key="g">g. a single movement of a needle and thread through cloth</button><button type="button" class="lm-item" data-key="h">h. make something popular again</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 15</div>
+      <h2>Unit 8 Listening — Section 4: Sashiko</h2>
+      <p class="task-sub">From Complete IELTS Unit 8. A lecture on a traditional Japanese stitching technique. You have about 40 seconds to read the notes. Answers are checked when you press <b>Next</b>.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Unit 8 · Track 14 — Questions 1–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit8-track14.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 1–10</p><p class="qg-instr">Complete the notes below. Write <b>ONE WORD ONLY</b> for each answer.</p></div>
+<div class="card" id="t2-notes1"><p class="prompt-label">Sashiko</p><div style="line-height:2.1;"><div>• The word means ‘little (1) <input type="text" class="text-answer" id="t2-1" data-correct="stitches" autocomplete="off" style="width:130px;">’.</div><div><b>Origins</b></div><div>• Began among (2) <input type="text" class="text-answer" id="t2-2" data-correct="farming" autocomplete="off" style="width:130px;"> communities in mountain villages in northern Japan</div><div>• There were no sheep, so there was no (3) <input type="text" class="text-answer" id="t2-3" data-correct="wool" autocomplete="off" style="width:110px;"></div><div>• The local material, asa, was hard-wearing but not very (4) <input type="text" class="text-answer" id="t2-4" data-correct="warm" autocomplete="off" style="width:110px;"></div><div>• Cloth was dyed blue because the dye was thought to (5) <input type="text" class="text-answer" id="t2-5" data-correct="strengthen" autocomplete="off" style="width:140px;"> the fibres</div><div>• Warmth came from stitching together many (6) <input type="text" class="text-answer" id="t2-6" data-correct="layers" autocomplete="off" style="width:120px;"> of cloth</div><div>• Traditional patterns had names, e.g. ‘sea (7) <input type="text" class="text-answer" id="t2-7" data-correct="wave" autocomplete="off" style="width:110px;">’</div><div><b>Uses</b></div><div>• Waistcoats were heavily stitched on the back and shoulders for carrying heavy (8) <input type="text" class="text-answer" id="t2-8" data-correct="baskets" autocomplete="off" style="width:120px;"></div><div>• Firemen’s garments were soaked with (9) <input type="text" class="text-answer" id="t2-9" data-correct="water" autocomplete="off" style="width:110px;"> for protection</div><div><b>Decline and revival</b></div><div>• In 1895, (10) <input type="text" class="text-answer" id="t2-10" data-correct="rail" autocomplete="off" style="width:110px;"> travel reached northern Japan, so warm textiles could be imported</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-notes1', 't2-notes1-score')">Check answers</button>
+          <span id="t2-notes1-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 15</div>
+      <h2>Unit 8 Listening — Answers and Why Marks Are Lost</h2>
+      <p class="task-sub">Check Questions 1–10. In a lecture, the answer is usually inside a longer explanation — notice the words just before each answer.</p>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">stitches</span><span class="an-where">definition</span></summary><div class="an-body"><p><span class="ev">It translates as little stitches</span>. Plural.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">farming</span><span class="an-where">origins</span></summary><div class="an-body"><p><span class="ev">It started among farming communities in mountain villages in the north</span>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">wool</span><span class="an-where">origins</span></summary><div class="an-body"><p><span class="ev">there were no sheep in Japan at this time, so no wool either</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">warm</span><span class="an-where">origins</span></summary><div class="an-body"><p><span class="ev">a locally produced material called asa that was hard-wearing, but not very warm</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">strengthen</span><span class="an-where">origins</span></summary><div class="an-body"><p><span class="ev">the dye was thought to strengthen the fibres</span>. A verb after <i>to</i>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">layers</span><span class="an-where">origins</span></summary><div class="an-body"><p><span class="ev">they solved the problem of warmth by stitching together many layers of this cloth</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">wave</span><span class="an-where">patterns</span></summary><div class="an-body"><p><span class="ev">traditional Japanese patterns that had their own names such as sea wave</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">baskets</span><span class="an-where">uses</span></summary><div class="an-body"><p><span class="ev">waistcoats were heavily stitched on the back and shoulders if they were going to be worn while carrying heavy baskets</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">water</span><span class="an-where">uses</span></summary><div class="an-body"><p>Firemen’s garments <span class="ev">were soaked with water to protect them</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">rail</span><span class="an-where">decline</span></summary><div class="an-body"><p><span class="ev">in 1895 … rail travel reached northern Japan and warm textiles could then be imported</span>.</p><p><span class="trap">Trap:</span> <i>the 1970s</i> is the date of the revival, not the decline.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Why were these answers marked wrong?</strong></p>
+      <div class="card" id="t3-why"><div class="sel-row"><select class="select" id="t3-why-1" data-answer="singular instead of plural"><option value="">—</option><option value="singular instead of plural">singular instead of plural</option><option value="wrong word form">wrong word form</option><option value="over the word limit">over the word limit</option><option value="spelling">spelling</option></select><span><b>1.</b> Q6: <i>layer</i></span></div><div class="sel-row"><select class="select" id="t3-why-2" data-answer="wrong word form"><option value="">—</option><option value="singular instead of plural">singular instead of plural</option><option value="wrong word form">wrong word form</option><option value="over the word limit">over the word limit</option><option value="spelling">spelling</option></select><span><b>2.</b> Q5: <i>strong</i></span></div><div class="sel-row"><select class="select" id="t3-why-3" data-answer="over the word limit"><option value="">—</option><option value="singular instead of plural">singular instead of plural</option><option value="wrong word form">wrong word form</option><option value="over the word limit">over the word limit</option><option value="spelling">spelling</option></select><span><b>3.</b> Q8: <i>heavy baskets</i> (ONE WORD ONLY)</span></div><div class="sel-row"><select class="select" id="t3-why-4" data-answer="spelling"><option value="">—</option><option value="singular instead of plural">singular instead of plural</option><option value="wrong word form">wrong word form</option><option value="over the word limit">over the word limit</option><option value="spelling">spelling</option></select><span><b>4.</b> Q5: <i>strenghten</i></span></div><div class="sel-row"><select class="select" id="t3-why-5" data-answer="singular instead of plural"><option value="">—</option><option value="singular instead of plural">singular instead of plural</option><option value="wrong word form">wrong word form</option><option value="over the word limit">over the word limit</option><option value="spelling">spelling</option></select><span><b>5.</b> Q1: <i>stitch</i></span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-why', 't3-why-score')">Check answers</button>
+          <span id="t3-why-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 15</div>
+      <h2>Practice Test — Section 1: Ordering Office Furniture</h2>
+      <p class="task-sub"><b>The full test starts now.</b> The recording includes the exam instructions and pauses. Section 1 — a phone order. Answers are checked when you press <b>Next</b>.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Practice test · Section 1 — Questions 1–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/practice-test-track20.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 1–5</p><p class="qg-instr">Complete the form. Write <b>ONE WORD AND/OR A NUMBER</b> for each answer.</p></div>
+<div class="card" id="t4-notes2"><p class="prompt-label">KT Furniture — customer details</p><div style="line-height:2.1;"><div><i>Example:</i> Name: <u>Sue Brown</u></div><div>Business: formal clothes for weddings; also repairs and (1) <input type="text" class="text-answer" id="t4-1" data-correct="alters/alterations" autocomplete="off" style="width:130px;"> clothes</div><div>Address: (2) <input type="text" class="text-answer" id="t4-2" data-correct="kirby" autocomplete="off" style="width:120px;"> Trading Estate</div><div>Building number: (3) <input type="text" class="text-answer" id="t4-3" data-correct="210" autocomplete="off" style="width:90px;"></div><div>Mobile: (4) <input type="text" class="text-answer" id="t4-4" data-correct="09356 788545/09356788545/09356 788 545" autocomplete="off" style="width:170px;"></div><div>Delivery: end of the month — (5) <input type="text" class="text-answer" id="t4-5" data-correct="free" autocomplete="off" style="width:110px;"> of charge</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-notes2', 't4-notes2-score')">Check answers</button>
+          <span id="t4-notes2-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 6–10</p><p class="qg-instr">Complete the table. Write <b>ONE WORD AND/OR A NUMBER</b> for each answer.</p></div>
+<div class="card" style="overflow-x:auto;"><table class="data-table" style="width:100%;">
+<tr><th>Item</th><th>Code</th><th>Colour</th><th>Quantity</th></tr>
+<tr><td>office chairs</td><td>ASP 23</td><td><b>(6)</b> ______</td><td><b>(7)</b> ______</td></tr>
+<tr><td>glass desks (large)</td><td><b>(8)</b> ______</td><td>—</td><td>2</td></tr>
+<tr><td>leather sofa</td><td>DFD 44</td><td><b>(9)</b> ______</td><td>1</td></tr>
+<tr><td>coffee table</td><td>TX 22</td><td><b>(10)</b> ______</td><td>1</td></tr></table></div>
+      <div class="card" id="t4-t" style="line-height:2.6;"><p>6. <input type="text" class="text-answer" id="t4-6" data-correct="black" autocomplete="off" style="width:110px;"> &nbsp; 7. <input type="text" class="text-answer" id="t4-7" data-correct="5/five" autocomplete="off" style="width:80px;"> &nbsp; 8. <input type="text" class="text-answer" id="t4-8" data-correct="tg586/tg 586" autocomplete="off" style="width:110px;"> &nbsp; 9. <input type="text" class="text-answer" id="t4-9" data-correct="yellow" autocomplete="off" style="width:110px;"> &nbsp; 10. <input type="text" class="text-answer" id="t4-10" data-correct="silver" autocomplete="off" style="width:110px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-t', 't4-t-score')">Check answers</button>
+          <span id="t4-t-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 15</div>
+      <h2>Practice Test — Section 2: Watching the City Marathon</h2>
+      <p class="task-sub">Section 2 — a radio interview with advice for spectators. Read Questions 11–20 before you press play.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Practice test · Section 2 — Questions 11–20</p>
+        <audio controls preload="none" style="width:100%;" src="audio/practice-test-track21.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–17</p><p class="qg-instr">Complete the notes. Write <b>ONE WORD AND/OR A NUMBER</b> for each answer.</p></div>
+<div class="card" id="t5-notes3"><p class="prompt-label">Advice for spectators</p><div style="line-height:2.1;"><div>• Number of runners this year: (11) <input type="text" class="text-answer" id="t5-11" data-correct="12,000/12000/12 000" autocomplete="off" style="width:110px;"></div><div>• The best way to get around the town: on (12) <input type="text" class="text-answer" id="t5-12" data-correct="foot" autocomplete="off" style="width:100px;"></div><div>• Wear sensible (13) <input type="text" class="text-answer" id="t5-13" data-correct="clothes" autocomplete="off" style="width:120px;"></div><div>• Check the weather (14) <input type="text" class="text-answer" id="t5-14" data-correct="forecast" autocomplete="off" style="width:120px;"> on Friday night</div><div>• Leave drinks for runners to the (15) <input type="text" class="text-answer" id="t5-15" data-correct="volunteers" autocomplete="off" style="width:130px;"></div><div>• Do not (16) <input type="text" class="text-answer" id="t5-16" data-correct="cross" autocomplete="off" style="width:100px;"> the road</div><div>• Don’t arrange to meet friends at the (17) <input type="text" class="text-answer" id="t5-17" data-correct="finish/finishing" autocomplete="off" style="width:110px;"> line</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-notes3', 't5-notes3-score')">Check answers</button>
+          <span id="t5-notes3-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 18–20</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b> or <b>C</b>.</p></div>
+      <div class="card" id="t5-mc"><div class="q-item" id="t5-mc-18">
+          <p>18. What does the speaker say about taxis on the day?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-18" data-correct="false"> A. There will be fewer drivers.</label><label><input type="radio" value="1" name="t5-mc-18" data-correct="true"> B. They may not arrive on time.</label><label><input type="radio" value="2" name="t5-mc-18" data-correct="false"> C. They cannot pick people up from home.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-19">
+          <p>19. Why does he recommend the trams for the start of the race?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-19" data-correct="false"> A. They are free on race day.</label><label><input type="radio" value="1" name="t5-mc-19" data-correct="true"> B. Their timetables are likely to be more reliable.</label><label><input type="radio" value="2" name="t5-mc-19" data-correct="false"> C. They go directly to the start.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-20">
+          <p>20. Where can people find details of the bus routes?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-20" data-correct="false"> A. on the radio station’s website</label><label><input type="radio" value="1" name="t5-mc-20" data-correct="true"> B. in this week’s local paper</label><label><input type="radio" value="2" name="t5-mc-20" data-correct="false"> C. at bus stops in the city centre</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-mc', 't5-mc-score')">Check answers</button>
+          <span id="t5-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 15</div>
+      <h2>Practice Test — Section 3: Feedback on a Seminar</h2>
+      <p class="task-sub">Section 3 — a tutor gives a student feedback.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Practice test · Section 3 — Questions 21–30</p>
+        <audio controls preload="none" style="width:100%;" src="audio/practice-test-track22.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 21–26</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b> or <b>C</b>.</p></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-21">
+          <p>21. How does Ahmed feel about working in a group?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-21" data-correct="false"> A. He prefers working on his own.</label><label><input type="radio" value="1" name="t6-mc-21" data-correct="true"> B. It is better than working alone, although he compares himself with others.</label><label><input type="radio" value="2" name="t6-mc-21" data-correct="false"> C. He feels too shy to speak.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-22">
+          <p>22. What had Ahmed done before the seminar?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-22" data-correct="false"> A. read all the articles on the list</label><label><input type="radio" value="1" name="t6-mc-22" data-correct="true"> B. written up the results of the class experiments</label><label><input type="radio" value="2" name="t6-mc-22" data-correct="false"> C. prepared questions for the other students</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-23">
+          <p>23. What was Ahmed’s problem during the discussion?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-23" data-correct="true"> A. He kept turning to the person next to him.</label><label><input type="radio" value="1" name="t6-mc-23" data-correct="false"> B. He avoided eye contact.</label><label><input type="radio" value="2" name="t6-mc-23" data-correct="false"> C. He spoke too much.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-24">
+          <p>24. What does the tutor say Ahmed did well?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-24" data-correct="false"> A. He took very good notes.</label><label><input type="radio" value="1" name="t6-mc-24" data-correct="true"> B. He waited for a pause before speaking.</label><label><input type="radio" value="2" name="t6-mc-24" data-correct="false"> C. He kept up with the discussion.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-25">
+          <p>25. What is the tutor most concerned about?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-25" data-correct="false"> A. Ahmed’s pronunciation</label><label><input type="radio" value="1" name="t6-mc-25" data-correct="true"> B. Ahmed’s ability to follow the discussion</label><label><input type="radio" value="2" name="t6-mc-25" data-correct="false"> C. Ahmed’s background reading</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-26">
+          <p>26. In the next seminar, the tutor wants Ahmed to</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-26" data-correct="false"> A. ask more questions.</label><label><input type="radio" value="1" name="t6-mc-26" data-correct="false"> B. sit next to a quiet student.</label><label><input type="radio" value="2" name="t6-mc-26" data-correct="true"> C. pay more attention to the people around him.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 27–30</p><p class="qg-instr">Complete the sentences. Write <b>ONE WORD ONLY</b> for each answer.</p></div>
+      <div class="card" id="t6-sc" style="line-height:2.4;"><p>27. The aim is for everyone to feel comfortable about giving their <input type="text" class="text-answer" id="t6-27" data-correct="views" autocomplete="off" style="width:120px;">.</p><p>28. Ahmed needs to be more <input type="text" class="text-answer" id="t6-28" data-correct="attentive" autocomplete="off" style="width:130px;"> to other students.</p><p>29. He should plan how to take notes a few <input type="text" class="text-answer" id="t6-29" data-correct="days" autocomplete="off" style="width:100px;"> before the seminar.</p><p>30. He should include a small <input type="text" class="text-answer" id="t6-30" data-correct="column" autocomplete="off" style="width:110px;"> in his notes for points to return to.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-sc', 't6-sc-score')">Check answers</button>
+          <span id="t6-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 15</div>
+      <h2>Practice Test — Section 4: Desert Plants</h2>
+      <p class="task-sub">Section 4 — a lecture with <b>no break</b>. Read all ten gaps first.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Practice test · Section 4 — Questions 31–40</p>
+        <audio controls preload="none" style="width:100%;" src="audio/practice-test-track23.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 31–40</p><p class="qg-instr">Complete the notes. Write <b>ONE WORD ONLY</b> for each answer.</p></div>
+<div class="card" id="t7-notes4"><p class="prompt-label">Desert plants</p><div style="line-height:2.1;"><div><b>Background</b></div><div>• Deserts form in a ‘rain (31) <input type="text" class="text-answer" id="t7-31" data-correct="shadow" autocomplete="off" style="width:120px;">’ beneath a mountain range</div><div>• Rain evaporates quickly, so the soil becomes (32) <input type="text" class="text-answer" id="t7-32" data-correct="salty" autocomplete="off" style="width:110px;"></div><div>• Deserts are second only to tropical (33) <input type="text" class="text-answer" id="t7-33" data-correct="rainforests/rainforest" autocomplete="off" style="width:140px;"> in variety of species</div><div>• Two main adaptations: collecting and (34) <input type="text" class="text-answer" id="t7-34" data-correct="storing" autocomplete="off" style="width:120px;"> water; reducing water loss</div><div><b>Examples</b></div><div>• Saguaro cactus: roots collect water; water is kept in the green (35) <input type="text" class="text-answer" id="t7-35" data-correct="stem" autocomplete="off" style="width:100px;">; its skeleton is used in (36) <input type="text" class="text-answer" id="t7-36" data-correct="building" autocomplete="off" style="width:120px;"> materials</div><div>• Barrel cactus: up to a metre high, with long yellow (37) <input type="text" class="text-answer" id="t7-37" data-correct="spines" autocomplete="off" style="width:110px;"></div><div>• Old man cactus: white hairs (38) <input type="text" class="text-answer" id="t7-38" data-correct="reflect" autocomplete="off" style="width:110px;"> the hot sun</div><div>• Prickly pear: sharp (39) <input type="text" class="text-answer" id="t7-39" data-correct="thorns" autocomplete="off" style="width:110px;"> keep animals away</div><div>• Aloe: waxy leaves hold water in; juice used as a (40) <input type="text" class="text-answer" id="t7-40" data-correct="medicine" autocomplete="off" style="width:120px;"> for centuries</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-notes4', 't7-notes4-score')">Check answers</button>
+          <span id="t7-notes4-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 15</div>
+      <h2>Practice Test — Answer Analysis and Your Band</h2>
+      <p class="task-sub">Open each answer to see what the speakers said and where the traps were. Then total your score and find your band.</p>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">alters</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">formal dress for weddings and special occasions. We also repair and alter clothes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">Kirby</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">we’re on Kirby Trading Estate … K-I-R-B-Y</span>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">210</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">Number 210</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">09356 788545</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">09356 … seven double eight five four five</span>. Listen for <i>double</i>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">free</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">the end of the month … that’s a free delivery</span>.</p><p><span class="trap">Trap:</span> the 16th costs extra — she rejects it.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">black</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">those chairs come in pink, white and black … the darker colour’s better for us</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">5</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">We’ll have five of those</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">TG586</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">I think we’ll have the large ones. The code here is TG586</span>.</p><p><span class="trap">Trap:</span> she starts to give the code for the small ones first.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">yellow</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">it does come in yellow as well … I thought of red. But that sounds lively. Yes, I’ll have that colour</span>.</p><p><span class="trap">Trap:</span> red is mentioned, then rejected.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">silver</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">Maybe TX22, the silver one</span>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">12,000</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">this year we have 12,000 runners taking part</span>.</p><p><span class="trap">Trap:</span> 26 miles / 42 kilometres is the distance.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">foot</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">the best way to get around the town will be on foot</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">clothes</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">I’m going to tell you to put on sensible clothes</span>.</p><p><span class="trap">Trap:</span> shoes were advice for <i>runners</i> last week.</p></div></details><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">forecast</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">look at the forecast on Friday night</span>.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">volunteers</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">We already have hundreds of volunteers … let them give out the drinks</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">cross</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">please don’t cross the road</span>.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">finish</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">please don’t say that you’ll see them at the finish line</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">B</span><span class="an-where">S2</span></summary><div class="an-body"><p>Taxis <span class="ev">will be held up … passengers shouldn’t expect them to be as punctual</span>. There will be <i>extra</i> drivers (A ✗).</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">B</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">they’re likely to have more reliable timetables than buses</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">B</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">a full list of all the bus routes … in this week’s local paper</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">B</span><span class="an-where">S3</span></summary><div class="an-body"><p><span class="ev">it’s better, I think, than working on your own, though you’re comparing yourself all the time</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">B</span><span class="an-where">S3</span></summary><div class="an-body"><p><span class="ev">I did look at the results of the experiments we did in class and write them up beforehand</span>. He has only <i>started</i> the articles (A ✗).</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">A</span><span class="an-where">S3</span></summary><div class="an-body"><p><span class="ev">I kept turning to the person next to me</span>. He says he is <i>not shy</i> (B ✗).</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">B</span><span class="an-where">S3</span></summary><div class="an-body"><p><span class="ev">I felt I did wait for a pause. — Yes, you handled that quite well</span>.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">B</span><span class="an-where">S3</span></summary><div class="an-body"><p><span class="ev">The thing I’m really concerned about is keeping up with the discussion</span>.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">C</span><span class="an-where">S3</span></summary><div class="an-body"><p><span class="ev">you should look more at the people around you … look outside yourself</span>.</p></div></details><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">views</span><span class="an-where">S3</span></summary><div class="an-body"><p><span class="ev">we need everyone to feel comfortable about giving their views</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">attentive</span><span class="an-where">S3</span></summary><div class="an-body"><p><span class="ev">So I need to be attentive. — Yes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">days</span><span class="an-where">S3</span></summary><div class="an-body"><p><span class="ev">you actually need to think a few days ahead</span>.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">column</span><span class="an-where">S3</span></summary><div class="an-body"><p><span class="ev">include a small column in your notes, where you can jot down things you want to go back to</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">shadow</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">something that’s called a rain shadow</span>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">salty</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">that makes the soil salty</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">rainforests</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">second only to tropical rainforests in the variety of plant and animal species</span>.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">storing</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">an ability to collect water and to store it</span>. After <i>collecting and</i> → <b>storing</b>.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">stem</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">the water is taken to the green stem. This is where all its water is kept</span>.</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">building</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">its skeleton is actually used in building materials</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">spines</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">it has long yellow spines</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">reflect</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">these help the plant reflect the hot desert sun</span>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">thorns</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">the plant has sharp thorns specially designed to prevent the predator</span>.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">medicine</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">Its juice has been used as a medicine for centuries</span>.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Listening)</p>
+<table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr>
+<tr><td>13–15</td><td>5.0</td></tr><tr><td>16–17</td><td>5.5</td></tr><tr><td>18–22</td><td>6.0</td></tr><tr><td>23–25</td><td>6.5</td></tr><tr><td>26–29</td><td>7.0</td></tr><tr><td>30–31</td><td>7.5</td></tr><tr><td>32–34</td><td>8.0</td></tr><tr><td>35+</td><td>8.5+</td></tr></table></div>
+      <div class="card"><p class="mini-q">1. Your score out of 40 and your estimated band:</p><textarea class="no-check mini-answer" id="t8-rf-1" placeholder="Write here..." style="min-height:56px;"></textarea><p class="mini-q">2. Which section cost you most marks, and why? (speed / distractors / spelling / concentration)</p><textarea class="no-check mini-answer" id="t8-rf-2" placeholder="Write here..." style="min-height:56px;"></textarea><p class="mini-q">3. Choose one wrong answer. What did you hear, and what was the trap?</p><textarea class="no-check mini-answer" id="t8-rf-3" placeholder="Write here..." style="min-height:56px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-rf-btn">Show some ideas</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-rf-ans"><p>The traps in this test follow a clear pattern: an option is <b>mentioned and then rejected</b> (red sofa, the 16th, small desks), or <b>several numbers</b> appear together (26 miles, 42 km, 12,000). In Section 3, the tutor often <b>corrects or develops</b> what the student says — the answer is the tutor’s final point.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 15</div>
+      <h2>Extra Listening — Section 2: Volunteering at a Wildlife Centre</h2>
+      <p class="task-sub">An extra Section 2 recording made for today. Read Questions 1–10, then play once. Answers are checked when you press <b>Next</b>; the transcript comes in the next task.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Extra recording — Questions 1–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/extra-wildlife-volunteers.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 1–4</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b> or <b>C</b>.</p></div>
+      <div class="card" id="t9-mc"><div class="q-item" id="t9-mc-1">
+          <p>1. When the centre opened, it was run by</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-1" data-correct="true"> A. three paid staff.</label><label><input type="radio" value="1" name="t9-mc-1" data-correct="false"> B. ninety volunteers.</label><label><input type="radio" value="2" name="t9-mc-1" data-correct="false"> C. eleven employees.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-2">
+          <p>2. Contact with the animals is</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-2" data-correct="false"> A. part of every volunteer’s work.</label><label><input type="radio" value="1" name="t9-mc-2" data-correct="true"> B. limited to staff with specialist training.</label><label><input type="radio" value="2" name="t9-mc-2" data-correct="false"> C. allowed after six months.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-3">
+          <p>3. The greatest need for volunteers at the moment is</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-3" data-correct="true"> A. in the visitor centre.</label><label><input type="radio" value="1" name="t9-mc-3" data-correct="false"> B. for maintenance work.</label><label><input type="radio" value="2" name="t9-mc-3" data-correct="false"> C. for fundraising.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-4">
+          <p>4. Volunteers must commit for six months because</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-4" data-correct="false"> A. the animals need a routine.</label><label><input type="radio" value="1" name="t9-mc-4" data-correct="true"> B. training each volunteer takes time.</label><label><input type="radio" value="2" name="t9-mc-4" data-correct="false"> C. of insurance rules.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-mc', 't9-mc-score')">Check answers</button>
+          <span id="t9-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 5–10</p><p class="qg-instr">Complete the notes. Write <b>ONE WORD AND/OR A NUMBER</b> for each answer.</p></div>
+<div class="card" id="t9-notes5"><p class="prompt-label">Practical information</p><div style="line-height:2.1;"><div>• Training: first (5) <input type="text" class="text-answer" id="t9-5" data-correct="saturday" autocomplete="off" style="width:120px;"> of each month; lasts (6) <input type="text" class="text-answer" id="t9-6" data-correct="4/four" autocomplete="off" style="width:80px;"> hours</div><div>• Benefits: free parking and a (7) <input type="text" class="text-answer" id="t9-7" data-correct="20%/20/twenty" autocomplete="off" style="width:90px;"> % discount in the café and shop</div><div>• Bring your own (8) <input type="text" class="text-answer" id="t9-8" data-correct="boots" autocomplete="off" style="width:110px;"></div><div>• Under-18s need a (9) <input type="text" class="text-answer" id="t9-9" data-correct="letter" autocomplete="off" style="width:110px;"> of permission from a parent or guardian</div><div>• Apply using the form on the (10) <input type="text" class="text-answer" id="t9-10" data-correct="website" autocomplete="off" style="width:120px;"></div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-notes5', 't9-notes5-score')">Check answers</button>
+          <span id="t9-notes5-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 15</div>
+      <h2>Extra Listening — Answers, Transcript and Distractors</h2>
+      <p class="task-sub">Check your answers, then read the transcript while you listen again. Notice how the speaker <b>mentions</b> things that are <b>not</b> the answer.</p>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">A</span><span class="an-where">extra</span></summary><div class="an-body"><p>“at that time it was run entirely by three paid staff.” Eleven employees and ninety volunteers are the numbers <i>today</i>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">B</span><span class="an-where">extra</span></summary><div class="an-body"><p>“contact with the animals is limited to staff with specialist training.”</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">A</span><span class="an-where">extra</span></summary><div class="an-body"><p>“The biggest need at the moment is for people to work in our visitor centre.”</p><p><span class="trap">Trap:</span> maintenance and fundraising are needed <i>too</i>, but they are not the biggest need.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">B</span><span class="an-where">extra</span></summary><div class="an-body"><p>“That is because training each volunteer takes time.”</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">Saturday</span><span class="an-where">extra</span></summary><div class="an-body"><p>“Training takes place on the first Saturday of each month”.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">4</span><span class="an-where">extra</span></summary><div class="an-body"><p>“it lasts for four hours.”</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">20</span><span class="an-where">extra</span></summary><div class="an-body"><p>“a twenty per cent discount in our café and shop.”</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">boots</span><span class="an-where">extra</span></summary><div class="an-body"><p>“you will need to bring your own boots” — the fleece and T-shirt are provided.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">letter</span><span class="an-where">extra</span></summary><div class="an-body"><p>“we will need a letter of permission from a parent or guardian.”</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">website</span><span class="an-where">extra</span></summary><div class="an-body"><p>“fill in the form on our website. Please do not phone the office”.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Spot the distractor.</strong> Each detail is mentioned in the recording. Is it the answer or a distractor?</p>
+      <div class="card" id="t10-d"><div class="sel-row"><select class="select" id="t10-d-1" data-answer="distractor"><option value="">—</option><option value="answer">answer</option><option value="distractor">distractor</option></select><span><b>1.</b> ninety volunteers (Q1)</span></div><div class="sel-row"><select class="select" id="t10-d-2" data-answer="answer"><option value="">—</option><option value="answer">answer</option><option value="distractor">distractor</option></select><span><b>2.</b> specialist training (Q2)</span></div><div class="sel-row"><select class="select" id="t10-d-3" data-answer="distractor"><option value="">—</option><option value="answer">answer</option><option value="distractor">distractor</option></select><span><b>3.</b> fundraising (Q3)</span></div><div class="sel-row"><select class="select" id="t10-d-4" data-answer="distractor"><option value="">—</option><option value="answer">answer</option><option value="distractor">distractor</option></select><span><b>4.</b> a green fleece (Q8)</span></div><div class="sel-row"><select class="select" id="t10-d-5" data-answer="distractor"><option value="">—</option><option value="answer">answer</option><option value="distractor">distractor</option></select><span><b>5.</b> phone the office (Q10)</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-d', 't10-d-score')">Check answers</button>
+          <span id="t10-d-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 15</div>
+      <h2>Dictation — Numbers, Names and Sentences</h2>
+      <p class="task-sub">Each item is read <b>twice</b>. Type exactly what you hear — you may pause the recording.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Dictation Part A — numbers, dates and spelling</p>
+        <audio controls preload="none" style="width:100%;" src="audio/dictation-a.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Pause the recording if you need more time to type.</p></div>
+      <div class="card" id="t11-a" style="line-height:2.4;"><p>1. Reference number: <input type="text" class="text-answer" id="t11-a1" data-correct="kl40973/kl 40973" autocomplete="off" style="width:130px;"></p><p>2. The seminar has moved to room <input type="text" class="text-answer" id="t11-a2" data-correct="410" autocomplete="off" style="width:90px;"></p><p>3. Deposit £350; monthly rent £<input type="text" class="text-answer" id="t11-a3" data-correct="825" autocomplete="off" style="width:90px;"></p><p>4. Family name: <input type="text" class="text-answer" id="t11-a4" data-correct="okonkwo" autocomplete="off" style="width:130px;"></p><p>5. Deadline: Thursday <input type="text" class="text-answer" id="t11-a5" data-correct="21st november/21 november/november 21/november 21st/the 21st of november" autocomplete="off" style="width:170px;"></p><p>6. The study surveyed <input type="text" class="text-answer" id="t11-a6" data-correct="1,260/1260" autocomplete="off" style="width:110px;"> adults</p><p>7. Phone: <input type="text" class="text-answer" id="t11-a7" data-correct="01223 547998/01223547998" autocomplete="off" style="width:150px;"></p><p>8. The questionnaire takes about <input type="text" class="text-answer" id="t11-a8" data-correct="15/fifteen" autocomplete="off" style="width:80px;"> minutes</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-a', 't11-a-score')">Check answers</button>
+          <span id="t11-a-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Dictation Part B — sentences</p>
+        <audio controls preload="none" style="width:100%;" src="audio/dictation-b.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Write the missing words exactly. Spelling counts.</p></div>
+      <div class="card" id="t11-b" style="line-height:2.5;"><p>1. The <input type="text" class="text-answer" id="t11-b1" data-correct="government" autocomplete="off" style="width:130px;"> has introduced new <input type="text" class="text-answer" id="t11-b2" data-correct="regulations" autocomplete="off" style="width:130px;"> on recycling.</p><p>2. <input type="text" class="text-answer" id="t11-b3" data-correct="participants" autocomplete="off" style="width:130px;"> were divided into two <input type="text" class="text-answer" id="t11-b4" data-correct="separate" autocomplete="off" style="width:110px;"> groups.</p><p>3. The results were not statistically <input type="text" class="text-answer" id="t11-b5" data-correct="significant" autocomplete="off" style="width:130px;">.</p><p>4. <input type="text" class="text-answer" id="t11-b6" data-correct="accommodation" autocomplete="off" style="width:150px;"> is guaranteed for all first-year students.</p><p>5. The <input type="text" class="text-answer" id="t11-b7" data-correct="committee" autocomplete="off" style="width:120px;"> will make a final decision next Wednesday.</p><p>6. The <input type="text" class="text-answer" id="t11-b8" data-correct="environmental" autocomplete="off" style="width:140px;"> consequences are difficult to predict.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-b', 't11-b-score')">Check answers</button>
+          <span id="t11-b-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 15</div>
+      <h2>TED Talk — How to Speak So That People Want to Listen</h2>
+      <p class="task-sub">Watch Julian Treasure’s TED talk (about 10 minutes). Watch once without subtitles, then again with English subtitles if you need them. Answer the questions, then summarise the talk in writing (<b>at least 100 words</b>) and aloud (<b>at least 45 seconds</b>).</p>
+      <div class="card" style="padding:0; overflow:hidden;"><div style="position:relative; padding-top:56.25%;">
+          <iframe src="https://embed.ted.com/talks/julian_treasure_how_to_speak_so_that_people_want_to_listen" title="Julian Treasure — How to speak so that people want to listen" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe>
+        </div></div>
+      <div class="card" id="t12-mc"><div class="q-item" id="t12-mc-1">
+          <p>1. What does Treasure call the habits that make people stop listening?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-mc-1" data-correct="true"> A. the seven deadly sins of speaking</label><label><input type="radio" value="1" name="t12-mc-1" data-correct="false"> B. the five mistakes of talking</label><label><input type="radio" value="2" name="t12-mc-1" data-correct="false"> C. the ten bad manners</label><label><input type="radio" value="3" name="t12-mc-1" data-correct="false"> D. the rules of silence</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-mc-2">
+          <p>2. Which of these is one of the habits he warns against?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-mc-2" data-correct="false"> A. asking questions</label><label><input type="radio" value="1" name="t12-mc-2" data-correct="true"> B. complaining</label><label><input type="radio" value="2" name="t12-mc-2" data-correct="false"> C. speaking slowly</label><label><input type="radio" value="3" name="t12-mc-2" data-correct="false"> D. smiling</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-mc-3">
+          <p>3. What does the acronym HAIL stand for?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-mc-3" data-correct="true"> A. Honesty, Authenticity, Integrity, Love</label><label><input type="radio" value="1" name="t12-mc-3" data-correct="false"> B. Humour, Attention, Interest, Listening</label><label><input type="radio" value="2" name="t12-mc-3" data-correct="false"> C. Health, Action, Ideas, Learning</label><label><input type="radio" value="3" name="t12-mc-3" data-correct="false"> D. Hope, Ambition, Imagination, Leadership</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-mc-4">
+          <p>4. Which of these is part of his “vocal toolbox”?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-mc-4" data-correct="true"> A. register, timbre, prosody, pace, pitch and volume</label><label><input type="radio" value="1" name="t12-mc-4" data-correct="false"> B. grammar and vocabulary</label><label><input type="radio" value="2" name="t12-mc-4" data-correct="false"> C. eye contact and gestures</label><label><input type="radio" value="3" name="t12-mc-4" data-correct="false"> D. slides and notes</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-mc-5">
+          <p>5. What does he suggest people do before an important talk?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-mc-5" data-correct="false"> A. drink a lot of water</label><label><input type="radio" value="1" name="t12-mc-5" data-correct="true"> B. do vocal warm-up exercises</label><label><input type="radio" value="2" name="t12-mc-5" data-correct="false"> C. memorise the whole speech</label><label><input type="radio" value="3" name="t12-mc-5" data-correct="false"> D. avoid talking all day</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-mc', 't12-mc-score')">Check answers</button>
+          <span id="t12-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the talk in your own words — <b>at least 100 words</b>. Give the main idea, the key supporting points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the talk (at least 100 words):</p><textarea class="no-check mini-answer" id="t12-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t12-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t12-sum-ans"><p>Julian Treasure, a sound expert, explains how to speak in a way that makes people want to listen. He begins with seven “deadly sins” of speaking that stop people listening, including gossip, judging, negativity, complaining, making excuses, exaggerating or lying, and dogmatism — confusing facts with opinions. Instead, he suggests four foundations for powerful speech, summarised as HAIL: honesty, authenticity, integrity and love. He then describes a “vocal toolbox” of features we can control, such as register, timbre, prosody, pace, pitch and volume, and he recommends doing vocal warm-up exercises before an important talk. He ends by imagining a world in which people speak powerfully and listen consciously. I found the talk very practical, especially the reminder that how we say something matters as much as what we say.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t12-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the talk <b>aloud</b> without reading your written summary — speak for <b>at least 45 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The talk focuses on…”</li><li>“According to the speaker,…”</li><li>“A key point is that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 15</div>
+      <h2>Speaking Part 3 — Museums</h2>
+      <p class="task-sub">Listen to the Unit 8 recordings: each one plays <b>two candidates</b> answering the same Part 3 question. Decide which answer is stronger, then give your own answers — each in its own box.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Unit 8 · Track 15 — What benefits can school children gain from visiting museums?</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit8-track15.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Listen as many times as you like.</p></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Unit 8 · Track 16 — How do you think most children feel about visiting a museum?</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit8-track16.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Listen as many times as you like.</p></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Unit 8 · Track 17 — Are museums more educational now than when your parents were young?</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit8-track17.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Listen as many times as you like.</p></div>
+      <div class="card" id="t13-mc"><div class="q-item" id="t13-mc-1">
+          <p>1. Track 15: Why is the second answer stronger?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-mc-1" data-correct="false"> A. It is longer and uses more difficult words.</label><label><input type="radio" value="1" name="t13-mc-1" data-correct="true"> B. It answers the question directly, with clear benefits and examples.</label><label><input type="radio" value="2" name="t13-mc-1" data-correct="false"> C. It talks about the cost of museums.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-mc-2">
+          <p>2. Track 16: What is the weakness of the first answer?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-mc-2" data-correct="true"> A. It talks mostly about the speaker’s own preferences instead of children in general.</label><label><input type="radio" value="1" name="t13-mc-2" data-correct="false"> B. It is too formal.</label><label><input type="radio" value="2" name="t13-mc-2" data-correct="false"> C. It uses too many examples.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-mc-3">
+          <p>3. Track 17: How does the second speaker develop her answer?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-mc-3" data-correct="false"> A. by describing her parents</label><label><input type="radio" value="1" name="t13-mc-3" data-correct="true"> B. by contrasting the past function of museums with the present</label><label><input type="radio" value="2" name="t13-mc-3" data-correct="false"> C. by giving statistics</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-mc', 't13-mc-score')">Check answers</button>
+          <span id="t13-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="question-box" data-field="t13-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">What benefits can school children gain from visiting museums?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the benefits are…”</li><li>“First of all,…”</li><li>“Another advantage is that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t13-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Should traditional skills, such as hand-stitching or weaving, be taught in schools today?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“There’s a good case for…”</li><li>“On the other hand,…”</li><li>“Personally, I’d argue that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t13-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Why do many people enjoy watching big sports events like marathons?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I suppose it’s because…”</li><li>“What makes it special is…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 15</div>
+      <h2>Vocabulary — Spelling and Collocations from Today’s Recordings</h2>
+      <p class="task-sub">These words appeared in today’s recordings and are often misspelled. Type the correct spelling, then choose the natural collocation.</p>
+      <div class="card" id="t14-sp" style="line-height:2.4;"><p>1. a place to stay: <input type="text" class="text-answer" id="t14-1" data-correct="accommodation" autocomplete="off" style="width:150px;"></p><p>2. a group of people who make decisions: <input type="text" class="text-answer" id="t14-2" data-correct="committee" autocomplete="off" style="width:140px;"></p><p>3. a list of written questions: <input type="text" class="text-answer" id="t14-3" data-correct="questionnaire" autocomplete="off" style="width:150px;"></p><p>4. important or noticeable: <input type="text" class="text-answer" id="t14-4" data-correct="significant" autocomplete="off" style="width:140px;"></p><p>5. people who take part in a study: <input type="text" class="text-answer" id="t14-5" data-correct="participants" autocomplete="off" style="width:140px;"></p><p>6. the people who rule a country: <input type="text" class="text-answer" id="t14-6" data-correct="government" autocomplete="off" style="width:140px;"></p><p>7. a long race of 42 kilometres: a <input type="text" class="text-answer" id="t14-7" data-correct="marathon" autocomplete="off" style="width:130px;"></p><p>8. the day after Wednesday: <input type="text" class="text-answer" id="t14-8" data-correct="thursday" autocomplete="off" style="width:130px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-sp', 't14-sp-score')">Check answers</button>
+          <span id="t14-sp-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t14-col"><div class="q-item" id="t14-col-1">
+          <p>1. to ______ an order</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-col-1" data-correct="true"> place</label><label><input type="radio" value="1" name="t14-col-1" data-correct="false"> put</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-col-2">
+          <p>2. to ______ an eye on something</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-col-2" data-correct="false"> hold</label><label><input type="radio" value="1" name="t14-col-2" data-correct="true"> keep</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-col-3">
+          <p>3. to ______ a deposit</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-col-3" data-correct="true"> pay</label><label><input type="radio" value="1" name="t14-col-3" data-correct="false"> give in</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-col-4">
+          <p>4. to ______ up with the discussion</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-col-4" data-correct="true"> keep</label><label><input type="radio" value="1" name="t14-col-4" data-correct="false"> catch</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-col-5">
+          <p>5. to ______ someone on</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-col-5" data-correct="false"> shout</label><label><input type="radio" value="1" name="t14-col-5" data-correct="true"> cheer</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-col-6">
+          <p>6. a ______ forecast</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-col-6" data-correct="true"> weather</label><label><input type="radio" value="1" name="t14-col-6" data-correct="false"> climate</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-col', 't14-col-score')">Check answers</button>
+          <span id="t14-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task15" data-task="15">
+      <div class="task-eyebrow">Task 15 of 15</div>
+      <h2>Writing Task 2 — Traditional Skills</h2>
+      <p class="task-sub">Finish the day with a full Task 2 essay inspired by the Sashiko lecture. Spend about <b>40 minutes</b> and write <b>at least 250 words</b>.</p>
+<div class="card advice-card"><p class="prompt-label">Plan before you write</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Position:</b> decide how far you agree before you start.</li><li><b>Body 1:</b> why traditional skills matter (culture, identity, practical value, sustainability — e.g. repairing clothes).</li><li><b>Body 2:</b> the other side (time, money, modern skills like technology are more useful for jobs).</li><li><b>Conclusion:</b> a clear, balanced final position.</li></ul></div>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Many traditional skills, such as hand-sewing or woodworking, are disappearing. Some people believe that governments should spend money to keep these skills alive. To what extent do you agree or disagree?</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t15-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t15-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t15-essay-model"><div class="model-text" style="padding:2px 0;">
+  <p>As mass production replaces handmade goods, many traditional crafts are in danger of being lost. I largely agree that governments should help to preserve these skills, although I believe their support should be targeted rather than unlimited.</p>
+  <p>The strongest argument for government support is that traditional skills are part of a country’s cultural identity. Techniques such as Japanese sashiko stitching or Uzbek embroidery carry knowledge that has been passed down for generations, and once the last skilled workers disappear, that knowledge may be impossible to recover. Moreover, many traditional crafts are more sustainable than modern industry. Repairing and reusing clothes, for example, reduces waste at a time when the fashion industry is a major source of pollution. Supporting craftspeople can also bring economic benefits, since tourists are often willing to pay high prices for authentic handmade products.</p>
+  <p>On the other hand, public money is limited, and governments must decide between many priorities. Spending on hospitals, schools and modern technical training may seem more urgent than funding crafts that few people practise. In addition, if a skill only survives because of subsidies, it may not have a real future.</p>
+  <p>In my view, the best solution is for governments to provide focused support, such as funding apprenticeships, recording traditional techniques and including some crafts in school art programmes, rather than paying for whole industries. In this way, valuable skills can be kept alive while still encouraging them to find a place in the modern economy.</p>
+  <p class="alt">≈ 290 words</p>
+</div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 15</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 32 of 45</div>
+    <h1>Day 32 complete! 🎉</h1>
+    <p>Day 32 done — the Unit 8 lecture, a full 40-question listening test with analysis, an extra recording, dictation, a TED talk, speaking and a Task 2 essay.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+    initWritingCoach('t15-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Many traditional skills, such as hand-sewing or woodworking, are disappearing. Some people believe that governments should spend money to keep these skills alive. To what extent do you agree or disagree?' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-summary"]'); if (b) initRecordControl(b, user.id, 32, 12, 't12-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t13-speaking-1"]'); if (b) initRecordControl(b, user.id, 32, 13, 't13-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t13-speaking-2"]'); if (b) initRecordControl(b, user.id, 32, 13, 't13-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t13-speaking-3"]'); if (b) initRecordControl(b, user.id, 32, 13, 't13-speaking-3', 0); }
+
+    await initTaskFlow(32, 15, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-notes1', 't2-notes1-score'); },
+      3: () => { checkAllAnswers('t3-why', 't3-why-score'); },
+      4: () => { checkAllAnswers('t4-notes2', 't4-notes2-score'); checkAllAnswers('t4-t', 't4-t-score'); },
+      5: () => { checkAllAnswers('t5-notes3', 't5-notes3-score'); checkAllAnswers('t5-mc', 't5-mc-score'); },
+      6: () => { checkAllAnswers('t6-mc', 't6-mc-score'); checkAllAnswers('t6-sc', 't6-sc-score'); },
+      7: () => { checkAllAnswers('t7-notes4', 't7-notes4-score'); },
+      9: () => { checkAllAnswers('t9-mc', 't9-mc-score'); checkAllAnswers('t9-notes5', 't9-notes5-score'); },
+      10: () => { checkAllAnswers('t10-d', 't10-d-score'); },
+      11: () => { checkAllAnswers('t11-a', 't11-a-score'); checkAllAnswers('t11-b', 't11-b-score'); },
+      12: () => { checkAllAnswers('t12-mc', 't12-mc-score'); },
+      13: () => { checkAllAnswers('t13-mc', 't13-mc-score'); },
+      14: () => { checkAllAnswers('t14-sp', 't14-sp-score'); checkAllAnswers('t14-col', 't14-col-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t8-rf-btn', 't8-rf-ans', '[id^="t8-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t12-sum-btn', 't12-sum-ans', '[id^="t12-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t15-essay-model-btn', 't15-essay-model', '#t15-essay');
+  });
+</script>
+</body>
+</html>

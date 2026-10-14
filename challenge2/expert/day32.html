@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 32 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 32 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 16</div>
+      <h2>Starting Off — Listening Test Day</h2>
+      <p class="task-sub">Today is an extended <b>listening day</b> — plan for about <b>3 hours</b>. You will do the Unit 8 Section 4 lecture, a <b>complete IELTS Listening test</b> (4 sections, 40 questions) from the Complete IELTS practice test, two extra recordings, a dictation, a TED talk, speaking and a Task 2 essay. Use headphones and play every recording <b>once only</b>.</p>
+      <p style="margin-top:26px;"><strong>Band 8+ listening strategy.</strong> Choose the best answer.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. In Section 4 you have no break in the middle. What should you do before it starts?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. Read only the first three questions.</label><label><input type="radio" value="1" name="t1-st-1" data-correct="true"> B. Read all ten questions and predict the type of word for every gap.</label><label><input type="radio" value="2" name="t1-st-1" data-correct="false"> C. Close your eyes and concentrate on the audio.</label><label><input type="radio" value="3" name="t1-st-1" data-correct="false"> D. Write possible answers in every gap.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. The speaker says “It was originally thought to be for protection … but not everyone agrees.” This usually signals that</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="false"> A. the first idea is the final answer.</label><label><input type="radio" value="1" name="t1-st-2" data-correct="true"> B. the answer may be a different idea that comes next.</label><label><input type="radio" value="2" name="t1-st-2" data-correct="false"> C. the question has been skipped.</label><label><input type="radio" value="3" name="t1-st-2" data-correct="false"> D. the speaker is joking.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. You miss an answer. What is the best response?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="false"> A. Stop and try to remember what was said.</label><label><input type="radio" value="1" name="t1-st-3" data-correct="true"> B. Leave it, follow the next question, and guess at the end.</label><label><input type="radio" value="2" name="t1-st-3" data-correct="false"> C. Go back to the previous section.</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. Write the last word you heard.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. “NO MORE THAN TWO WORDS” — the speaker says “model lions”. Which answer is acceptable?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="false"> A. some toy model lions</label><label><input type="radio" value="1" name="t1-st-4" data-correct="true"> B. model lions</label><label><input type="radio" value="2" name="t1-st-4" data-correct="false"> C. five model lions</label><label><input type="radio" value="3" name="t1-st-4" data-correct="false"> D. lions models</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Topic vocabulary.</strong> Match each word to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. telescope</button><button type="button" class="lm-item" data-key="2">2. eclipse</button><button type="button" class="lm-item" data-key="3">3. amateur</button><button type="button" class="lm-item" data-key="4">4. brightness</button><button type="button" class="lm-item" data-key="5">5. incentive</button><button type="button" class="lm-item" data-key="6">6. mobility</button><button type="button" class="lm-item" data-key="7">7. extinction</button><button type="button" class="lm-item" data-key="8">8. status symbol</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. something that shows a high social position</button><button type="button" class="lm-item" data-key="b">b. the ability to move between places</button><button type="button" class="lm-item" data-key="c">c. when one space object blocks the light of another</button><button type="button" class="lm-item" data-key="d">d. something that encourages a person to do something</button><button type="button" class="lm-item" data-key="e">e. someone who does an activity for pleasure, not as a job</button><button type="button" class="lm-item" data-key="f">f. the situation in which a species no longer exists</button><button type="button" class="lm-item" data-key="g">g. an instrument that makes distant objects look nearer</button><button type="button" class="lm-item" data-key="h">h. how much light something gives out</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 16</div>
+      <h2>Unit 8 Listening — Section 4: Space Observation</h2>
+      <p class="task-sub">A lecture from Complete IELTS Unit 8 (“Across the universe”). You have about 40 seconds to read the notes before the recording begins. Answers are checked when you press <b>Next</b>.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Unit 8 · Track 17 — Questions 1–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit8-track17.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 1–10</p><p class="qg-instr">Complete the notes below. Write <b>NO MORE THAN TWO WORDS</b> for each answer.</p></div>
+<div class="card" id="t2-notes1"><p class="prompt-label">Space observation</p><div style="line-height:2.1;"><div><b>Early days</b></div><div>First telescopes — started the (1) ‘<input type="text" class="text-answer" id="t2-1" data-correct="scientific revolution" autocomplete="off" style="width:170px;">’</div><div>Galileo’s telescope — moved the focus from (2) <input type="text" class="text-answer" id="t2-2" data-correct="earth/the earth" autocomplete="off" style="width:140px;"> to the sky</div><div>First (3) <input type="text" class="text-answer" id="t2-3" data-correct="moon photo/moon photograph/moon photo(graph)" autocomplete="off" style="width:160px;"> — by John William Draper (1839)</div><div><b>Present day</b></div><div>Professional astronomers — aim to get (4) <input type="text" class="text-answer" id="t2-4" data-correct="research data" autocomplete="off" style="width:150px;"></div><div>Amateur astronomers — aim to photograph beautiful images, e.g. (5) <input type="text" class="text-answer" id="t2-5" data-correct="solar eclipse" autocomplete="off" style="width:150px;"> (Greece)</div><div><b>Contribution of amateur astronomers</b></div><div>• recognise changes in the (6) <input type="text" class="text-answer" id="t2-6" data-correct="brightness" autocomplete="off" style="width:140px;"> of a space object</div><div>• are able to produce (7) <input type="text" class="text-answer" id="t2-7" data-correct="accurate measurements/accurate measurement" autocomplete="off" style="width:190px;"> of space</div><div>Two main types of observation: (a) new discoveries, e.g. an (8) <input type="text" class="text-answer" id="t2-8" data-correct="exploding star" autocomplete="off" style="width:150px;"> or a comet; (b) monitor the (9) <input type="text" class="text-answer" id="t2-9" data-correct="evolution" autocomplete="off" style="width:130px;"> of objects in space</div><div>Main advantages: great patience and passion; can conduct (10) <input type="text" class="text-answer" id="t2-10" data-correct="long-term/long term" autocomplete="off" style="width:130px;"> observations</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-notes1', 't2-notes1-score')">Check answers</button>
+          <span id="t2-notes1-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 16</div>
+      <h2>Unit 8 Listening — Answers and Why Marks Are Lost</h2>
+      <p class="task-sub">Check every answer. At this level most lost marks are not about understanding — they are about <b>form</b>: spelling, plurals, hyphens and the word limit.</p>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">scientific revolution</span><span class="an-where">early days</span></summary><div class="an-body"><p>The first telescopes are described as starting <i>the scientific revolution</i>. Two words — both needed.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">(the) Earth</span><span class="an-where">Galileo</span></summary><div class="an-body"><p>Galileo turned attention <i>from the Earth to the sky</i> — the gap contrasts with <i>sky</i>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">moon photo(graph)</span><span class="an-where">Draper, 1839</span></summary><div class="an-body"><p>Draper took the first photograph of the Moon. <i>Moon photo</i> or <i>Moon photograph</i>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">research data</span><span class="an-where">professionals</span></summary><div class="an-body"><p>Professionals want <i>research data</i>; amateurs want beautiful images — a contrast the notes are built on.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">solar eclipse</span><span class="an-where">Greece</span></summary><div class="an-body"><p>An example of a beautiful image linked to Greece. Spelling: <b>eclipse</b>, not <i>eclips</i>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">brightness</span><span class="an-where">knowledge</span></summary><div class="an-body"><p>Amateurs recognise changes in the <i>brightness</i> of an object. Noun after <i>the</i>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">accurate measurement(s)</span><span class="an-where">knowledge</span></summary><div class="an-body"><p>They can produce <i>accurate measurements</i>. The plural is accepted.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">exploding star</span><span class="an-where">discoveries</span></summary><div class="an-body"><p>“an ___” — the answer must begin with a vowel sound: <b>exploding star</b>.</p><p><span class="trap">Trap:</span> <i>supernova</i> may come to mind, but you must write what you hear.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">evolution</span><span class="an-where">monitoring</span></summary><div class="an-body"><p>They monitor the <i>evolution</i> of objects in space.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">long-term</span><span class="an-where">advantages</span></summary><div class="an-body"><p>The only adjective gap: <i>long-term</i> observations. With or without the hyphen.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Why were these answers marked wrong?</strong></p>
+      <div class="card" id="t3-why"><div class="sel-row"><select class="select" id="t3-why-1" data-answer="spelling"><option value="">—</option><option value="spelling">spelling</option><option value="over the word limit">over the word limit</option><option value="wrong word form">wrong word form</option><option value="singular/plural changes the meaning">singular/plural changes the meaning</option><option value="a word you predicted, not one you heard">a word you predicted, not one you heard</option></select><span><b>1.</b> Q5: <i>solar eclips</i></span></div><div class="sel-row"><select class="select" id="t3-why-2" data-answer="over the word limit"><option value="">—</option><option value="spelling">spelling</option><option value="over the word limit">over the word limit</option><option value="wrong word form">wrong word form</option><option value="singular/plural changes the meaning">singular/plural changes the meaning</option><option value="a word you predicted, not one you heard">a word you predicted, not one you heard</option></select><span><b>2.</b> Q1: <i>the start of the scientific revolution</i></span></div><div class="sel-row"><select class="select" id="t3-why-3" data-answer="wrong word form"><option value="">—</option><option value="spelling">spelling</option><option value="over the word limit">over the word limit</option><option value="wrong word form">wrong word form</option><option value="singular/plural changes the meaning">singular/plural changes the meaning</option><option value="a word you predicted, not one you heard">a word you predicted, not one you heard</option></select><span><b>3.</b> Q6: <i>bright</i></span></div><div class="sel-row"><select class="select" id="t3-why-4" data-answer="a word you predicted, not one you heard"><option value="">—</option><option value="spelling">spelling</option><option value="over the word limit">over the word limit</option><option value="wrong word form">wrong word form</option><option value="singular/plural changes the meaning">singular/plural changes the meaning</option><option value="a word you predicted, not one you heard">a word you predicted, not one you heard</option></select><span><b>4.</b> Q8: <i>supernova</i></span></div><div class="sel-row"><select class="select" id="t3-why-5" data-answer="over the word limit"><option value="">—</option><option value="spelling">spelling</option><option value="over the word limit">over the word limit</option><option value="wrong word form">wrong word form</option><option value="singular/plural changes the meaning">singular/plural changes the meaning</option><option value="a word you predicted, not one you heard">a word you predicted, not one you heard</option></select><span><b>5.</b> Q2: <i>the planet Earth’s surface</i></span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-why', 't3-why-score')">Check answers</button>
+          <span id="t3-why-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 16</div>
+      <h2>Practice Test — Section 1: Lake Pane Campground</h2>
+      <p class="task-sub"><b>The full test starts now.</b> The recording includes the exam instructions and pauses. Section 1 — a phone booking. Answers are checked when you press <b>Next</b>.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Practice test · Section 1 — Questions 1–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/practice-test-track22.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 1–5</p><p class="qg-instr">Complete the form below. Write <b>NO MORE THAN ONE WORD AND/OR A NUMBER</b> for each answer.</p></div>
+<div class="card" id="t4-notes2"><p class="prompt-label">Lake Pane Campground, US — Bookings</p><div style="line-height:2.1;"><div><i>Example:</i> Length of stay: <u>5 nights</u></div><div>Date of arrival: (1) <input type="text" class="text-answer" id="t4-1" data-correct="23rd july/23 july/july 23/july 23rd/23rd of july/23.7" autocomplete="off" style="width:150px;"></div><div>Family name: (2) <input type="text" class="text-answer" id="t4-2" data-correct="hepworth" autocomplete="off" style="width:150px;"></div><div>Contact number: (3) <input type="text" class="text-answer" id="t4-3" data-correct="07968 355630/07968355630" autocomplete="off" style="width:170px;"></div><div>Camp facilities: (4) <input type="text" class="text-answer" id="t4-4" data-correct="electricity/electric" autocomplete="off" style="width:140px;">, water and (5) <input type="text" class="text-answer" id="t4-5" data-correct="drain/sewer" autocomplete="off" style="width:130px;"></div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-notes2', 't4-notes2-score')">Check answers</button>
+          <span id="t4-notes2-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 6–10</p><p class="qg-instr">Complete the notes below. Write <b>NO MORE THAN TWO WORDS AND/OR A NUMBER</b> for each answer.</p></div>
+<div class="card" id="t4-notes3"><div style="line-height:2.1;"><div>Site code: (6) <input type="text" class="text-answer" id="t4-6" data-correct="sew 47/sew47" autocomplete="off" style="width:120px;"></div><div>Location: Drive past the offices and (7) <input type="text" class="text-answer" id="t4-7" data-correct="pool/swimming pool" autocomplete="off" style="width:140px;">. Keep going until you reach the (8) <input type="text" class="text-answer" id="t4-8" data-correct="laundry" autocomplete="off" style="width:130px;">. Then turn left.</div><div>Remember: Do not leave (9) <input type="text" class="text-answer" id="t4-9" data-correct="litter/rubbish" autocomplete="off" style="width:130px;">. Return the (10) <input type="text" class="text-answer" id="t4-10" data-correct="shower key/washroom key" autocomplete="off" style="width:150px;">.</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-notes3', 't4-notes3-score')">Check answers</button>
+          <span id="t4-notes3-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 16</div>
+      <h2>Practice Test — Section 2: Colour in Food and Fashion</h2>
+      <p class="task-sub">Section 2 — a radio talk. Read Questions 11–20 quickly before you press play.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Practice test · Section 2 — Questions 11–20</p>
+        <audio controls preload="none" style="width:100%;" src="audio/practice-test-track23.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–14</p><p class="qg-instr">What does the speaker say about the following natural food colourings? Choose the correct letter, <b>A–F</b>.</p></div>
+<div class="card"><p class="prompt-label">Statements</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; It is made using another food product.<br><b>B</b>&nbsp; The ingredients are difficult to find.<br><b>C</b>&nbsp; It is also used to dye cosmetics.<br><b>D</b>&nbsp; Sales fell then increased.<br><b>E</b>&nbsp; It can be used to give processed food a uniform colour.<br><b>F</b>&nbsp; It is less popular than other dyes.</p></div>
+      <div class="card" id="t5-m"><div class="sel-row"><select class="select" id="t5-m-11" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>11.</b> green</span></div><div class="sel-row"><select class="select" id="t5-m-12" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>12.</b> brown</span></div><div class="sel-row"><select class="select" id="t5-m-13" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>13.</b> red</span></div><div class="sel-row"><select class="select" id="t5-m-14" data-answer="F"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>14.</b> blue</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-m', 't5-m-score')">Check answers</button>
+          <span id="t5-m-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 15–17</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b> or <b>C</b>.</p></div>
+      <div class="card" id="t5-mc"><div class="q-item" id="t5-mc-15">
+          <p>15. When we buy new clothes, our</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-15" data-correct="false"> A. friends may not like the colours we choose.</label><label><input type="radio" value="1" name="t5-mc-15" data-correct="true"> B. choice may be based on the colours we see.</label><label><input type="radio" value="2" name="t5-mc-15" data-correct="false"> C. ideas about fashion may not be up to date.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-16">
+          <p>16. Colourists are people who</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-16" data-correct="false"> A. decide which colours suit us best.</label><label><input type="radio" value="1" name="t5-mc-16" data-correct="false"> B. create the dyes that are used to make clothes.</label><label><input type="radio" value="2" name="t5-mc-16" data-correct="true"> C. predict which colours will be fashionable in the future.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-17">
+          <p>17. What does the speaker say about the colours we wear?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-17" data-correct="true"> A. The colours we like change as we get older.</label><label><input type="radio" value="1" name="t5-mc-17" data-correct="false"> B. Most people prefer light colours to dark ones.</label><label><input type="radio" value="2" name="t5-mc-17" data-correct="false"> C. We worry too much about the colour of clothes.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-mc', 't5-mc-score')">Check answers</button>
+          <span id="t5-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 18–20</p><p class="qg-instr">Complete the sentences. Write <b>ONE WORD ONLY</b> for each answer.</p></div>
+      <div class="card" id="t5-sc" style="line-height:2.4;"><p>18. Both a product and its <input type="text" class="text-answer" id="t5-18" data-correct="packaging" autocomplete="off" style="width:140px;"> must appeal to consumers.</p><p>19. Green indicates that businesses care about the <input type="text" class="text-answer" id="t5-19" data-correct="environment" autocomplete="off" style="width:140px;">.</p><p>20. Blue helps people to think in a more <input type="text" class="text-answer" id="t5-20" data-correct="creative" autocomplete="off" style="width:130px;"> way.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-sc', 't5-sc-score')">Check answers</button>
+          <span id="t5-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 16</div>
+      <h2>Practice Test — Section 3: International Student Mobility</h2>
+      <p class="task-sub">Section 3 — a tutor and two students. For “Choose TWO letters”, the two answers can come in any order in the recording; enter them here in <b>alphabetical order</b>.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Practice test · Section 3 — Questions 21–30</p>
+        <audio controls preload="none" style="width:100%;" src="audio/practice-test-track24.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 21–26</p><p class="qg-instr">Complete the table. Write <b>ONE WORD ONLY</b> for each answer.</p></div>
+<div class="card" style="overflow-x:auto;"><p class="prompt-label">International student mobility</p><table class="data-table" style="width:100%;">
+<tr><th>Questions</th><th>Findings</th></tr>
+<tr><td>What is the total number?</td><td>• about 3 million<br>• Not every country uses the same <b>(21)</b> ______ for an international student.<br>• Figure may be much higher.</td></tr>
+<tr><td>What is the global <b>(22)</b> ______?</td><td>• Figures may be inaccurate.<br>• <b>(23)</b> ______ organisations may be ignored.</td></tr>
+<tr><td>Where do students come from?</td><td>Big increases in figures for North America and <b>(24)</b> ______</td></tr>
+<tr><td>Are student <b>(25)</b> ______ changing?</td><td>• more <b>(26)</b> ______<br>• a spirit of exchange</td></tr></table></div>
+      <div class="card" id="t6-t" style="line-height:2.6;"><p>21. <input type="text" class="text-answer" id="t6-21" data-correct="definition" autocomplete="off" style="width:130px;"> &nbsp; 22. <input type="text" class="text-answer" id="t6-22" data-correct="breakdown" autocomplete="off" style="width:130px;"> &nbsp; 23. <input type="text" class="text-answer" id="t6-23" data-correct="private" autocomplete="off" style="width:120px;"></p><p>24. <input type="text" class="text-answer" id="t6-24" data-correct="europe" autocomplete="off" style="width:120px;"> &nbsp; 25. <input type="text" class="text-answer" id="t6-25" data-correct="destinations" autocomplete="off" style="width:140px;"> &nbsp; 26. <input type="text" class="text-answer" id="t6-26" data-correct="competition/opportunities" autocomplete="off" style="width:150px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-t', 't6-t-score')">Check answers</button>
+          <span id="t6-t-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 27–28</p><p class="qg-instr">Choose <b>TWO</b> letters, <b>A–E</b>. When choosing a course, which TWO factors did students consider important? (alphabetical order)</p></div>
+<div class="card"><p class="prompt-label">Options</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; how expensive the course is<br><b>B</b>&nbsp; the reputation of the institution<br><b>C</b>&nbsp; the distance from home<br><b>D</b>&nbsp; the qualifications of the tutors<br><b>E</b>&nbsp; how useful the qualification will be</p></div>
+      <div class="card" id="t6-a"><div class="sel-row"><select class="select" id="t6-a-27" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>27.</b> first letter</span></div><div class="sel-row"><select class="select" id="t6-a-28" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>28.</b> second letter</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-a', 't6-a-score')">Check answers</button>
+          <span id="t6-a-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 29–30</p><p class="qg-instr">Choose <b>TWO</b> letters, <b>A–E</b>. Which TWO incentives would encourage graduates to return home? (alphabetical order)</p></div>
+<div class="card"><p class="prompt-label">Options</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; scholarships for higher degrees<br><b>B</b>&nbsp; research grants<br><b>C</b>&nbsp; special housing<br><b>D</b>&nbsp; lower tax rates<br><b>E</b>&nbsp; special work zones</p></div>
+      <div class="card" id="t6-b"><div class="sel-row"><select class="select" id="t6-b-29" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>29.</b> first letter</span></div><div class="sel-row"><select class="select" id="t6-b-30" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>30.</b> second letter</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-b', 't6-b-score')">Check answers</button>
+          <span id="t6-b-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 16</div>
+      <h2>Practice Test — Section 4: Lions</h2>
+      <p class="task-sub">Section 4 — a lecture with <b>no break</b>. Read all ten gaps first and predict the type of word.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Practice test · Section 4 — Questions 31–40</p>
+        <audio controls preload="none" style="width:100%;" src="audio/practice-test-track25.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 31–40</p><p class="qg-instr">Complete the notes below. Write <b>NO MORE THAN TWO WORDS</b> for each answer.</p></div>
+<div class="card" id="t7-notes4"><p class="prompt-label">LIONS</p><div style="line-height:2.1;"><div><b>Lion history</b></div><div>• Found today in Africa and a (31) <input type="text" class="text-answer" id="t7-31" data-correct="forest" autocomplete="off" style="width:120px;"> in India</div><div>• Have lived on every continent apart from Antarctica and (32) <input type="text" class="text-answer" id="t7-32" data-correct="australia" autocomplete="off" style="width:130px;"></div><div>• Killed by early humans: (a) in competition for food; (b) for (33) <input type="text" class="text-answer" id="t7-33" data-correct="clothing" autocomplete="off" style="width:130px;"></div><div><b>Cave paintings</b></div><div>• (34) <input type="text" class="text-answer" id="t7-34" data-correct="fossil evidence" autocomplete="off" style="width:150px;"> confirms European lions much bigger than African lions</div><div>• Date of first appearance of mane (35) <input type="text" class="text-answer" id="t7-35" data-correct="unknown/is unknown" autocomplete="off" style="width:130px;"></div><div><b>Purpose of mane</b></div><div>• Mane is comparable to (36) <input type="text" class="text-answer" id="t7-36" data-correct="human hair" autocomplete="off" style="width:140px;"> in some ways</div><div>• Researchers first believed mane used for (37) <input type="text" class="text-answer" id="t7-37" data-correct="protection" autocomplete="off" style="width:130px;"> during fights</div><div><b>The lion expert’s study</b></div><div>• Made some (38) <input type="text" class="text-answer" id="t7-38" data-correct="toys/toy lions/models/model lions" autocomplete="off" style="width:140px;"> with different manes</div><div>• (39) <input type="text" class="text-answer" id="t7-39" data-correct="long dark/dark long/long, dark" autocomplete="off" style="width:140px;"> manes attracted female lions</div><div>• Conclusion: mane is a (40) <input type="text" class="text-answer" id="t7-40" data-correct="status symbol" autocomplete="off" style="width:140px;"></div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-notes4', 't7-notes4-score')">Check answers</button>
+          <span id="t7-notes4-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 16</div>
+      <h2>Practice Test — Answer Analysis and Your Band</h2>
+      <p class="task-sub">Open each answer to see what you heard and where the traps were. Then total your score and find your band.</p>
+      <div class="card an-card"><p class="an-intro">Script quotations are from the Complete IELTS Bands 6.5–7.5 recording scripts.</p><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">23rd July</span><span class="an-where">S1</span></summary><div class="an-body"><p>The caller gives the arrival date while the example (5 nights) has already been done. Dates can be written in several ways — all standard forms are accepted.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">HEPWORTH</span><span class="an-where">S1</span></summary><div class="an-body"><p>Spelt out letter by letter. Capital or small letters are both fine, but every letter must be correct.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">07968 355630</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">Yes – it’s 07968 355630</span>. The manager then asks if she wants to give her <i>home</i> number — he says no, so there is only one number.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">electricity</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">would you like to hook up to our electricity?</span></p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">drain / sewer</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">you can have a site with a sewer – or I think you guys call it a drain</span>. Either word is accepted.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">SEW 47</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">Most of our sites are coded … EW or SEW … yours is one of the SEW ones and it’s number 47</span>.</p><p><span class="trap">Trap:</span> EW is mentioned first.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">(swimming) pool</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">there’s another office next to ours … and there’s a pool behind that</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">laundry</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">at the very end there’s a laundry … Turn left at the laundry</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">litter / rubbish</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">we do ask our visitors to take away all their litter</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">shower key</span><span class="an-where">S1</span></summary><div class="an-body"><p><span class="ev">you’ll be able to get a key for the shower … could you return it when you leave?</span></p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">E</span><span class="an-where">S2 green</span></summary><div class="an-body"><p>Tinned peas may not be green all over, so a natural additive gives them the perfect, even shade → a <b>uniform colour</b> for processed food.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">A</span><span class="an-where">S2 brown</span></summary><div class="an-body"><p>Brown food colouring comes from <i>caramelised sugar</i> — another food product.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">D</span><span class="an-where">S2 red</span></summary><div class="an-body"><p>Cochineal was <span class="ev">unpopular with consumers for some years</span>, but health scares about artificial dyes mean <span class="ev">more shoppers are buying cochineal again</span>.</p><p><span class="trap">Trap:</span> Cochineal is made from insects — but the speaker does not say the ingredients are hard to find (B).</p></div></details><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">F</span><span class="an-where">S2 blue</span></summary><div class="an-body"><p><span class="ev">there is little demand for the colouring</span> → less popular.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">B</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">the shops are full of it, and you’ve ended up buying an orange shirt … simply because it’s this season’s colour</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">C</span><span class="an-where">S2</span></summary><div class="an-body"><p>Colourists <span class="ev">have to look ahead and say what colour models will be wearing … several years in advance</span>.</p><p><span class="trap">Trap:</span> They make deals with suppliers of dyes — but they do not create the dyes (B).</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">A</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">Like everything, our tastes alter with age</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">packaging</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">Even the packaging has to be carefully designed in order to maximise sales</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">environment</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">green … promotes the view that the company cares about the environment</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">creative</span><span class="an-where">S2</span></summary><div class="an-body"><p><span class="ev">blue is a much better stimulus for creative thought</span>.</p><p><span class="trap">Trap:</span> Red used to be associated with creativity — the speaker corrects this.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">definition</span><span class="an-where">S3</span></summary><div class="an-body"><p><span class="ev">the definition of the term ‘international student’ varies across countries</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">breakdown</span><span class="an-where">S3</span></summary><div class="an-body"><p>The students look at the global <i>breakdown</i> — how the total divides between countries.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">private</span><span class="an-where">S3</span></summary><div class="an-body"><p>Figures from <i>private</i> organisations may not be counted.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">Europe</span><span class="an-where">S3</span></summary><div class="an-body"><p>The big increases are for North America and Europe.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">destinations</span><span class="an-where">S3</span></summary><div class="an-body"><p>The question is whether student <i>destinations</i> — where students go — are changing.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">competition / opportunities</span><span class="an-where">S3</span></summary><div class="an-body"><p>More <i>competition</i> between countries for students (also accepted: opportunities).</p></div></details><details class="an-item"><summary><span class="an-n">27–28</span><span class="an-ans">B, E</span><span class="an-where">S3</span></summary><div class="an-body"><p>Students chose by talking to friends → <span class="ev">not by looking at how many degrees or publications the staff had</span> (so not D), but <span class="ev">they were interested in the degrees they were taking and whether … they’d get a good job</span> → reputation (B) and usefulness (E).</p></div></details><details class="an-item"><summary><span class="an-n">29–30</span><span class="an-ans">B, D</span><span class="an-where">S3</span></summary><div class="an-body"><p>Scholarships to return and study were not wanted (A ✗). <span class="ev">grants for research … much more popular</span> (B) and <span class="ev">tax exemptions</span> (D). Work zones did not appeal to Arts students (E ✗).</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">forest</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">some small groups in the Indian forest of Gir</span>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">Australia</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">the only continents that were and have always been lion-free were … Antarctica … and Australia</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">clothing</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">with many lions also being killed to make clothing</span>.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">fossil evidence</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">there’s plenty of fossil evidence that supports the larger proportions</span>.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">unknown</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">the date when the lion’s mane first appeared is unknown</span>.</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">human hair</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">a lion’s mane can be various lengths and colours, not unlike human hair</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">protection</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">the mane acts as a form of protection during battles</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">toys / models</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">to make five toy lions</span> … later called <span class="ev">the models</span>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">long dark</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">the female lions were attracted to the ones that had long, dark manes</span>.</p><p><span class="trap">Trap:</span> The males attacked the <i>short, blond</i> ones.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">status symbol</span><span class="an-where">S4</span></summary><div class="an-body"><p><span class="ev">a lion’s mane is effectively a status symbol</span>.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Listening)</p>
+<table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr>
+<tr><td>23–25</td><td>6.0</td></tr><tr><td>26–29</td><td>6.5</td></tr><tr><td>30–31</td><td>7.0</td></tr><tr><td>32–34</td><td>7.5</td></tr><tr><td>35–36</td><td>8.0</td></tr><tr><td>37–38</td><td>8.5</td></tr><tr><td>39–40</td><td>9.0</td></tr></table></div>
+      <div class="card"><p class="mini-q">1. Your score out of 40 and your estimated band:</p><textarea class="no-check mini-answer" id="t8-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. In which section did you lose most marks? Was it because of speed, distractors, spelling or concentration?</p><textarea class="no-check mini-answer" id="t8-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Choose one answer you got wrong. What exactly did you hear, and why did it mislead you?</p><textarea class="no-check mini-answer" id="t8-rf-3" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-rf-btn">Show some ideas</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-rf-ans"><p>Typical patterns: Section 1 marks lost through <b>spelling and number format</b> (HEPWORTH, the phone number); Section 2 through <b>distractors</b> (red = creativity is corrected to blue); Section 3 through the <b>two-letter questions</b>, where three options are mentioned but only two are confirmed; Section 4 through <b>concentration</b> in the second half.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 16</div>
+      <h2>Extra Listening 1 — Section 4: Urban Beekeeping</h2>
+      <p class="task-sub">An extra lecture recorded for today. Read the notes for 40 seconds, then play once. Answers are checked when you press <b>Next</b>; the full transcript comes in Task 11.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Extra lecture — Questions 1–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/extra-urban-bees.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 1–10</p><p class="qg-instr">Complete the notes below. Write <b>ONE WORD ONLY</b> for each answer.</p></div>
+<div class="card" id="t9-notes5"><p class="prompt-label">Urban beekeeping</p><div style="line-height:2.1;"><div>• The Paris Opera has kept bees on its roof since the (1) <input type="text" class="text-answer" id="t9-1" data-correct="1980s/1980’s/1980" autocomplete="off" style="width:120px;">.</div><div>• The honeybee is not endangered; it is essentially a (2) <input type="text" class="text-answer" id="t9-2" data-correct="domesticated" autocomplete="off" style="width:150px;"> animal.</div><div>• Species in decline: bumblebees and (3) <input type="text" class="text-answer" id="t9-3" data-correct="solitary" autocomplete="off" style="width:130px;"> bees.</div><div>• Britain: about 270 bee species — only (4) <input type="text" class="text-answer" id="t9-4" data-correct="one/1" autocomplete="off" style="width:90px;"> is the honeybee.</div><div>• Honeybees and wild bees compete for nectar and (5) <input type="text" class="text-answer" id="t9-5" data-correct="pollen" autocomplete="off" style="width:120px;">.</div><div>• London: hives more than doubled, but flowering (6) <input type="text" class="text-answer" id="t9-6" data-correct="vegetation" autocomplete="off" style="width:140px;"> barely changed.</div><div>• Montreal: as hive numbers rose, the (7) <input type="text" class="text-answer" id="t9-7" data-correct="diversity" autocomplete="off" style="width:130px;"> of wild bees fell.</div><div>• Managed colonies can spread viruses and (8) <input type="text" class="text-answer" id="t9-8" data-correct="parasites" autocomplete="off" style="width:130px;">.</div><div>• Recommendation 1: match hive numbers to the availability of (9) <input type="text" class="text-answer" id="t9-9" data-correct="forage" autocomplete="off" style="width:120px;">.</div><div>• Recommendation 2: redirect money and enthusiasm towards (10) <input type="text" class="text-answer" id="t9-10" data-correct="planting" autocomplete="off" style="width:120px;">.</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-notes5', 't9-notes5-score')">Check answers</button>
+          <span id="t9-notes5-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 16</div>
+      <h2>Extra Listening 2 — Section 3: Noise in Open-Plan Offices</h2>
+      <p class="task-sub">An extra Section 3 recording. Read Questions 1–10, then play once.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Extra discussion — Questions 1–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/extra-open-plan.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 1–7</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b> or <b>C</b>.</p></div>
+      <div class="card" id="t10-mc"><div class="q-item" id="t10-mc-1">
+          <p>1. According to the literature, the most distracting noise is</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-1" data-correct="false"> A. loud machinery.</label><label><input type="radio" value="1" name="t10-mc-1" data-correct="true"> B. conversation that can be understood.</label><label><input type="radio" value="2" name="t10-mc-1" data-correct="false"> C. air conditioning.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-2">
+          <p>2. How many employees did the students interview?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-2" data-correct="false"> A. 12</label><label><input type="radio" value="1" name="t10-mc-2" data-correct="true"> B. 24</label><label><input type="radio" value="2" name="t10-mc-2" data-correct="false"> C. 42</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-3">
+          <p>3. Which group complained least about noise?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-3" data-correct="false"> A. managers</label><label><input type="radio" value="1" name="t10-mc-3" data-correct="true"> B. the sales team</label><label><input type="radio" value="2" name="t10-mc-3" data-correct="false"> C. new employees</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-4">
+          <p>4. What does the tutor say about the students’ explanation for this?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-4" data-correct="true"> A. It should be presented as a possibility, not a finding.</label><label><input type="radio" value="1" name="t10-mc-4" data-correct="false"> B. It is probably wrong.</label><label><input type="radio" value="2" name="t10-mc-4" data-correct="false"> C. It needs to be tested with a survey.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-5">
+          <p>5. What was the problem with the quiet zones?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-5" data-correct="false"> A. Staff disliked the idea.</label><label><input type="radio" value="1" name="t10-mc-5" data-correct="true"> B. They were full early in the day.</label><label><input type="radio" value="2" name="t10-mc-5" data-correct="false"> C. People still made phone calls there.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-6">
+          <p>6. What did some managers say about the headphones?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-6" data-correct="false"> A. They were too expensive.</label><label><input type="radio" value="1" name="t10-mc-6" data-correct="true"> B. Staff became less willing to help each other.</label><label><input type="radio" value="2" name="t10-mc-6" data-correct="false"> C. Productivity fell.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-7">
+          <p>7. What does the tutor think could be the most original part of the project?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-7" data-correct="false"> A. the interviews</label><label><input type="radio" value="1" name="t10-mc-7" data-correct="false"> B. the literature review</label><label><input type="radio" value="2" name="t10-mc-7" data-correct="true"> C. the discussion of a trade-off</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-mc', 't10-mc-score')">Check answers</button>
+          <span id="t10-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 8–10</p><p class="qg-instr">Complete the notes. Write <b>ONE WORD AND/OR A NUMBER</b> for each answer.</p></div>
+      <div class="card" id="t10-n" style="line-height:2.4;"><p>8. Present the data in a <input type="text" class="text-answer" id="t10-8" data-correct="table" autocomplete="off" style="width:120px;"> rather than a pie chart.</p><p>9. Draft deadline: Friday the <input type="text" class="text-answer" id="t10-9" data-correct="12th/12/twelfth" autocomplete="off" style="width:110px;"></p><p>10. Meeting to discuss the draft: <input type="text" class="text-answer" id="t10-10" data-correct="tuesday" autocomplete="off" style="width:120px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-n', 't10-n-score')">Check answers</button>
+          <span id="t10-n-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 16</div>
+      <h2>Extra Listening — Answers and Transcripts</h2>
+      <p class="task-sub">Check both extra recordings. Read the transcript while you listen again and notice the <b>signposting</b> (“The first point to make is…”, “There is also the question of…”, “And second, and perhaps more importantly…”).</p>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">E1·1</span><span class="an-ans">1980s</span><span class="an-where">lecture</span></summary><div class="an-body"><p>“The Paris Opera has kept bees on its roof since the nineteen eighties.”</p></div></details><details class="an-item"><summary><span class="an-n">E1·2</span><span class="an-ans">domesticated</span><span class="an-where">lecture</span></summary><div class="an-body"><p>“It is essentially a domesticated animal, managed by humans for its honey.”</p></div></details><details class="an-item"><summary><span class="an-n">E1·3</span><span class="an-ans">solitary</span><span class="an-where">lecture</span></summary><div class="an-body"><p>“bumblebees and so-called solitary bees, which nest alone”.</p></div></details><details class="an-item"><summary><span class="an-n">E1·4</span><span class="an-ans">one</span><span class="an-where">lecture</span></summary><div class="an-body"><p>“around two hundred and seventy species of bee, and only one of them is the honeybee.”</p></div></details><details class="an-item"><summary><span class="an-n">E1·5</span><span class="an-ans">pollen</span><span class="an-where">lecture</span></summary><div class="an-body"><p>“compete for the same resource: the nectar and pollen produced by flowers.”</p></div></details><details class="an-item"><summary><span class="an-n">E1·6</span><span class="an-ans">vegetation</span><span class="an-where">lecture</span></summary><div class="an-body"><p>“the amount of flowering vegetation had barely changed.”</p></div></details><details class="an-item"><summary><span class="an-n">E1·7</span><span class="an-ans">diversity</span><span class="an-where">lecture</span></summary><div class="an-body"><p>“As hive numbers rose, the diversity of wild bees fell.”</p></div></details><details class="an-item"><summary><span class="an-n">E1·8</span><span class="an-ans">parasites</span><span class="an-where">lecture</span></summary><div class="an-body"><p>“Managed colonies can carry viruses and parasites”. Plural.</p></div></details><details class="an-item"><summary><span class="an-n">E1·9</span><span class="an-ans">forage</span><span class="an-where">lecture</span></summary><div class="an-body"><p>“matched to the availability of forage, in other words, to the quantity of flowers”. The speaker defines the word immediately — a common lecture pattern.</p></div></details><details class="an-item"><summary><span class="an-n">E1·10</span><span class="an-ans">planting</span><span class="an-where">lecture</span></summary><div class="an-body"><p>“money and enthusiasm should be redirected towards planting.”</p></div></details><details class="an-item"><summary><span class="an-n">E2·1</span><span class="an-ans">B</span><span class="an-where">discussion</span></summary><div class="an-body"><p>“it isn’t loud noise … It’s conversation, especially when you can understand what’s being said.” Air conditioning “hardly matters”.</p></div></details><details class="an-item"><summary><span class="an-n">E2·2</span><span class="an-ans">B</span><span class="an-where">discussion</span></summary><div class="an-body"><p>“We interviewed twenty-four employees at two companies.”</p></div></details><details class="an-item"><summary><span class="an-n">E2·3</span><span class="an-ans">B</span><span class="an-where">discussion</span></summary><div class="an-body"><p>“the people who complained least were in the sales team.”</p></div></details><details class="an-item"><summary><span class="an-n">E2·4</span><span class="an-ans">A</span><span class="an-where">discussion</span></summary><div class="an-body"><p>“You should present it as a possible explanation, not a finding.”</p></div></details><details class="an-item"><summary><span class="an-n">E2·5</span><span class="an-ans">B</span><span class="an-where">discussion</span></summary><div class="an-body"><p>“Staff liked the idea, but … the zones were often full by nine o’clock.”</p><p><span class="trap">Trap:</span> A — staff <i>liked</i> the idea.</p></div></details><details class="an-item"><summary><span class="an-n">E2·6</span><span class="an-ans">B</span><span class="an-where">discussion</span></summary><div class="an-body"><p>“people became isolated and less willing to help each other.” Productivity seemed to <i>improve</i> (C ✗).</p></div></details><details class="an-item"><summary><span class="an-n">E2·7</span><span class="an-ans">C</span><span class="an-where">discussion</span></summary><div class="an-body"><p>“That’s an interesting trade-off … It could be the most original part of your project.”</p></div></details><details class="an-item"><summary><span class="an-n">E2·8</span><span class="an-ans">table</span><span class="an-where">discussion</span></summary><div class="an-body"><p>“I’d suggest a simple table rather than a pie chart.”</p></div></details><details class="an-item"><summary><span class="an-n">E2·9</span><span class="an-ans">12th</span><span class="an-where">discussion</span></summary><div class="an-body"><p>“Friday the twelfth”.</p></div></details><details class="an-item"><summary><span class="an-n">E2·10</span><span class="an-ans">Tuesday</span><span class="an-where">discussion</span></summary><div class="an-body"><p>“we’ll meet the following Tuesday”.</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Signposting.</strong> What does each phrase from the lecture signal?</p>
+      <div class="card" id="t11-sig"><div class="sel-row"><select class="select" id="t11-sig-1" data-answer="introducing the first point"><option value="">—</option><option value="introducing the first point">introducing the first point</option><option value="adding a new point">adding a new point</option><option value="giving a definition">giving a definition</option><option value="introducing the most important point">introducing the most important point</option><option value="contrasting appearance and reality">contrasting appearance and reality</option></select><span><b>1.</b> “The first point to make is that…”</span></div><div class="sel-row"><select class="select" id="t11-sig-2" data-answer="adding a new point"><option value="">—</option><option value="introducing the first point">introducing the first point</option><option value="adding a new point">adding a new point</option><option value="giving a definition">giving a definition</option><option value="introducing the most important point">introducing the most important point</option><option value="contrasting appearance and reality">contrasting appearance and reality</option></select><span><b>2.</b> “There is also the question of disease.”</span></div><div class="sel-row"><select class="select" id="t11-sig-3" data-answer="giving a definition"><option value="">—</option><option value="introducing the first point">introducing the first point</option><option value="adding a new point">adding a new point</option><option value="giving a definition">giving a definition</option><option value="introducing the most important point">introducing the most important point</option><option value="contrasting appearance and reality">contrasting appearance and reality</option></select><span><b>3.</b> “…forage, in other words, the quantity of flowers…”</span></div><div class="sel-row"><select class="select" id="t11-sig-4" data-answer="introducing the most important point"><option value="">—</option><option value="introducing the first point">introducing the first point</option><option value="adding a new point">adding a new point</option><option value="giving a definition">giving a definition</option><option value="introducing the most important point">introducing the most important point</option><option value="contrasting appearance and reality">contrasting appearance and reality</option></select><span><b>4.</b> “And second, and perhaps more importantly,…”</span></div><div class="sel-row"><select class="select" id="t11-sig-5" data-answer="contrasting appearance and reality"><option value="">—</option><option value="introducing the first point">introducing the first point</option><option value="adding a new point">adding a new point</option><option value="giving a definition">giving a definition</option><option value="introducing the most important point">introducing the most important point</option><option value="contrasting appearance and reality">contrasting appearance and reality</option></select><span><b>5.</b> “At first sight… The reality, however, is rather more complicated.”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-sig', 't11-sig-score')">Check answers</button>
+          <span id="t11-sig-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 16</div>
+      <h2>Dictation — Numbers, Names and Academic Sentences</h2>
+      <p class="task-sub">Dictation trains the accuracy that Section 1 and Section 4 reward. Each item is read <b>twice</b>. Type exactly what you hear.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Dictation Part A — numbers and names</p>
+        <audio controls preload="none" style="width:100%;" src="audio/dictation-a.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Pause the recording if you need more time to type.</p></div>
+      <div class="card" id="t12-a" style="line-height:2.5;"><p>1. a response rate of <input type="text" class="text-answer" id="t12-a1" data-correct="62.5%/62.5 per cent/62.5 percent/62.5" autocomplete="off" style="width:140px;"></p><p>2. the manuscript dates from <input type="text" class="text-answer" id="t12-a2" data-correct="1863" autocomplete="off" style="width:110px;"></p><p>3. the lead researcher: Dr <input type="text" class="text-answer" id="t12-a3" data-correct="pemberton-hale" autocomplete="off" style="width:170px;"></p><p>4. applications close at 5 p.m. on <input type="text" class="text-answer" id="t12-a4" data-correct="30th september/30 september/september 30/september 30th/the 30th of september" autocomplete="off" style="width:190px;"></p><p>5. a sample of <input type="text" class="text-answer" id="t12-a5" data-correct="2,418/2418" autocomplete="off" style="width:120px;"> households</p><p>6. funding fell from <input type="text" class="text-answer" id="t12-a6" data-correct="1.2 million/1,200,000/1200000" autocomplete="off" style="width:140px;"> to just under 900,000</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-a', 't12-a-score')">Check answers</button>
+          <span id="t12-a-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card audio-card"><p class="prompt-label">🎧 Dictation Part B — academic sentences</p>
+        <audio controls preload="none" style="width:100%;" src="audio/dictation-b.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Write the missing words exactly. Spelling counts.</p></div>
+      <div class="card" id="t12-b" style="line-height:2.5;"><p>1. The <input type="text" class="text-answer" id="t12-b1" data-correct="hypothesis" autocomplete="off" style="width:130px;"> was not supported by the <input type="text" class="text-answer" id="t12-b2" data-correct="subsequent" autocomplete="off" style="width:130px;"> experiments.</p><p>2. Researchers acknowledged a number of <input type="text" class="text-answer" id="t12-b3" data-correct="methodological" autocomplete="off" style="width:160px;"> limitations.</p><p>3. The <input type="text" class="text-answer" id="t12-b4" data-correct="phenomenon" autocomplete="off" style="width:140px;"> has been documented in several independent studies.</p><p>4. <input type="text" class="text-answer" id="t12-b5" data-correct="biodiversity" autocomplete="off" style="width:140px;"> in the region has declined considerably since the 1970s.</p><p>5. Critics argue that the conclusions are somewhat <input type="text" class="text-answer" id="t12-b6" data-correct="premature" autocomplete="off" style="width:130px;">.</p><p>6. The data were collected <input type="text" class="text-answer" id="t12-b7" data-correct="anonymously" autocomplete="off" style="width:140px;"> in order to protect participants.</p><p>7. A <input type="text" class="text-answer" id="t12-b8" data-correct="comprehensive" autocomplete="off" style="width:150px;"> analysis of the archive is still under way.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-b', 't12-b-score')">Check answers</button>
+          <span id="t12-b-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 16</div>
+      <h2>TED Talk — Inside the Mind of a Master Procrastinator</h2>
+      <p class="task-sub">Watch Tim Urban’s TED talk (about 14 minutes). Watch once without subtitles; turn on English subtitles the second time if you need them. Then answer the questions and summarise the talk in writing and aloud.</p>
+      <div class="card" style="padding:0; overflow:hidden;"><div style="position:relative; padding-top:56.25%;">
+          <iframe src="https://embed.ted.com/talks/tim_urban_inside_the_mind_of_a_master_procrastinator" title="Tim Urban — Inside the mind of a master procrastinator" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe>
+        </div></div>
+      <div class="card" id="t13-mc"><div class="q-item" id="t13-mc-1">
+          <p>1. What experience does Urban use to open the talk?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-mc-1" data-correct="false"> A. failing a driving test</label><label><input type="radio" value="1" name="t13-mc-1" data-correct="true"> B. writing a 90-page university thesis at the last minute</label><label><input type="radio" value="2" name="t13-mc-1" data-correct="false"> C. missing a flight</label><label><input type="radio" value="3" name="t13-mc-1" data-correct="false"> D. losing a job interview</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-mc-2">
+          <p>2. In Urban’s model, who takes control of the procrastinator’s brain?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-mc-2" data-correct="false"> A. the Panic Monster</label><label><input type="radio" value="1" name="t13-mc-2" data-correct="true"> B. the Instant Gratification Monkey</label><label><input type="radio" value="2" name="t13-mc-2" data-correct="false"> C. the Rational Decision-Maker</label><label><input type="radio" value="3" name="t13-mc-2" data-correct="false"> D. the Dark Playground</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-mc-3">
+          <p>3. What scares the Monkey away?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-mc-3" data-correct="true"> A. the Panic Monster, when a deadline gets close</label><label><input type="radio" value="1" name="t13-mc-3" data-correct="false"> B. a teacher’s warning</label><label><input type="radio" value="2" name="t13-mc-3" data-correct="false"> C. a cup of coffee</label><label><input type="radio" value="3" name="t13-mc-3" data-correct="false"> D. a to-do list</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-mc-4">
+          <p>4. Why, according to Urban, is procrastination worse in situations with no deadline?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-mc-4" data-correct="false"> A. Because people work too hard.</label><label><input type="radio" value="1" name="t13-mc-4" data-correct="true"> B. Because the Panic Monster never appears.</label><label><input type="radio" value="2" name="t13-mc-4" data-correct="false"> C. Because the Monkey gets bored.</label><label><input type="radio" value="3" name="t13-mc-4" data-correct="false"> D. Because people forget their goals.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-mc-5">
+          <p>5. What is the purpose of the “Life Calendar” at the end?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-mc-5" data-correct="false"> A. to plan holidays</label><label><input type="radio" value="1" name="t13-mc-5" data-correct="true"> B. to show how few weeks a human life contains</label><label><input type="radio" value="2" name="t13-mc-5" data-correct="false"> C. to measure productivity</label><label><input type="radio" value="3" name="t13-mc-5" data-correct="false"> D. to explain sleep cycles</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-mc', 't13-mc-score')">Check answers</button>
+          <span id="t13-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the talk in your own words — <b>at least 120 words</b>. Capture the central argument, the key evidence and any counter-argument, and end with a one-sentence evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the talk (at least 120 words):</p><textarea class="no-check mini-answer" id="t13-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:180px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t13-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t13-sum-ans"><p>Tim Urban uses humour and simple drawings to explain why some people put things off. Drawing on his own experience of writing a 90-page university thesis in the final three days, he describes the procrastinator’s brain as containing a Rational Decision-Maker that is regularly overruled by an Instant Gratification Monkey, which prefers easy, enjoyable activities. The only thing the Monkey fears is the Panic Monster, which wakes up when a deadline approaches and forces the person to work. Urban’s key point is that this system breaks down when there is no deadline — for example, in pursuing a career change, improving one’s health or maintaining relationships — because the Panic Monster never appears, and the delay can continue for years. He ends with a “Life Calendar” showing a 90-year life as a grid of weeks, arguing that everyone is procrastinating about something. I found the talk entertaining, and its point about deadline-free goals is genuinely thought-provoking.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t13-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the talk <b>aloud</b> without reading your written summary — speak for <b>at least 60 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central argument is that…”</li><li>“Urban illustrates this with…”</li><li>“What makes his point especially relevant is…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 16</div>
+      <h2>Speaking Parts 2 and 3 — Across the Universe</h2>
+      <p class="task-sub">First listen to a model Part 3 answer from Unit 8, then give your own Part 2 talk and answer the Part 3 questions, each in its own box.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Unit 8 · Track 18 — model Part 3 discussion</p>
+        <audio controls preload="none" style="width:100%;" src="audio/unit8-track18.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Listen for the phrases the speaker uses to give opinions and speculate about the future.</p></div>
+      <div class="question-box" data-field="t14-speaking-p2">
+        <div class="q-num">Part 2 — long turn</div>
+        <div class="q-text"><b>Part 2.</b> Describe a story about space (real or fictitious) that you have read about or seen in a film or on TV. You should say: when you read about or saw the story; what happened in the story; whether the story has any significance today — and explain how you felt about this story. <i>(1 minute to prepare, then speak for up to 2 minutes.)</i></div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The story I’d like to talk about is…”</li><li>“What struck me most was…”</li><li>“Looking back, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t14-speaking-1">
+        <div class="q-num">Part 3 — Question 1</div>
+        <div class="q-text">Is space exploration a good use of public money?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“There’s a strong argument that…”</li><li>“Having said that,…”</li><li>“On balance, I’d say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t14-speaking-2">
+        <div class="q-num">Part 3 — Question 2</div>
+        <div class="q-text">How might space exploration change ordinary people’s lives in the future?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s quite conceivable that…”</li><li>“In the long run,…”</li><li>“I doubt whether…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t14-speaking-3">
+        <div class="q-num">Part 3 — Question 3</div>
+        <div class="q-text">Why do you think so many films and books are about space?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I suppose it’s because…”</li><li>“There’s something about the unknown that…”</li><li>“It reflects…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task15" data-task="15">
+      <div class="task-eyebrow">Task 15 of 16</div>
+      <h2>Vocabulary — Listening Spelling and Collocations</h2>
+      <p class="task-sub">These words appeared in today’s recordings — and they are among the most commonly misspelled words in IELTS Listening. Type the correct spelling, then complete the collocations.</p>
+      <div class="card" id="t15-sp" style="line-height:2.4;"><p>1. a place to stay: <input type="text" class="text-answer" id="t15-1" data-correct="accommodation" autocomplete="off" style="width:150px;"></p><p>2. the natural world: <input type="text" class="text-answer" id="t15-2" data-correct="environment" autocomplete="off" style="width:150px;"></p><p>3. when the Moon blocks the Sun: a solar <input type="text" class="text-answer" id="t15-3" data-correct="eclipse" autocomplete="off" style="width:130px;"></p><p>4. the system of laws in a country: <input type="text" class="text-answer" id="t15-4" data-correct="government" autocomplete="off" style="width:140px;"></p><p>5. a list of written questions: <input type="text" class="text-answer" id="t15-5" data-correct="questionnaire" autocomplete="off" style="width:150px;"></p><p>6. the third day of the working week: <input type="text" class="text-answer" id="t15-6" data-correct="wednesday" autocomplete="off" style="width:140px;"></p><p>7. money given to pay for research: a <input type="text" class="text-answer" id="t15-7" data-correct="grant" autocomplete="off" style="width:110px;"></p><p>8. how things develop over time: <input type="text" class="text-answer" id="t15-8" data-correct="evolution" autocomplete="off" style="width:130px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-sp', 't15-sp-score')">Check answers</button>
+          <span id="t15-sp-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t15-col"><div class="q-item" id="t15-col-1">
+          <p>1. to ______ an experiment</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-col-1" data-correct="true"> conduct</label><label><input type="radio" value="1" name="t15-col-1" data-correct="false"> make up</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t15-col-2">
+          <p>2. to ______ awareness</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-col-2" data-correct="false"> rise</label><label><input type="radio" value="1" name="t15-col-2" data-correct="true"> raise</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t15-col-3">
+          <p>3. to ______ the brightness of a star</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-col-3" data-correct="false"> look after</label><label><input type="radio" value="1" name="t15-col-3" data-correct="true"> monitor</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t15-col-4">
+          <p>4. a ______ symbol</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-col-4" data-correct="false"> state</label><label><input type="radio" value="1" name="t15-col-4" data-correct="true"> status</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t15-col-5">
+          <p>5. to ______ a deadline</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-col-5" data-correct="true"> meet</label><label><input type="radio" value="1" name="t15-col-5" data-correct="false"> reach out</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t15-col-6">
+          <p>6. ______ evidence</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-col-6" data-correct="true"> fossil</label><label><input type="radio" value="1" name="t15-col-6" data-correct="false"> fossilised</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-col', 't15-col-score')">Check answers</button>
+          <span id="t15-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task16" data-task="16">
+      <div class="task-eyebrow">Task 16 of 16</div>
+      <h2>Writing Task 2 — Space or Earth?</h2>
+      <p class="task-sub">Finish the day with a full Task 2 essay on the Unit 8 topic. Spend about <b>40 minutes</b> and write <b>at least 250 words</b>.</p>
+<div class="card advice-card"><p class="prompt-label">Plan before you write</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Discuss both views</b> — give each a full paragraph with reasons and examples, then state your own opinion clearly.</li><li><b>View 1:</b> pressing problems on Earth — poverty, health, climate.</li><li><b>View 2:</b> the benefits of space research — satellites, weather forecasting, technology spin-offs, inspiration.</li><li><b>Your opinion:</b> a precise position (e.g. space spending is justified when it serves Earth-based needs).</li></ul></div>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Some people think that governments should spend money on exploring space. Others believe this money should be spent on solving problems on Earth. Discuss both views and give your own opinion.</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t16-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t16-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t16-essay-model"><div class="model-text" style="padding:2px 0;">
+  <p>Space programmes cost billions, and at a time of poverty, disease and climate change, it is reasonable to ask whether that money should be spent closer to home. While I understand this view, I believe that well-chosen investment in space is one of the ways in which we solve problems on Earth.</p>
+  <p>Those who oppose space spending argue that governments have a moral duty to address urgent human needs first. Millions of people lack clean water, adequate healthcare or education, and the sums spent on a single mission could fund hospitals or schools for years. From this perspective, sending probes to distant planets is a luxury that wealthy nations can only justify once basic problems have been solved.</p>
+  <p>Supporters respond that this presents a false choice. Space research has produced technologies that most people use daily, from satellite navigation and weather forecasting to advances in medical imaging and water purification. Satellites are now essential for monitoring deforestation, crop yields and rising sea levels, which makes them central to tackling climate change rather than a distraction from it. Moreover, space exploration inspires young people to study science and engineering, which benefits every area of a country’s economy.</p>
+  <p>In my view, the strongest argument is that space and Earth are not competing priorities. Governments should continue to fund space research, but with a clear emphasis on missions that bring tangible benefits on Earth, such as climate observation and communications. Prestige projects with little practical value are harder to justify while urgent human needs remain unmet.</p>
+  <p class="alt">≈ 300 words</p>
+</div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 16</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 32 of 45</div>
+    <h1>Day 32 complete! 🎉</h1>
+    <p>Day 32 done — the Unit 8 lecture, a full 40-question practice test with analysis, two extra recordings, dictation, a TED talk, speaking and a Task 2 essay.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+    initWritingCoach('t16-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Some people think that governments should spend money on exploring space. Others believe this money should be spent on solving problems on Earth. Discuss both views and give your own opinion.' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t13-speaking-summary"]'); if (b) initRecordControl(b, user.id, 32, 13, 't13-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t14-speaking-p2"]'); if (b) initRecordControl(b, user.id, 32, 14, 't14-speaking-p2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t14-speaking-1"]'); if (b) initRecordControl(b, user.id, 32, 14, 't14-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t14-speaking-2"]'); if (b) initRecordControl(b, user.id, 32, 14, 't14-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t14-speaking-3"]'); if (b) initRecordControl(b, user.id, 32, 14, 't14-speaking-3', 0); }
+
+    await initTaskFlow(32, 16, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-notes1', 't2-notes1-score'); },
+      3: () => { checkAllAnswers('t3-why', 't3-why-score'); },
+      4: () => { checkAllAnswers('t4-notes2', 't4-notes2-score'); checkAllAnswers('t4-notes3', 't4-notes3-score'); },
+      5: () => { checkAllAnswers('t5-m', 't5-m-score'); checkAllAnswers('t5-mc', 't5-mc-score'); checkAllAnswers('t5-sc', 't5-sc-score'); },
+      6: () => { checkAllAnswers('t6-t', 't6-t-score'); checkAllAnswers('t6-a', 't6-a-score'); checkAllAnswers('t6-b', 't6-b-score'); },
+      7: () => { checkAllAnswers('t7-notes4', 't7-notes4-score'); },
+      9: () => { checkAllAnswers('t9-notes5', 't9-notes5-score'); },
+      10: () => { checkAllAnswers('t10-mc', 't10-mc-score'); checkAllAnswers('t10-n', 't10-n-score'); },
+      11: () => { checkAllAnswers('t11-sig', 't11-sig-score'); },
+      12: () => { checkAllAnswers('t12-a', 't12-a-score'); checkAllAnswers('t12-b', 't12-b-score'); },
+      13: () => { checkAllAnswers('t13-mc', 't13-mc-score'); },
+      15: () => { checkAllAnswers('t15-sp', 't15-sp-score'); checkAllAnswers('t15-col', 't15-col-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t8-rf-btn', 't8-rf-ans', '[id^="t8-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t13-sum-btn', 't13-sum-ans', '[id^="t13-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t16-essay-model-btn', 't16-essay-model', '#t16-essay');
+  });
+</script>
+</body>
+</html>
