@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 31 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 31 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 15</div>
+      <h2>Starting Off — Reading Test Day</h2>
+      <p class="task-sub">Today is a long <b>reading day</b> — plan for about <b>3 hours</b>. You will take a full IELTS Reading test (3 passages, 40 questions, 60 minutes) with full answer analysis, then two extra articles, three reading-skills tasks, vocabulary, a speaking discussion and a Task 2 essay. Take a short break after the test.</p>
+      <p style="margin-top:26px;"><strong>Test strategy.</strong> Choose the best advice.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. Passage 3 is usually the hardest. What is the smartest plan?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. Do Passage 3 first while you are fresh.</label><label><input type="radio" value="1" name="t1-st-1" data-correct="false"> B. Keep strictly to 20 minutes per passage and transfer nothing until the end.</label><label><input type="radio" value="2" name="t1-st-1" data-correct="true"> C. Move faster through Passage 1 so you bank extra minutes for Passage 3.</label><label><input type="radio" value="3" name="t1-st-1" data-correct="false"> D. Skip Passage 1 entirely.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. A statement says “always”, but the passage says “usually”. The answer is most likely</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="false"> A. TRUE</label><label><input type="radio" value="1" name="t1-st-2" data-correct="true"> B. FALSE</label><label><input type="radio" value="2" name="t1-st-2" data-correct="false"> C. NOT GIVEN</label><label><input type="radio" value="3" name="t1-st-2" data-correct="false"> D. impossible to decide</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. In a matching-features task (e.g. match statements to researchers), the statements are</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="false"> A. in passage order</label><label><input type="radio" value="1" name="t1-st-3" data-correct="true"> B. not in passage order</label><label><input type="radio" value="2" name="t1-st-3" data-correct="false"> C. always about one researcher</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. never paraphrased</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. What does “NO MORE THAN TWO WORDS” allow?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="true"> A. one or two words</label><label><input type="radio" value="1" name="t1-st-4" data-correct="false"> B. exactly two words</label><label><input type="radio" value="2" name="t1-st-4" data-correct="false"> C. two words and a number only</label><label><input type="radio" value="3" name="t1-st-4" data-correct="false"> D. three short words</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Vocabulary for today’s passages.</strong> Match each word to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. frustration</button><button type="button" class="lm-item" data-key="2">2. estimate</button><button type="button" class="lm-item" data-key="3">3. endangered</button><button type="button" class="lm-item" data-key="4">4. revive</button><button type="button" class="lm-item" data-key="5">5. agitation</button><button type="button" class="lm-item" data-key="6">6. deception</button><button type="button" class="lm-item" data-key="7">7. subsidise</button><button type="button" class="lm-item" data-key="8">8. novelty</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. the quality of being new and unusual</button><button type="button" class="lm-item" data-key="b">b. making someone believe something that is not true</button><button type="button" class="lm-item" data-key="c">c. an approximate calculation</button><button type="button" class="lm-item" data-key="d">d. a state of worry and nervous restlessness</button><button type="button" class="lm-item" data-key="e">e. at risk of disappearing completely</button><button type="button" class="lm-item" data-key="f">f. pay part of the cost of something</button><button type="button" class="lm-item" data-key="g">g. the feeling of being annoyed because you cannot change something</button><button type="button" class="lm-item" data-key="h">h. bring back into use or life</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 15</div>
+      <h2>Reading Passage 1 — Why Waiting in Line Feels So Long</h2>
+      <p class="task-sub"><b>The test starts now.</b> Spend about <b>18 minutes</b> on Questions 1–13: <b>TRUE / FALSE / NOT GIVEN</b>, <b>note completion</b> and <b>multiple choice</b>. Answers are checked when you press <b>Next</b> — you cannot change them afterwards.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Why Waiting in Line Feels So Long<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Research into queues shows that our frustration has less to do with the clock than with the mind.</small></h3>
+            <p class="article-meta">Reading Passage 1 · Psychology · 548 words</p>
+            <p><span class="para-label">A</span>Most of us spend a surprising amount of our lives waiting in queues — at supermarkets, airports, banks and government offices. One estimate suggests that the average person in a developed country spends around six months of their life standing in line. Yet research into queues has shown that the frustration we feel depends less on how long we actually wait than on how the wait is experienced.</p><p><span class="para-label">B</span>The modern study of queuing began in Copenhagen in the early twentieth century, when a Danish engineer, Agner Krarup Erlang, worked for the city’s telephone company. Erlang wanted to calculate how many telephone lines and operators were needed so that callers would not have to wait too long to be connected. His mathematical work, now known as queuing theory, is still used today to plan everything from call centres to hospital emergency departments.</p><p><span class="para-label">C</span>Mathematics, however, can only solve part of the problem. In the 1980s, David Maister, a business professor, argued that the psychology of waiting matters as much as its length. One of his best-known observations was that unoccupied time feels longer than occupied time. This is why many restaurants hand customers a menu while they wait for a table, and why lifts in tall buildings often have mirrors beside them: people who are busy looking at themselves are less likely to complain about the wait.</p><p><span class="para-label">D</span>A famous example comes from an airport in Houston, Texas. Passengers there complained constantly about the time they spent waiting for their luggage. The airport employed more baggage handlers, which reduced the average wait to eight minutes, but the complaints continued. Investigators then discovered that passengers walked for only one minute from the plane to the baggage area and then stood for seven minutes. The solution was surprisingly simple: the airport moved arrival gates further away from the main terminal and sent bags to the most distant carousel. Passengers now walked for six minutes and waited for two, and the complaints almost disappeared.</p><p><span class="para-label">E</span>Uncertainty also makes waiting worse. People who do not know how long they will wait tend to become more anxious and impatient than those who are given an estimate. For this reason, many theme parks display expected waiting times at the entrance to each ride. Some deliberately overestimate the time, so that visitors are pleasantly surprised when they reach the front sooner than expected.</p><p><span class="para-label">F</span>Perhaps the strongest feeling of all, however, is a sense of unfairness. Research has found that people are more upset by someone pushing in ahead of them than by the length of the wait itself. Many banks and post offices have therefore replaced several separate lines with a single ‘serpentine’ line that feeds customers to the next free counter. Although this does not usually reduce the average waiting time, customers prefer it because everyone is served in order and nobody can choose a faster line.</p><p><span class="para-label">G</span>Technology is now changing the experience again. In many places, customers can take a virtual ticket on their phone and receive a message when it is their turn, allowing them to wait in a café rather than in a line. Yet some researchers believe that a visible queue still has value. A long line outside a restaurant, they point out, can persuade passers-by that the food must be worth waiting for.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. According to one estimate, people in developed countries spend about half a year of their lives queuing.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. Erlang’s work was originally intended to improve hospital services.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. Maister was the first researcher to study the psychology of waiting.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-3" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. In Houston, employing more baggage handlers put an end to the complaints.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-5">
+          <p>5. Some theme parks tell visitors they will wait longer than they really will.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-5" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-6">
+          <p>6. A single serpentine line usually reduces the average time customers wait.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-6" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-6" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–10</p><p class="qg-instr">Complete the notes. Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p></div>
+<div class="card"><p class="prompt-label">Making waits feel shorter</p><ul style="margin:0; padding-left:20px; line-height:2;">
+<li>keep people occupied — e.g. restaurants give customers a <b>(7)</b> ______ while they wait</li>
+<li>place <b>(8)</b> ______ beside lifts</li>
+<li>give an estimate — without one, people become more anxious and <b>(9)</b> ______</li>
+<li>use one serpentine line so that everyone is served in <b>(10)</b> ______</li></ul></div>
+      <div class="card" id="t2-n" style="line-height:2.6;"><p>7. <input type="text" class="text-answer" id="t2-7" data-correct="menu" autocomplete="off" style="width:130px;"> &nbsp; 8. <input type="text" class="text-answer" id="t2-8" data-correct="mirrors" autocomplete="off" style="width:130px;"> &nbsp; 9. <input type="text" class="text-answer" id="t2-9" data-correct="impatient" autocomplete="off" style="width:130px;"> &nbsp; 10. <input type="text" class="text-answer" id="t2-10" data-correct="order" autocomplete="off" style="width:130px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-n', 't2-n-score')">Check answers</button>
+          <span id="t2-n-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–13</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-11">
+          <p>11. What was the real cause of the complaints at the Houston airport?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-11" data-correct="false"> A. There were too few baggage handlers.</label><label><input type="radio" value="1" name="t2-mc-11" data-correct="true"> B. Passengers spent most of their time standing still.</label><label><input type="radio" value="2" name="t2-mc-11" data-correct="false"> C. The walk from the plane was too long.</label><label><input type="radio" value="3" name="t2-mc-11" data-correct="false"> D. Luggage was often lost.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-12">
+          <p>12. Why, according to paragraph F, do customers prefer a single line?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-12" data-correct="false"> A. It is always faster.</label><label><input type="radio" value="1" name="t2-mc-12" data-correct="true"> B. It feels fairer.</label><label><input type="radio" value="2" name="t2-mc-12" data-correct="false"> C. It takes up less space.</label><label><input type="radio" value="3" name="t2-mc-12" data-correct="false"> D. They can choose their counter.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-13">
+          <p>13. What point do some researchers make about visible queues?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-13" data-correct="false"> A. They will soon disappear.</label><label><input type="radio" value="1" name="t2-mc-13" data-correct="false"> B. They make customers angry.</label><label><input type="radio" value="2" name="t2-mc-13" data-correct="true"> C. They can make a business seem more attractive.</label><label><input type="radio" value="3" name="t2-mc-13" data-correct="false"> D. They are cheaper than virtual tickets.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 15</div>
+      <h2>Reading Passage 1 — Answer Analysis</h2>
+      <p class="task-sub">Open each answer. Pay special attention to <b>FALSE vs NOT GIVEN</b> and to the paraphrases in the notes.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Why Waiting in Line Feels So Long</summary>
+        <p><span class="para-label">A</span>Most of us spend a surprising amount of our lives waiting in queues — at supermarkets, airports, banks and government offices. One estimate suggests that the average person in a developed country spends around six months of their life standing in line. Yet research into queues has shown that the frustration we feel depends less on how long we actually wait than on how the wait is experienced.</p><p><span class="para-label">B</span>The modern study of queuing began in Copenhagen in the early twentieth century, when a Danish engineer, Agner Krarup Erlang, worked for the city’s telephone company. Erlang wanted to calculate how many telephone lines and operators were needed so that callers would not have to wait too long to be connected. His mathematical work, now known as queuing theory, is still used today to plan everything from call centres to hospital emergency departments.</p><p><span class="para-label">C</span>Mathematics, however, can only solve part of the problem. In the 1980s, David Maister, a business professor, argued that the psychology of waiting matters as much as its length. One of his best-known observations was that unoccupied time feels longer than occupied time. This is why many restaurants hand customers a menu while they wait for a table, and why lifts in tall buildings often have mirrors beside them: people who are busy looking at themselves are less likely to complain about the wait.</p><p><span class="para-label">D</span>A famous example comes from an airport in Houston, Texas. Passengers there complained constantly about the time they spent waiting for their luggage. The airport employed more baggage handlers, which reduced the average wait to eight minutes, but the complaints continued. Investigators then discovered that passengers walked for only one minute from the plane to the baggage area and then stood for seven minutes. The solution was surprisingly simple: the airport moved arrival gates further away from the main terminal and sent bags to the most distant carousel. Passengers now walked for six minutes and waited for two, and the complaints almost disappeared.</p><p><span class="para-label">E</span>Uncertainty also makes waiting worse. People who do not know how long they will wait tend to become more anxious and impatient than those who are given an estimate. For this reason, many theme parks display expected waiting times at the entrance to each ride. Some deliberately overestimate the time, so that visitors are pleasantly surprised when they reach the front sooner than expected.</p><p><span class="para-label">F</span>Perhaps the strongest feeling of all, however, is a sense of unfairness. Research has found that people are more upset by someone pushing in ahead of them than by the length of the wait itself. Many banks and post offices have therefore replaced several separate lines with a single ‘serpentine’ line that feeds customers to the next free counter. Although this does not usually reduce the average waiting time, customers prefer it because everyone is served in order and nobody can choose a faster line.</p><p><span class="para-label">G</span>Technology is now changing the experience again. In many places, customers can take a virtual ticket on their phone and receive a message when it is their turn, allowing them to wait in a café rather than in a line. Yet some researchers believe that a visible queue still has value. A long line outside a restaurant, they point out, can persuade passers-by that the food must be worth waiting for.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">One estimate suggests that the average person … spends around six months of their life standing in line</span>. six months = half a year.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Erlang wanted to calculate how many telephone lines and operators were needed</span>. It was for a telephone company; hospitals use it <i>today</i>.</p><p><span class="trap">Trap:</span> <i>hospital emergency departments</i> appears in the paragraph — but as a modern use, not the original aim.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para C</span></summary><div class="an-body"><p>Maister <span class="ev">argued that the psychology of waiting matters as much as its length</span> — but the passage does not say he was the <b>first</b>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">FALSE</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">reduced the average wait to eight minutes, but the complaints continued</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">TRUE</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Some deliberately overestimate the time</span>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">FALSE</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">this does not usually reduce the average waiting time</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">menu</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">many restaurants hand customers a menu while they wait for a table</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">mirrors</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">lifts in tall buildings often have mirrors beside them</span>. Plural.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">impatient</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">tend to become more anxious and impatient</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">order</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">everyone is served in order</span>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">walked for only one minute … and then stood for seven minutes</span>.</p><p><span class="trap">Trap:</span> A was the airport’s first idea — and it did not work.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">people are more upset by someone pushing in … customers prefer it because everyone is served in order</span> → fairness.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">C</span><span class="an-where">Para G</span></summary><div class="an-body"><p><span class="ev">A long line … can persuade passers-by that the food must be worth waiting for</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 15</div>
+      <h2>Reading Passage 2 — When a Language Dies</h2>
+      <p class="task-sub">Spend about <b>20 minutes</b> on Questions 14–26: <b>matching headings</b>, <b>matching sentence endings</b> and <b>summary completion</b>.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Sentence endings:</b> the correct ending must fit the meaning <b>and</b> the grammar. Read the beginning, find it in the passage, then choose — two endings may look possible until you check the passage.</li><li><b>Headings:</b> cross out each heading once you have used it (in this task each heading is used once).</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">When a Language Dies<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Hundreds of the world’s languages may fall silent this century. What is lost — and can anything be done?</small></h3>
+            <p class="article-meta">Reading Passage 2 · Language and culture · 481 words</p>
+            <p><span class="para-label">A</span>Of the roughly 7,000 languages spoken in the world today, linguists estimate that around 40 per cent are endangered, and that one disappears on average every few months. Many of these languages have never been written down, so when their last speakers die, an entire system of words, sounds and grammar can vanish without leaving a trace. Half of the world’s population, meanwhile, speaks just 23 of the largest languages.</p><p><span class="para-label">B</span>Languages rarely die suddenly. More often, the process takes place over three or four generations. Parents who speak a minority language at home decide, often for practical reasons, to raise their children in a national or global language that seems to offer better jobs and education. The children may understand their grandparents’ language but no longer speak it, and their own children may not understand it at all. By the time anyone notices, there may be only a handful of elderly speakers left.</p><p><span class="para-label">C</span>Why should this matter to people who have never heard these languages? One answer is that each language contains knowledge that cannot easily be translated. Communities that have lived in one place for centuries often have detailed names for local plants, animals and weather patterns. Researchers working with speakers of indigenous languages in the Pacific, for instance, have recorded words that distinguish dozens of types of fish and the seasons when each can be caught. When the language is lost, much of this knowledge goes with it.</p><p><span class="para-label">D</span>Languages also reveal the variety of ways in which the human mind can organise experience. Some languages, for example, have no words for ‘left’ and ‘right’, and their speakers describe position using compass directions instead, saying things like ‘the cup is to the north of the plate’. Speakers of such languages have been found to have an exceptional sense of direction, even in unfamiliar buildings. Each language that is lost reduces the evidence available to scientists who study how language and thought are connected.</p><p><span class="para-label">E</span>Not every story ends in loss, however. Hebrew, which for centuries was used mainly for religious and written purposes, was revived as an everyday spoken language in the late nineteenth and twentieth centuries and now has millions of native speakers. In New Zealand, Māori ‘language nests’ — pre-schools in which young children are cared for entirely in Māori — have helped to increase the number of young speakers since they were introduced in the 1980s. In Wales, the number of Welsh speakers has stabilised after decades of decline, partly because of Welsh-language schools and television.</p><p><span class="para-label">F</span>Technology offers new tools as well. Linguists can now record speakers on inexpensive digital equipment, and online dictionaries and language-learning apps allow scattered communities to use their language daily. Yet experts warn that recordings alone cannot save a language. A language survives, they argue, only if it is spoken by children, and that depends on whether families believe it has a future.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–19</p><p class="qg-instr">The passage has six paragraphs, <b>A–F</b>. Choose the correct heading for each paragraph from the list below.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; Clues to how we think<br><b>ii</b>&nbsp; Why global languages are easier to learn<br><b>iii</b>&nbsp; The scale of the loss<br><b>iv</b>&nbsp; The limits of recordings and apps<br><b>v</b>&nbsp; How a language slowly fades away<br><b>vi</b>&nbsp; Examples of successful revival<br><b>vii</b>&nbsp; The cost of teaching minority languages<br><b>viii</b>&nbsp; Local knowledge at risk</p></div>
+      <div class="card" id="t4-h"><div class="sel-row"><select class="select" id="t4-h-14" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>14.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t4-h-15" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>15.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t4-h-16" data-answer="viii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>16.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t4-h-17" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>17.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t4-h-18" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>18.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t4-h-19" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>19.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-h', 't4-h-score')">Check answers</button>
+          <span id="t4-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 20–23</p><p class="qg-instr">Complete each sentence with the correct ending, <b>A–F</b>, below.</p></div>
+<div class="card"><p class="prompt-label">Endings</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; tend to have an unusually good sense of direction.<br><b>B</b>&nbsp; it continues to be spoken by children.<br><b>C</b>&nbsp; it appears to provide better opportunities.<br><b>D</b>&nbsp; are easier to translate into other languages.<br><b>E</b>&nbsp; have increased the number of young speakers.<br><b>F</b>&nbsp; it has a written form.</p></div>
+      <div class="card" id="t4-se"><div class="sel-row"><select class="select" id="t4-se-20" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>20.</b> Parents may raise their children in a national language because</span></div><div class="sel-row"><select class="select" id="t4-se-21" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>21.</b> Speakers of languages without words for left and right</span></div><div class="sel-row"><select class="select" id="t4-se-22" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>22.</b> Māori language nests</span></div><div class="sel-row"><select class="select" id="t4-se-23" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>23.</b> Experts believe that a language will survive only if</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-se', 't4-se-score')">Check answers</button>
+          <span id="t4-se-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 24–26</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p></div>
+      <div class="card" id="t4-s" style="line-height:2.7;"><p>Before it became an everyday spoken language again, Hebrew had mainly been used for religious and (24) <input type="text" class="text-answer" id="t4-24" data-correct="written" autocomplete="off" style="width:120px;"> purposes. In Wales, after many years of decline, the number of Welsh speakers has (25) <input type="text" class="text-answer" id="t4-25" data-correct="stabilised/stabilized" autocomplete="off" style="width:130px;">, partly as a result of Welsh-language schools and (26) <input type="text" class="text-answer" id="t4-26" data-correct="television" autocomplete="off" style="width:130px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-s', 't4-s-score')">Check answers</button>
+          <span id="t4-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 15</div>
+      <h2>Reading Passage 2 — Answer Analysis</h2>
+      <p class="task-sub">Check your answers. Notice how each correct heading summarises the <b>whole</b> paragraph, and how the wrong endings are “true in general” but not what the passage says.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — When a Language Dies</summary>
+        <p><span class="para-label">A</span>Of the roughly 7,000 languages spoken in the world today, linguists estimate that around 40 per cent are endangered, and that one disappears on average every few months. Many of these languages have never been written down, so when their last speakers die, an entire system of words, sounds and grammar can vanish without leaving a trace. Half of the world’s population, meanwhile, speaks just 23 of the largest languages.</p><p><span class="para-label">B</span>Languages rarely die suddenly. More often, the process takes place over three or four generations. Parents who speak a minority language at home decide, often for practical reasons, to raise their children in a national or global language that seems to offer better jobs and education. The children may understand their grandparents’ language but no longer speak it, and their own children may not understand it at all. By the time anyone notices, there may be only a handful of elderly speakers left.</p><p><span class="para-label">C</span>Why should this matter to people who have never heard these languages? One answer is that each language contains knowledge that cannot easily be translated. Communities that have lived in one place for centuries often have detailed names for local plants, animals and weather patterns. Researchers working with speakers of indigenous languages in the Pacific, for instance, have recorded words that distinguish dozens of types of fish and the seasons when each can be caught. When the language is lost, much of this knowledge goes with it.</p><p><span class="para-label">D</span>Languages also reveal the variety of ways in which the human mind can organise experience. Some languages, for example, have no words for ‘left’ and ‘right’, and their speakers describe position using compass directions instead, saying things like ‘the cup is to the north of the plate’. Speakers of such languages have been found to have an exceptional sense of direction, even in unfamiliar buildings. Each language that is lost reduces the evidence available to scientists who study how language and thought are connected.</p><p><span class="para-label">E</span>Not every story ends in loss, however. Hebrew, which for centuries was used mainly for religious and written purposes, was revived as an everyday spoken language in the late nineteenth and twentieth centuries and now has millions of native speakers. In New Zealand, Māori ‘language nests’ — pre-schools in which young children are cared for entirely in Māori — have helped to increase the number of young speakers since they were introduced in the 1980s. In Wales, the number of Welsh speakers has stabilised after decades of decline, partly because of Welsh-language schools and television.</p><p><span class="para-label">F</span>Technology offers new tools as well. Linguists can now record speakers on inexpensive digital equipment, and online dictionaries and language-learning apps allow scattered communities to use their language daily. Yet experts warn that recordings alone cannot save a language. A language survives, they argue, only if it is spoken by children, and that depends on whether families believe it has a future.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">iii</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">around 40 per cent are endangered … one disappears on average every few months</span> — numbers showing the scale.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">v</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Languages rarely die suddenly … the process takes place over three or four generations</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">viii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">detailed names for local plants, animals and weather … When the language is lost, much of this knowledge goes with it</span>.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">i</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">reveal the variety of ways in which the human mind can organise experience</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">vi</span><span class="an-where">Para E</span></summary><div class="an-body"><p>Hebrew, Māori, Welsh — <span class="ev">Not every story ends in loss</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">iv</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">experts warn that recordings alone cannot save a language</span>.</p><p><span class="trap">Trap:</span> ii and vii use topics from the passage (global languages, schools) but no paragraph is about them.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">C</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">a national or global language that seems to offer better jobs and education</span>. seems to offer = appears to provide.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">A</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">have been found to have an exceptional sense of direction</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">E</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">have helped to increase the number of young speakers</span>.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">A language survives … only if it is spoken by children</span>.</p><p><span class="trap">Trap:</span> F — many endangered languages have <i>never been written down</i>, but the passage never says writing is the condition for survival.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">written</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">used mainly for religious and written purposes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">stabilised</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">the number of Welsh speakers has stabilised after decades of decline</span>. <i>stabilized</i> (US spelling) is also accepted.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">television</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">partly because of Welsh-language schools and television</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 15</div>
+      <h2>Reading Passage 3 — Should Robots Care for Older People?</h2>
+      <p class="task-sub">Spend about <b>22 minutes</b> on Questions 27–40: <b>matching features</b>, <b>YES / NO / NOT GIVEN</b>, <b>multiple choice</b> and <b>sentence completion</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Should Robots Care for Older People?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">As populations age and carers become scarce, machines are entering care homes. Not everyone is convinced.</small></h3>
+            <p class="article-meta">Reading Passage 3 · Technology and society · 466 words</p>
+            <p><span class="para-label">A</span>Populations around the world are ageing rapidly. In Japan, almost 30 per cent of people are now over 65, and similar trends are visible across Europe and East Asia. At the same time, many countries face a serious shortage of care workers: Japan alone is expected to need hundreds of thousands more within the next decade. Faced with this gap, governments and companies are increasingly turning to robots.</p><p><span class="para-label">B</span>The robots already in use vary widely. Some, such as robotic beds that turn into wheelchairs or machines that help carers lift patients, perform physical tasks that would otherwise cause back injuries among staff. Others are designed for company. The best known of these is Paro, a robotic baby seal developed by the Japanese engineer Takanori Shibata. Paro responds to touch and voice, moves its head and tail, and makes soft sounds. It has been used in care homes in more than 30 countries.</p><p><span class="para-label">C</span>Supporters claim that such companion robots can bring real benefits. A study led by the nursing researcher Wendy Moyle in Australia found that residents with dementia who spent time with Paro showed less agitation and were more engaged than those who did not. Carers also reported that the robot sometimes helped residents to start conversations with each other. Unlike live animals, robotic pets do not need feeding, cannot bite and do not trigger allergies.</p><p><span class="para-label">D</span>Critics, however, raise serious concerns. The sociologist Sherry Turkle has argued that offering robots as companions to lonely people is a form of deception, since the machine only appears to care. She worries that relying on robots will allow families and societies to feel less responsible for visiting and looking after older relatives. Other researchers point out that the benefits found in studies are often small and short-lived, and that the novelty of a robot may wear off after a few weeks.</p><p><span class="para-label">E</span>Cost is another obstacle. A single Paro costs several thousand dollars, and more advanced robots are far more expensive. A large government programme in Japan, which subsidised care robots for hundreds of care homes, found that many machines were used only occasionally, or not at all, because staff lacked the time or training to operate them. In some cases, introducing robots actually created extra work for carers.</p><p><span class="para-label">F</span>My own view is that the debate is often framed in the wrong way. The question is not whether robots should replace human carers, which almost no one in the field seriously proposes, but which tasks they can do well. Lifting and moving patients, reminding people to take medicine and monitoring for falls are all areas where machines can relieve exhausted staff. Companionship, on the other hand, should remain a human responsibility. Used in this way, robots could give carers more time, not less, for the personal contact that matters most.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 27–30</p><p class="qg-instr">Match each statement with the correct person or group, <b>A–D</b>.</p></div>
+<div class="card"><p class="prompt-label">People and groups</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; Takanori Shibata<br><b>B</b>&nbsp; Wendy Moyle<br><b>C</b>&nbsp; Sherry Turkle<br><b>D</b>&nbsp; a Japanese government programme</p></div>
+      <div class="card" id="t6-mf"><div class="sel-row"><select class="select" id="t6-mf-27" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>27.</b> found that equipment was often left unused</span></div><div class="sel-row"><select class="select" id="t6-mf-28" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>28.</b> fears that robot companions may make people feel less responsible for older relatives</span></div><div class="sel-row"><select class="select" id="t6-mf-29" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>29.</b> created a robot that reacts to touch and voice</span></div><div class="sel-row"><select class="select" id="t6-mf-30" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>30.</b> found that a robot reduced agitation among care-home residents</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mf', 't6-mf-score')">Check answers</button>
+          <span id="t6-mf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 31–35</p><p class="qg-instr">Do the following statements agree with the views of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-31">
+          <p>31. Robots should replace human carers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-31" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-31" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-31" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-32">
+          <p>32. Robots are useful for physical tasks such as moving patients.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-32" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-32" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-32" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-33">
+          <p>33. Companionship should be provided by people rather than machines.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-33" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-33" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-33" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-34">
+          <p>34. Paro is the most effective companion robot available.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-34" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-34" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-34" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-35">
+          <p>35. Care robots will become much cheaper in the future.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-35" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-35" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-35" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 36–38</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-36">
+          <p>36. Paragraph A mainly explains</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-36" data-correct="false"> A. why robots are cheaper than carers.</label><label><input type="radio" value="1" name="t6-mc-36" data-correct="true"> B. why interest in care robots is growing.</label><label><input type="radio" value="2" name="t6-mc-36" data-correct="false"> C. how robots were first developed.</label><label><input type="radio" value="3" name="t6-mc-36" data-correct="false"> D. why older people prefer robots.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-37">
+          <p>37. Which advantage of robotic pets over live animals is mentioned?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-37" data-correct="false"> A. They are cheaper to buy.</label><label><input type="radio" value="1" name="t6-mc-37" data-correct="false"> B. They can talk to residents.</label><label><input type="radio" value="2" name="t6-mc-37" data-correct="true"> C. They cannot bite.</label><label><input type="radio" value="3" name="t6-mc-37" data-correct="false"> D. They live longer.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-38">
+          <p>38. What problem with the Japanese programme does the writer describe?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-38" data-correct="false"> A. The robots broke down easily.</label><label><input type="radio" value="1" name="t6-mc-38" data-correct="true"> B. Staff lacked the time or training to use the robots.</label><label><input type="radio" value="2" name="t6-mc-38" data-correct="false"> C. Residents were afraid of the robots.</label><label><input type="radio" value="3" name="t6-mc-38" data-correct="false"> D. The government stopped paying for it.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 39–40</p><p class="qg-instr">Complete the sentences. Choose <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.</p></div>
+      <div class="card" id="t6-sc" style="line-height:2.4;"><p>39. Machines that help carers lift patients can prevent <input type="text" class="text-answer" id="t6-39" data-correct="back injuries" autocomplete="off" style="width:160px;"> among staff.</p><p>40. Some researchers say the benefits may not last because the <input type="text" class="text-answer" id="t6-40" data-correct="novelty" autocomplete="off" style="width:140px;"> of a robot can wear off.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-sc', 't6-sc-score')">Check answers</button>
+          <span id="t6-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 15</div>
+      <h2>Reading Passage 3 — Answer Analysis and Your Score</h2>
+      <p class="task-sub">Check Passage 3, add up your total out of 40 and find your estimated band. Then reflect on your weakest question type.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Should Robots Care for Older People?</summary>
+        <p><span class="para-label">A</span>Populations around the world are ageing rapidly. In Japan, almost 30 per cent of people are now over 65, and similar trends are visible across Europe and East Asia. At the same time, many countries face a serious shortage of care workers: Japan alone is expected to need hundreds of thousands more within the next decade. Faced with this gap, governments and companies are increasingly turning to robots.</p><p><span class="para-label">B</span>The robots already in use vary widely. Some, such as robotic beds that turn into wheelchairs or machines that help carers lift patients, perform physical tasks that would otherwise cause back injuries among staff. Others are designed for company. The best known of these is Paro, a robotic baby seal developed by the Japanese engineer Takanori Shibata. Paro responds to touch and voice, moves its head and tail, and makes soft sounds. It has been used in care homes in more than 30 countries.</p><p><span class="para-label">C</span>Supporters claim that such companion robots can bring real benefits. A study led by the nursing researcher Wendy Moyle in Australia found that residents with dementia who spent time with Paro showed less agitation and were more engaged than those who did not. Carers also reported that the robot sometimes helped residents to start conversations with each other. Unlike live animals, robotic pets do not need feeding, cannot bite and do not trigger allergies.</p><p><span class="para-label">D</span>Critics, however, raise serious concerns. The sociologist Sherry Turkle has argued that offering robots as companions to lonely people is a form of deception, since the machine only appears to care. She worries that relying on robots will allow families and societies to feel less responsible for visiting and looking after older relatives. Other researchers point out that the benefits found in studies are often small and short-lived, and that the novelty of a robot may wear off after a few weeks.</p><p><span class="para-label">E</span>Cost is another obstacle. A single Paro costs several thousand dollars, and more advanced robots are far more expensive. A large government programme in Japan, which subsidised care robots for hundreds of care homes, found that many machines were used only occasionally, or not at all, because staff lacked the time or training to operate them. In some cases, introducing robots actually created extra work for carers.</p><p><span class="para-label">F</span>My own view is that the debate is often framed in the wrong way. The question is not whether robots should replace human carers, which almost no one in the field seriously proposes, but which tasks they can do well. Lifting and moving patients, reminding people to take medicine and monitoring for falls are all areas where machines can relieve exhausted staff. Companionship, on the other hand, should remain a human responsibility. Used in this way, robots could give carers more time, not less, for the personal contact that matters most.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">D</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">many machines were used only occasionally, or not at all</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">C</span><span class="an-where">Para D</span></summary><div class="an-body"><p>Turkle <span class="ev">worries that relying on robots will allow families and societies to feel less responsible</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">A</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Paro, a robotic baby seal developed by … Takanori Shibata. Paro responds to touch and voice</span>.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">A study led by … Wendy Moyle … found that residents … showed less agitation</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">NO</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">The question is not whether robots should replace human carers, which almost no one … seriously proposes … Companionship … should remain a human responsibility</span>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Lifting and moving patients … are all areas where machines can relieve exhausted staff</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Companionship, on the other hand, should remain a human responsibility</span>.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>Paro is <span class="ev">the best known</span> — but <i>best known</i> is not <i>most effective</i>, and the writer never compares robots.</p><p><span class="trap">Trap:</span> This is a classic NOT GIVEN trap: a similar-looking superlative.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para E</span></summary><div class="an-body"><p>The passage gives current prices only. No prediction is made.</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">B</span><span class="an-where">Para A</span></summary><div class="an-body"><p>Ageing populations + shortage of carers → <span class="ev">governments and companies are increasingly turning to robots</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">C</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">do not need feeding, cannot bite and do not trigger allergies</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">B</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">because staff lacked the time or training to operate them</span>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">back injuries</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">physical tasks that would otherwise cause back injuries among staff</span>.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">novelty</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">the novelty of a robot may wear off after a few weeks</span>.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Academic Reading)</p>
+<table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr>
+<tr><td>15–18</td><td>5.0</td></tr><tr><td>19–22</td><td>5.5</td></tr><tr><td>23–26</td><td>6.0</td></tr><tr><td>27–29</td><td>6.5</td></tr><tr><td>30–32</td><td>7.0</td></tr><tr><td>33–34</td><td>7.5</td></tr><tr><td>35–36</td><td>8.0</td></tr><tr><td>37–38</td><td>8.5</td></tr><tr><td>39–40</td><td>9.0</td></tr></table></div>
+      <div class="card"><p class="mini-q">1. Your score out of 40 and your estimated band:</p><textarea class="no-check mini-answer" id="t7-rf-1" placeholder="Write here..." style="min-height:56px;"></textarea><p class="mini-q">2. Which question type cost you the most marks today, and why do you think that happened?</p><textarea class="no-check mini-answer" id="t7-rf-2" placeholder="Write here..." style="min-height:56px;"></textarea><p class="mini-q">3. What will you change in your next test? Give two concrete actions.</p><textarea class="no-check mini-answer" id="t7-rf-3" placeholder="Write here..." style="min-height:56px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t7-rf-btn">Show some ideas</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t7-rf-ans"><p>Common patterns at this level: choosing <b>FALSE</b> when the passage is simply silent (Q3, Q34); picking a heading because of one shared word; writing a paraphrase instead of the passage word in completion tasks.</p><p>Concrete actions: “Before choosing FALSE, I will find the exact sentence that contradicts the statement”; “I will check each completion answer against the word limit and spelling”; “I will leave matching-information questions until last”.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 15</div>
+      <h2>Extra Reading 1 — The Unexpected Value of Boredom</h2>
+      <p class="task-sub">After the test, the first of two extra articles (about <b>20 minutes</b>). Answer the questions, then summarise the article in writing (<b>at least 100 words</b>) and aloud (<b>at least 45 seconds</b>).</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Unexpected Value of Boredom</h3>
+        <p class="article-meta">Extra reading 1 · Psychology · 332 words</p>
+        <p><span class="para-label">A</span>Boredom has a bad reputation. We associate it with wasted time, and most of us will do almost anything to avoid it — in one well-known experiment, a quarter of the women and two-thirds of the men chose to give themselves a mild electric shock rather than sit alone with their thoughts for fifteen minutes. Smartphones have made escape easier than ever: the moment we have nothing to do, we can fill the gap with messages, videos or games.</p><p><span class="para-label">B</span>Yet a growing number of psychologists argue that boredom has a useful function. It acts, they say, as a signal that our current activity is not satisfying and that we should look for something more meaningful. In this sense, boredom is similar to hunger or pain: unpleasant, but valuable because it pushes us to change our behaviour.</p><p><span class="para-label">C</span>There is also evidence that boredom can encourage creativity. In a study at the University of Central Lancashire in the UK, participants were first asked to copy numbers from a telephone directory — a deliberately dull task — and then to think of as many uses as possible for a pair of plastic cups. They produced more ideas than a group who had not done the boring task first. The researchers suggested that a bored mind begins to daydream, and that daydreaming helps people to make new connections between ideas.</p><p><span class="para-label">D</span>The difficulty is that constant digital stimulation may prevent this process from happening. If every quiet moment is filled with a screen, the mind never has the chance to wander. Some teachers and parents are therefore experimenting with ‘boredom time’ — periods without devices in which children must find their own ways to occupy themselves.</p><p><span class="para-label">E</span>Boredom is not always harmless, however. Chronic boredom, especially at work or school, has been linked to poor performance, unhealthy eating and risk-taking. The aim, psychologists say, is not to seek boredom for its own sake, but to stop treating every empty moment as a problem that must be solved immediately.</p>
+      </div>
+      <div class="card" id="t8-tf"><div class="q-item" id="t8-tf-1">
+          <p>1. In the experiment described, more men than women chose an electric shock over sitting alone.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t8-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-2">
+          <p>2. Psychologists compare boredom to hunger because both are signals to change behaviour.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t8-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-3">
+          <p>3. The Lancashire study found that bored participants made fewer mistakes when copying numbers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t8-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-3" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-4">
+          <p>4. All teachers now include ‘boredom time’ in their lessons.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t8-tf-4" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t8-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-5">
+          <p>5. Long-term boredom at work has been connected with taking risks.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-5" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t8-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-tf', 't8-tf-score')">Check answers</button>
+          <span id="t8-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 100 words</b>. Give the main idea, the key supporting points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 100 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>The article argues that boredom, although unpleasant, can be useful. Many people try hard to avoid it, and smartphones now make it easy to escape every empty moment. However, psychologists believe boredom works like hunger or pain: it signals that we should find something more meaningful to do. It may also encourage creativity, because a bored mind daydreams and makes new connections — in one UK study, people who first did a dull task later produced more creative ideas. The writer warns that constant screen use may stop this from happening, and some parents and teachers now create device-free “boredom time”. Chronic boredom, however, can be harmful. In my view, the article makes a convincing case for leaving some quiet moments unfilled.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 45 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The article focuses on…”</li><li>“According to the writer,…”</li><li>“A key point is that…”</li><li>“However,…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 15</div>
+      <h2>Extra Reading 2 — Why Cities Are Painting Their Roofs White</h2>
+      <p class="task-sub">The second extra article (about <b>20 minutes</b>). Answer the completion questions using words from the article, then summarise it in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Why Cities Are Painting Their Roofs White</h3>
+        <p class="article-meta">Extra reading 2 · Cities and climate · 287 words</p>
+        <p><span class="para-label">A</span>On a hot summer afternoon, the centre of a large city can be several degrees warmer than the countryside around it. This ‘urban heat island’ effect is caused largely by dark surfaces such as asphalt roads and tarred roofs, which absorb sunlight during the day and release the heat slowly at night. As heatwaves become more frequent, the effect is no longer just uncomfortable: it increases energy use for air conditioning and can be deadly for older people.</p><p><span class="para-label">B</span>One of the simplest responses is to make roofs reflect sunlight instead of absorbing it. A conventional black roof can reach temperatures of more than 80°C on a sunny day, while a white or specially coated ‘cool roof’ may stay 30°C cooler. In New York, a programme launched in 2010 has coated more than ten million square feet of roofs, mainly using volunteers. In Ahmedabad, India, low-cost white coatings on the roofs of small homes have reduced indoor temperatures by up to 5°C.</p><p><span class="para-label">C</span>Cool roofs are not without drawbacks. In cold climates, they can increase heating costs in winter, because the building absorbs less of the sun’s warmth. White coatings also become dirty and less effective over time unless they are cleaned or renewed. Some researchers have warned that if cool roofs were used on a very large scale, they could slightly reduce rainfall in certain regions, although this remains uncertain.</p><p><span class="para-label">D</span>For this reason, many experts see cool roofs as one tool among several. Planting trees, which provide shade and cool the air through evaporation, and creating ‘green roofs’ covered with plants can also reduce urban temperatures, and have the added benefits of absorbing rainwater and supporting wildlife. Green roofs, however, are considerably more expensive to install and maintain.</p>
+      </div>
+      <div class="card" id="t9-sc" style="line-height:2.4;"><p class="example-q" style="margin:0 0 6px;">Write <b>ONE WORD OR A NUMBER</b> from the article.</p><p>1. The urban heat island effect is mainly caused by dark surfaces such as roads and <input type="text" class="text-answer" id="t9-1" data-correct="roofs" autocomplete="off" style="width:120px;">.</p><p>2. On a sunny day, a cool roof may be <input type="text" class="text-answer" id="t9-2" data-correct="30°C/30/30C/30 degrees" autocomplete="off" style="width:100px;"> cooler than a black roof.</p><p>3. Much of the work in New York was done by <input type="text" class="text-answer" id="t9-3" data-correct="volunteers" autocomplete="off" style="width:130px;">.</p><p>4. In cold places, cool roofs can raise the cost of <input type="text" class="text-answer" id="t9-4" data-correct="heating" autocomplete="off" style="width:120px;"> in winter.</p><p>5. Apart from cooling, green roofs absorb <input type="text" class="text-answer" id="t9-5" data-correct="rainwater" autocomplete="off" style="width:130px;"> and support wildlife.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-sc', 't9-sc-score')">Check answers</button>
+          <span id="t9-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 100 words</b>. Give the main idea, the key supporting points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 100 words):</p><textarea class="no-check mini-answer" id="t9-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-sum-ans"><p>The article explains why some cities are making their roofs white. Dark surfaces such as roads and roofs absorb heat, so city centres become much hotter than the countryside, which raises energy use and can endanger older people. A “cool roof” reflects sunlight and can be around 30°C cooler than a black one; New York has coated millions of square feet of roofs, and cheap white coatings in Ahmedabad have cut indoor temperatures by up to 5°C. However, cool roofs can increase heating costs in cold climates, need regular cleaning, and might affect rainfall. Experts therefore recommend combining them with trees and green roofs, although green roofs are more expensive. I think cool roofs are a sensible low-cost first step for hot cities like ours.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 45 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The article focuses on…”</li><li>“According to the writer,…”</li><li>“A key point is that…”</li><li>“However,…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 15</div>
+      <h2>Reading Skill — Spotting Paraphrase</h2>
+      <p class="task-sub">Top scorers recognise paraphrase instantly. Match the question language (left) to the passage language (right), then choose the closest meaning.</p>
+      <div class="card" id="t10-lm">
+        <div class="line-match" id="t10-lm-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. half a year</button><button type="button" class="lm-item" data-key="2">2. appears to provide</button><button type="button" class="lm-item" data-key="3">3. an unusually good sense of direction</button><button type="button" class="lm-item" data-key="4">4. left unused</button><button type="button" class="lm-item" data-key="5">5. feel less responsible</button><button type="button" class="lm-item" data-key="6">6. fades away slowly</button><button type="button" class="lm-item" data-key="7">7. tell visitors they will wait longer</button><button type="button" class="lm-item" data-key="8">8. put an end to the complaints</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. an exceptional sense of direction</button><button type="button" class="lm-item" data-key="b">b. the complaints almost disappeared</button><button type="button" class="lm-item" data-key="c">c. seems to offer</button><button type="button" class="lm-item" data-key="d">d. rarely die suddenly</button><button type="button" class="lm-item" data-key="e">e. used only occasionally, or not at all</button><button type="button" class="lm-item" data-key="f">f. six months</button><button type="button" class="lm-item" data-key="g">g. allow families … to feel less responsible</button><button type="button" class="lm-item" data-key="h">h. deliberately overestimate the time</button></div>
+          <select class="lm-hidden-select select" id="t10-lm-1" data-lm-key="1" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-5" data-lm-key="5" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-7" data-lm-key="7" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-8" data-lm-key="8" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm');">Check answers</button>
+          <span id="t10-lm-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t10-mc"><div class="q-item" id="t10-mc-1">
+          <p>1. “The debate is often framed in the wrong way.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-1" data-correct="true"> A. People usually ask the wrong question.</label><label><input type="radio" value="1" name="t10-mc-1" data-correct="false"> B. The debate is too emotional.</label><label><input type="radio" value="2" name="t10-mc-1" data-correct="false"> C. Nobody is interested in the debate.</label><label><input type="radio" value="3" name="t10-mc-1" data-correct="false"> D. The debate has ended.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-2">
+          <p>2. “Mathematics … can only solve part of the problem.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-2" data-correct="false"> A. Mathematics is useless here.</label><label><input type="radio" value="1" name="t10-mc-2" data-correct="true"> B. Mathematics is not enough on its own.</label><label><input type="radio" value="2" name="t10-mc-2" data-correct="false"> C. Mathematics solves the problem completely.</label><label><input type="radio" value="3" name="t10-mc-2" data-correct="false"> D. Mathematics creates new problems.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-3">
+          <p>3. “The benefits found in studies are often small and short-lived.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-3" data-correct="false"> A. The benefits are large but slow.</label><label><input type="radio" value="1" name="t10-mc-3" data-correct="true"> B. The benefits are modest and do not last.</label><label><input type="radio" value="2" name="t10-mc-3" data-correct="false"> C. There are no benefits at all.</label><label><input type="radio" value="3" name="t10-mc-3" data-correct="false"> D. The studies were short.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-4">
+          <p>4. “This remains uncertain.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-4" data-correct="false"> A. This has been proved.</label><label><input type="radio" value="1" name="t10-mc-4" data-correct="true"> B. This has not been confirmed.</label><label><input type="radio" value="2" name="t10-mc-4" data-correct="false"> C. This is impossible.</label><label><input type="radio" value="3" name="t10-mc-4" data-correct="false"> D. This is no longer important.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-mc', 't10-mc-score')">Check answers</button>
+          <span id="t10-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 15</div>
+      <h2>Reading Skill — Linking Words and Reference</h2>
+      <p class="task-sub">Linking words tell you what the writer is doing (contrasting, adding, giving a result). Reference words connect sentences. Both help you answer questions faster.</p>
+      <p style="margin-top:26px;"><strong>Part 1 — What is the function of the underlined word?</strong></p>
+      <div class="card" id="t11-fn"><div class="sel-row"><select class="select" id="t11-fn-1" data-answer="contrast"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="addition">addition</option><option value="example">example</option></select><span><b>1.</b> “Mathematics, <u>however</u>, can only solve part of the problem.”</span></div><div class="sel-row"><select class="select" id="t11-fn-2" data-answer="result"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="addition">addition</option><option value="example">example</option></select><span><b>2.</b> “Many banks … have <u>therefore</u> replaced several separate lines.”</span></div><div class="sel-row"><select class="select" id="t11-fn-3" data-answer="example"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="addition">addition</option><option value="example">example</option></select><span><b>3.</b> “Researchers … in the Pacific, <u>for instance</u>, have recorded words…”</span></div><div class="sel-row"><select class="select" id="t11-fn-4" data-answer="addition"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="addition">addition</option><option value="example">example</option></select><span><b>4.</b> “Technology offers new tools <u>as well</u>.”</span></div><div class="sel-row"><select class="select" id="t11-fn-5" data-answer="contrast"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="addition">addition</option><option value="example">example</option></select><span><b>5.</b> “<u>Yet</u> experts warn that recordings alone cannot save a language.”</span></div><div class="sel-row"><select class="select" id="t11-fn-6" data-answer="result"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="addition">addition</option><option value="example">example</option></select><span><b>6.</b> “<u>For this reason</u>, many theme parks display expected waiting times.”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-fn', 't11-fn-score')">Check answers</button>
+          <span id="t11-fn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Reference.</strong> What does the word in bold refer to?</p>
+      <div class="card" id="t11-ref"><div class="q-item" id="t11-ref-1">
+          <p>1. “…the airport moved arrival gates further away … Passengers now walked for six minutes and waited for two, and the complaints almost disappeared.” What solved the problem?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-1" data-correct="false"> A. more baggage handlers</label><label><input type="radio" value="1" name="t11-ref-1" data-correct="true"> B. a longer walk</label><label><input type="radio" value="2" name="t11-ref-1" data-correct="false"> C. faster carousels</label><label><input type="radio" value="3" name="t11-ref-1" data-correct="false"> D. virtual tickets</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-2">
+          <p>2. “…so that visitors are pleasantly surprised when <b>they</b> reach the front…” — <b>they</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-2" data-correct="false"> A. theme parks</label><label><input type="radio" value="1" name="t11-ref-2" data-correct="true"> B. visitors</label><label><input type="radio" value="2" name="t11-ref-2" data-correct="false"> C. rides</label><label><input type="radio" value="3" name="t11-ref-2" data-correct="false"> D. estimates</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-3">
+          <p>3. “…and <b>that</b> depends on whether families believe it has a future.” — <b>that</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-3" data-correct="false"> A. recording a language</label><label><input type="radio" value="1" name="t11-ref-3" data-correct="true"> B. children speaking the language</label><label><input type="radio" value="2" name="t11-ref-3" data-correct="false"> C. online dictionaries</label><label><input type="radio" value="3" name="t11-ref-3" data-correct="false"> D. scattered communities</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-4">
+          <p>4. “Used in <b>this way</b>, robots could give carers more time.” — <b>this way</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-4" data-correct="false"> A. as companions</label><label><input type="radio" value="1" name="t11-ref-4" data-correct="true"> B. for practical tasks such as lifting and reminders</label><label><input type="radio" value="2" name="t11-ref-4" data-correct="false"> C. as replacements for carers</label><label><input type="radio" value="3" name="t11-ref-4" data-correct="false"> D. only in Japan</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-ref', 't11-ref-score')">Check answers</button>
+          <span id="t11-ref-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 15</div>
+      <h2>Reading Skill — Speed Reading Challenge</h2>
+      <p class="task-sub"><b>Part 1:</b> skim the text in <b>60 seconds</b> and choose the best title. <b>Part 2:</b> scan for the answers in <b>2½ minutes</b> — move your eyes only to names, numbers and capital letters.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">A Short History of the Umbrella</h3>
+        <p class="article-meta">Speed reading · 330 words · 228 words</p>
+        <p><span class="para-label">A</span>Umbrellas have existed for at least 3,000 years, but for most of their history they were used to protect people from the sun, not the rain. In ancient Egypt, Assyria and China, large sunshades were carried by servants above kings and nobles, and the umbrella became a symbol of power and high status. The Chinese are believed to have been the first to make waterproof umbrellas, by covering paper with wax and lacquer, possibly as early as the fourth century.</p><p><span class="para-label">B</span>In Europe, umbrellas were rare until the seventeenth and eighteenth centuries, and for a long time they were seen as an accessory for women. Men who carried them were often laughed at. This began to change in London in the 1750s, when a traveller named Jonas Hanway carried an umbrella in public for some thirty years, ignoring the insults of coach drivers, who feared losing customers on rainy days.</p><p><span class="para-label">C</span>Early umbrellas were heavy, with frames made of wood or whalebone. In 1852, the English manufacturer Samuel Fox designed a lighter frame using steel ribs, which became the basis of most modern umbrellas. The folding pocket umbrella followed in the twentieth century: a German engineer, Hans Haupt, received a patent for a compact design in 1928. Today, it is estimated that more than a billion umbrellas are sold worldwide every year, and the vast majority are produced in China.</p>
+      </div>
+      <div class="card" id="t12-title"><div class="q-item" id="t12-title-1">
+          <p>1. Part 1 — Choose the best title.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-title-1" data-correct="false"> A. Why men refused to carry umbrellas</label><label><input type="radio" value="1" name="t12-title-1" data-correct="true"> B. From royal sunshade to everyday object</label><label><input type="radio" value="2" name="t12-title-1" data-correct="false"> C. How to choose a good umbrella</label><label><input type="radio" value="3" name="t12-title-1" data-correct="false"> D. The umbrella industry in modern China</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-title', 't12-title-score')">Check answers</button>
+          <span id="t12-title-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t12-scan" style="line-height:2.4;"><p>1. What did early Chinese makers cover paper with to make it waterproof? wax and <input type="text" class="text-answer" id="t12-1" data-correct="lacquer" autocomplete="off" style="width:120px;"></p><p>2. In which decade did Jonas Hanway start carrying an umbrella in London? the <input type="text" class="text-answer" id="t12-2" data-correct="1750s" autocomplete="off" style="width:110px;"></p><p>3. Which group of workers insulted Hanway? coach <input type="text" class="text-answer" id="t12-3" data-correct="drivers" autocomplete="off" style="width:120px;"></p><p>4. What material did Samuel Fox use for the ribs? <input type="text" class="text-answer" id="t12-4" data-correct="steel" autocomplete="off" style="width:110px;"></p><p>5. In what year did Hans Haupt receive his patent? <input type="text" class="text-answer" id="t12-5" data-correct="1928" autocomplete="off" style="width:110px;"></p><p>6. Roughly how many umbrellas are sold every year? more than a <input type="text" class="text-answer" id="t12-6" data-correct="billion" autocomplete="off" style="width:110px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-scan', 't12-scan-score')">Check answers</button>
+          <span id="t12-scan-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 15</div>
+      <h2>Vocabulary — Word Families and Collocations</h2>
+      <p class="task-sub">Completion tasks punish the wrong word form. Practise the families and collocations from today’s texts.</p>
+      <div class="card" id="t13-wf" style="line-height:2.4;"><p>1. The <input type="text" class="text-answer" id="t13-1" data-correct="frustration" autocomplete="off" style="width:130px;"> of waiting depends on how the wait is experienced. (frustrate)</p><p>2. Hebrew is a famous example of language <input type="text" class="text-answer" id="t13-2" data-correct="revival" autocomplete="off" style="width:120px;">. (revive)</p><p>3. Some critics see robot companions as <input type="text" class="text-answer" id="t13-3" data-correct="deceptive" autocomplete="off" style="width:120px;">. (deceive)</p><p>4. Japan faces a serious <input type="text" class="text-answer" id="t13-4" data-correct="shortage" autocomplete="off" style="width:120px;"> of care workers. (short)</p><p>5. Long waits can make customers <input type="text" class="text-answer" id="t13-5" data-correct="impatient" autocomplete="off" style="width:120px;">. (patience — opposite)</p><p>6. Cool roofs are an <input type="text" class="text-answer" id="t13-6" data-correct="effective" autocomplete="off" style="width:120px;"> way to reduce heat. (effect)</p><p>7. The number of speakers has been <input type="text" class="text-answer" id="t13-7" data-correct="declining" autocomplete="off" style="width:120px;"> for decades. (decline — verb, -ing)</p><p>8. Researchers <input type="text" class="text-answer" id="t13-8" data-correct="distinguish" autocomplete="off" style="width:120px;"> dozens of types of fish. (distinction)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-wf', 't13-wf-score')">Check answers</button>
+          <span id="t13-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Collocations.</strong> Choose the word that collocates.</p>
+      <div class="card" id="t13-col"><div class="q-item" id="t13-col-1">
+          <p>1. to ______ a gap</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-1" data-correct="true"> fill</label><label><input type="radio" value="1" name="t13-col-1" data-correct="false"> close up</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-2">
+          <p>2. to ______ concerns</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-2" data-correct="false"> lift</label><label><input type="radio" value="1" name="t13-col-2" data-correct="true"> raise</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-3">
+          <p>3. a ______ shortage</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-3" data-correct="true"> serious</label><label><input type="radio" value="1" name="t13-col-3" data-correct="false"> heavy</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-4">
+          <p>4. to ______ the scale of a problem</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-4" data-correct="true"> underestimate</label><label><input type="radio" value="1" name="t13-col-4" data-correct="false"> undercount</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-5">
+          <p>5. the novelty ______ off</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-5" data-correct="false"> goes</label><label><input type="radio" value="1" name="t13-col-5" data-correct="true"> wears</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-6">
+          <p>6. to ______ a trace</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-6" data-correct="true"> leave</label><label><input type="radio" value="1" name="t13-col-6" data-correct="false"> let</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-col', 't13-col-score')">Check answers</button>
+          <span id="t13-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 15</div>
+      <h2>Speaking Part 3 — Discussing Today’s Topics</h2>
+      <p class="task-sub">Answer each question in its own box. Aim for <b>45–60 seconds</b>: opinion, explanation, example, and a short concluding point.</p>
+      <div class="question-box" data-field="t14-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Why do people find waiting so frustrating? How could public services make waiting less stressful?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“A practical solution would be…”</li><li>“For instance,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t14-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Is it important to protect minority languages? Who should be responsible for this?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Personally, I’m convinced that…”</li><li>“Governments have a role, but…”</li><li>“Ultimately, it depends on families…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t14-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Would you be comfortable with a robot looking after an elderly relative? Why or why not?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d have mixed feelings about…”</li><li>“On the one hand,… on the other hand,…”</li><li>“What matters most is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t14-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Do you think people today are ever bored? Is that a good or a bad thing?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Hardly ever, because…”</li><li>“There’s an argument that…”</li><li>“On balance,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task15" data-task="15">
+      <div class="task-eyebrow">Task 15 of 15</div>
+      <h2>Writing Task 2 — Technology and Care for Older People</h2>
+      <p class="task-sub">Finish with a full Task 2 essay on today’s Passage 3 topic. Spend about <b>40 minutes</b> and write <b>at least 250 words</b>. Use ideas from the passage, but in your own words.</p>
+<div class="card advice-card"><p class="prompt-label">Plan before you write</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Position:</b> agree, disagree or partly agree — decide before you start and keep it consistent.</li><li><b>Body 1:</b> where technology helps (physical tasks, safety, staff shortages) + example.</li><li><b>Body 2:</b> why human contact cannot be replaced (loneliness, dignity, responsibility of families).</li><li><b>Conclusion:</b> restate your position precisely (e.g. “technology should support carers, not replace them”).</li></ul></div>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>As populations age, some countries are using robots and other technology to care for older people. Some people believe this is the best solution to the shortage of care workers. To what extent do you agree or disagree?</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t15-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t15-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t15-essay-model"><div class="model-text" style="padding:2px 0;">
+  <p>Many countries are facing a growing gap between the number of older people who need care and the number of workers available to provide it, and some see robots as the answer. While I agree that technology can play a valuable role, I do not believe it is the best overall solution.</p>
+  <p>There is no doubt that machines can reduce the pressure on care staff. Lifting patients, moving them from bed to wheelchair and checking whether someone has fallen are physically demanding tasks, and robots can perform them reliably without injuring workers. Similarly, simple devices can remind older people to take their medicine or alert relatives in an emergency. In Japan, where almost a third of the population is over 65, such technology may be essential simply to keep care homes running.</p>
+  <p>However, care is not only a set of physical tasks. Many older people suffer from loneliness, and what they need most is conversation, attention and the feeling that someone values them. A robotic pet may calm a person for a while, but it cannot genuinely care, and there is a risk that families will visit less if they believe a machine is providing company. Moreover, experience in Japan shows that expensive robots are often left unused when staff lack training, which suggests that money might be better spent on recruiting and paying carers properly.</p>
+  <p>In conclusion, technology should be used to support human carers by taking over routine physical work, so that they have more time for personal contact. Treating robots as a replacement for people, however, would be a mistake.</p>
+  <p class="alt">≈ 290 words</p>
+</div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 15</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 31 of 45</div>
+    <h1>Day 31 complete! 🎉</h1>
+    <p>Day 31 done — a full 40-question reading test with analysis, two extra articles, three reading-skills tasks, vocabulary, a speaking discussion and a Task 2 essay.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t10-lm-lm');
+
+    initWritingCoach('t15-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'As populations age, some countries are using robots and other technology to care for older people. Some people believe this is the best solution to the shortage of care workers. To what extent do you agree or disagree?' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 31, 8, 't8-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-summary"]'); if (b) initRecordControl(b, user.id, 31, 9, 't9-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t14-speaking-1"]'); if (b) initRecordControl(b, user.id, 31, 14, 't14-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t14-speaking-2"]'); if (b) initRecordControl(b, user.id, 31, 14, 't14-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t14-speaking-3"]'); if (b) initRecordControl(b, user.id, 31, 14, 't14-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t14-speaking-4"]'); if (b) initRecordControl(b, user.id, 31, 14, 't14-speaking-4', 0); }
+
+    await initTaskFlow(31, 15, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-n', 't2-n-score'); checkAllAnswers('t2-mc', 't2-mc-score'); },
+      4: () => { checkAllAnswers('t4-h', 't4-h-score'); checkAllAnswers('t4-se', 't4-se-score'); checkAllAnswers('t4-s', 't4-s-score'); },
+      6: () => { checkAllAnswers('t6-mf', 't6-mf-score'); checkAllAnswers('t6-yn', 't6-yn-score'); checkAllAnswers('t6-mc', 't6-mc-score'); checkAllAnswers('t6-sc', 't6-sc-score'); },
+      8: () => { checkAllAnswers('t8-tf', 't8-tf-score'); },
+      9: () => { checkAllAnswers('t9-sc', 't9-sc-score'); },
+      10: () => { checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm'); checkAllAnswers('t10-mc', 't10-mc-score'); },
+      11: () => { checkAllAnswers('t11-fn', 't11-fn-score'); checkAllAnswers('t11-ref', 't11-ref-score'); },
+      12: () => { checkAllAnswers('t12-title', 't12-title-score'); checkAllAnswers('t12-scan', 't12-scan-score'); },
+      13: () => { checkAllAnswers('t13-wf', 't13-wf-score'); checkAllAnswers('t13-col', 't13-col-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t7-rf-btn', 't7-rf-ans', '[id^="t7-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-sum-btn', 't9-sum-ans', '[id^="t9-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t15-essay-model-btn', 't15-essay-model', '#t15-essay');
+  });
+</script>
+</body>
+</html>

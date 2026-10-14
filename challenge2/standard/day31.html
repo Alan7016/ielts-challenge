@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 31 — Standard — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 31 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 14</div>
+      <h2>Starting Off — Reading Test Day</h2>
+      <p class="task-sub">Today is a <b>reading day</b> and a long one — plan for about <b>3 hours</b>. You will do a full IELTS Reading test (3 passages, 40 questions, 60 minutes), check every answer, then do an extra reading, four reading-skills tasks, a speaking discussion and a Task 2 essay. Take a short break after the test.</p>
+      <p style="margin-top:26px;"><strong>Test strategy.</strong> Choose the best advice for each situation.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. You have 60 minutes for three passages. How should you plan your time?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. Spend 30 minutes on Passage 1 because it is the easiest.</label><label><input type="radio" value="1" name="t1-st-1" data-correct="true"> B. About 20 minutes per passage, a little less on Passage 1 and a little more on Passage 3.</label><label><input type="radio" value="2" name="t1-st-1" data-correct="false"> C. Read all three passages first, then answer the questions.</label><label><input type="radio" value="3" name="t1-st-1" data-correct="false"> D. Answer only the questions you like.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. You cannot find the answer to one question after two minutes. What should you do?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="false"> A. Keep looking until you find it.</label><label><input type="radio" value="1" name="t1-st-2" data-correct="false"> B. Leave the whole passage.</label><label><input type="radio" value="2" name="t1-st-2" data-correct="true"> C. Guess, mark it, and move on — come back if you have time.</label><label><input type="radio" value="3" name="t1-st-2" data-correct="false"> D. Leave it blank.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. The instructions say ONE WORD ONLY. What do you write?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="true"> A. one word copied from the passage</label><label><input type="radio" value="1" name="t1-st-3" data-correct="false"> B. a short phrase with the right meaning</label><label><input type="radio" value="2" name="t1-st-3" data-correct="false"> C. a word with the same meaning</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. one word and a number</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. Most questions in a group follow the order of the passage. Which type usually does NOT?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="false"> A. TRUE / FALSE / NOT GIVEN</label><label><input type="radio" value="1" name="t1-st-4" data-correct="false"> B. sentence completion</label><label><input type="radio" value="2" name="t1-st-4" data-correct="true"> C. matching information (Which paragraph…?)</label><label><input type="radio" value="3" name="t1-st-4" data-correct="false"> D. multiple choice</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Vocabulary for today’s passages.</strong> Match each word to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. scarce</button><button type="button" class="lm-item" data-key="2">2. contagious</button><button type="button" class="lm-item" data-key="3">3. evaporate</button><button type="button" class="lm-item" data-key="4">4. humid</button><button type="button" class="lm-item" data-key="5">5. separated</button><button type="button" class="lm-item" data-key="6">6. scheme</button><button type="button" class="lm-item" data-key="7">7. profit</button><button type="button" class="lm-item" data-key="8">8. theory</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. an idea that tries to explain something</button><button type="button" class="lm-item" data-key="b">b. an official plan or system</button><button type="button" class="lm-item" data-key="c">c. easily passed from one person to another</button><button type="button" class="lm-item" data-key="d">d. kept apart</button><button type="button" class="lm-item" data-key="e">e. change from liquid into gas</button><button type="button" class="lm-item" data-key="f">f. money you make after paying your costs</button><button type="button" class="lm-item" data-key="g">g. not enough; difficult to find</button><button type="button" class="lm-item" data-key="h">h. warm and wet (about air)</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 14</div>
+      <h2>Reading Passage 1 — Back on Two Wheels</h2>
+      <p class="task-sub"><b>The test starts now.</b> Spend about <b>20 minutes</b> on Questions 1–13. Three question types: <b>TRUE / FALSE / NOT GIVEN</b>, <b>sentence completion</b> and <b>multiple choice</b>. Passage on the left, questions on the right. Your answers are checked when you press <b>Next</b> — you cannot change them afterwards.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Back on Two Wheels<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Many cities once gave their streets to cars. Now the bicycle is returning.</small></h3>
+            <p class="article-meta">Reading Passage 1 · Cities and transport · 434 words</p>
+            <p><span class="para-label">A</span>In the 1950s, the bicycle was one of the most common ways of getting to work in many European cities. In Amsterdam, for example, around 80% of journeys to work were made by bike. But as cars became cheaper, cities changed. New roads were built, car parks replaced parks and squares, and cycling began to look old-fashioned and dangerous. By the 1970s, the number of cyclists in many cities had fallen sharply.</p><p><span class="para-label">B</span>Amsterdam was one of the first cities to change direction. In the early 1970s, many children were killed in road accidents, and parents organised protests with the slogan ‘Stop the child murder’. At the same time, an oil crisis made petrol very expensive. The city government listened, and slowly began to build separate cycle lanes and to make some streets free of cars.</p><p><span class="para-label">C</span>Today, cities all over the world are trying to follow this example. Paris has built hundreds of kilometres of new cycle lanes since 2015, and while the city was building them, the number of cyclists on some main roads more than doubled. In Bogotá, Colombia, more than 100 kilometres of roads are closed to cars every Sunday morning so that people can walk, run and cycle safely. This event, called the Ciclovía, now attracts around 1.5 million people each week.</p><p><span class="para-label">D</span>Bike-sharing schemes have also helped. Users can pick up a bike from a docking station, ride it across the city and leave it at another station. Many schemes now offer electric bikes, which make hills and long distances much easier, especially for older riders. In some cities, people can unlock a bike using an app on their phone, and the first thirty minutes are free.</p><p><span class="para-label">E</span>Supporters of cycling point to many benefits. Cycling produces no pollution, takes up far less space than driving, and is good for both physical and mental health. A study in the United Kingdom found that people who cycled to work had a lower risk of heart disease than people who drove or took public transport. Cycling is also cheap: after buying a bike, the costs of using it are very low.</p><p><span class="para-label">F</span>However, there are still problems. Many people say that they would like to cycle but feel unsafe on busy roads. Bikes are often stolen, and in some places there is nowhere safe to leave them. Weather is another difficulty, as few people enjoy cycling in heavy rain or snow. Experts agree that the most important step is to build cycle lanes which are physically separated from traffic. ‘If you build safe lanes,’ one city planner says, ‘people of all ages will use them.’</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–5</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. In the 1950s, most journeys to work in Amsterdam were made by bicycle.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. In the 1970s, the number of cyclists increased in many cities.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. In the early 1970s, petrol in the Netherlands was cheap.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. Paris has built more cycle lanes than any other European city.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-4" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-5">
+          <p>5. The Ciclovía in Bogotá takes place every Sunday morning.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-5" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 6–9</p><p class="qg-instr">Complete the sentences. Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p></div>
+      <div class="card" id="t2-sc" style="line-height:2.4;"><p>6. In many cities, car parks took the place of parks and <input type="text" class="text-answer" id="t2-6" data-correct="squares" autocomplete="off" style="width:130px;">.</p><p>7. Users of bike-sharing schemes can leave their bike at another docking <input type="text" class="text-answer" id="t2-7" data-correct="station" autocomplete="off" style="width:130px;">.</p><p>8. Electric bikes are especially helpful for <input type="text" class="text-answer" id="t2-8" data-correct="older" autocomplete="off" style="width:130px;"> riders.</p><p>9. Few people enjoy cycling in heavy rain or <input type="text" class="text-answer" id="t2-9" data-correct="snow" autocomplete="off" style="width:130px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-sc', 't2-sc-score')">Check answers</button>
+          <span id="t2-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 10–13</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-10">
+          <p>10. Why did Amsterdam begin to change its streets?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-10" data-correct="false"> A. Cycling had become fashionable again.</label><label><input type="radio" value="1" name="t2-mc-10" data-correct="true"> B. Road deaths and expensive petrol made people demand change.</label><label><input type="radio" value="2" name="t2-mc-10" data-correct="false"> C. The government banned cars from the city.</label><label><input type="radio" value="3" name="t2-mc-10" data-correct="false"> D. Other European cities asked it to.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-11">
+          <p>11. What happened in Paris while the new lanes were being built?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-11" data-correct="true"> A. On some main roads, the number of cyclists more than doubled.</label><label><input type="radio" value="1" name="t2-mc-11" data-correct="false"> B. Car use in the city stopped completely.</label><label><input type="radio" value="2" name="t2-mc-11" data-correct="false"> C. Bike theft fell sharply.</label><label><input type="radio" value="3" name="t2-mc-11" data-correct="false"> D. The city started its own Ciclovía.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-12">
+          <p>12. The study in the United Kingdom found that people who cycled to work</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-12" data-correct="false"> A. spent less money than drivers.</label><label><input type="radio" value="1" name="t2-mc-12" data-correct="true"> B. had a lower risk of heart disease.</label><label><input type="radio" value="2" name="t2-mc-12" data-correct="false"> C. were happier at work.</label><label><input type="radio" value="3" name="t2-mc-12" data-correct="false"> D. arrived at work more quickly.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-13">
+          <p>13. According to experts, what is the most important step?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-13" data-correct="false"> A. making bicycles cheaper</label><label><input type="radio" value="1" name="t2-mc-13" data-correct="false"> B. offering more bike-sharing schemes</label><label><input type="radio" value="2" name="t2-mc-13" data-correct="true"> C. building cycle lanes separated from traffic</label><label><input type="radio" value="3" name="t2-mc-13" data-correct="false"> D. giving better weather information</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 14</div>
+      <h2>Reading Passage 1 — Answer Analysis</h2>
+      <p class="task-sub">Open each answer and find the evidence. For TRUE / FALSE / NOT GIVEN, ask: does the passage <b>say the same</b>, <b>say the opposite</b>, or <b>not say</b>?</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Back on Two Wheels</summary>
+        <p><span class="para-label">A</span>In the 1950s, the bicycle was one of the most common ways of getting to work in many European cities. In Amsterdam, for example, around 80% of journeys to work were made by bike. But as cars became cheaper, cities changed. New roads were built, car parks replaced parks and squares, and cycling began to look old-fashioned and dangerous. By the 1970s, the number of cyclists in many cities had fallen sharply.</p><p><span class="para-label">B</span>Amsterdam was one of the first cities to change direction. In the early 1970s, many children were killed in road accidents, and parents organised protests with the slogan ‘Stop the child murder’. At the same time, an oil crisis made petrol very expensive. The city government listened, and slowly began to build separate cycle lanes and to make some streets free of cars.</p><p><span class="para-label">C</span>Today, cities all over the world are trying to follow this example. Paris has built hundreds of kilometres of new cycle lanes since 2015, and while the city was building them, the number of cyclists on some main roads more than doubled. In Bogotá, Colombia, more than 100 kilometres of roads are closed to cars every Sunday morning so that people can walk, run and cycle safely. This event, called the Ciclovía, now attracts around 1.5 million people each week.</p><p><span class="para-label">D</span>Bike-sharing schemes have also helped. Users can pick up a bike from a docking station, ride it across the city and leave it at another station. Many schemes now offer electric bikes, which make hills and long distances much easier, especially for older riders. In some cities, people can unlock a bike using an app on their phone, and the first thirty minutes are free.</p><p><span class="para-label">E</span>Supporters of cycling point to many benefits. Cycling produces no pollution, takes up far less space than driving, and is good for both physical and mental health. A study in the United Kingdom found that people who cycled to work had a lower risk of heart disease than people who drove or took public transport. Cycling is also cheap: after buying a bike, the costs of using it are very low.</p><p><span class="para-label">F</span>However, there are still problems. Many people say that they would like to cycle but feel unsafe on busy roads. Bikes are often stolen, and in some places there is nowhere safe to leave them. Weather is another difficulty, as few people enjoy cycling in heavy rain or snow. Experts agree that the most important step is to build cycle lanes which are physically separated from traffic. ‘If you build safe lanes,’ one city planner says, ‘people of all ages will use them.’</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">around 80% of journeys to work were made by bike</span>. 80% = <i>most</i>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">FALSE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">By the 1970s, the number of cyclists in many cities had fallen sharply</span>. Fallen ↔ increased.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">an oil crisis made petrol very expensive</span>. Expensive ↔ cheap.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Paris has built hundreds of kilometres of new cycle lanes</span> — but there is no comparison with other cities.</p><p><span class="trap">Trap:</span> <i>hundreds of kilometres</i> sounds like a lot, but “more than any other city” is never stated.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">TRUE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">roads are closed to cars every Sunday morning … This event, called the Ciclovía</span>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">squares</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">car parks replaced parks and squares</span>. <i>replaced</i> = <i>took the place of</i>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">station</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">pick up a bike from a docking station … leave it at another station</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">older</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">much easier, especially for older riders</span>. An adjective is needed before <i>riders</i>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">snow</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">few people enjoy cycling in heavy rain or snow</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">many children were killed … parents organised protests … an oil crisis made petrol very expensive. The city government listened</span>.</p><p><span class="trap">Trap:</span> C — the city made <i>some</i> streets free of cars; it did not ban cars.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">A</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">while the city was building them, the number of cyclists on some main roads more than doubled</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">B</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">people who cycled to work had a lower risk of heart disease</span>.</p><p><span class="trap">Trap:</span> A — cycling is cheap, but that is not what the <i>study</i> found.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">C</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">the most important step is to build cycle lanes which are physically separated from traffic</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 14</div>
+      <h2>Reading Passage 2 — Why Do We Yawn?</h2>
+      <p class="task-sub">Spend about <b>20 minutes</b> on Questions 14–26. Question types: <b>matching headings</b>, <b>summary completion with a word bank</b> and <b>short answers</b>.</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Headings:</b> read the whole paragraph, then ask “What is this paragraph mainly about?” A heading that repeats one word from the paragraph is often a trap.</li><li><b>Word bank:</b> decide what kind of word fits each gap (noun? adjective?) before you look at the box. There are more words than gaps.</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Why Do We Yawn?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">It is one of the most common things the human body does — and one of the least understood.</small></h3>
+            <p class="article-meta">Reading Passage 2 · The human body · 412 words</p>
+            <p><span class="para-label">A</span>Everybody yawns. We yawn when we are tired, when we are bored, and sometimes for no clear reason at all. Babies yawn even before they are born: scans have shown that they begin to yawn in the womb at around eleven weeks. Yet although yawning is one of the most common things the human body does, scientists still do not fully agree about why it happens.</p><p><span class="para-label">B</span>For many years, the most popular explanation was that we yawn to get more oxygen. According to this idea, when we are tired our breathing becomes slow, oxygen levels in the blood fall, and a big yawn brings in extra air. However, in the 1980s, a psychologist called Robert Provine tested this idea. He asked volunteers to breathe air containing extra oxygen. They yawned just as often as before. The oxygen theory, it seemed, was wrong.</p><p><span class="para-label">C</span>A newer theory suggests that yawning helps to cool the brain. Like a computer, the brain works best at a certain temperature. When we yawn, we take in a large amount of air and stretch the jaw, which increases the flow of blood to the head. Researchers have found that people yawn less often when they hold a cold pack against their forehead, and that yawning is more common in mild weather than in very hot or very cold weather.</p><p><span class="para-label">D</span>Perhaps the strangest thing about yawning is that it is contagious. When we see, hear or even read about someone yawning, we often start to yawn ourselves. You may be yawning right now! Studies show that around half of adults yawn after watching a video of other people yawning. Interestingly, we are more likely to ‘catch’ a yawn from a family member or close friend than from a stranger.</p><p><span class="para-label">E</span>Some scientists believe this is connected to empathy, the ability to understand the feelings of others. Young children under the age of about four rarely catch yawns, and this is roughly the age at which children begin to understand that other people have their own thoughts and feelings. However, other researchers point out that the link is weak, and that age may be more important than empathy.</p><p><span class="para-label">F</span>Humans are not the only ones who yawn. Almost all animals with a backbone do it, including fish, birds and snakes. Chimpanzees and dogs can also catch yawns, and some studies suggest that dogs even catch them from their owners. Studying animals may help scientists finally to solve the mystery of why we yawn.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–19</p><p class="qg-instr">The passage has six paragraphs, <b>A–F</b>. Choose the correct heading for each paragraph from the list below.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; Not just a human habit<br><b>ii</b>&nbsp; How to stop yourself yawning<br><b>iii</b>&nbsp; An old explanation is tested<br><b>iv</b>&nbsp; Why one yawn leads to another<br><b>v</b>&nbsp; A common action that is not fully understood<br><b>vi</b>&nbsp; Yawning as a sign of illness<br><b>vii</b>&nbsp; Keeping the brain at the right temperature<br><b>viii</b>&nbsp; A possible link with understanding others</p></div>
+      <div class="card" id="t4-h"><div class="sel-row"><select class="select" id="t4-h-14" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>14.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t4-h-15" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>15.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t4-h-16" data-answer="vii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>16.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t4-h-17" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>17.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t4-h-18" data-answer="viii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>18.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t4-h-19" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>19.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-h', 't4-h-score')">Check answers</button>
+          <span id="t4-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 20–24</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD</b> from the box for each answer.</p></div>
+      <div class="word-bank">oxygen · often · cool · cold · mild · hot · slowly · warm · food</div><div class="card" id="t4-s" style="line-height:2.7;"><p>For a long time, people believed that we yawn to take in more (20) <input type="text" class="text-answer" id="t4-20" data-correct="oxygen" autocomplete="off" style="width:120px;">. But when volunteers breathed extra oxygen, they yawned just as (21) <input type="text" class="text-answer" id="t4-21" data-correct="often" autocomplete="off" style="width:120px;"> as before. A newer idea is that yawning helps to (22) <input type="text" class="text-answer" id="t4-22" data-correct="cool" autocomplete="off" style="width:120px;"> the brain. People yawn less when they put something (23) <input type="text" class="text-answer" id="t4-23" data-correct="cold" autocomplete="off" style="width:120px;"> on their forehead, and yawning is more common in (24) <input type="text" class="text-answer" id="t4-24" data-correct="mild" autocomplete="off" style="width:120px;"> weather.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-s', 't4-s-score')">Check answers</button>
+          <span id="t4-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 25–26</p><p class="qg-instr">Answer the questions. Choose <b>NO MORE THAN TWO WORDS AND/OR A NUMBER</b> from the passage for each answer.</p></div>
+      <div class="card" id="t4-sa" style="line-height:2.4;"><p>25. At what age do babies begin to yawn in the womb? <input type="text" class="text-answer" id="t4-25" data-correct="eleven weeks/11 weeks" autocomplete="off" style="width:150px;"></p><p>26. Which animals may catch yawns from their owners? <input type="text" class="text-answer" id="t4-26" data-correct="dogs/dog" autocomplete="off" style="width:150px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-sa', 't4-sa-score')">Check answers</button>
+          <span id="t4-sa-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 14</div>
+      <h2>Reading Passage 2 — Answer Analysis</h2>
+      <p class="task-sub">Check your answers. For each heading, notice the <b>main idea</b> of the paragraph — not just one word.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Why Do We Yawn?</summary>
+        <p><span class="para-label">A</span>Everybody yawns. We yawn when we are tired, when we are bored, and sometimes for no clear reason at all. Babies yawn even before they are born: scans have shown that they begin to yawn in the womb at around eleven weeks. Yet although yawning is one of the most common things the human body does, scientists still do not fully agree about why it happens.</p><p><span class="para-label">B</span>For many years, the most popular explanation was that we yawn to get more oxygen. According to this idea, when we are tired our breathing becomes slow, oxygen levels in the blood fall, and a big yawn brings in extra air. However, in the 1980s, a psychologist called Robert Provine tested this idea. He asked volunteers to breathe air containing extra oxygen. They yawned just as often as before. The oxygen theory, it seemed, was wrong.</p><p><span class="para-label">C</span>A newer theory suggests that yawning helps to cool the brain. Like a computer, the brain works best at a certain temperature. When we yawn, we take in a large amount of air and stretch the jaw, which increases the flow of blood to the head. Researchers have found that people yawn less often when they hold a cold pack against their forehead, and that yawning is more common in mild weather than in very hot or very cold weather.</p><p><span class="para-label">D</span>Perhaps the strangest thing about yawning is that it is contagious. When we see, hear or even read about someone yawning, we often start to yawn ourselves. You may be yawning right now! Studies show that around half of adults yawn after watching a video of other people yawning. Interestingly, we are more likely to ‘catch’ a yawn from a family member or close friend than from a stranger.</p><p><span class="para-label">E</span>Some scientists believe this is connected to empathy, the ability to understand the feelings of others. Young children under the age of about four rarely catch yawns, and this is roughly the age at which children begin to understand that other people have their own thoughts and feelings. However, other researchers point out that the link is weak, and that age may be more important than empathy.</p><p><span class="para-label">F</span>Humans are not the only ones who yawn. Almost all animals with a backbone do it, including fish, birds and snakes. Chimpanzees and dogs can also catch yawns, and some studies suggest that dogs even catch them from their owners. Studying animals may help scientists finally to solve the mystery of why we yawn.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">v</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">one of the most common things the human body does, scientists still do not fully agree about why</span> → common + not fully understood.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">iii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">the most popular explanation … Robert Provine tested this idea</span>. The oxygen idea is <i>old</i> and it is <i>tested</i>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">vii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">yawning helps to cool the brain … the brain works best at a certain temperature</span>.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">iv</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">it is contagious. When we see, hear or even read about someone yawning, we often start to yawn ourselves</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">viii</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">connected to empathy, the ability to understand the feelings of others</span>. <i>possible</i> — because other researchers say the link is weak.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">i</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Humans are not the only ones who yawn</span>.</p><p><span class="trap">Trap:</span> No paragraph says how to <i>stop</i> yawning (ii) or links yawning to illness (vi).</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">oxygen</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">we yawn to get more oxygen</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">often</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">They yawned just as often as before</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">cool</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">yawning helps to cool the brain</span>. After <i>helps to</i> we need a verb.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">cold</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">hold a cold pack against their forehead</span>.</p><p><span class="trap">Trap:</span> <i>hot</i> and <i>warm</i> are in the box to test whether you read carefully.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">mild</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">more common in mild weather than in very hot or very cold weather</span>.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">eleven weeks</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">they begin to yawn in the womb at around eleven weeks</span>. <i>11 weeks</i> is also correct.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">dogs</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">some studies suggest that dogs even catch them from their owners</span>.</p><p><span class="trap">Trap:</span> Chimpanzees also catch yawns, but the passage does not say they catch them from <i>owners</i>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 14</div>
+      <h2>Reading Passage 3 — Farming in the Desert</h2>
+      <p class="task-sub">Spend about <b>20 minutes</b> on Questions 27–40. Question types: <b>matching information</b>, <b>flow-chart completion</b> and <b>YES / NO / NOT GIVEN</b> (the writer’s opinions).</p>
+      <div class="card advice-card"><p class="prompt-label">Exam advice</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Matching information</b> questions are <b>not in passage order</b>. Do them last if you find them slow.</li><li><b>YES / NO / NOT GIVEN</b> is about the <b>writer’s opinion</b>. Look for <i>In my view, I believe, should</i>. What critics or other people think is not the writer’s view.</li></ul></div>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Farming in the Desert<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Hot desert coasts have plenty of sunshine and seawater. Can they also grow food?</small></h3>
+            <p class="article-meta">Reading Passage 3 · Food and technology · 459 words</p>
+            <p><span class="para-label">A</span>The world needs more food, but good farmland is limited, and in many countries fresh water is becoming scarce. Agriculture already uses around 70% of the world’s fresh water. In dry regions such as the Middle East and North Africa, farmers often pump water from deep underground, but these supplies are running out. For this reason, some engineers have started to ask a surprising question: could we grow food using seawater and sunshine, two things that hot desert coasts have in large amounts?</p><p><span class="para-label">B</span>One answer is the seawater greenhouse. The idea was developed by a British inventor, Charlie Paton, in the 1990s, after a holiday in Morocco. The first full-sized version was built on the island of Tenerife, and later projects followed in Oman, Abu Dhabi, Australia and Somaliland.</p><p><span class="para-label">C</span>The greenhouse works in a simple way. First, seawater is pumped from the sea to the front wall of the greenhouse. Here, it runs down a wall made of a material similar to cardboard. Wind from the sea blows through this wet wall, and as the water evaporates, the air becomes cool and humid. This cool air then passes over the plants, which need less water because they lose less through their leaves. Finally, at the back of the greenhouse, the warm, wet air meets pipes that contain cold seawater. Drops of fresh water form on the pipes, and this water is collected and used for the crops.</p><p><span class="para-label">D</span>A different project in South Australia, called Sundrop Farms, uses the sun’s energy in a more high-tech way. Thousands of mirrors reflect sunlight onto a tall tower, producing heat and electricity. This energy is used to remove the salt from seawater, giving the farm enough fresh water for around 180,000 tomato plants. The farm produces about 15,000 tonnes of tomatoes a year, which are sold in Australian supermarkets.</p><p><span class="para-label">E</span>These projects have attracted a lot of attention, but they are not without problems. Building them is expensive, and in their early years several projects closed because they could not make a profit. Sundrop Farms also had to be repaired after a storm damaged it in 2016. Critics also point out that removing salt from seawater produces very salty waste, which can harm sea life if it is put back into the sea carelessly.</p><p><span class="para-label">F</span>In my view, these difficulties are real, but they should not stop us. The cost of solar technology has fallen sharply in the past twenty years, and it is likely to fall further. I believe that desert farming will never replace traditional agriculture, but it could become an important source of fresh vegetables for countries that have little water and few other options. Governments in dry countries should support research into these methods now, before their underground water runs out.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 27–31</p><p class="qg-instr">The passage has six paragraphs, <b>A–F</b>. Which paragraph contains the following information? <b>NB</b> You may use any letter more than once.</p></div>
+      <div class="card" id="t6-mi"><div class="sel-row"><select class="select" id="t6-mi-27" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>27.</b> a description of damage caused by bad weather</span></div><div class="sel-row"><select class="select" id="t6-mi-28" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>28.</b> the place where the first large seawater greenhouse was built</span></div><div class="sel-row"><select class="select" id="t6-mi-29" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>29.</b> a reason why farmers in dry countries cannot continue in the same way</span></div><div class="sel-row"><select class="select" id="t6-mi-30" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>30.</b> the number of plants that one farm can grow</span></div><div class="sel-row"><select class="select" id="t6-mi-31" data-answer="F"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>31.</b> a prediction about the price of a technology</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mi', 't6-mi-score')">Check answers</button>
+          <span id="t6-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 32–36</p><p class="qg-instr">Complete the flow-chart. Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p></div>
+<div class="card"><p class="prompt-label">How a seawater greenhouse works</p>
+<div style="display:flex; flex-direction:column; gap:6px; line-height:1.7;">
+<div class="card" style="margin:0; padding:10px 14px;">Seawater is pumped to the front <b>(32)</b> ______ of the greenhouse.</div><div style="text-align:center;">↓</div>
+<div class="card" style="margin:0; padding:10px 14px;">The water runs down a material similar to <b>(33)</b> ______.</div><div style="text-align:center;">↓</div>
+<div class="card" style="margin:0; padding:10px 14px;">Wind blows through the wet wall; the air becomes cool and <b>(34)</b> ______.</div><div style="text-align:center;">↓</div>
+<div class="card" style="margin:0; padding:10px 14px;">The plants lose less water through their <b>(35)</b> ______.</div><div style="text-align:center;">↓</div>
+<div class="card" style="margin:0; padding:10px 14px;">At the back, fresh water forms on <b>(36)</b> ______ containing cold seawater, and is used for the crops.</div>
+</div></div>
+      <div class="card" id="t6-fc" style="line-height:2.6;"><p>32. <input type="text" class="text-answer" id="t6-32" data-correct="wall" autocomplete="off" style="width:130px;"> &nbsp; 33. <input type="text" class="text-answer" id="t6-33" data-correct="cardboard" autocomplete="off" style="width:130px;"> &nbsp; 34. <input type="text" class="text-answer" id="t6-34" data-correct="humid" autocomplete="off" style="width:130px;"></p><p>35. <input type="text" class="text-answer" id="t6-35" data-correct="leaves" autocomplete="off" style="width:130px;"> &nbsp; 36. <input type="text" class="text-answer" id="t6-36" data-correct="pipes" autocomplete="off" style="width:130px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-fc', 't6-fc-score')">Check answers</button>
+          <span id="t6-fc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 37–40</p><p class="qg-instr">Do the following statements agree with the views of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-37">
+          <p>37. Desert farming will one day replace traditional agriculture.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-37" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-37" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-37" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-38">
+          <p>38. Seawater greenhouses are the best method of desert farming.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-38" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-38" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-38" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-39">
+          <p>39. Governments in dry countries should support research into desert farming now.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-39" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-39" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-39" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-40">
+          <p>40. The problems of desert farming are not serious.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-40" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-40" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-40" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 14</div>
+      <h2>Reading Passage 3 — Answer Analysis and Your Score</h2>
+      <p class="task-sub">Check Passage 3, then add up your score for the whole test and find your estimated band.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Farming in the Desert</summary>
+        <p><span class="para-label">A</span>The world needs more food, but good farmland is limited, and in many countries fresh water is becoming scarce. Agriculture already uses around 70% of the world’s fresh water. In dry regions such as the Middle East and North Africa, farmers often pump water from deep underground, but these supplies are running out. For this reason, some engineers have started to ask a surprising question: could we grow food using seawater and sunshine, two things that hot desert coasts have in large amounts?</p><p><span class="para-label">B</span>One answer is the seawater greenhouse. The idea was developed by a British inventor, Charlie Paton, in the 1990s, after a holiday in Morocco. The first full-sized version was built on the island of Tenerife, and later projects followed in Oman, Abu Dhabi, Australia and Somaliland.</p><p><span class="para-label">C</span>The greenhouse works in a simple way. First, seawater is pumped from the sea to the front wall of the greenhouse. Here, it runs down a wall made of a material similar to cardboard. Wind from the sea blows through this wet wall, and as the water evaporates, the air becomes cool and humid. This cool air then passes over the plants, which need less water because they lose less through their leaves. Finally, at the back of the greenhouse, the warm, wet air meets pipes that contain cold seawater. Drops of fresh water form on the pipes, and this water is collected and used for the crops.</p><p><span class="para-label">D</span>A different project in South Australia, called Sundrop Farms, uses the sun’s energy in a more high-tech way. Thousands of mirrors reflect sunlight onto a tall tower, producing heat and electricity. This energy is used to remove the salt from seawater, giving the farm enough fresh water for around 180,000 tomato plants. The farm produces about 15,000 tonnes of tomatoes a year, which are sold in Australian supermarkets.</p><p><span class="para-label">E</span>These projects have attracted a lot of attention, but they are not without problems. Building them is expensive, and in their early years several projects closed because they could not make a profit. Sundrop Farms also had to be repaired after a storm damaged it in 2016. Critics also point out that removing salt from seawater produces very salty waste, which can harm sea life if it is put back into the sea carelessly.</p><p><span class="para-label">F</span>In my view, these difficulties are real, but they should not stop us. The cost of solar technology has fallen sharply in the past twenty years, and it is likely to fall further. I believe that desert farming will never replace traditional agriculture, but it could become an important source of fresh vegetables for countries that have little water and few other options. Governments in dry countries should support research into these methods now, before their underground water runs out.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">E</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Sundrop Farms also had to be repaired after a storm damaged it in 2016</span>. storm = bad weather.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">The first full-sized version was built on the island of Tenerife</span>. full-sized = large.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">A</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">farmers often pump water from deep underground, but these supplies are running out</span>.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">D</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">enough fresh water for around 180,000 tomato plants</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">F</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">The cost of solar technology … is likely to fall further</span> → a prediction about price.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">wall</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">seawater is pumped from the sea to the front wall of the greenhouse</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">cardboard</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">a wall made of a material similar to cardboard</span>.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">humid</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">the air becomes cool and humid</span>.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">leaves</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">they lose less through their leaves</span>. Plural — <i>leafs</i> is wrong.</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">pipes</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Drops of fresh water form on the pipes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">NO</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">I believe that desert farming will never replace traditional agriculture</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>The writer describes two methods but never says which is <b>best</b>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Governments in dry countries should support research into these methods now</span>.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">NO</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">In my view, these difficulties are real</span> — the writer thinks they are serious, but not a reason to stop.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Academic Reading)</p>
+<table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr>
+<tr><td>13–14</td><td>4.5</td></tr><tr><td>15–18</td><td>5.0</td></tr><tr><td>19–22</td><td>5.5</td></tr><tr><td>23–26</td><td>6.0</td></tr><tr><td>27–29</td><td>6.5</td></tr><tr><td>30–32</td><td>7.0</td></tr><tr><td>33–34</td><td>7.5</td></tr><tr><td>35+</td><td>8.0+</td></tr></table></div>
+      <div class="card"><p class="mini-q">1. How many did you get right out of 40? Which question type gave you the most problems?</p><textarea class="no-check mini-answer" id="t7-rf-1" placeholder="Write here..." style="min-height:56px;"></textarea><p class="mini-q">2. Write down two things you will do differently in your next reading test.</p><textarea class="no-check mini-answer" id="t7-rf-2" placeholder="Write here..." style="min-height:56px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t7-rf-btn">Show some ideas</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t7-rf-ans"><p>Typical problems: <b>NOT GIVEN</b> answers chosen as FALSE (the passage does not say the opposite — it says nothing); <b>spelling and plurals</b> in completion tasks (<i>leaves</i>, <i>pipes</i>); <b>headings</b> chosen because one word matches.</p><p>Good plans: “I will spend no more than 20 minutes on each passage”, “I will check plurals”, “I will underline the key idea in each heading first”.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 14</div>
+      <h2>Extra Reading — Four Days at School, Three Days Off</h2>
+      <p class="task-sub">After the test, an extra article — about <b>15 minutes</b>. Answer the questions, then summarise the article in writing (<b>at least 80 words</b>) and aloud (<b>at least 30 seconds</b>).</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Four Days at School, Three Days Off</h3>
+        <p class="article-meta">Extra reading · Education · 255 words</p>
+        <p><span class="para-label">A</span>In some parts of the United States, more than 2,000 schools now open only four days a week. Students have longer lessons from Monday to Thursday, and Friday is a day off. The idea started in small country towns, where school districts wanted to save money on buses, heating and electricity. Now it is spreading to larger towns too.</p><p><span class="para-label">B</span>Supporters say the shorter week has several advantages. Teachers can use Fridays to plan lessons, and many school districts say it is easier to find and keep good teachers, because the four-day week is attractive to them. Some students say they feel less tired and enjoy having more time for hobbies, part-time jobs or family.</p><p><span class="para-label">C</span>However, research suggests the savings are smaller than many people expected — usually only around 1 to 2 per cent of a school’s budget. More worryingly, a number of studies have found that students in four-day schools make slightly less progress in reading and maths than similar students in five-day schools, especially when the shorter week continues for several years.</p><p><span class="para-label">D</span>Parents are divided. Some love the long weekend, but others, especially those who work full-time, must find and pay for childcare on Fridays. For families with little money, the extra day off can also mean one less free school lunch each week.</p><p><span class="para-label">E</span>Most experts agree that the four-day week is not simply good or bad. It seems to work best when schools keep the total number of teaching hours the same and offer activities or extra lessons on the free day.</p>
+      </div>
+      <div class="card" id="t8-mc"><div class="q-item" id="t8-mc-1">
+          <p>1. Why did the four-day week start in small country towns?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-1" data-correct="false"> A. Students asked for it.</label><label><input type="radio" value="1" name="t8-mc-1" data-correct="true"> B. School districts wanted to save money.</label><label><input type="radio" value="2" name="t8-mc-1" data-correct="false"> C. There were not enough teachers.</label><label><input type="radio" value="3" name="t8-mc-1" data-correct="false"> D. Parents wanted longer weekends.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-2">
+          <p>2. Why do some districts find it easier to keep good teachers?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-2" data-correct="false"> A. They pay teachers more.</label><label><input type="radio" value="1" name="t8-mc-2" data-correct="true"> B. Teachers find the four-day week attractive.</label><label><input type="radio" value="2" name="t8-mc-2" data-correct="false"> C. Classes are smaller.</label><label><input type="radio" value="3" name="t8-mc-2" data-correct="false"> D. Teachers work fewer hours in total.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-3">
+          <p>3. What does research say about the money saved?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-3" data-correct="false"> A. It is much larger than expected.</label><label><input type="radio" value="1" name="t8-mc-3" data-correct="false"> B. It is about 20% of the budget.</label><label><input type="radio" value="2" name="t8-mc-3" data-correct="true"> C. It is smaller than many people expected.</label><label><input type="radio" value="3" name="t8-mc-3" data-correct="false"> D. There are no savings at all.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-4">
+          <p>4. Which parents find the four-day week most difficult?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-4" data-correct="true"> A. parents who work full-time</label><label><input type="radio" value="1" name="t8-mc-4" data-correct="false"> B. parents who live in the country</label><label><input type="radio" value="2" name="t8-mc-4" data-correct="false"> C. parents of older children</label><label><input type="radio" value="3" name="t8-mc-4" data-correct="false"> D. parents who are teachers</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-5">
+          <p>5. According to experts, when does the four-day week work best?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-5" data-correct="false"> A. when Fridays are completely free</label><label><input type="radio" value="1" name="t8-mc-5" data-correct="false"> B. when it is used only for a short time</label><label><input type="radio" value="2" name="t8-mc-5" data-correct="true"> C. when teaching hours stay the same and the free day has activities</label><label><input type="radio" value="3" name="t8-mc-5" data-correct="false"> D. when it starts in large towns</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-mc', 't8-mc-score')">Check answers</button>
+          <span id="t8-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 80 words</b>. Say what it is about, give the most important points for and against, and finish with one sentence about what you think.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 80 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="80" placeholder="Write your summary here..." style="min-height:160px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>The article is about schools in the United States that open only four days a week. The idea began in small towns that wanted to save money, and supporters say it helps schools keep good teachers and gives students more free time. However, research shows that the savings are small and that students may make slightly less progress in reading and maths. Parents who work full-time also have to pay for childcare on Fridays. Experts think it works best when the total teaching hours stay the same. Personally, I think a five-day week is better for most students.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 30 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 30 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“On the one hand,…”</li><li>“On the other hand, research shows that…”</li><li>“Experts believe that…”</li><li>“Personally, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 14</div>
+      <h2>Reading Skill — Spotting Paraphrase</h2>
+      <p class="task-sub">IELTS questions rarely use the same words as the passage. They <b>paraphrase</b>. Find the matching words from today’s passages.</p>
+      <p style="margin-top:26px;"><strong>Part 1.</strong> Match the words from the questions (left) with the words in the passages (right).</p>
+      <div class="card" id="t9-lm">
+        <div class="line-match" id="t9-lm-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. took the place of</button><button type="button" class="lm-item" data-key="2">2. large (greenhouse)</button><button type="button" class="lm-item" data-key="3">3. bad weather</button><button type="button" class="lm-item" data-key="4">4. a prediction about price</button><button type="button" class="lm-item" data-key="5">5. fast-moving or busy roads</button><button type="button" class="lm-item" data-key="6">6. understanding others</button><button type="button" class="lm-item" data-key="7">7. becoming difficult to find</button><button type="button" class="lm-item" data-key="8">8. not enough money is made</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. traffic</button><button type="button" class="lm-item" data-key="b">b. scarce</button><button type="button" class="lm-item" data-key="c">c. replaced</button><button type="button" class="lm-item" data-key="d">d. could not make a profit</button><button type="button" class="lm-item" data-key="e">e. is likely to fall further</button><button type="button" class="lm-item" data-key="f">f. full-sized</button><button type="button" class="lm-item" data-key="g">g. empathy</button><button type="button" class="lm-item" data-key="h">h. a storm</button></div>
+          <select class="lm-hidden-select select" id="t9-lm-1" data-lm-key="1" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-lm-2" data-lm-key="2" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-lm-3" data-lm-key="3" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-lm-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-lm-5" data-lm-key="5" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-lm-6" data-lm-key="6" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-lm-7" data-lm-key="7" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t9-lm-8" data-lm-key="8" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-lm', 't9-lm-score'); markLineMatchResult('t9-lm-lm');">Check answers</button>
+          <span id="t9-lm-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Part 2.</strong> Choose the sentence that has the <b>same meaning</b> as the sentence from the passage.</p>
+      <div class="card" id="t9-mc"><div class="q-item" id="t9-mc-1">
+          <p>1. “The oxygen theory, it seemed, was wrong.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-1" data-correct="false"> A. The oxygen theory was proved correct.</label><label><input type="radio" value="1" name="t9-mc-1" data-correct="true"> B. The oxygen theory appeared to be incorrect.</label><label><input type="radio" value="2" name="t9-mc-1" data-correct="false"> C. Nobody tested the oxygen theory.</label><label><input type="radio" value="3" name="t9-mc-1" data-correct="false"> D. The oxygen theory is still the most popular.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-2">
+          <p>2. “Young children … rarely catch yawns.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-2" data-correct="false"> A. Young children often catch yawns.</label><label><input type="radio" value="1" name="t9-mc-2" data-correct="true"> B. Young children almost never catch yawns.</label><label><input type="radio" value="2" name="t9-mc-2" data-correct="false"> C. Young children cannot yawn.</label><label><input type="radio" value="3" name="t9-mc-2" data-correct="false"> D. Young children yawn more than adults.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-3">
+          <p>3. “These projects … are not without problems.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-3" data-correct="false"> A. These projects have no problems.</label><label><input type="radio" value="1" name="t9-mc-3" data-correct="true"> B. These projects have some problems.</label><label><input type="radio" value="2" name="t9-mc-3" data-correct="false"> C. These projects have failed.</label><label><input type="radio" value="3" name="t9-mc-3" data-correct="false"> D. These projects are too new to judge.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-4">
+          <p>4. “Parents are divided.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-4" data-correct="false"> A. Parents all agree.</label><label><input type="radio" value="1" name="t9-mc-4" data-correct="true"> B. Parents have different opinions.</label><label><input type="radio" value="2" name="t9-mc-4" data-correct="false"> C. Parents live apart.</label><label><input type="radio" value="3" name="t9-mc-4" data-correct="false"> D. Parents do not care.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-5">
+          <p>5. “Cycling … takes up far less space than driving.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-5" data-correct="true"> A. Driving needs much more space than cycling.</label><label><input type="radio" value="1" name="t9-mc-5" data-correct="false"> B. Cycling needs a lot of space.</label><label><input type="radio" value="2" name="t9-mc-5" data-correct="false"> C. Cycling and driving need the same space.</label><label><input type="radio" value="3" name="t9-mc-5" data-correct="false"> D. Driving is faster than cycling.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-mc', 't9-mc-score')">Check answers</button>
+          <span id="t9-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 14</div>
+      <h2>Reading Skill — What Does It Refer To?</h2>
+      <p class="task-sub">Writers use words like <i>it, this, they, these, which</i> so they do not repeat themselves. Good readers always know what these words refer to — and IELTS questions often depend on it.</p>
+      <div class="card" id="t10-ref"><div class="q-item" id="t10-ref-1">
+          <p>1. “Researchers have found that people yawn less often when they hold a cold pack against <b>their</b> forehead.” — <b>their</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-ref-1" data-correct="false"> A. researchers’</label><label><input type="radio" value="1" name="t10-ref-1" data-correct="true"> B. people’s</label><label><input type="radio" value="2" name="t10-ref-1" data-correct="false"> C. babies’</label><label><input type="radio" value="3" name="t10-ref-1" data-correct="false"> D. animals’</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-ref-2">
+          <p>2. “Young children under the age of about four rarely catch yawns, and <b>this</b> is roughly the age at which…” — <b>this</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-ref-2" data-correct="true"> A. the age of four</label><label><input type="radio" value="1" name="t10-ref-2" data-correct="false"> B. catching yawns</label><label><input type="radio" value="2" name="t10-ref-2" data-correct="false"> C. empathy</label><label><input type="radio" value="3" name="t10-ref-2" data-correct="false"> D. young children</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-ref-3">
+          <p>3. “Many schemes now offer electric bikes, <b>which</b> make hills and long distances much easier.” — <b>which</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-ref-3" data-correct="false"> A. schemes</label><label><input type="radio" value="1" name="t10-ref-3" data-correct="true"> B. electric bikes</label><label><input type="radio" value="2" name="t10-ref-3" data-correct="false"> C. hills</label><label><input type="radio" value="3" name="t10-ref-3" data-correct="false"> D. long distances</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-ref-4">
+          <p>4. “Building <b>them</b> is expensive.” (Passage 3, paragraph E) — <b>them</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-ref-4" data-correct="false"> A. tomatoes</label><label><input type="radio" value="1" name="t10-ref-4" data-correct="true"> B. desert farming projects</label><label><input type="radio" value="2" name="t10-ref-4" data-correct="false"> C. mirrors</label><label><input type="radio" value="3" name="t10-ref-4" data-correct="false"> D. governments</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-ref-5">
+          <p>5. “… some engineers have started to ask a surprising question” — the question is about</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-ref-5" data-correct="false"> A. how to save underground water</label><label><input type="radio" value="1" name="t10-ref-5" data-correct="true"> B. growing food with seawater and sunshine</label><label><input type="radio" value="2" name="t10-ref-5" data-correct="false"> C. building more farms in Morocco</label><label><input type="radio" value="3" name="t10-ref-5" data-correct="false"> D. how much water farms use</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-ref-6">
+          <p>6. “Some love the long weekend, but <b>others</b> … must find and pay for childcare.” — <b>others</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-ref-6" data-correct="false"> A. other students</label><label><input type="radio" value="1" name="t10-ref-6" data-correct="true"> B. other parents</label><label><input type="radio" value="2" name="t10-ref-6" data-correct="false"> C. other schools</label><label><input type="radio" value="3" name="t10-ref-6" data-correct="false"> D. other teachers</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-ref', 't10-ref-score')">Check answers</button>
+          <span id="t10-ref-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Write.</strong> Rewrite each pair as one sentence using <i>which</i> or <i>who</i>.</p>
+      <div class="card" id="t10-rel" style="line-height:2.6;"><p>1. Charlie Paton is a British inventor. He developed the seawater greenhouse. → Charlie Paton is the British inventor <input type="text" class="text-answer" id="t10-r1" data-correct="who" autocomplete="off" style="width:90px;"> developed the seawater greenhouse.</p><p>2. The Ciclovía is an event. It attracts 1.5 million people a week. → The Ciclovía is an event <input type="text" class="text-answer" id="t10-r2" data-correct="which/that" autocomplete="off" style="width:90px;"> attracts 1.5 million people a week.</p><p>3. Parents work full-time. They must pay for childcare. → Parents <input type="text" class="text-answer" id="t10-r3" data-correct="who/that" autocomplete="off" style="width:90px;"> work full-time must pay for childcare.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-rel', 't10-rel-score')">Check answers</button>
+          <span id="t10-rel-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 14</div>
+      <h2>Reading Skill — Speed Reading Challenge</h2>
+      <p class="task-sub">Reading fast is a skill you can practise. <b>Part 1:</b> give yourself <b>90 seconds</b> to skim the text and choose the best title. <b>Part 2:</b> <b>scan</b> for the answers — look only for numbers, dates and names. Try to finish Part 2 in <b>3 minutes</b>.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">A Short History of Tea</h3>
+        <p class="article-meta">Speed reading · 300 words · 215 words</p>
+        <p><span class="para-label">A</span>Tea was first drunk in China, probably more than 4,000 years ago. According to an old story, the emperor Shen Nong was boiling water outside when some leaves from a tea bush fell into his pot. He liked the taste, and a new drink was born. Whether the story is true or not, tea had become a popular drink across China by the time of the Tang dynasty, which began in 618.</p><p><span class="para-label">B</span>Tea reached Japan in the ninth century, brought by Buddhist monks who had studied in China. In Japan, it later became part of a special ceremony which is still practised today. European traders did not discover tea until much later. Dutch ships brought the first tea to Europe in 1610, and it arrived in England in the 1650s, where it was sold in coffee houses as a medicine.</p><p><span class="para-label">C</span>At first, tea in England was very expensive, and only rich people could afford it. But in the eighteenth century, the price fell, and tea became the national drink. In the 1830s, the British began to grow tea in India, in the region of Assam, so that they no longer depended on China. Today, India and China are still the world’s two largest producers, and around two billion cups of tea are drunk every day.</p>
+      </div>
+      <div class="card" id="t11-title"><div class="q-item" id="t11-title-1">
+          <p>1. Part 1 — Choose the best title for the whole text.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-title-1" data-correct="false"> A. How to make the perfect cup of tea</label><label><input type="radio" value="1" name="t11-title-1" data-correct="true"> B. Tea: from China to the world</label><label><input type="radio" value="2" name="t11-title-1" data-correct="false"> C. Why tea is good for your health</label><label><input type="radio" value="3" name="t11-title-1" data-correct="false"> D. The Japanese tea ceremony</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-title', 't11-title-score')">Check answers</button>
+          <span id="t11-title-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Scanning.</strong> Write a number, a date or ONE word from the text.</p>
+      <div class="card" id="t11-scan" style="line-height:2.4;"><p>1. In what year did the Tang dynasty begin? <input type="text" class="text-answer" id="t11-1" data-correct="618" autocomplete="off" style="width:110px;"></p><p>2. Who brought tea to Japan? Buddhist <input type="text" class="text-answer" id="t11-2" data-correct="monks" autocomplete="off" style="width:110px;"></p><p>3. In what year did the first tea arrive in Europe? <input type="text" class="text-answer" id="t11-3" data-correct="1610" autocomplete="off" style="width:110px;"></p><p>4. Where was tea sold in England at first? in coffee <input type="text" class="text-answer" id="t11-4" data-correct="houses" autocomplete="off" style="width:110px;"></p><p>5. In which region of India did the British begin growing tea? <input type="text" class="text-answer" id="t11-5" data-correct="Assam" autocomplete="off" style="width:110px;"></p><p>6. How many cups of tea are drunk every day? about two <input type="text" class="text-answer" id="t11-6" data-correct="billion" autocomplete="off" style="width:110px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-scan', 't11-scan-score')">Check answers</button>
+          <span id="t11-scan-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 14</div>
+      <h2>Vocabulary — Word Forms and Collocations</h2>
+      <p class="task-sub">In completion tasks, the <b>form</b> of the word matters: a noun gap needs a noun. Practise the word families from today’s passages.</p>
+      <p style="margin-top:26px;"><strong>Part 1 — Word forms.</strong> Write the correct form of the word in brackets.</p>
+      <div class="card" id="t12-wf" style="line-height:2.4;"><p>1. The <input type="text" class="text-answer" id="t12-1" data-correct="pollution" autocomplete="off" style="width:120px;"> in many cities is caused by cars. (pollute)</p><p>2. Cycling is good for your physical and <input type="text" class="text-answer" id="t12-2" data-correct="mental" autocomplete="off" style="width:120px;"> health. (mind)</p><p>3. Water <input type="text" class="text-answer" id="t12-3" data-correct="evaporates" autocomplete="off" style="width:120px;"> quickly in hot weather. (evaporation)</p><p>4. Scientists still do not fully <input type="text" class="text-answer" id="t12-4" data-correct="understand" autocomplete="off" style="width:120px;"> why we yawn. (understanding)</p><p>5. The <input type="text" class="text-answer" id="t12-5" data-correct="cost" autocomplete="off" style="width:120px;"> of solar technology has fallen. (costly)</p><p>6. Many people feel <input type="text" class="text-answer" id="t12-6" data-correct="unsafe" autocomplete="off" style="width:120px;"> on busy roads. (safe — opposite)</p><p>7. A seawater greenhouse needs very little <input type="text" class="text-answer" id="t12-7" data-correct="electricity" autocomplete="off" style="width:120px;">. (electric)</p><p>8. The <input type="text" class="text-answer" id="t12-8" data-correct="explanation" autocomplete="off" style="width:120px;"> was tested in the 1980s. (explain)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-wf', 't12-wf-score')">Check answers</button>
+          <span id="t12-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Collocations.</strong> Choose the word that goes with the noun.</p>
+      <div class="card" id="t12-col"><div class="q-item" id="t12-col-1">
+          <p>1. to ______ a profit</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-col-1" data-correct="true"> make</label><label><input type="radio" value="1" name="t12-col-1" data-correct="false"> do</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-col-2">
+          <p>2. to ______ attention</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-col-2" data-correct="false"> bring</label><label><input type="radio" value="1" name="t12-col-2" data-correct="true"> attract</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-col-3">
+          <p>3. to ______ a mystery</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-col-3" data-correct="true"> solve</label><label><input type="radio" value="1" name="t12-col-3" data-correct="false"> answer</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-col-4">
+          <p>4. a ______ risk of heart disease</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-col-4" data-correct="false"> smaller</label><label><input type="radio" value="1" name="t12-col-4" data-correct="true"> lower</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-col-5">
+          <p>5. to ______ research</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-col-5" data-correct="true"> support</label><label><input type="radio" value="1" name="t12-col-5" data-correct="false"> help up</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-col-6">
+          <p>6. to ______ a protest</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-col-6" data-correct="false"> make up</label><label><input type="radio" value="1" name="t12-col-6" data-correct="true"> organise</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-col', 't12-col-score')">Check answers</button>
+          <span id="t12-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 14</div>
+      <h2>Speaking Part 3 — Discussing Today’s Topics</h2>
+      <p class="task-sub">Answer each question in its own box. Speak for <b>30–45 seconds</b> each: give your opinion, a reason and an example.</p>
+      <div class="question-box" data-field="t13-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Should cities spend more money on cycle lanes? Why or why not?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I strongly believe that…”</li><li>“One reason is that…”</li><li>“In my city, for example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t13-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">What are the advantages and disadvantages of a four-day school week?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The main advantage is…”</li><li>“On the other hand,…”</li><li>“Overall, I think…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t13-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">How can people in dry countries save water?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“People could…”</li><li>“Another way is to…”</li><li>“The government should…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t13-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Do you think science will solve most of the world’s food problems in the future?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s possible that…”</li><li>“However, I doubt whether…”</li><li>“It depends on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 14</div>
+      <h2>Writing Task 2 — Cycle Lanes or Roads?</h2>
+      <p class="task-sub">Finish the day with a full Task 2 essay on one of today’s topics. Spend about <b>40 minutes</b> and write <b>at least 250 words</b>. Use ideas from Reading Passage 1.</p>
+<div class="card advice-card"><p class="prompt-label">Plan before you write</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Introduction:</b> paraphrase the question and give your position (advantages outweigh disadvantages — or not).</li><li><b>Body 1:</b> advantages (health, pollution, space, cost) with an example — Amsterdam or Paris.</li><li><b>Body 2:</b> disadvantages (drivers, weather, safety, cost of building lanes).</li><li><b>Conclusion:</b> repeat your position in different words.</li></ul></div>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>In many cities, governments are spending money on cycle lanes instead of new roads for cars. Do the advantages of this outweigh the disadvantages?</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t14-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t14-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t14-essay-model"><div class="model-text" style="padding:2px 0;">
+  <p>In recent years, many city governments have chosen to build cycle lanes rather than new roads for cars. Although this policy has some drawbacks, I believe that its benefits are far greater.</p>
+  <p>The main advantage of cycle lanes is that they make cities healthier. Cycling produces no pollution, so when more people cycle, the air becomes cleaner. It is also excellent exercise, and studies have shown that people who cycle to work have a lower risk of heart disease. In addition, bicycles take up much less space than cars, which means that more people can travel on the same street. Paris is a good example: when the city built new lanes, the number of cyclists on some main roads more than doubled.</p>
+  <p>On the other hand, there are some disadvantages. Drivers often complain that cycle lanes make the roads narrower and cause traffic jams. Cycling is also less attractive in cold or rainy weather, so lanes may be empty for part of the year. Finally, building safe lanes that are separated from traffic costs a lot of money.</p>
+  <p>However, these problems can be reduced. Traffic usually becomes lighter when people have a real choice of transport, and the cost of a cycle lane is much lower than the cost of a new road. In my view, the long-term benefits for health, the environment and city life clearly outweigh the disadvantages.</p>
+  <p class="alt">≈ 270 words</p>
+</div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 14</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 31 of 45</div>
+    <h1>Day 31 complete! 🎉</h1>
+    <p>Day 31 done — a full 40-question reading test with analysis, an extra article, four reading-skills tasks, a speaking discussion and a Task 2 essay.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t9-lm-lm');
+
+    initWritingCoach('t14-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'In many cities, governments are spending money on cycle lanes instead of new roads for cars. Do the advantages of this outweigh the disadvantages?' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 31, 8, 't8-speaking-summary', 30); }
+    { const b = document.querySelector('.question-box[data-field="t13-speaking-1"]'); if (b) initRecordControl(b, user.id, 31, 13, 't13-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t13-speaking-2"]'); if (b) initRecordControl(b, user.id, 31, 13, 't13-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t13-speaking-3"]'); if (b) initRecordControl(b, user.id, 31, 13, 't13-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t13-speaking-4"]'); if (b) initRecordControl(b, user.id, 31, 13, 't13-speaking-4', 0); }
+
+    await initTaskFlow(31, 14, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-sc', 't2-sc-score'); checkAllAnswers('t2-mc', 't2-mc-score'); },
+      4: () => { checkAllAnswers('t4-h', 't4-h-score'); checkAllAnswers('t4-s', 't4-s-score'); checkAllAnswers('t4-sa', 't4-sa-score'); },
+      6: () => { checkAllAnswers('t6-mi', 't6-mi-score'); checkAllAnswers('t6-fc', 't6-fc-score'); checkAllAnswers('t6-yn', 't6-yn-score'); },
+      8: () => { checkAllAnswers('t8-mc', 't8-mc-score'); },
+      9: () => { checkAllAnswers('t9-lm', 't9-lm-score'); markLineMatchResult('t9-lm-lm'); checkAllAnswers('t9-mc', 't9-mc-score'); },
+      10: () => { checkAllAnswers('t10-ref', 't10-ref-score'); checkAllAnswers('t10-rel', 't10-rel-score'); },
+      11: () => { checkAllAnswers('t11-title', 't11-title-score'); checkAllAnswers('t11-scan', 't11-scan-score'); },
+      12: () => { checkAllAnswers('t12-wf', 't12-wf-score'); checkAllAnswers('t12-col', 't12-col-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t7-rf-btn', 't7-rf-ans', '[id^="t7-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t14-essay-model-btn', 't14-essay-model', '#t14-essay');
+  });
+</script>
+</body>
+</html>

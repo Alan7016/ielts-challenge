@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 31 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 31 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 16</div>
+      <h2>Starting Off — Reading Test Day</h2>
+      <p class="task-sub">Today is an extended <b>reading day</b> — plan for about <b>3 hours</b>. A full, exam-difficulty IELTS Reading test (3 passages, 40 questions, 60 minutes) with complete analysis, then three extra articles with summaries, three advanced reading-skills tasks, vocabulary, a speaking discussion and a Task 2 essay.</p>
+      <p style="margin-top:26px;"><strong>Band 8+ strategy.</strong> Choose the best answer.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. In a YES / NO / NOT GIVEN task, the passage reports what <i>critics</i> believe. The statement presents this belief as the writer’s view. The answer is</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. YES</label><label><input type="radio" value="1" name="t1-st-1" data-correct="false"> B. NO</label><label><input type="radio" value="2" name="t1-st-1" data-correct="true"> C. NOT GIVEN — unless the writer adopts or rejects that view</label><label><input type="radio" value="3" name="t1-st-1" data-correct="false"> D. always NO</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. Two headings both seem to fit a paragraph. Which is usually correct?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="false"> A. the one that repeats a word from the paragraph</label><label><input type="radio" value="1" name="t1-st-2" data-correct="true"> B. the one that covers the paragraph’s overall function and content</label><label><input type="radio" value="2" name="t1-st-2" data-correct="false"> C. the shorter one</label><label><input type="radio" value="3" name="t1-st-2" data-correct="false"> D. the one about the first sentence</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. Why do strong candidates often leave matching-information questions until last?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="false"> A. They are worth more marks.</label><label><input type="radio" value="1" name="t1-st-3" data-correct="true"> B. The information can be anywhere, so they are easier once you know the passage well.</label><label><input type="radio" value="2" name="t1-st-3" data-correct="false"> C. They are always about the last paragraph.</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. They do not need the passage.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. “NO MORE THAN TWO WORDS AND/OR A NUMBER” — which answer is acceptable?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="false"> A. the 1989 experiment</label><label><input type="radio" value="1" name="t1-st-4" data-correct="true"> B. 26 years</label><label><input type="radio" value="2" name="t1-st-4" data-correct="false"> C. twenty-six long years</label><label><input type="radio" value="3" name="t1-st-4" data-correct="false"> D. after 26 years later</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Precision vocabulary.</strong> Match each word to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. exaggeration</button><button type="button" class="lm-item" data-key="2">2. harness</button><button type="button" class="lm-item" data-key="3">3. precipitate</button><button type="button" class="lm-item" data-key="4">4. moratorium</button><button type="button" class="lm-item" data-key="5">5. smother</button><button type="button" class="lm-item" data-key="6">6. anthropomorphism</button><button type="button" class="lm-item" data-key="7">7. credibility</button><button type="button" class="lm-item" data-key="8">8. threshold</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. the level at which something starts to happen</button><button type="button" class="lm-item" data-key="b">b. giving human qualities to animals or objects</button><button type="button" class="lm-item" data-key="c">c. control and use something for a purpose</button><button type="button" class="lm-item" data-key="d">d. cover something completely so that it cannot breathe or grow</button><button type="button" class="lm-item" data-key="e">e. (of a substance) separate out from a liquid as a solid</button><button type="button" class="lm-item" data-key="f">f. the quality of being believed and trusted</button><button type="button" class="lm-item" data-key="g">g. a statement that makes something seem bigger or better than it is</button><button type="button" class="lm-item" data-key="h">h. an agreed temporary stop to an activity</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 16</div>
+      <h2>Reading Passage 1 — The Placebo Paradox</h2>
+      <p class="task-sub"><b>The test starts now.</b> Spend about <b>18 minutes</b> on Questions 1–13: <b>matching headings</b>, <b>TRUE / FALSE / NOT GIVEN</b> and <b>summary completion</b>. Answers are checked when you press <b>Next</b> — you cannot change them afterwards.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Placebo Paradox<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Inactive treatments cannot cure disease. So why do they so often make patients feel better?</small></h3>
+            <p class="article-meta">Reading Passage 1 · Medicine · 555 words</p>
+            <p><span class="para-label">A</span>In 1955, the American anaesthetist Henry Beecher published a paper titled ‘The Powerful Placebo’, in which he claimed that roughly a third of patients across a range of conditions improved after receiving an inactive treatment. The figure became one of the most widely quoted statistics in medicine. Later analyses, however, showed that Beecher had not separated the effect of the placebo from the natural course of illness: many of his patients would simply have got better anyway. The idea that a sugar pill can cure disease turned out to be, at best, an exaggeration.</p><p><span class="para-label">B</span>Yet the placebo response is not imaginary. Brain-imaging studies have shown that when patients expect pain relief, their brains release endorphins, the body’s natural painkillers, and that this release can be blocked by a drug called naloxone. In patients with Parkinson’s disease, a placebo injection has been found to trigger the release of dopamine, the chemical whose loss causes the disease’s symptoms. In other words, expectation produces measurable changes in the body — but mainly in symptoms that the brain itself regulates, such as pain, nausea and fatigue, rather than in the underlying disease.</p><p><span class="para-label">C</span>Context appears to matter enormously. Experiments have found that two placebo pills work better than one, that injections outperform pills, and that capsules described as expensive produce stronger effects than identical ones presented as cheap. Even colour plays a part: in several studies, blue pills were more effective as sedatives and red ones as stimulants — except, curiously, among Italian men, for whom blue is the colour of the national football team and is associated with excitement rather than calm.</p><p><span class="para-label">D</span>The relationship between doctor and patient may be the most powerful ingredient of all. In a study of patients with irritable bowel syndrome led by Ted Kaptchuk at Harvard, one group received placebo acupuncture from a practitioner who was brisk and businesslike, while another received the same fake treatment from one who was warm, attentive and spent 45 minutes listening to them. The second group reported significantly greater improvement, suggesting that the ritual of care can itself be therapeutic.</p><p><span class="para-label">E</span>Such findings create an ethical problem. Prescribing a placebo has traditionally required deception: the treatment works, it was assumed, only if the patient believes it is real. Most medical codes regard deceiving patients as unacceptable, and doctors who secretly prescribe inactive pills risk damaging the trust on which medicine depends. Surveys nevertheless suggest that a significant proportion of doctors in several countries admit to having given ‘impure’ placebos, such as vitamins, or antibiotics for viral infections, partly to satisfy patients.</p><p><span class="para-label">F</span>A surprising possible solution has emerged in the past decade. In ‘open-label’ placebo trials, patients are told plainly that they are receiving pills that contain no active ingredient, but that such pills have produced improvements in other studies. Remarkably, several trials — for conditions including chronic back pain and irritable bowel syndrome — have found that patients still benefit. Researchers do not yet fully understand why, though one explanation is that the act of taking a pill as part of a routine is itself associated with getting better. Sceptics caution that most of these trials have been small and that patients could not be prevented from guessing which group they were in. If the results hold, however, they may allow doctors to harness the placebo effect without lying.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">The passage has six paragraphs, <b>A–F</b>. Choose the correct heading for each paragraph from the list below.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; A celebrated figure that misled<br><b>ii</b>&nbsp; Real effects, but limited in scope<br><b>iii</b>&nbsp; Why patients prefer cheaper medicines<br><b>iv</b>&nbsp; The influence of how a treatment is presented<br><b>v</b>&nbsp; The healing power of attention<br><b>vi</b>&nbsp; An ethical dilemma for doctors<br><b>vii</b>&nbsp; Benefits without deception?<br><b>viii</b>&nbsp; The decline of placebo research<br><b>ix</b>&nbsp; Placebos in veterinary medicine</p></div>
+      <div class="card" id="t2-h"><div class="sel-row"><select class="select" id="t2-h-1" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>1.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t2-h-2" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>2.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t2-h-3" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>3.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t2-h-4" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>4.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t2-h-5" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>5.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t2-h-6" data-answer="vii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option><option value="ix">ix</option></select><span><b>6.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-h', 't2-h-score')">Check answers</button>
+          <span id="t2-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–10</p><p class="qg-instr">Do the following statements agree with the information given in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-7">
+          <p>7. Beecher’s analysis took account of patients who would have recovered without treatment.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-7" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-7" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-7" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-8">
+          <p>8. Naloxone can prevent the release of endorphins triggered by a placebo.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-8" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-8" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-8" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-9">
+          <p>9. Italian women respond to blue placebo pills in the same way as Italian men.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-9" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-9" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-9" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-10">
+          <p>10. Most medical codes allow doctors to deceive patients in certain circumstances.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-10" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-10" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-10" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–13</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p></div>
+      <div class="card" id="t2-s" style="line-height:2.7;"><p>In open-label trials, patients are informed that their pills contain no active (11) <input type="text" class="text-answer" id="t2-11" data-correct="ingredient" autocomplete="off" style="width:130px;">. Even so, patients with conditions such as chronic back pain have reported benefits. One possible explanation is that taking a pill as part of a (12) <input type="text" class="text-answer" id="t2-12" data-correct="routine" autocomplete="off" style="width:120px;"> is linked in people’s minds with recovery. Sceptics, however, note that most such trials have been (13) <input type="text" class="text-answer" id="t2-13" data-correct="small" autocomplete="off" style="width:110px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-s', 't2-s-score')">Check answers</button>
+          <span id="t2-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 16</div>
+      <h2>Reading Passage 1 — Answer Analysis</h2>
+      <p class="task-sub">Open each answer. Pay attention to the distractor headings (iii, viii, ix): each borrows an idea from the passage but does not describe any paragraph’s main function.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Placebo Paradox</summary>
+        <p><span class="para-label">A</span>In 1955, the American anaesthetist Henry Beecher published a paper titled ‘The Powerful Placebo’, in which he claimed that roughly a third of patients across a range of conditions improved after receiving an inactive treatment. The figure became one of the most widely quoted statistics in medicine. Later analyses, however, showed that Beecher had not separated the effect of the placebo from the natural course of illness: many of his patients would simply have got better anyway. The idea that a sugar pill can cure disease turned out to be, at best, an exaggeration.</p><p><span class="para-label">B</span>Yet the placebo response is not imaginary. Brain-imaging studies have shown that when patients expect pain relief, their brains release endorphins, the body’s natural painkillers, and that this release can be blocked by a drug called naloxone. In patients with Parkinson’s disease, a placebo injection has been found to trigger the release of dopamine, the chemical whose loss causes the disease’s symptoms. In other words, expectation produces measurable changes in the body — but mainly in symptoms that the brain itself regulates, such as pain, nausea and fatigue, rather than in the underlying disease.</p><p><span class="para-label">C</span>Context appears to matter enormously. Experiments have found that two placebo pills work better than one, that injections outperform pills, and that capsules described as expensive produce stronger effects than identical ones presented as cheap. Even colour plays a part: in several studies, blue pills were more effective as sedatives and red ones as stimulants — except, curiously, among Italian men, for whom blue is the colour of the national football team and is associated with excitement rather than calm.</p><p><span class="para-label">D</span>The relationship between doctor and patient may be the most powerful ingredient of all. In a study of patients with irritable bowel syndrome led by Ted Kaptchuk at Harvard, one group received placebo acupuncture from a practitioner who was brisk and businesslike, while another received the same fake treatment from one who was warm, attentive and spent 45 minutes listening to them. The second group reported significantly greater improvement, suggesting that the ritual of care can itself be therapeutic.</p><p><span class="para-label">E</span>Such findings create an ethical problem. Prescribing a placebo has traditionally required deception: the treatment works, it was assumed, only if the patient believes it is real. Most medical codes regard deceiving patients as unacceptable, and doctors who secretly prescribe inactive pills risk damaging the trust on which medicine depends. Surveys nevertheless suggest that a significant proportion of doctors in several countries admit to having given ‘impure’ placebos, such as vitamins, or antibiotics for viral infections, partly to satisfy patients.</p><p><span class="para-label">F</span>A surprising possible solution has emerged in the past decade. In ‘open-label’ placebo trials, patients are told plainly that they are receiving pills that contain no active ingredient, but that such pills have produced improvements in other studies. Remarkably, several trials — for conditions including chronic back pain and irritable bowel syndrome — have found that patients still benefit. Researchers do not yet fully understand why, though one explanation is that the act of taking a pill as part of a routine is itself associated with getting better. Sceptics caution that most of these trials have been small and that patients could not be prevented from guessing which group they were in. If the results hold, however, they may allow doctors to harness the placebo effect without lying.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">i</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">one of the most widely quoted statistics … Beecher had not separated the effect of the placebo from the natural course of illness</span>. Celebrated + misleading.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">ii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">the placebo response is not imaginary … measurable changes … but mainly in symptoms that the brain itself regulates</span>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">iv</span><span class="an-where">Para C</span></summary><div class="an-body"><p>Number of pills, injections, price, colour — all about <span class="ev">context</span> and presentation.</p><p><span class="trap">Trap:</span> iii — the passage says <i>expensive</i> placebos work better, the opposite of a preference for cheap ones.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">v</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">warm, attentive and spent 45 minutes listening … the ritual of care can itself be therapeutic</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">vi</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Such findings create an ethical problem … required deception</span>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">vii</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">allow doctors to harness the placebo effect without lying</span>. The question mark reflects the sceptics’ caution.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">FALSE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Beecher had not separated the effect of the placebo from the natural course of illness</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">TRUE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">this release can be blocked by a drug called naloxone</span>. blocked = prevented.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para C</span></summary><div class="an-body"><p>Only <span class="ev">Italian men</span> are mentioned. Nothing is said about Italian women.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">FALSE</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Most medical codes regard deceiving patients as unacceptable</span>.</p><p><span class="trap">Trap:</span> Doctors <i>admit</i> to giving impure placebos — but that is practice, not what the codes permit.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">ingredient</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">pills that contain no active ingredient</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">routine</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">the act of taking a pill as part of a routine is itself associated with getting better</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">small</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Sceptics caution that most of these trials have been small</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 16</div>
+      <h2>Reading Passage 2 — Mining the Deep Ocean</h2>
+      <p class="task-sub">Spend about <b>20 minutes</b> on Questions 14–26: <b>matching information</b>, <b>matching features</b> and <b>sentence completion</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Mining the Deep Ocean<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">The seabed holds metals the energy transition needs. Whether it should be mined is one of the hardest environmental questions of the decade.</small></h3>
+            <p class="article-meta">Reading Passage 2 · Environment and resources · 600 words</p>
+            <p><span class="para-label">A</span>Three to six kilometres below the surface of the Pacific Ocean, scattered across the abyssal plains between Hawaii and Mexico, lie trillions of potato-sized lumps of rock known as polymetallic nodules. Formed over millions of years as metals in seawater slowly precipitate around a fragment of shell or a shark’s tooth, they are rich in manganese, nickel, cobalt and copper — metals essential to the batteries of electric vehicles. The area in which they are most concentrated, the Clarion-Clipperton Zone, covers some 4.5 million square kilometres.</p><p><span class="para-label">B</span>For mining companies, the attraction is obvious. Demand for battery metals is expected to rise sharply as countries phase out petrol cars, and land-based mines are frequently associated with deforestation, polluted rivers and poor working conditions. Gerard Barron, chief executive of The Metals Company, has described the nodules as ‘a battery in a rock’, arguing that collecting them from the seabed would cause less harm than digging new mines in rainforests.</p><p><span class="para-label">C</span>Scientists who study the deep sea are far less convinced. Diva Amon, a marine biologist who has taken part in expeditions to the Clarion-Clipperton Zone, has pointed out that the majority of species collected there are new to science. Because so little is known about these ecosystems, she argues, it is impossible to predict how mining would affect them. The nodules themselves are habitats: many animals, including sponges and corals, can live only by attaching themselves to a hard surface, and on the soft mud of the abyssal plains the nodules are often the only such surface available. Once removed, they would take millions of years to form again.</p><p><span class="para-label">D</span>There are concerns, too, about the clouds of sediment that collecting machines would stir up. Deep-sea animals have evolved in exceptionally clear and still water, and many filter food from it. Plumes of sediment could spread for tens or even hundreds of kilometres, potentially smothering animals far beyond the mined area. A 1989 experiment off the coast of Peru, in which researchers ploughed a section of seabed to simulate mining, offers a sobering indication: when scientists returned 26 years later, the tracks were still clearly visible and many animal populations had not recovered.</p><p><span class="para-label">E</span>Regulating the industry is unusually complicated. The seabed beyond national boundaries is governed by the International Seabed Authority (ISA), a body established under the United Nations Convention on the Law of the Sea, which describes these resources as the ‘common heritage of mankind’. The ISA has issued exploration contracts but has not yet agreed the rules that would allow commercial mining to begin. In 2021, the small Pacific nation of Nauru, which sponsors a mining company, triggered a little-known clause requiring the ISA to complete its regulations within two years, increasing the pressure for a decision.</p><p><span class="para-label">F</span>Opposition has grown in response. More than twenty countries, including France, Germany and New Zealand, have called for a pause or moratorium until the environmental risks are better understood, and several major car and technology manufacturers have pledged not to use metals from the deep sea until those risks are clearer. Some analysts also question whether the metals will be needed at all, since battery chemistries are changing rapidly and some newer designs use little or no cobalt or nickel.</p><p><span class="para-label">G</span>Supporters counter that waiting indefinitely is not a neutral choice, since every year of delay means more mining on land, with its well-documented damage to people and ecosystems. The underlying difficulty is that the comparison is between a familiar harm and an unknown one. Choosing between them requires not only better science, but also a decision about how much uncertainty societies are prepared to accept.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–18</p><p class="qg-instr">The passage has seven paragraphs, <b>A–G</b>. Which paragraph contains the following information? <b>NB</b> You may use any letter more than once.</p></div>
+      <div class="card" id="t4-mi"><div class="sel-row"><select class="select" id="t4-mi-14" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select><span><b>14.</b> an account of a test whose effects were still visible decades later</span></div><div class="sel-row"><select class="select" id="t4-mi-15" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select><span><b>15.</b> a reference to a legal mechanism used to speed up a decision</span></div><div class="sel-row"><select class="select" id="t4-mi-16" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select><span><b>16.</b> an explanation of how the nodules come into existence</span></div><div class="sel-row"><select class="select" id="t4-mi-17" data-answer="F"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select><span><b>17.</b> a suggestion that technological change could reduce demand for certain metals</span></div><div class="sel-row"><select class="select" id="t4-mi-18" data-answer="G"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select><span><b>18.</b> the argument that postponing a decision also has environmental costs</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mi', 't4-mi-score')">Check answers</button>
+          <span id="t4-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 19–22</p><p class="qg-instr">Match each statement with the correct person or organisation, <b>A–D</b>. You may use any letter more than once.</p></div>
+<div class="card"><p class="prompt-label">People and organisations</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; Gerard Barron<br><b>B</b>&nbsp; Diva Amon<br><b>C</b>&nbsp; the International Seabed Authority<br><b>D</b>&nbsp; Nauru</p></div>
+      <div class="card" id="t4-mf"><div class="sel-row"><select class="select" id="t4-mf-19" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>19.</b> has not yet finalised the rules needed for commercial extraction</span></div><div class="sel-row"><select class="select" id="t4-mf-20" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>20.</b> compares a natural object to a familiar manufactured product</span></div><div class="sel-row"><select class="select" id="t4-mf-21" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>21.</b> stresses how little is known about the region’s wildlife</span></div><div class="sel-row"><select class="select" id="t4-mf-22" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>22.</b> supports a commercial company’s involvement in seabed mining</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mf', 't4-mf-score')">Check answers</button>
+          <span id="t4-mf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 23–26</p><p class="qg-instr">Complete the sentences. Choose <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.</p></div>
+      <div class="card" id="t4-sc" style="line-height:2.4;"><p>23. Sponges and corals on the abyssal plains need a <input type="text" class="text-answer" id="t4-23" data-correct="hard surface" autocomplete="off" style="width:150px;"> to which they can attach themselves.</p><p>24. Many deep-sea animals <input type="text" class="text-answer" id="t4-24" data-correct="filter" autocomplete="off" style="width:120px;"> food from the surrounding water.</p><p>25. The UN convention describes seabed resources as the <input type="text" class="text-answer" id="t4-25" data-correct="common heritage" autocomplete="off" style="width:160px;"> of mankind.</p><p>26. Some manufacturers will not use deep-sea metals until the <input type="text" class="text-answer" id="t4-26" data-correct="risks/environmental risks" autocomplete="off" style="width:160px;"> are clearer.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-sc', 't4-sc-score')">Check answers</button>
+          <span id="t4-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 16</div>
+      <h2>Reading Passage 2 — Answer Analysis</h2>
+      <p class="task-sub">Check your answers. Matching information rewards readers who notice the <b>type</b> of information (an account, an explanation, an argument) rather than the topic alone.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Mining the Deep Ocean</summary>
+        <p><span class="para-label">A</span>Three to six kilometres below the surface of the Pacific Ocean, scattered across the abyssal plains between Hawaii and Mexico, lie trillions of potato-sized lumps of rock known as polymetallic nodules. Formed over millions of years as metals in seawater slowly precipitate around a fragment of shell or a shark’s tooth, they are rich in manganese, nickel, cobalt and copper — metals essential to the batteries of electric vehicles. The area in which they are most concentrated, the Clarion-Clipperton Zone, covers some 4.5 million square kilometres.</p><p><span class="para-label">B</span>For mining companies, the attraction is obvious. Demand for battery metals is expected to rise sharply as countries phase out petrol cars, and land-based mines are frequently associated with deforestation, polluted rivers and poor working conditions. Gerard Barron, chief executive of The Metals Company, has described the nodules as ‘a battery in a rock’, arguing that collecting them from the seabed would cause less harm than digging new mines in rainforests.</p><p><span class="para-label">C</span>Scientists who study the deep sea are far less convinced. Diva Amon, a marine biologist who has taken part in expeditions to the Clarion-Clipperton Zone, has pointed out that the majority of species collected there are new to science. Because so little is known about these ecosystems, she argues, it is impossible to predict how mining would affect them. The nodules themselves are habitats: many animals, including sponges and corals, can live only by attaching themselves to a hard surface, and on the soft mud of the abyssal plains the nodules are often the only such surface available. Once removed, they would take millions of years to form again.</p><p><span class="para-label">D</span>There are concerns, too, about the clouds of sediment that collecting machines would stir up. Deep-sea animals have evolved in exceptionally clear and still water, and many filter food from it. Plumes of sediment could spread for tens or even hundreds of kilometres, potentially smothering animals far beyond the mined area. A 1989 experiment off the coast of Peru, in which researchers ploughed a section of seabed to simulate mining, offers a sobering indication: when scientists returned 26 years later, the tracks were still clearly visible and many animal populations had not recovered.</p><p><span class="para-label">E</span>Regulating the industry is unusually complicated. The seabed beyond national boundaries is governed by the International Seabed Authority (ISA), a body established under the United Nations Convention on the Law of the Sea, which describes these resources as the ‘common heritage of mankind’. The ISA has issued exploration contracts but has not yet agreed the rules that would allow commercial mining to begin. In 2021, the small Pacific nation of Nauru, which sponsors a mining company, triggered a little-known clause requiring the ISA to complete its regulations within two years, increasing the pressure for a decision.</p><p><span class="para-label">F</span>Opposition has grown in response. More than twenty countries, including France, Germany and New Zealand, have called for a pause or moratorium until the environmental risks are better understood, and several major car and technology manufacturers have pledged not to use metals from the deep sea until those risks are clearer. Some analysts also question whether the metals will be needed at all, since battery chemistries are changing rapidly and some newer designs use little or no cobalt or nickel.</p><p><span class="para-label">G</span>Supporters counter that waiting indefinitely is not a neutral choice, since every year of delay means more mining on land, with its well-documented damage to people and ecosystems. The underlying difficulty is that the comparison is between a familiar harm and an unknown one. Choosing between them requires not only better science, but also a decision about how much uncertainty societies are prepared to accept.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">D</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">A 1989 experiment … when scientists returned 26 years later, the tracks were still clearly visible</span>.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">E</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">triggered a little-known clause requiring the ISA to complete its regulations within two years</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">A</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Formed over millions of years as metals in seawater slowly precipitate around a fragment of shell</span>.</p><p><span class="trap">Trap:</span> Para C mentions that nodules would take millions of years to <i>form again</i> — but A explains <i>how</i> they form.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">F</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">battery chemistries are changing rapidly and some newer designs use little or no cobalt or nickel</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">G</span><span class="an-where">Para G</span></summary><div class="an-body"><p><span class="ev">waiting indefinitely is not a neutral choice, since every year of delay means more mining on land</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">C</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">has not yet agreed the rules that would allow commercial mining to begin</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">A</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">‘a battery in a rock’</span> — a natural object (nodule) compared with a manufactured one (battery).</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">the majority of species collected there are new to science</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">D</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Nauru, which sponsors a mining company</span>.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">hard surface</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">can live only by attaching themselves to a hard surface</span>.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">filter</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">many filter food from it</span>. The sentence needs a verb in the present simple.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">common heritage</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">the ‘common heritage of mankind’</span>.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">risks</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">pledged not to use metals from the deep sea until those risks are clearer</span>. <i>environmental risks</i> (two words) is also accepted.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 16</div>
+      <h2>Reading Passage 3 — How Clever Are Animals?</h2>
+      <p class="task-sub">Spend about <b>22 minutes</b> on Questions 27–40: <b>YES / NO / NOT GIVEN</b>, <b>multiple choice</b> and <b>summary completion with a word bank</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">How Clever Are Animals?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">The study of animal minds has moved from suspicion to enthusiasm. The challenge now is to get the balance right.</small></h3>
+            <p class="article-meta">Reading Passage 3 · Animal cognition · 556 words</p>
+            <p><span class="para-label">A</span>For much of the twentieth century, scientists who studied animal behaviour were deeply suspicious of any suggestion that animals might think. The dominant approach, behaviourism, held that behaviour should be explained in terms of learned associations between stimuli and responses, and that talk of animal minds was unscientific speculation. Researchers were warned against ‘anthropomorphism’ — attributing human thoughts and feelings to other species — and with good reason: the history of the field contained cautionary tales such as that of Clever Hans, a horse in early-twentieth-century Berlin who appeared to solve arithmetic problems but was in fact responding to unconscious cues from his questioners.</p><p><span class="para-label">B</span>Since the 1970s, however, the pendulum has swung decisively. A series of striking discoveries has revealed cognitive abilities in species once considered mere bundles of reflexes. New Caledonian crows manufacture hooked tools from twigs and can solve problems requiring several steps in sequence. Chimpanzees appear to understand what other individuals can and cannot see. Honeybees can learn the concept of ‘zero’, and octopuses, whose last common ancestor with humans was a worm-like creature living more than 500 million years ago, can open jars, escape from tanks and recognise individual people.</p><p><span class="para-label">C</span>The octopus is especially instructive, because its intelligence evolved entirely independently of our own. Two-thirds of its neurons are located not in its brain but in its arms, each of which can taste, touch and to some degree act on its own. If such a radically different nervous system can produce flexible, problem-solving behaviour, then intelligence may be less a single ladder, with humans at the top, than a collection of solutions that evolution has arrived at repeatedly in response to similar challenges.</p><p><span class="para-label">D</span>I find this view persuasive, but it carries its own risks. In their enthusiasm, some researchers and many journalists have described animal achievements in language that implies far more than the evidence shows. A crow that bends a wire into a hook has demonstrated an impressive capacity for problem-solving; whether it ‘understands’ physics in anything like the way a human does is a separate question that the experiment cannot answer. Overstating such findings may ultimately damage the credibility of a field that has fought hard for scientific respectability.</p><p><span class="para-label">E</span>There is also a methodological problem. Many experiments in animal cognition rely on small numbers of animals, sometimes a single individual, and on tasks designed with human abilities in mind. An animal that fails such a test may lack the ability being measured — or may simply lack interest in the reward, be distracted by an unfamiliar laboratory, or perceive the task through senses we barely share. The classic ‘mirror test’ of self-recognition, which most species fail, may tell us more about the importance of vision to primates than about self-awareness in, say, dogs, which rely far more on smell.</p><p><span class="para-label">F</span>None of this means the study of animal minds should return to the cautious silence of the behaviourist era. The evidence that many species possess rich cognitive lives is now overwhelming, and it has practical consequences: several countries have extended animal-welfare protections to octopuses and crabs on the basis of research into their capacity to feel pain. What it does mean is that researchers should design tests that suit the animal rather than the investigator, and should describe their results with the same precision they would expect of any other science.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 27–32</p><p class="qg-instr">Do the following statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-27">
+          <p>27. Behaviourists were right to be cautious about anthropomorphism.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-27" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-27" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-27" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-28">
+          <p>28. The idea that intelligence has evolved in several different forms is convincing.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-28" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-28" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-28" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-29">
+          <p>29. Journalists bear more responsibility than researchers for exaggerating animal intelligence.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-29" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-29" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-29" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-30">
+          <p>30. Experiments with crows show that they understand physics as humans do.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-30" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-30" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-30" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-31">
+          <p>31. The mirror test is a reliable measure of self-awareness in all species.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-31" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-31" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-31" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-32">
+          <p>32. Research into animal pain has influenced the law in some countries.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-32" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-32" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-32" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 33–36</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-33">
+          <p>33. The writer mentions Clever Hans in order to</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-33" data-correct="false"> A. show that horses are capable of arithmetic.</label><label><input type="radio" value="1" name="t6-mc-33" data-correct="true"> B. illustrate the danger of misinterpreting animal behaviour.</label><label><input type="radio" value="2" name="t6-mc-33" data-correct="false"> C. criticise the methods of behaviourists.</label><label><input type="radio" value="3" name="t6-mc-33" data-correct="false"> D. explain the origins of animal cognition research in Berlin.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-34">
+          <p>34. According to the writer, the octopus is particularly significant because</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-34" data-correct="false"> A. it has more neurons than any other invertebrate.</label><label><input type="radio" value="1" name="t6-mc-34" data-correct="true"> B. its intelligence developed separately from that of humans.</label><label><input type="radio" value="2" name="t6-mc-34" data-correct="false"> C. it is the closest living relative of humans among invertebrates.</label><label><input type="radio" value="3" name="t6-mc-34" data-correct="false"> D. its arms are controlled entirely by its brain.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-35">
+          <p>35. What does the writer suggest about animals that fail cognitive tests?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-35" data-correct="false"> A. They clearly lack the ability being tested.</label><label><input type="radio" value="1" name="t6-mc-35" data-correct="false"> B. They are usually distracted by the presence of humans.</label><label><input type="radio" value="2" name="t6-mc-35" data-correct="true"> C. Their failure may reflect the design of the test rather than a lack of ability.</label><label><input type="radio" value="3" name="t6-mc-35" data-correct="false"> D. They should be tested again using larger groups.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-36">
+          <p>36. What is the writer’s main purpose in the final paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-36" data-correct="false"> A. to argue that animal research should be reduced</label><label><input type="radio" value="1" name="t6-mc-36" data-correct="true"> B. to recommend a balanced approach to future research</label><label><input type="radio" value="2" name="t6-mc-36" data-correct="false"> C. to describe new laws protecting animals</label><label><input type="radio" value="3" name="t6-mc-36" data-correct="false"> D. to defend the behaviourist tradition</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 37–40</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD</b> from the box for each answer.</p></div>
+      <div class="word-bank">abilities · credibility · small · senses · reflexes · funding · large · rewards · ancestors</div><div class="card" id="t6-s" style="line-height:2.7;"><p>Since the 1970s, a series of discoveries has revealed unexpected cognitive (37) <input type="text" class="text-answer" id="t6-37" data-correct="abilities" autocomplete="off" style="width:130px;"> in species once regarded as little more than collections of reflexes. The writer warns, however, that describing these findings too enthusiastically could damage the (38) <input type="text" class="text-answer" id="t6-38" data-correct="credibility" autocomplete="off" style="width:130px;"> of the field. Moreover, many studies involve only a (39) <input type="text" class="text-answer" id="t6-39" data-correct="small" autocomplete="off" style="width:110px;"> number of animals, and tests may be unsuitable for species that experience the world through different (40) <input type="text" class="text-answer" id="t6-40" data-correct="senses" autocomplete="off" style="width:110px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-s', 't6-s-score')">Check answers</button>
+          <span id="t6-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 16</div>
+      <h2>Reading Passage 3 — Answer Analysis and Your Score</h2>
+      <p class="task-sub">Check Passage 3, total your score out of 40, find your band and diagnose your weakest question type.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — How Clever Are Animals?</summary>
+        <p><span class="para-label">A</span>For much of the twentieth century, scientists who studied animal behaviour were deeply suspicious of any suggestion that animals might think. The dominant approach, behaviourism, held that behaviour should be explained in terms of learned associations between stimuli and responses, and that talk of animal minds was unscientific speculation. Researchers were warned against ‘anthropomorphism’ — attributing human thoughts and feelings to other species — and with good reason: the history of the field contained cautionary tales such as that of Clever Hans, a horse in early-twentieth-century Berlin who appeared to solve arithmetic problems but was in fact responding to unconscious cues from his questioners.</p><p><span class="para-label">B</span>Since the 1970s, however, the pendulum has swung decisively. A series of striking discoveries has revealed cognitive abilities in species once considered mere bundles of reflexes. New Caledonian crows manufacture hooked tools from twigs and can solve problems requiring several steps in sequence. Chimpanzees appear to understand what other individuals can and cannot see. Honeybees can learn the concept of ‘zero’, and octopuses, whose last common ancestor with humans was a worm-like creature living more than 500 million years ago, can open jars, escape from tanks and recognise individual people.</p><p><span class="para-label">C</span>The octopus is especially instructive, because its intelligence evolved entirely independently of our own. Two-thirds of its neurons are located not in its brain but in its arms, each of which can taste, touch and to some degree act on its own. If such a radically different nervous system can produce flexible, problem-solving behaviour, then intelligence may be less a single ladder, with humans at the top, than a collection of solutions that evolution has arrived at repeatedly in response to similar challenges.</p><p><span class="para-label">D</span>I find this view persuasive, but it carries its own risks. In their enthusiasm, some researchers and many journalists have described animal achievements in language that implies far more than the evidence shows. A crow that bends a wire into a hook has demonstrated an impressive capacity for problem-solving; whether it ‘understands’ physics in anything like the way a human does is a separate question that the experiment cannot answer. Overstating such findings may ultimately damage the credibility of a field that has fought hard for scientific respectability.</p><p><span class="para-label">E</span>There is also a methodological problem. Many experiments in animal cognition rely on small numbers of animals, sometimes a single individual, and on tasks designed with human abilities in mind. An animal that fails such a test may lack the ability being measured — or may simply lack interest in the reward, be distracted by an unfamiliar laboratory, or perceive the task through senses we barely share. The classic ‘mirror test’ of self-recognition, which most species fail, may tell us more about the importance of vision to primates than about self-awareness in, say, dogs, which rely far more on smell.</p><p><span class="para-label">F</span>None of this means the study of animal minds should return to the cautious silence of the behaviourist era. The evidence that many species possess rich cognitive lives is now overwhelming, and it has practical consequences: several countries have extended animal-welfare protections to octopuses and crabs on the basis of research into their capacity to feel pain. What it does mean is that researchers should design tests that suit the animal rather than the investigator, and should describe their results with the same precision they would expect of any other science.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">YES</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Researchers were warned against ‘anthropomorphism’ … and with good reason</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">YES</span><span class="an-where">Paras C–D</span></summary><div class="an-body"><p>C presents intelligence as <span class="ev">a collection of solutions that evolution has arrived at repeatedly</span>; D begins <span class="ev">I find this view persuasive</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">some researchers and many journalists</span> — both are criticised, but responsibility is never compared.</p><p><span class="trap">Trap:</span> “many” vs “some” describes numbers, not degrees of responsibility.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">NO</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">whether it ‘understands’ physics … is a separate question that the experiment cannot answer</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">NO</span><span class="an-where">Para E</span></summary><div class="an-body"><p>The mirror test <span class="ev">may tell us more about the importance of vision to primates than about self-awareness in … dogs</span>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">several countries have extended animal-welfare protections … on the basis of research into their capacity to feel pain</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">B</span><span class="an-where">Para A</span></summary><div class="an-body"><p>Hans <span class="ev">appeared to solve arithmetic problems but was in fact responding to unconscious cues</span> — a cautionary tale.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">its intelligence evolved entirely independently of our own</span>.</p><p><span class="trap">Trap:</span> D contradicts the passage: two-thirds of its neurons are in its arms.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">C</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">may lack the ability being measured — or may simply lack interest … or perceive the task through senses we barely share</span>.</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p>Not a return to silence, but <span class="ev">design tests that suit the animal … describe their results with the same precision</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">abilities</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">revealed cognitive abilities in species once considered mere bundles of reflexes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">credibility</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Overstating such findings may ultimately damage the credibility of a field</span>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">small</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">rely on small numbers of animals</span>.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">senses</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">perceive the task through senses we barely share</span>.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Academic Reading)</p>
+<table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr>
+<tr><td>23–26</td><td>6.0</td></tr><tr><td>27–29</td><td>6.5</td></tr><tr><td>30–32</td><td>7.0</td></tr><tr><td>33–34</td><td>7.5</td></tr><tr><td>35–36</td><td>8.0</td></tr><tr><td>37–38</td><td>8.5</td></tr><tr><td>39–40</td><td>9.0</td></tr></table></div>
+      <div class="card"><p class="mini-q">1. Your score out of 40 and your estimated band:</p><textarea class="no-check mini-answer" id="t7-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. List every question you got wrong and classify each mistake: misread the question / misread the passage / spelling-grammar / time pressure / trap.</p><textarea class="no-check mini-answer" id="t7-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Which ONE habit will most improve your score in the next test?</p><textarea class="no-check mini-answer" id="t7-rf-3" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t7-rf-btn">Show some ideas</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t7-rf-ans"><p>At band 7–8, lost marks usually come from three sources: <b>NOT GIVEN traps</b> involving comparison or superlatives (Q9, Q29); <b>heading distractors</b> that reuse a passage idea (iii, viii); and <b>grammatical fit</b> in completion (Q24 needs a verb).</p><p>The single most valuable habit is usually to <b>locate the exact sentence</b> before answering any TRUE/FALSE or YES/NO question — never answer from memory of the passage.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 16</div>
+      <h2>Extra Reading 1 — The Myth of the 10,000-Hour Rule</h2>
+      <p class="task-sub">The first of three extra articles (about <b>20 minutes</b> each). Answer the questions, then summarise in writing (<b>at least 120 words</b>) and aloud (<b>at least 60 seconds</b>).</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Myth of the 10,000-Hour Rule</h3>
+        <p class="article-meta">Extra reading 1 · Learning and expertise · 330 words</p>
+        <p><span class="para-label">A</span>Few ideas about success have spread as widely as the claim that it takes 10,000 hours of practice to become an expert. Popularised by the journalist Malcolm Gladwell in his 2008 book <i>Outliers</i>, the ‘rule’ was based on research by the psychologist Anders Ericsson, who had studied violin students at a music academy in Berlin. Ericsson found that the best performers had, by the age of twenty, accumulated an average of around 10,000 hours of practice — considerably more than their less accomplished classmates.</p><p><span class="para-label">B</span>Ericsson himself, however, repeatedly objected to the way his findings were summarised. The figure of 10,000 was an average, not a threshold: some of the top violinists had practised far less. More importantly, his research emphasised not the quantity of practice but its quality. What he called ‘deliberate practice’ involves working at the edge of one’s ability on specific weaknesses, usually with feedback from a teacher, and is often mentally exhausting rather than enjoyable. Simply repeating an activity one can already do — playing familiar pieces, or hitting the same golf shots — produces little improvement, however many hours it fills.</p><p><span class="para-label">C</span>Later research has also questioned how much practice explains at all. A large analysis published in 2014 by Brooke Macnamara and colleagues, which combined the results of 88 studies, concluded that deliberate practice accounted for about a quarter of the differences in performance in games such as chess, around a fifth in music and sport, and only about 4 per cent in education. Other factors — the age at which people start, working-memory capacity, personality and simple opportunity — appear to matter considerably.</p><p><span class="para-label">D</span>None of this means that practice is unimportant; in almost every field, experts practise a great deal. But the popular version of the rule may mislead in two directions. It can encourage people to believe that hours alone guarantee success, and it can discourage those who make slower progress from recognising that the way they practise may matter more than how long.</p>
+      </div>
+      <div class="card" id="t8-mc"><div class="q-item" id="t8-mc-1">
+          <p>1. The 10,000-hour figure originally came from</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-1" data-correct="false"> A. Gladwell’s interviews with experts.</label><label><input type="radio" value="1" name="t8-mc-1" data-correct="true"> B. a study of violin students.</label><label><input type="radio" value="2" name="t8-mc-1" data-correct="false"> C. an analysis of 88 studies.</label><label><input type="radio" value="3" name="t8-mc-1" data-correct="false"> D. research on chess players.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-2">
+          <p>2. Ericsson objected that the popular rule</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-2" data-correct="false"> A. overestimated the number of hours needed.</label><label><input type="radio" value="1" name="t8-mc-2" data-correct="true"> B. ignored that the figure was an average and that quality matters.</label><label><input type="radio" value="2" name="t8-mc-2" data-correct="false"> C. was based on too few musicians.</label><label><input type="radio" value="3" name="t8-mc-2" data-correct="false"> D. applied only to sport.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-3">
+          <p>3. Deliberate practice is best described as</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-3" data-correct="false"> A. enjoyable repetition of familiar skills.</label><label><input type="radio" value="1" name="t8-mc-3" data-correct="false"> B. practising for as many hours as possible.</label><label><input type="radio" value="2" name="t8-mc-3" data-correct="true"> C. demanding work on weaknesses at the limit of one’s ability.</label><label><input type="radio" value="3" name="t8-mc-3" data-correct="false"> D. practice without a teacher.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-4">
+          <p>4. According to the 2014 analysis, practice explained the smallest share of performance differences in</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-4" data-correct="false"> A. chess</label><label><input type="radio" value="1" name="t8-mc-4" data-correct="false"> B. music</label><label><input type="radio" value="2" name="t8-mc-4" data-correct="false"> C. sport</label><label><input type="radio" value="3" name="t8-mc-4" data-correct="true"> D. education</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-5">
+          <p>5. The writer’s overall conclusion is that</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-5" data-correct="false"> A. practice is largely irrelevant to expertise.</label><label><input type="radio" value="1" name="t8-mc-5" data-correct="true"> B. the popular rule is misleading even though practice matters.</label><label><input type="radio" value="2" name="t8-mc-5" data-correct="false"> C. talent is more important than practice in every field.</label><label><input type="radio" value="3" name="t8-mc-5" data-correct="false"> D. Ericsson’s research was flawed.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-mc', 't8-mc-score')">Check answers</button>
+          <span id="t8-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 120 words</b>. Capture the central argument, the key evidence and any counter-argument, and end with a one-sentence evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 120 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:180px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>The article argues that the popular “10,000-hour rule” misrepresents the research behind it. Malcolm Gladwell drew the figure from Anders Ericsson’s study of violin students, who by twenty had practised for about 10,000 hours on average. Ericsson, however, stressed that this was an average rather than a threshold, and that the quality of practice matters more than its quantity: “deliberate practice” means working on specific weaknesses at the limit of one’s ability, usually with feedback. A 2014 analysis of 88 studies further showed that practice explains only part of the differences between performers — about a quarter in chess and just 4 per cent in education — while factors such as starting age, memory and opportunity also matter. The writer concludes that practice is essential, but the rule wrongly suggests that hours alone guarantee success. I find the argument convincing, especially the point that how we practise matters more than how long.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 60 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central argument is that…”</li><li>“This is supported by…”</li><li>“That said, critics point out that…”</li><li>“What I find most convincing is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 16</div>
+      <h2>Extra Reading 2 — The Return of the Night Train</h2>
+      <p class="task-sub">Answer the completion questions using words from the article, then summarise it in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Return of the Night Train</h3>
+        <p class="article-meta">Extra reading 2 · Transport and climate · 266 words</p>
+        <p><span class="para-label">A</span>For several decades, Europe’s sleeper trains seemed to be heading for extinction. Cheap flights, faster high-speed rail and the high cost of operating carriages that are used only once a day led many national operators to close their overnight services. Germany’s state railway, Deutsche Bahn, withdrew its last sleeper trains in 2016.</p><p><span class="para-label">B</span>Within a few years, however, the trend had reversed. Austria’s federal railway, ÖBB, took over many of the routes abandoned by its German neighbour under the brand Nightjet, and the network now connects cities including Vienna, Munich, Hamburg, Paris and Amsterdam. New private operators have also appeared, and in 2021 France reopened a sleeper service between Paris and Nice that had been cancelled four years earlier.</p><p><span class="para-label">C</span>The main driving force has been concern about climate change. A journey by train typically produces a fraction of the greenhouse-gas emissions of the same journey by air, and night trains have a particular advantage over daytime rail: by travelling while passengers sleep, they make routes of 1,000 kilometres or more practical without the loss of a working day. Some travellers also point to the savings on a night’s hotel accommodation.</p><p><span class="para-label">D</span>Expanding the network is nevertheless difficult. Sleeper carriages are expensive to build and there are few manufacturers; ÖBB had to wait several years for new trains to be delivered. Crossing borders often means paying track-access charges to several national rail companies, and overnight routes must compete for space with freight trains, which also run mainly at night. Without government support, critics argue, night trains will remain a niche product that cannot compete on price with budget airlines.</p>
+      </div>
+      <div class="card" id="t9-sc" style="line-height:2.4;"><p class="example-q" style="margin:0 0 6px;">Write <b>NO MORE THAN TWO WORDS AND/OR A NUMBER</b> from the article.</p><p>1. Deutsche Bahn withdrew its last sleeper trains in <input type="text" class="text-answer" id="t9-1" data-correct="2016" autocomplete="off" style="width:100px;">.</p><p>2. ÖBB operates its overnight routes under the brand <input type="text" class="text-answer" id="t9-2" data-correct="Nightjet" autocomplete="off" style="width:120px;">.</p><p>3. The Paris–Nice sleeper had been cancelled <input type="text" class="text-answer" id="t9-3" data-correct="four years/4 years" autocomplete="off" style="width:130px;"> before it reopened.</p><p>4. Night trains make long routes practical without losing a <input type="text" class="text-answer" id="t9-4" data-correct="working day" autocomplete="off" style="width:140px;">.</p><p>5. At night, sleeper services compete for track space with <input type="text" class="text-answer" id="t9-5" data-correct="freight trains" autocomplete="off" style="width:150px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-sc', 't9-sc-score')">Check answers</button>
+          <span id="t9-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 120 words</b>. Capture the central argument, the key evidence and any counter-argument, and end with a one-sentence evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 120 words):</p><textarea class="no-check mini-answer" id="t9-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:180px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-sum-ans"><p>The article describes the revival of Europe’s night trains after decades of decline. Cheap flights, high-speed rail and high operating costs had led many operators to close sleeper services, and Deutsche Bahn ended its last ones in 2016. Since then, Austria’s ÖBB has taken over many routes under the Nightjet brand, private operators have entered the market and France has reopened the Paris–Nice line. The main reason is concern about climate change: rail produces far lower emissions than flying, and overnight travel makes journeys of over 1,000 kilometres possible without losing a working day. However, expansion is difficult because sleeper carriages are expensive and slow to obtain, cross-border track charges add costs, and night routes must share the tracks with freight. Critics believe the trains will remain a niche product without government support. In my view, subsidising them would be a sensible climate policy.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 60 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central argument is that…”</li><li>“This is supported by…”</li><li>“That said, critics point out that…”</li><li>“What I find most convincing is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 16</div>
+      <h2>Extra Reading 3 — Diamonds from the Laboratory</h2>
+      <p class="task-sub">The final extra article. Decide TRUE / FALSE / NOT GIVEN, then summarise it in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Diamonds from the Laboratory</h3>
+        <p class="article-meta">Extra reading 3 · Business and technology · 269 words</p>
+        <p><span class="para-label">A</span>For more than a century, the diamond industry built its marketing on a single idea: that diamonds are rare, natural and therefore precious. That idea is now under pressure. Diamonds grown in laboratories — chemically and physically identical to mined stones — have moved from scientific curiosity to mass-market product, and in the United States they accounted for around half of all diamonds sold in engagement rings by 2023, according to some industry estimates.</p><p><span class="para-label">B</span>Laboratory diamonds are produced by one of two methods. In the first, carbon is subjected to extreme pressure and temperature, recreating the conditions deep inside the Earth. In the second, a gas containing carbon is heated until carbon atoms settle, layer by layer, on a small diamond ‘seed’. Either process can produce a gem-quality stone in a matter of weeks, compared with the billions of years required by nature.</p><p><span class="para-label">C</span>The most obvious attraction is price. A laboratory-grown stone typically costs a fraction of a mined diamond of similar size and quality, and that price has fallen steeply as production has expanded, much of it in China and India. Supporters also argue that laboratory diamonds avoid the environmental damage of mining and the human-rights problems associated with so-called ‘conflict diamonds’.</p><p><span class="para-label">D</span>The mining industry disputes some of these claims. It points out that growing diamonds consumes large amounts of electricity, much of it still generated from fossil fuels, and that many mining communities in countries such as Botswana depend on diamond revenue for schools and hospitals. Some jewellers also warn that, because their price keeps falling, laboratory diamonds are unlikely to hold their value, unlike natural stones.</p>
+      </div>
+      <div class="card" id="t10-tf"><div class="q-item" id="t10-tf-1">
+          <p>1. Laboratory diamonds have the same chemical composition as mined diamonds.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t10-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t10-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-tf-2">
+          <p>2. Most laboratory diamonds are produced in China and India.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t10-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t10-tf-2" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-tf-3">
+          <p>3. The price of laboratory diamonds has risen as production has grown.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t10-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t10-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-tf-4">
+          <p>4. Diamond revenue helps to pay for public services in Botswana.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-tf-4" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t10-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t10-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-tf-5">
+          <p>5. Jewellers expect laboratory diamonds to keep their value.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t10-tf-5" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t10-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-tf', 't10-tf-score')">Check answers</button>
+          <span id="t10-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 120 words</b>. Capture the central argument, the key evidence and any counter-argument, and end with a one-sentence evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 120 words):</p><textarea class="no-check mini-answer" id="t10-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:180px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t10-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t10-sum-ans"><p>The article examines how laboratory-grown diamonds are challenging the traditional diamond industry, whose marketing has always depended on rarity. Lab diamonds are physically and chemically identical to mined ones and are made in weeks, either by applying extreme pressure and heat to carbon or by depositing carbon atoms from a heated gas onto a seed crystal. They now account for around half of engagement-ring diamonds in the US, mainly because they cost far less, and supporters also claim they avoid mining’s environmental and human-rights problems. The mining industry responds that production uses large amounts of electricity, often from fossil fuels, and that countries such as Botswana rely on diamond income for public services. Jewellers add that lab diamonds may not hold their value as prices keep falling. Overall, the article presents a balanced picture, and I think the environmental argument is weaker than it first appears.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t10-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 60 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central argument is that…”</li><li>“This is supported by…”</li><li>“That said, critics point out that…”</li><li>“What I find most convincing is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 16</div>
+      <h2>Reading Skill — Inference and Paraphrase</h2>
+      <p class="task-sub">Band 8+ readers understand what a text <b>implies</b>, not only what it states. Match the paraphrases, then choose what can be inferred.</p>
+      <div class="card" id="t11-lm">
+        <div class="line-match" id="t11-lm-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. at best, an exaggeration</button><button type="button" class="lm-item" data-key="2">2. the pendulum has swung decisively</button><button type="button" class="lm-item" data-key="3">3. a sobering indication</button><button type="button" class="lm-item" data-key="4">4. not a neutral choice</button><button type="button" class="lm-item" data-key="5">5. a niche product</button><button type="button" class="lm-item" data-key="6">6. fought hard for scientific respectability</button><button type="button" class="lm-item" data-key="7">7. heading for extinction</button><button type="button" class="lm-item" data-key="8">8. the ritual of care</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. a decision with consequences of its own</button><button type="button" class="lm-item" data-key="b">b. the process and attention involved in treatment</button><button type="button" class="lm-item" data-key="c">c. opinion has changed strongly in the opposite direction</button><button type="button" class="lm-item" data-key="d">d. something used by a small, specialised group</button><button type="button" class="lm-item" data-key="e">e. likely to disappear completely</button><button type="button" class="lm-item" data-key="f">f. a worrying piece of evidence</button><button type="button" class="lm-item" data-key="g">g. struggled to be taken seriously as a science</button><button type="button" class="lm-item" data-key="h">h. an overstatement, even if partly true</button></div>
+          <select class="lm-hidden-select select" id="t11-lm-1" data-lm-key="1" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t11-lm-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t11-lm-3" data-lm-key="3" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t11-lm-4" data-lm-key="4" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t11-lm-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t11-lm-6" data-lm-key="6" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t11-lm-7" data-lm-key="7" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t11-lm-8" data-lm-key="8" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-lm', 't11-lm-score'); markLineMatchResult('t11-lm-lm');">Check answers</button>
+          <span id="t11-lm-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t11-inf"><div class="q-item" id="t11-inf-1">
+          <p>1. From Passage 1, what can be inferred about doctors who give “impure” placebos?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-inf-1" data-correct="false"> A. They believe placebos cure disease.</label><label><input type="radio" value="1" name="t11-inf-1" data-correct="true"> B. They sometimes act against the principles of their profession.</label><label><input type="radio" value="2" name="t11-inf-1" data-correct="false"> C. They are mainly found in one country.</label><label><input type="radio" value="3" name="t11-inf-1" data-correct="false"> D. They always tell patients the truth.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-inf-2">
+          <p>2. What does the Peru experiment (Passage 2) imply about deep-sea ecosystems?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-inf-2" data-correct="false"> A. They recover quickly from disturbance.</label><label><input type="radio" value="1" name="t11-inf-2" data-correct="true"> B. They may take a very long time to recover.</label><label><input type="radio" value="2" name="t11-inf-2" data-correct="false"> C. They are not affected by sediment.</label><label><input type="radio" value="3" name="t11-inf-2" data-correct="false"> D. They are well understood.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-inf-3">
+          <p>3. What does the writer of Passage 3 imply by “the cautious silence of the behaviourist era”?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-inf-3" data-correct="false"> A. Behaviourists did excellent research.</label><label><input type="radio" value="1" name="t11-inf-3" data-correct="true"> B. Behaviourists avoided discussing animal minds altogether.</label><label><input type="radio" value="2" name="t11-inf-3" data-correct="false"> C. Behaviourists studied only silent animals.</label><label><input type="radio" value="3" name="t11-inf-3" data-correct="false"> D. Behaviourists were careless.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-inf-4">
+          <p>4. What is implied by “some newer designs use little or no cobalt or nickel” (Passage 2)?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-inf-4" data-correct="true"> A. Seabed metals may become less valuable.</label><label><input type="radio" value="1" name="t11-inf-4" data-correct="false"> B. Batteries will become more expensive.</label><label><input type="radio" value="2" name="t11-inf-4" data-correct="false"> C. Cobalt is found only on the seabed.</label><label><input type="radio" value="3" name="t11-inf-4" data-correct="false"> D. Car manufacturers support deep-sea mining.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-inf', 't11-inf-score')">Check answers</button>
+          <span id="t11-inf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 16</div>
+      <h2>Reading Skill — Fact, Opinion and Reported View</h2>
+      <p class="task-sub">YES / NO / NOT GIVEN tasks depend on separating the <b>writer’s own view</b> from facts and from <b>other people’s</b> opinions. Classify each sentence, then identify how strongly the writer commits.</p>
+      <div class="card" id="t12-st"><div class="sel-row"><select class="select" id="t12-st-1" data-answer="the writer’s view"><option value="">—</option><option value="fact">fact</option><option value="the writer’s view">the writer’s view</option><option value="someone else’s view">someone else’s view</option></select><span><b>1.</b> “I find this view persuasive, but it carries its own risks.”</span></div><div class="sel-row"><select class="select" id="t12-st-2" data-answer="fact"><option value="">—</option><option value="fact">fact</option><option value="the writer’s view">the writer’s view</option><option value="someone else’s view">someone else’s view</option></select><span><b>2.</b> “Two-thirds of its neurons are located not in its brain but in its arms.”</span></div><div class="sel-row"><select class="select" id="t12-st-3" data-answer="someone else’s view"><option value="">—</option><option value="fact">fact</option><option value="the writer’s view">the writer’s view</option><option value="someone else’s view">someone else’s view</option></select><span><b>3.</b> “Gerard Barron … has described the nodules as ‘a battery in a rock’.”</span></div><div class="sel-row"><select class="select" id="t12-st-4" data-answer="someone else’s view"><option value="">—</option><option value="fact">fact</option><option value="the writer’s view">the writer’s view</option><option value="someone else’s view">someone else’s view</option></select><span><b>4.</b> “Sceptics caution that most of these trials have been small.”</span></div><div class="sel-row"><select class="select" id="t12-st-5" data-answer="the writer’s view"><option value="">—</option><option value="fact">fact</option><option value="the writer’s view">the writer’s view</option><option value="someone else’s view">someone else’s view</option></select><span><b>5.</b> “None of this means the study of animal minds should return to the cautious silence of the behaviourist era.”</span></div><div class="sel-row"><select class="select" id="t12-st-6" data-answer="fact"><option value="">—</option><option value="fact">fact</option><option value="the writer’s view">the writer’s view</option><option value="someone else’s view">someone else’s view</option></select><span><b>6.</b> “The ISA has issued exploration contracts.”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-st', 't12-st-score')">Check answers</button>
+          <span id="t12-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Hedging.</strong> How certain is the writer? Choose the best description of the underlined language.</p>
+      <div class="card" id="t12-h"><div class="q-item" id="t12-h-1">
+          <p>1. “Plumes of sediment <u>could</u> spread for tens or even hundreds of kilometres.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-h-1" data-correct="false"> A. certain</label><label><input type="radio" value="1" name="t12-h-1" data-correct="true"> B. possible but not proven</label><label><input type="radio" value="2" name="t12-h-1" data-correct="false"> C. impossible</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-h-2">
+          <p>2. “The relationship between doctor and patient <u>may be</u> the most powerful ingredient of all.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-h-2" data-correct="false"> A. a definite fact</label><label><input type="radio" value="1" name="t12-h-2" data-correct="true"> B. a tentative claim</label><label><input type="radio" value="2" name="t12-h-2" data-correct="false"> C. a rejected idea</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-h-3">
+          <p>3. “The evidence … is now <u>overwhelming</u>.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-h-3" data-correct="true"> A. strong commitment</label><label><input type="radio" value="1" name="t12-h-3" data-correct="false"> B. weak commitment</label><label><input type="radio" value="2" name="t12-h-3" data-correct="false"> C. no commitment</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t12-h-4">
+          <p>4. “Researchers do <u>not yet fully</u> understand why.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-h-4" data-correct="false"> A. complete understanding</label><label><input type="radio" value="1" name="t12-h-4" data-correct="true"> B. partial understanding</label><label><input type="radio" value="2" name="t12-h-4" data-correct="false"> C. no research at all</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-h', 't12-h-score')">Check answers</button>
+          <span id="t12-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 16</div>
+      <h2>Reading Skill — Speed Reading Challenge</h2>
+      <p class="task-sub"><b>Part 1:</b> skim in <b>50 seconds</b> and choose the best title. <b>Part 2:</b> scan and answer all six in <b>2 minutes</b>.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Setting the World’s Clocks</h3>
+        <p class="article-meta">Speed reading · 360 words · 254 words</p>
+        <p><span class="para-label">A</span>Until the second half of the nineteenth century, almost every town kept its own time, set by the position of the sun at noon. When it was midday in London, it was around ten minutes earlier in Bristol, which lies further west. For most people this caused no difficulty, since journeys between towns were slow. The arrival of the railways changed that. Timetables listing dozens of local times confused passengers and, more seriously, increased the risk of collisions on single-track lines.</p><p><span class="para-label">B</span>In Britain, the Great Western Railway adopted London time across its network in November 1840, and by 1855 the great majority of public clocks in the country were set to Greenwich Mean Time. Legal recognition came later: GMT did not become the official time for the whole of Great Britain until 1880.</p><p><span class="para-label">C</span>North America faced a larger problem. Before 1883, American and Canadian railways used around fifty different time standards. On 18 November of that year — a date later known as ‘the day of two noons’ — the railways introduced four time zones across the continent. The system was not adopted into federal law in the United States until 1918.</p><p><span class="para-label">D</span>Global standardisation followed the International Meridian Conference, held in Washington, D.C., in 1884, at which delegates from 25 countries voted to make the meridian passing through Greenwich the prime meridian, the zero line of longitude. France, which had proposed a meridian through Paris, abstained, and continued to use Paris Mean Time for several more decades, only adopting a Greenwich-based standard in 1911.</p>
+      </div>
+      <div class="card" id="t13-title"><div class="q-item" id="t13-title-1">
+          <p>1. Part 1 — Choose the best title.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-title-1" data-correct="false"> A. Why France rejected Greenwich</label><label><input type="radio" value="1" name="t13-title-1" data-correct="true"> B. How railways and diplomacy created standard time</label><label><input type="radio" value="2" name="t13-title-1" data-correct="false"> C. The history of the clock</label><label><input type="radio" value="3" name="t13-title-1" data-correct="false"> D. Railway accidents in the nineteenth century</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-title', 't13-title-score')">Check answers</button>
+          <span id="t13-title-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t13-scan" style="line-height:2.4;"><p>1. Roughly how many minutes behind London was Bristol? <input type="text" class="text-answer" id="t13-1" data-correct="ten/10" autocomplete="off" style="width:90px;"></p><p>2. In what year did the Great Western Railway adopt London time? <input type="text" class="text-answer" id="t13-2" data-correct="1840" autocomplete="off" style="width:100px;"></p><p>3. When did GMT become official for the whole of Great Britain? <input type="text" class="text-answer" id="t13-3" data-correct="1880" autocomplete="off" style="width:100px;"></p><p>4. 18 November 1883 was later called ‘the day of two <input type="text" class="text-answer" id="t13-4" data-correct="noons" autocomplete="off" style="width:100px;">’.</p><p>5. How many countries sent delegates to the 1884 conference? <input type="text" class="text-answer" id="t13-5" data-correct="25/twenty-five" autocomplete="off" style="width:100px;"></p><p>6. When did France adopt a Greenwich-based standard? <input type="text" class="text-answer" id="t13-6" data-correct="1911" autocomplete="off" style="width:100px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-scan', 't13-scan-score')">Check answers</button>
+          <span id="t13-scan-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 16</div>
+      <h2>Vocabulary — Academic Word Families and Collocations</h2>
+      <p class="task-sub">Accurate word forms are essential for completion tasks and for Writing. Complete each sentence, then choose the natural collocation.</p>
+      <div class="card" id="t14-wf" style="line-height:2.4;"><p>1. Beecher’s claim was later shown to be an <input type="text" class="text-answer" id="t14-1" data-correct="exaggeration" autocomplete="off" style="width:130px;">. (exaggerate)</p><p>2. Placebos can produce <input type="text" class="text-answer" id="t14-2" data-correct="measurable" autocomplete="off" style="width:130px;"> changes in the body. (measure)</p><p>3. Doctors who deceive patients risk losing their <input type="text" class="text-answer" id="t14-3" data-correct="trust" autocomplete="off" style="width:110px;">. (trustworthy)</p><p>4. The <input type="text" class="text-answer" id="t14-4" data-correct="regulation" autocomplete="off" style="width:130px;"> of deep-sea mining is complicated. (regulate)</p><p>5. Scientists cannot <input type="text" class="text-answer" id="t14-5" data-correct="predict" autocomplete="off" style="width:120px;"> how mining would affect these ecosystems. (prediction)</p><p>6. The field fought hard for scientific <input type="text" class="text-answer" id="t14-6" data-correct="respectability" autocomplete="off" style="width:140px;">. (respect)</p><p>7. Many species have a rich <input type="text" class="text-answer" id="t14-7" data-correct="cognitive" autocomplete="off" style="width:120px;"> life. (cognition)</p><p>8. Night trains are not yet <input type="text" class="text-answer" id="t14-8" data-correct="competitive" autocomplete="off" style="width:130px;"> on price with budget airlines. (compete)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-wf', 't14-wf-score')">Check answers</button>
+          <span id="t14-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t14-col"><div class="q-item" id="t14-col-1">
+          <p>1. to ______ a moratorium</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-col-1" data-correct="true"> call for</label><label><input type="radio" value="1" name="t14-col-1" data-correct="false"> ask on</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-col-2">
+          <p>2. to ______ the placebo effect</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-col-2" data-correct="false"> harvest</label><label><input type="radio" value="1" name="t14-col-2" data-correct="true"> harness</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-col-3">
+          <p>3. a ______ indication</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-col-3" data-correct="true"> sobering</label><label><input type="radio" value="1" name="t14-col-3" data-correct="false"> sobered</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-col-4">
+          <p>4. to ______ a clause</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-col-4" data-correct="false"> fire</label><label><input type="radio" value="1" name="t14-col-4" data-correct="true"> trigger</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-col-5">
+          <p>5. evidence is ______</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-col-5" data-correct="true"> overwhelming</label><label><input type="radio" value="1" name="t14-col-5" data-correct="false"> overflowing</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-col-6">
+          <p>6. to ______ credibility</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-col-6" data-correct="false"> hurt down</label><label><input type="radio" value="1" name="t14-col-6" data-correct="true"> damage</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-col', 't14-col-score')">Check answers</button>
+          <span id="t14-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task15" data-task="15">
+      <div class="task-eyebrow">Task 15 of 16</div>
+      <h2>Speaking Part 3 — Discussing Today’s Topics</h2>
+      <p class="task-sub">Answer each question in its own box. Aim for <b>60 seconds</b>: a clear position, developed reasoning, a concrete example and a qualification.</p>
+      <div class="question-box" data-field="t15-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Is it ever acceptable for a doctor not to tell a patient the whole truth?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It depends to a large extent on…”</li><li>“There’s a strong case for…, but…”</li><li>“Ultimately, trust is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t15-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Should the world mine the deep sea to obtain the metals needed for clean energy?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This is a genuine dilemma because…”</li><li>“The precautionary principle suggests…”</li><li>“A more balanced approach would be…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t15-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">How should we decide which animals deserve legal protection?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“One criterion might be…”</li><li>“The difficulty is that…”</li><li>“I would argue that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t15-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Is natural talent or practice more important for becoming an expert?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The evidence suggests…”</li><li>“That said,…”</li><li>“In my own experience,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task16" data-task="16">
+      <div class="task-eyebrow">Task 16 of 16</div>
+      <h2>Writing Task 2 — New Industries and Environmental Risk</h2>
+      <p class="task-sub">Finish with a full Task 2 essay on today’s Passage 2 topic. Spend about <b>40 minutes</b> and write <b>at least 250 words</b>. Aim for a clear, nuanced position.</p>
+<div class="card advice-card"><p class="prompt-label">Plan before you write</p><ul style="margin:0; padding-left:20px; line-height:1.8;"><li><b>Position:</b> “to what extent” invites a nuanced answer — e.g. agree in principle, but “fully understood” is an unrealistic standard.</li><li><b>Body 1:</b> the case for caution — irreversible damage, the Peru experiment, unknown species.</li><li><b>Body 2:</b> the limits of waiting — certainty is never complete; delay has its own costs (more land mining).</li><li><b>Conclusion:</b> a precise final position (e.g. strict, staged permission with independent monitoring).</li></ul></div>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Governments should not allow new industries, such as deep-sea mining, to begin until their environmental effects are fully understood. To what extent do you agree or disagree?</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t16-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t16-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t16-essay-model"><div class="model-text" style="padding:2px 0;">
+  <p>As demand grows for the metals needed in batteries and other clean technologies, companies are proposing activities, such as mining the deep seabed, whose environmental consequences remain largely unknown. I agree that caution should be the starting point, but I believe that requiring effects to be “fully understood” sets a standard that could never be met and could itself cause harm.</p>
+  <p>The case for restraint is strong, particularly where damage may be irreversible. Deep-sea ecosystems are among the least studied on Earth, and most species collected there have never been described. Evidence from a disturbance experiment off Peru, where tracks remained visible and animal populations had not recovered after twenty-six years, suggests that mistakes made there could last for generations. When the potential loss is permanent, the burden of proof should lie with those who wish to proceed, not with those who urge caution.</p>
+  <p>However, complete understanding of any complex natural system is unattainable, and waiting for it can become a disguised decision to do nothing. Inaction is not neutral: if metals are not obtained from the sea, they will be dug from land, where mining is already linked to deforestation and pollution. A blanket ban until certainty is achieved may therefore simply move environmental damage elsewhere.</p>
+  <p>A more defensible policy would allow new industries to proceed only in carefully staged steps — small, monitored trials, independent scientific review and the power to halt operations if serious harm appears. In conclusion, while I strongly support a precautionary approach, I disagree that full understanding should be a precondition, since it is both impossible to achieve and not without its own risks.</p>
+  <p class="alt">≈ 300 words</p>
+</div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 16</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 31 of 45</div>
+    <h1>Day 31 complete! 🎉</h1>
+    <p>Day 31 done — a full exam-difficulty reading test with analysis, three extra articles with summaries, inference and stance skills, vocabulary, a speaking discussion and a Task 2 essay.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t11-lm-lm');
+
+    initWritingCoach('t16-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Governments should not allow new industries, such as deep-sea mining, to begin until their environmental effects are fully understood. To what extent do you agree or disagree?' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 31, 8, 't8-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-summary"]'); if (b) initRecordControl(b, user.id, 31, 9, 't9-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-summary"]'); if (b) initRecordControl(b, user.id, 31, 10, 't10-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t15-speaking-1"]'); if (b) initRecordControl(b, user.id, 31, 15, 't15-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t15-speaking-2"]'); if (b) initRecordControl(b, user.id, 31, 15, 't15-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t15-speaking-3"]'); if (b) initRecordControl(b, user.id, 31, 15, 't15-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t15-speaking-4"]'); if (b) initRecordControl(b, user.id, 31, 15, 't15-speaking-4', 0); }
+
+    await initTaskFlow(31, 16, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-h', 't2-h-score'); checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-s', 't2-s-score'); },
+      4: () => { checkAllAnswers('t4-mi', 't4-mi-score'); checkAllAnswers('t4-mf', 't4-mf-score'); checkAllAnswers('t4-sc', 't4-sc-score'); },
+      6: () => { checkAllAnswers('t6-yn', 't6-yn-score'); checkAllAnswers('t6-mc', 't6-mc-score'); checkAllAnswers('t6-s', 't6-s-score'); },
+      8: () => { checkAllAnswers('t8-mc', 't8-mc-score'); },
+      9: () => { checkAllAnswers('t9-sc', 't9-sc-score'); },
+      10: () => { checkAllAnswers('t10-tf', 't10-tf-score'); },
+      11: () => { checkAllAnswers('t11-lm', 't11-lm-score'); markLineMatchResult('t11-lm-lm'); checkAllAnswers('t11-inf', 't11-inf-score'); },
+      12: () => { checkAllAnswers('t12-st', 't12-st-score'); checkAllAnswers('t12-h', 't12-h-score'); },
+      13: () => { checkAllAnswers('t13-title', 't13-title-score'); checkAllAnswers('t13-scan', 't13-scan-score'); },
+      14: () => { checkAllAnswers('t14-wf', 't14-wf-score'); checkAllAnswers('t14-col', 't14-col-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t7-rf-btn', 't7-rf-ans', '[id^="t7-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-sum-btn', 't9-sum-ans', '[id^="t9-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t10-sum-btn', 't10-sum-ans', '[id^="t10-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t16-essay-model-btn', 't16-essay-model', '#t16-essay');
+  });
+</script>
+</body>
+</html>
