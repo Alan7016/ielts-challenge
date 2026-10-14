@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 33 — Standard — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 33 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 12</div>
+      <h2>Week Review — Words and Skills from Days 28–32</h2>
+      <p class="task-sub">Today is a <b>catch-up day</b> for the whole week — plan for about <b>3 hours</b>. You will review the week’s vocabulary and skills, do a new reading and a new listening, write a full Task 1 report, plan a Task 2 essay, practise speaking and finish with a reflection on your progress.</p>
+      <p style="margin-top:26px;"><strong>Part 1 — Vocabulary from this week.</strong> Match each word to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. skim</button><button type="button" class="lm-item" data-key="2">2. scan</button><button type="button" class="lm-item" data-key="3">3. literacy</button><button type="button" class="lm-item" data-key="4">4. permit</button><button type="button" class="lm-item" data-key="5">5. species</button><button type="button" class="lm-item" data-key="6">6. voluntary</button><button type="button" class="lm-item" data-key="7">7. humid</button><button type="button" class="lm-item" data-key="8">8. scarce</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. not enough; difficult to find</button><button type="button" class="lm-item" data-key="b">b. done because you choose to</button><button type="button" class="lm-item" data-key="c">c. look quickly for one piece of information</button><button type="button" class="lm-item" data-key="d">d. a group of animals of the same type</button><button type="button" class="lm-item" data-key="e">e. the ability to read and write</button><button type="button" class="lm-item" data-key="f">f. warm and wet (about air)</button><button type="button" class="lm-item" data-key="g">g. read quickly to get the general idea</button><button type="button" class="lm-item" data-key="h">h. an official paper that allows you to do something</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Part 2 — Which skill?</strong> Choose the reading or listening skill you need.</p>
+      <div class="card" id="t1-sk"><div class="q-item" id="t1-sk-1">
+          <p>1. You need to find a date in a long passage.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-sk-1" data-correct="false"> skimming</label><label><input type="radio" value="1" name="t1-sk-1" data-correct="true"> scanning</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-sk-2">
+          <p>2. You want the general idea of a passage before you read the questions.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-sk-2" data-correct="true"> skimming</label><label><input type="radio" value="1" name="t1-sk-2" data-correct="false"> scanning</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-sk-3">
+          <p>3. The speaker says “It’s 13 … no, sorry, 30.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-sk-3" data-correct="false"> write the first number</label><label><input type="radio" value="1" name="t1-sk-3" data-correct="true"> write the corrected number</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-sk-4">
+          <p>4. A matching-headings heading repeats one word from the paragraph.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-sk-4" data-correct="false"> It is probably correct.</label><label><input type="radio" value="1" name="t1-sk-4" data-correct="true"> It may be a trap — check the main idea.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-sk-5">
+          <p>5. The passage does not say anything about the statement.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-sk-5" data-correct="false"> FALSE</label><label><input type="radio" value="1" name="t1-sk-5" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-sk', 't1-sk-score')">Check answers</button>
+          <span id="t1-sk-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 3 — raise or rise?</strong></p>
+      <div class="card" id="t1-rr"><div class="q-item" id="t1-rr-1">
+          <p>1. Library fees ______ last year.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rr-1" data-correct="false"> raised</label><label><input type="radio" value="1" name="t1-rr-1" data-correct="true"> rose</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-rr-2">
+          <p>2. The museum has ______ its prices.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rr-2" data-correct="true"> raised</label><label><input type="radio" value="1" name="t1-rr-2" data-correct="false"> risen</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-rr-3">
+          <p>3. Visitor numbers have ______ every year.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rr-3" data-correct="false"> raised</label><label><input type="radio" value="1" name="t1-rr-3" data-correct="true"> risen</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-rr-4">
+          <p>4. We should ______ standards of literacy.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-rr-4" data-correct="false"> rise</label><label><input type="radio" value="1" name="t1-rr-4" data-correct="true"> raise</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-rr', 't1-rr-score')">Check answers</button>
+          <span id="t1-rr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 12</div>
+      <h2>Catch-up Reading — Board Games Are Back</h2>
+      <p class="task-sub">A new reading with the question types you practised this week. Spend about <b>18 minutes</b>. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Board Games Are Back<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">In an age of smartphones, an old-fashioned hobby is enjoying a surprising return.</small></h3>
+            <p class="article-meta">Catch-up reading · Free time · 364 words</p>
+            <p><span class="para-label">A</span>Twenty years ago, many people thought that board games would soon disappear. Children had video games, adults had smartphones, and the old boxes of Monopoly and chess were left in cupboards. But something surprising has happened. Sales of board games have grown every year for more than a decade, and in many cities there are now ‘board game cafés’, where customers pay a small fee to play games from a library of hundreds.</p><p><span class="para-label">B</span>The first board game café in North America, Snakes &amp; Lattes, opened in Toronto in 2010. Its owners were not sure that anyone would come. Within a few months, however, there were queues outside the door at weekends, and the café soon had to move to a larger building. Today, there are thousands of similar cafés around the world, from London to Seoul.</p><p><span class="para-label">C</span>Why are people returning to board games? One reason is that they offer a break from screens. Many people spend all day looking at computers and phones, and a board game is a chance to sit around a table and talk face to face. Another reason is that modern games are very different from the old ones. Instead of simply rolling dice and moving around a board, players often have to make plans, work together and solve problems.</p><p><span class="para-label">D</span>Board games may also be good for us. Some studies suggest that older people who play games regularly have a lower risk of memory problems, although scientists say more research is needed. For children, games can teach useful skills, such as counting, taking turns and learning how to lose without getting angry.</p><p><span class="para-label">E</span>The internet, surprisingly, has helped too. Websites allow small companies to raise money for new games directly from players, and video reviews help people choose which games to buy. In 2023, one popular game raised more than two million dollars online before it was even made.</p><p><span class="para-label">F</span>Not everyone is convinced that the trend will last. Some people say board games are simply fashionable at the moment, like many hobbies before them. But for the many families and friends who now spend their Friday evenings around a table, the old-fashioned board game seems to have found a new life.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–5</p><p class="qg-instr">Do the following statements agree with the information in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. Twenty years ago, many people expected board games to disappear.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. Snakes &amp; Lattes was the first board game café in the world.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-2" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. Snakes &amp; Lattes moved to a larger building.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. In most modern games, players only roll dice and move around a board.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-5">
+          <p>5. Scientists are sure that playing games prevents memory problems.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-5" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 6–9</p><p class="qg-instr">Complete the sentences. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t2-sc" style="line-height:2.4;"><p>6. In board game cafés, customers pay a small <input type="text" class="text-answer" id="t2-6" data-correct="fee" autocomplete="off" style="width:110px;">.</p><p>7. Board games give people a break from <input type="text" class="text-answer" id="t2-7" data-correct="screens" autocomplete="off" style="width:120px;">.</p><p>8. Games can teach children counting and taking <input type="text" class="text-answer" id="t2-8" data-correct="turns" autocomplete="off" style="width:110px;">.</p><p>9. Video <input type="text" class="text-answer" id="t2-9" data-correct="reviews" autocomplete="off" style="width:120px;"> help people to choose games.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-sc', 't2-sc-score')">Check answers</button>
+          <span id="t2-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 10–12</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-10">
+          <p>10. Paragraph C mainly explains</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-10" data-correct="false"> A. how to play modern games.</label><label><input type="radio" value="1" name="t2-mc-10" data-correct="true"> B. why board games have become popular again.</label><label><input type="radio" value="2" name="t2-mc-10" data-correct="false"> C. the history of chess.</label><label><input type="radio" value="3" name="t2-mc-10" data-correct="false"> D. why people prefer video games.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-11">
+          <p>11. In 2023, one game raised more than</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-11" data-correct="false"> A. two thousand dollars.</label><label><input type="radio" value="1" name="t2-mc-11" data-correct="false"> B. two hundred thousand dollars.</label><label><input type="radio" value="2" name="t2-mc-11" data-correct="true"> C. two million dollars.</label><label><input type="radio" value="3" name="t2-mc-11" data-correct="false"> D. twenty million dollars.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-12">
+          <p>12. What does the writer say in the last paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-12" data-correct="false"> A. Board games will soon disappear again.</label><label><input type="radio" value="1" name="t2-mc-12" data-correct="true"> B. Some people doubt the trend will last, but many people enjoy games now.</label><label><input type="radio" value="2" name="t2-mc-12" data-correct="false"> C. Families should play more games.</label><label><input type="radio" value="3" name="t2-mc-12" data-correct="false"> D. Board games are only popular on Fridays.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 12</div>
+      <h2>Catch-up Reading — Answer Analysis</h2>
+      <p class="task-sub">Check every answer. Which question type was the most difficult for you this week?</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Board Games Are Back</summary>
+        <p><span class="para-label">A</span>Twenty years ago, many people thought that board games would soon disappear. Children had video games, adults had smartphones, and the old boxes of Monopoly and chess were left in cupboards. But something surprising has happened. Sales of board games have grown every year for more than a decade, and in many cities there are now ‘board game cafés’, where customers pay a small fee to play games from a library of hundreds.</p><p><span class="para-label">B</span>The first board game café in North America, Snakes &amp; Lattes, opened in Toronto in 2010. Its owners were not sure that anyone would come. Within a few months, however, there were queues outside the door at weekends, and the café soon had to move to a larger building. Today, there are thousands of similar cafés around the world, from London to Seoul.</p><p><span class="para-label">C</span>Why are people returning to board games? One reason is that they offer a break from screens. Many people spend all day looking at computers and phones, and a board game is a chance to sit around a table and talk face to face. Another reason is that modern games are very different from the old ones. Instead of simply rolling dice and moving around a board, players often have to make plans, work together and solve problems.</p><p><span class="para-label">D</span>Board games may also be good for us. Some studies suggest that older people who play games regularly have a lower risk of memory problems, although scientists say more research is needed. For children, games can teach useful skills, such as counting, taking turns and learning how to lose without getting angry.</p><p><span class="para-label">E</span>The internet, surprisingly, has helped too. Websites allow small companies to raise money for new games directly from players, and video reviews help people choose which games to buy. In 2023, one popular game raised more than two million dollars online before it was even made.</p><p><span class="para-label">F</span>Not everyone is convinced that the trend will last. Some people say board games are simply fashionable at the moment, like many hobbies before them. But for the many families and friends who now spend their Friday evenings around a table, the old-fashioned board game seems to have found a new life.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Twenty years ago, many people thought that board games would soon disappear</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">The first board game café in North America</span> — the passage says nothing about the rest of the world.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">TRUE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">the café soon had to move to a larger building</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">FALSE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Instead of simply rolling dice and moving around a board, players often have to make plans</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">FALSE</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">scientists say more research is needed</span> → they are not sure.</p><p><span class="trap">Trap:</span> “Some studies suggest” is not the same as “scientists are sure”.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">fee</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">customers pay a small fee</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">screens</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">they offer a break from screens</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">turns</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">counting, taking turns and learning how to lose</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">reviews</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">video reviews help people choose which games to buy</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Why are people returning to board games? One reason is… Another reason is…</span>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">C</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">raised more than two million dollars online</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Not everyone is convinced that the trend will last … But for the many families and friends…</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 12</div>
+      <h2>Catch-up Listening — Joining a Sports Centre</h2>
+      <p class="task-sub">A new Section 1 recording. Read the form first, then play <b>once only</b>. Answers are checked when you press <b>Next</b>.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Section 1 — Questions 1–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/day33-sports-centre.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 1–10</p><p class="qg-instr">Complete the form. Write <b>ONE WORD AND/OR A NUMBER</b> for each answer.</p></div>
+<div class="card" id="t4-notes1"><p class="prompt-label">Northgate Sports Centre — new member</p><div style="line-height:2.1;"><div>Surname: (1) <input type="text" class="text-answer" id="t4-1" data-correct="prescott" autocomplete="off" style="width:130px;"></div><div>Date of birth: (2) <input type="text" class="text-answer" id="t4-2" data-correct="4th/4/fourth" autocomplete="off" style="width:80px;"> June 2003</div><div>Address: Flat 6, (3) <input type="text" class="text-answer" id="t4-3" data-correct="58" autocomplete="off" style="width:80px;"> Mill Lane, Northgate</div><div>Phone: (4) <input type="text" class="text-answer" id="t4-4" data-correct="07723 418960/07723418960" autocomplete="off" style="width:160px;"></div><div>Membership type: (5) <input type="text" class="text-answer" id="t4-5" data-correct="silver" autocomplete="off" style="width:110px;"></div><div>Cost: £(6) <input type="text" class="text-answer" id="t4-6" data-correct="28" autocomplete="off" style="width:80px;"> per month</div><div>Student discount: (7) <input type="text" class="text-answer" id="t4-7" data-correct="10/ten/10%" autocomplete="off" style="width:80px;"> %</div><div>Must bring: student (8) <input type="text" class="text-answer" id="t4-8" data-correct="card" autocomplete="off" style="width:100px;"></div><div>Pool closes at 8 pm on (9) <input type="text" class="text-answer" id="t4-9" data-correct="friday/fridays" autocomplete="off" style="width:120px;"></div><div>Induction: Monday at (10) <input type="text" class="text-answer" id="t4-10" data-correct="7/7pm/7 pm/7.00/7:00/seven" autocomplete="off" style="width:100px;"></div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-notes1', 't4-notes1-score')">Check answers</button>
+          <span id="t4-notes1-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 12</div>
+      <h2>Catch-up Listening — Answers and Transcript</h2>
+      <p class="task-sub">Check your answers and read the key parts of the transcript.</p>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">Prescott</span><span class="an-where"></span></summary><div class="an-body"><p>“P, R, E, S, C, O, double T.” <i>double T</i> = TT.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">4th</span><span class="an-where"></span></summary><div class="an-body"><p>“The fourth of June, two thousand and three.”</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">58</span><span class="an-where"></span></summary><div class="an-body"><p>“Flat 6, fifty-eight Mill Lane”. <i>6</i> is the flat number.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">07723 418960</span><span class="an-where"></span></summary><div class="an-body"><p>“oh seven seven two three, four one eight, nine six oh” — <i>oh</i> = 0.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">silver</span><span class="an-where"></span></summary><div class="an-body"><p>“I’ll take silver, I think. I mainly want to swim.”</p><p><span class="trap">Trap:</span> gold is mentioned first.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">28</span><span class="an-where"></span></summary><div class="an-body"><p>“Gold is forty-two pounds a month, and silver is twenty-eight.”</p><p><span class="trap">Trap:</span> 42 is the price of gold.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">10</span><span class="an-where"></span></summary><div class="an-body"><p>“Students get ten per cent off.”</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">card</span><span class="an-where"></span></summary><div class="an-body"><p>“you’ll need to bring your student card”.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">Friday</span><span class="an-where"></span></summary><div class="an-body"><p>“except on Fridays, when it closes at eight”.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">7 pm</span><span class="an-where"></span></summary><div class="an-body"><p>“The next one is on Monday at seven p.m.”</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Listening traps this week.</strong> What kind of trap is each one?</p>
+      <div class="card" id="t5-tr"><div class="sel-row"><select class="select" id="t5-tr-1" data-answer="two options — the speaker chooses one"><option value="">—</option><option value="a number that is then corrected">a number that is then corrected</option><option value="two options — the speaker chooses one">two options — the speaker chooses one</option><option value="a similar word">a similar word</option><option value="a letter spelled with “double”">a letter spelled with “double”</option></select><span><b>1.</b> “Gold is £42 … silver is £28. I’ll take silver.”</span></div><div class="sel-row"><select class="select" id="t5-tr-2" data-answer="a number that is then corrected"><option value="">—</option><option value="a number that is then corrected">a number that is then corrected</option><option value="two options — the speaker chooses one">two options — the speaker chooses one</option><option value="a similar word">a similar word</option><option value="a letter spelled with “double”">a letter spelled with “double”</option></select><span><b>2.</b> “It’s 13 … no, sorry, 30.”</span></div><div class="sel-row"><select class="select" id="t5-tr-3" data-answer="a letter spelled with “double”"><option value="">—</option><option value="a number that is then corrected">a number that is then corrected</option><option value="two options — the speaker chooses one">two options — the speaker chooses one</option><option value="a similar word">a similar word</option><option value="a letter spelled with “double”">a letter spelled with “double”</option></select><span><b>3.</b> “P, R, E, S, C, O, double T.”</span></div><div class="sel-row"><select class="select" id="t5-tr-4" data-answer="a similar word"><option value="">—</option><option value="a number that is then corrected">a number that is then corrected</option><option value="two options — the speaker chooses one">two options — the speaker chooses one</option><option value="a similar word">a similar word</option><option value="a letter spelled with “double”">a letter spelled with “double”</option></select><span><b>4.</b> You hear “meerkats”, but you write “monkeys”.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-tr', 't5-tr-score')">Check answers</button>
+          <span id="t5-tr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 12</div>
+      <h2>Writing Task 1 — Review: Describing Trends</h2>
+      <p class="task-sub">Review the Task 1 language from this week before you write a full report.</p>
+<div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Average weekly visitors to a board game café, 2018–2024" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Average weekly visitors to a board game café, 2018–2024</text><line x1="64" y1="290.0" x2="620" y2="290.0" stroke="#e3e5ec"/><text x="56" y="294.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="249.3" x2="620" y2="249.3" stroke="#e3e5ec"/><text x="56" y="253.3" text-anchor="end" font-size="11" fill="#4b4e5c">100</text><line x1="64" y1="208.7" x2="620" y2="208.7" stroke="#e3e5ec"/><text x="56" y="212.7" text-anchor="end" font-size="11" fill="#4b4e5c">200</text><line x1="64" y1="168.0" x2="620" y2="168.0" stroke="#e3e5ec"/><text x="56" y="172.0" text-anchor="end" font-size="11" fill="#4b4e5c">300</text><line x1="64" y1="127.3" x2="620" y2="127.3" stroke="#e3e5ec"/><text x="56" y="131.3" text-anchor="end" font-size="11" fill="#4b4e5c">400</text><line x1="64" y1="86.7" x2="620" y2="86.7" stroke="#e3e5ec"/><text x="56" y="90.7" text-anchor="end" font-size="11" fill="#4b4e5c">500</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">600</text><text x="64.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2018</text><text x="156.7" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2019</text><text x="249.3" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2020</text><text x="342.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2021</text><text x="434.7" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2022</text><text x="527.3" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2023</text><text x="620.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2024</text><text x="14" y="168.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 168.0)">visitors</text><polyline fill="none" stroke="#2c6bed" stroke-width="2.6" points="64.0,241.2 156.7,229.0 249.3,253.4 342.0,224.9 434.7,200.5 527.3,184.3 620.0,168.0"/><circle cx="64.0" cy="241.2" r="3.6" fill="#2c6bed"/><circle cx="156.7" cy="229.0" r="3.6" fill="#2c6bed"/><circle cx="249.3" cy="253.4" r="3.6" fill="#2c6bed"/><circle cx="342.0" cy="224.9" r="3.6" fill="#2c6bed"/><circle cx="434.7" cy="200.5" r="3.6" fill="#2c6bed"/><circle cx="527.3" cy="184.3" r="3.6" fill="#2c6bed"/><circle cx="620.0" cy="168.0" r="3.6" fill="#2c6bed"/><rect x="64" y="334" width="14" height="4" fill="#2c6bed"/><text x="84" y="339" font-size="12" fill="#14162b">weekdays</text><polyline fill="none" stroke="#d9480f" stroke-width="2.6" points="64.0,168.0 156.7,151.7 249.3,216.8 342.0,135.5 434.7,107.0 527.3,94.8 620.0,78.5"/><circle cx="64.0" cy="168.0" r="3.6" fill="#d9480f"/><circle cx="156.7" cy="151.7" r="3.6" fill="#d9480f"/><circle cx="249.3" cy="216.8" r="3.6" fill="#d9480f"/><circle cx="342.0" cy="135.5" r="3.6" fill="#d9480f"/><circle cx="434.7" cy="107.0" r="3.6" fill="#d9480f"/><circle cx="527.3" cy="94.8" r="3.6" fill="#d9480f"/><circle cx="620.0" cy="78.5" r="3.6" fill="#d9480f"/><rect x="151.6" y="334" width="14" height="4" fill="#d9480f"/><text x="171.6" y="339" font-size="12" fill="#14162b">weekends</text></svg></div>
+      <p style="margin-top:26px;"><strong>Part 1 — Choose the best description.</strong></p>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-1">
+          <p>1. 2019 – 2020 (both lines)</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-1" data-correct="true"> A. a sharp fall</label><label><input type="radio" value="1" name="t6-mc-1" data-correct="false"> B. a slight rise</label><label><input type="radio" value="2" name="t6-mc-1" data-correct="false"> C. no change</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-2">
+          <p>2. 2020 – 2024 (weekdays)</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-2" data-correct="true"> A. a steady increase</label><label><input type="radio" value="1" name="t6-mc-2" data-correct="false"> B. a gradual decrease</label><label><input type="radio" value="2" name="t6-mc-2" data-correct="false"> C. a peak</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-3">
+          <p>3. The best overview:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-3" data-correct="false"> A. In 2024 there were 520 weekend visitors.</label><label><input type="radio" value="1" name="t6-mc-3" data-correct="true"> B. Overall, visitor numbers rose over the period, despite a drop in 2020, and weekends were always busier.</label><label><input type="radio" value="2" name="t6-mc-3" data-correct="false"> C. The café is popular.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Complete the sentences.</strong> Write ONE word in each gap.</p>
+      <div class="card" id="t6-g" style="line-height:2.4;"><p>1. Weekend visitor numbers <input type="text" class="text-answer" id="t6-1" data-correct="rose/increased/grew" autocomplete="off" style="width:110px;"> from 300 in 2018 to 340 in 2019.</p><p>2. In 2020, both figures fell <input type="text" class="text-answer" id="t6-2" data-correct="sharply/dramatically" autocomplete="off" style="width:120px;">.</p><p>3. Weekday numbers increased <input type="text" class="text-answer" id="t6-3" data-correct="steadily/gradually" autocomplete="off" style="width:120px;"> after 2020.</p><p>4. Weekend numbers reached a <input type="text" class="text-answer" id="t6-4" data-correct="peak/high" autocomplete="off" style="width:100px;"> of 520 in 2024.</p><p>5. Weekends were <input type="text" class="text-answer" id="t6-5" data-correct="always" autocomplete="off" style="width:100px;"> busier than weekdays.</p><p>6. The number of weekday visitors rose <input type="text" class="text-answer" id="t6-6" data-correct="by" autocomplete="off" style="width:70px;"> 40 between 2023 and 2024.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-g', 't6-g-score')">Check answers</button>
+          <span id="t6-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 3 — Correct the mistakes.</strong></p>
+      <div class="card" id="t6-err" style="line-height:2.4;"><p>1. Numbers <u>rised</u> in 2019. → <input type="text" class="text-answer" id="t6-e1" data-correct="rose" autocomplete="off" style="width:110px;"></p><p>2. There was a <u>sharply</u> fall in 2020. → <input type="text" class="text-answer" id="t6-e2" data-correct="sharp" autocomplete="off" style="width:110px;"></p><p>3. Numbers increased <u>steadyly</u>. → <input type="text" class="text-answer" id="t6-e3" data-correct="steadily" autocomplete="off" style="width:110px;"></p><p>4. Since 2020, numbers <u>rose</u> every year. (present perfect) → <input type="text" class="text-answer" id="t6-e4" data-correct="have risen" autocomplete="off" style="width:130px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-err', 't6-err-score')">Check answers</button>
+          <span id="t6-err-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 12</div>
+      <h2>Grammar Review — Tenses, Relative Clauses and Articles</h2>
+      <p class="task-sub">The grammar mistakes examiners noticed most this week. Choose the correct option.</p>
+      <div class="card" id="t7-gr"><div class="q-item" id="t7-gr-1">
+          <p>1. The café ______ in 2010.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-gr-1" data-correct="true"> opened</label><label><input type="radio" value="1" name="t7-gr-1" data-correct="false"> has opened</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-gr-2">
+          <p>2. Since 2010, thousands of cafés ______.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-gr-2" data-correct="false"> opened</label><label><input type="radio" value="1" name="t7-gr-2" data-correct="true"> have opened</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-gr-3">
+          <p>3. The man ______ developed the greenhouse was British.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-gr-3" data-correct="true"> who</label><label><input type="radio" value="1" name="t7-gr-3" data-correct="false"> which</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-gr-4">
+          <p>4. The game ______ raised two million dollars was very popular.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-gr-4" data-correct="false"> who</label><label><input type="radio" value="1" name="t7-gr-4" data-correct="true"> which</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-gr-5">
+          <p>5. She is ______ engineer.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-gr-5" data-correct="false"> a</label><label><input type="radio" value="1" name="t7-gr-5" data-correct="true"> an</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-gr-6">
+          <p>6. ______ Ciclovía takes place every Sunday.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-gr-6" data-correct="true"> The</label><label><input type="radio" value="1" name="t7-gr-6" data-correct="false"> —</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-gr-7">
+          <p>7. Many people feel ______ on busy roads.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-gr-7" data-correct="true"> unsafe</label><label><input type="radio" value="1" name="t7-gr-7" data-correct="false"> unsafely</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t7-gr-8">
+          <p>8. Numbers fell ______ in 2020.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t7-gr-8" data-correct="false"> sharp</label><label><input type="radio" value="1" name="t7-gr-8" data-correct="true"> sharply</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-gr', 't7-gr-score')">Check answers</button>
+          <span id="t7-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 12</div>
+      <h2>Writing Task 1 — Your Report</h2>
+      <p class="task-sub">Now write a full report on the café graph. Spend about <b>20 minutes</b> and write <b>at least 150 words</b>. Use the language from Task 6.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The graph below shows the average number of people who visited a board game café each week on weekdays and at weekends between 2018 and 2024.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Average weekly visitors to a board game café, 2018–2024" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Average weekly visitors to a board game café, 2018–2024</text><line x1="64" y1="290.0" x2="620" y2="290.0" stroke="#e3e5ec"/><text x="56" y="294.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="249.3" x2="620" y2="249.3" stroke="#e3e5ec"/><text x="56" y="253.3" text-anchor="end" font-size="11" fill="#4b4e5c">100</text><line x1="64" y1="208.7" x2="620" y2="208.7" stroke="#e3e5ec"/><text x="56" y="212.7" text-anchor="end" font-size="11" fill="#4b4e5c">200</text><line x1="64" y1="168.0" x2="620" y2="168.0" stroke="#e3e5ec"/><text x="56" y="172.0" text-anchor="end" font-size="11" fill="#4b4e5c">300</text><line x1="64" y1="127.3" x2="620" y2="127.3" stroke="#e3e5ec"/><text x="56" y="131.3" text-anchor="end" font-size="11" fill="#4b4e5c">400</text><line x1="64" y1="86.7" x2="620" y2="86.7" stroke="#e3e5ec"/><text x="56" y="90.7" text-anchor="end" font-size="11" fill="#4b4e5c">500</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">600</text><text x="64.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2018</text><text x="156.7" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2019</text><text x="249.3" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2020</text><text x="342.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2021</text><text x="434.7" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2022</text><text x="527.3" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2023</text><text x="620.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2024</text><text x="14" y="168.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 168.0)">visitors</text><polyline fill="none" stroke="#2c6bed" stroke-width="2.6" points="64.0,241.2 156.7,229.0 249.3,253.4 342.0,224.9 434.7,200.5 527.3,184.3 620.0,168.0"/><circle cx="64.0" cy="241.2" r="3.6" fill="#2c6bed"/><circle cx="156.7" cy="229.0" r="3.6" fill="#2c6bed"/><circle cx="249.3" cy="253.4" r="3.6" fill="#2c6bed"/><circle cx="342.0" cy="224.9" r="3.6" fill="#2c6bed"/><circle cx="434.7" cy="200.5" r="3.6" fill="#2c6bed"/><circle cx="527.3" cy="184.3" r="3.6" fill="#2c6bed"/><circle cx="620.0" cy="168.0" r="3.6" fill="#2c6bed"/><rect x="64" y="334" width="14" height="4" fill="#2c6bed"/><text x="84" y="339" font-size="12" fill="#14162b">weekdays</text><polyline fill="none" stroke="#d9480f" stroke-width="2.6" points="64.0,168.0 156.7,151.7 249.3,216.8 342.0,135.5 434.7,107.0 527.3,94.8 620.0,78.5"/><circle cx="64.0" cy="168.0" r="3.6" fill="#d9480f"/><circle cx="156.7" cy="151.7" r="3.6" fill="#d9480f"/><circle cx="249.3" cy="216.8" r="3.6" fill="#d9480f"/><circle cx="342.0" cy="135.5" r="3.6" fill="#d9480f"/><circle cx="434.7" cy="107.0" r="3.6" fill="#d9480f"/><circle cx="527.3" cy="94.8" r="3.6" fill="#d9480f"/><circle cx="620.0" cy="78.5" r="3.6" fill="#d9480f"/><rect x="151.6" y="334" width="14" height="4" fill="#d9480f"/><text x="171.6" y="339" font-size="12" fill="#14162b">weekends</text></svg></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t8-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-essay-model"><div class="model-text" style="padding:2px 0;">
+  <p>The line graph compares the average number of weekly visitors to a board game café on weekdays and at weekends over a seven-year period from 2018 to 2024.</p>
+  <p>Overall, visitor numbers increased considerably over the period, despite a sharp drop in 2020. Weekends were always much busier than weekdays.</p>
+  <p>In 2018, the café had about 300 visitors at weekends and 120 on weekdays. Both figures rose slightly in 2019, but in 2020 they fell sharply, to 180 and 90 respectively, the lowest points on the graph.</p>
+  <p>After that, both lines rose steadily. Weekend visitors increased to 450 in 2022 and reached a peak of 520 in 2024. Weekday numbers also grew, from 160 in 2021 to 300 in 2024, which was more than three times the 2020 figure.</p>
+  <p class="alt">≈ 160 words</p>
+</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 12</div>
+      <h2>Writing Task 2 — Planning and Paragraphs</h2>
+      <p class="task-sub">This week you wrote essays on cycle lanes and on museums. Today, practise the <b>planning</b> stage and write two paragraphs.</p>
+<div class="card task-prompt"><p class="prompt-label">Writing Task 2</p><p><i>Some people think that children should spend more time playing traditional games instead of computer games. To what extent do you agree or disagree?</i></p></div>
+      <p style="margin-top:26px;"><strong>Part 1 — Choose the best option for each part of the plan.</strong></p>
+      <div class="card" id="t9-pl"><div class="q-item" id="t9-pl-1">
+          <p>1. Best thesis statement (your opinion):</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-pl-1" data-correct="false"> A. Computer games are games.</label><label><input type="radio" value="1" name="t9-pl-1" data-correct="true"> B. I largely agree, because traditional games help children to develop social skills, although computer games also have some benefits.</label><label><input type="radio" value="2" name="t9-pl-1" data-correct="false"> C. In this essay I will talk about games.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-pl-2">
+          <p>2. Best topic sentence for Body 1:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-pl-2" data-correct="true"> A. Traditional games help children learn to communicate and cooperate.</label><label><input type="radio" value="1" name="t9-pl-2" data-correct="false"> B. Monopoly was invented in 1935.</label><label><input type="radio" value="2" name="t9-pl-2" data-correct="false"> C. I like chess.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-pl-3">
+          <p>3. Best example for Body 1:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-pl-3" data-correct="false"> A. Many people have phones.</label><label><input type="radio" value="1" name="t9-pl-3" data-correct="false"> B. Games are fun.</label><label><input type="radio" value="2" name="t9-pl-3" data-correct="true"> C. Board game cafés are now popular around the world, and families play together face to face.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-pl-4">
+          <p>4. Best topic sentence for Body 2:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-pl-4" data-correct="false"> A. Computer games are bad.</label><label><input type="radio" value="1" name="t9-pl-4" data-correct="true"> B. However, some computer games can also develop useful skills, such as problem-solving.</label><label><input type="radio" value="2" name="t9-pl-4" data-correct="false"> C. In conclusion, games are good.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-pl', 't9-pl-score')">Check answers</button>
+          <span id="t9-pl-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">1. Write your introduction (2–3 sentences: paraphrase + your opinion).</p><textarea class="no-check mini-answer" id="t9-w-1" placeholder="Write here..." style="min-height:150px;"></textarea><p class="mini-q">2. Write Body paragraph 1 (topic sentence, explanation, example).</p><textarea class="no-check mini-answer" id="t9-w-2" placeholder="Write here..." style="min-height:150px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-w-btn">Show model paragraphs</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-w-ans"><p><b>Introduction:</b> These days, many children spend hours playing computer games, and some people believe they should play traditional games more often. I largely agree with this view, although I accept that computer games can also have some benefits.</p>
+    <p><b>Body 1:</b> The main advantage of traditional games is that they help children to develop social skills. When children play board games or outdoor games, they have to talk to each other, take turns and follow rules. They also learn how to lose without getting angry. For example, the growing number of board game cafés shows that many families now enjoy playing together face to face, away from screens.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 12</div>
+      <h2>Speaking Part 1 — Free Time and Games</h2>
+      <p class="task-sub">Answer each question in its own box. Give a direct answer, a reason and a short example — about <b>20–30 seconds</b> each.</p>
+      <div class="question-box" data-field="t10-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Do you like playing games? What kind?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Yes, I really enjoy…”</li><li>“My favourite is… because…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Did you play board games when you were a child?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“When I was younger,…”</li><li>“I used to…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">How much time do you spend looking at screens every day?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Probably about…”</li><li>“To be honest,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t10-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">What do you usually do on Friday evenings?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Usually, I…”</li><li>“Sometimes I also…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 12</div>
+      <h2>Speaking Parts 2 and 3 — A Hobby</h2>
+      <p class="task-sub">Give a full Part 2 talk, then answer two Part 3 questions, each in its own box.</p>
+      <div class="question-box" data-field="t11-speaking-p2">
+        <div class="q-num">Part 2 — long turn</div>
+        <div class="q-text"><b>Part 2.</b> Describe a hobby you enjoy. You should say: what it is; when you started it; how often you do it — and explain why you enjoy it. <i>(1 minute to prepare, then speak for 1–2 minutes.)</i></div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d like to talk about…”</li><li>“I started when…”</li><li>“What I enjoy most is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-1">
+        <div class="q-num">Part 3 — Question 1</div>
+        <div class="q-text">Why do some hobbies become very popular for a short time and then disappear?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think it’s because…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-2">
+        <div class="q-num">Part 3 — Question 2</div>
+        <div class="q-text">Is it better for children to have hobbies indoors or outdoors?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“In my opinion,…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 12</div>
+      <h2>Week Reflection — Your Progress</h2>
+      <p class="task-sub">Finish the week by reflecting honestly. Your answers help your mentor understand what to focus on next week.</p>
+      <div class="card"><p class="mini-q">1. What was your score in the Day 31 reading test and in the Day 32 listening test (out of 40)?</p><textarea class="no-check mini-answer" id="t12-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. Which question type is now easier for you than at the start of the week? Why?</p><textarea class="no-check mini-answer" id="t12-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Which question type is still the most difficult? What will you do about it next week?</p><textarea class="no-check mini-answer" id="t12-rf-3" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">4. Write one Writing goal and one Speaking goal for next week.</p><textarea class="no-check mini-answer" id="t12-rf-4" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t12-rf-btn">Show examples of good goals</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t12-rf-ans"><p>Good goals are <b>specific</b>: not “improve my listening” but “check plurals and spelling in every Section 1 answer”; not “speak better” but “give a reason and an example in every Part 1 answer”; not “write more” but “always write an overview in Task 1”.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 12</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 33 of 45</div>
+    <h1>Day 33 complete! 🎉</h1>
+    <p>Day 33 done — the week reviewed: vocabulary and skills, a new reading and listening, Task 1 and Task 2 practice, speaking and your reflection.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+    initWritingCoach('t8-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The graph below shows the average number of people who visited a board game café each week on weekdays and at weekends between 2018 and 2024.' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-1"]'); if (b) initRecordControl(b, user.id, 33, 10, 't10-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-2"]'); if (b) initRecordControl(b, user.id, 33, 10, 't10-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-3"]'); if (b) initRecordControl(b, user.id, 33, 10, 't10-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t10-speaking-4"]'); if (b) initRecordControl(b, user.id, 33, 10, 't10-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-p2"]'); if (b) initRecordControl(b, user.id, 33, 11, 't11-speaking-p2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-1"]'); if (b) initRecordControl(b, user.id, 33, 11, 't11-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-2"]'); if (b) initRecordControl(b, user.id, 33, 11, 't11-speaking-2', 0); }
+
+    await initTaskFlow(33, 12, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-sk', 't1-sk-score'); checkAllAnswers('t1-rr', 't1-rr-score'); },
+      2: () => { checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-sc', 't2-sc-score'); checkAllAnswers('t2-mc', 't2-mc-score'); },
+      4: () => { checkAllAnswers('t4-notes1', 't4-notes1-score'); },
+      5: () => { checkAllAnswers('t5-tr', 't5-tr-score'); },
+      6: () => { checkAllAnswers('t6-mc', 't6-mc-score'); checkAllAnswers('t6-g', 't6-g-score'); checkAllAnswers('t6-err', 't6-err-score'); },
+      7: () => { checkAllAnswers('t7-gr', 't7-gr-score'); },
+      9: () => { checkAllAnswers('t9-pl', 't9-pl-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t8-essay-model-btn', 't8-essay-model', '#t8-essay');
+    initGatedMistakeReveal('t9-w-btn', 't9-w-ans', '[id^="t9-w-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t12-rf-btn', 't12-rf-ans', '[id^="t12-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>

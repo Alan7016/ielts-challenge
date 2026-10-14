@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 33 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 33 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 13</div>
+      <h2>Week Review — Words and Skills from Days 28–32</h2>
+      <p class="task-sub">Today is a <b>catch-up day</b> for the whole week — plan for about <b>3 hours</b>. Review the week’s vocabulary and skills, do a new reading, an extra article and a new listening, write a full Task 1 report, plan a Task 2 essay, practise speaking and reflect on your progress.</p>
+      <p style="margin-top:26px;"><strong>Part 1 — Vocabulary from this week.</strong> Match each word to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. frustration</button><button type="button" class="lm-item" data-key="2">2. endangered</button><button type="button" class="lm-item" data-key="3">3. revive</button><button type="button" class="lm-item" data-key="4">4. novelty</button><button type="button" class="lm-item" data-key="5">5. congested</button><button type="button" class="lm-item" data-key="6">6. punctual</button><button type="button" class="lm-item" data-key="7">7. adaptation</button><button type="button" class="lm-item" data-key="8">8. subsidise</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. pay part of the cost of something</button><button type="button" class="lm-item" data-key="b">b. arriving at the expected time</button><button type="button" class="lm-item" data-key="c">c. at risk of disappearing completely</button><button type="button" class="lm-item" data-key="d">d. too full of people or traffic</button><button type="button" class="lm-item" data-key="e">e. bring back into use</button><button type="button" class="lm-item" data-key="f">f. a feature that helps a living thing survive</button><button type="button" class="lm-item" data-key="g">g. the feeling of being annoyed because you cannot change something</button><button type="button" class="lm-item" data-key="h">h. the quality of being new and unusual</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Part 2 — Exam technique.</strong> Choose the best answer.</p>
+      <div class="card" id="t1-sk"><div class="q-item" id="t1-sk-1">
+          <p>1. A statement says “always”; the passage says “usually”.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-sk-1" data-correct="false"> A. TRUE</label><label><input type="radio" value="1" name="t1-sk-1" data-correct="true"> B. FALSE</label><label><input type="radio" value="2" name="t1-sk-1" data-correct="false"> C. NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-sk-2">
+          <p>2. A passage says “the best known” robot; the statement says “the most effective”.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-sk-2" data-correct="false"> A. TRUE</label><label><input type="radio" value="1" name="t1-sk-2" data-correct="false"> B. FALSE</label><label><input type="radio" value="2" name="t1-sk-2" data-correct="true"> C. NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-sk-3">
+          <p>3. In a listening form, the speaker gives two prices and then chooses the cheaper option.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-sk-3" data-correct="false"> A. write the first price</label><label><input type="radio" value="1" name="t1-sk-3" data-correct="true"> B. write the price of the option chosen</label><label><input type="radio" value="2" name="t1-sk-3" data-correct="false"> C. write both</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-sk-4">
+          <p>4. Sentence endings: two endings fit the grammar.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-sk-4" data-correct="false"> A. choose the first one</label><label><input type="radio" value="1" name="t1-sk-4" data-correct="true"> B. check the meaning in the passage</label><label><input type="radio" value="2" name="t1-sk-4" data-correct="false"> C. choose the longer one</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-sk', 't1-sk-score')">Check answers</button>
+          <span id="t1-sk-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 3 — Linking words.</strong> Choose the function of the underlined word.</p>
+      <div class="card" id="t1-ln"><div class="sel-row"><select class="select" id="t1-ln-1" data-answer="contrast"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="example">example</option><option value="addition">addition</option></select><span><b>1.</b> Mathematics, <u>however</u>, can only solve part of the problem.</span></div><div class="sel-row"><select class="select" id="t1-ln-2" data-answer="result"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="example">example</option><option value="addition">addition</option></select><span><b>2.</b> The banks have <u>therefore</u> replaced separate lines.</span></div><div class="sel-row"><select class="select" id="t1-ln-3" data-answer="example"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="example">example</option><option value="addition">addition</option></select><span><b>3.</b> Researchers in the Pacific, <u>for instance</u>, recorded fish names.</span></div><div class="sel-row"><select class="select" id="t1-ln-4" data-answer="addition"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="example">example</option><option value="addition">addition</option></select><span><b>4.</b> Technology offers new tools <u>as well</u>.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-ln', 't1-ln-score')">Check answers</button>
+          <span id="t1-ln-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 13</div>
+      <h2>Catch-up Reading — The Return of Vinyl</h2>
+      <p class="task-sub">A new reading with the question types you practised this week. Spend about <b>18 minutes</b>. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Return of Vinyl<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Streaming was supposed to make physical music obsolete. Instead, the record is back.</small></h3>
+            <p class="article-meta">Catch-up reading · Culture and technology · 408 words</p>
+            <p><span class="para-label">A</span>In 2007, sales of vinyl records in the United States fell to fewer than one million copies, and the format seemed destined for museums. Compact discs had replaced it in the 1980s and 1990s, and digital downloads were now replacing CDs. Yet in 2022, for the first time since 1987, Americans bought more vinyl records than CDs — over forty million of them. The revival is one of the most unexpected stories in the modern music industry.</p><p><span class="para-label">B</span>The buyers are not, as many people assume, mainly older listeners trying to recapture their youth. Surveys in both the United States and Britain have found that a large proportion of vinyl buyers are under thirty-five, and many of them own a record player that they bought only recently. Some even admit that they rarely play the records at all.</p><p><span class="para-label">C</span>Why would a generation raised on streaming choose such an inconvenient format? Part of the answer is that streaming has made music almost invisible. With millions of songs available instantly for a monthly fee, music has become something that plays in the background rather than something people own. A record, by contrast, is a physical object: it has to be chosen, carried home and placed carefully on a turntable. For many buyers, this ritual is the point.</p><p><span class="para-label">D</span>Sound quality is also frequently mentioned, although here the evidence is more complicated. Enthusiasts describe vinyl as ‘warmer’ than digital audio, but in blind listening tests, most people cannot reliably tell the difference, and some of the qualities that listeners enjoy are in fact small imperfections — the faint crackle of dust, for instance — rather than a more accurate reproduction of the original recording.</p><p><span class="para-label">E</span>The revival has created practical problems for the industry. Most of the factories that once pressed records were closed decades ago, and the machines that make them are no longer manufactured in large numbers. As a result, artists sometimes wait six months or more for their records to be produced. The raw material, a type of plastic called PVC, has also attracted criticism from environmental groups, prompting some manufacturers to experiment with recycled and plant-based alternatives.</p><p><span class="para-label">F</span>For musicians, vinyl offers something streaming rarely does: a meaningful income. A single stream earns an artist a tiny fraction of a cent, whereas a fan who buys a record may pay twenty-five dollars or more. For many smaller bands, selling records at concerts has become an essential part of making a living.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">The passage has six paragraphs, <b>A–F</b>. Choose the correct heading for each paragraph.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; An unlikely comeback<br><b>ii</b>&nbsp; Younger buyers than expected<br><b>iii</b>&nbsp; The appeal of owning something physical<br><b>iv</b>&nbsp; A debate about sound<br><b>v</b>&nbsp; Struggling to keep up with demand<br><b>vi</b>&nbsp; A better deal for artists<br><b>vii</b>&nbsp; How streaming services choose music<br><b>viii</b>&nbsp; The decline of live concerts</p></div>
+      <div class="card" id="t2-h"><div class="sel-row"><select class="select" id="t2-h-1" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>1.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t2-h-2" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>2.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t2-h-3" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>3.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t2-h-4" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>4.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t2-h-5" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>5.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t2-h-6" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>6.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-h', 't2-h-score')">Check answers</button>
+          <span id="t2-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–10</p><p class="qg-instr">Do the following statements agree with the information in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-7">
+          <p>7. In 2022, Americans bought more vinyl records than CDs.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-7" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-7" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-7" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-8">
+          <p>8. Vinyl buyers are mainly older people.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-8" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-8" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-8" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-9">
+          <p>9. In blind tests, most listeners can identify which recording is on vinyl.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-9" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-9" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-9" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-10">
+          <p>10. Plant-based records are now cheaper than PVC records.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-10" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-10" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-10" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–13</p><p class="qg-instr">Complete the sentences. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t2-sc" style="line-height:2.4;"><p>11. For many buyers, the <input type="text" class="text-answer" id="t2-11" data-correct="ritual" autocomplete="off" style="width:120px;"> of playing a record is what matters.</p><p>12. Some qualities that listeners enjoy are actually small <input type="text" class="text-answer" id="t2-12" data-correct="imperfections" autocomplete="off" style="width:150px;">.</p><p>13. Smaller bands often depend on selling records at <input type="text" class="text-answer" id="t2-13" data-correct="concerts" autocomplete="off" style="width:130px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-sc', 't2-sc-score')">Check answers</button>
+          <span id="t2-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 13</div>
+      <h2>Catch-up Reading — Answer Analysis</h2>
+      <p class="task-sub">Check every answer. Compare the question types with the ones you found hardest in Day 31.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Return of Vinyl</summary>
+        <p><span class="para-label">A</span>In 2007, sales of vinyl records in the United States fell to fewer than one million copies, and the format seemed destined for museums. Compact discs had replaced it in the 1980s and 1990s, and digital downloads were now replacing CDs. Yet in 2022, for the first time since 1987, Americans bought more vinyl records than CDs — over forty million of them. The revival is one of the most unexpected stories in the modern music industry.</p><p><span class="para-label">B</span>The buyers are not, as many people assume, mainly older listeners trying to recapture their youth. Surveys in both the United States and Britain have found that a large proportion of vinyl buyers are under thirty-five, and many of them own a record player that they bought only recently. Some even admit that they rarely play the records at all.</p><p><span class="para-label">C</span>Why would a generation raised on streaming choose such an inconvenient format? Part of the answer is that streaming has made music almost invisible. With millions of songs available instantly for a monthly fee, music has become something that plays in the background rather than something people own. A record, by contrast, is a physical object: it has to be chosen, carried home and placed carefully on a turntable. For many buyers, this ritual is the point.</p><p><span class="para-label">D</span>Sound quality is also frequently mentioned, although here the evidence is more complicated. Enthusiasts describe vinyl as ‘warmer’ than digital audio, but in blind listening tests, most people cannot reliably tell the difference, and some of the qualities that listeners enjoy are in fact small imperfections — the faint crackle of dust, for instance — rather than a more accurate reproduction of the original recording.</p><p><span class="para-label">E</span>The revival has created practical problems for the industry. Most of the factories that once pressed records were closed decades ago, and the machines that make them are no longer manufactured in large numbers. As a result, artists sometimes wait six months or more for their records to be produced. The raw material, a type of plastic called PVC, has also attracted criticism from environmental groups, prompting some manufacturers to experiment with recycled and plant-based alternatives.</p><p><span class="para-label">F</span>For musicians, vinyl offers something streaming rarely does: a meaningful income. A single stream earns an artist a tiny fraction of a cent, whereas a fan who buys a record may pay twenty-five dollars or more. For many smaller bands, selling records at concerts has become an essential part of making a living.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">i</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">the format seemed destined for museums … The revival is one of the most unexpected stories</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">ii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">not, as many people assume, mainly older listeners … a large proportion … are under thirty-five</span>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">iii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">A record, by contrast, is a physical object … this ritual is the point</span>.</p><p><span class="trap">Trap:</span> vii — streaming is mentioned, but the paragraph is not about how services choose music.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">iv</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Sound quality is also frequently mentioned, although here the evidence is more complicated</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">v</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">most of the factories … were closed … artists sometimes wait six months or more</span>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">vi</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">vinyl offers something streaming rarely does: a meaningful income</span>.</p><p><span class="trap">Trap:</span> viii — concerts are mentioned as a place to <i>sell</i> records, not as declining.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">in 2022 … Americans bought more vinyl records than CDs</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">The buyers are not, as many people assume, mainly older listeners</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">FALSE</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">in blind listening tests, most people cannot reliably tell the difference</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para E</span></summary><div class="an-body"><p>Manufacturers <span class="ev">experiment with recycled and plant-based alternatives</span> — but prices are never compared.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">ritual</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">For many buyers, this ritual is the point</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">imperfections</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">some of the qualities that listeners enjoy are in fact small imperfections</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">concerts</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">selling records at concerts has become an essential part of making a living</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 13</div>
+      <h2>Extra Reading — Why Do We Forget Our Dreams?</h2>
+      <p class="task-sub">An extra article (about <b>20 minutes</b>). Answer the questions, then summarise it in writing (<b>at least 100 words</b>) and aloud (<b>at least 45 seconds</b>).</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Why Do We Forget Our Dreams?</h3>
+        <p class="article-meta">Extra reading · Science · 263 words</p>
+        <p><span class="para-label">A</span>Most people dream several times every night, yet by the time they have finished breakfast, they usually remember little or nothing of what they experienced. Researchers estimate that we forget around ninety-five per cent of our dreams. Why should something that feels so vivid while it is happening disappear so quickly?</p><p><span class="para-label">B</span>One explanation involves a chemical called noradrenaline, which plays an important role in forming memories. During the stage of sleep in which most vivid dreams occur, known as REM sleep, levels of noradrenaline in the brain are extremely low. Without it, the brain may simply fail to store the experience in long-term memory.</p><p><span class="para-label">C</span>Another factor is timing. Studies have found that people who wake up during or immediately after a dream are far more likely to remember it than those who sleep on. People who often recall their dreams also tend to wake up more frequently during the night, although these periods are usually too short for them to notice.</p><p><span class="para-label">D</span>The content of the dream matters as well. Dreams that are emotional, strange or frightening are remembered more often than ordinary ones, perhaps because emotional experiences are more easily stored in memory in general.</p><p><span class="para-label">E</span>For those who would like to remember more of their dreams, sleep researchers offer simple advice. Keeping a notebook beside the bed and writing down anything you remember as soon as you wake — before checking your phone or getting up — can significantly increase recall within a couple of weeks. Even a single word or image can be enough to bring back a surprising amount of detail.</p>
+      </div>
+      <div class="card" id="t4-mc"><div class="q-item" id="t4-mc-1">
+          <p>1. About how many of our dreams do we forget?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-1" data-correct="false"> A. a quarter</label><label><input type="radio" value="1" name="t4-mc-1" data-correct="false"> B. half</label><label><input type="radio" value="2" name="t4-mc-1" data-correct="true"> C. nearly all</label><label><input type="radio" value="3" name="t4-mc-1" data-correct="false"> D. none</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-2">
+          <p>2. During REM sleep, levels of noradrenaline are</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-2" data-correct="true"> A. extremely low.</label><label><input type="radio" value="1" name="t4-mc-2" data-correct="false"> B. higher than usual.</label><label><input type="radio" value="2" name="t4-mc-2" data-correct="false"> C. the same as when awake.</label><label><input type="radio" value="3" name="t4-mc-2" data-correct="false"> D. impossible to measure.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-3">
+          <p>3. Who is most likely to remember a dream?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-3" data-correct="false"> A. people who sleep for a long time</label><label><input type="radio" value="1" name="t4-mc-3" data-correct="true"> B. people who wake during or just after it</label><label><input type="radio" value="2" name="t4-mc-3" data-correct="false"> C. people who go to bed late</label><label><input type="radio" value="3" name="t4-mc-3" data-correct="false"> D. people who dream very little</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-4">
+          <p>4. Which dreams are remembered more often?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-4" data-correct="false"> A. short ones</label><label><input type="radio" value="1" name="t4-mc-4" data-correct="false"> B. ordinary ones</label><label><input type="radio" value="2" name="t4-mc-4" data-correct="true"> C. emotional or strange ones</label><label><input type="radio" value="3" name="t4-mc-4" data-correct="false"> D. dreams about other people</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-5">
+          <p>5. What do researchers recommend?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-5" data-correct="false"> A. checking your phone as soon as you wake</label><label><input type="radio" value="1" name="t4-mc-5" data-correct="true"> B. writing your dream down immediately</label><label><input type="radio" value="2" name="t4-mc-5" data-correct="false"> C. sleeping for longer</label><label><input type="radio" value="3" name="t4-mc-5" data-correct="false"> D. avoiding frightening films</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mc', 't4-mc-score')">Check answers</button>
+          <span id="t4-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 100 words</b>. Give the main idea, the key points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 100 words):</p><textarea class="no-check mini-answer" id="t4-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t4-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t4-sum-ans"><p>The article explains why we forget around 95 per cent of our dreams, even though they feel vivid at the time. One reason is chemical: during REM sleep, when most vivid dreams happen, the brain has very little noradrenaline, a substance that helps to form memories, so dreams may not be stored. Timing also matters, because people who wake during or just after a dream are much more likely to remember it, and people who often recall dreams tend to wake briefly more often. Emotional or strange dreams are also remembered better than ordinary ones. Finally, researchers suggest keeping a notebook by the bed and writing dreams down immediately. I found the explanation clear, and the advice is easy to try.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t4-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 45 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The article explains why…”</li><li>“One reason is that…”</li><li>“Another factor is…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 13</div>
+      <h2>Catch-up Listening — Changes at the City Library</h2>
+      <p class="task-sub">A new Section 2 recording. Read the questions first, then play <b>once only</b>. Answers are checked when you press <b>Next</b>.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Section 2 — Questions 1–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/day33-library.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 1–2</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b> or <b>C</b>.</p></div>
+      <div class="card" id="t5-mc"><div class="q-item" id="t5-mc-1">
+          <p>1. Why will the library reopen later than planned?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-1" data-correct="true"> A. problems with the roof</label><label><input type="radio" value="1" name="t5-mc-1" data-correct="false"> B. a shortage of staff</label><label><input type="radio" value="2" name="t5-mc-1" data-correct="false"> C. a lack of money</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-2">
+          <p>2. What is now on the ground floor?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-2" data-correct="false"> A. the reference section</label><label><input type="radio" value="1" name="t5-mc-2" data-correct="true"> B. a children’s area</label><label><input type="radio" value="2" name="t5-mc-2" data-correct="false"> C. the study zone</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-mc', 't5-mc-score')">Check answers</button>
+          <span id="t5-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 3–10</p><p class="qg-instr">Complete the notes. Write <b>ONE WORD AND/OR A NUMBER</b> for each answer.</p></div>
+<div class="card" id="t5-notes1"><p class="prompt-label">Central Library — what’s new</p><div style="line-height:2.1;"><div>• Story-telling sessions: every Saturday at (3) <input type="text" class="text-answer" id="t5-3" data-correct="10.30/10:30/10.30am/10:30am/10.30 am/10:30 am" autocomplete="off" style="width:110px;"></div><div>• Study zone: (4) <input type="text" class="text-answer" id="t5-4" data-correct="120" autocomplete="off" style="width:90px;"> desks, each with a power socket</div><div>• First floor: phones must be switched (5) <input type="text" class="text-answer" id="t5-5" data-correct="off" autocomplete="off" style="width:90px;"></div><div>• Archive: book at least (6) <input type="text" class="text-answer" id="t5-6" data-correct="2/two" autocomplete="off" style="width:80px;"> days in advance, because the documents are (7) <input type="text" class="text-answer" id="t5-7" data-correct="fragile" autocomplete="off" style="width:120px;"></div><div>• Borrow up to (8) <input type="text" class="text-answer" id="t5-8" data-correct="15/fifteen" autocomplete="off" style="width:80px;"> books; loan period (9) <input type="text" class="text-answer" id="t5-9" data-correct="4/four" autocomplete="off" style="width:80px;"> weeks</div><div>• Sundays: closed, but the online catalogue and (10) <input type="text" class="text-answer" id="t5-10" data-correct="e-books/ebooks/e books" autocomplete="off" style="width:120px;"> are available 24 hours</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-notes1', 't5-notes1-score')">Check answers</button>
+          <span id="t5-notes1-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 13</div>
+      <h2>Catch-up Listening — Answers and Distractors</h2>
+      <p class="task-sub">Check your answers. Every answer in this recording had a distractor near it — can you see them?</p>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">A</span><span class="an-where"></span></summary><div class="an-body"><p>“a little later than we originally planned, because of problems with the roof.”</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">B</span><span class="an-where"></span></summary><div class="an-body"><p>“The old reference section has been moved upstairs, and the space is now a large children’s area.”</p><p><span class="trap">Trap:</span> the reference section <i>was</i> on the ground floor.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">10.30</span><span class="an-where"></span></summary><div class="an-body"><p>“every Saturday morning at ten thirty.”</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">120</span><span class="an-where"></span></summary><div class="an-body"><p>“one hundred and twenty desks, compared with sixty before”.</p><p><span class="trap">Trap:</span> 60 is the old number.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">off</span><span class="an-where"></span></summary><div class="an-body"><p>“Phones must be switched off, not just put on silent.”</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">2</span><span class="an-where"></span></summary><div class="an-body"><p>“at least two days in advance”.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">fragile</span><span class="an-where"></span></summary><div class="an-body"><p>“because the documents are fragile”.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">15</span><span class="an-where"></span></summary><div class="an-body"><p>“fifteen books at a time instead of ten”.</p><p><span class="trap">Trap:</span> 10 is the old limit.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">4</span><span class="an-where"></span></summary><div class="an-body"><p>“extended from three weeks to four.”</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">e-books</span><span class="an-where"></span></summary><div class="an-body"><p>“the online catalogue and e-books are available twenty-four hours a day.”</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Old or new?</strong> For each detail, decide whether it describes the library <b>before</b> or <b>after</b> the changes.</p>
+      <div class="card" id="t6-on"><div class="sel-row"><select class="select" id="t6-on-1" data-answer="before"><option value="">—</option><option value="before">before</option><option value="after">after</option></select><span><b>1.</b> 60 desks</span></div><div class="sel-row"><select class="select" id="t6-on-2" data-answer="after"><option value="">—</option><option value="before">before</option><option value="after">after</option></select><span><b>2.</b> 15 books at a time</span></div><div class="sel-row"><select class="select" id="t6-on-3" data-answer="before"><option value="">—</option><option value="before">before</option><option value="after">after</option></select><span><b>3.</b> late fees</span></div><div class="sel-row"><select class="select" id="t6-on-4" data-answer="before"><option value="">—</option><option value="before">before</option><option value="after">after</option></select><span><b>4.</b> three-week loans</span></div><div class="sel-row"><select class="select" id="t6-on-5" data-answer="after"><option value="">—</option><option value="before">before</option><option value="after">after</option></select><span><b>5.</b> a silent first floor</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-on', 't6-on-score')">Check answers</button>
+          <span id="t6-on-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 13</div>
+      <h2>Writing Task 1 — Review: Comparing Data</h2>
+      <p class="task-sub">Review the Task 1 skills from this week — choosing key features, comparing and using accurate language.</p>
+<div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="How adults in one country listened to music, 2014 and 2024 (%)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">How adults in one country listened to music, 2014 and 2024 (%)</text><line x1="64" y1="284.0" x2="620" y2="284.0" stroke="#e3e5ec"/><text x="56" y="288.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="236.4" x2="620" y2="236.4" stroke="#e3e5ec"/><text x="56" y="240.4" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="188.8" x2="620" y2="188.8" stroke="#e3e5ec"/><text x="56" y="192.8" text-anchor="end" font-size="11" fill="#4b4e5c">40</text><line x1="64" y1="141.2" x2="620" y2="141.2" stroke="#e3e5ec"/><text x="56" y="145.2" text-anchor="end" font-size="11" fill="#4b4e5c">60</text><line x1="64" y1="93.6" x2="620" y2="93.6" stroke="#e3e5ec"/><text x="56" y="97.6" text-anchor="end" font-size="11" fill="#4b4e5c">80</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">100</text><text x="14" y="165.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 165.0)">% of adults</text><rect x="85.6" y="224.5" width="32.0" height="59.5" fill="#2c6bed"/><rect x="119.6" y="98.4" width="32.0" height="185.6" fill="#d9480f"/><text x="119.6" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">streaming</text><rect x="196.8" y="188.8" width="32.0" height="95.2" fill="#2c6bed"/><rect x="230.8" y="265.0" width="32.0" height="19.0" fill="#d9480f"/><text x="230.8" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">CDs</text><rect x="308.0" y="276.9" width="32.0" height="7.1" fill="#2c6bed"/><rect x="342.0" y="262.6" width="32.0" height="21.4" fill="#d9480f"/><text x="342.0" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">vinyl</text><rect x="419.2" y="153.1" width="32.0" height="130.9" fill="#2c6bed"/><rect x="453.2" y="193.6" width="32.0" height="90.4" fill="#d9480f"/><text x="453.2" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">radio</text><rect x="530.4" y="212.6" width="32.0" height="71.4" fill="#2c6bed"/><rect x="564.4" y="272.1" width="32.0" height="11.9" fill="#d9480f"/><text x="564.4" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">downloads</text><rect x="64" y="330" width="12" height="12" fill="#2c6bed"/><text x="82" y="340" font-size="12" fill="#14162b">2014</text><rect x="122.8" y="330" width="12" height="12" fill="#d9480f"/><text x="140.8" y="340" font-size="12" fill="#14162b">2024</text></svg></div>
+      <p style="margin-top:26px;"><strong>Part 1 — Which statements are accurate?</strong></p>
+      <div class="card" id="t7-acc"><div class="sel-row"><select class="select" id="t7-acc-1" data-answer="accurate"><option value="">—</option><option value="accurate">accurate</option><option value="inaccurate">inaccurate</option></select><span><b>1.</b> Streaming more than tripled between 2014 and 2024.</span></div><div class="sel-row"><select class="select" id="t7-acc-2" data-answer="inaccurate"><option value="">—</option><option value="accurate">accurate</option><option value="inaccurate">inaccurate</option></select><span><b>2.</b> Radio was the most popular way of listening in both years.</span></div><div class="sel-row"><select class="select" id="t7-acc-3" data-answer="accurate"><option value="">—</option><option value="accurate">accurate</option><option value="inaccurate">inaccurate</option></select><span><b>3.</b> The proportion buying CDs fell by 32 percentage points.</span></div><div class="sel-row"><select class="select" id="t7-acc-4" data-answer="accurate"><option value="">—</option><option value="accurate">accurate</option><option value="inaccurate">inaccurate</option></select><span><b>4.</b> Vinyl tripled, although it remained a minority format.</span></div><div class="sel-row"><select class="select" id="t7-acc-5" data-answer="inaccurate"><option value="">—</option><option value="accurate">accurate</option><option value="inaccurate">inaccurate</option></select><span><b>5.</b> Downloads rose slightly.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-acc', 't7-acc-score')">Check answers</button>
+          <span id="t7-acc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Complete the comparison sentences.</strong> Write ONE word in each gap.</p>
+      <div class="card" id="t7-g" style="line-height:2.4;"><p>1. In 2014, radio was the most <input type="text" class="text-answer" id="t7-1" data-correct="popular/common" autocomplete="off" style="width:110px;"> way of listening to music.</p><p>2. By 2024, streaming had <input type="text" class="text-answer" id="t7-2" data-correct="overtaken/replaced/surpassed" autocomplete="off" style="width:120px;"> radio as the leading method.</p><p>3. The figure for CDs fell <input type="text" class="text-answer" id="t7-3" data-correct="from" autocomplete="off" style="width:80px;"> 40% to 8%.</p><p>4. Vinyl was three <input type="text" class="text-answer" id="t7-4" data-correct="times" autocomplete="off" style="width:90px;"> as popular in 2024 as in 2014.</p><p>5. Downloads, <input type="text" class="text-answer" id="t7-5" data-correct="by" autocomplete="off" style="width:80px;"> contrast, almost disappeared.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-g', 't7-g-score')">Check answers</button>
+          <span id="t7-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 13</div>
+      <h2>Grammar Review — Accuracy for Band 6.5+</h2>
+      <p class="task-sub">Choose the correct option. These are the structures that appeared most often in this week’s writing and reading.</p>
+      <div class="card" id="t8-gr"><div class="q-item" id="t8-gr-1">
+          <p>1. The library ______ since March.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-gr-1" data-correct="false"> was closed</label><label><input type="radio" value="1" name="t8-gr-1" data-correct="true"> has been closed</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-gr-2">
+          <p>2. Vinyl sales ______ in 2007.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-gr-2" data-correct="false"> have fallen</label><label><input type="radio" value="1" name="t8-gr-2" data-correct="true"> fell</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-gr-3">
+          <p>3. The machines that make records ______ in large numbers any more.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-gr-3" data-correct="false"> do not manufacture</label><label><input type="radio" value="1" name="t8-gr-3" data-correct="true"> are not manufactured</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-gr-4">
+          <p>4. A record costs ______ than a month of streaming.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-gr-4" data-correct="true"> much more</label><label><input type="radio" value="1" name="t8-gr-4" data-correct="false"> very more</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-gr-5">
+          <p>5. Streaming is ______ popular method.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-gr-5" data-correct="false"> most</label><label><input type="radio" value="1" name="t8-gr-5" data-correct="true"> the most</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-gr-6">
+          <p>6. If late fees ______ abolished, more families would come back.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-gr-6" data-correct="true"> were</label><label><input type="radio" value="1" name="t8-gr-6" data-correct="false"> are</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-gr-7">
+          <p>7. The documents, ______ are very fragile, must be prepared by staff.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-gr-7" data-correct="false"> that</label><label><input type="radio" value="1" name="t8-gr-7" data-correct="true"> which</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-gr-8">
+          <p>8. ______ number of buyers under 35 is surprising.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-gr-8" data-correct="true"> The</label><label><input type="radio" value="1" name="t8-gr-8" data-correct="false"> A</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-gr', 't8-gr-score')">Check answers</button>
+          <span id="t8-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 13</div>
+      <h2>Writing Task 1 — Your Report</h2>
+      <p class="task-sub">Now write a full report on the music chart. Spend about <b>20 minutes</b> and write <b>at least 150 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The chart below shows the percentage of adults in one country who used different methods to listen to music in 2014 and 2024.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="How adults in one country listened to music, 2014 and 2024 (%)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">How adults in one country listened to music, 2014 and 2024 (%)</text><line x1="64" y1="284.0" x2="620" y2="284.0" stroke="#e3e5ec"/><text x="56" y="288.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="236.4" x2="620" y2="236.4" stroke="#e3e5ec"/><text x="56" y="240.4" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="188.8" x2="620" y2="188.8" stroke="#e3e5ec"/><text x="56" y="192.8" text-anchor="end" font-size="11" fill="#4b4e5c">40</text><line x1="64" y1="141.2" x2="620" y2="141.2" stroke="#e3e5ec"/><text x="56" y="145.2" text-anchor="end" font-size="11" fill="#4b4e5c">60</text><line x1="64" y1="93.6" x2="620" y2="93.6" stroke="#e3e5ec"/><text x="56" y="97.6" text-anchor="end" font-size="11" fill="#4b4e5c">80</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">100</text><text x="14" y="165.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 165.0)">% of adults</text><rect x="85.6" y="224.5" width="32.0" height="59.5" fill="#2c6bed"/><rect x="119.6" y="98.4" width="32.0" height="185.6" fill="#d9480f"/><text x="119.6" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">streaming</text><rect x="196.8" y="188.8" width="32.0" height="95.2" fill="#2c6bed"/><rect x="230.8" y="265.0" width="32.0" height="19.0" fill="#d9480f"/><text x="230.8" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">CDs</text><rect x="308.0" y="276.9" width="32.0" height="7.1" fill="#2c6bed"/><rect x="342.0" y="262.6" width="32.0" height="21.4" fill="#d9480f"/><text x="342.0" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">vinyl</text><rect x="419.2" y="153.1" width="32.0" height="130.9" fill="#2c6bed"/><rect x="453.2" y="193.6" width="32.0" height="90.4" fill="#d9480f"/><text x="453.2" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">radio</text><rect x="530.4" y="212.6" width="32.0" height="71.4" fill="#2c6bed"/><rect x="564.4" y="272.1" width="32.0" height="11.9" fill="#d9480f"/><text x="564.4" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">downloads</text><rect x="64" y="330" width="12" height="12" fill="#2c6bed"/><text x="82" y="340" font-size="12" fill="#14162b">2014</text><rect x="122.8" y="330" width="12" height="12" fill="#d9480f"/><text x="140.8" y="340" font-size="12" fill="#14162b">2024</text></svg></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t9-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-essay-model"><div class="model-text" style="padding:2px 0;">
+  <p>The bar chart compares the proportion of adults in one country who listened to music in five different ways in 2014 and 2024.</p>
+  <p>Overall, streaming became by far the most common method over the decade, while traditional formats such as CDs and downloads declined sharply. Vinyl was the only physical format to grow.</p>
+  <p>In 2014, radio was the most popular way of listening to music, used by 55% of adults, followed by CDs (40%) and downloads (30%). Only a quarter of adults used streaming services, and just 3% bought vinyl.</p>
+  <p>Ten years later, the picture had changed dramatically. Streaming more than tripled to 78%, overtaking radio, which fell to 38%. The figure for CDs dropped from 40% to only 8%, and downloads almost disappeared, at 5%. By contrast, vinyl tripled to 9%, although it remained a minority choice.</p>
+  <p class="alt">≈ 170 words</p>
+</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 13</div>
+      <h2>Writing Task 2 — Planning and Paragraphs</h2>
+      <p class="task-sub">Practise the planning stage and write two paragraphs for this question.</p>
+<div class="card task-prompt"><p class="prompt-label">Writing Task 2</p><p><i>Some people believe that buying physical products such as books and music records is a waste of money when digital versions are available. To what extent do you agree or disagree?</i></p></div>
+      <div class="card" id="t10-pl"><div class="q-item" id="t10-pl-1">
+          <p>1. Best thesis statement:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-pl-1" data-correct="false"> A. Books and records are things.</label><label><input type="radio" value="1" name="t10-pl-1" data-correct="false"> B. Digital versions are good.</label><label><input type="radio" value="2" name="t10-pl-1" data-correct="true"> C. I disagree to a large extent: although digital versions are cheaper and more convenient, physical products offer ownership and support creators in ways digital formats often do not.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-pl-2">
+          <p>2. Best topic sentence for the “agree” paragraph:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-pl-2" data-correct="true"> A. Digital versions are undeniably cheaper, more convenient and less wasteful.</label><label><input type="radio" value="1" name="t10-pl-2" data-correct="false"> B. I like my phone.</label><label><input type="radio" value="2" name="t10-pl-2" data-correct="false"> C. Vinyl sales rose in 2022.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-pl-3">
+          <p>3. Best example to support physical products:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-pl-3" data-correct="true"> A. A fan who buys a record may pay $25, while a stream earns the artist a fraction of a cent.</label><label><input type="radio" value="1" name="t10-pl-3" data-correct="false"> B. Many people listen to music.</label><label><input type="radio" value="2" name="t10-pl-3" data-correct="false"> C. Records are round.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-pl-4">
+          <p>4. Best concluding sentence:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-pl-4" data-correct="false"> A. In conclusion, music is good.</label><label><input type="radio" value="1" name="t10-pl-4" data-correct="true"> B. In conclusion, while digital versions suit everyday use, buying physical products is far from a waste of money.</label><label><input type="radio" value="2" name="t10-pl-4" data-correct="false"> C. Records will disappear soon.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-pl', 't10-pl-score')">Check answers</button>
+          <span id="t10-pl-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">1. Write your introduction (paraphrase + clear position).</p><textarea class="no-check mini-answer" id="t10-w-1" placeholder="Write here..." style="min-height:160px;"></textarea><p class="mini-q">2. Write one body paragraph supporting your position (topic sentence, explanation, example).</p><textarea class="no-check mini-answer" id="t10-w-2" placeholder="Write here..." style="min-height:160px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t10-w-btn">Show model paragraphs</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t10-w-ans"><p><b>Introduction:</b> With almost every book and song now available digitally, some people argue that spending money on physical copies makes little sense. I disagree with this view to a large extent, since physical products offer benefits that digital versions cannot.</p>
+    <p><b>Body:</b> The most important advantage of physical products is that they give genuine ownership and support the people who create them. A digital file can disappear if a service closes or a licence changes, whereas a book or record belongs to its owner permanently. Moreover, physical sales provide a far more meaningful income for artists: a fan who buys a record may pay twenty-five dollars, while a single stream earns only a fraction of a cent. For smaller bands and independent writers, these sales can make the difference between continuing their work and giving it up.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 13</div>
+      <h2>Speaking Part 1 — Music, Reading and Dreams</h2>
+      <p class="task-sub">Answer each question in its own box — a direct answer, a reason and a detail. About <b>20–30 seconds</b> each.</p>
+      <div class="question-box" data-field="t11-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">How do you usually listen to music?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Mostly through…”</li><li>“The reason is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Do you prefer printed books or e-books? Why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d say I prefer…”</li><li>“Mainly because…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Do you often remember your dreams?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Not very often, but…”</li><li>“Occasionally I…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t11-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">How often do you visit a library?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“To be honest,…”</li><li>“When I was at school,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 13</div>
+      <h2>Speaking Parts 2 and 3 — Something You Own</h2>
+      <p class="task-sub">Give a full Part 2 talk, then answer two Part 3 questions, each in its own box.</p>
+      <div class="question-box" data-field="t12-speaking-p2">
+        <div class="q-num">Part 2 — long turn</div>
+        <div class="q-text"><b>Part 2.</b> Describe something you own that is important to you. You should say: what it is; how you got it; how long you have had it — and explain why it is important to you. <i>(1 minute to prepare, then speak for up to 2 minutes.)</i></div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d like to talk about…”</li><li>“I was given it…”</li><li>“What makes it special is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-1">
+        <div class="q-num">Part 3 — Question 1</div>
+        <div class="q-text">Why do some people prefer to own physical things rather than digital versions?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think one reason is…”</li><li>“There’s also the feeling that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-2">
+        <div class="q-num">Part 3 — Question 2</div>
+        <div class="q-text">Do you think libraries will still exist in fifty years?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I suspect they will, but…”</li><li>“Their role might change…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 13</div>
+      <h2>Week Reflection — Your Progress</h2>
+      <p class="task-sub">Finish the week by reflecting honestly. Your answers help your mentor plan next week.</p>
+      <div class="card"><p class="mini-q">1. Your scores out of 40 in the Day 31 reading test and the Day 32 listening test:</p><textarea class="no-check mini-answer" id="t13-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. Which question type improved most this week? What made the difference?</p><textarea class="no-check mini-answer" id="t13-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Which question type is still costing you most marks? What exactly will you do about it?</p><textarea class="no-check mini-answer" id="t13-rf-3" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">4. Write one specific Writing goal and one specific Speaking goal for next week.</p><textarea class="no-check mini-answer" id="t13-rf-4" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t13-rf-btn">Show examples of good goals</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t13-rf-ans"><p>Specific goals work: “Before choosing FALSE, I will find the sentence that contradicts the statement”; “I will write an overview as the second paragraph of every Task 1”; “In Part 3, I will add a reason and an example to every answer”.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 13</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 33 of 45</div>
+    <h1>Day 33 complete! 🎉</h1>
+    <p>Day 33 done — the week reviewed: vocabulary and skills, a new reading, an extra article, a new listening, Task 1 and Task 2 practice, speaking and your reflection.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+    initWritingCoach('t9-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The chart below shows the percentage of adults in one country who used different methods to listen to music in 2014 and 2024.' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t4-speaking-summary"]'); if (b) initRecordControl(b, user.id, 33, 4, 't4-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-1"]'); if (b) initRecordControl(b, user.id, 33, 11, 't11-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-2"]'); if (b) initRecordControl(b, user.id, 33, 11, 't11-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-3"]'); if (b) initRecordControl(b, user.id, 33, 11, 't11-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t11-speaking-4"]'); if (b) initRecordControl(b, user.id, 33, 11, 't11-speaking-4', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-p2"]'); if (b) initRecordControl(b, user.id, 33, 12, 't12-speaking-p2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-1"]'); if (b) initRecordControl(b, user.id, 33, 12, 't12-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-2"]'); if (b) initRecordControl(b, user.id, 33, 12, 't12-speaking-2', 0); }
+
+    await initTaskFlow(33, 13, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-sk', 't1-sk-score'); checkAllAnswers('t1-ln', 't1-ln-score'); },
+      2: () => { checkAllAnswers('t2-h', 't2-h-score'); checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-sc', 't2-sc-score'); },
+      4: () => { checkAllAnswers('t4-mc', 't4-mc-score'); },
+      5: () => { checkAllAnswers('t5-mc', 't5-mc-score'); checkAllAnswers('t5-notes1', 't5-notes1-score'); },
+      6: () => { checkAllAnswers('t6-on', 't6-on-score'); },
+      7: () => { checkAllAnswers('t7-acc', 't7-acc-score'); checkAllAnswers('t7-g', 't7-g-score'); },
+      8: () => { checkAllAnswers('t8-gr', 't8-gr-score'); },
+      10: () => { checkAllAnswers('t10-pl', 't10-pl-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t4-sum-btn', 't4-sum-ans', '[id^="t4-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-essay-model-btn', 't9-essay-model', '#t9-essay');
+    initGatedMistakeReveal('t10-w-btn', 't10-w-ans', '[id^="t10-w-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t13-rf-btn', 't13-rf-ans', '[id^="t13-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>

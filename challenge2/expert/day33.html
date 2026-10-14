@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 33 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 33 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 14</div>
+      <h2>Week Review — Language and Technique from Days 28–32</h2>
+      <p class="task-sub">Today is an extended <b>catch-up day</b> for the whole week — plan for about <b>3 hours</b>. Review the week’s vocabulary and exam technique, do a new reading, two extra articles and a new lecture, write a Task 1 report, plan a Task 2 essay, practise speaking and reflect on your progress.</p>
+      <p style="margin-top:26px;"><strong>Part 1 — Precision vocabulary from this week.</strong> Match each word to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. exaggeration</button><button type="button" class="lm-item" data-key="2">2. harness</button><button type="button" class="lm-item" data-key="3">3. moratorium</button><button type="button" class="lm-item" data-key="4">4. credibility</button><button type="button" class="lm-item" data-key="5">5. incentive</button><button type="button" class="lm-item" data-key="6">6. viable</button><button type="button" class="lm-item" data-key="7">7. stubborn</button><button type="button" class="lm-item" data-key="8">8. democratise</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. make something available to everyone</button><button type="button" class="lm-item" data-key="b">b. able to work successfully, especially financially</button><button type="button" class="lm-item" data-key="c">c. control and use something for a purpose</button><button type="button" class="lm-item" data-key="d">d. something that encourages a person to act</button><button type="button" class="lm-item" data-key="e">e. an agreed temporary stop to an activity</button><button type="button" class="lm-item" data-key="f">f. difficult to change</button><button type="button" class="lm-item" data-key="g">g. a statement that makes something seem bigger than it is</button><button type="button" class="lm-item" data-key="h">h. the quality of being believed and trusted</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <p style="margin-top:26px;"><strong>Part 2 — Exam technique.</strong> Choose the best answer.</p>
+      <div class="card" id="t1-sk"><div class="q-item" id="t1-sk-1">
+          <p>1. The passage says “some studies suggest”; the statement says “research has proved”.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-sk-1" data-correct="false"> A. YES/TRUE</label><label><input type="radio" value="1" name="t1-sk-1" data-correct="true"> B. NO/FALSE</label><label><input type="radio" value="2" name="t1-sk-1" data-correct="false"> C. NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-sk-2">
+          <p>2. The passage reports critics’ view; the statement presents it as the writer’s view, and the writer does not comment.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-sk-2" data-correct="false"> A. YES</label><label><input type="radio" value="1" name="t1-sk-2" data-correct="false"> B. NO</label><label><input type="radio" value="2" name="t1-sk-2" data-correct="true"> C. NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-sk-3">
+          <p>3. In a lecture, the speaker says “It was originally thought… but…”. The answer is most likely</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-sk-3" data-correct="false"> A. the original idea</label><label><input type="radio" value="1" name="t1-sk-3" data-correct="true"> B. what follows “but”</label><label><input type="radio" value="2" name="t1-sk-3" data-correct="false"> C. neither</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-sk-4">
+          <p>4. “Choose TWO letters”: three options are mentioned in the recording.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-sk-4" data-correct="false"> A. choose the first two mentioned</label><label><input type="radio" value="1" name="t1-sk-4" data-correct="true"> B. choose the two that are confirmed, not rejected</label><label><input type="radio" value="2" name="t1-sk-4" data-correct="false"> C. choose all three</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-sk', 't1-sk-score')">Check answers</button>
+          <span id="t1-sk-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 14</div>
+      <h2>Catch-up Reading — The Case for Free Public Transport</h2>
+      <p class="task-sub">A new exam-level reading. Spend about <b>18 minutes</b>. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Case for Free Public Transport<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Fare-free buses and trains promise cleaner, fairer cities. The evidence is more complicated.</small></h3>
+            <p class="article-meta">Catch-up reading · Cities and policy · 476 words</p>
+            <p><span class="para-label">A</span>In March 2020, Luxembourg became the first country in the world to make all public transport free — buses, trams and trains — for residents and visitors alike. Tallinn, the capital of Estonia, had already abolished fares for registered residents in 2013, and dozens of smaller towns in France, Poland and the United States have followed similar paths. Supporters present fare-free transport as a simple way to reduce traffic, cut emissions and make cities fairer. The evidence, however, suggests that the picture is considerably more complicated.</p><p><span class="para-label">B</span>The most consistent finding is that removing fares does increase passenger numbers. In Tallinn, public transport use rose by around fourteen per cent in the first year. The difficulty lies in where these new passengers come from. Several studies have found that a large share were not former drivers but people who had previously walked or cycled. Shifting pedestrians onto buses brings little environmental benefit and may even reduce the amount of physical exercise people take.</p><p><span class="para-label">C</span>Car use, by contrast, has often proved stubborn. In Tallinn, the number of car journeys fell only slightly, and in some cities it barely changed at all. Researchers explain this by pointing out that price is rarely the main reason why drivers choose their cars. Journey time, comfort, reliability and the ability to travel directly from door to door matter far more to most motorists than the cost of a ticket.</p><p><span class="para-label">D</span>There is also the question of who pays. Fares typically cover between a third and a half of the operating costs of public transport in Europe. When they are abolished, the money must come from elsewhere — usually local or national taxes. In Luxembourg, a wealthy country where fares had in any case been low, the lost income amounted to roughly forty million euros a year, a manageable sum. For larger and poorer cities, the cost could be far harder to absorb, and could lead to reduced investment in services.</p><p><span class="para-label">E</span>In my view, the strongest case for fare-free transport is not environmental but social. For low-income households, transport costs can consume a significant share of the budget and limit access to jobs, education and healthcare. Removing fares, or offering free travel to specific groups such as students and the unemployed, can make a real difference to people’s lives. Dunkirk in France, which abolished fares in 2018, reported that many passengers used buses to reach places they had previously been unable to visit.</p><p><span class="para-label">F</span>Nevertheless, I would argue that cities seeking to reduce car use should treat free fares as, at most, one element of a broader strategy. Frequent, reliable services, dedicated bus lanes and restrictions on parking and car access in city centres appear to have a much greater effect on how people travel. A free bus that arrives late and is stuck in traffic is still not a serious alternative to the car.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–5</p><p class="qg-instr">Do the following statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-yn"><div class="q-item" id="t2-yn-1">
+          <p>1. The effects of free public transport are less straightforward than its supporters suggest.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-yn-1" data-correct="true"> YES</label><label><input type="radio" value="1" name="t2-yn-1" data-correct="false"> NO</label><label><input type="radio" value="2" name="t2-yn-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-yn-2">
+          <p>2. Moving pedestrians onto buses brings significant environmental benefits.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-yn-2" data-correct="false"> YES</label><label><input type="radio" value="1" name="t2-yn-2" data-correct="true"> NO</label><label><input type="radio" value="2" name="t2-yn-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-yn-3">
+          <p>3. Luxembourg’s decision was mainly intended to attract tourists.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-yn-3" data-correct="false"> YES</label><label><input type="radio" value="1" name="t2-yn-3" data-correct="false"> NO</label><label><input type="radio" value="2" name="t2-yn-3" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-yn-4">
+          <p>4. The main benefit of free public transport is social rather than environmental.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-yn-4" data-correct="true"> YES</label><label><input type="radio" value="1" name="t2-yn-4" data-correct="false"> NO</label><label><input type="radio" value="2" name="t2-yn-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-yn-5">
+          <p>5. All cities should abolish public transport fares.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-yn-5" data-correct="false"> YES</label><label><input type="radio" value="1" name="t2-yn-5" data-correct="true"> NO</label><label><input type="radio" value="2" name="t2-yn-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-yn', 't2-yn-score')">Check answers</button>
+          <span id="t2-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 6–9</p><p class="qg-instr">Which paragraph, <b>A–F</b>, contains the following information?</p></div>
+      <div class="card" id="t2-mi"><div class="sel-row"><select class="select" id="t2-mi-6" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>6.</b> the proportion of operating costs normally covered by tickets</span></div><div class="sel-row"><select class="select" id="t2-mi-7" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>7.</b> an explanation of why lower prices do not attract many drivers</span></div><div class="sel-row"><select class="select" id="t2-mi-8" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>8.</b> a city where passengers were able to reach new places</span></div><div class="sel-row"><select class="select" id="t2-mi-9" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>9.</b> evidence that the number of passengers increased</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mi', 't2-mi-score')">Check answers</button>
+          <span id="t2-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 10–13</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t2-s" style="line-height:2.7;"><p>Many of Tallinn’s new passengers had previously walked or (10) <input type="text" class="text-answer" id="t2-10" data-correct="cycled" autocomplete="off" style="width:120px;">, while the number of car journeys fell only (11) <input type="text" class="text-answer" id="t2-11" data-correct="slightly" autocomplete="off" style="width:120px;">. When fares are abolished, the lost income usually has to be replaced by (12) <input type="text" class="text-answer" id="t2-12" data-correct="taxes" autocomplete="off" style="width:110px;">, and in larger, poorer cities this could lead to reduced (13) <input type="text" class="text-answer" id="t2-13" data-correct="investment" autocomplete="off" style="width:130px;"> in services.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-s', 't2-s-score')">Check answers</button>
+          <span id="t2-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 14</div>
+      <h2>Catch-up Reading — Answer Analysis</h2>
+      <p class="task-sub">Check every answer. Notice that the writer’s views are concentrated in paragraphs A, E and F.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Case for Free Public Transport</summary>
+        <p><span class="para-label">A</span>In March 2020, Luxembourg became the first country in the world to make all public transport free — buses, trams and trains — for residents and visitors alike. Tallinn, the capital of Estonia, had already abolished fares for registered residents in 2013, and dozens of smaller towns in France, Poland and the United States have followed similar paths. Supporters present fare-free transport as a simple way to reduce traffic, cut emissions and make cities fairer. The evidence, however, suggests that the picture is considerably more complicated.</p><p><span class="para-label">B</span>The most consistent finding is that removing fares does increase passenger numbers. In Tallinn, public transport use rose by around fourteen per cent in the first year. The difficulty lies in where these new passengers come from. Several studies have found that a large share were not former drivers but people who had previously walked or cycled. Shifting pedestrians onto buses brings little environmental benefit and may even reduce the amount of physical exercise people take.</p><p><span class="para-label">C</span>Car use, by contrast, has often proved stubborn. In Tallinn, the number of car journeys fell only slightly, and in some cities it barely changed at all. Researchers explain this by pointing out that price is rarely the main reason why drivers choose their cars. Journey time, comfort, reliability and the ability to travel directly from door to door matter far more to most motorists than the cost of a ticket.</p><p><span class="para-label">D</span>There is also the question of who pays. Fares typically cover between a third and a half of the operating costs of public transport in Europe. When they are abolished, the money must come from elsewhere — usually local or national taxes. In Luxembourg, a wealthy country where fares had in any case been low, the lost income amounted to roughly forty million euros a year, a manageable sum. For larger and poorer cities, the cost could be far harder to absorb, and could lead to reduced investment in services.</p><p><span class="para-label">E</span>In my view, the strongest case for fare-free transport is not environmental but social. For low-income households, transport costs can consume a significant share of the budget and limit access to jobs, education and healthcare. Removing fares, or offering free travel to specific groups such as students and the unemployed, can make a real difference to people’s lives. Dunkirk in France, which abolished fares in 2018, reported that many passengers used buses to reach places they had previously been unable to visit.</p><p><span class="para-label">F</span>Nevertheless, I would argue that cities seeking to reduce car use should treat free fares as, at most, one element of a broader strategy. Frequent, reliable services, dedicated bus lanes and restrictions on parking and car access in city centres appear to have a much greater effect on how people travel. A free bus that arrives late and is stuck in traffic is still not a serious alternative to the car.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">YES</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">The evidence, however, suggests that the picture is considerably more complicated</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">NO</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Shifting pedestrians onto buses brings little environmental benefit</span>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para A</span></summary><div class="an-body"><p>Luxembourg made transport free <span class="ev">for residents and visitors alike</span>, but no motive is given.</p><p><span class="trap">Trap:</span> <i>visitors</i> may suggest tourism.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">YES</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">In my view, the strongest case for fare-free transport is not environmental but social</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">NO</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">treat free fares as, at most, one element of a broader strategy</span> — the writer does not recommend abolition everywhere.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">D</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Fares typically cover between a third and a half of the operating costs</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">C</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">price is rarely the main reason why drivers choose their cars</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">E</span><span class="an-where">Para E</span></summary><div class="an-body"><p>Dunkirk: <span class="ev">many passengers used buses to reach places they had previously been unable to visit</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">In Tallinn, public transport use rose by around fourteen per cent</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">cycled</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">people who had previously walked or cycled</span>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">slightly</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">the number of car journeys fell only slightly</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">taxes</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">usually local or national taxes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">investment</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">could lead to reduced investment in services</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 14</div>
+      <h2>Extra Reading 1 — Why Do We Forget Our Dreams?</h2>
+      <p class="task-sub">The first of two extra articles (about <b>20 minutes</b> each). Complete the summary, then summarise the article in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Why Do We Forget Our Dreams?</h3>
+        <p class="article-meta">Extra reading 1 · Science · 263 words</p>
+        <p><span class="para-label">A</span>Most people dream several times every night, yet by the time they have finished breakfast, they usually remember little or nothing of what they experienced. Researchers estimate that we forget around ninety-five per cent of our dreams. Why should something that feels so vivid while it is happening disappear so quickly?</p><p><span class="para-label">B</span>One explanation involves a chemical called noradrenaline, which plays an important role in forming memories. During the stage of sleep in which most vivid dreams occur, known as REM sleep, levels of noradrenaline in the brain are extremely low. Without it, the brain may simply fail to store the experience in long-term memory.</p><p><span class="para-label">C</span>Another factor is timing. Studies have found that people who wake up during or immediately after a dream are far more likely to remember it than those who sleep on. People who often recall their dreams also tend to wake up more frequently during the night, although these periods are usually too short for them to notice.</p><p><span class="para-label">D</span>The content of the dream matters as well. Dreams that are emotional, strange or frightening are remembered more often than ordinary ones, perhaps because emotional experiences are more easily stored in memory in general.</p><p><span class="para-label">E</span>For those who would like to remember more of their dreams, sleep researchers offer simple advice. Keeping a notebook beside the bed and writing down anything you remember as soon as you wake — before checking your phone or getting up — can significantly increase recall within a couple of weeks. Even a single word or image can be enough to bring back a surprising amount of detail.</p>
+      </div>
+      <div class="card" id="t4-s" style="line-height:2.7;"><p class="example-q" style="margin:0 0 6px;">Complete the summary. Choose <b>ONE WORD ONLY</b> from the article.</p><p>We forget about 95 per cent of our dreams. One reason is that levels of (1) <input type="text" class="text-answer" id="t4-1" data-correct="noradrenaline" autocomplete="off" style="width:150px;">, a chemical involved in forming memories, are very low during REM sleep. People who wake during or immediately after a dream are far more likely to (2) <input type="text" class="text-answer" id="t4-2" data-correct="remember" autocomplete="off" style="width:120px;"> it. Dreams that are (3) <input type="text" class="text-answer" id="t4-3" data-correct="emotional" autocomplete="off" style="width:120px;">, strange or frightening are recalled more often. Researchers suggest keeping a (4) <input type="text" class="text-answer" id="t4-4" data-correct="notebook" autocomplete="off" style="width:120px;"> beside the bed and writing in it before checking your (5) <input type="text" class="text-answer" id="t4-5" data-correct="phone" autocomplete="off" style="width:100px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-s', 't4-s-score')">Check answers</button>
+          <span id="t4-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 120 words</b>. Capture the central argument, the key evidence and any counter-argument, and end with a one-sentence evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 120 words):</p><textarea class="no-check mini-answer" id="t4-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:180px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t4-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t4-sum-ans"><p>The article explains why we forget the vast majority of our dreams — around 95 per cent — despite how vivid they feel. The main explanation is neurochemical: during REM sleep, when most vivid dreams occur, levels of noradrenaline, which helps the brain form memories, are extremely low, so dreams may never be stored long-term. Timing is a second factor, since people who wake during or immediately after a dream are far more likely to recall it, and frequent recallers tend to wake briefly more often. Content matters too: emotional, strange or frightening dreams are remembered better, probably because emotional experiences are generally easier to store. The article ends with practical advice — keeping a notebook by the bed and writing immediately on waking. The explanation is convincing, although the article presents the noradrenaline theory as more certain than the word “may” suggests.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t4-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 60 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central argument is that…”</li><li>“This is supported by…”</li><li>“That said,…”</li><li>“What I find most convincing is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 14</div>
+      <h2>Extra Reading 2 — The Rise of Urban Farming</h2>
+      <p class="task-sub">The second extra article. Decide TRUE / FALSE / NOT GIVEN, then summarise it in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Rise of Urban Farming</h3>
+        <p class="article-meta">Extra reading 2 · Food and cities · 260 words</p>
+        <p><span class="para-label">A</span>Growing food in cities is not new — during the Second World War, ‘victory gardens’ in Britain and the United States produced a significant proportion of the vegetables eaten at home. But in recent decades, urban agriculture has taken new and more technological forms, from rooftop greenhouses to ‘vertical farms’ in which crops are grown in stacked layers under artificial light.</p><p><span class="para-label">B</span>Vertical farms make bold claims. Because plants are grown indoors in carefully controlled conditions, they need no pesticides, can be harvested all year round and use up to ninety-five per cent less water than conventional fields. Crops can also be grown close to the people who eat them, reducing the distance food has to travel.</p><p><span class="para-label">C</span>The main problem is energy. Replacing sunlight with LED lighting requires enormous amounts of electricity, and when energy prices rose sharply in 2022, several high-profile vertical farming companies in Europe and the United States went out of business. At present, the technology is economically viable mainly for high-value, fast-growing crops such as salad leaves and herbs; growing staple foods such as wheat or rice indoors remains far too expensive.</p><p><span class="para-label">D</span>Community gardens offer a lower-tech alternative. Their contribution to a city’s total food supply is small, but researchers have found that they bring other benefits, including stronger social connections between neighbours, better diets among participants and cooler temperatures in surrounding streets.</p><p><span class="para-label">E</span>Urban farming, then, is unlikely to feed entire cities. Its value may lie less in the quantity of food it produces than in the way it reconnects city dwellers with how food is grown.</p>
+      </div>
+      <div class="card" id="t5-tf"><div class="q-item" id="t5-tf-1">
+          <p>1. Victory gardens existed in both Britain and the United States.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t5-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t5-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-2">
+          <p>2. Vertical farms use no water at all.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t5-tf-2" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t5-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-3">
+          <p>3. Rising energy prices contributed to the failure of some vertical farming companies.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-3" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t5-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t5-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-4">
+          <p>4. Growing rice in vertical farms is now economically viable.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t5-tf-4" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t5-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-tf-5">
+          <p>5. Community gardens are more popular in Europe than in the United States.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t5-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t5-tf-5" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-tf', 't5-tf-score')">Check answers</button>
+          <span id="t5-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 120 words</b>. Capture the central argument, the key evidence and any counter-argument, and end with a one-sentence evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 120 words):</p><textarea class="no-check mini-answer" id="t5-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:180px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t5-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t5-sum-ans"><p>The article assesses the potential of urban farming. Growing food in cities has a long history, such as the wartime victory gardens, but modern forms include high-tech vertical farms where crops grow in stacked layers under artificial light. These farms need no pesticides, produce crops all year, use up to 95 per cent less water and reduce transport distances. However, their electricity demands are enormous, and the 2022 rise in energy prices forced several well-known companies to close; at present, only high-value crops such as salad leaves and herbs are economically viable, while staple foods remain far too expensive to grow indoors. Lower-tech community gardens contribute little to total food supply but strengthen communities, improve diets and cool streets. The writer concludes that urban farming will not feed cities, but can reconnect people with food production. I find this balanced conclusion persuasive.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t5-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 60 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The central argument is that…”</li><li>“This is supported by…”</li><li>“That said,…”</li><li>“What I find most convincing is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 14</div>
+      <h2>Catch-up Listening — Section 4: The Paperback Revolution</h2>
+      <p class="task-sub">A new lecture. Read the notes for 40 seconds, then play <b>once only</b>. Answers are checked when you press <b>Next</b>.</p>
+      <div class="card audio-card"><p class="prompt-label">🎧 Section 4 — Questions 1–10</p>
+        <audio controls preload="none" style="width:100%;" src="audio/day33-paperback.mp3"></audio>
+        <p class="article-meta" style="margin-top:8px;">Play the recording <b>once only</b>, as in the exam. Answer while you listen.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 1–10</p><p class="qg-instr">Complete the notes. Write <b>ONE WORD AND/OR A NUMBER</b> for each answer.</p></div>
+<div class="card" id="t6-notes1"><p class="prompt-label">The paperback book</p><div style="line-height:2.1;"><div><b>Before the paperback</b></div><div>• 19th-century ‘penny dreadfuls’ were printed on poor-quality (1) <input type="text" class="text-answer" id="t6-1" data-correct="paper" autocomplete="off" style="width:110px;"></div><div>• Railway bookstalls sold cheap editions for (2) <input type="text" class="text-answer" id="t6-2" data-correct="travellers/travelers" autocomplete="off" style="width:130px;"></div><div><b>Penguin Books</b></div><div>• Launched in (3) <input type="text" class="text-answer" id="t6-3" data-correct="1935" autocomplete="off" style="width:90px;"> by Allen Lane</div><div>• Idea came at a railway station in (4) <input type="text" class="text-answer" id="t6-4" data-correct="exeter" autocomplete="off" style="width:110px;"></div><div>• Price: the same as a packet of (5) <input type="text" class="text-answer" id="t6-5" data-correct="cigarettes" autocomplete="off" style="width:130px;"></div><div>• Booksellers feared lower (6) <input type="text" class="text-answer" id="t6-6" data-correct="profits" autocomplete="off" style="width:110px;"></div><div>• The Woolworths order made the venture financially (7) <input type="text" class="text-answer" id="t6-7" data-correct="viable" autocomplete="off" style="width:110px;"></div><div>• Colour code: orange = fiction; (8) <input type="text" class="text-answer" id="t6-8" data-correct="green" autocomplete="off" style="width:100px;"> = crime; blue = biography</div><div><b>Later developments and debate</b></div><div>• US special editions for the armed (9) <input type="text" class="text-answer" id="t6-9" data-correct="forces" autocomplete="off" style="width:110px;"></div><div>• Critics: publishers’ preference for bestsellers may have reduced the (10) <input type="text" class="text-answer" id="t6-10" data-correct="variety" autocomplete="off" style="width:110px;"> of books</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-notes1', 't6-notes1-score')">Check answers</button>
+          <span id="t6-notes1-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 14</div>
+      <h2>Catch-up Listening — Answers and Lecture Structure</h2>
+      <p class="task-sub">Check your answers, then identify how the lecturer organises her talk.</p>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">paper</span><span class="an-where"></span></summary><div class="an-body"><p>“sensational stories printed on poor-quality paper”.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">travellers</span><span class="an-where"></span></summary><div class="an-body"><p>“railway bookstalls sold inexpensive editions for travellers.”</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">1935</span><span class="an-where"></span></summary><div class="an-body"><p>“The decisive change came in nineteen thirty-five”.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">Exeter</span><span class="an-where"></span></summary><div class="an-body"><p>“Lane was waiting at Exeter railway station”.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">cigarettes</span><span class="an-where"></span></summary><div class="an-body"><p>“at the price of a packet of cigarettes.”</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">profits</span><span class="an-where"></span></summary><div class="an-body"><p>“Booksellers worried that cheap books would reduce their profits”.</p><p><span class="trap">Trap:</span> authors feared lower <i>incomes</i>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">viable</span><span class="an-where"></span></summary><div class="an-body"><p>“which made the venture financially viable.”</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">green</span><span class="an-where"></span></summary><div class="an-body"><p>“orange for fiction, green for crime, and blue for biography.”</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">forces</span><span class="an-where"></span></summary><div class="an-body"><p>“special editions for the armed forces.”</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">variety</span><span class="an-where"></span></summary><div class="an-body"><p>“which may have reduced the variety of what was published.”</p></div></details></div>
+      <p style="margin-top:26px;"><strong>Lecture structure.</strong> Match each phrase to its function.</p>
+      <div class="card" id="t7-st"><div class="sel-row"><select class="select" id="t7-st-1" data-answer="giving background"><option value="">—</option><option value="giving background">giving background</option><option value="introducing the key turning point">introducing the key turning point</option><option value="describing opposition">describing opposition</option><option value="introducing contrasting views">introducing contrasting views</option><option value="concluding with a certain point">concluding with a certain point</option></select><span><b>1.</b> “Cheap books had existed long before, of course.”</span></div><div class="sel-row"><select class="select" id="t7-st-2" data-answer="introducing the key turning point"><option value="">—</option><option value="giving background">giving background</option><option value="introducing the key turning point">introducing the key turning point</option><option value="describing opposition">describing opposition</option><option value="introducing contrasting views">introducing contrasting views</option><option value="concluding with a certain point">concluding with a certain point</option></select><span><b>2.</b> “The decisive change came in 1935…”</span></div><div class="sel-row"><select class="select" id="t7-st-3" data-answer="describing opposition"><option value="">—</option><option value="giving background">giving background</option><option value="introducing the key turning point">introducing the key turning point</option><option value="describing opposition">describing opposition</option><option value="introducing contrasting views">introducing contrasting views</option><option value="concluding with a certain point">concluding with a certain point</option></select><span><b>3.</b> “Most people in the publishing industry thought he would fail.”</span></div><div class="sel-row"><select class="select" id="t7-st-4" data-answer="introducing contrasting views"><option value="">—</option><option value="giving background">giving background</option><option value="introducing the key turning point">introducing the key turning point</option><option value="describing opposition">describing opposition</option><option value="introducing contrasting views">introducing contrasting views</option><option value="concluding with a certain point">concluding with a certain point</option></select><span><b>4.</b> “Historians disagree about the long-term cultural effect.”</span></div><div class="sel-row"><select class="select" id="t7-st-5" data-answer="concluding with a certain point"><option value="">—</option><option value="giving background">giving background</option><option value="introducing the key turning point">introducing the key turning point</option><option value="describing opposition">describing opposition</option><option value="introducing contrasting views">introducing contrasting views</option><option value="concluding with a certain point">concluding with a certain point</option></select><span><b>5.</b> “What is beyond doubt is that…”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t7-st', 't7-st-score')">Check answers</button>
+          <span id="t7-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 14</div>
+      <h2>Writing Task 1 — Review: Selecting and Comparing</h2>
+      <p class="task-sub">A band 8 report selects the significant changes and makes precise comparisons. Review these skills before you write.</p>
+<div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="City journeys by mode of transport, 2019 and 2023 (%)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">City journeys by mode of transport, 2019 and 2023 (%)</text><line x1="64" y1="284.0" x2="620" y2="284.0" stroke="#e3e5ec"/><text x="56" y="288.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="244.3" x2="620" y2="244.3" stroke="#e3e5ec"/><text x="56" y="248.3" text-anchor="end" font-size="11" fill="#4b4e5c">10</text><line x1="64" y1="204.7" x2="620" y2="204.7" stroke="#e3e5ec"/><text x="56" y="208.7" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="165.0" x2="620" y2="165.0" stroke="#e3e5ec"/><text x="56" y="169.0" text-anchor="end" font-size="11" fill="#4b4e5c">30</text><line x1="64" y1="125.3" x2="620" y2="125.3" stroke="#e3e5ec"/><text x="56" y="129.3" text-anchor="end" font-size="11" fill="#4b4e5c">40</text><line x1="64" y1="85.7" x2="620" y2="85.7" stroke="#e3e5ec"/><text x="56" y="89.7" text-anchor="end" font-size="11" fill="#4b4e5c">50</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">60</text><text x="14" y="165.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 165.0)">% of journeys</text><rect x="85.6" y="93.6" width="32.0" height="190.4" fill="#2c6bed"/><rect x="119.6" y="105.5" width="32.0" height="178.5" fill="#d9480f"/><text x="119.6" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">car</text><rect x="196.8" y="212.6" width="32.0" height="71.4" fill="#2c6bed"/><rect x="230.8" y="176.9" width="32.0" height="107.1" fill="#d9480f"/><text x="230.8" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">bus</text><rect x="308.0" y="204.7" width="32.0" height="79.3" fill="#2c6bed"/><rect x="342.0" y="224.5" width="32.0" height="59.5" fill="#d9480f"/><text x="342.0" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">walking</text><rect x="419.2" y="244.3" width="32.0" height="39.7" fill="#2c6bed"/><rect x="453.2" y="252.3" width="32.0" height="31.7" fill="#d9480f"/><text x="453.2" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">cycling</text><rect x="530.4" y="268.1" width="32.0" height="15.9" fill="#2c6bed"/><rect x="564.4" y="264.2" width="32.0" height="19.8" fill="#d9480f"/><text x="564.4" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">other</text><rect x="64" y="330" width="12" height="12" fill="#2c6bed"/><text x="82" y="340" font-size="12" fill="#14162b">2019</text><rect x="122.8" y="330" width="12" height="12" fill="#d9480f"/><text x="140.8" y="340" font-size="12" fill="#14162b">2023</text></svg></div>
+      <p style="margin-top:26px;"><strong>Part 1 — Which feature belongs in the overview?</strong></p>
+      <div class="card" id="t8-ov"><div class="sel-row"><select class="select" id="t8-ov-1" data-answer="overview"><option value="">—</option><option value="overview">overview</option><option value="detail">detail</option></select><span><b>1.</b> Cars remained the dominant mode in both years.</span></div><div class="sel-row"><select class="select" id="t8-ov-2" data-answer="detail"><option value="">—</option><option value="overview">overview</option><option value="detail">detail</option></select><span><b>2.</b> Other modes rose from 4% to 5%.</span></div><div class="sel-row"><select class="select" id="t8-ov-3" data-answer="overview"><option value="">—</option><option value="overview">overview</option><option value="detail">detail</option></select><span><b>3.</b> Bus use rose substantially, while walking and cycling declined.</span></div><div class="sel-row"><select class="select" id="t8-ov-4" data-answer="detail"><option value="">—</option><option value="overview">overview</option><option value="detail">detail</option></select><span><b>4.</b> Cycling fell by two percentage points.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-ov', 't8-ov-score')">Check answers</button>
+          <span id="t8-ov-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Precise comparison.</strong> Complete each sentence with ONE word.</p>
+      <div class="card" id="t8-g" style="line-height:2.4;"><p>1. The share of bus journeys rose by nine percentage <input type="text" class="text-answer" id="t8-1" data-correct="points" autocomplete="off" style="width:110px;">.</p><p>2. Car use fell only <input type="text" class="text-answer" id="t8-2" data-correct="marginally/slightly" autocomplete="off" style="width:130px;">, from 48% to 45%.</p><p>3. Walking declined from one in <input type="text" class="text-answer" id="t8-3" data-correct="five" autocomplete="off" style="width:90px;"> journeys to 15%.</p><p>4. The rise in bus use appears to have come largely at the <input type="text" class="text-answer" id="t8-4" data-correct="expense" autocomplete="off" style="width:120px;"> of walking and cycling.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-g', 't8-g-score')">Check answers</button>
+          <span id="t8-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 14</div>
+      <h2>Grammar for Band 8 — Nominalisation, Hedging and Concession</h2>
+      <p class="task-sub">Academic writing packs ideas into noun phrases, qualifies claims carefully and acknowledges counter-arguments. Practise all three.</p>
+      <p style="margin-top:26px;"><strong>Part 1 — Nominalisation.</strong> Complete the noun phrase.</p>
+      <div class="card" id="t9-n" style="line-height:2.4;"><p>1. Fares were abolished. → The <input type="text" class="text-answer" id="t9-1" data-correct="abolition" autocomplete="off" style="width:120px;"> of fares</p><p>2. Passenger numbers increased. → The <input type="text" class="text-answer" id="t9-2" data-correct="increase/rise" autocomplete="off" style="width:110px;"> in passenger numbers</p><p>3. Car use was reduced. → The <input type="text" class="text-answer" id="t9-3" data-correct="reduction" autocomplete="off" style="width:120px;"> in car use</p><p>4. Services deteriorated. → The <input type="text" class="text-answer" id="t9-4" data-correct="deterioration" autocomplete="off" style="width:140px;"> of services</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-n', 't9-n-score')">Check answers</button>
+          <span id="t9-n-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Part 2 — Hedging and concession.</strong> Choose the most appropriate option for academic writing.</p>
+      <div class="card" id="t9-h"><div class="q-item" id="t9-h-1">
+          <p>1. Free fares ______ reduce car use in some cities.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-h-1" data-correct="false"> A. definitely</label><label><input type="radio" value="1" name="t9-h-1" data-correct="true"> B. may</label><label><input type="radio" value="2" name="t9-h-1" data-correct="false"> C. always</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-h-2">
+          <p>2. ______ removing fares increases passenger numbers, it does not necessarily reduce traffic.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-h-2" data-correct="false"> A. Because</label><label><input type="radio" value="1" name="t9-h-2" data-correct="true"> B. Although</label><label><input type="radio" value="2" name="t9-h-2" data-correct="false"> C. Therefore</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-h-3">
+          <p>3. ______ does free transport help low-income households, but it can also improve access to education.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-h-3" data-correct="true"> A. Not only</label><label><input type="radio" value="1" name="t9-h-3" data-correct="false"> B. Only</label><label><input type="radio" value="2" name="t9-h-3" data-correct="false"> C. Not</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-h-4">
+          <p>4. The evidence ______ that the effect on emissions is limited.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-h-4" data-correct="false"> A. proves</label><label><input type="radio" value="1" name="t9-h-4" data-correct="true"> B. suggests</label><label><input type="radio" value="2" name="t9-h-4" data-correct="false"> C. shows clearly and finally</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-h', 't9-h-score')">Check answers</button>
+          <span id="t9-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 14</div>
+      <h2>Writing Task 1 — Your Report</h2>
+      <p class="task-sub">Write a full report on the transport chart. Spend about <b>20 minutes</b> and write <b>at least 150 words</b>, aiming for precise comparisons and a clear overview.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The chart below shows the percentage of journeys made by different modes of transport in one city in 2019, before buses became free, and in 2023.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="City journeys by mode of transport, 2019 and 2023 (%)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">City journeys by mode of transport, 2019 and 2023 (%)</text><line x1="64" y1="284.0" x2="620" y2="284.0" stroke="#e3e5ec"/><text x="56" y="288.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="244.3" x2="620" y2="244.3" stroke="#e3e5ec"/><text x="56" y="248.3" text-anchor="end" font-size="11" fill="#4b4e5c">10</text><line x1="64" y1="204.7" x2="620" y2="204.7" stroke="#e3e5ec"/><text x="56" y="208.7" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="165.0" x2="620" y2="165.0" stroke="#e3e5ec"/><text x="56" y="169.0" text-anchor="end" font-size="11" fill="#4b4e5c">30</text><line x1="64" y1="125.3" x2="620" y2="125.3" stroke="#e3e5ec"/><text x="56" y="129.3" text-anchor="end" font-size="11" fill="#4b4e5c">40</text><line x1="64" y1="85.7" x2="620" y2="85.7" stroke="#e3e5ec"/><text x="56" y="89.7" text-anchor="end" font-size="11" fill="#4b4e5c">50</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">60</text><text x="14" y="165.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 165.0)">% of journeys</text><rect x="85.6" y="93.6" width="32.0" height="190.4" fill="#2c6bed"/><rect x="119.6" y="105.5" width="32.0" height="178.5" fill="#d9480f"/><text x="119.6" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">car</text><rect x="196.8" y="212.6" width="32.0" height="71.4" fill="#2c6bed"/><rect x="230.8" y="176.9" width="32.0" height="107.1" fill="#d9480f"/><text x="230.8" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">bus</text><rect x="308.0" y="204.7" width="32.0" height="79.3" fill="#2c6bed"/><rect x="342.0" y="224.5" width="32.0" height="59.5" fill="#d9480f"/><text x="342.0" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">walking</text><rect x="419.2" y="244.3" width="32.0" height="39.7" fill="#2c6bed"/><rect x="453.2" y="252.3" width="32.0" height="31.7" fill="#d9480f"/><text x="453.2" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">cycling</text><rect x="530.4" y="268.1" width="32.0" height="15.9" fill="#2c6bed"/><rect x="564.4" y="264.2" width="32.0" height="19.8" fill="#d9480f"/><text x="564.4" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">other</text><rect x="64" y="330" width="12" height="12" fill="#2c6bed"/><text x="82" y="340" font-size="12" fill="#14162b">2019</text><rect x="122.8" y="330" width="12" height="12" fill="#d9480f"/><text x="140.8" y="340" font-size="12" fill="#14162b">2023</text></svg></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t10-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t10-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t10-essay-model"><div class="model-text" style="padding:2px 0;">
+  <p>The bar chart compares the share of journeys made by five modes of transport in a city in 2019, before bus travel became free, and in 2023.</p>
+  <p>Overall, the car remained by far the most common mode in both years. The most significant change was a substantial rise in bus use, which appears to have come largely at the expense of walking and cycling rather than driving.</p>
+  <p>In 2019, almost half of all journeys (48%) were made by car, followed by walking (20%) and the bus (18%). Cycling accounted for one in ten journeys, and other modes for just 4%.</p>
+  <p>By 2023, the proportion of bus journeys had risen by nine percentage points to 27%, overtaking walking, which fell to 15%. Cycling also declined slightly, to 8%. By contrast, car use fell only marginally, from 48% to 45%, while other modes rose by a single point to 5%.</p>
+  <p class="alt">≈ 175 words</p>
+</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 14</div>
+      <h2>Writing Task 2 — Planning and Paragraphs</h2>
+      <p class="task-sub">Practise the planning stage for a nuanced “to what extent” essay, then write two paragraphs.</p>
+<div class="card task-prompt"><p class="prompt-label">Writing Task 2</p><p><i>Some people argue that public transport should be free for everyone, paid for by taxes. To what extent do you agree or disagree?</i></p></div>
+      <div class="card" id="t11-pl"><div class="q-item" id="t11-pl-1">
+          <p>1. Most effective thesis for a band 8 essay:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-pl-1" data-correct="false"> A. Public transport is useful.</label><label><input type="radio" value="1" name="t11-pl-1" data-correct="false"> B. I agree, because free things are good.</label><label><input type="radio" value="2" name="t11-pl-1" data-correct="true"> C. I agree only in part: targeted free travel is justified on social grounds, but universal free fares are an expensive and inefficient way to reduce car use.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-pl-2">
+          <p>2. Best evidence for the “disagree” side:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-pl-2" data-correct="true"> A. In Tallinn, car journeys fell only slightly, and many new passengers had previously walked or cycled.</label><label><input type="radio" value="1" name="t11-pl-2" data-correct="false"> B. Buses are big.</label><label><input type="radio" value="2" name="t11-pl-2" data-correct="false"> C. Many people like buses.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-pl-3">
+          <p>3. Best evidence for the “agree” side:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-pl-3" data-correct="false"> A. Luxembourg is small.</label><label><input type="radio" value="1" name="t11-pl-3" data-correct="true"> B. For low-income households, transport costs limit access to jobs, education and healthcare.</label><label><input type="radio" value="2" name="t11-pl-3" data-correct="false"> C. Trains are faster than buses.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-pl-4">
+          <p>4. Most precise concluding position:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-pl-4" data-correct="false"> A. In conclusion, transport should be better.</label><label><input type="radio" value="1" name="t11-pl-4" data-correct="true"> B. In conclusion, free fares for students, the unemployed and older people are justified, but cities should invest mainly in frequent, reliable services and limits on car use.</label><label><input type="radio" value="2" name="t11-pl-4" data-correct="false"> C. In conclusion, everybody should drive less.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-pl', 't11-pl-score')">Check answers</button>
+          <span id="t11-pl-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">1. Write your introduction (paraphrase + precise position).</p><textarea class="no-check mini-answer" id="t11-w-1" placeholder="Write here..." style="min-height:170px;"></textarea><p class="mini-q">2. Write the body paragraph that presents the limits of universal free fares.</p><textarea class="no-check mini-answer" id="t11-w-2" placeholder="Write here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t11-w-btn">Show model paragraphs</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t11-w-ans"><p><b>Introduction:</b> Several cities, and even one country, have made public transport free, arguing that it reduces traffic and helps people on low incomes. I agree with this policy only in part: free travel for those who need it most is clearly justified, but abolishing fares for everyone is an expensive and surprisingly ineffective way of changing how people travel.</p>
+    <p><b>Body:</b> The central weakness of universal free fares is that they do little to persuade drivers to leave their cars. Evidence from Tallinn, which abolished fares for residents in 2013, shows that although passenger numbers rose, car journeys fell only slightly, and many of the new passengers had previously walked or cycled. This is because motorists choose cars mainly for speed, comfort and convenience rather than cost. At the same time, fares usually cover a third to a half of operating costs, so abolishing them diverts money that could otherwise fund more frequent services or dedicated bus lanes — measures that appear to have a far greater effect on travel behaviour.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 14</div>
+      <h2>Speaking Part 3 — Cities, Reading and Technology</h2>
+      <p class="task-sub">Answer each abstract question in its own box. Aim for <b>45–60 seconds</b>: position, reasoning, example and qualification.</p>
+      <div class="question-box" data-field="t12-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Should governments make public services free, even if it means higher taxes?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It depends largely on…”</li><li>“There’s a strong argument for…, but…”</li><li>“On balance,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Has technology changed the way people read? Is this a good thing?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Undoubtedly, technology has…”</li><li>“The downside is that…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t12-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Could cities ever produce most of their own food?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’m rather sceptical, because…”</li><li>“Where it could make a difference is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 14</div>
+      <h2>Speaking Part 2 — A Book That Influenced You</h2>
+      <p class="task-sub">Give a full Part 2 talk, then answer the follow-up question.</p>
+      <div class="question-box" data-field="t13-speaking-p2">
+        <div class="q-num">Part 2 — long turn</div>
+        <div class="q-text"><b>Part 2.</b> Describe a book that has influenced you. You should say: what the book is; when you read it; what it is about — and explain how it influenced you. <i>(1 minute to prepare, then speak for up to 2 minutes.)</i></div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The book I’d like to talk about is…”</li><li>“What struck me most was…”</li><li>“It changed the way I…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t13-speaking-1">
+        <div class="q-num">Follow-up question</div>
+        <div class="q-text">Do you think printed books will eventually disappear?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d be surprised if…”</li><li>“Much like vinyl records,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 14</div>
+      <h2>Week Reflection — Your Progress</h2>
+      <p class="task-sub">Finish the week with an honest, analytical reflection. Your answers help your mentor plan next week.</p>
+      <div class="card"><p class="mini-q">1. Your scores out of 40 in the Day 31 reading and Day 32 listening tests, with estimated bands:</p><textarea class="no-check mini-answer" id="t14-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. Which question type improved most this week, and what specific change in technique made the difference?</p><textarea class="no-check mini-answer" id="t14-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Which mistakes are still costing you marks at band 7–8? Be precise (e.g. NOT GIVEN traps with comparisons; plurals in Section 4).</p><textarea class="no-check mini-answer" id="t14-rf-3" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">4. Set one measurable goal each for Reading, Listening, Writing and Speaking next week.</p><textarea class="no-check mini-answer" id="t14-rf-4" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t14-rf-btn">Show examples of good goals</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t14-rf-ans"><p>Measurable goals at this level look like: “No more than one NOT GIVEN error per test”; “Zero spelling errors in Section 1”; “Every Task 1 has an overview with two main features”; “Every Part 3 answer includes a qualification (e.g. <i>That said…</i>)”.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 14</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 33 of 45</div>
+    <h1>Day 33 complete! 🎉</h1>
+    <p>Day 33 done — the week reviewed: vocabulary and technique, a new reading, two extra articles, a new lecture, Task 1 and Task 2 practice, speaking and your reflection.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+    initWritingCoach('t10-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The chart below shows the percentage of journeys made by different modes of transport in one city in 2019, before buses became free, and in 2023.' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t4-speaking-summary"]'); if (b) initRecordControl(b, user.id, 33, 4, 't4-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-summary"]'); if (b) initRecordControl(b, user.id, 33, 5, 't5-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-1"]'); if (b) initRecordControl(b, user.id, 33, 12, 't12-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-2"]'); if (b) initRecordControl(b, user.id, 33, 12, 't12-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t12-speaking-3"]'); if (b) initRecordControl(b, user.id, 33, 12, 't12-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t13-speaking-p2"]'); if (b) initRecordControl(b, user.id, 33, 13, 't13-speaking-p2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t13-speaking-1"]'); if (b) initRecordControl(b, user.id, 33, 13, 't13-speaking-1', 0); }
+
+    await initTaskFlow(33, 14, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-sk', 't1-sk-score'); },
+      2: () => { checkAllAnswers('t2-yn', 't2-yn-score'); checkAllAnswers('t2-mi', 't2-mi-score'); checkAllAnswers('t2-s', 't2-s-score'); },
+      4: () => { checkAllAnswers('t4-s', 't4-s-score'); },
+      5: () => { checkAllAnswers('t5-tf', 't5-tf-score'); },
+      6: () => { checkAllAnswers('t6-notes1', 't6-notes1-score'); },
+      7: () => { checkAllAnswers('t7-st', 't7-st-score'); },
+      8: () => { checkAllAnswers('t8-ov', 't8-ov-score'); checkAllAnswers('t8-g', 't8-g-score'); },
+      9: () => { checkAllAnswers('t9-n', 't9-n-score'); checkAllAnswers('t9-h', 't9-h-score'); },
+      11: () => { checkAllAnswers('t11-pl', 't11-pl-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t4-sum-btn', 't4-sum-ans', '[id^="t4-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t5-sum-btn', 't5-sum-ans', '[id^="t5-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t10-essay-model-btn', 't10-essay-model', '#t10-essay');
+    initGatedMistakeReveal('t11-w-btn', 't11-w-ans', '[id^="t11-w-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t14-rf-btn', 't14-rf-ans', '[id^="t14-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>
