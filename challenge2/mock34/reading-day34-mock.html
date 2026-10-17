@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading &mdash; Mock Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            line-height: 1.4;
+            font-size: 16px;
+            padding-bottom: 90px;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 60px;
+        }
+
+        .timer-container { display: none; }
+
+        .main-container {
+            margin-top: 60px;
+            display: flex;
+            background: #ffffff;
+            padding-bottom: 100px;
+        }
+
+        .left-panel {
+            width: 48%;
+            padding: 24px 28px;
+            border-right: 1px solid #e0e0e0;
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+            position: sticky;
+            top: 60px;
+        }
+
+        .right-panel {
+            display: block;
+            width: 52%;
+            padding: 24px 28px;
+        }
+
+        .passage-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .passage-sub {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 18px;
+            font-style: italic;
+        }
+
+        #passage-text p, .passage-text p { margin-bottom: 14px; text-align: justify; }
+
+        .part-header {
+            background-color: #f1f2ec;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .question { margin-bottom: 36px; }
+        .question p { margin-bottom: 10px; }
+        .question-prompt { margin-bottom: 16px; }
+
+        .answer-input {
+            border: 1px solid #9aa3ad;
+            border-radius: 4px;
+            background-color: #fff;
+            padding: 4px 8px;
+            font-size: 16px;
+            width: 140px;
+            height: 28px;
+            line-height: 1.2;
+            vertical-align: middle;
+            transition: border-color 0.15s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        .answer-input::placeholder { color: #999; font-weight: bold; text-align: center; }
+        .answer-input:focus { outline: none; border-color: #2c6bed; border-width: 2px; }
+        .answer-input.correct { border-color: #28a745; background-color: #e9f7ef; }
+        .answer-input.incorrect { border-color: #dc3545; background-color: #f8d7da; color: #721c24; }
+
+        .correct-inline {
+            color: #28a745;
+            font-weight: 700;
+            margin-left: 10px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .correct-inline::before { content: "\2192  "; }
+
+        .multi-choice-option {
+            display: block;
+            width: 100%;
+            padding: 10px 14px;
+            background-color: #fff;
+            border: 1px solid transparent;
+            transition: background-color 0.2s;
+        }
+        .multi-choice-option:hover { background-color: #f1f7ff; border-color: #c6dcfb; }
+        .multi-choice-option:has(input[type="radio"]:checked) { background-color: #cfe3f9; }
+        .multi-choice-option.correct { background-color: #d4edda !important; }
+        .multi-choice-option.incorrect { background-color: #f8d7da !important; }
+        .multi-choice-option label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 16px; width: 100%; }
+        .multi-choice-option input[type="radio"] { transform: scale(1.2); }
+
+        .headings-box {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px 18px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        .headings-box p { margin: 3px 0; }
+
+        .hidden { display: none; }
+
+        .nav-arrows { position: fixed; bottom: 100px; right: 20px; display: flex; gap: 5px; z-index: 101; }
+        .nav-arrow {
+            width: 50px; height: 50px; background: #333; color: white; border: none;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 22px; font-weight: bold;
+        }
+        .nav-arrow:hover { background: #555; }
+        .nav-arrow:disabled { background: #ccc; cursor: not-allowed; }
+
+        .nav-row {
+            position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff; padding: 0;
+            display: flex; align-items: center; height: 80px; z-index: 100;
+            overflow-x: auto; overflow-y: hidden; white-space: nowrap;
+        }
+        .footer__questionWrapper___1tZ46 { display: flex; align-items: center; margin-right: 20px; flex-shrink: 0; }
+        .footer__questionNo___3WNct {
+            background: none; border: none; padding: 10px 15px; font-size: 16px; font-weight: 600;
+            color: #333; cursor: pointer; display: flex; align-items: center; gap: 5px;
+        }
+        .footer__questionNo___3WNct:hover { background-color: #f8f9fa; }
+        .attemptedCount { font-size: 14px; color: #666; margin-left: 5px; font-weight: 400; }
+        .footer__subquestionWrapper___9GgoP { display: none; gap: 2px; margin-left: 10px; }
+        .footer__questionWrapper___1tZ46.selected .footer__subquestionWrapper___9GgoP { display: flex; }
+        .footer__questionWrapper___1tZ46.selected .attemptedCount { display: none; }
+        .subQuestion {
+            width: 32px; height: 32px; border: 1px solid #ccc; background: white; color: #333;
+            font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; transition: all 0.2s; border-radius: 2px;
+        }
+        .subQuestion.answered { background-color: #e9ecef; border-color: #ddd; }
+        .subQuestion.correct { background-color: #28a745; color: white; border-color: #28a745; }
+        .subQuestion.incorrect { background-color: #dc3545; color: white; border-color: #dc3545; }
+        .subQuestion:hover { background-color: #f0f0f0; border-color: #999; }
+        .subQuestion.active { background-color: #4a90e2; color: white; border-color: #4a90e2; }
+        .sr-only {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+        }
+        .footer__deliverButton___3FM07 {
+            margin-left: auto; margin-right: 20px; background-color: #f0f0f0; color: #333;
+            border: 1px solid #ccc; padding: 12px 20px; border-radius: 4px; font-size: 16px;
+            font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            min-width: 170px; justify-content: center;
+        }
+        .footer__deliverButton___3FM07:hover { background-color: #e0e0e0; border-color: #bbb; }
+        .footer__deliverButton___3FM07.success { background-color: #28a745; color: #fff; border-color: #28a745; }
+
+        .highlight { background-color: #ffff00; }
+        .comment-highlight { background-color: #90EE90; position: relative; cursor: help; }
+        .comment-tooltip {
+            position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #333;
+            color: white; padding: 8px 12px; border-radius: 4px; font-size: 14px; white-space: nowrap;
+            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .comment-highlight:hover .comment-tooltip { opacity: 1; }
+
+        .context-menu {
+            position: absolute; background: white; border: 1px solid #ccc; border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); z-index: 1000; display: none; min-width: 140px;
+        }
+        .context-menu-item {
+            padding: 12px 16px; cursor: pointer; font-size: 16px; border-bottom: 1px solid #f0f0f0;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .context-menu-item:hover { background-color: #f8f9fa; }
+        .context-menu-item:last-child { border-bottom: none; }
+
+        .tfng-question {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 26px;
+        }
+        .tfng-num-box {
+            width: 26px;
+            height: 26px;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .tfng-body { flex: 1; }
+        .tfng-statement { margin-bottom: 10px; }
+        .tfng-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .tfng-option input[type="radio"] { transform: scale(1.15); cursor: pointer; }
+
+        .selection-toolbar {
+            position: absolute;
+            display: none;
+            background: #2b2b2b;
+            border-radius: 6px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            z-index: 1500;
+            overflow: hidden;
+        }
+        .selection-toolbar button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            padding: 8px 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .selection-toolbar button:hover { background: #444; }
+        .selection-toolbar button + button { border-left: 1px solid #555; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6);
+            z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-content {
+            background: white; padding: 25px; border-radius: 8px; width: 100%; max-width: 800px;
+            max-height: 90vh; overflow-y: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd;
+            padding-bottom: 15px; margin-bottom: 20px;
+        }
+        .modal-header h2 { font-size: 24px; color: #333; }
+        .modal-close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #888; }
+        .modal-close-btn:hover { color: #333; }
+        #score-summary {
+            font-size: 16px; font-weight: 600; color: #111827; background: #f1f5f9; border: 1px solid #e2e8f0;
+            padding: 10px 12px; border-radius: 8px; display: inline-block; margin-bottom: 15px;
+        }
+        #result-details table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        #result-details th, #result-details td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        #result-details th { background-color: #f8f9fa; font-weight: 600; }
+        .result-correct { color: #28a745; font-weight: bold; }
+        .result-incorrect { color: #dc3545; font-weight: bold; }
+
+        @keyframes flash { 0% { background-color: #e6f4ff; } 100% { background-color: transparent; } }
+        .question.flash { animation: flash 1s ease-out; }
+
+        select.answer-select {
+            border: 1px solid #9aa3ad; border-radius: 4px; background-color: #fff; padding: 4px 8px;
+            font-size: 15px; height: 32px; vertical-align: middle;
+        }
+        select.answer-select.correct { border-color: #28a745; background-color: #e9f7ef; }
+        select.answer-select.incorrect { border-color: #dc3545; background-color: #f8d7da; }
+
+        @media (max-width: 1024px) {
+            .main-container { flex-direction: column; }
+            .left-panel { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid #e0e0e0; }
+            .right-panel { width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="timer-container"><span class="timer-display">60:00</span></div>
+        <div style="font-weight:700;color:#3e3e3e;">IELTS Reading &mdash; Mock Test</div>
+        <div></div>
+    </div>
+
+    <div class="main-container">
+        <div class="left-panel">
+            <div id="passage-1" class="passage-part">
+                <div class="passage-title">The Burgess Shale fossils</div>
+                <div class="passage-sub">Fauna vanished with a whimper, not a bang</div>
+                <div id="passage-text-1" class="passage-text">
+<p>Some discoveries are so unusual it takes decades and sometimes even centuries to understand their full significance. One such discovery is the fossil bed known as the Burgess Shale. It was discovered in the Canadian Rockies over a century ago and was popularised in 1989 in a book, Wonderful Life, by Stephen Jay Gould an American palaeontologist.</p>
+<p>The Burgess Shale fossils were created at a time when the future Canadian land mass was situated near the Earth's equator. The creatures were preserved when an entire marine ecosystem was buried in mud that eventually hardened and became exposed hundreds of millions of years later in an outcrop of the Rocky Mountains. American palaeontologist Charles Walcott, following reports of fabulous fossils finds by construction workers on Canadian railways who were digging in the mountains in the late 19th century, is said to have tripped over a block of shale in 1909 that revealed the area’s remarkable supply of specimens. It has long been believed that the curious fauna that lived there vanished in a series of extinction because the fossil record ends abruptly, but that no longer appears to be the case.</p>
+<p>The Burgess Shale began to form soon after a period of time known as the Cambrian explosion, when most major groups of complex animals arose over a surprisingly short period. Before 560m years ago, most living things were either individual cells or simple colonies of cells. Then, and for reasons that remain a mystery, life massively diversified and became ever more complex as the rate of evolution increased. An unusual feature of the Burgess Shale is that it is one of the earliest fossil beds to contain impressions of the soft body parts alongside the remains of bones and shells, which is highly unusual.</p>
+<p>Although the fossil bed was discovered on a mountain, these animals originally existed below an ocean, the bed of which was later pushed up to create the Rockies. Nobody knows exactly why they were so well preserved. One possibility is that the creatures were buried quickly and in conditions that were hostile to the bacteria that cause decomposition of soft body parts.</p>
+<p>Those that first worked on the Burgess Shale, unearthing 65,000 specimens over a 14-year period up to 1924, assumed that the fossils came from extinct members of groups of animals in existence today. This turned out to be misleading because many of the creatures are so unusual that they are still difficult to classify.</p>
+<p>One such example is Opabinia, a creature that grew to about 8cm (3 inches) had five eyes, a body that was a series of lobes, a tail in the shape of a fan and that ate using a long proboscis. The proboscis had a set of grasping claws on the end, with which it grabbed food and stuff it into its mouth. Nectocaris, meanwhile, could be mistaken for a leech, with fins and tentacles. Weirdest of all was Hallucigenia, described by palaeontologist Simon Conway Morris when he re-examined Walcott's specimens in 1979. With its multiplicity of spines and tentacles, little about Hallucigenia made sense. Like an abstract painting, its orientation is a mystery at first, making it difficult to work out which way up it went, which hole food went into, and which hole food come out of.</p>
+<p>Palaeontologists had long thought that many of the Burgess Shale animals were examples of experiments in evolution. In other words, entirely new forms of life that did not survive or lead to other groups or species. Hallucigenia, ironically, turned out to be the exception that proved the rule. It is now thought to be an ancestor of the modern group of arthropods, which includes everything from flies and butterflies to centipedes and crabs.</p>
+<p>Now another misconception has been quashed. Writing in Nature, Peter Van Roy of Yale University and his colleagues suggest that the sudden absence of such crazy soft-bodied fossils does not indicate a mass extinction, but merely an end to the unusual local circumstances that caused the creatures to be preserved. In an area of the Atlas Mountains of Morocco, Van Roy's team of researchers have found another diverse (and sometimes bizarre) assemblage of soft-bodied organisms from a period after the Burgess Shale was formed. One discovery includes something that may be a stalked barnacle. This suggests that the evolution of such complex life went on uninterrupted. For its part, the Burgess Shale continues to produce an astonishing array of indefinable creatures faster than palaeontologists can examine them. The world still has plenty to learn about this wonderful life.</p>
+                </div>
+            </div>
+            <div id="passage-2" class="passage-part hidden">
+                <div class="passage-title">Corporate Social Responsibility</div>
+                <div class="passage-sub">Reading Passage 2</div>
+                <div id="passage-text-2" class="passage-text">
+<p>Broadly speaking, proponents of CSR have used four arguments to make their case: moral obligation, sustainability, license to operate, and reputation. The moral appeal — arguing that companies have a duty to be good citizens and to “do the right thing” — is prominent in the goal of Business for Social Responsibility, the leading non-profit CSR business association in the United States. It asks that its members “achieve commercial success in ways that honor ethical values and respect people, communities, and the natural environment.” Sustainability emphasizes environmental and community stewardship.</p>
+<p><strong>A</strong></p>
+<p>An excellent definition was developed in the 1980s by Norwegian Prime Minister Gro Harlem Brundtland and used by the World Business Council for Sustainable Development “Meeting the needs of the present without compromising the ability of future generations to meet their own needs.” The notion of license to operate derives from the fact that every company needs tacit or explicit permission from governments, communities, and numerous other stakeholders to do business. Finally, reputation is used by many companies to justify CSR initiatives on the grounds that they will improve a company’s image, strengthen its brand, enliven morale, and even raise the value of its stock.</p>
+<p><strong>B</strong></p>
+<p>To advance CSR, we must root it in a broad understanding of the interrelationship between a corporation and society while at the same time anchoring it in the strategies and activities of specific companies. To say broadly that business and society need each other might seem like a cliché, but it is also the basic truth that will pull companies out of the muddle that their current corporate-responsibility thinking has created. Successful corporations need a healthy society. Education, health care, and equal opportunity are essential to a productive workforce. Safe products and working conditions not only attract customers but lower the internal costs of accidents. Efficient utilization of land, water, energy, and other natural resources makes business more productive. Good government, the rule of law, and property rights are essential for efficiency and innovation. Strong regulatory standards protect both consumers and competitive companies from exploitation. Ultimately, a healthy society creates expanding demand for business, as more human needs are met and aspirations grow. Any business that pursues its ends at the expense of the society in which it operates will find its success to be illusory and ultimately temporary. At the same time, a healthy society needs successful companies. No social program can rival the business sector when it comes to creating the jobs, wealth, and innovation that improve standards of living and social conditions over time.</p>
+<p><strong>C</strong></p>
+<p>A company’s impact on society also changes over time, as social standards evolve and science progresses. Asbestos, now understood as a serious health risk, was thought to be safe in the early 1900s, given the scientific knowledge then available. Evidence of its risks gradually mounted for more than 50 years before any company was held liable for the harms it can cause. Many firms that failed to anticipate the consequences of this evolving body of research have been bankrupted by the results. No longer can companies be content to monitor only the obvious social impacts of today. Without a careful process for identifying evolving social effects of tomorrow, firms may risk their very survival.</p>
+<p><strong>D</strong></p>
+<p>No business can solve all of society’s problems or bear the cost of doing so. Instead, each company must select issues that intersect with its particular business. Other social agendas are best left to those companies in other industries, NGOs, or government institutions that are better positioned to address them. The essential test that should guide CSR is not whether a cause is worthy but whether it presents an opportunity to create shared value — that is, a meaningful benefit for society that is also valuable to the business. However, corporations are not responsible for all the world’s problems, nor do they have the resources to solve them all. Each company can identify the particular set of societal problems that it is best equipped to help resolve and from which it can gain the greatest competitive benefit. Addressing social issues by creating shared value will lead to self-sustaining solutions that do not depend on private or government subsidies. When a well-run business applies its vast resources, expertise, and management talent to problems that it understands and in which it has a stake, it can have a greater impact on social good than any other institution or philanthropic organization.</p>
+<p><strong>E</strong></p>
+<p>The best corporate citizenship initiatives involve far more than writing a check: They specify clear, measurable goals and track results over time. A good example is GE’s program to adopt underperforming public high schools near several of its major facilities. The company contributes between $250,000 and $1 million over a five-year period to each school and makes in-kind donations as well. GE managers and employees take an active role by working with school administrators to assess needs and mentor or tutor students. In an independent study of ten schools in the program between 1989 and 1999, nearly all showed significant improvement, while the graduation rate in four of the five worst performing schools doubled from an average of 30% to 60%. Effective corporate citizenship initiatives such as this one create goodwill and improve relations with local governments and other important constituencies. What’s more, GE’s employees feel great pride in their participation. Their effect is inherently limited, however. No matter how beneficial the program is, it remains incidental to the company’s business, and the direct effect on GE’s recruiting and retention is modest.</p>
+<p><strong>F</strong></p>
+<p>Microsoft’s Working Connections partnership with the American Association of Community Colleges (AACC) is a good example of a shared-value opportunity arising from investments in context. The shortage of information technology workers is a significant constraint on Microsoft’s growth; currently, there are more than 450,000 unfilled IT positions in the United States alone. Community colleges, with an enrollment of 11.6 million students, representing 45% of all U.S. undergraduates, could be a major solution. Microsoft recognizes, however, that community colleges face special challenges: IT curricula are not standardized, technology used in classrooms is often outdated, and there are no systematic professional development programs to keep faculty up to date. Microsoft’s $50 million five-year initiative was aimed at all three problems. In addition to contributing money and products, Microsoft sent employee volunteers to colleges to assess needs, contribute to curriculum development, and create faculty development institutes. Note that in this case, volunteers and assigned staff were able to use their core professional skills to address a social need, a far cry from typical volunteer programs. Microsoft has achieved results that have benefited many communities while having a direct — and potentially significant — impact on the company.</p>
+<p><strong>G</strong></p>
+<p>At the heart of any strategy is a unique value proposition: a set of needs a company can meet for its chosen customers that others cannot. The most strategic CSR occurs when a company adds a social dimension to its value proposition, making social impact integral to the overall strategy. Consider Whole Foods Market, whose value proposition is to sell organic, natural and healthy food products to customers who are passionate about food and the environment. The company’s sourcing emphasizes purchases from local farmers through each store’s procurement process. Buyers screen out foods containing any of nearly 100 common ingredients that the company considers unhealthy or environmentally damaging. The same standards apply to products made internally. Whole Foods’ commitment to natural and environmentally friendly operating practices extends well beyond sourcing. Stores are constructed using a minimum of virgin raw materials. Recently, the company purchased renewable wind energy credits equal to 100% of its electricity use in all of its stores and facilities, the only Fortune 500 company to offset its electricity consumption entirely. Spoiled produce and biodegradable waste are trucked to regional centers for composting. Whole Foods’ vehicles are being converted to run on biofuels. Even the cleaning products used in its stores are environmentally friendly. And through its philanthropy, the company has created the Animal Compassion Foundation to develop more natural and humane ways of raising farm animals. In short, nearly every aspect of the company’s value chain reinforces the social dimensions of its value proposition, distinguishing Whole Foods from its competitors.</p>
+                </div>
+            </div>
+            <div id="passage-3" class="passage-part hidden">
+                <div class="passage-title">The art of deception</div>
+                <div class="passage-sub">Do tiny changes of facial expression show whether someone is telling lies?</div>
+                <div id="passage-text-3" class="passage-text">
+<p>Forty years ago, the research psychologist Dr Paul Ekman was addressing a group of young psychiatrists in training when he was asked a question, the answer to which has kept him busy ever since. Suppose the group wanted to know, a particular patient swears they are telling the truth. They look and sound sincere. So here is the question: is there any way you can be sure they are telling the truth? Ekman did not know the answer then, but wanted to find out.</p>
+<p>As part of his research, he had already filmed a series of 12-minute interviews with psychiatric patients. In a subsequent conversation, one of the patients told him that she had lied to him. So, Ekman sat and looked at the film but saw nothing noteworthy. Then he slowed it down and looked again. Then he slowed it even further. And suddenly, there, across just two frames of the film, he saw it: an intense expression of extreme anguish. It lasted less than a 15th of a second, but once he had spotted the first expression, he soon found three more examples in that same interview. He termed his discovery “micro-expression”: very rapid intense demonstrations of emotion that the subject intended to be concealed.</p>
+<p>Over the course of the next four decades, Ekman successfully demonstrated a proposition first suggested by Charles Darwin: that the ways in which we express rage, disgust, contempt, fear, surprise, happiness and sadness are universal. The facial muscles triggered by those seven basic emotions are, he has shown, essentially standard, regardless of language and culture, from the US to Japan and Brazil to Papua New Guinea. What is more, expressions of emotion are impossible to suppress and, particularly when we are lying, micro-expressions of powerfully felt emotions will inevitably flit across our face before we get the chance to stop them.</p>
+<p>Fortunately for liars, most people will fail to spot these fleeting signals of inner torment. Of the 15,000 Ekman has tested, only 50 people, whom he calls “naturals”, have been able to do it. But given a little more training, Ekman says, almost anyone can develop the skill. He should know, since these tests were completed in the mid-1980s and the first publication of his research, he has been called in by the FBI and CIA (among countless more law-enforcement and other agencies around the world), not just to solve cases, but to teach them how to use his technique for themselves. He has held workshops for defense and prosecution lawyers, health professionals, even jealous spouses, all of them wanting to know exactly when someone is not being 100 percent candid.</p>
+<p>Most recently, Ekman's research has resulted in a new television series about the exploits of the fictional Dr Cal Lightman, a scientist who studies involuntary body language to discover not only if you are lying. But why might you have been motivated to do so? According to the publicity blurb, Lightman is a human lie detector, even more accurate than a polygraph test. Ekman concedes he was skeptical when the producer first approached him with the idea of turning his life's work into a TV series, and initially would have stopped the project if he could. In particular, he was fearful that the show would exaggerate the effectiveness of his techniques and create the quite inaccurate impression among audiences that criminals could no longer hope to get away with lying. In the worst-case scenario, he was concerned about unfair convictions, that one day someone not properly trained in his techniques might be sitting on a jury and wrongly find someone guilty of a crime simply on the basis of a television programme.</p>
+<p>In the end though, he was won over because the series is unusual in several respects. It is the first time, as far as Ekman is aware, that a commercial TV drama has been based on the work of just one scientist. That scientist is also deeply involved in the project, talking through plot ideas and checking five successive drafts of each script to ensure details are correct. He was also impressed with the producer's manifestly serious and well-intentioned reasons for making the programme. Now that the first series has been completed, he believes probably 80-90 per cent of the show is based on fact and that's good enough for what is. After all, a drama, not a documentary.</p>
+<p>Ekman, incidentally, professes to have been a terrible liar ever since he was a small boy and observes that the ability to detect a lie and the ability to lie successfully are completely unrelated. He has been asked by people running for high office if he could teach them to become more credible with the public but has always refused to use his skills in that way on ethical grounds. He also insists that there are various kinds of lies. A “true” lie can be identified by having two essential characteristics: there must be a deliberate intent to mislead and there must be no notification that this is what is occurring. This means that an actor or a poker player isn't a true liar. They are supposed to deceive you, it's part of the game, and the same is true of flattery. He prefers to focus on the kinds of lies where the liar would be in grave trouble if they were found out, and where the target would feel properly aggrieved if they knew.</p>
+                </div>
+            </div>
+        </div><!-- end left-panel -->
+
+        <div class="right-panel">
+            <div id="part-1" class="question-part">
+                <div class="part-header">
+                    <p><strong>Reading Passage 1</strong></p>
+                    <p>You should spend about 20 minutes on Questions 1&ndash;13, which are based on Reading Passage 1.</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 1&ndash;5</strong></p>
+                            <p>Do the following statements agree with the information given in Reading Passage 1?</p>
+                            <p>Write <strong>TRUE</strong> if the statement agrees with the information, <strong>FALSE</strong> if the statement contradicts the information, <strong>NOT GIVEN</strong> if there is no information on this.</p>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">1</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">The Burgess Shale became widely known to the public because of Gould's book.</p>
+                                <label class="tfng-option"><input type="radio" name="q1" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q1" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q1" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">2</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">Charles Walcott had to get permission from Canadian authorities to gain access to the fossil site.</p>
+                                <label class="tfng-option"><input type="radio" name="q2" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q2" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q2" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">3</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">The Burgess Shale includes impressions of soft and hard body parts.</p>
+                                <label class="tfng-option"><input type="radio" name="q3" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q3" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q3" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">4</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">The Burgess Shale creatures were land animals.</p>
+                                <label class="tfng-option"><input type="radio" name="q4" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q4" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q4" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">5</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">Researchers now believe that Hallucigenia is unrelated to any modern creature.</p>
+                                <label class="tfng-option"><input type="radio" name="q5" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q5" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q5" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 6&ndash;9</strong></p>
+                            <p>Complete the notes below. Choose <strong>NO MORE THAN TWO WORDS AND/OR A NUMBER</strong> from the passage for each answer.</p>
+                        </div>
+                        <div style="border:1px solid #ccc;border-radius:5px;padding:16px 20px;background:#fafafa;margin-bottom:16px;"><p style="font-weight:700;margin-bottom:10px;text-align:center;">The Burgess Shale</p>
+<p style="font-weight:700;margin-bottom:6px;">Formation:</p>
+<ul style="list-style:none;padding-left:0;margin-bottom:14px;"><li style="margin-bottom:8px;">&#8211;&nbsp; Burgess Shale was formed following a time called the <input type="text" id="q6" class="answer-input" placeholder="6" style="width:200px;">.</li></ul>
+<p style="font-weight:700;margin-bottom:6px;">Discovery and investigation in the twentieth century:</p>
+<ul style="list-style:none;padding-left:0;margin-bottom:14px;">
+<li style="margin-bottom:8px;">&#8211;&nbsp; discovered in 1909</li>
+<li style="margin-bottom:8px;">&#8211;&nbsp; Charles Walcott learned of the fossil finds from people building a <input type="text" id="q7" class="answer-input" placeholder="7" style="width:160px;">.</li>
+<li style="margin-bottom:8px;">&#8211;&nbsp; the first work on Burgess Shale was undertaken at the start of the century.</li>
+<li style="margin-bottom:8px;">&#8211;&nbsp; a researcher looked at Burgess Shale findings again in <input type="text" id="q8" class="answer-input" placeholder="8" style="width:120px;">.</li></ul>
+<p style="font-weight:700;margin-bottom:6px;">Recent theories:</p>
+<ul style="list-style:none;padding-left:0;"><li style="margin-bottom:8px;">&#8211;&nbsp; Peter Van Roy believes that discoveries in Morocco show that the <input type="text" id="q9" class="answer-input" placeholder="9" style="width:160px;"> of complex life forms continued.</li></ul></div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 10&ndash;13</strong></p>
+                            <p>Complete the table below. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+                        </div>
+                        <p style="font-weight:700;margin-bottom:8px;">Burgess Shale Creatures</p>
+                        <table style="width:100%;border-collapse:collapse;">
+<tr><th style="border:1px solid #ccc;padding:8px 12px;text-align:left;width:160px;background:#f0f0f0;">Name</th><th style="border:1px solid #ccc;padding:8px 12px;text-align:left;background:#f0f0f0;">Features</th></tr>
+<tr><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;font-weight:600;">Opabinia</td><td style="border:1px solid #ccc;padding:8px 12px;line-height:2;">&#8211; five eyes<br>&#8211; tail resembling a <input type="text" id="q10" class="answer-input" placeholder="10" style="width:130px;"><br>&#8211; claws used to hold <input type="text" id="q11" class="answer-input" placeholder="11" style="width:130px;"></td></tr>
+<tr><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;font-weight:600;">Nectocaris</td><td style="border:1px solid #ccc;padding:8px 12px;line-height:2;">&#8211; looked like a <input type="text" id="q12" class="answer-input" placeholder="12" style="width:130px;"><br>&#8211; fins<br>&#8211; tentacles</td></tr>
+<tr><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;font-weight:600;">Hallucigenia</td><td style="border:1px solid #ccc;padding:8px 12px;line-height:2;">&#8211; spines used to <input type="text" id="q13" class="answer-input" placeholder="13" style="width:130px;"><br>&#8211; tentacles</td></tr>
+</table>
+                    </div>
+                </div>
+            </div>
+            <div id="part-2" class="question-part hidden">
+                <div class="part-header">
+                    <p><strong>Reading Passage 2</strong></p>
+                    <p>You should spend about 20 minutes on Questions 14&ndash;26, which are based on Reading Passage 2.</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 14&ndash;20</strong></p>
+                            <p>Reading Passage 2 has seven paragraphs, <strong>A&ndash;G</strong>.</p>
+                            <p>Choose the correct heading for each paragraph from the list of headings below.</p>
+                        </div>
+                        <div style="border:1px solid #ccc;border-radius:5px;padding:16px 20px;background:#fafafa;margin-bottom:16px;"><p style="font-weight:700;text-align:center;margin-bottom:8px;">List of Headings</p><p style="margin-bottom:5px;"><strong>i</strong> &nbsp; How CSR may help one business to expand</p><p style="margin-bottom:5px;"><strong>ii</strong> &nbsp; CSR in many aspects of a company’s business</p><p style="margin-bottom:5px;"><strong>iii</strong> &nbsp; A CSR initiative without a financial gain</p><p style="margin-bottom:5px;"><strong>iv</strong> &nbsp; Lack of action by the state of social issues</p><p style="margin-bottom:5px;"><strong>v</strong> &nbsp; Drives or pressures motivate companies to address CSR</p><p style="margin-bottom:5px;"><strong>vi</strong> &nbsp; The past illustrates business are responsible for future outcomes</p><p style="margin-bottom:5px;"><strong>vii</strong> &nbsp; Companies applying CSR should be selective</p><p style="margin-bottom:5px;"><strong>viii</strong> &nbsp; Reasons that business and society benefit each other</p></div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">14 &nbsp; Paragraph A</span>
+                            <select class="answer-select" id="q14" style="min-width:90px;"><option value="">--</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">15 &nbsp; Paragraph B</span>
+                            <select class="answer-select" id="q15" style="min-width:90px;"><option value="">--</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">16 &nbsp; Paragraph C</span>
+                            <select class="answer-select" id="q16" style="min-width:90px;"><option value="">--</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">17 &nbsp; Paragraph D</span>
+                            <select class="answer-select" id="q17" style="min-width:90px;"><option value="">--</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">18 &nbsp; Paragraph E</span>
+                            <select class="answer-select" id="q18" style="min-width:90px;"><option value="">--</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">19 &nbsp; Paragraph F</span>
+                            <select class="answer-select" id="q19" style="min-width:90px;"><option value="">--</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">20 &nbsp; Paragraph G</span>
+                            <select class="answer-select" id="q20" style="min-width:90px;"><option value="">--</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 21&ndash;22</strong></p>
+                            <p>Complete the summary below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</p>
+                        </div>
+                        <div style="border:1px solid #ccc;border-radius:5px;padding:16px 20px;background:#fafafa;margin-bottom:16px;"><p style="line-height:2;">Promotion of CSR requires the understanding of interdependence between business and society. Corporations workers’ productivity generally needs health care, education, and given <input type="text" id="q21" class="answer-input" placeholder="21" style="width:160px;">. Restrictions imposed by government and companies both protect consumers from being treated unfairly. Improvement of the safety standard can reduce the <input type="text" id="q22" class="answer-input" placeholder="22" style="width:160px;"> of accidents in the workplace. Similarly, society becomes pool of more human needs and aspirations.</p></div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 23&ndash;26</strong></p>
+                            <p>Look at the following statements (Questions 23&ndash;26) and the list of companies below.</p>
+                            <p>Match each statement with the correct company, <strong>A&ndash;C</strong>.</p>
+                            <p><em>NB</em> You may use any letter more than once.</p>
+                        </div>
+                        <div style="border:1px solid #ccc;border-radius:5px;padding:16px 20px;background:#fafafa;margin-bottom:16px;"><p style="font-weight:700;text-align:center;margin-bottom:8px;">List of companies</p><p style="margin-bottom:5px;"><strong>A</strong> &nbsp; General Electronics</p><p style="margin-bottom:5px;"><strong>B</strong> &nbsp; Microsoft</p><p><strong>C</strong> &nbsp; Whole Foods Market</p></div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">23 &nbsp; The disposable waste</span>
+                            <select class="answer-select" id="q23" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">24 &nbsp; The way company purchases as goods</span>
+                            <select class="answer-select" id="q24" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">25 &nbsp; Helping the undeveloped</span>
+                            <select class="answer-select" id="q25" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">26 &nbsp; Ensuring the people have the latest information</span>
+                            <select class="answer-select" id="q26" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="part-3" class="question-part hidden">
+                <div class="part-header">
+                    <p><strong>Reading Passage 3</strong></p>
+                    <p>You should spend about 20 minutes on Questions 27&ndash;40, which are based on Reading Passage 3.</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 27&ndash;31</strong></p>
+                            <p>Choose the correct letter, <strong>A, B, C</strong> or <strong>D</strong>.</p>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">27 &nbsp; According to the writer, Ekman became interested in lying after a question from his</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q27" value="A"> A &nbsp; peers.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q27" value="B"> B &nbsp; patients.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q27" value="C"> C &nbsp; students.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q27" value="D"> D &nbsp; teachers.</label></div>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">28 &nbsp; The writer refers to the 12-minute interviews in order to</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q28" value="A"> A &nbsp; illustrate how frequently patients lie.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q28" value="B"> B &nbsp; describe the origins of Ekman's theories.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q28" value="C"> C &nbsp; compare Ekman's research to previous studies.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q28" value="D"> D &nbsp; show how patients' behaviour is affected by filming.</label></div>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">29 &nbsp; What is the writer's point in the third paragraph?</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q29" value="A"> A &nbsp; Micro-expressions are common to all people.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q29" value="B"> B &nbsp; Recent research has refuted an old idea.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q29" value="C"> C &nbsp; With practice we can learn to control our micro-expressions.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q29" value="D"> D &nbsp; Human society is too complex to allow for generalisations.</label></div>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">30 &nbsp; What are we told about Ekman's conclusions from his tests?</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q30" value="A"> A &nbsp; It's natural for people to lie.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q30" value="B"> B &nbsp; Few untrained people can detect lying.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q30" value="C"> C &nbsp; Most liars suffer from periods of depression.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q30" value="D"> D &nbsp; All of his subjects were trained to identify micro-expressions.</label></div>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">31 &nbsp; What point does the writer make about Ekman's techniques in the fourth paragraph?</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q31" value="A"> A &nbsp; They take a decade to teach.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q31" value="B"> B &nbsp; They have been in great demand.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q31" value="C"> C &nbsp; They have aroused the suspicions of some agencies.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q31" value="D"> D &nbsp; They can be used by a limited range of occupations.</label></div>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 32&ndash;36</strong></p>
+                            <p>Complete the summary using the list of words, <strong>A&ndash;I</strong>, below.</p>
+                        </div>
+                        <p style="font-weight:700;margin-bottom:8px;">The television series based on Ekman&rsquo;s work</p>
+                        <div style="border:1px solid #ccc;border-radius:5px;padding:16px 20px;background:#fafafa;margin-bottom:16px;"><p style="line-height:2.2;">A new TV series based on Ekman's work features a hero named Lightman, who detects lies. Initially, Ekman was unenthusiastic about the TV project because he feared the possibility of encouraging viewers' <select class="answer-select" id="q32" style="min-width:70px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option></select>. For example, he was worried that one day the programme could result in <select class="answer-select" id="q33" style="min-width:70px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option></select> not being carried out. Ultimately though, he has given the show his blessing because he is not aware of any other comparable programme based on a single person's <select class="answer-select" id="q34" style="min-width:70px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option></select>. The <select class="answer-select" id="q35" style="min-width:70px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option></select> of the show's producer have been another pleasant surprise considering the genre of the programme. Ekman is happy with the show's overall <select class="answer-select" id="q36" style="min-width:70px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option></select>.</p></div>
+                        <div style="border:1px solid #ccc;border-radius:5px;padding:16px 20px;background:#fafafa;margin-bottom:16px;"><p style="font-weight:700;text-align:center;margin-bottom:8px;">List of words</p><p style="display:flex;flex-wrap:wrap;gap:6px 30px;"><span><strong>A</strong> consequences</span><span><strong>B</strong> crimes</span><span><strong>C</strong> false beliefs</span><span><strong>D</strong> motives</span><span><strong>E</strong> justice</span><span><strong>F</strong> accuracy</span><span><strong>G</strong> acting</span><span><strong>H</strong> research</span><span><strong>I</strong> ratings</span></p></div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 37&ndash;40</strong></p>
+                            <p>Do the following statements agree with the claims of the writer in Reading Passage 3?</p>
+                            <p>Write <strong>YES</strong> if the statement agrees with the claims of the writer, <strong>NO</strong> if the statement contradicts the claims of the writer, <strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this.</p>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">37</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">Ekman regrets the lies he told as a child.</p>
+                                <label class="tfng-option"><input type="radio" name="q37" value="YES"> YES</label>
+                                <label class="tfng-option"><input type="radio" name="q37" value="NO"> NO</label>
+                                <label class="tfng-option"><input type="radio" name="q37" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">38</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">People who are good at lying tend to be good at detecting lies.</p>
+                                <label class="tfng-option"><input type="radio" name="q38" value="YES"> YES</label>
+                                <label class="tfng-option"><input type="radio" name="q38" value="NO"> NO</label>
+                                <label class="tfng-option"><input type="radio" name="q38" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">39</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">Ekman has worked with poker players to help them lie more convincingly.</p>
+                                <label class="tfng-option"><input type="radio" name="q39" value="YES"> YES</label>
+                                <label class="tfng-option"><input type="radio" name="q39" value="NO"> NO</label>
+                                <label class="tfng-option"><input type="radio" name="q39" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">40</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">Ekman is more interested in the types of lies with serious consequences.</p>
+                                <label class="tfng-option"><input type="radio" name="q40" value="YES"> YES</label>
+                                <label class="tfng-option"><input type="radio" name="q40" value="NO"> NO</label>
+                                <label class="tfng-option"><input type="radio" name="q40" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- end right-panel -->
+    </div><!-- end main-container -->
+
+    <!-- Nav Arrows -->
+    <div class="nav-arrows">
+        <button class="nav-arrow" onclick="previousQ()" id="prevBtn">&#8249;</button>
+        <button class="nav-arrow" onclick="nextQ()" id="nextBtn">&#8250;</button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="nav-row" aria-label="Questions">
+        <div class="footer__questionWrapper___1tZ46 selected multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(1)">
+                <span><span class="section-prefix">Passage </span><span class="sectionNr">1</span><span class="attemptedCount">0 of 13</span></span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion" onclick="goToQuestion(1)"><span class="sr-only">Q1</span><span>1</span></button>
+                <button class="subQuestion" onclick="goToQuestion(2)"><span class="sr-only">Q2</span><span>2</span></button>
+                <button class="subQuestion" onclick="goToQuestion(3)"><span class="sr-only">Q3</span><span>3</span></button>
+                <button class="subQuestion" onclick="goToQuestion(4)"><span class="sr-only">Q4</span><span>4</span></button>
+                <button class="subQuestion" onclick="goToQuestion(5)"><span class="sr-only">Q5</span><span>5</span></button>
+                <button class="subQuestion" onclick="goToQuestion(6)"><span class="sr-only">Q6</span><span>6</span></button>
+                <button class="subQuestion" onclick="goToQuestion(7)"><span class="sr-only">Q7</span><span>7</span></button>
+                <button class="subQuestion" onclick="goToQuestion(8)"><span class="sr-only">Q8</span><span>8</span></button>
+                <button class="subQuestion" onclick="goToQuestion(9)"><span class="sr-only">Q9</span><span>9</span></button>
+                <button class="subQuestion" onclick="goToQuestion(10)"><span class="sr-only">Q10</span><span>10</span></button>
+                <button class="subQuestion" onclick="goToQuestion(11)"><span class="sr-only">Q11</span><span>11</span></button>
+                <button class="subQuestion" onclick="goToQuestion(12)"><span class="sr-only">Q12</span><span>12</span></button>
+                <button class="subQuestion" onclick="goToQuestion(13)"><span class="sr-only">Q13</span><span>13</span></button>
+            </div>
+        </div>
+        <div class="footer__questionWrapper___1tZ46 multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(2)">
+                <span><span class="section-prefix">Passage </span><span class="sectionNr">2</span><span class="attemptedCount">0 of 13</span></span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion" onclick="goToQuestion(14)"><span class="sr-only">Q14</span><span>14</span></button>
+                <button class="subQuestion" onclick="goToQuestion(15)"><span class="sr-only">Q15</span><span>15</span></button>
+                <button class="subQuestion" onclick="goToQuestion(16)"><span class="sr-only">Q16</span><span>16</span></button>
+                <button class="subQuestion" onclick="goToQuestion(17)"><span class="sr-only">Q17</span><span>17</span></button>
+                <button class="subQuestion" onclick="goToQuestion(18)"><span class="sr-only">Q18</span><span>18</span></button>
+                <button class="subQuestion" onclick="goToQuestion(19)"><span class="sr-only">Q19</span><span>19</span></button>
+                <button class="subQuestion" onclick="goToQuestion(20)"><span class="sr-only">Q20</span><span>20</span></button>
+                <button class="subQuestion" onclick="goToQuestion(21)"><span class="sr-only">Q21</span><span>21</span></button>
+                <button class="subQuestion" onclick="goToQuestion(22)"><span class="sr-only">Q22</span><span>22</span></button>
+                <button class="subQuestion" onclick="goToQuestion(23)"><span class="sr-only">Q23</span><span>23</span></button>
+                <button class="subQuestion" onclick="goToQuestion(24)"><span class="sr-only">Q24</span><span>24</span></button>
+                <button class="subQuestion" onclick="goToQuestion(25)"><span class="sr-only">Q25</span><span>25</span></button>
+                <button class="subQuestion" onclick="goToQuestion(26)"><span class="sr-only">Q26</span><span>26</span></button>
+            </div>
+        </div>
+        <div class="footer__questionWrapper___1tZ46 multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(3)">
+                <span><span class="section-prefix">Passage </span><span class="sectionNr">3</span><span class="attemptedCount">0 of 14</span></span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion" onclick="goToQuestion(27)"><span class="sr-only">Q27</span><span>27</span></button>
+                <button class="subQuestion" onclick="goToQuestion(28)"><span class="sr-only">Q28</span><span>28</span></button>
+                <button class="subQuestion" onclick="goToQuestion(29)"><span class="sr-only">Q29</span><span>29</span></button>
+                <button class="subQuestion" onclick="goToQuestion(30)"><span class="sr-only">Q30</span><span>30</span></button>
+                <button class="subQuestion" onclick="goToQuestion(31)"><span class="sr-only">Q31</span><span>31</span></button>
+                <button class="subQuestion" onclick="goToQuestion(32)"><span class="sr-only">Q32</span><span>32</span></button>
+                <button class="subQuestion" onclick="goToQuestion(33)"><span class="sr-only">Q33</span><span>33</span></button>
+                <button class="subQuestion" onclick="goToQuestion(34)"><span class="sr-only">Q34</span><span>34</span></button>
+                <button class="subQuestion" onclick="goToQuestion(35)"><span class="sr-only">Q35</span><span>35</span></button>
+                <button class="subQuestion" onclick="goToQuestion(36)"><span class="sr-only">Q36</span><span>36</span></button>
+                <button class="subQuestion" onclick="goToQuestion(37)"><span class="sr-only">Q37</span><span>37</span></button>
+                <button class="subQuestion" onclick="goToQuestion(38)"><span class="sr-only">Q38</span><span>38</span></button>
+                <button class="subQuestion" onclick="goToQuestion(39)"><span class="sr-only">Q39</span><span>39</span></button>
+                <button class="subQuestion" onclick="goToQuestion(40)"><span class="sr-only">Q40</span><span>40</span></button>
+            </div>
+        </div>
+        <button id="deliver-button" class="footer__deliverButton___3FM07"><span>Check Answers</span></button>
+    </nav>
+
+    <!-- Context Menu -->
+    <div id="contextMenu" class="context-menu">
+        <div class="context-menu-item" onclick="highlightText()">Highlight</div>
+        <div class="context-menu-item" onclick="addComment()">Comment</div>
+        <div class="context-menu-item" id="clear-item" onclick="clearHighlight()" style="display:none;">Clear</div>
+        <div class="context-menu-item" onclick="clearAllHighlights()">Clear All</div>
+    </div>
+
+    <!-- Selection Toolbar (appears on text selection, no right-click needed) -->
+    <div id="selectionToolbar" class="selection-toolbar">
+        <button type="button" onclick="highlightText()">&#9998; Highlight</button>
+        <button type="button" onclick="addComment()">&#128172; Comment</button>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="result-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Results</h2>
+                <button id="modal-close-button" class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="score-summary"></p>
+                <div id="result-details"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {"q1": "TRUE", "q2": "NOT GIVEN", "q3": "TRUE", "q4": "FALSE", "q5": "FALSE", "q6": ["Cambrian explosion", "the Cambrian explosion"], "q7": ["railway", "railways"], "q8": ["1979"], "q9": ["evolution"], "q10": ["fan"], "q11": ["food"], "q12": ["leech"], "q13": ["move"], "q14": ["v"], "q15": ["viii"], "q16": ["vi"], "q17": ["vii"], "q18": ["iii"], "q19": ["i"], "q20": ["ii"], "q21": ["equal opportunity"], "q22": ["internal costs"], "q23": ["C"], "q24": ["C"], "q25": ["A"], "q26": ["B"], "q27": "C", "q28": "B", "q29": "A", "q30": "B", "q31": "B", "q32": ["C"], "q33": ["E"], "q34": ["H"], "q35": ["D"], "q36": ["F"], "q37": "NOT GIVEN", "q38": "NO", "q39": "NOT GIVEN", "q40": "YES"};
+
+        const questionTypes = {"q1": "radio", "q2": "radio", "q3": "radio", "q4": "radio", "q5": "radio", "q6": "text", "q7": "text", "q8": "text", "q9": "text", "q10": "text", "q11": "text", "q12": "text", "q13": "text", "q14": "select", "q15": "select", "q16": "select", "q17": "select", "q18": "select", "q19": "select", "q20": "select", "q21": "text", "q22": "text", "q23": "select", "q24": "select", "q25": "select", "q26": "select", "q27": "mcq", "q28": "mcq", "q29": "mcq", "q30": "mcq", "q31": "mcq", "q32": "select", "q33": "select", "q34": "select", "q35": "select", "q36": "select", "q37": "radio", "q38": "radio", "q39": "radio", "q40": "radio"};
+
+        // part ranges (variable size per passage)
+        const partRanges = { 1: [1, 13], 2: [14, 26], 3: [27, 40] };
+        const allQNums = [].concat(
+            Array.from({length: 13}, (_, i) => i + 1),
+            Array.from({length: 13}, (_, i) => i + 14),
+            Array.from({length: 14}, (_, i) => i + 27)
+        );
+
+        let currentPart = 1;
+        let currentQuestion = 1;
+        let selectedRange = null;
+        let contextElement = null;
+
+        function partOf(qNum) {
+            for (const p in partRanges) {
+                const [s, e] = partRanges[p];
+                if (qNum >= s && qNum <= e) return parseInt(p);
+            }
+            return 1;
+        }
+
+        function switchToPart(partNumber) {
+            currentPart = partNumber;
+            document.querySelectorAll('.question-part').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.passage-part').forEach(el => el.classList.add('hidden'));
+            const part = document.getElementById('part-' + partNumber);
+            if (part) part.classList.remove('hidden');
+            const passage = document.getElementById('passage-' + partNumber);
+            if (passage) passage.classList.remove('hidden');
+            document.querySelectorAll('.footer__questionWrapper___1tZ46').forEach((w, i) => w.classList.toggle('selected', i + 1 === partNumber));
+            const [partStart, partEnd] = partRanges[partNumber];
+            if (currentQuestion < partStart || currentQuestion > partEnd) {
+                currentQuestion = partStart;
+                document.querySelectorAll('.subQuestion').forEach(b => b.classList.remove('active'));
+                const activeBtn = document.querySelector('.subQuestion[onclick="goToQuestion(' + partStart + ')"]');
+                if (activeBtn) activeBtn.classList.add('active');
+            }
+            updateAttemptedCount(partNumber);
+            document.getElementById('prevBtn').disabled = currentQuestion <= allQNums[0];
+            document.getElementById('nextBtn').disabled = currentQuestion >= allQNums[allQNums.length - 1];
+        }
+
+        function goToQuestion(qNum) {
+            currentQuestion = qNum;
+            const part = partOf(qNum);
+            if (currentPart !== part) switchToPart(part);
+            document.querySelectorAll('.subQuestion').forEach(b => b.classList.remove('active'));
+            const btn = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
+            if (btn) btn.classList.add('active');
+            let el = document.getElementById('q' + qNum) || document.querySelector('input[name="q' + qNum + '"]');
+            if (el) {
+                const container = el.closest('.question') || el.closest('div[style]');
+                if (container) {
+                    container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    container.classList.add('flash');
+                    setTimeout(() => container.classList.remove('flash'), 1000);
+                }
+            }
+            const idx = allQNums.indexOf(qNum);
+            document.getElementById('prevBtn').disabled = idx <= 0;
+            document.getElementById('nextBtn').disabled = idx >= allQNums.length - 1;
+        }
+
+        function nextQ() {
+            const idx = allQNums.indexOf(currentQuestion);
+            if (idx < allQNums.length - 1) goToQuestion(allQNums[idx + 1]);
+        }
+        function previousQ() {
+            const idx = allQNums.indexOf(currentQuestion);
+            if (idx > 0) goToQuestion(allQNums[idx - 1]);
+        }
+
+        function updateAttemptedCount(partNumber) {
+            const [start, end] = partRanges[partNumber];
+            let count = 0;
+            for (let i = start; i <= end; i++) {
+                const el = document.getElementById('q' + i);
+                const rad = document.querySelector('input[name="q' + i + '"]:checked');
+                if (el && el.tagName === 'SELECT' && el.value) count++;
+                else if (el && el.tagName === 'INPUT' && el.value.trim()) count++;
+                else if (rad) count++;
+            }
+            const wrapper = document.querySelectorAll('.footer__questionWrapper___1tZ46')[partNumber - 1];
+            if (wrapper) {
+                const span = wrapper.querySelector('.attemptedCount');
+                if (span) span.textContent = count + ' of ' + (end - start + 1);
+            }
+        }
+
+        function updateAnsweredIndicators() {
+            allQNums.forEach(qNum => {
+                const btn = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
+                if (!btn || btn.classList.contains('correct') || btn.classList.contains('incorrect')) return;
+                const el = document.getElementById('q' + qNum);
+                const rad = document.querySelector('input[name="q' + qNum + '"]:checked');
+                let answered = false;
+                if (el && el.tagName === 'SELECT') answered = !!el.value;
+                else if (el && el.tagName === 'INPUT') answered = el.value.trim() !== '';
+                else if (rad) answered = true;
+                btn.classList.toggle('answered', answered);
+            });
+            [1, 2, 3].forEach(p => updateAttemptedCount(p));
+        }
+
+        document.querySelectorAll('.answer-input, .answer-select, input[type="radio"]').forEach(inp => {
+            inp.addEventListener('input', updateAnsweredIndicators);
+            inp.addEventListener('change', updateAnsweredIndicators);
+        });
+
+        // ---- Lenient answer matching (same rules as the mentor results page) ----
+        // Case, extra spaces, surrounding punctuation, "18th" vs "18",
+        // number words vs digits, British vs American spelling and
+        // "May 11" vs "11 May" are all treated as the same answer.
+        const __NUM = { zero:0, one:1, two:2, three:3, four:4, five:5, six:6, seven:7, eight:8, nine:9, ten:10, eleven:11, twelve:12, thirteen:13, fourteen:14, fifteen:15, sixteen:16, seventeen:17, eighteen:18, nineteen:19, twenty:20, thirty:30, forty:40, fifty:50, sixty:60, seventy:70, eighty:80, ninety:90, hundred:100 };
+        const __ORD = { first:1, second:2, third:3, fourth:4, fifth:5, sixth:6, seventh:7, eighth:8, ninth:9, tenth:10, eleventh:11, twelfth:12, thirteenth:13, fourteenth:14, fifteenth:15, sixteenth:16, seventeenth:17, eighteenth:18, nineteenth:19, twentieth:20, thirtieth:30 };
+        const __SPELL = { colour:'color', favourite:'favorite', neighbour:'neighbor', behaviour:'behavior', organise:'organize', organisation:'organization', realise:'realize', recognise:'recognize', analyse:'analyze', programme:'program', programmes:'programs', catalogue:'catalog', cheque:'check', grey:'gray', tyre:'tire', tyres:'tires', mould:'mold', aluminium:'aluminum', jewellery:'jewelry', defence:'defense', licence:'license', practise:'practice', enrolment:'enrollment', travelling:'traveling', traveller:'traveler', cancelled:'canceled', centre:'center', centres:'centers', theatre:'theater', metre:'meter', metres:'meters', litre:'liter', litres:'liters', kilometre:'kilometer', kilometres:'kilometers', fibre:'fiber', homogenise:'homogenize', fossilised:'fossilized', pedestrianised:'pedestrianized' };
+        const __MONTHS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+        function __normAns(raw) {
+            if (raw === undefined || raw === null) return '';
+            let s = String(raw).trim().toLowerCase();
+            if (!s) return '';
+            s = s.replace(/[‘’]/g, "'").replace(/\s+/g, ' ').replace(/^[\s.,;:'"()]+|[\s.,;:'"()!?]+$/g, '');
+            s = s.replace(/\b(\d+)(st|nd|rd|th)\b/g, '$1');
+            s = s.replace(/-/g, ' ').split(' ').map(w => (w in __NUM) ? String(__NUM[w]) : (w in __ORD) ? String(__ORD[w]) : (__SPELL[w] || w)).join(' ');
+            s = s.replace(/\s*,\s*/g, ' ').replace(/(\d) (?=\d{3}\b)/g, '$1').replace(/(\d),(?=\d{3}\b)/g, '$1');
+            const t = s.split(' ').filter(x => x !== 'of' && x !== 'the');
+            if (t.length === 2) {
+                if (__MONTHS.indexOf(t[0]) >= 0 && /^\d+$/.test(t[1])) s = t[1] + ' ' + t[0];
+                else if (__MONTHS.indexOf(t[1]) >= 0 && /^\d+$/.test(t[0])) s = t[0] + ' ' + t[1];
+            }
+            return s;
+        }
+        function __matches(accepted, user) {
+            const u = __normAns(user);
+            if (!u) return false;
+            return (Array.isArray(accepted) ? accepted : [accepted]).some(a => a !== '???' && __normAns(a) === u);
+        }
+        function __bandFor(r) {
+            if (r >= 39) return 9; if (r >= 37) return 8.5; if (r >= 35) return 8; if (r >= 32) return 7.5;
+            if (r >= 30) return 7; if (r >= 26) return 6.5; if (r >= 23) return 6; if (r >= 18) return 5.5;
+            if (r >= 16) return 5; if (r >= 13) return 4.5; if (r >= 10) return 4; if (r >= 8) return 3.5;
+            if (r >= 6) return 3; if (r >= 4) return 2.5; if (r >= 2) return 2; if (r === 1) return 1.5; return 0;
+        }
+        function __readAnswer(key) {
+            const el = document.getElementById(key);
+            if (el && (el.tagName === 'INPUT' || el.tagName === 'SELECT')) return (el.value || '').trim();
+            const checked = document.querySelector('input[name="' + key + '"]:checked');
+            return checked ? checked.value : '';
+        }
+        // ---- Mock exam bridge ----
+        // Used only by the mock orchestrator page. Grades silently (nothing on
+        // screen changes, no answers revealed) and returns the student's
+        // answers, the FULL list of accepted answers per question, and the score.
+        // "Choose THREE" groups (checkboxes) are stored one letter per question
+        // number, each letter graded against the group's full accepted list.
+        const __multi = (typeof multiGroups !== 'undefined') ? multiGroups : {};
+        window.__mockGetResult = function () {
+            const answers = {}, key = {};
+            let score = 0;
+            Object.keys(correctAnswers).forEach(k => {
+                const accepted = Array.isArray(correctAnswers[k]) ? correctAnswers[k].slice() : [correctAnswers[k]];
+                if (__multi[k]) {
+                    const picked = Array.from(document.querySelectorAll('input[name="' + k + '"]:checked')).map(c => c.value).slice(0, __multi[k].length);
+                    __multi[k].forEach((qn, i) => {
+                        const user = picked[i] || '';
+                        answers[String(qn)] = user;
+                        key[String(qn)] = accepted.slice();
+                        if (__matches(accepted, user)) score++;
+                    });
+                    return;
+                }
+                const q = k.replace('q', '');
+                const user = __readAnswer(k);
+                answers[q] = user;
+                key[q] = Array.isArray(correctAnswers[k]) ? correctAnswers[k].slice() : correctAnswers[k];
+                if (__matches(correctAnswers[k], user)) score++;
+            });
+            return { score: score, total: 40, band: __bandFor(score), answers: answers, key: key };
+        };
+        // Puts previously saved answers back (after a page reload mid-section).
+        window.__mockRestore = function (answers) {
+            if (!answers) return;
+            Object.keys(__multi).forEach(g => {
+                __multi[g].forEach(qn => {
+                    const v = answers[String(qn)];
+                    if (v) document.querySelectorAll('input[name="' + g + '"]').forEach(c => { if (c.value === v) c.checked = true; });
+                });
+            });
+            Object.keys(answers).forEach(q => {
+                const v = answers[q];
+                if (v === undefined || v === null || v === '' || v === 'No Answer') return;
+                const el = document.getElementById('q' + q);
+                if (el && (el.tagName === 'INPUT' || el.tagName === 'SELECT')) { el.value = v; return; }
+                document.querySelectorAll('input[name="q' + q + '"]').forEach(r => { if (r.value === v) r.checked = true; });
+            });
+            try { updateAnsweredIndicators(); } catch (e) { }
+        };
+        window.__mockLock = function () {
+            document.querySelectorAll('.answer-input, .answer-select, input[type="radio"], input[type="checkbox"]').forEach(el => el.disabled = true);
+        };
+
+        function checkAnswers() {
+            let score = 0;
+            const resultsData = [];
+
+            document.querySelectorAll('.correct-inline').forEach(el => el.remove());
+            document.querySelectorAll('.answer-input, .answer-select').forEach(el => el.classList.remove('correct', 'incorrect'));
+            document.querySelectorAll('.multi-choice-option').forEach(el => el.classList.remove('correct', 'incorrect'));
+
+            Object.keys(correctAnswers).forEach(key => {
+                const correct = correctAnswers[key];
+                const type = questionTypes[key];
+                const qNum = parseInt(key.replace('q', ''));
+                let userAnswer = '', isCorrect = false;
+
+                if (type === 'text') {
+                    const el = document.getElementById(key);
+                    userAnswer = el ? el.value.trim() : '';
+                    const accepted = Array.isArray(correct) ? correct : [correct];
+                    isCorrect = accepted.some(a => a.toLowerCase() === userAnswer.toLowerCase());
+                    if (el) {
+                        el.classList.add(isCorrect ? 'correct' : 'incorrect');
+                        if (!isCorrect) {
+                            const sp = document.createElement('span');
+                            sp.className = 'correct-inline';
+                            sp.textContent = accepted[0];
+                            el.insertAdjacentElement('afterend', sp);
+                        }
+                    }
+                } else if (type === 'select') {
+                    const el = document.getElementById(key);
+                    userAnswer = el ? el.value : '';
+                    const accepted = Array.isArray(correct) ? correct : [correct];
+                    isCorrect = accepted.some(a => a.toLowerCase() === (userAnswer || '').toLowerCase());
+                    if (el) {
+                        el.classList.add(isCorrect ? 'correct' : 'incorrect');
+                        if (!isCorrect) {
+                            const sp = document.createElement('span');
+                            sp.className = 'correct-inline';
+                            sp.textContent = accepted[0];
+                            el.insertAdjacentElement('afterend', sp);
+                        }
+                    }
+                } else if (type === 'radio') {
+                    const checked = document.querySelector('input[name="' + key + '"]:checked');
+                    userAnswer = checked ? checked.value : 'No Answer';
+                    const accepted = Array.isArray(correct) ? correct : [correct];
+                    isCorrect = accepted.some(a => a.toUpperCase() === userAnswer.toUpperCase());
+                } else if (type === 'mcq') {
+                    const checked = document.querySelector('input[name="' + key + '"]:checked');
+                    userAnswer = checked ? checked.value : 'No Answer';
+                    isCorrect = userAnswer === correct;
+                    document.querySelectorAll('input[name="' + key + '"]').forEach(r => {
+                        const wrapper = r.closest('.multi-choice-option');
+                        if (!wrapper) return;
+                        if (r.value === correct) wrapper.classList.add('correct');
+                        else if (r.checked) wrapper.classList.add('incorrect');
+                    });
+                }
+
+                if (isCorrect) score++;
+                const navBtn = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
+                if (navBtn) { navBtn.classList.remove('answered'); navBtn.classList.add(isCorrect ? 'correct' : 'incorrect'); }
+                resultsData.push({ question: qNum, userAnswer: userAnswer || 'No Answer', correctAnswer: Array.isArray(correct) ? correct[0] : correct, isCorrect });
+            });
+
+            document.querySelectorAll('.answer-input, .answer-select, input[type="radio"]').forEach(el => el.disabled = true);
+
+            const band = (function (r) {
+                if (r >= 39) return 9; if (r >= 37) return 8.5; if (r >= 35) return 8; if (r >= 32) return 7.5;
+                if (r >= 30) return 7; if (r >= 26) return 6.5; if (r >= 23) return 6; if (r >= 18) return 5.5;
+                if (r >= 16) return 5; if (r >= 13) return 4.5; if (r >= 10) return 4; if (r >= 8) return 3.5;
+                if (r >= 6) return 3; if (r >= 4) return 2.5; if (r >= 2) return 2; if (r === 1) return 1.5; return 0;
+            })(score);
+
+            document.getElementById('score-summary').textContent = 'You scored ' + score + ' out of 40 (Band ' + band + ').';
+
+            const resultDetails = document.getElementById('result-details');
+            let rhtml = '<table><thead><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody>';
+            resultsData.sort((a, b) => a.question - b.question).forEach(r => {
+                rhtml += '<tr><td>' + r.question + '</td><td>' + r.userAnswer + '</td><td>' + r.correctAnswer + '</td><td class="' + (r.isCorrect ? 'result-correct' : 'result-incorrect') + '">' + (r.isCorrect ? '&#10003; Correct' : '&#10007; Incorrect') + '</td></tr>';
+            });
+            rhtml += '</tbody></table>';
+            resultDetails.innerHTML = rhtml;
+
+            const deliverButton = document.getElementById('deliver-button');
+            deliverButton.classList.add('success');
+            deliverButton.innerHTML = '<span>My Results</span>';
+            const newBtn = deliverButton.cloneNode(true);
+            deliverButton.parentNode.replaceChild(newBtn, deliverButton);
+            newBtn.addEventListener('click', () => { document.getElementById('result-modal').style.display = 'flex'; });
+            document.getElementById('result-modal').style.display = 'flex';
+        }
+
+        document.getElementById('deliver-button').addEventListener('click', checkAnswers);
+        document.getElementById('modal-close-button').addEventListener('click', () => { document.getElementById('result-modal').style.display = 'none'; });
+
+        document.addEventListener('selectionchange', () => {
+            const sel = window.getSelection();
+            if (sel && sel.rangeCount > 0 && !sel.isCollapsed) selectedRange = sel.getRangeAt(0);
+        });
+        document.body.addEventListener('contextmenu', function (e) {
+            const text = window.getSelection().toString();
+            if (!text) return;
+            e.preventDefault();
+            const menu = document.getElementById('contextMenu');
+            menu.style.left = e.pageX + 'px';
+            menu.style.top = e.pageY + 'px';
+            menu.style.display = 'block';
+            contextElement = e.target.closest('.highlight, .comment-highlight');
+            document.getElementById('clear-item').style.display = contextElement ? 'block' : 'none';
+        });
+        document.body.addEventListener('click', function (e) {
+            if (!e.target.closest('.context-menu')) document.getElementById('contextMenu').style.display = 'none';
+        });
+
+        // ---- Selection toolbar: shows a floating Highlight/Comment button
+        // above any text the user selects inside the passage, no right-click
+        // or long-press menu required. Works with mouse drag and touch.
+        const selectionToolbar = document.getElementById('selectionToolbar');
+
+        function showSelectionToolbar() {
+            const sel = window.getSelection();
+            if (!sel || sel.rangeCount === 0 || sel.isCollapsed) { hideSelectionToolbar(); return; }
+            const text = sel.toString().trim();
+            if (!text) { hideSelectionToolbar(); return; }
+            const anchorNode = sel.anchorNode;
+            const anchorEl = anchorNode && (anchorNode.nodeType === 1 ? anchorNode : anchorNode.parentNode);
+            const passage = anchorEl && anchorEl.closest('.passage-part:not(.hidden)');
+            if (!passage || !anchorEl) { hideSelectionToolbar(); return; }
+            const range = sel.getRangeAt(0);
+            selectedRange = range;
+            const rect = range.getBoundingClientRect();
+            if (!rect || (rect.width === 0 && rect.height === 0)) { hideSelectionToolbar(); return; }
+            const toolbarWidth = selectionToolbar.offsetWidth || 160;
+            let left = rect.left + rect.width / 2 - toolbarWidth / 2 + window.scrollX;
+            left = Math.max(8, Math.min(left, window.innerWidth - toolbarWidth - 8 + window.scrollX));
+            let top = rect.top + window.scrollY - 44;
+            if (top < window.scrollY) top = rect.bottom + window.scrollY + 8;
+            selectionToolbar.style.left = left + 'px';
+            selectionToolbar.style.top = top + 'px';
+            selectionToolbar.style.display = 'flex';
+            toolbarShownAt = Date.now();
+        }
+
+        let toolbarShownAt = 0;
+
+        function hideSelectionToolbar() {
+            selectionToolbar.style.display = 'none';
+        }
+
+        document.addEventListener('mouseup', (e) => {
+            if (e.target.closest('#selectionToolbar')) return;
+            setTimeout(showSelectionToolbar, 0);
+        });
+        document.addEventListener('touchend', (e) => {
+            if (e.target.closest('#selectionToolbar')) return;
+            setTimeout(showSelectionToolbar, 0);
+        });
+        // Selecting text can itself trigger a browser auto-scroll-into-view,
+        // which would otherwise immediately hide the toolbar right after it
+        // appears. Ignore scroll events that land within 300ms of a show.
+        document.addEventListener('scroll', () => {
+            if (Date.now() - toolbarShownAt > 300) hideSelectionToolbar();
+        }, true);
+        document.addEventListener('mousedown', (e) => {
+            if (!e.target.closest('#selectionToolbar')) hideSelectionToolbar();
+        });
+
+        function highlightText() {
+            if (!selectedRange || selectedRange.collapsed) return;
+            try { const span = document.createElement('span'); span.className = 'highlight'; selectedRange.surroundContents(span); } catch (e) { }
+            window.getSelection().removeAllRanges();
+            document.getElementById('contextMenu').style.display = 'none';
+            hideSelectionToolbar();
+        }
+        function addComment() {
+            const t = prompt('Enter your comment:');
+            if (!t || !selectedRange) return;
+            try {
+                const span = document.createElement('span'); span.className = 'comment-highlight';
+                const tip = document.createElement('span'); tip.className = 'comment-tooltip'; tip.textContent = t;
+                span.appendChild(tip); selectedRange.surroundContents(span);
+            } catch (e) { }
+            window.getSelection().removeAllRanges();
+            document.getElementById('contextMenu').style.display = 'none';
+            hideSelectionToolbar();
+        }
+        function clearHighlight() {
+            if (contextElement) {
+                const parent = contextElement.parentNode;
+                while (contextElement.firstChild) parent.insertBefore(contextElement.firstChild, contextElement);
+                parent.removeChild(contextElement); parent.normalize();
+            }
+            document.getElementById('contextMenu').style.display = 'none';
+        }
+        function clearAllHighlights() {
+            document.querySelectorAll('.highlight, .comment-highlight').forEach(el => {
+                const parent = el.parentNode;
+                while (el.firstChild) parent.insertBefore(el.firstChild, el);
+                parent.removeChild(el); parent.normalize();
+            });
+            document.getElementById('contextMenu').style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            switchToPart(1);
+            goToQuestion(1);
+        });
+    </script>
+</body>
+
+</html>
