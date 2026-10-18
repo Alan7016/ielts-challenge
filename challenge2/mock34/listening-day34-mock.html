@@ -164,6 +164,20 @@
 #speed-btn, #speed-options { display: none !important; }
 #progress-bar { pointer-events: none; }
 </style>
+<style>
+/* ---- Highlight / comment tool (same as the Day 20 listening mock) ---- */
+.highlight { background-color: #ffff00; }
+.comment-highlight { background-color: #90EE90; position: relative; cursor: help; }
+.comment-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 8px 12px; border-radius: 4px; font-size: 14px; white-space: nowrap; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity .3s; }
+.comment-highlight:hover .comment-tooltip { opacity: 1; }
+.hl-menu { position: absolute; background: #fff; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,.15); z-index: 1000; display: none; min-width: 140px; }
+.hl-menu div { padding: 12px 16px; cursor: pointer; font-size: 16px; border-bottom: 1px solid #f0f0f0; }
+.hl-menu div:hover { background: #f8f9fa; }
+.hl-menu div:last-child { border-bottom: none; }
+.select-tip { position: absolute; display: none; align-items: center; gap: 2px; background: #222; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,.25); z-index: 1001; padding: 4px; }
+.select-tip button { background: none; border: 0; color: #fff; padding: 8px 12px; font-size: 14px; border-radius: 4px; cursor: pointer; white-space: nowrap; }
+.select-tip button:hover { background: #444; }
+</style>
 </head>
 
 <body>
@@ -894,6 +908,76 @@
             goToQuestion(1);
         });
     </script>
+
+<div id="hlSelectTip" class="select-tip">
+    <button id="hlTipHighlight" type="button">&#9998; Highlight</button>
+    <button id="hlTipComment" type="button">&#128172; Comment</button>
+</div>
+<div id="hlMenu" class="hl-menu">
+    <div id="hlMenuHighlight">Highlight</div>
+    <div id="hlMenuComment">Comment</div>
+    <div id="hlMenuClear" style="display:none;">Clear</div>
+    <div id="hlMenuClearAll">Clear All</div>
+</div>
+<script>
+(function () {
+    // Highlighting only changes how the page looks; it never touches answers.
+    var range = null, ctxEl = null;
+    var tip = document.getElementById('hlSelectTip'), menu = document.getElementById('hlMenu');
+    function area() { return document.querySelector('.main-container'); }
+    function touchesField(r) { var f = r.cloneContents(); return !!(f.querySelector && f.querySelector('input, select, textarea, button')); }
+    function wrap(r, span) {
+        try { r.surroundContents(span); return true; }
+        catch (e) { try { var f = r.extractContents(); span.appendChild(f); r.insertNode(span); return true; } catch (e2) { return false; } }
+    }
+    function hide() { tip.style.display = 'none'; menu.style.display = 'none'; }
+    function apply(comment) {
+        if (!range || range.collapsed || touchesField(range)) { window.getSelection().removeAllRanges(); hide(); return; }
+        var span = document.createElement('span');
+        span.className = comment ? 'comment-highlight' : 'highlight';
+        var r = range;
+        if (comment) {
+            var t = prompt('Enter your comment:'); if (!t) { hide(); return; }
+            if (wrap(r, span)) { var c = document.createElement('span'); c.className = 'comment-tooltip'; c.textContent = t; span.appendChild(c); }
+        } else wrap(r, span);
+        window.getSelection().removeAllRanges(); range = null; hide();
+    }
+    function unwrap(el) { var p = el.parentNode; el.querySelectorAll('.comment-tooltip').forEach(function (c) { c.remove(); }); while (el.firstChild) p.insertBefore(el.firstChild, el); p.removeChild(el); p.normalize(); }
+    function showTip() {
+        setTimeout(function () {
+            var sel = window.getSelection();
+            if (!sel || sel.isCollapsed || !sel.rangeCount || !sel.toString().trim()) { tip.style.display = 'none'; return; }
+            var r = sel.getRangeAt(0), a = area();
+            if (!a || !a.contains(r.commonAncestorContainer)) { tip.style.display = 'none'; return; }
+            range = r;
+            var rect = r.getBoundingClientRect();
+            if (!rect || (rect.width === 0 && rect.height === 0)) { tip.style.display = 'none'; return; }
+            tip.style.left = Math.max(8, rect.left + window.scrollX) + 'px';
+            tip.style.top = Math.max(8, rect.top + window.scrollY - 44) + 'px';
+            tip.style.display = 'flex';
+        }, 0);
+    }
+    document.addEventListener('mouseup', showTip);
+    document.addEventListener('touchend', showTip);
+    document.addEventListener('mousedown', function (e) { if (!e.target.closest('#hlSelectTip')) tip.style.display = 'none'; if (!e.target.closest('#hlMenu')) menu.style.display = 'none'; });
+    document.getElementById('hlTipHighlight').addEventListener('click', function () { apply(false); });
+    document.getElementById('hlTipComment').addEventListener('click', function () { apply(true); });
+    document.getElementById('hlMenuHighlight').addEventListener('click', function () { apply(false); });
+    document.getElementById('hlMenuComment').addEventListener('click', function () { apply(true); });
+    document.getElementById('hlMenuClear').addEventListener('click', function () { if (ctxEl) unwrap(ctxEl); ctxEl = null; hide(); });
+    document.getElementById('hlMenuClearAll').addEventListener('click', function () { document.querySelectorAll('.highlight, .comment-highlight').forEach(unwrap); hide(); });
+    document.addEventListener('contextmenu', function (e) {
+        var a = area(); if (!a || !a.contains(e.target)) return;
+        ctxEl = e.target.closest('.highlight, .comment-highlight');
+        var sel = window.getSelection();
+        if (!ctxEl && (!sel || !sel.toString().trim())) return;
+        if (sel && sel.rangeCount && !sel.isCollapsed) range = sel.getRangeAt(0);
+        e.preventDefault();
+        menu.style.left = e.pageX + 'px'; menu.style.top = e.pageY + 'px'; menu.style.display = 'block';
+        document.getElementById('hlMenuClear').style.display = ctxEl ? 'block' : 'none';
+    });
+})();
+</script>
 </body>
 
 </html>
