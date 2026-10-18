@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 36 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 36 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 20</div>
+      <h2>Starting Off — Another Reading and Writing Day</h2>
+      <p class="task-sub">Another long <b>reading and writing day</b> — about <b>4 hours</b>, with breaks. A full Band 8-level reading test, two extra articles, advanced reading skills, vocabulary and grammar, a full <b>Writing Task 1</b> and <b>Task 2</b>, and speaking.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. In a “matching information” task, the paragraphs</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. are always used once each</label><label><input type="radio" value="1" name="t1-st-1" data-correct="true"> B. may be used more than once, and some may not be used</label><label><input type="radio" value="2" name="t1-st-1" data-correct="false"> C. are matched to headings</label><label><input type="radio" value="3" name="t1-st-1" data-correct="false"> D. are in the same order as the questions</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. A “to what extent do you agree” essay at Band 8 should</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="false"> A. always fully agree</label><label><input type="radio" value="1" name="t1-st-2" data-correct="true"> B. present a clear, nuanced position maintained throughout</label><label><input type="radio" value="2" name="t1-st-2" data-correct="false"> C. present both sides with no opinion</label><label><input type="radio" value="3" name="t1-st-2" data-correct="false"> D. avoid examples</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. In a Task 1 bar chart with many categories, the overview should</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="false"> A. list every figure</label><label><input type="radio" value="1" name="t1-st-3" data-correct="true"> B. identify the largest categories and the main changes</label><label><input type="radio" value="2" name="t1-st-3" data-correct="false"> C. give your opinion</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. repeat the title</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. A word bank summary usually contains</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="false"> A. exactly the right number of words</label><label><input type="radio" value="1" name="t1-st-4" data-correct="true"> B. more words than gaps, including grammatically plausible distractors</label><label><input type="radio" value="2" name="t1-st-4" data-correct="false"> C. only nouns</label><label><input type="radio" value="3" name="t1-st-4" data-correct="false"> D. words not related to the text</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. erosion</button><button type="button" class="lm-item" data-key="2">2. stench</button><button type="button" class="lm-item" data-key="3">3. cholera</button><button type="button" class="lm-item" data-key="4">4. conditional</button><button type="button" class="lm-item" data-key="5">5. stigma</button><button type="button" class="lm-item" data-key="6">6. inflationary</button><button type="button" class="lm-item" data-key="7">7. embankment</button><button type="button" class="lm-item" data-key="8">8. lexicon</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. the vocabulary of a language</button><button type="button" class="lm-item" data-key="b">b. causing prices to rise</button><button type="button" class="lm-item" data-key="c">c. a very strong unpleasant smell</button><button type="button" class="lm-item" data-key="d">d. shame attached to something</button><button type="button" class="lm-item" data-key="e">e. a dangerous disease spread through dirty water</button><button type="button" class="lm-item" data-key="f">f. a raised wall of earth or stone along a river</button><button type="button" class="lm-item" data-key="g">g. gradual wearing away</button><button type="button" class="lm-item" data-key="h">h. depending on certain requirements</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 20</div>
+      <h2>Reading Passage 1 — Why Do Languages Change?</h2>
+      <p class="task-sub"><b>The test starts now.</b> About <b>18 minutes</b> for Questions 1–13.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Why Do Languages Change?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Every living language is constantly changing. Linguists have long debated why.</small></h3>
+            <p class="article-meta">Reading Passage 1 · Linguistics · 396 words</p>
+            <p><span class="para-label">A</span>A speaker of modern English who travelled back a thousand years would struggle to understand a single sentence. Old English, spoken before the Norman Conquest of 1066, had a grammar closer to modern German, with nouns that changed their endings according to their role in the sentence. Even Shakespeare’s English, only four centuries old, contains words and constructions that today’s readers find puzzling. Change, it seems, is an inevitable feature of every living language.</p><p><span class="para-label">B</span>For centuries, such change was regarded as decay. Writers in the eighteenth century, such as Jonathan Swift, called for an academy to ‘fix’ the English language and prevent it from being corrupted. Similar institutions already existed in other countries: the Académie française had been established in 1635 to protect the purity of French. Yet despite its efforts, French has continued to change, and English, which never had such an academy, is not noticeably more ‘disordered’ than French.</p><p><span class="para-label">C</span>Linguists today regard change as neither good nor bad, simply natural, and they have identified several mechanisms that drive it. One is the principle of least effort: speakers tend to simplify pronunciation, so that, for example, the ‘k’ in ‘knight’ and ‘knee’, once pronounced, has disappeared. Another is analogy, in which irregular forms are replaced by regular ones — the past tense of ‘help’ was once ‘holp’, but it has since become ‘helped’, following the regular pattern.</p><p><span class="para-label">D</span>Contact between languages is another powerful force. After 1066, French became the language of the English ruling class, and thousands of French words entered English, particularly in law, government and food. This explains why English has pairs such as ‘cow’ (from Old English) and ‘beef’ (from French): the Anglo-Saxon farmers raised the animals, while the French-speaking nobility ate the meat.</p><p><span class="para-label">E</span>Social factors also matter. The sociolinguist William Labov, studying speech on the island of Martha’s Vineyard in the 1960s, found that some young residents were exaggerating a traditional local pronunciation, apparently to distinguish themselves from the summer tourists. His research showed that change is often led by particular social groups — frequently young women — and spreads as others adopt it to signal identity.</p><p><span class="para-label">F</span>Many people today worry that technology, especially texting and social media, is damaging language. Yet research suggests that young people switch between informal digital writing and formal writing with considerable skill. If anything, the internet has made language change more visible, not necessarily faster.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">Choose the correct heading for each paragraph, <b>A–F</b>.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; Unrecognisable ancestors<br><b>ii</b>&nbsp; A failed attempt to stop the clock<br><b>iii</b>&nbsp; Making things easier and more regular<br><b>iv</b>&nbsp; The influence of conquerors<br><b>v</b>&nbsp; Using speech to show who we are<br><b>vi</b>&nbsp; A modern fear examined<br><b>vii</b>&nbsp; The first English dictionary<br><b>viii</b>&nbsp; Why some languages die out</p></div>
+      <div class="card" id="t2-h"><div class="sel-row"><select class="select" id="t2-h-1" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>1.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t2-h-2" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>2.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t2-h-3" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>3.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t2-h-4" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>4.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t2-h-5" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>5.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t2-h-6" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>6.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-h', 't2-h-score')">Check answers</button>
+          <span id="t2-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–10</p><p class="qg-instr">Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-7">
+          <p>7. Old English grammar resembled that of modern German.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-7" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-7" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-7" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-8">
+          <p>8. The Académie française has successfully prevented French from changing.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-8" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-8" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-8" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-9">
+          <p>9. Jonathan Swift wrote a dictionary of English.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-9" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-9" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-9" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-10">
+          <p>10. The “k” in “knight” was once pronounced.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-10" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-10" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-10" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–13</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t2-s" style="line-height:2.7;"><p>Irregular forms can be replaced by regular ones through a process known as (11) <input type="text" class="text-answer" id="t2-11" data-correct="analogy" autocomplete="off" style="width:110px;">. After 1066, many French words entered English, especially in law, government and (12) <input type="text" class="text-answer" id="t2-12" data-correct="food" autocomplete="off" style="width:90px;">. Labov found that change is often led by particular social groups, often young (13) <input type="text" class="text-answer" id="t2-13" data-correct="women" autocomplete="off" style="width:100px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-s', 't2-s-score')">Check answers</button>
+          <span id="t2-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 20</div>
+      <h2>Reading Passage 1 — Answer Analysis</h2>
+      <p class="task-sub">Check the evidence for every answer.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Why Do Languages Change?</summary>
+        <p><span class="para-label">A</span>A speaker of modern English who travelled back a thousand years would struggle to understand a single sentence. Old English, spoken before the Norman Conquest of 1066, had a grammar closer to modern German, with nouns that changed their endings according to their role in the sentence. Even Shakespeare’s English, only four centuries old, contains words and constructions that today’s readers find puzzling. Change, it seems, is an inevitable feature of every living language.</p><p><span class="para-label">B</span>For centuries, such change was regarded as decay. Writers in the eighteenth century, such as Jonathan Swift, called for an academy to ‘fix’ the English language and prevent it from being corrupted. Similar institutions already existed in other countries: the Académie française had been established in 1635 to protect the purity of French. Yet despite its efforts, French has continued to change, and English, which never had such an academy, is not noticeably more ‘disordered’ than French.</p><p><span class="para-label">C</span>Linguists today regard change as neither good nor bad, simply natural, and they have identified several mechanisms that drive it. One is the principle of least effort: speakers tend to simplify pronunciation, so that, for example, the ‘k’ in ‘knight’ and ‘knee’, once pronounced, has disappeared. Another is analogy, in which irregular forms are replaced by regular ones — the past tense of ‘help’ was once ‘holp’, but it has since become ‘helped’, following the regular pattern.</p><p><span class="para-label">D</span>Contact between languages is another powerful force. After 1066, French became the language of the English ruling class, and thousands of French words entered English, particularly in law, government and food. This explains why English has pairs such as ‘cow’ (from Old English) and ‘beef’ (from French): the Anglo-Saxon farmers raised the animals, while the French-speaking nobility ate the meat.</p><p><span class="para-label">E</span>Social factors also matter. The sociolinguist William Labov, studying speech on the island of Martha’s Vineyard in the 1960s, found that some young residents were exaggerating a traditional local pronunciation, apparently to distinguish themselves from the summer tourists. His research showed that change is often led by particular social groups — frequently young women — and spreads as others adopt it to signal identity.</p><p><span class="para-label">F</span>Many people today worry that technology, especially texting and social media, is damaging language. Yet research suggests that young people switch between informal digital writing and formal writing with considerable skill. If anything, the internet has made language change more visible, not necessarily faster.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">i</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">would struggle to understand a single sentence</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">ii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">called for an academy to ‘fix’ the English language … Yet despite its efforts, French has continued to change</span>.</p><p><span class="trap">Trap:</span> vii — no dictionary is mentioned.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">iii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">speakers tend to simplify pronunciation … irregular forms are replaced by regular ones</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">iv</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">After 1066, French became the language of the English ruling class</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">v</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">to distinguish themselves from the summer tourists … to signal identity</span>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">vi</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Many people today worry … Yet research suggests</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">had a grammar closer to modern German</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">despite its efforts, French has continued to change</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para B</span></summary><div class="an-body"><p>Swift called for an academy; nothing is said about a dictionary.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">TRUE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">the ‘k’ in ‘knight’ and ‘knee’, once pronounced, has disappeared</span>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">analogy</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Another is analogy</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">food</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">particularly in law, government and food</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">women</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">frequently young women</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 20</div>
+      <h2>Reading Passage 2 — The Great Stink</h2>
+      <p class="task-sub">About <b>20 minutes</b> for Questions 14–26.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Great Stink<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">How a hot summer in London changed the way cities deal with waste.</small></h3>
+            <p class="article-meta">Reading Passage 2 · History and engineering · 410 words</p>
+            <p><span class="para-label">A</span>In the summer of 1858, an unusually hot spell turned the River Thames in London into an open sewer. For decades, the city’s growing population had flushed its waste directly into the river, from which much of its drinking water was also taken. As temperatures rose, the smell became so overpowering that the newspapers named it ‘the Great Stink’. Curtains in the Houses of Parliament were soaked in chemicals in an attempt to block out the odour.</p><p><span class="para-label">B</span>The crisis was not only unpleasant but deadly. London had suffered repeated outbreaks of cholera, including one in 1854 that killed more than 600 people in the Soho district alone. At the time, most doctors believed the disease was spread by ‘miasma’, or bad air. The physician John Snow had argued otherwise: by mapping cases in Soho, he showed that they clustered around a single water pump in Broad Street, and he persuaded local officials to remove its handle. Yet his theory that cholera was carried by contaminated water was not widely accepted until years later.</p><p><span class="para-label">C</span>Ironically, it was the belief in miasma that finally prompted action. Fearing that the smell itself was dangerous, Parliament passed legislation within weeks and gave the engineer Joseph Bazalgette the funds to build a new sewer system. His plan was to intercept waste before it reached the river and carry it to outfalls east of the city.</p><p><span class="para-label">D</span>The scale of the project was immense. Over the next sixteen years, workers built around 2,100 kilometres of street sewers and 132 kilometres of main intercepting sewers, using more than 300 million bricks. Crucially, Bazalgette made the pipes far wider than his calculations required, reasoning that the city would continue to grow. The new embankments built along the Thames to house the sewers also created new roads and public gardens.</p><p><span class="para-label">E</span>The results were dramatic. Cholera largely disappeared from the parts of London served by the system; an outbreak in 1866 struck mainly an eastern district that had not yet been connected. Bazalgette’s generous design meant that the network continued to serve London well into the twenty-first century.</p><p><span class="para-label">F</span>Today, however, the system is under strain. Because rainwater and sewage share the same pipes, heavy rain causes overflows that release untreated sewage into the Thames dozens of times a year. A new ‘super sewer’, the Thames Tideway Tunnel, 25 kilometres long, was completed in 2025 to capture these overflows — a reminder that infrastructure must keep pace with the cities it serves.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–18</p><p class="qg-instr">Which paragraph, <b>A–F</b>, contains the following information? You may use any letter more than once.</p></div>
+      <div class="card" id="t4-mi"><div class="sel-row"><select class="select" id="t4-mi-14" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>14.</b> a reference to an additional benefit of the construction work</span></div><div class="sel-row"><select class="select" id="t4-mi-15" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>15.</b> an example of an incorrect belief leading to a good outcome</span></div><div class="sel-row"><select class="select" id="t4-mi-16" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>16.</b> evidence that the new system protected people from disease</span></div><div class="sel-row"><select class="select" id="t4-mi-17" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>17.</b> a description of an unusual attempt to escape a smell</span></div><div class="sel-row"><select class="select" id="t4-mi-18" data-answer="F"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>18.</b> a reason why the system needs to be extended today</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mi', 't4-mi-score')">Check answers</button>
+          <span id="t4-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 19–22</p><p class="qg-instr">Match each statement with the correct person or group, <b>A–D</b>.</p></div>
+<div class="card"><p class="prompt-label">People and groups</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; John Snow<br><b>B</b>&nbsp; Joseph Bazalgette<br><b>C</b>&nbsp; Parliament<br><b>D</b>&nbsp; most doctors of the time</p></div>
+      <div class="card" id="t4-mf"><div class="sel-row"><select class="select" id="t4-mf-19" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>19.</b> believed that disease was carried by bad air</span></div><div class="sel-row"><select class="select" id="t4-mf-20" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>20.</b> designed a system larger than was necessary at the time</span></div><div class="sel-row"><select class="select" id="t4-mf-21" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>21.</b> used a map to identify the source of an outbreak</span></div><div class="sel-row"><select class="select" id="t4-mf-22" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>22.</b> acted quickly because of fear of the smell</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mf', 't4-mf-score')">Check answers</button>
+          <span id="t4-mf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 23–26</p><p class="qg-instr">Complete the notes. Choose <b>NO MORE THAN TWO WORDS AND/OR A NUMBER</b>.</p></div>
+<div class="card" id="t4-notes1"><p class="prompt-label">London’s sewers</p><div style="line-height:2.1;"><div>• Cholera outbreak in Soho: more than (23) <input type="text" class="text-answer" id="t4-23" data-correct="600" autocomplete="off" style="width:80px;"> deaths in 1854</div><div>• Snow persuaded officials to remove a pump’s (24) <input type="text" class="text-answer" id="t4-24" data-correct="handle" autocomplete="off" style="width:100px;"></div><div>• Building materials: more than 300 million (25) <input type="text" class="text-answer" id="t4-25" data-correct="bricks" autocomplete="off" style="width:100px;"></div><div>• Thames Tideway Tunnel: (26) <input type="text" class="text-answer" id="t4-26" data-correct="25 kilometres/25 km/25km/25" autocomplete="off" style="width:130px;"> long, completed 2025</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-notes1', 't4-notes1-score')">Check answers</button>
+          <span id="t4-notes1-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 20</div>
+      <h2>Reading Passage 2 — Answer Analysis</h2>
+      <p class="task-sub">Check every answer.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Great Stink</summary>
+        <p><span class="para-label">A</span>In the summer of 1858, an unusually hot spell turned the River Thames in London into an open sewer. For decades, the city’s growing population had flushed its waste directly into the river, from which much of its drinking water was also taken. As temperatures rose, the smell became so overpowering that the newspapers named it ‘the Great Stink’. Curtains in the Houses of Parliament were soaked in chemicals in an attempt to block out the odour.</p><p><span class="para-label">B</span>The crisis was not only unpleasant but deadly. London had suffered repeated outbreaks of cholera, including one in 1854 that killed more than 600 people in the Soho district alone. At the time, most doctors believed the disease was spread by ‘miasma’, or bad air. The physician John Snow had argued otherwise: by mapping cases in Soho, he showed that they clustered around a single water pump in Broad Street, and he persuaded local officials to remove its handle. Yet his theory that cholera was carried by contaminated water was not widely accepted until years later.</p><p><span class="para-label">C</span>Ironically, it was the belief in miasma that finally prompted action. Fearing that the smell itself was dangerous, Parliament passed legislation within weeks and gave the engineer Joseph Bazalgette the funds to build a new sewer system. His plan was to intercept waste before it reached the river and carry it to outfalls east of the city.</p><p><span class="para-label">D</span>The scale of the project was immense. Over the next sixteen years, workers built around 2,100 kilometres of street sewers and 132 kilometres of main intercepting sewers, using more than 300 million bricks. Crucially, Bazalgette made the pipes far wider than his calculations required, reasoning that the city would continue to grow. The new embankments built along the Thames to house the sewers also created new roads and public gardens.</p><p><span class="para-label">E</span>The results were dramatic. Cholera largely disappeared from the parts of London served by the system; an outbreak in 1866 struck mainly an eastern district that had not yet been connected. Bazalgette’s generous design meant that the network continued to serve London well into the twenty-first century.</p><p><span class="para-label">F</span>Today, however, the system is under strain. Because rainwater and sewage share the same pipes, heavy rain causes overflows that release untreated sewage into the Thames dozens of times a year. A new ‘super sewer’, the Thames Tideway Tunnel, 25 kilometres long, was completed in 2025 to capture these overflows — a reminder that infrastructure must keep pace with the cities it serves.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">D</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">The new embankments … also created new roads and public gardens</span>.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">C</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Ironically, it was the belief in miasma that finally prompted action</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">E</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Cholera largely disappeared from the parts of London served by the system</span>.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">A</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Curtains … were soaked in chemicals</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">F</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">heavy rain causes overflows</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">D</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">most doctors believed the disease was spread by ‘miasma’, or bad air</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">made the pipes far wider than his calculations required</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">A</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">by mapping cases in Soho</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">C</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Fearing that the smell itself was dangerous, Parliament passed legislation within weeks</span>.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">600</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">killed more than 600 people</span>.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">handle</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">remove its handle</span>.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">bricks</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">more than 300 million bricks</span>.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">25 kilometres</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">25 kilometres long</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 20</div>
+      <h2>Reading Passage 3 — Universal Basic Income</h2>
+      <p class="task-sub">About <b>22 minutes</b> for Questions 27–40.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Universal Basic Income<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Should every citizen receive a regular payment from the state, with no conditions?</small></h3>
+            <p class="article-meta">Reading Passage 3 · Economics and society · 432 words</p>
+            <p><span class="para-label">A</span>The idea of a universal basic income (UBI) — a regular cash payment made by the state to every adult, regardless of income or employment — is not new. Thomas Paine proposed a version of it in 1797, and in the twentieth century it attracted supporters as different as the civil rights leader Martin Luther King and the free-market economist Milton Friedman. In recent years, the prospect of automation replacing jobs has brought the idea back into public debate.</p><p><span class="para-label">B</span>Advocates make several arguments. A basic income would provide security in an economy where work is increasingly insecure. Because it is paid to everyone, it would avoid the stigma and complexity of conditional welfare systems, which require claimants to prove that they are looking for work and can trap them in poverty: a person who takes a low-paid job may lose more in benefits than they gain in wages. A UBI, by contrast, is never withdrawn, so work always pays.</p><p><span class="para-label">C</span>Critics raise equally serious objections. The most obvious is cost. A payment large enough to live on, given to every adult, would require a substantial increase in taxation. Some economists fear that it could also be inflationary, or that it might reduce the incentive to work. Others object on principle, arguing that it is unfair to give money to the wealthy, who do not need it, and that targeted support for those in need is a more efficient use of public funds.</p><p><span class="para-label">D</span>Experiments have produced interesting but limited evidence. In Finland, a two-year trial from 2017 gave 2,000 unemployed people a monthly payment of €560 with no conditions. Participants reported better wellbeing and less stress, but their employment was only slightly higher than that of a control group. In Kenya, the charity GiveDirectly began a twelve-year programme in 2017 providing payments to thousands of villagers; early results suggest that recipients invested in businesses and livestock rather than spending the money on alcohol, as some had predicted.</p><p><span class="para-label">E</span>However, these experiments have important limitations. Most were temporary, so participants knew the payments would end, and most involved only a small group rather than an entire population. A true UBI would need to be permanent and universal, and its effects on prices, taxes and the wider economy cannot be tested in a small trial.</p><p><span class="para-label">F</span>In my view, the strongest case for a basic income is not that it would end poverty on its own, but that it would replace a welfare system which too often punishes people for working. Whether societies are willing to pay for it is, ultimately, a political rather than an economic question.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 27–31</p><p class="qg-instr">Do the statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-27">
+          <p>27. Interest in UBI is a recent development.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-27" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-27" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-27" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-28">
+          <p>28. Conditional welfare systems can discourage people from taking low-paid work.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-28" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-28" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-28" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-29">
+          <p>29. Most economists believe UBI would be inflationary.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-29" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-29" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-29" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-30">
+          <p>30. Small trials cannot show the full economic effects of a UBI.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-30" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-30" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-30" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-31">
+          <p>31. UBI would, by itself, put an end to poverty.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-31" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-31" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-31" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 32–35</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-32">
+          <p>32. Why does the writer mention Martin Luther King and Milton Friedman?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-32" data-correct="false"> A. to show that UBI is a left-wing idea</label><label><input type="radio" value="1" name="t6-mc-32" data-correct="true"> B. to show that UBI has attracted support from very different thinkers</label><label><input type="radio" value="2" name="t6-mc-32" data-correct="false"> C. to criticise both men</label><label><input type="radio" value="3" name="t6-mc-32" data-correct="false"> D. to explain how UBI began</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-33">
+          <p>33. What was the main finding of the Finnish trial?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-33" data-correct="false"> A. Employment rose sharply.</label><label><input type="radio" value="1" name="t6-mc-33" data-correct="true"> B. Wellbeing improved but employment changed little.</label><label><input type="radio" value="2" name="t6-mc-33" data-correct="false"> C. Participants spent the money on alcohol.</label><label><input type="radio" value="3" name="t6-mc-33" data-correct="false"> D. The trial was stopped early.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-34">
+          <p>34. What did early results from Kenya suggest?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-34" data-correct="false"> A. Recipients stopped working.</label><label><input type="radio" value="1" name="t6-mc-34" data-correct="true"> B. Recipients invested the money productively.</label><label><input type="radio" value="2" name="t6-mc-34" data-correct="false"> C. Prices rose rapidly.</label><label><input type="radio" value="3" name="t6-mc-34" data-correct="false"> D. The programme was too expensive.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-35">
+          <p>35. According to the writer, whether to introduce UBI is mainly</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-35" data-correct="false"> A. an economic question</label><label><input type="radio" value="1" name="t6-mc-35" data-correct="false"> B. a technical question</label><label><input type="radio" value="2" name="t6-mc-35" data-correct="true"> C. a political question</label><label><input type="radio" value="3" name="t6-mc-35" data-correct="false"> D. a question for charities</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 36–40</p><p class="qg-instr">Complete the summary using the list of words below.</p></div>
+      <div class="word-bank">stigma · withdrawn · cost · temporary · universal · reduced · targeted · profit · popular</div><div class="card" id="t6-s" style="line-height:2.7;"><p>Supporters argue that UBI would avoid the (36) <input type="text" class="text-answer" id="t6-36" data-correct="stigma" autocomplete="off" style="width:110px;"> of conditional welfare, and since it is never (37) <input type="text" class="text-answer" id="t6-37" data-correct="withdrawn" autocomplete="off" style="width:120px;">, work always pays. Opponents point to the (38) <input type="text" class="text-answer" id="t6-38" data-correct="cost" autocomplete="off" style="width:90px;"> and argue that giving money to the wealthy is unfair. Trials such as Finland’s were (39) <input type="text" class="text-answer" id="t6-39" data-correct="temporary" autocomplete="off" style="width:120px;"> and involved only a small group, whereas a real UBI would have to be permanent and (40) <input type="text" class="text-answer" id="t6-40" data-correct="universal" autocomplete="off" style="width:120px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-s', 't6-s-score')">Check answers</button>
+          <span id="t6-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 20</div>
+      <h2>Reading Passage 3 — Answer Analysis and Your Score</h2>
+      <p class="task-sub">Check Passage 3 and find your band.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Universal Basic Income</summary>
+        <p><span class="para-label">A</span>The idea of a universal basic income (UBI) — a regular cash payment made by the state to every adult, regardless of income or employment — is not new. Thomas Paine proposed a version of it in 1797, and in the twentieth century it attracted supporters as different as the civil rights leader Martin Luther King and the free-market economist Milton Friedman. In recent years, the prospect of automation replacing jobs has brought the idea back into public debate.</p><p><span class="para-label">B</span>Advocates make several arguments. A basic income would provide security in an economy where work is increasingly insecure. Because it is paid to everyone, it would avoid the stigma and complexity of conditional welfare systems, which require claimants to prove that they are looking for work and can trap them in poverty: a person who takes a low-paid job may lose more in benefits than they gain in wages. A UBI, by contrast, is never withdrawn, so work always pays.</p><p><span class="para-label">C</span>Critics raise equally serious objections. The most obvious is cost. A payment large enough to live on, given to every adult, would require a substantial increase in taxation. Some economists fear that it could also be inflationary, or that it might reduce the incentive to work. Others object on principle, arguing that it is unfair to give money to the wealthy, who do not need it, and that targeted support for those in need is a more efficient use of public funds.</p><p><span class="para-label">D</span>Experiments have produced interesting but limited evidence. In Finland, a two-year trial from 2017 gave 2,000 unemployed people a monthly payment of €560 with no conditions. Participants reported better wellbeing and less stress, but their employment was only slightly higher than that of a control group. In Kenya, the charity GiveDirectly began a twelve-year programme in 2017 providing payments to thousands of villagers; early results suggest that recipients invested in businesses and livestock rather than spending the money on alcohol, as some had predicted.</p><p><span class="para-label">E</span>However, these experiments have important limitations. Most were temporary, so participants knew the payments would end, and most involved only a small group rather than an entire population. A true UBI would need to be permanent and universal, and its effects on prices, taxes and the wider economy cannot be tested in a small trial.</p><p><span class="para-label">F</span>In my view, the strongest case for a basic income is not that it would end poverty on its own, but that it would replace a welfare system which too often punishes people for working. Whether societies are willing to pay for it is, ultimately, a political rather than an economic question.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">NO</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">is not new. Thomas Paine proposed a version of it in 1797</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">YES</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">a person who takes a low-paid job may lose more in benefits than they gain in wages</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Some economists fear</span> — no claim about most economists.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">YES</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">its effects on prices, taxes and the wider economy cannot be tested in a small trial</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">NO</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">not that it would end poverty on its own</span>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">B</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">supporters as different as</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">better wellbeing … employment was only slightly higher</span>.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">recipients invested in businesses and livestock</span>.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">C</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">a political rather than an economic question</span>.</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">stigma</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">avoid the stigma and complexity</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">withdrawn</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">A UBI, by contrast, is never withdrawn</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">cost</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">The most obvious is cost</span>.</p><p><span class="trap">Trap:</span> “targeted” describes the critics’ alternative, not their objection.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">temporary</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Most were temporary</span>.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">universal</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">would need to be permanent and universal</span>.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Academic Reading)</p><table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr><tr><td>23–26</td><td>6.0</td></tr><tr><td>27–29</td><td>6.5</td></tr><tr><td>30–32</td><td>7.0</td></tr><tr><td>33–34</td><td>7.5</td></tr><tr><td>35–36</td><td>8.0</td></tr><tr><td>37–38</td><td>8.5</td></tr><tr><td>39–40</td><td>9.0</td></tr></table></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 20</div>
+      <h2>Extra Reading 1 — How Long Does It Take to Form a Habit?</h2>
+      <p class="task-sub">An extra article (about <b>12 minutes</b>). Answer the questions, then summarise in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">How Long Does It Take to Form a Habit?</h3>
+        <p class="article-meta">Extra reading 1 · Psychology · 216 words</p>
+        <p><span class="para-label">A</span>It is often claimed that it takes twenty-one days to form a new habit. The figure appears to originate in the 1960 book <i>Psycho-Cybernetics</i> by Maxwell Maltz, a plastic surgeon, who observed that patients took ‘a minimum of about 21 days’ to adjust to changes in their appearance. Over time, ‘a minimum of’ disappeared from popular retellings.</p><p><span class="para-label">B</span>Research suggests the reality is more varied. In a 2009 study at University College London, Phillippa Lally and colleagues asked 96 volunteers to adopt a new daily behaviour, such as drinking water after breakfast or running before dinner, and to report how automatic it felt. On average, it took 66 days for the behaviour to become automatic, but the range was enormous — from 18 to 254 days. Simpler behaviours became habits faster than more demanding ones.</p><p><span class="para-label">C</span>Encouragingly, missing a single day did not significantly affect the process. What mattered most was consistency in the same context: performing the behaviour at the same time and place, after the same cue. Psychologists call this ‘context-dependent repetition’.</p><p><span class="para-label">D</span>Some researchers recommend ‘habit stacking’ — attaching a new behaviour to an existing routine, such as doing stretching exercises while the kettle boils. Others emphasise reducing friction: making the desired behaviour as easy as possible, for example by leaving running shoes by the door.</p>
+      </div>
+      <div class="card" id="t8-tf"><div class="q-item" id="t8-tf-1">
+          <p>1. Maltz claimed that habits always form in exactly 21 days.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-1" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t8-tf-1" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t8-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-2">
+          <p>2. The volunteers in Lally’s study chose behaviours such as drinking water after breakfast.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t8-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-3">
+          <p>3. Some participants took longer than eight months to form a habit.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-3" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t8-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-4">
+          <p>4. Morning behaviours became habits faster than evening ones.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t8-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-4" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-5">
+          <p>5. Missing one day meant participants had to start again.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t8-tf-5" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t8-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-6">
+          <p>6. Leaving running shoes by the door is an example of reducing friction.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-6" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t8-tf-6" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-tf', 't8-tf-score')">Check answers</button>
+          <span id="t8-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 120 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 120 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>The article challenges the popular belief that habits take 21 days to form, tracing it to a misquotation of Maxwell Maltz, who wrote of “a minimum of about 21 days”. Lally’s 2009 study found an average of 66 days, though individuals varied from 18 to 254, with simpler behaviours forming faster. Occasional lapses mattered little; what counted was repetition in a consistent context. The practical lessons are to link new behaviours to existing routines and to reduce friction. The article is a good example of how a qualified claim becomes oversimplified as it spreads.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 60 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 20</div>
+      <h2>Extra Reading 2 — The Hidden Cost of Free Apps</h2>
+      <p class="task-sub">A second extra article. Answer the questions, then summarise it in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Hidden Cost of Free Apps</h3>
+        <p class="article-meta">Extra reading 2 · Technology · 204 words</p>
+        <p><span class="para-label">A</span>Most of the apps on our phones cost nothing to download. Yet, as the saying goes, if you are not paying for the product, you are the product. Free apps typically earn money by collecting data about their users and selling advertising targeted at them.</p><p><span class="para-label">B</span>The amount of data involved can be surprising. A 2018 study by researchers at Oxford University examined nearly one million Android apps and found that the median app could share data with ten third-party companies, and around one in five could share it with more than twenty. Much of this data, such as location and browsing habits, can be combined to build detailed profiles.</p><p><span class="para-label">C</span>Companies argue that this model allows them to provide valuable services free of charge, and that most users are happy with the trade. Surveys suggest otherwise: many users say they are uncomfortable with data collection but feel they have no real choice, a phenomenon researchers call ‘digital resignation’.</p><p><span class="para-label">D</span>Regulators have begun to act. The EU’s General Data Protection Regulation, in force since 2018, requires companies to obtain consent and allows users to request the data held about them. Critics note, however, that consent forms are often so long and complex that few people read them.</p>
+      </div>
+      <div class="card" id="t9-mc"><div class="q-item" id="t9-mc-1">
+          <p>1. How do free apps typically make money?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-1" data-correct="false"> A. by charging for upgrades only</label><label><input type="radio" value="1" name="t9-mc-1" data-correct="true"> B. through data collection and targeted advertising</label><label><input type="radio" value="2" name="t9-mc-1" data-correct="false"> C. through government grants</label><label><input type="radio" value="3" name="t9-mc-1" data-correct="false"> D. by selling phones</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-2">
+          <p>2. The Oxford study found that the median app could share data with</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-2" data-correct="false"> A. one company</label><label><input type="radio" value="1" name="t9-mc-2" data-correct="true"> B. ten third-party companies</label><label><input type="radio" value="2" name="t9-mc-2" data-correct="false"> C. more than twenty companies</label><label><input type="radio" value="3" name="t9-mc-2" data-correct="false"> D. one million companies</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-3">
+          <p>3. What is “digital resignation”?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-3" data-correct="false"> A. leaving a job in technology</label><label><input type="radio" value="1" name="t9-mc-3" data-correct="true"> B. feeling uncomfortable about data collection but accepting it as unavoidable</label><label><input type="radio" value="2" name="t9-mc-3" data-correct="false"> C. deleting all apps</label><label><input type="radio" value="3" name="t9-mc-3" data-correct="false"> D. refusing to use the internet</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-4">
+          <p>4. What criticism of GDPR is mentioned?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-4" data-correct="false"> A. It does not apply in the EU.</label><label><input type="radio" value="1" name="t9-mc-4" data-correct="true"> B. Consent forms are too long and complex for most people to read.</label><label><input type="radio" value="2" name="t9-mc-4" data-correct="false"> C. It was introduced too late.</label><label><input type="radio" value="3" name="t9-mc-4" data-correct="false"> D. It bans advertising.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-5">
+          <p>5. The writer’s overall attitude is best described as</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-5" data-correct="false"> A. enthusiastic about free apps</label><label><input type="radio" value="1" name="t9-mc-5" data-correct="true"> B. concerned about the hidden costs of free apps</label><label><input type="radio" value="2" name="t9-mc-5" data-correct="false"> C. uninterested</label><label><input type="radio" value="3" name="t9-mc-5" data-correct="false"> D. opposed to all regulation</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-mc', 't9-mc-score')">Check answers</button>
+          <span id="t9-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 120 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 120 words):</p><textarea class="no-check mini-answer" id="t9-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-sum-ans"><p>The article argues that “free” apps are paid for with users’ data, which is used for targeted advertising. A 2018 Oxford study of almost a million Android apps found that the typical app could share data with ten third parties, allowing detailed profiles to be built. Although companies claim users accept this trade, many people feel uncomfortable yet powerless — “digital resignation”. The EU’s GDPR requires consent and gives users access to their data, but consent forms are often too complex to read. I think the article rightly suggests that consent is meaningless if nobody understands what they are agreeing to.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 60 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 20</div>
+      <h2>Reading Skill — Advanced Paraphrase</h2>
+      <p class="task-sub">Match the passage language to its meaning, then interpret complex sentences.</p>
+      <div class="card" id="t10-lm">
+        <div class="line-match" id="t10-lm-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. an inevitable feature</button><button type="button" class="lm-item" data-key="2">2. regarded as decay</button><button type="button" class="lm-item" data-key="3">3. overpowering</button><button type="button" class="lm-item" data-key="4">4. prompted action</button><button type="button" class="lm-item" data-key="5">5. intercept</button><button type="button" class="lm-item" data-key="6">6. keep pace with</button><button type="button" class="lm-item" data-key="7">7. trap them in poverty</button><button type="button" class="lm-item" data-key="8">8. on principle</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. too strong to bear</button><button type="button" class="lm-item" data-key="b">b. because of a basic belief</button><button type="button" class="lm-item" data-key="c">c. seen as getting worse</button><button type="button" class="lm-item" data-key="d">d. develop as fast as</button><button type="button" class="lm-item" data-key="e">e. caused people to act</button><button type="button" class="lm-item" data-key="f">f. something that cannot be avoided</button><button type="button" class="lm-item" data-key="g">g. stop before it reaches its destination</button><button type="button" class="lm-item" data-key="h">h. stop them escaping from being poor</button></div>
+          <select class="lm-hidden-select select" id="t10-lm-1" data-lm-key="1" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-5" data-lm-key="5" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-7" data-lm-key="7" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-8" data-lm-key="8" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm');">Check answers</button>
+          <span id="t10-lm-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t10-mc"><div class="q-item" id="t10-mc-1">
+          <p>1. “English, which never had such an academy, is not noticeably more ‘disordered’ than French.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-1" data-correct="false"> A. Academies make languages more orderly.</label><label><input type="radio" value="1" name="t10-mc-1" data-correct="true"> B. An academy seems to make little difference.</label><label><input type="radio" value="2" name="t10-mc-1" data-correct="false"> C. English is more disordered.</label><label><input type="radio" value="3" name="t10-mc-1" data-correct="false"> D. French has no academy.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-2">
+          <p>2. “Ironically, it was the belief in miasma that finally prompted action.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-2" data-correct="false"> A. A correct theory caused the change.</label><label><input type="radio" value="1" name="t10-mc-2" data-correct="true"> B. A wrong belief led to a good result.</label><label><input type="radio" value="2" name="t10-mc-2" data-correct="false"> C. Nobody believed in miasma.</label><label><input type="radio" value="3" name="t10-mc-2" data-correct="false"> D. Action was never taken.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-3">
+          <p>3. “…the internet has made language change more visible, not necessarily faster.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-3" data-correct="false"> A. Language now changes faster.</label><label><input type="radio" value="1" name="t10-mc-3" data-correct="true"> B. We notice change more, but it may not be faster.</label><label><input type="radio" value="2" name="t10-mc-3" data-correct="false"> C. The internet stops change.</label><label><input type="radio" value="3" name="t10-mc-3" data-correct="false"> D. Change is invisible.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-4">
+          <p>4. “…a political rather than an economic question.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-4" data-correct="true"> A. It depends mainly on what society chooses.</label><label><input type="radio" value="1" name="t10-mc-4" data-correct="false"> B. It depends mainly on economic data.</label><label><input type="radio" value="2" name="t10-mc-4" data-correct="false"> C. It is not a question.</label><label><input type="radio" value="3" name="t10-mc-4" data-correct="false"> D. Politicians oppose it.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-mc', 't10-mc-score')">Check answers</button>
+          <span id="t10-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 20</div>
+      <h2>Reading Skill — Writer’s Stance and Reference</h2>
+      <p class="task-sub">Identify the writer’s attitude and what reference words refer to.</p>
+      <div class="card" id="t11-st"><div class="sel-row"><select class="select" id="t11-st-1" data-answer="cautious claim"><option value="">—</option><option value="cautious claim">cautious claim</option><option value="comment on surprise">comment on surprise</option><option value="personal opinion">personal opinion</option><option value="reporting others">reporting others</option><option value="correction of a view">correction of a view</option></select><span><b>1.</b> “Change, it seems, is an inevitable feature of every living language.”</span></div><div class="sel-row"><select class="select" id="t11-st-2" data-answer="comment on surprise"><option value="">—</option><option value="cautious claim">cautious claim</option><option value="comment on surprise">comment on surprise</option><option value="personal opinion">personal opinion</option><option value="reporting others">reporting others</option><option value="correction of a view">correction of a view</option></select><span><b>2.</b> “Ironically, it was the belief in miasma…”</span></div><div class="sel-row"><select class="select" id="t11-st-3" data-answer="personal opinion"><option value="">—</option><option value="cautious claim">cautious claim</option><option value="comment on surprise">comment on surprise</option><option value="personal opinion">personal opinion</option><option value="reporting others">reporting others</option><option value="correction of a view">correction of a view</option></select><span><b>3.</b> “In my view, the strongest case for a basic income is…”</span></div><div class="sel-row"><select class="select" id="t11-st-4" data-answer="reporting others"><option value="">—</option><option value="cautious claim">cautious claim</option><option value="comment on surprise">comment on surprise</option><option value="personal opinion">personal opinion</option><option value="reporting others">reporting others</option><option value="correction of a view">correction of a view</option></select><span><b>4.</b> “Some economists fear that it could also be inflationary.”</span></div><div class="sel-row"><select class="select" id="t11-st-5" data-answer="correction of a view"><option value="">—</option><option value="cautious claim">cautious claim</option><option value="comment on surprise">comment on surprise</option><option value="personal opinion">personal opinion</option><option value="reporting others">reporting others</option><option value="correction of a view">correction of a view</option></select><span><b>5.</b> “If anything, the internet has made language change more visible.”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-st', 't11-st-score')">Check answers</button>
+          <span id="t11-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t11-ref"><div class="q-item" id="t11-ref-1">
+          <p>1. “Similar institutions already existed…” — similar to</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-1" data-correct="true"> A. an academy to fix the language</label><label><input type="radio" value="1" name="t11-ref-1" data-correct="false"> B. a dictionary</label><label><input type="radio" value="2" name="t11-ref-1" data-correct="false"> C. a school</label><label><input type="radio" value="3" name="t11-ref-1" data-correct="false"> D. a newspaper</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-2">
+          <p>2. “His plan was to intercept waste…” — his =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-2" data-correct="false"> A. John Snow</label><label><input type="radio" value="1" name="t11-ref-2" data-correct="true"> B. Joseph Bazalgette</label><label><input type="radio" value="2" name="t11-ref-2" data-correct="false"> C. a doctor</label><label><input type="radio" value="3" name="t11-ref-2" data-correct="false"> D. a member of Parliament</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-3">
+          <p>3. “…these experiments have important limitations.” — these experiments =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-3" data-correct="true"> A. the trials in Finland and Kenya</label><label><input type="radio" value="1" name="t11-ref-3" data-correct="false"> B. Paine’s proposals</label><label><input type="radio" value="2" name="t11-ref-3" data-correct="false"> C. welfare systems</label><label><input type="radio" value="3" name="t11-ref-3" data-correct="false"> D. surveys</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-4">
+          <p>4. “…most users are happy with <b>the trade</b>.” — the trade =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-4" data-correct="false"> A. buying phones</label><label><input type="radio" value="1" name="t11-ref-4" data-correct="true"> B. free services in exchange for data</label><label><input type="radio" value="2" name="t11-ref-4" data-correct="false"> C. selling apps</label><label><input type="radio" value="3" name="t11-ref-4" data-correct="false"> D. international trade</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-ref', 't11-ref-score')">Check answers</button>
+          <span id="t11-ref-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 20</div>
+      <h2>Reading Skill — Speed Reading Challenge</h2>
+      <p class="task-sub"><b>Part 1:</b> skim in <b>40 seconds</b>. <b>Part 2:</b> scan for six answers in <b>2 minutes</b>.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Story of the Pencil</h3>
+        <p class="article-meta">Speed reading · 280 words · 186 words</p>
+        <p><span class="para-label">A</span>For most of history, people wrote with brushes, quills or pieces of charcoal. The modern pencil became possible after 1564, when a large deposit of unusually pure graphite was discovered in Borrowdale, in the north of England. Local shepherds first used it to mark their sheep. Because graphite is soft and breaks easily, people wrapped it in string or sheepskin, and later in wood.</p><p><span class="para-label">B</span>The Borrowdale mine was so valuable that it was guarded, and graphite was sometimes smuggled. When supplies ran short in France during wars with Britain, the French engineer Nicolas-Jacques Conté found a solution in 1795: he mixed powdered graphite with clay and baked it. By changing the amount of clay, he could make pencils harder or softer — the basis of the grading system still used today.</p><p><span class="para-label">C</span>In the nineteenth century, pencil factories grew in Germany and the United States. The famous yellow colour was introduced in the 1890s, when some manufacturers painted their best pencils yellow to suggest that the graphite came from China, where the colour was associated with royalty. Today, more than fourteen billion pencils are produced every year.</p>
+      </div>
+      <div class="card" id="t12-title"><div class="q-item" id="t12-title-1">
+          <p>1. Part 1 — Best title:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-title-1" data-correct="false"> A. Graphite mining in England</label><label><input type="radio" value="1" name="t12-title-1" data-correct="true"> B. How the modern pencil developed</label><label><input type="radio" value="2" name="t12-title-1" data-correct="false"> C. Wars between Britain and France</label><label><input type="radio" value="3" name="t12-title-1" data-correct="false"> D. Why pencils are yellow</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-title', 't12-title-score')">Check answers</button>
+          <span id="t12-title-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t12-scan" style="line-height:2.4;"><p>1. In which year was the Borrowdale graphite found? <input type="text" class="text-answer" id="t12-1" data-correct="1564" autocomplete="off" style="width:90px;"></p><p>2. Who first used the graphite? local <input type="text" class="text-answer" id="t12-2" data-correct="shepherds" autocomplete="off" style="width:120px;"></p><p>3. In which year did Conté find his solution? <input type="text" class="text-answer" id="t12-3" data-correct="1795" autocomplete="off" style="width:90px;"></p><p>4. What did Conté mix with graphite? <input type="text" class="text-answer" id="t12-4" data-correct="clay" autocomplete="off" style="width:90px;"></p><p>5. When was the yellow colour introduced? the <input type="text" class="text-answer" id="t12-5" data-correct="1890s" autocomplete="off" style="width:90px;"></p><p>6. Yellow was associated in China with <input type="text" class="text-answer" id="t12-6" data-correct="royalty" autocomplete="off" style="width:110px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-scan', 't12-scan-score')">Check answers</button>
+          <span id="t12-scan-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 20</div>
+      <h2>Vocabulary — Advanced Word Forms and Collocations</h2>
+      <p class="task-sub">Complete each sentence, then choose the natural collocation.</p>
+      <div class="card" id="t13-wf" style="line-height:2.4;"><p>1. Change is an <input type="text" class="text-answer" id="t13-1" data-correct="inevitable" autocomplete="off" style="width:130px;"> feature of every living language. (avoid — cannot be)</p><p>2. Swift wanted to prevent English from being <input type="text" class="text-answer" id="t13-2" data-correct="corrupted" autocomplete="off" style="width:120px;">. (corrupt)</p><p>3. The smell was <input type="text" class="text-answer" id="t13-3" data-correct="overpowering" autocomplete="off" style="width:140px;">. (power — too strong)</p><p>4. Snow’s theory was not widely <input type="text" class="text-answer" id="t13-4" data-correct="accepted" autocomplete="off" style="width:110px;"> until years later. (accept)</p><p>5. The project’s <input type="text" class="text-answer" id="t13-5" data-correct="scale" autocomplete="off" style="width:90px;"> was immense. (large — noun meaning size)</p><p>6. Welfare systems require <input type="text" class="text-answer" id="t13-6" data-correct="claimants" autocomplete="off" style="width:120px;"> to prove they are looking for work. (claim — people)</p><p>7. A UBI could reduce the <input type="text" class="text-answer" id="t13-7" data-correct="incentive" autocomplete="off" style="width:120px;"> to work. (motivation)</p><p>8. Targeted support may be more <input type="text" class="text-answer" id="t13-8" data-correct="efficient" autocomplete="off" style="width:120px;">. (efficiency)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-wf', 't13-wf-score')">Check answers</button>
+          <span id="t13-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t13-col"><div class="q-item" id="t13-col-1">
+          <p>1. to ______ legislation</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-1" data-correct="true"> pass</label><label><input type="radio" value="1" name="t13-col-1" data-correct="false"> make through</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-2">
+          <p>2. to ______ a theory</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-2" data-correct="true"> put forward</label><label><input type="radio" value="1" name="t13-col-2" data-correct="false"> put up</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-3">
+          <p>3. to ______ objections</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-3" data-correct="true"> raise</label><label><input type="radio" value="1" name="t13-col-3" data-correct="false"> rise</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-4">
+          <p>4. to ______ pace with</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-4" data-correct="true"> keep</label><label><input type="radio" value="1" name="t13-col-4" data-correct="false"> hold</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-5">
+          <p>5. to ______ public funds</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-5" data-correct="true"> make use of</label><label><input type="radio" value="1" name="t13-col-5" data-correct="false"> take use of</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-6">
+          <p>6. to ______ a risk</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-6" data-correct="true"> run</label><label><input type="radio" value="1" name="t13-col-6" data-correct="false"> walk</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-col', 't13-col-score')">Check answers</button>
+          <span id="t13-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 20</div>
+      <h2>Grammar for Writing — Concession and Hedging</h2>
+      <p class="task-sub">Band 8 essays balance claims precisely. Choose the best option.</p>
+      <div class="card" id="t14-gr"><div class="q-item" id="t14-gr-1">
+          <p>1. ______ its cost, a basic income could simplify the welfare system.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-1" data-correct="true"> Despite</label><label><input type="radio" value="1" name="t14-gr-1" data-correct="false"> Although</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-2">
+          <p>2. ______ UBI is expensive, it may save administrative costs.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-2" data-correct="false"> Despite</label><label><input type="radio" value="1" name="t14-gr-2" data-correct="true"> While</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-3">
+          <p>3. It ______ argued that UBI would reduce the incentive to work.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-3" data-correct="true"> could be</label><label><input type="radio" value="1" name="t14-gr-3" data-correct="false"> could</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-4">
+          <p>4. There is little evidence ______ UBI makes people stop working.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-4" data-correct="true"> that</label><label><input type="radio" value="1" name="t14-gr-4" data-correct="false"> what</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-5">
+          <p>5. ______ the Finnish trial was temporary, its results must be interpreted with caution.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-5" data-correct="true"> Since</label><label><input type="radio" value="1" name="t14-gr-5" data-correct="false"> Despite</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-6">
+          <p>6. UBI is ______ a complete solution to poverty.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-6" data-correct="true"> by no means</label><label><input type="radio" value="1" name="t14-gr-6" data-correct="false"> by no way</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-7">
+          <p>7. ______ it be introduced, taxes would almost certainly rise.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-7" data-correct="true"> Should</label><label><input type="radio" value="1" name="t14-gr-7" data-correct="false"> Would</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-8">
+          <p>8. Not only ______ expensive, but it would also benefit the rich.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-8" data-correct="true"> would it be</label><label><input type="radio" value="1" name="t14-gr-8" data-correct="false"> it would be</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-gr', 't14-gr-score')">Check answers</button>
+          <span id="t14-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task15" data-task="15">
+      <div class="task-eyebrow">Task 15 of 20</div>
+      <h2>Writing Task 1 — Skills: Comparing Proportions</h2>
+      <p class="task-sub">Study the chart and practise precise comparison.</p>
+<div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Average weekly household spending, 2005 and 2025 (%)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Average weekly household spending, 2005 and 2025 (%)</text><line x1="64" y1="284.0" x2="620" y2="284.0" stroke="#e3e5ec"/><text x="56" y="288.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="250.0" x2="620" y2="250.0" stroke="#e3e5ec"/><text x="56" y="254.0" text-anchor="end" font-size="11" fill="#4b4e5c">5</text><line x1="64" y1="216.0" x2="620" y2="216.0" stroke="#e3e5ec"/><text x="56" y="220.0" text-anchor="end" font-size="11" fill="#4b4e5c">10</text><line x1="64" y1="182.0" x2="620" y2="182.0" stroke="#e3e5ec"/><text x="56" y="186.0" text-anchor="end" font-size="11" fill="#4b4e5c">15</text><line x1="64" y1="148.0" x2="620" y2="148.0" stroke="#e3e5ec"/><text x="56" y="152.0" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="114.0" x2="620" y2="114.0" stroke="#e3e5ec"/><text x="56" y="118.0" text-anchor="end" font-size="11" fill="#4b4e5c">25</text><line x1="64" y1="80.0" x2="620" y2="80.0" stroke="#e3e5ec"/><text x="56" y="84.0" text-anchor="end" font-size="11" fill="#4b4e5c">30</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">35</text><text x="14" y="165.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 165.0)">% of spending</text><rect x="77.9" y="134.4" width="30.4" height="149.6" fill="#2c6bed"/><rect x="110.3" y="73.2" width="30.4" height="210.8" fill="#d9480f"/><text x="110.3" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">housing</text><rect x="170.6" y="148.0" width="30.4" height="136.0" fill="#2c6bed"/><rect x="203.0" y="182.0" width="30.4" height="102.0" fill="#d9480f"/><text x="203.0" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">food</text><rect x="263.2" y="182.0" width="30.4" height="102.0" fill="#2c6bed"/><rect x="295.7" y="195.6" width="30.4" height="88.4" fill="#d9480f"/><text x="295.7" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">transport</text><rect x="355.9" y="188.8" width="30.4" height="95.2" fill="#2c6bed"/><rect x="388.3" y="209.2" width="30.4" height="74.8" fill="#d9480f"/><text x="388.3" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">leisure</text><rect x="448.6" y="263.6" width="30.4" height="20.4" fill="#2c6bed"/><rect x="481.0" y="222.8" width="30.4" height="61.2" fill="#d9480f"/><text x="481.0" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">technology</text><rect x="541.2" y="107.2" width="30.4" height="176.8" fill="#2c6bed"/><rect x="573.7" y="141.2" width="30.4" height="142.8" fill="#d9480f"/><text x="573.7" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">other</text><rect x="64" y="330" width="12" height="12" fill="#2c6bed"/><text x="82" y="340" font-size="12" fill="#14162b">2005</text><rect x="122.8" y="330" width="12" height="12" fill="#d9480f"/><text x="140.8" y="340" font-size="12" fill="#14162b">2025</text></svg></div>
+      <div class="card" id="t15-q"><div class="q-item" id="t15-q-1">
+          <p>1. Which category grew most in proportion?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-q-1" data-correct="true"> A. housing</label><label><input type="radio" value="1" name="t15-q-1" data-correct="false"> B. technology</label><label><input type="radio" value="2" name="t15-q-1" data-correct="false"> C. leisure</label><label><input type="radio" value="3" name="t15-q-1" data-correct="false"> D. food</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t15-q-2">
+          <p>2. Which category tripled?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-q-2" data-correct="false"> A. housing</label><label><input type="radio" value="1" name="t15-q-2" data-correct="true"> B. technology</label><label><input type="radio" value="2" name="t15-q-2" data-correct="false"> C. transport</label><label><input type="radio" value="3" name="t15-q-2" data-correct="false"> D. other</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t15-q-3">
+          <p>3. Best overview:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-q-3" data-correct="false"> A. Housing was 31% in 2025.</label><label><input type="radio" value="1" name="t15-q-3" data-correct="true"> B. Over the period, housing and technology took a larger share of spending, while every other category declined, with housing becoming by far the largest.</label><label><input type="radio" value="2" name="t15-q-3" data-correct="false"> C. People spent money.</label><label><input type="radio" value="3" name="t15-q-3" data-correct="false"> D. Food fell by 5 points.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-q', 't15-q-score')">Check answers</button>
+          <span id="t15-q-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t15-g" style="line-height:2.4;"><p>1. The share spent on housing rose <input type="text" class="text-answer" id="t15-1" data-correct="from" autocomplete="off" style="width:70px;"> 22% to 31%.</p><p>2. Spending on technology <input type="text" class="text-answer" id="t15-2" data-correct="tripled/trebled" autocomplete="off" style="width:110px;">, from 3% to 9%.</p><p>3. Food’s share fell <input type="text" class="text-answer" id="t15-3" data-correct="by" autocomplete="off" style="width:60px;"> five percentage points.</p><p>4. In 2005, housing and food accounted <input type="text" class="text-answer" id="t15-4" data-correct="for" autocomplete="off" style="width:60px;"> roughly equal proportions.</p><p>5. Transport saw only a <input type="text" class="text-answer" id="t15-5" data-correct="slight/marginal/small" autocomplete="off" style="width:110px;"> decline, from 15% to 13%.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-g', 't15-g-score')">Check answers</button>
+          <span id="t15-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task16" data-task="16">
+      <div class="task-eyebrow">Task 16 of 20</div>
+      <h2>Writing Task 1 — Your Report</h2>
+      <p class="task-sub">Write the full report. About <b>20 minutes</b>, <b>at least 150 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The bar chart below shows how households in one country divided their weekly spending in 2005 and 2025. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Average weekly household spending, 2005 and 2025 (%)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Average weekly household spending, 2005 and 2025 (%)</text><line x1="64" y1="284.0" x2="620" y2="284.0" stroke="#e3e5ec"/><text x="56" y="288.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="250.0" x2="620" y2="250.0" stroke="#e3e5ec"/><text x="56" y="254.0" text-anchor="end" font-size="11" fill="#4b4e5c">5</text><line x1="64" y1="216.0" x2="620" y2="216.0" stroke="#e3e5ec"/><text x="56" y="220.0" text-anchor="end" font-size="11" fill="#4b4e5c">10</text><line x1="64" y1="182.0" x2="620" y2="182.0" stroke="#e3e5ec"/><text x="56" y="186.0" text-anchor="end" font-size="11" fill="#4b4e5c">15</text><line x1="64" y1="148.0" x2="620" y2="148.0" stroke="#e3e5ec"/><text x="56" y="152.0" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="114.0" x2="620" y2="114.0" stroke="#e3e5ec"/><text x="56" y="118.0" text-anchor="end" font-size="11" fill="#4b4e5c">25</text><line x1="64" y1="80.0" x2="620" y2="80.0" stroke="#e3e5ec"/><text x="56" y="84.0" text-anchor="end" font-size="11" fill="#4b4e5c">30</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">35</text><text x="14" y="165.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 165.0)">% of spending</text><rect x="77.9" y="134.4" width="30.4" height="149.6" fill="#2c6bed"/><rect x="110.3" y="73.2" width="30.4" height="210.8" fill="#d9480f"/><text x="110.3" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">housing</text><rect x="170.6" y="148.0" width="30.4" height="136.0" fill="#2c6bed"/><rect x="203.0" y="182.0" width="30.4" height="102.0" fill="#d9480f"/><text x="203.0" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">food</text><rect x="263.2" y="182.0" width="30.4" height="102.0" fill="#2c6bed"/><rect x="295.7" y="195.6" width="30.4" height="88.4" fill="#d9480f"/><text x="295.7" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">transport</text><rect x="355.9" y="188.8" width="30.4" height="95.2" fill="#2c6bed"/><rect x="388.3" y="209.2" width="30.4" height="74.8" fill="#d9480f"/><text x="388.3" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">leisure</text><rect x="448.6" y="263.6" width="30.4" height="20.4" fill="#2c6bed"/><rect x="481.0" y="222.8" width="30.4" height="61.2" fill="#d9480f"/><text x="481.0" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">technology</text><rect x="541.2" y="107.2" width="30.4" height="176.8" fill="#2c6bed"/><rect x="573.7" y="141.2" width="30.4" height="142.8" fill="#d9480f"/><text x="573.7" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">other</text><rect x="64" y="330" width="12" height="12" fill="#2c6bed"/><text x="82" y="340" font-size="12" fill="#14162b">2005</text><rect x="122.8" y="330" width="12" height="12" fill="#d9480f"/><text x="140.8" y="340" font-size="12" fill="#14162b">2025</text></svg></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t16-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t16-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t16-essay-model"><div class="model-text">
+  <p>The bar chart compares the proportions of weekly household spending devoted to six categories in one country in 2005 and 2025.</p>
+  <p>Overall, housing and technology absorbed a growing share of household budgets over the twenty-year period, while all other categories declined. By 2025, housing had become by far the largest single item of expenditure.</p>
+  <p>In 2005, housing and food accounted for similar proportions of spending, at 22% and 20% respectively. Over the following two decades, however, the share spent on housing rose sharply to 31%, whereas that spent on food fell by five percentage points to 15%. The most dramatic relative change was in technology, whose share tripled from just 3% to 9%.</p>
+  <p>By contrast, the remaining categories all decreased. Transport saw only a slight decline, from 15% to 13%, and leisure fell from 14% to 11%. Miscellaneous “other” spending dropped from 26% to 21%, although it remained the second-largest category.</p>
+  <p class="alt">≈ 175 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task17" data-task="17">
+      <div class="task-eyebrow">Task 17 of 20</div>
+      <h2>Writing Task 2 — Planning</h2>
+      <p class="task-sub">Plan a nuanced position before you write.</p>
+<div class="card task-prompt"><p class="prompt-label">Writing Task 2</p><p><i>Some people believe that governments should pay every adult citizen a basic income, regardless of whether they work. To what extent do you agree or disagree?</i></p></div>
+      <div class="card" id="t17-pl"><div class="q-item" id="t17-pl-1">
+          <p>1. Which thesis is clearest and most nuanced?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-1" data-correct="false"> A. UBI is good and bad.</label><label><input type="radio" value="1" name="t17-pl-1" data-correct="true"> B. I partly agree: a basic income would correct the flaws of conditional welfare, but only a modest, carefully funded version is realistic.</label><label><input type="radio" value="2" name="t17-pl-1" data-correct="false"> C. Money is important.</label><label><input type="radio" value="3" name="t17-pl-1" data-correct="false"> D. Governments pay people.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-2">
+          <p>2. Which point best supports your position?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-2" data-correct="true"> A. Conditional benefits can make taking low-paid work financially irrational.</label><label><input type="radio" value="1" name="t17-pl-2" data-correct="false"> B. Some people are rich.</label><label><input type="radio" value="2" name="t17-pl-2" data-correct="false"> C. Finland is cold.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-3">
+          <p>3. Which counter-argument should you address?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-3" data-correct="true"> A. The cost would require large tax increases.</label><label><input type="radio" value="1" name="t17-pl-3" data-correct="false"> B. Apps are free.</label><label><input type="radio" value="2" name="t17-pl-3" data-correct="false"> C. Pencils are yellow.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-4">
+          <p>4. Best concluding move for a Band 8 essay:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-4" data-correct="false"> A. introduce a new argument</label><label><input type="radio" value="1" name="t17-pl-4" data-correct="true"> B. restate the nuanced position precisely, with its condition</label><label><input type="radio" value="2" name="t17-pl-4" data-correct="false"> C. say “it depends” only</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t17-pl', 't17-pl-score')">Check answers</button>
+          <span id="t17-pl-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write your plan: thesis + two supporting points + one counter-argument and your response.</p><textarea class="no-check mini-answer" id="t17-out-1" placeholder="Write your plan here..." style="min-height:110px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t17-out-btn">Show an example plan</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t17-out-ans"><p><b>Thesis:</b> partly agree — modest UBI replacing conditional benefits. <b>Support:</b> removes poverty trap; security in insecure labour market (automation). <b>Counter:</b> cost and fairness to the rich → recover via progressive taxation. <b>Evidence:</b> Finland (wellbeing), Kenya (investment).</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task18" data-task="18">
+      <div class="task-eyebrow">Task 18 of 20</div>
+      <h2>Writing Task 2 — Your Essay</h2>
+      <p class="task-sub">Write the full essay. About <b>40 minutes</b>, <b>at least 250 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Some people believe that governments should pay every adult citizen a basic income, regardless of whether they work. To what extent do you agree or disagree?</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t18-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t18-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t18-essay-model"><div class="model-text">
+  <p>The idea of paying every adult a regular income, whether or not they work, has moved from the margins of political debate towards the mainstream. I agree with the principle to a considerable extent, although I believe that only a modest, carefully funded version would be workable.</p>
+  <p>The strongest argument for a basic income is that it would remove the perverse incentives built into conditional welfare systems. At present, an unemployed person who accepts a low-paid or part-time job may lose more in benefits than they gain in wages, which effectively penalises them for working. A universal payment, by contrast, is never withdrawn, so any additional work always increases income. It would also spare claimants the stigma and bureaucracy of proving that they deserve support. Moreover, as automation makes employment less secure, a guaranteed income could provide a stable foundation from which people retrain or start businesses — a pattern suggested by early results in Kenya.</p>
+  <p>Nevertheless, the objections cannot be dismissed. A payment large enough to live on would be extremely expensive, and it seems wasteful to give public money to those who do not need it. These concerns, however, are less decisive than they first appear. Much of the cost could be recovered from wealthier citizens through progressive taxation, so that in practice the payment would benefit mainly those on lower incomes. A modest initial payment, replacing rather than adding to existing benefits, would also limit the burden on public finances.</p>
+  <p>In conclusion, while a full income that allowed people to live without working is probably unaffordable, I strongly support a basic payment that replaces conditional benefits, because it would reward work rather than punish it.</p>
+  <p class="alt">≈ 300 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task19" data-task="19">
+      <div class="task-eyebrow">Task 19 of 20</div>
+      <h2>Speaking Part 3 — Today’s Topics</h2>
+      <p class="task-sub">Answer each question in its own box — about <b>50 seconds</b> each. Aim for nuanced, developed answers.</p>
+      <div class="question-box" data-field="t19-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Should governments try to protect a language from change, for example from foreign words?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’m somewhat sceptical of that, because…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Why do governments often wait for a crisis before investing in infrastructure?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Part of the reason is that…”</li><li>“A case in point would be…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Would a basic income make people less motivated to work?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The evidence so far suggests…”</li><li>“It would depend largely on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Are people today too willing to give up their privacy in exchange for convenience?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“To some extent, yes, although…”</li><li>“What worries me is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task20" data-task="20">
+      <div class="task-eyebrow">Task 20 of 20</div>
+      <h2>Self-Check — Two Reading and Writing Days</h2>
+      <p class="task-sub">Compare today with Day 35.</p>
+      <div class="card"><p class="mini-q">1. Your reading scores on Day 35 and Day 36 (out of 40) and estimated bands:</p><textarea class="no-check mini-answer" id="t20-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. Which question type cost you the most marks across both days, and why?</p><textarea class="no-check mini-answer" id="t20-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Compare your Task 2 essays: is your position nuanced and consistent from introduction to conclusion? What will you improve next?</p><textarea class="no-check mini-answer" id="t20-rf-3" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t20-rf-btn">Show some guidance</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t20-rf-ans"><p>Band 8 signs: matching-information answers located by meaning, not by keywords; summaries with correct word forms from a bank; a Task 1 overview that names the key trends; a Task 2 position with a clear condition or limit, maintained throughout.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 20</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 36 of 45</div>
+    <h1>Day 36 complete! 🎉</h1>
+    <p>Day 36 done — a full reading test, two extra articles, advanced reading skills, vocabulary and grammar, Writing Task 1 and Task 2, and speaking.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t10-lm-lm');
+
+    initWritingCoach('t16-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The bar chart below shows how households in one country divided their weekly spending in 2005 and 2025. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.' });
+    initWritingCoach('t18-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Some people believe that governments should pay every adult citizen a basic income, regardless of whether they work. To what extent do you agree or disagree?' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 36, 8, 't8-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-summary"]'); if (b) initRecordControl(b, user.id, 36, 9, 't9-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-1"]'); if (b) initRecordControl(b, user.id, 36, 19, 't19-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-2"]'); if (b) initRecordControl(b, user.id, 36, 19, 't19-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-3"]'); if (b) initRecordControl(b, user.id, 36, 19, 't19-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-4"]'); if (b) initRecordControl(b, user.id, 36, 19, 't19-speaking-4', 0); }
+
+    await initTaskFlow(36, 20, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-h', 't2-h-score'); checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-s', 't2-s-score'); },
+      4: () => { checkAllAnswers('t4-mi', 't4-mi-score'); checkAllAnswers('t4-mf', 't4-mf-score'); checkAllAnswers('t4-notes1', 't4-notes1-score'); },
+      6: () => { checkAllAnswers('t6-yn', 't6-yn-score'); checkAllAnswers('t6-mc', 't6-mc-score'); checkAllAnswers('t6-s', 't6-s-score'); },
+      8: () => { checkAllAnswers('t8-tf', 't8-tf-score'); },
+      9: () => { checkAllAnswers('t9-mc', 't9-mc-score'); },
+      10: () => { checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm'); checkAllAnswers('t10-mc', 't10-mc-score'); },
+      11: () => { checkAllAnswers('t11-st', 't11-st-score'); checkAllAnswers('t11-ref', 't11-ref-score'); },
+      12: () => { checkAllAnswers('t12-title', 't12-title-score'); checkAllAnswers('t12-scan', 't12-scan-score'); },
+      13: () => { checkAllAnswers('t13-wf', 't13-wf-score'); checkAllAnswers('t13-col', 't13-col-score'); },
+      14: () => { checkAllAnswers('t14-gr', 't14-gr-score'); },
+      15: () => { checkAllAnswers('t15-q', 't15-q-score'); checkAllAnswers('t15-g', 't15-g-score'); },
+      17: () => { checkAllAnswers('t17-pl', 't17-pl-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-sum-btn', 't9-sum-ans', '[id^="t9-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t16-essay-model-btn', 't16-essay-model', '#t16-essay');
+    initGatedMistakeReveal('t17-out-btn', 't17-out-ans', '[id^="t17-out-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t18-essay-model-btn', 't18-essay-model', '#t18-essay');
+    initGatedMistakeReveal('t20-rf-btn', 't20-rf-ans', '[id^="t20-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>

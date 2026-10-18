@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 36 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 36 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 20</div>
+      <h2>Starting Off — Another Reading and Writing Day</h2>
+      <p class="task-sub">Another long <b>reading and writing day</b> — about <b>4 hours</b>, with breaks. A full reading test, two extra articles, reading skills, vocabulary and grammar, a full <b>Writing Task 1</b> (a process) and <b>Task 2</b>, and speaking.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. In a process diagram, which tense is usually best?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. past simple</label><label><input type="radio" value="1" name="t1-st-1" data-correct="true"> B. present simple passive</label><label><input type="radio" value="2" name="t1-st-1" data-correct="false"> C. future continuous</label><label><input type="radio" value="3" name="t1-st-1" data-correct="false"> D. present perfect</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. A process overview usually states</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="false"> A. your opinion of the process</label><label><input type="radio" value="1" name="t1-st-2" data-correct="true"> B. the number of stages and where the process begins and ends</label><label><input type="radio" value="2" name="t1-st-2" data-correct="false"> C. every detail of stage 3</label><label><input type="radio" value="3" name="t1-st-2" data-correct="false"> D. the history of the process</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. An “advantages outweigh disadvantages” question requires you to</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="false"> A. list advantages only</label><label><input type="radio" value="1" name="t1-st-3" data-correct="true"> B. weigh both sides and give a clear judgement</label><label><input type="radio" value="2" name="t1-st-3" data-correct="false"> C. avoid an opinion</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. describe a process</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. A sentence-endings task: the ending must fit</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="false"> A. only the grammar</label><label><input type="radio" value="1" name="t1-st-4" data-correct="false"> B. only the meaning</label><label><input type="radio" value="2" name="t1-st-4" data-correct="true"> C. both the grammar and the meaning of the passage</label><label><input type="radio" value="3" name="t1-st-4" data-correct="false"> D. the first ending you see</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. livestock</button><button type="button" class="lm-item" data-key="2">2. recolonise</button><button type="button" class="lm-item" data-key="3">3. compensation</button><button type="button" class="lm-item" data-key="4">4. predator</button><button type="button" class="lm-item" data-key="5">5. suppress</button><button type="button" class="lm-item" data-key="6">6. dementia</button><button type="button" class="lm-item" data-key="7">7. supplement</button><button type="button" class="lm-item" data-key="8">8. allocate</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. give out for a particular purpose</button><button type="button" class="lm-item" data-key="b">b. a serious illness affecting memory and thinking</button><button type="button" class="lm-item" data-key="c">c. return to live in an area again</button><button type="button" class="lm-item" data-key="d">d. stop something from being expressed</button><button type="button" class="lm-item" data-key="e">e. money paid for a loss</button><button type="button" class="lm-item" data-key="f">f. add to something to improve it</button><button type="button" class="lm-item" data-key="g">g. farm animals</button><button type="button" class="lm-item" data-key="h">h. an animal that kills and eats others</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 20</div>
+      <h2>Reading Passage 1 — The Return of the Wolf</h2>
+      <p class="task-sub"><b>The test starts now.</b> About <b>18 minutes</b> for Questions 1–13.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Return of the Wolf<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">After a century of absence, wolves are back in much of Europe. Not everyone is pleased.</small></h3>
+            <p class="article-meta">Reading Passage 1 · Wildlife · 378 words</p>
+            <p><span class="para-label">A</span>A century ago, wolves had been driven to extinction across most of western and central Europe. Hunted as a threat to livestock and people, they survived only in isolated pockets in countries such as Italy, Spain, Poland and Romania. Today, there are estimated to be more than 20,000 wolves in Europe, and they have returned to areas where they had not been seen for generations, including Germany, France and the Netherlands.</p><p><span class="para-label">B</span>The recovery has several causes. In 1979, the Bern Convention gave wolves legal protection in many European countries, and the European Union’s Habitats Directive of 1992 strengthened this. At the same time, millions of people moved from the countryside to cities, leaving behind abandoned farmland that turned into forest and scrub. Populations of deer and wild boar — the wolves’ main prey — increased dramatically.</p><p><span class="para-label">C</span>Wolves are remarkable travellers. Young wolves leave their family pack at around one or two years old to find territory of their own, and some cover hundreds of kilometres in a few weeks. One wolf fitted with a GPS collar travelled more than 1,500 kilometres from Germany to Belarus. This ability explains how wolves have been able to recolonise regions far from the populations they came from.</p><p><span class="para-label">D</span>Their return has not been welcomed by everyone. Sheep farmers in particular have suffered losses: in France, wolves kill more than 10,000 sheep a year, and the government pays compensation to affected farmers. Many farmers argue that compensation does not reflect the stress and extra work involved, and that they should be allowed to shoot wolves more freely.</p><p><span class="para-label">E</span>Conservationists point to measures that reduce attacks, such as electric fences and specially trained guard dogs, which have been used for centuries in regions where wolves never disappeared. Where such methods are adopted, losses can fall significantly. Some argue that the real challenge is not ecological but social: learning once again to live alongside a large predator.</p><p><span class="para-label">F</span>In 2023, the European Commission proposed reducing the legal protection of wolves, citing growing numbers and conflicts with farmers, and in 2024 the Bern Convention downgraded their status from ‘strictly protected’ to ‘protected’. Supporters of the change say it will allow more flexible management; critics fear it will lead to unnecessary killing of a species that has only just recovered.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. A century ago, wolves survived in parts of Italy and Spain.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. The Bern Convention came after the EU Habitats Directive.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. Deer populations in Europe have increased.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. Young wolves usually stay with their family pack for life.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-5">
+          <p>5. Most sheep farmers in France have lost animals to wolves.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-5" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-6">
+          <p>6. Guard dogs are a recent method of protecting sheep from wolves.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-6" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-6" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–10</p><p class="qg-instr">Complete the notes. Choose <b>ONE WORD AND/OR A NUMBER</b>.</p></div>
+<div class="card" id="t2-notes1"><p class="prompt-label">Wolves in Europe</p><div style="line-height:2.1;"><div>• Number today: more than (7) <input type="text" class="text-answer" id="t2-7" data-correct="20,000/20000" autocomplete="off" style="width:100px;"></div><div>• A wolf with a GPS collar travelled from Germany to (8) <input type="text" class="text-answer" id="t2-8" data-correct="belarus" autocomplete="off" style="width:120px;"></div><div>• The French government pays (9) <input type="text" class="text-answer" id="t2-9" data-correct="compensation" autocomplete="off" style="width:150px;"> to farmers</div><div>• Methods to reduce attacks: electric (10) <input type="text" class="text-answer" id="t2-10" data-correct="fences" autocomplete="off" style="width:110px;"> and guard dogs</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-notes1', 't2-notes1-score')">Check answers</button>
+          <span id="t2-notes1-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–13</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-11">
+          <p>11. Paragraph B mainly explains</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-11" data-correct="false"> A. how wolves hunt</label><label><input type="radio" value="1" name="t2-mc-11" data-correct="true"> B. why wolf numbers recovered</label><label><input type="radio" value="2" name="t2-mc-11" data-correct="false"> C. where wolves live today</label><label><input type="radio" value="3" name="t2-mc-11" data-correct="false"> D. why people moved to cities</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-12">
+          <p>12. According to Paragraph E, the real challenge is</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-12" data-correct="false"> A. finding enough prey</label><label><input type="radio" value="1" name="t2-mc-12" data-correct="false"> B. building more fences</label><label><input type="radio" value="2" name="t2-mc-12" data-correct="true"> C. learning to live with a large predator again</label><label><input type="radio" value="3" name="t2-mc-12" data-correct="false"> D. training dogs</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-13">
+          <p>13. In 2024, the Bern Convention</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-13" data-correct="false"> A. banned wolf hunting completely</label><label><input type="radio" value="1" name="t2-mc-13" data-correct="true"> B. reduced the level of protection for wolves</label><label><input type="radio" value="2" name="t2-mc-13" data-correct="false"> C. paid farmers more compensation</label><label><input type="radio" value="3" name="t2-mc-13" data-correct="false"> D. reintroduced wolves to France</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 20</div>
+      <h2>Reading Passage 1 — Answer Analysis</h2>
+      <p class="task-sub">Check the evidence for every answer.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Return of the Wolf</summary>
+        <p><span class="para-label">A</span>A century ago, wolves had been driven to extinction across most of western and central Europe. Hunted as a threat to livestock and people, they survived only in isolated pockets in countries such as Italy, Spain, Poland and Romania. Today, there are estimated to be more than 20,000 wolves in Europe, and they have returned to areas where they had not been seen for generations, including Germany, France and the Netherlands.</p><p><span class="para-label">B</span>The recovery has several causes. In 1979, the Bern Convention gave wolves legal protection in many European countries, and the European Union’s Habitats Directive of 1992 strengthened this. At the same time, millions of people moved from the countryside to cities, leaving behind abandoned farmland that turned into forest and scrub. Populations of deer and wild boar — the wolves’ main prey — increased dramatically.</p><p><span class="para-label">C</span>Wolves are remarkable travellers. Young wolves leave their family pack at around one or two years old to find territory of their own, and some cover hundreds of kilometres in a few weeks. One wolf fitted with a GPS collar travelled more than 1,500 kilometres from Germany to Belarus. This ability explains how wolves have been able to recolonise regions far from the populations they came from.</p><p><span class="para-label">D</span>Their return has not been welcomed by everyone. Sheep farmers in particular have suffered losses: in France, wolves kill more than 10,000 sheep a year, and the government pays compensation to affected farmers. Many farmers argue that compensation does not reflect the stress and extra work involved, and that they should be allowed to shoot wolves more freely.</p><p><span class="para-label">E</span>Conservationists point to measures that reduce attacks, such as electric fences and specially trained guard dogs, which have been used for centuries in regions where wolves never disappeared. Where such methods are adopted, losses can fall significantly. Some argue that the real challenge is not ecological but social: learning once again to live alongside a large predator.</p><p><span class="para-label">F</span>In 2023, the European Commission proposed reducing the legal protection of wolves, citing growing numbers and conflicts with farmers, and in 2024 the Bern Convention downgraded their status from ‘strictly protected’ to ‘protected’. Supporters of the change say it will allow more flexible management; critics fear it will lead to unnecessary killing of a species that has only just recovered.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">they survived only in isolated pockets in countries such as Italy, Spain</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">In 1979, the Bern Convention … the … Habitats Directive of 1992</span> — the Convention came first.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">TRUE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Populations of deer and wild boar … increased dramatically</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">FALSE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Young wolves leave their family pack at around one or two years old</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para D</span></summary><div class="an-body"><p>The total number of sheep killed is given, but not how many farmers are affected.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">FALSE</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">used for centuries</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">20,000</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">more than 20,000 wolves</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">Belarus</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">from Germany to Belarus</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">compensation</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">the government pays compensation</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">fences</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">electric fences</span>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">The recovery has several causes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">C</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">the real challenge is not ecological but social</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">downgraded their status from ‘strictly protected’ to ‘protected’</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 20</div>
+      <h2>Reading Passage 2 — How Bilingualism Shapes the Brain</h2>
+      <p class="task-sub">About <b>20 minutes</b> for Questions 14–26.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">How Bilingualism Shapes the Brain<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Does speaking two languages make you think better? The answer has changed more than once.</small></h3>
+            <p class="article-meta">Reading Passage 2 · Language and the brain · 313 words</p>
+            <p><span class="para-label">A</span>For much of the twentieth century, raising children with two languages was widely thought to be harmful. Early studies, many of them conducted with immigrant children who were tested only in their second language, suggested that bilingual children had lower intelligence and confused their languages. Parents were often advised to speak only the majority language at home.</p><p><span class="para-label">B</span>This view began to change in 1962, when Elizabeth Peal and Wallace Lambert in Montreal compared bilingual and monolingual children carefully matched for social background. To their surprise, the bilingual children performed better on a range of tests, particularly those requiring mental flexibility.</p><p><span class="para-label">C</span>Later research, led by the psychologist Ellen Bialystok in Toronto, proposed an explanation. Because both languages are active in a bilingual person’s mind, even when only one is being used, the brain must constantly select one and suppress the other. This regular practice, Bialystok argued, strengthens ‘executive control’ — the ability to focus attention, switch between tasks and ignore distractions.</p><p><span class="para-label">D</span>Perhaps the most striking claim concerns ageing. In a 2007 study, Bialystok and colleagues found that bilingual patients with dementia had developed symptoms around four years later, on average, than monolingual patients. Similar results have since been reported in India and elsewhere, though not in every study.</p><p><span class="para-label">E</span>In the past decade, however, the ‘bilingual advantage’ has come under serious challenge. Several large studies have found no consistent difference in executive control between bilinguals and monolinguals, and some researchers have suggested that earlier positive findings were partly the result of small samples and a tendency for journals to publish positive results.</p><p><span class="para-label">F</span>What is not disputed is that speaking two languages brings obvious social, cultural and economic benefits, and that there is no evidence it harms children’s development. The current debate concerns whether bilingualism also improves general thinking skills — a question that may depend on how, when and how often both languages are used.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–19</p><p class="qg-instr">Choose the correct heading for each paragraph, <b>A–F</b>.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; A once-negative view<br><b>ii</b>&nbsp; A surprising turning point<br><b>iii</b>&nbsp; Constant mental exercise<br><b>iv</b>&nbsp; Protection in later life<br><b>v</b>&nbsp; An advantage questioned<br><b>vi</b>&nbsp; Undisputed benefits<br><b>vii</b>&nbsp; How to raise a bilingual child<br><b>viii</b>&nbsp; Languages in danger of disappearing</p></div>
+      <div class="card" id="t4-h"><div class="sel-row"><select class="select" id="t4-h-14" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>14.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t4-h-15" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>15.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t4-h-16" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>16.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t4-h-17" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>17.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t4-h-18" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>18.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t4-h-19" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>19.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-h', 't4-h-score')">Check answers</button>
+          <span id="t4-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 20–23</p><p class="qg-instr">Complete each sentence with the correct ending, <b>A–F</b>.</p></div>
+<div class="card"><p class="prompt-label">Endings</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; were tested only in their second language.<br><b>B</b>&nbsp; performed better on tasks requiring mental flexibility.<br><b>C</b>&nbsp; constantly choose one language and block the other.<br><b>D</b>&nbsp; partly resulted from small samples.<br><b>E</b>&nbsp; developed dementia earlier than monolinguals.<br><b>F</b>&nbsp; should speak only the majority language.</p></div>
+      <div class="card" id="t4-se"><div class="sel-row"><select class="select" id="t4-se-20" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>20.</b> Many immigrant children in early studies</span></div><div class="sel-row"><select class="select" id="t4-se-21" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>21.</b> The bilingual children in the 1962 study</span></div><div class="sel-row"><select class="select" id="t4-se-22" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>22.</b> According to Bialystok, bilinguals’ brains must</span></div><div class="sel-row"><select class="select" id="t4-se-23" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>23.</b> Some researchers believe earlier positive findings</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-se', 't4-se-score')">Check answers</button>
+          <span id="t4-se-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 24–26</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t4-s" style="line-height:2.7;"><p>Bialystok argued that bilingualism strengthens executive (24) <input type="text" class="text-answer" id="t4-24" data-correct="control" autocomplete="off" style="width:110px;">. In a 2007 study, bilingual patients with (25) <input type="text" class="text-answer" id="t4-25" data-correct="dementia" autocomplete="off" style="width:120px;"> developed symptoms about four years later on average, and similar results were later reported in (26) <input type="text" class="text-answer" id="t4-26" data-correct="india" autocomplete="off" style="width:100px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-s', 't4-s-score')">Check answers</button>
+          <span id="t4-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 20</div>
+      <h2>Reading Passage 2 — Answer Analysis</h2>
+      <p class="task-sub">Check every answer.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — How Bilingualism Shapes the Brain</summary>
+        <p><span class="para-label">A</span>For much of the twentieth century, raising children with two languages was widely thought to be harmful. Early studies, many of them conducted with immigrant children who were tested only in their second language, suggested that bilingual children had lower intelligence and confused their languages. Parents were often advised to speak only the majority language at home.</p><p><span class="para-label">B</span>This view began to change in 1962, when Elizabeth Peal and Wallace Lambert in Montreal compared bilingual and monolingual children carefully matched for social background. To their surprise, the bilingual children performed better on a range of tests, particularly those requiring mental flexibility.</p><p><span class="para-label">C</span>Later research, led by the psychologist Ellen Bialystok in Toronto, proposed an explanation. Because both languages are active in a bilingual person’s mind, even when only one is being used, the brain must constantly select one and suppress the other. This regular practice, Bialystok argued, strengthens ‘executive control’ — the ability to focus attention, switch between tasks and ignore distractions.</p><p><span class="para-label">D</span>Perhaps the most striking claim concerns ageing. In a 2007 study, Bialystok and colleagues found that bilingual patients with dementia had developed symptoms around four years later, on average, than monolingual patients. Similar results have since been reported in India and elsewhere, though not in every study.</p><p><span class="para-label">E</span>In the past decade, however, the ‘bilingual advantage’ has come under serious challenge. Several large studies have found no consistent difference in executive control between bilinguals and monolinguals, and some researchers have suggested that earlier positive findings were partly the result of small samples and a tendency for journals to publish positive results.</p><p><span class="para-label">F</span>What is not disputed is that speaking two languages brings obvious social, cultural and economic benefits, and that there is no evidence it harms children’s development. The current debate concerns whether bilingualism also improves general thinking skills — a question that may depend on how, when and how often both languages are used.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">i</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">raising children with two languages was widely thought to be harmful</span>.</p><p><span class="trap">Trap:</span> vii — parents’ advice is mentioned, but the paragraph is about a past belief.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">ii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">This view began to change in 1962 … To their surprise</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">iii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">the brain must constantly select one and suppress the other. This regular practice</span>.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">iv</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">bilingual patients with dementia had developed symptoms around four years later</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">v</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">the ‘bilingual advantage’ has come under serious challenge</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">vi</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">What is not disputed</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">A</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">tested only in their second language</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">particularly those requiring mental flexibility</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">C</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">constantly select one and suppress the other</span>.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">D</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">partly the result of small samples</span>.</p><p><span class="trap">Trap:</span> E reverses the dementia finding.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">control</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">strengthens ‘executive control’</span>.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">dementia</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">bilingual patients with dementia</span>.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">India</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Similar results have since been reported in India</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 20</div>
+      <h2>Reading Passage 3 — The Gig Economy</h2>
+      <p class="task-sub">About <b>22 minutes</b> for Questions 27–40.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Gig Economy<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Apps have changed the way millions of people work. Is it freedom or insecurity?</small></h3>
+            <p class="article-meta">Reading Passage 3 · Work and technology · 313 words</p>
+            <p><span class="para-label">A</span>Over the past fifteen years, digital platforms such as Uber, Deliveroo and Upwork have transformed the way millions of people work. Rather than being employed by a company, ‘gig workers’ accept individual tasks — a taxi ride, a food delivery, a design project — through an app, and are paid for each piece of work.</p><p><span class="para-label">B</span>Estimates of the size of the gig economy vary widely, partly because many people use platforms only occasionally to supplement other income. The International Labour Organization has estimated that the number of online platforms grew five-fold between 2010 and 2020, and surveys in Britain suggest that around one in seven adults has done some platform work.</p><p><span class="para-label">C</span>For many workers, the main attraction is flexibility. Students, parents and people with other jobs can choose when and how much to work, and for some, platforms provide an income that would otherwise be unavailable. Platforms themselves argue that they create opportunities and make services cheaper and more convenient for customers.</p><p><span class="para-label">D</span>Critics, however, highlight a lack of security. Because gig workers are usually classified as self-employed, they are not entitled to minimum wages, sick pay or holiday pay in many countries, and their earnings can be unpredictable. Algorithms that allocate work and rate performance can also deactivate accounts with little explanation.</p><p><span class="para-label">E</span>Courts and governments have begun to respond. In 2021, the UK Supreme Court ruled that Uber drivers should be treated as ‘workers’, entitled to the minimum wage and holiday pay, and in 2024 the European Union adopted a directive intended to clarify the employment status of platform workers and increase transparency about algorithms.</p><p><span class="para-label">F</span>In my view, the gig economy is neither the liberation its promoters claim nor the exploitation its harshest critics describe. Flexibility is genuinely valuable, but it should not require workers to give up basic protections. The challenge for regulators is to preserve the first while guaranteeing the second.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 27–30</p><p class="qg-instr">Match each statement with the correct organisation or group, <b>A–D</b>.</p></div>
+<div class="card"><p class="prompt-label">Organisations and groups</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; the International Labour Organization<br><b>B</b>&nbsp; the UK Supreme Court<br><b>C</b>&nbsp; the European Union<br><b>D</b>&nbsp; platforms</p></div>
+      <div class="card" id="t6-mf"><div class="sel-row"><select class="select" id="t6-mf-27" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>27.</b> ruled that a group of drivers are entitled to holiday pay</span></div><div class="sel-row"><select class="select" id="t6-mf-28" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>28.</b> claim that they make services more convenient</span></div><div class="sel-row"><select class="select" id="t6-mf-29" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>29.</b> reported a large increase in the number of online platforms</span></div><div class="sel-row"><select class="select" id="t6-mf-30" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>30.</b> aims to make the use of algorithms more transparent</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mf', 't6-mf-score')">Check answers</button>
+          <span id="t6-mf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 31–35</p><p class="qg-instr">Do the statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-31">
+          <p>31. The gig economy offers workers complete freedom.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-31" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-31" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-31" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-32">
+          <p>32. Flexibility is genuinely valuable to workers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-32" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-32" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-32" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-33">
+          <p>33. Gig workers earn more on average than employees.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-33" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-33" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-33" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-34">
+          <p>34. Workers should keep basic protections while enjoying flexibility.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-34" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-34" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-34" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-35">
+          <p>35. Most gig workers are students.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-35" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-35" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-35" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 36–38</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-36">
+          <p>36. Why do estimates of the gig economy vary?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-36" data-correct="false"> A. Platforms keep their data secret.</label><label><input type="radio" value="1" name="t6-mc-36" data-correct="true"> B. Many people use platforms only occasionally.</label><label><input type="radio" value="2" name="t6-mc-36" data-correct="false"> C. Governments do not count workers.</label><label><input type="radio" value="3" name="t6-mc-36" data-correct="false"> D. The economy is shrinking.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-37">
+          <p>37. What problem with algorithms is mentioned?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-37" data-correct="false"> A. They pay workers too much.</label><label><input type="radio" value="1" name="t6-mc-37" data-correct="true"> B. They can deactivate accounts with little explanation.</label><label><input type="radio" value="2" name="t6-mc-37" data-correct="false"> C. They are too slow.</label><label><input type="radio" value="3" name="t6-mc-37" data-correct="false"> D. They are illegal.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-38">
+          <p>38. What did the EU do in 2024?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-38" data-correct="false"> A. banned gig work</label><label><input type="radio" value="1" name="t6-mc-38" data-correct="true"> B. adopted a directive on platform workers</label><label><input type="radio" value="2" name="t6-mc-38" data-correct="false"> C. took Uber to court</label><label><input type="radio" value="3" name="t6-mc-38" data-correct="false"> D. set a European minimum wage</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 39–40</p><p class="qg-instr">Complete the sentences. Choose <b>NO MORE THAN TWO WORDS AND/OR A NUMBER</b>.</p></div>
+      <div class="card" id="t6-sc" style="line-height:2.4;"><p>39. Around one in <input type="text" class="text-answer" id="t6-39" data-correct="seven/7" autocomplete="off" style="width:90px;"> British adults has done some platform work.</p><p>40. Gig workers are usually classified as <input type="text" class="text-answer" id="t6-40" data-correct="self-employed/self employed" autocomplete="off" style="width:150px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-sc', 't6-sc-score')">Check answers</button>
+          <span id="t6-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 20</div>
+      <h2>Reading Passage 3 — Answer Analysis and Your Score</h2>
+      <p class="task-sub">Check Passage 3 and find your band.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Gig Economy</summary>
+        <p><span class="para-label">A</span>Over the past fifteen years, digital platforms such as Uber, Deliveroo and Upwork have transformed the way millions of people work. Rather than being employed by a company, ‘gig workers’ accept individual tasks — a taxi ride, a food delivery, a design project — through an app, and are paid for each piece of work.</p><p><span class="para-label">B</span>Estimates of the size of the gig economy vary widely, partly because many people use platforms only occasionally to supplement other income. The International Labour Organization has estimated that the number of online platforms grew five-fold between 2010 and 2020, and surveys in Britain suggest that around one in seven adults has done some platform work.</p><p><span class="para-label">C</span>For many workers, the main attraction is flexibility. Students, parents and people with other jobs can choose when and how much to work, and for some, platforms provide an income that would otherwise be unavailable. Platforms themselves argue that they create opportunities and make services cheaper and more convenient for customers.</p><p><span class="para-label">D</span>Critics, however, highlight a lack of security. Because gig workers are usually classified as self-employed, they are not entitled to minimum wages, sick pay or holiday pay in many countries, and their earnings can be unpredictable. Algorithms that allocate work and rate performance can also deactivate accounts with little explanation.</p><p><span class="para-label">E</span>Courts and governments have begun to respond. In 2021, the UK Supreme Court ruled that Uber drivers should be treated as ‘workers’, entitled to the minimum wage and holiday pay, and in 2024 the European Union adopted a directive intended to clarify the employment status of platform workers and increase transparency about algorithms.</p><p><span class="para-label">F</span>In my view, the gig economy is neither the liberation its promoters claim nor the exploitation its harshest critics describe. Flexibility is genuinely valuable, but it should not require workers to give up basic protections. The challenge for regulators is to preserve the first while guaranteeing the second.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">B</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">the UK Supreme Court ruled that Uber drivers … entitled to the minimum wage and holiday pay</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">D</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Platforms themselves argue that they … make services cheaper and more convenient</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">A</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">the number of online platforms grew five-fold</span>.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">C</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">increase transparency about algorithms</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">NO</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">neither the liberation its promoters claim</span>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Flexibility is genuinely valuable</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>Earnings are described as unpredictable, but never compared with employees’.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">it should not require workers to give up basic protections</span>.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para C</span></summary><div class="an-body"><p>Students are one group mentioned; no proportions are given.</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">many people use platforms only occasionally</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">can also deactivate accounts with little explanation</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">B</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">adopted a directive intended to clarify the employment status</span>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">seven</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">around one in seven adults</span>.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">self-employed</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">usually classified as self-employed</span>.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Academic Reading)</p><table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr><tr><td>15–18</td><td>5.0</td></tr><tr><td>19–22</td><td>5.5</td></tr><tr><td>23–26</td><td>6.0</td></tr><tr><td>27–29</td><td>6.5</td></tr><tr><td>30–32</td><td>7.0</td></tr><tr><td>33–34</td><td>7.5</td></tr><tr><td>35+</td><td>8.0+</td></tr></table></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 20</div>
+      <h2>Extra Reading 1 — How Long Does It Take to Form a Habit?</h2>
+      <p class="task-sub">An extra article (about <b>15 minutes</b>). Answer the questions, then summarise in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">How Long Does It Take to Form a Habit?</h3>
+        <p class="article-meta">Extra reading 1 · Psychology · 216 words</p>
+        <p><span class="para-label">A</span>It is often claimed that it takes twenty-one days to form a new habit. The figure appears to originate in the 1960 book <i>Psycho-Cybernetics</i> by Maxwell Maltz, a plastic surgeon, who observed that patients took ‘a minimum of about 21 days’ to adjust to changes in their appearance. Over time, ‘a minimum of’ disappeared from popular retellings.</p><p><span class="para-label">B</span>Research suggests the reality is more varied. In a 2009 study at University College London, Phillippa Lally and colleagues asked 96 volunteers to adopt a new daily behaviour, such as drinking water after breakfast or running before dinner, and to report how automatic it felt. On average, it took 66 days for the behaviour to become automatic, but the range was enormous — from 18 to 254 days. Simpler behaviours became habits faster than more demanding ones.</p><p><span class="para-label">C</span>Encouragingly, missing a single day did not significantly affect the process. What mattered most was consistency in the same context: performing the behaviour at the same time and place, after the same cue. Psychologists call this ‘context-dependent repetition’.</p><p><span class="para-label">D</span>Some researchers recommend ‘habit stacking’ — attaching a new behaviour to an existing routine, such as doing stretching exercises while the kettle boils. Others emphasise reducing friction: making the desired behaviour as easy as possible, for example by leaving running shoes by the door.</p>
+      </div>
+      <div class="card" id="t8-mc"><div class="q-item" id="t8-mc-1">
+          <p>1. Where does the “21 days” idea seem to come from?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-1" data-correct="false"> A. a 2009 study</label><label><input type="radio" value="1" name="t8-mc-1" data-correct="true"> B. a 1960 book by a plastic surgeon</label><label><input type="radio" value="2" name="t8-mc-1" data-correct="false"> C. a university experiment with 96 volunteers</label><label><input type="radio" value="3" name="t8-mc-1" data-correct="false"> D. a sports coach</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-2">
+          <p>2. In Lally’s study, how long did it take on average for a behaviour to become automatic?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-2" data-correct="false"> A. 18 days</label><label><input type="radio" value="1" name="t8-mc-2" data-correct="false"> B. 21 days</label><label><input type="radio" value="2" name="t8-mc-2" data-correct="true"> C. 66 days</label><label><input type="radio" value="3" name="t8-mc-2" data-correct="false"> D. 254 days</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-3">
+          <p>3. Which behaviours became habits faster?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-3" data-correct="false"> A. more demanding ones</label><label><input type="radio" value="1" name="t8-mc-3" data-correct="true"> B. simpler ones</label><label><input type="radio" value="2" name="t8-mc-3" data-correct="false"> C. evening ones</label><label><input type="radio" value="3" name="t8-mc-3" data-correct="false"> D. none</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-4">
+          <p>4. What happened when people missed a single day?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-4" data-correct="false"> A. They had to start again.</label><label><input type="radio" value="1" name="t8-mc-4" data-correct="true"> B. It did not significantly affect the process.</label><label><input type="radio" value="2" name="t8-mc-4" data-correct="false"> C. It took twice as long.</label><label><input type="radio" value="3" name="t8-mc-4" data-correct="false"> D. They gave up.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-5">
+          <p>5. What is “habit stacking”?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-5" data-correct="false"> A. doing several new habits at once</label><label><input type="radio" value="1" name="t8-mc-5" data-correct="true"> B. attaching a new behaviour to an existing routine</label><label><input type="radio" value="2" name="t8-mc-5" data-correct="false"> C. stopping bad habits</label><label><input type="radio" value="3" name="t8-mc-5" data-correct="false"> D. writing habits down</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-mc', 't8-mc-score')">Check answers</button>
+          <span id="t8-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 100 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 100 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>The article questions the popular claim that a habit forms in 21 days. The figure seems to come from a 1960 book by Maxwell Maltz, who actually wrote “a minimum of about 21 days”. A 2009 study at University College London found that it took 66 days on average for a new daily behaviour to become automatic, with a huge range from 18 to 254 days, and simpler behaviours were quicker. Missing one day did not matter much; consistency in the same context was more important. Researchers recommend attaching new behaviours to existing routines and making them as easy as possible. I found the advice practical and realistic.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 45 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 20</div>
+      <h2>Extra Reading 2 — Roads Made of Plastic</h2>
+      <p class="task-sub">A second extra article. Complete the sentences, then summarise it in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Roads Made of Plastic</h3>
+        <p class="article-meta">Extra reading 2 · Environment · 185 words</p>
+        <p><span class="para-label">A</span>Every year, millions of tonnes of plastic waste end up in landfill or in the oceans. One idea for putting some of it to use is to mix it into the materials used to build roads.</p><p><span class="para-label">B</span>The technique was pioneered in India by Rajagopalan Vasudevan, a chemistry professor in Madurai, who in the early 2000s developed a method of shredding plastic bags and bottles, melting them and coating stones with the plastic before adding bitumen, the black material that binds road surfaces together. Since then, more than 100,000 kilometres of roads in India have reportedly been built using the method.</p><p><span class="para-label">C</span>Supporters say plastic roads are cheaper, use waste that would otherwise be burned or dumped, and may resist water damage and potholes better than conventional roads. Trials have also taken place in the Netherlands, Britain and Ghana.</p><p><span class="para-label">D</span>However, scientists warn that the long-term effects are not yet fully understood. As roads wear down, they may release microplastics into soil and water, and the plastic used cannot easily be recycled again. Critics argue that the priority should be to reduce plastic production in the first place.</p>
+      </div>
+      <div class="card" id="t9-sc" style="line-height:2.4;"><p class="example-q" style="margin:0 0 6px;">Write <b>ONE WORD ONLY</b> from the article.</p><p>1. Vasudevan worked in the Indian city of <input type="text" class="text-answer" id="t9-1" data-correct="madurai" autocomplete="off" style="width:120px;">.</p><p>2. Melted plastic is used to coat <input type="text" class="text-answer" id="t9-2" data-correct="stones" autocomplete="off" style="width:110px;"> before bitumen is added.</p><p>3. Bitumen is the black material that <input type="text" class="text-answer" id="t9-3" data-correct="binds" autocomplete="off" style="width:100px;"> road surfaces together.</p><p>4. Plastic roads may resist water damage and <input type="text" class="text-answer" id="t9-4" data-correct="potholes" autocomplete="off" style="width:120px;">.</p><p>5. As roads wear down, they may release <input type="text" class="text-answer" id="t9-5" data-correct="microplastics" autocomplete="off" style="width:140px;"> into soil and water.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-sc', 't9-sc-score')">Check answers</button>
+          <span id="t9-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 100 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 100 words):</p><textarea class="no-check mini-answer" id="t9-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-sum-ans"><p>The article describes the idea of building roads with plastic waste. The technique was developed in India in the early 2000s by Rajagopalan Vasudevan, who coated stones with melted plastic before adding bitumen, and over 100,000 kilometres of Indian roads have reportedly used the method. Supporters say the roads are cheaper, reuse waste and may resist water damage and potholes, and trials have taken place in several other countries. However, scientists warn that worn roads may release microplastics and that the plastic cannot easily be recycled again, so critics believe reducing plastic production should be the priority. I agree that this is a useful but limited solution.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 45 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 20</div>
+      <h2>Reading Skill — Paraphrase</h2>
+      <p class="task-sub">Match the question language to the passage language, then choose the closest meaning.</p>
+      <div class="card" id="t10-lm">
+        <div class="line-match" id="t10-lm-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. drove to extinction</button><button type="button" class="lm-item" data-key="2">2. isolated pockets</button><button type="button" class="lm-item" data-key="3">3. downgraded</button><button type="button" class="lm-item" data-key="4">4. not disputed</button><button type="button" class="lm-item" data-key="5">5. five-fold</button><button type="button" class="lm-item" data-key="6">6. supplement other income</button><button type="button" class="lm-item" data-key="7">7. deactivate</button><button type="button" class="lm-item" data-key="8">8. harshest critics</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. reduced in level</button><button type="button" class="lm-item" data-key="b">b. strongest opponents</button><button type="button" class="lm-item" data-key="c">c. small separate areas</button><button type="button" class="lm-item" data-key="d">d. add to money from elsewhere</button><button type="button" class="lm-item" data-key="e">e. accepted by everyone</button><button type="button" class="lm-item" data-key="f">f. killed every last one</button><button type="button" class="lm-item" data-key="g">g. five times</button><button type="button" class="lm-item" data-key="h">h. switch off</button></div>
+          <select class="lm-hidden-select select" id="t10-lm-1" data-lm-key="1" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-5" data-lm-key="5" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-7" data-lm-key="7" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-8" data-lm-key="8" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm');">Check answers</button>
+          <span id="t10-lm-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t10-mc"><div class="q-item" id="t10-mc-1">
+          <p>1. “Their return has not been welcomed by everyone.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-1" data-correct="false"> A. Everyone is happy wolves are back.</label><label><input type="radio" value="1" name="t10-mc-1" data-correct="true"> B. Some people are unhappy that wolves are back.</label><label><input type="radio" value="2" name="t10-mc-1" data-correct="false"> C. Nobody noticed the wolves.</label><label><input type="radio" value="3" name="t10-mc-1" data-correct="false"> D. Wolves did not return.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-2">
+          <p>2. “…has come under serious challenge.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-2" data-correct="true"> A. has been strongly questioned</label><label><input type="radio" value="1" name="t10-mc-2" data-correct="false"> B. has been proved</label><label><input type="radio" value="2" name="t10-mc-2" data-correct="false"> C. has been forgotten</label><label><input type="radio" value="3" name="t10-mc-2" data-correct="false"> D. has become popular</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-3">
+          <p>3. “…neither the liberation its promoters claim nor the exploitation its harshest critics describe.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-3" data-correct="false"> A. completely positive</label><label><input type="radio" value="1" name="t10-mc-3" data-correct="false"> B. completely negative</label><label><input type="radio" value="2" name="t10-mc-3" data-correct="true"> C. between the two extremes</label><label><input type="radio" value="3" name="t10-mc-3" data-correct="false"> D. not important</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-4">
+          <p>4. “…a question that may depend on how, when and how often both languages are used.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-4" data-correct="false"> A. The answer is simple.</label><label><input type="radio" value="1" name="t10-mc-4" data-correct="true"> B. The answer may vary with how the languages are used.</label><label><input type="radio" value="2" name="t10-mc-4" data-correct="false"> C. Nobody uses two languages.</label><label><input type="radio" value="3" name="t10-mc-4" data-correct="false"> D. The question has been answered.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-mc', 't10-mc-score')">Check answers</button>
+          <span id="t10-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 20</div>
+      <h2>Reading Skill — Linking and Reference</h2>
+      <p class="task-sub">Identify linking functions and reference words.</p>
+      <div class="card" id="t11-fn"><div class="sel-row"><select class="select" id="t11-fn-1" data-answer="addition"><option value="">—</option><option value="addition">addition</option><option value="result">result</option><option value="contrast">contrast</option><option value="example">example</option><option value="reason">reason</option></select><span><b>1.</b> “<u>At the same time</u>, millions of people moved from the countryside.”</span></div><div class="sel-row"><select class="select" id="t11-fn-2" data-answer="result"><option value="">—</option><option value="addition">addition</option><option value="result">result</option><option value="contrast">contrast</option><option value="example">example</option><option value="reason">reason</option></select><span><b>2.</b> “This ability <u>explains</u> how wolves have been able to recolonise…”</span></div><div class="sel-row"><select class="select" id="t11-fn-3" data-answer="contrast"><option value="">—</option><option value="addition">addition</option><option value="result">result</option><option value="contrast">contrast</option><option value="example">example</option><option value="reason">reason</option></select><span><b>3.</b> “Critics, <u>however</u>, highlight a lack of security.”</span></div><div class="sel-row"><select class="select" id="t11-fn-4" data-answer="example"><option value="">—</option><option value="addition">addition</option><option value="result">result</option><option value="contrast">contrast</option><option value="example">example</option><option value="reason">reason</option></select><span><b>4.</b> “…such as electric fences and specially trained guard dogs.”</span></div><div class="sel-row"><select class="select" id="t11-fn-5" data-answer="reason"><option value="">—</option><option value="addition">addition</option><option value="result">result</option><option value="contrast">contrast</option><option value="example">example</option><option value="reason">reason</option></select><span><b>5.</b> “<u>Because</u> gig workers are usually classified as self-employed…”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-fn', 't11-fn-score')">Check answers</button>
+          <span id="t11-fn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t11-ref"><div class="q-item" id="t11-ref-1">
+          <p>1. “…Habitats Directive of 1992 strengthened <b>this</b>.” — <b>this</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-1" data-correct="true"> A. the legal protection of wolves</label><label><input type="radio" value="1" name="t11-ref-1" data-correct="false"> B. farmland</label><label><input type="radio" value="2" name="t11-ref-1" data-correct="false"> C. the deer population</label><label><input type="radio" value="3" name="t11-ref-1" data-correct="false"> D. the Directive</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-2">
+          <p>2. “<b>This ability</b> explains how wolves have been able to recolonise…” — <b>this ability</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-2" data-correct="false"> A. hunting deer</label><label><input type="radio" value="1" name="t11-ref-2" data-correct="true"> B. travelling long distances</label><label><input type="radio" value="2" name="t11-ref-2" data-correct="false"> C. avoiding farmers</label><label><input type="radio" value="3" name="t11-ref-2" data-correct="false"> D. living in packs</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-3">
+          <p>3. “…preserve <b>the first</b> while guaranteeing <b>the second</b>.” — the first / the second =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-3" data-correct="false"> A. algorithms / courts</label><label><input type="radio" value="1" name="t11-ref-3" data-correct="true"> B. flexibility / basic protections</label><label><input type="radio" value="2" name="t11-ref-3" data-correct="false"> C. Uber / Deliveroo</label><label><input type="radio" value="3" name="t11-ref-3" data-correct="false"> D. wages / holidays</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-4">
+          <p>4. “Similar results have since been reported…” — the results show that</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-4" data-correct="true"> A. bilinguals develop dementia symptoms later</label><label><input type="radio" value="1" name="t11-ref-4" data-correct="false"> B. bilingual children are confused</label><label><input type="radio" value="2" name="t11-ref-4" data-correct="false"> C. dementia is rare</label><label><input type="radio" value="3" name="t11-ref-4" data-correct="false"> D. Indian patients are monolingual</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-ref', 't11-ref-score')">Check answers</button>
+          <span id="t11-ref-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 20</div>
+      <h2>Reading Skill — Speed Reading Challenge</h2>
+      <p class="task-sub"><b>Part 1:</b> skim in <b>50 seconds</b>. <b>Part 2:</b> scan for six answers in <b>2½ minutes</b>.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Story of the Pencil</h3>
+        <p class="article-meta">Speed reading · 280 words · 186 words</p>
+        <p><span class="para-label">A</span>For most of history, people wrote with brushes, quills or pieces of charcoal. The modern pencil became possible after 1564, when a large deposit of unusually pure graphite was discovered in Borrowdale, in the north of England. Local shepherds first used it to mark their sheep. Because graphite is soft and breaks easily, people wrapped it in string or sheepskin, and later in wood.</p><p><span class="para-label">B</span>The Borrowdale mine was so valuable that it was guarded, and graphite was sometimes smuggled. When supplies ran short in France during wars with Britain, the French engineer Nicolas-Jacques Conté found a solution in 1795: he mixed powdered graphite with clay and baked it. By changing the amount of clay, he could make pencils harder or softer — the basis of the grading system still used today.</p><p><span class="para-label">C</span>In the nineteenth century, pencil factories grew in Germany and the United States. The famous yellow colour was introduced in the 1890s, when some manufacturers painted their best pencils yellow to suggest that the graphite came from China, where the colour was associated with royalty. Today, more than fourteen billion pencils are produced every year.</p>
+      </div>
+      <div class="card" id="t12-title"><div class="q-item" id="t12-title-1">
+          <p>1. Part 1 — Best title:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-title-1" data-correct="false"> A. Graphite mining in England</label><label><input type="radio" value="1" name="t12-title-1" data-correct="true"> B. How the modern pencil developed</label><label><input type="radio" value="2" name="t12-title-1" data-correct="false"> C. Wars between Britain and France</label><label><input type="radio" value="3" name="t12-title-1" data-correct="false"> D. Why pencils are yellow</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-title', 't12-title-score')">Check answers</button>
+          <span id="t12-title-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t12-scan" style="line-height:2.4;"><p>1. Where was pure graphite discovered in 1564? <input type="text" class="text-answer" id="t12-1" data-correct="borrowdale" autocomplete="off" style="width:130px;"></p><p>2. What did people first wrap graphite in? string or <input type="text" class="text-answer" id="t12-2" data-correct="sheepskin" autocomplete="off" style="width:120px;"></p><p>3. Nationality of Nicolas-Jacques Conté: <input type="text" class="text-answer" id="t12-3" data-correct="french" autocomplete="off" style="width:100px;"></p><p>4. What did Conté do to the graphite and clay mixture? He <input type="text" class="text-answer" id="t12-4" data-correct="baked" autocomplete="off" style="width:100px;"> it.</p><p>5. In which two countries did pencil factories grow in the 19th century? Germany and the <input type="text" class="text-answer" id="t12-5" data-correct="united states/us/usa" autocomplete="off" style="width:130px;"></p><p>6. Which country was the yellow colour meant to suggest? <input type="text" class="text-answer" id="t12-6" data-correct="china" autocomplete="off" style="width:100px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-scan', 't12-scan-score')">Check answers</button>
+          <span id="t12-scan-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 20</div>
+      <h2>Vocabulary — Word Families and Collocations</h2>
+      <p class="task-sub">Complete each sentence, then choose the natural collocation.</p>
+      <div class="card" id="t13-wf" style="line-height:2.4;"><p>1. The <input type="text" class="text-answer" id="t13-1" data-correct="recovery" autocomplete="off" style="width:120px;"> of wolves has several causes. (recover)</p><p>2. Wolves are remarkable <input type="text" class="text-answer" id="t13-2" data-correct="travellers/travelers" autocomplete="off" style="width:130px;">. (travel — people)</p><p>3. Bilingual children showed greater mental <input type="text" class="text-answer" id="t13-3" data-correct="flexibility" autocomplete="off" style="width:130px;">. (flexible)</p><p>4. Earnings can be <input type="text" class="text-answer" id="t13-4" data-correct="unpredictable" autocomplete="off" style="width:140px;">. (predict — negative adjective)</p><p>5. The EU wants greater <input type="text" class="text-answer" id="t13-5" data-correct="transparency" autocomplete="off" style="width:140px;"> about algorithms. (transparent)</p><p>6. Gig workers are not <input type="text" class="text-answer" id="t13-6" data-correct="entitled" autocomplete="off" style="width:110px;"> to sick pay. (entitlement)</p><p>7. Critics fear <input type="text" class="text-answer" id="t13-7" data-correct="unnecessary" autocomplete="off" style="width:130px;"> killing. (necessary — opposite)</p><p>8. There is no evidence that bilingualism is <input type="text" class="text-answer" id="t13-8" data-correct="harmful" autocomplete="off" style="width:110px;">. (harm)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-wf', 't13-wf-score')">Check answers</button>
+          <span id="t13-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t13-col"><div class="q-item" id="t13-col-1">
+          <p>1. to ______ a living</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-1" data-correct="false"> win</label><label><input type="radio" value="1" name="t13-col-1" data-correct="true"> earn</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-2">
+          <p>2. to ______ a ruling</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-2" data-correct="true"> make</label><label><input type="radio" value="1" name="t13-col-2" data-correct="false"> do</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-3">
+          <p>3. to ______ a directive</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-3" data-correct="true"> adopt</label><label><input type="radio" value="1" name="t13-col-3" data-correct="false"> adapt</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-4">
+          <p>4. to ______ a challenge</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-4" data-correct="true"> face</label><label><input type="radio" value="1" name="t13-col-4" data-correct="false"> do</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-5">
+          <p>5. to ______ a balance</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-5" data-correct="true"> strike</label><label><input type="radio" value="1" name="t13-col-5" data-correct="false"> make</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-6">
+          <p>6. to ______ income</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-6" data-correct="true"> supplement</label><label><input type="radio" value="1" name="t13-col-6" data-correct="false"> complete</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-col', 't13-col-score')">Check answers</button>
+          <span id="t13-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 20</div>
+      <h2>Grammar for Writing — The Passive and Sequencing</h2>
+      <p class="task-sub">Process descriptions need the passive and clear sequencing. Choose the correct option.</p>
+      <div class="card" id="t14-gr"><div class="q-item" id="t14-gr-1">
+          <p>1. First, plastic waste ______ from homes and businesses.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-1" data-correct="false"> collects</label><label><input type="radio" value="1" name="t14-gr-1" data-correct="true"> is collected</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-2">
+          <p>2. The plastic ______ into small pieces.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-2" data-correct="true"> is shredded</label><label><input type="radio" value="1" name="t14-gr-2" data-correct="false"> shreds</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-3">
+          <p>3. ______ the stones have been heated, they are coated with plastic.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-3" data-correct="true"> Once</label><label><input type="radio" value="1" name="t14-gr-3" data-correct="false"> Then</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-4">
+          <p>4. The mixture ______ to the construction site by lorry.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-4" data-correct="false"> transported</label><label><input type="radio" value="1" name="t14-gr-4" data-correct="true"> is transported</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-5">
+          <p>5. Finally, the road surface ______.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-5" data-correct="true"> is laid</label><label><input type="radio" value="1" name="t14-gr-5" data-correct="false"> lays</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-6">
+          <p>6. The process ______ seven stages.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-6" data-correct="true"> consists of</label><label><input type="radio" value="1" name="t14-gr-6" data-correct="false"> consists</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-7">
+          <p>7. ______ bitumen is added, the mixture is ready.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-7" data-correct="true"> After</label><label><input type="radio" value="1" name="t14-gr-7" data-correct="false"> Afterwards</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-8">
+          <p>8. In my view, the advantages of gig work ______ outweigh the disadvantages.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-8" data-correct="true"> do not</label><label><input type="radio" value="1" name="t14-gr-8" data-correct="false"> are not</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-gr', 't14-gr-score')">Check answers</button>
+          <span id="t14-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task15" data-task="15">
+      <div class="task-eyebrow">Task 15 of 20</div>
+      <h2>Writing Task 1 — Skills: Describing a Process</h2>
+      <p class="task-sub">Study the diagram and practise the language for processes.</p>
+<div class="card"><svg viewBox="0 0 722 250" class="svg-chart" role="img" aria-label="Building a road with plastic waste" style="width:100%;max-width:722px;display:block;margin:0 auto;font-family:inherit;"><defs><marker id="pa" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4b4e5c"/></marker></defs><text x="361.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Building a road with plastic waste</text><rect x="10" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="24" cy="54" r="10" fill="#2c6bed"/><text x="24" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">1</text><text x="91.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Collection</text><text x="85.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">plastic waste collected</text><rect x="194" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="208" cy="54" r="10" fill="#2c6bed"/><text x="208" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">2</text><text x="275.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Sorting</text><text x="269.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">bags & bottles separated</text><rect x="378" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="392" cy="54" r="10" fill="#2c6bed"/><text x="392" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">3</text><text x="459.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Shredding</text><text x="453.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">cut into small pieces</text><rect x="562" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="576" cy="54" r="10" fill="#2c6bed"/><text x="576" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">4</text><text x="643.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Heating stones</text><text x="637.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">stones heated to 170°C</text><rect x="562" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="576" cy="174" r="10" fill="#2c6bed"/><text x="576" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">5</text><text x="643.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Coating</text><text x="637.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">melted plastic coats stones</text><rect x="378" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="392" cy="174" r="10" fill="#2c6bed"/><text x="392" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">6</text><text x="459.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Mixing</text><text x="453.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">bitumen added</text><rect x="194" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="208" cy="174" r="10" fill="#2c6bed"/><text x="208" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">7</text><text x="275.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Transport</text><text x="269.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">taken to site by lorry</text><rect x="10" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="24" cy="174" r="10" fill="#2c6bed"/><text x="24" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">8</text><text x="91.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Laying</text><text x="85.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">spread & rolled flat</text><line x1="160" y1="77.0" x2="191" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="344" y1="77.0" x2="375" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="528" y1="77.0" x2="559" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="637.0" y1="114" x2="637.0" y2="157" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="562" y1="197.0" x2="531" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="378" y1="197.0" x2="347" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="194" y1="197.0" x2="163" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/></svg></div>
+      <div class="card" id="t15-ord"><div class="sel-row"><select class="select" id="t15-ord-1" data-answer="Collection"><option value="">—</option><option value="Collection">Collection</option><option value="Sorting">Sorting</option><option value="Heating stones">Heating stones</option><option value="Mixing">Mixing</option><option value="Laying">Laying</option></select><span><b>1.</b> Stage 1</span></div><div class="sel-row"><select class="select" id="t15-ord-2" data-answer="Heating stones"><option value="">—</option><option value="Collection">Collection</option><option value="Sorting">Sorting</option><option value="Heating stones">Heating stones</option><option value="Mixing">Mixing</option><option value="Laying">Laying</option></select><span><b>2.</b> Stage 4</span></div><div class="sel-row"><select class="select" id="t15-ord-3" data-answer="Mixing"><option value="">—</option><option value="Collection">Collection</option><option value="Sorting">Sorting</option><option value="Heating stones">Heating stones</option><option value="Mixing">Mixing</option><option value="Laying">Laying</option></select><span><b>3.</b> Stage 6</span></div><div class="sel-row"><select class="select" id="t15-ord-4" data-answer="Laying"><option value="">—</option><option value="Collection">Collection</option><option value="Sorting">Sorting</option><option value="Heating stones">Heating stones</option><option value="Mixing">Mixing</option><option value="Laying">Laying</option></select><span><b>4.</b> Stage 8</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-ord', 't15-ord-score')">Check answers</button>
+          <span id="t15-ord-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t15-g" style="line-height:2.4;"><p>1. The process <input type="text" class="text-answer" id="t15-1" data-correct="consists" autocomplete="off" style="width:110px;"> of eight stages.</p><p>2. It <input type="text" class="text-answer" id="t15-2" data-correct="begins/starts" autocomplete="off" style="width:110px;"> with the collection of plastic waste and ends with the laying of the road.</p><p>3. The plastic is <input type="text" class="text-answer" id="t15-3" data-correct="shredded" autocomplete="off" style="width:120px;"> into small pieces.</p><p>4. Stones are heated <input type="text" class="text-answer" id="t15-4" data-correct="to" autocomplete="off" style="width:60px;"> 170°C.</p><p>5. <input type="text" class="text-answer" id="t15-5" data-correct="finally/lastly" autocomplete="off" style="width:110px;">, the mixture is spread and rolled flat.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-g', 't15-g-score')">Check answers</button>
+          <span id="t15-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task16" data-task="16">
+      <div class="task-eyebrow">Task 16 of 20</div>
+      <h2>Writing Task 1 — Your Report</h2>
+      <p class="task-sub">Write the full report. About <b>20 minutes</b>, <b>at least 150 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The diagram below shows how roads can be built using plastic waste.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><svg viewBox="0 0 722 250" class="svg-chart" role="img" aria-label="Building a road with plastic waste" style="width:100%;max-width:722px;display:block;margin:0 auto;font-family:inherit;"><defs><marker id="pa" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4b4e5c"/></marker></defs><text x="361.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Building a road with plastic waste</text><rect x="10" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="24" cy="54" r="10" fill="#2c6bed"/><text x="24" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">1</text><text x="91.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Collection</text><text x="85.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">plastic waste collected</text><rect x="194" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="208" cy="54" r="10" fill="#2c6bed"/><text x="208" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">2</text><text x="275.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Sorting</text><text x="269.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">bags & bottles separated</text><rect x="378" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="392" cy="54" r="10" fill="#2c6bed"/><text x="392" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">3</text><text x="459.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Shredding</text><text x="453.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">cut into small pieces</text><rect x="562" y="40" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="576" cy="54" r="10" fill="#2c6bed"/><text x="576" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">4</text><text x="643.0" y="70" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Heating stones</text><text x="637.0" y="90" text-anchor="middle" font-size="10.5" fill="#4b4e5c">stones heated to 170°C</text><rect x="562" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="576" cy="174" r="10" fill="#2c6bed"/><text x="576" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">5</text><text x="643.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Coating</text><text x="637.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">melted plastic coats stones</text><rect x="378" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="392" cy="174" r="10" fill="#2c6bed"/><text x="392" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">6</text><text x="459.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Mixing</text><text x="453.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">bitumen added</text><rect x="194" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="208" cy="174" r="10" fill="#2c6bed"/><text x="208" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">7</text><text x="275.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Transport</text><text x="269.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">taken to site by lorry</text><rect x="10" y="160" width="150" height="74" rx="10" fill="#eef3fe" stroke="#2c6bed"/><circle cx="24" cy="174" r="10" fill="#2c6bed"/><text x="24" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">8</text><text x="91.0" y="190" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14162b">Laying</text><text x="85.0" y="210" text-anchor="middle" font-size="10.5" fill="#4b4e5c">spread & rolled flat</text><line x1="160" y1="77.0" x2="191" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="344" y1="77.0" x2="375" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="528" y1="77.0" x2="559" y2="77.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="637.0" y1="114" x2="637.0" y2="157" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="562" y1="197.0" x2="531" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="378" y1="197.0" x2="347" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/><line x1="194" y1="197.0" x2="163" y2="197.0" stroke="#4b4e5c" stroke-width="2" marker-end="url(#pa)"/></svg></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t16-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t16-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t16-essay-model"><div class="model-text">
+  <p>The diagram illustrates the process by which plastic waste is used to build roads.</p>
+  <p>Overall, there are eight stages, beginning with the collection of plastic waste and ending with the laying of the finished road surface. The process combines recycled plastic with conventional road materials.</p>
+  <p>First, plastic waste is collected, after which bags and bottles are separated from other materials. The sorted plastic is then shredded into small pieces. Meanwhile, stones are heated to a temperature of 170°C, and once they are hot, they are coated with the melted plastic.</p>
+  <p>In the next stage, bitumen is added to the coated stones and the two are mixed together. The resulting mixture is then transported by lorry to the construction site. Finally, it is spread over the road and rolled flat to form the finished surface.</p>
+  <p class="alt">≈ 150 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task17" data-task="17">
+      <div class="task-eyebrow">Task 17 of 20</div>
+      <h2>Writing Task 2 — Planning</h2>
+      <p class="task-sub">Plan before you write.</p>
+<div class="card task-prompt"><p class="prompt-label">Writing Task 2</p><p><i>More and more people are working in the “gig economy”, doing short-term jobs through apps instead of having permanent employment. Do the advantages of this development outweigh the disadvantages?</i></p></div>
+      <div class="card" id="t17-pl"><div class="q-item" id="t17-pl-1">
+          <p>1. What must your essay do?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-1" data-correct="false"> A. describe the history of apps</label><label><input type="radio" value="1" name="t17-pl-1" data-correct="true"> B. weigh advantages against disadvantages and give a clear judgement</label><label><input type="radio" value="2" name="t17-pl-1" data-correct="false"> C. list advantages only</label><label><input type="radio" value="3" name="t17-pl-1" data-correct="false"> D. avoid an opinion</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-2">
+          <p>2. Best thesis:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-2" data-correct="false"> A. Apps are popular.</label><label><input type="radio" value="1" name="t17-pl-2" data-correct="true"> B. Although gig work offers valuable flexibility, I believe its disadvantages outweigh its advantages unless workers receive basic protections.</label><label><input type="radio" value="2" name="t17-pl-2" data-correct="false"> C. Some people work.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-3">
+          <p>3. Best evidence for the disadvantages:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-3" data-correct="true"> A. Gig workers often have no sick pay or holiday pay, and earnings are unpredictable.</label><label><input type="radio" value="1" name="t17-pl-3" data-correct="false"> B. Apps are colourful.</label><label><input type="radio" value="2" name="t17-pl-3" data-correct="false"> C. Taxis are expensive.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-4">
+          <p>4. Best evidence for the advantages:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-4" data-correct="true"> A. Students and parents can choose when and how much to work.</label><label><input type="radio" value="1" name="t17-pl-4" data-correct="false"> B. Phones are useful.</label><label><input type="radio" value="2" name="t17-pl-4" data-correct="false"> C. Food is tasty.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t17-pl', 't17-pl-score')">Check answers</button>
+          <span id="t17-pl-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write your plan: thesis + main points and examples for each side.</p><textarea class="no-check mini-answer" id="t17-out-1" placeholder="Write your plan here..." style="min-height:110px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t17-out-btn">Show an example plan</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t17-out-ans"><p><b>Thesis:</b> disadvantages outweigh — unless regulated. <b>Advantages:</b> flexibility (students, parents), extra income, cheaper services. <b>Disadvantages:</b> no minimum wage/sick pay, unpredictable income, algorithm control. <b>Evidence:</b> UK Supreme Court 2021; EU directive 2024.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task18" data-task="18">
+      <div class="task-eyebrow">Task 18 of 20</div>
+      <h2>Writing Task 2 — Your Essay</h2>
+      <p class="task-sub">Write the full essay. About <b>40 minutes</b>, <b>at least 250 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>More and more people are working in the “gig economy”, doing short-term jobs through apps instead of having permanent employment. Do the advantages of this development outweigh the disadvantages?</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t18-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t18-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t18-essay-model"><div class="model-text">
+  <p>Apps now allow millions of people to earn money by delivering food, driving taxis or completing online projects, rather than holding permanent jobs. Although this development brings genuine benefits, I believe that, in its current form, its disadvantages outweigh its advantages.</p>
+  <p>The most important advantage of gig work is flexibility. Students, parents and people with other commitments can decide when and how much to work, which would be impossible in a traditional nine-to-five job. For some people, such as those who struggle to find permanent employment, platforms provide an income that would otherwise be unavailable. Customers also benefit, as services become cheaper and more convenient.</p>
+  <p>However, these benefits come at a considerable cost to workers. Because gig workers are usually classified as self-employed, they often have no right to a minimum wage, sick pay or holiday pay, and their earnings can vary greatly from week to week. If they become ill, they may lose their income completely. Moreover, their work is controlled by algorithms that can reduce their jobs or even close their accounts with little explanation, leaving them with no one to appeal to. In the long term, this insecurity makes it difficult for workers to plan their lives, rent a home or save money.</p>
+  <p>In conclusion, while the flexibility of the gig economy is valuable, I believe its disadvantages are greater at present. Governments should therefore follow the example of the UK courts and the European Union by ensuring that gig workers receive basic protections without losing their freedom to choose when they work.</p>
+  <p class="alt">≈ 290 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task19" data-task="19">
+      <div class="task-eyebrow">Task 19 of 20</div>
+      <h2>Speaking Part 3 — Today’s Topics</h2>
+      <p class="task-sub">Answer each question in its own box — about <b>45 seconds</b> each.</p>
+      <div class="question-box" data-field="t19-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Should wild predators such as wolves be protected, even if they harm farmers?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s a difficult balance, because…”</li><li>“One solution would be…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">What are the advantages of growing up speaking two languages?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The most obvious benefit is…”</li><li>“In my experience,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Would you prefer a permanent job or flexible gig work? Why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d probably choose…”</li><li>“The main reason is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Is it easy to change your habits? How?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the key is…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task20" data-task="20">
+      <div class="task-eyebrow">Task 20 of 20</div>
+      <h2>Self-Check — Two Reading and Writing Days</h2>
+      <p class="task-sub">Compare today with Day 35.</p>
+      <div class="card"><p class="mini-q">1. Your reading scores on Day 35 and Day 36 (out of 40) and estimated bands:</p><textarea class="no-check mini-answer" id="t20-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. Which question type improved, and which still costs you marks?</p><textarea class="no-check mini-answer" id="t20-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Compare your Task 2 essays from both days: is your position clearer today? What will you work on next?</p><textarea class="no-check mini-answer" id="t20-rf-3" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t20-rf-btn">Show some guidance</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t20-rf-ans"><p>Signs of real progress: fewer NOT GIVEN errors; correct word forms in completion tasks; a Task 1 overview that names the main features; a Task 2 position that is clear in the introduction and repeated precisely in the conclusion.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 20</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 36 of 45</div>
+    <h1>Day 36 complete! 🎉</h1>
+    <p>Day 36 done — a full reading test, two extra articles, reading skills, vocabulary and grammar, Writing Task 1 (a process) and Task 2, and speaking.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t10-lm-lm');
+
+    initWritingCoach('t16-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The diagram below shows how roads can be built using plastic waste.' });
+    initWritingCoach('t18-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'More and more people are working in the “gig economy”, doing short-term jobs through apps instead of having permanent employment. Do the advantages of this development outweigh the disadvantages?' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 36, 8, 't8-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-summary"]'); if (b) initRecordControl(b, user.id, 36, 9, 't9-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-1"]'); if (b) initRecordControl(b, user.id, 36, 19, 't19-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-2"]'); if (b) initRecordControl(b, user.id, 36, 19, 't19-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-3"]'); if (b) initRecordControl(b, user.id, 36, 19, 't19-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-4"]'); if (b) initRecordControl(b, user.id, 36, 19, 't19-speaking-4', 0); }
+
+    await initTaskFlow(36, 20, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-notes1', 't2-notes1-score'); checkAllAnswers('t2-mc', 't2-mc-score'); },
+      4: () => { checkAllAnswers('t4-h', 't4-h-score'); checkAllAnswers('t4-se', 't4-se-score'); checkAllAnswers('t4-s', 't4-s-score'); },
+      6: () => { checkAllAnswers('t6-mf', 't6-mf-score'); checkAllAnswers('t6-yn', 't6-yn-score'); checkAllAnswers('t6-mc', 't6-mc-score'); checkAllAnswers('t6-sc', 't6-sc-score'); },
+      8: () => { checkAllAnswers('t8-mc', 't8-mc-score'); },
+      9: () => { checkAllAnswers('t9-sc', 't9-sc-score'); },
+      10: () => { checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm'); checkAllAnswers('t10-mc', 't10-mc-score'); },
+      11: () => { checkAllAnswers('t11-fn', 't11-fn-score'); checkAllAnswers('t11-ref', 't11-ref-score'); },
+      12: () => { checkAllAnswers('t12-title', 't12-title-score'); checkAllAnswers('t12-scan', 't12-scan-score'); },
+      13: () => { checkAllAnswers('t13-wf', 't13-wf-score'); checkAllAnswers('t13-col', 't13-col-score'); },
+      14: () => { checkAllAnswers('t14-gr', 't14-gr-score'); },
+      15: () => { checkAllAnswers('t15-ord', 't15-ord-score'); checkAllAnswers('t15-g', 't15-g-score'); },
+      17: () => { checkAllAnswers('t17-pl', 't17-pl-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-sum-btn', 't9-sum-ans', '[id^="t9-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t16-essay-model-btn', 't16-essay-model', '#t16-essay');
+    initGatedMistakeReveal('t17-out-btn', 't17-out-ans', '[id^="t17-out-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t18-essay-model-btn', 't18-essay-model', '#t18-essay');
+    initGatedMistakeReveal('t20-rf-btn', 't20-rf-ans', '[id^="t20-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>

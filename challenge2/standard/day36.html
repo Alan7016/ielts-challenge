@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 36 — Standard — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 36 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 20</div>
+      <h2>Starting Off — Another Reading and Writing Day</h2>
+      <p class="task-sub">Another long <b>reading and writing day</b> — plan for about <b>4 hours</b>, with breaks. A full reading test, two extra articles, reading skills, vocabulary and grammar, a full <b>Writing Task 1</b> (pie charts) and <b>Task 2</b>, and speaking.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. What did you learn from yesterday’s reading test? Which advice is best for NOT GIVEN?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. Choose NOT GIVEN when you cannot find the answer quickly.</label><label><input type="radio" value="1" name="t1-st-1" data-correct="true"> B. Choose NOT GIVEN only when the passage says nothing about the statement.</label><label><input type="radio" value="2" name="t1-st-1" data-correct="false"> C. Never choose NOT GIVEN.</label><label><input type="radio" value="3" name="t1-st-1" data-correct="false"> D. Choose NOT GIVEN when the statement uses “all”.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. In a pie chart task, numbers are usually</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="true"> A. percentages</label><label><input type="radio" value="1" name="t1-st-2" data-correct="false"> B. years</label><label><input type="radio" value="2" name="t1-st-2" data-correct="false"> C. prices</label><label><input type="radio" value="3" name="t1-st-2" data-correct="false"> D. temperatures</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. In Task 2, a good body paragraph has</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="false"> A. only examples</label><label><input type="radio" value="1" name="t1-st-3" data-correct="true"> B. a topic sentence, explanation and example</label><label><input type="radio" value="2" name="t1-st-3" data-correct="false"> C. one long sentence</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. a question</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. How long should you spend planning a Task 2 essay?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="false"> A. no time</label><label><input type="radio" value="1" name="t1-st-4" data-correct="true"> B. about 5 minutes</label><label><input type="radio" value="2" name="t1-st-4" data-correct="false"> C. 20 minutes</label><label><input type="radio" value="3" name="t1-st-4" data-correct="false"> D. 35 minutes</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. contagious</button><button type="button" class="lm-item" data-key="2">2. signal</button><button type="button" class="lm-item" data-key="3">3. merchant</button><button type="button" class="lm-item" data-key="4">4. caravan</button><button type="button" class="lm-item" data-key="5">5. curriculum</button><button type="button" class="lm-item" data-key="6">6. inequality</button><button type="button" class="lm-item" data-key="7">7. gravity</button><button type="button" class="lm-item" data-key="8">8. pothole</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. a hole in the surface of a road</button><button type="button" class="lm-item" data-key="b">b. an unfair difference between groups</button><button type="button" class="lm-item" data-key="c">c. a sign that gives a message</button><button type="button" class="lm-item" data-key="d">d. the subjects taught at a school</button><button type="button" class="lm-item" data-key="e">e. a person who buys and sells goods</button><button type="button" class="lm-item" data-key="f">f. the force that makes things fall to the ground</button><button type="button" class="lm-item" data-key="g">g. spreading easily from person to person</button><button type="button" class="lm-item" data-key="h">h. a group of people and animals travelling together</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 20</div>
+      <h2>Reading Passage 1 — Why Do We Laugh?</h2>
+      <p class="task-sub"><b>The test starts now.</b> About <b>20 minutes</b> for Questions 1–13. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Why Do We Laugh?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Laughter has surprisingly little to do with jokes.</small></h3>
+            <p class="article-meta">Reading Passage 1 · Psychology · 328 words</p>
+            <p><span class="para-label">A</span>Laughter is one of the most common human sounds. Most people laugh many times a day, and babies begin to laugh at around four months old, long before they can speak. But scientists have discovered that laughter has surprisingly little to do with jokes.</p><p><span class="para-label">B</span>In the 1990s, the American psychologist Robert Provine and his students listened to more than 1,200 conversations in public places, such as shopping centres and university campuses, and noted every time someone laughed. They found that only about one in five laughs came after anything that could be called a joke. Most laughter followed ordinary comments such as ‘See you later’ or ‘I know’.</p><p><span class="para-label">C</span>Provine also found that speakers laughed more than their listeners — about 46 per cent more — and that people were around thirty times more likely to laugh when they were with others than when they were alone. These results suggest that laughter is mainly a social signal: a way of showing friendliness and agreement.</p><p><span class="para-label">D</span>Humans are not the only animals that laugh. Chimpanzees, gorillas and other apes make breathy, panting sounds when they play and tickle each other. Scientists believe that human laughter developed from this kind of ‘play panting’ millions of years ago. Even rats make high-pitched sounds when they are tickled, although humans cannot hear them without special equipment.</p><p><span class="para-label">E</span>Laughter may also be good for health. When we laugh, the body releases chemicals called endorphins, which can reduce pain and make us feel relaxed. In one study at the University of Oxford, people who had watched a comedy video together could hold their arm in an uncomfortable position for longer than those who had watched a boring documentary.</p><p><span class="para-label">F</span>Laughter is also contagious. Hearing other people laugh makes us more likely to laugh ourselves, which is why some television comedies add recorded laughter. Interestingly, people can usually tell the difference between real laughter and laughter that is put on, even when they hear it only for a second.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–5</p><p class="qg-instr">Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. Babies laugh before they can speak.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. Most laughs in Provine’s study came after jokes.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. Speakers laughed more than their listeners.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. Humans can hear rats laughing without special equipment.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-5">
+          <p>5. Provine’s study took place in five different countries.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-5" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 6–9</p><p class="qg-instr">Complete the notes. Choose <b>ONE WORD AND/OR A NUMBER</b> from the passage.</p></div>
+<div class="card" id="t2-notes1"><p class="prompt-label">Laughter — key facts</p><div style="line-height:2.1;"><div>• Babies begin to laugh at around four (6) <input type="text" class="text-answer" id="t2-6" data-correct="months" autocomplete="off" style="width:110px;"></div><div>• Provine listened to more than 1,200 (7) <input type="text" class="text-answer" id="t2-7" data-correct="conversations" autocomplete="off" style="width:140px;"></div><div>• People are 30 times more likely to laugh when they are with (8) <input type="text" class="text-answer" id="t2-8" data-correct="others" autocomplete="off" style="width:110px;"></div><div>• Laughing releases chemicals called (9) <input type="text" class="text-answer" id="t2-9" data-correct="endorphins" autocomplete="off" style="width:130px;"></div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-notes1', 't2-notes1-score')">Check answers</button>
+          <span id="t2-notes1-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 10–13</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-10">
+          <p>10. What did Provine conclude about laughter?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-10" data-correct="false"> A. It is mainly a reaction to jokes.</label><label><input type="radio" value="1" name="t2-mc-10" data-correct="true"> B. It is mainly a social signal.</label><label><input type="radio" value="2" name="t2-mc-10" data-correct="false"> C. It is bad for health.</label><label><input type="radio" value="3" name="t2-mc-10" data-correct="false"> D. It is only found in children.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-11">
+          <p>11. According to scientists, human laughter developed from</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-11" data-correct="false"> A. crying</label><label><input type="radio" value="1" name="t2-mc-11" data-correct="true"> B. the play panting of apes</label><label><input type="radio" value="2" name="t2-mc-11" data-correct="false"> C. singing</label><label><input type="radio" value="3" name="t2-mc-11" data-correct="false"> D. talking</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-12">
+          <p>12. In the Oxford study, people who watched a comedy</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-12" data-correct="false"> A. felt more pain.</label><label><input type="radio" value="1" name="t2-mc-12" data-correct="true"> B. could hold an uncomfortable position for longer.</label><label><input type="radio" value="2" name="t2-mc-12" data-correct="false"> C. fell asleep.</label><label><input type="radio" value="3" name="t2-mc-12" data-correct="false"> D. watched a documentary afterwards.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-13">
+          <p>13. What does Paragraph F say?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-13" data-correct="false"> A. All comedies use recorded laughter.</label><label><input type="radio" value="1" name="t2-mc-13" data-correct="true"> B. People can usually tell real laughter from false laughter.</label><label><input type="radio" value="2" name="t2-mc-13" data-correct="false"> C. Laughter is never contagious.</label><label><input type="radio" value="3" name="t2-mc-13" data-correct="false"> D. Recorded laughter is always real.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 20</div>
+      <h2>Reading Passage 1 — Answer Analysis</h2>
+      <p class="task-sub">Check the evidence for every answer.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Why Do We Laugh?</summary>
+        <p><span class="para-label">A</span>Laughter is one of the most common human sounds. Most people laugh many times a day, and babies begin to laugh at around four months old, long before they can speak. But scientists have discovered that laughter has surprisingly little to do with jokes.</p><p><span class="para-label">B</span>In the 1990s, the American psychologist Robert Provine and his students listened to more than 1,200 conversations in public places, such as shopping centres and university campuses, and noted every time someone laughed. They found that only about one in five laughs came after anything that could be called a joke. Most laughter followed ordinary comments such as ‘See you later’ or ‘I know’.</p><p><span class="para-label">C</span>Provine also found that speakers laughed more than their listeners — about 46 per cent more — and that people were around thirty times more likely to laugh when they were with others than when they were alone. These results suggest that laughter is mainly a social signal: a way of showing friendliness and agreement.</p><p><span class="para-label">D</span>Humans are not the only animals that laugh. Chimpanzees, gorillas and other apes make breathy, panting sounds when they play and tickle each other. Scientists believe that human laughter developed from this kind of ‘play panting’ millions of years ago. Even rats make high-pitched sounds when they are tickled, although humans cannot hear them without special equipment.</p><p><span class="para-label">E</span>Laughter may also be good for health. When we laugh, the body releases chemicals called endorphins, which can reduce pain and make us feel relaxed. In one study at the University of Oxford, people who had watched a comedy video together could hold their arm in an uncomfortable position for longer than those who had watched a boring documentary.</p><p><span class="para-label">F</span>Laughter is also contagious. Hearing other people laugh makes us more likely to laugh ourselves, which is why some television comedies add recorded laughter. Interestingly, people can usually tell the difference between real laughter and laughter that is put on, even when they hear it only for a second.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">babies begin to laugh at around four months old, long before they can speak</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">only about one in five laughs came after anything that could be called a joke</span>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">TRUE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">speakers laughed more than their listeners — about 46 per cent more</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">FALSE</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">humans cannot hear them without special equipment</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para B</span></summary><div class="an-body"><p>The passage mentions public places, but not countries.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">months</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">at around four months old</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">conversations</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">more than 1,200 conversations</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">others</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">thirty times more likely to laugh when they were with others</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">endorphins</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">chemicals called endorphins</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">laughter is mainly a social signal</span>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">human laughter developed from this kind of ‘play panting’</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">B</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">could hold their arm in an uncomfortable position for longer</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">people can usually tell the difference between real laughter and laughter that is put on</span>.</p><p><span class="trap">Trap:</span> A — only <i>some</i> comedies add recorded laughter.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 20</div>
+      <h2>Reading Passage 2 — Cities of the Silk Road</h2>
+      <p class="task-sub">About <b>20 minutes</b> for Questions 14–26: <b>headings</b>, <b>sentence completion</b> and <b>short answers</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Cities of the Silk Road<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">For over 1,500 years, trade routes linked China and the Mediterranean — and Central Asia was at their heart.</small></h3>
+            <p class="article-meta">Reading Passage 2 · History · 261 words</p>
+            <p><span class="para-label">A</span>For more than 1,500 years, a network of trade routes known as the Silk Road connected China with the Mediterranean. The name was invented only in 1877 by a German geographer, Ferdinand von Richthofen; the merchants who used the routes never called them by a single name.</p><p><span class="para-label">B</span>Silk was only one of many goods carried along the routes. Merchants also traded spices, paper, glass, horses, gold and precious stones. Few traders travelled the whole distance; instead, goods passed from one merchant to another, changing hands many times between China and Europe.</p><p><span class="para-label">C</span>Some of the greatest cities of the routes grew up in Central Asia. Samarkand, in present-day Uzbekistan, was famous for its paper, which was considered among the best in the world, while Bukhara became a major centre of learning, with hundreds of schools and libraries.</p><p><span class="para-label">D</span>The routes carried ideas as well as goods. Religions such as Buddhism and Islam spread along them, together with technologies including papermaking, printing and gunpowder. Scientists, poets and doctors travelled between cities, sharing knowledge.</p><p><span class="para-label">E</span>Travel was slow and dangerous. Caravans of camels could take months to cross deserts and mountains, and travellers faced extreme heat and cold, as well as attacks by robbers. Along the way, caravanserais — roadside inns with space for animals and goods — offered a safe place to rest.</p><p><span class="para-label">F</span>From the fifteenth century, the land routes became less important as European ships began to sail directly to Asia. Today, however, the Silk Road is enjoying new attention, as historic cities such as Samarkand and Bukhara attract tourists from around the world.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–19</p><p class="qg-instr">Choose the correct heading for each paragraph, <b>A–F</b>.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; The origin of a name<br><b>ii</b>&nbsp; More than just silk<br><b>iii</b>&nbsp; Centres of trade and learning<br><b>iv</b>&nbsp; The exchange of ideas<br><b>v</b>&nbsp; Hardships of the journey<br><b>vi</b>&nbsp; Decline and rediscovery<br><b>vii</b>&nbsp; The invention of silk<br><b>viii</b>&nbsp; Modern trade agreements</p></div>
+      <div class="card" id="t4-h"><div class="sel-row"><select class="select" id="t4-h-14" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>14.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t4-h-15" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>15.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t4-h-16" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>16.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t4-h-17" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>17.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t4-h-18" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>18.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t4-h-19" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>19.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-h', 't4-h-score')">Check answers</button>
+          <span id="t4-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 20–23</p><p class="qg-instr">Complete the sentences. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t4-sc" style="line-height:2.4;"><p>20. The name ‘Silk Road’ was invented by a German <input type="text" class="text-answer" id="t4-20" data-correct="geographer" autocomplete="off" style="width:130px;">.</p><p>21. Samarkand was famous for its <input type="text" class="text-answer" id="t4-21" data-correct="paper" autocomplete="off" style="width:100px;">.</p><p>22. Caravans of <input type="text" class="text-answer" id="t4-22" data-correct="camels" autocomplete="off" style="width:110px;"> took months to cross deserts.</p><p>23. Caravanserais were roadside <input type="text" class="text-answer" id="t4-23" data-correct="inns" autocomplete="off" style="width:100px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-sc', 't4-sc-score')">Check answers</button>
+          <span id="t4-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 24–26</p><p class="qg-instr">Answer the questions. Choose <b>NO MORE THAN TWO WORDS AND/OR A NUMBER</b>.</p></div>
+      <div class="card" id="t4-sa" style="line-height:2.4;"><p>24. In what year was the name ‘Silk Road’ invented? <input type="text" class="text-answer" id="t4-24" data-correct="1877" autocomplete="off" style="width:90px;"></p><p>25. Which city became a major centre of learning? <input type="text" class="text-answer" id="t4-25" data-correct="bukhara" autocomplete="off" style="width:120px;"></p><p>26. What made the land routes less important from the fifteenth century? <input type="text" class="text-answer" id="t4-26" data-correct="ships/european ships" autocomplete="off" style="width:140px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-sa', 't4-sa-score')">Check answers</button>
+          <span id="t4-sa-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 20</div>
+      <h2>Reading Passage 2 — Answer Analysis</h2>
+      <p class="task-sub">Check every answer.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Cities of the Silk Road</summary>
+        <p><span class="para-label">A</span>For more than 1,500 years, a network of trade routes known as the Silk Road connected China with the Mediterranean. The name was invented only in 1877 by a German geographer, Ferdinand von Richthofen; the merchants who used the routes never called them by a single name.</p><p><span class="para-label">B</span>Silk was only one of many goods carried along the routes. Merchants also traded spices, paper, glass, horses, gold and precious stones. Few traders travelled the whole distance; instead, goods passed from one merchant to another, changing hands many times between China and Europe.</p><p><span class="para-label">C</span>Some of the greatest cities of the routes grew up in Central Asia. Samarkand, in present-day Uzbekistan, was famous for its paper, which was considered among the best in the world, while Bukhara became a major centre of learning, with hundreds of schools and libraries.</p><p><span class="para-label">D</span>The routes carried ideas as well as goods. Religions such as Buddhism and Islam spread along them, together with technologies including papermaking, printing and gunpowder. Scientists, poets and doctors travelled between cities, sharing knowledge.</p><p><span class="para-label">E</span>Travel was slow and dangerous. Caravans of camels could take months to cross deserts and mountains, and travellers faced extreme heat and cold, as well as attacks by robbers. Along the way, caravanserais — roadside inns with space for animals and goods — offered a safe place to rest.</p><p><span class="para-label">F</span>From the fifteenth century, the land routes became less important as European ships began to sail directly to Asia. Today, however, the Silk Road is enjoying new attention, as historic cities such as Samarkand and Bukhara attract tourists from around the world.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">i</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">The name was invented only in 1877</span>.</p><p><span class="trap">Trap:</span> vii — silk is mentioned, but not how it was invented.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">ii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Silk was only one of many goods</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">iii</span><span class="an-where">Para C</span></summary><div class="an-body"><p>Samarkand’s paper and Bukhara’s <span class="ev">centre of learning</span>.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">iv</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">The routes carried ideas as well as goods</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">v</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Travel was slow and dangerous</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">vi</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">became less important … Today, however, the Silk Road is enjoying new attention</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">geographer</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">a German geographer</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">paper</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Samarkand … was famous for its paper</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">camels</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Caravans of camels</span>.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">inns</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">caravanserais — roadside inns</span>.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">1877</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">invented only in 1877</span>.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">Bukhara</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Bukhara became a major centre of learning</span>.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">ships</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">as European ships began to sail directly to Asia</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 20</div>
+      <h2>Reading Passage 3 — Should Homework Be Banned?</h2>
+      <p class="task-sub">About <b>20 minutes</b> for Questions 27–40: <b>matching information</b>, <b>summary completion</b> and <b>YES / NO / NOT GIVEN</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Should Homework Be Banned?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Is homework useful practice or an unnecessary burden?</small></h3>
+            <p class="article-meta">Reading Passage 3 · Education · 236 words</p>
+            <p><span class="para-label">A</span>Homework is a familiar part of school life in most countries, but its value has long been debated. In some places, pupils spend more than ten hours a week on homework; in others, especially in primary schools, homework has been reduced or abolished.</p><p><span class="para-label">B</span>Research suggests that the effect of homework depends greatly on age. A well-known review by the American researcher Harris Cooper found that homework had a clear positive link with achievement for older secondary students, but only a very small effect for primary school children.</p><p><span class="para-label">C</span>Supporters argue that homework helps pupils to practise skills, prepares them for independent study and keeps parents informed about what their children are learning. Some teachers also say that without homework there is not enough time to cover the curriculum.</p><p><span class="para-label">D</span>Critics point out that too much homework can cause stress, reduce sleep and leave little time for play, sport and family life. Homework may also increase inequality, because some children have a quiet place to work and parents who can help, while others do not.</p><p><span class="para-label">E</span>In my view, homework should not be banned, but it should be used more carefully. Young children benefit more from reading for pleasure than from worksheets, and for older students, a small amount of well-designed homework is more useful than long hours of repetitive exercises. Schools should also provide places where pupils can study after lessons, so that every child has the same opportunity.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 27–31</p><p class="qg-instr">Which paragraph, <b>A–E</b>, contains the following information?</p></div>
+      <div class="card" id="t6-mi"><div class="sel-row"><select class="select" id="t6-mi-27" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>27.</b> a reason why homework may be unfair</span></div><div class="sel-row"><select class="select" id="t6-mi-28" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>28.</b> the name of a researcher who reviewed studies</span></div><div class="sel-row"><select class="select" id="t6-mi-29" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>29.</b> an example of how much homework some pupils do</span></div><div class="sel-row"><select class="select" id="t6-mi-30" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>30.</b> a suggestion that schools should provide places to study</span></div><div class="sel-row"><select class="select" id="t6-mi-31" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>31.</b> a benefit of homework for parents</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mi', 't6-mi-score')">Check answers</button>
+          <span id="t6-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 32–36</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD</b> from the box.</p></div>
+      <div class="word-bank">achievement · small · stress · sleep · inequality · large · money · friends · happiness</div><div class="card" id="t6-s" style="line-height:2.7;"><p>Cooper found that homework had a positive link with (32) <input type="text" class="text-answer" id="t6-32" data-correct="achievement" autocomplete="off" style="width:140px;"> for older students, but only a (33) <input type="text" class="text-answer" id="t6-33" data-correct="small" autocomplete="off" style="width:100px;"> effect for younger children. Critics say that too much homework can cause (34) <input type="text" class="text-answer" id="t6-34" data-correct="stress" autocomplete="off" style="width:100px;"> and reduce (35) <input type="text" class="text-answer" id="t6-35" data-correct="sleep" autocomplete="off" style="width:100px;">, and that it may increase (36) <input type="text" class="text-answer" id="t6-36" data-correct="inequality" autocomplete="off" style="width:130px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-s', 't6-s-score')">Check answers</button>
+          <span id="t6-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 37–40</p><p class="qg-instr">Do the statements agree with the views of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-37">
+          <p>37. Homework should be completely banned.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-37" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-37" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-37" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-38">
+          <p>38. Reading for pleasure is more useful for young children than worksheets.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-38" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-38" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-38" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-39">
+          <p>39. Teachers in most countries give too much homework.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-39" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-39" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-39" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-40">
+          <p>40. Schools should give every pupil a place to study after lessons.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-40" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-40" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-40" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 20</div>
+      <h2>Reading Passage 3 — Answer Analysis and Your Score</h2>
+      <p class="task-sub">Check Passage 3, then add up your score.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Should Homework Be Banned?</summary>
+        <p><span class="para-label">A</span>Homework is a familiar part of school life in most countries, but its value has long been debated. In some places, pupils spend more than ten hours a week on homework; in others, especially in primary schools, homework has been reduced or abolished.</p><p><span class="para-label">B</span>Research suggests that the effect of homework depends greatly on age. A well-known review by the American researcher Harris Cooper found that homework had a clear positive link with achievement for older secondary students, but only a very small effect for primary school children.</p><p><span class="para-label">C</span>Supporters argue that homework helps pupils to practise skills, prepares them for independent study and keeps parents informed about what their children are learning. Some teachers also say that without homework there is not enough time to cover the curriculum.</p><p><span class="para-label">D</span>Critics point out that too much homework can cause stress, reduce sleep and leave little time for play, sport and family life. Homework may also increase inequality, because some children have a quiet place to work and parents who can help, while others do not.</p><p><span class="para-label">E</span>In my view, homework should not be banned, but it should be used more carefully. Young children benefit more from reading for pleasure than from worksheets, and for older students, a small amount of well-designed homework is more useful than long hours of repetitive exercises. Schools should also provide places where pupils can study after lessons, so that every child has the same opportunity.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">D</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Homework may also increase inequality</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">A well-known review by … Harris Cooper</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">A</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">pupils spend more than ten hours a week on homework</span>.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">E</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Schools should also provide places where pupils can study after lessons</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">C</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">keeps parents informed about what their children are learning</span>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">achievement</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">a clear positive link with achievement</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">small</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">only a very small effect</span>.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">stress</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">can cause stress</span>.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">sleep</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">reduce sleep</span>.</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">inequality</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">increase inequality</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">NO</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">homework should not be banned</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">YES</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Young children benefit more from reading for pleasure than from worksheets</span>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>The writer never says how much homework teachers give in most countries.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">YES</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">so that every child has the same opportunity</span>.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Academic Reading)</p><table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr><tr><td>13–14</td><td>4.5</td></tr><tr><td>15–18</td><td>5.0</td></tr><tr><td>19–22</td><td>5.5</td></tr><tr><td>23–26</td><td>6.0</td></tr><tr><td>27–29</td><td>6.5</td></tr><tr><td>30–32</td><td>7.0</td></tr><tr><td>33+</td><td>7.5+</td></tr></table></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 20</div>
+      <h2>Extra Reading 1 — Sleeping in Space</h2>
+      <p class="task-sub">An extra article (about <b>15 minutes</b>). Answer the questions, then summarise it in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Sleeping in Space</h3>
+        <p class="article-meta">Extra reading 1 · Science · 195 words</p>
+        <p><span class="para-label">A</span>Astronauts on the International Space Station see around sixteen sunrises and sunsets every day, because the station travels around the Earth every ninety minutes. This makes it difficult for the body to know when it is time to sleep.</p><p><span class="para-label">B</span>Without gravity, there is no ‘up’ or ‘down’, so astronauts do not lie in beds. Instead, they sleep in small cabins, inside sleeping bags fixed to the wall so that they do not float around and hit something. Many wear eye masks to block out light and earplugs, because the station is noisy, with fans running all the time.</p><p><span class="para-label">C</span>Studies show that astronauts often sleep only about six hours a night, less than the eight and a half hours planned in their schedules. To help, the station has special lights that can change colour: blue-white light in the morning helps astronauts to wake up, while warmer, orange light in the evening helps them to feel sleepy.</p><p><span class="para-label">D</span>Some astronauts say that sleeping in space is very comfortable, because there is no pressure on the body. Others find that their arms float up in front of them while they sleep, so they put them inside the sleeping bag.</p>
+      </div>
+      <div class="card" id="t8-mc"><div class="q-item" id="t8-mc-1">
+          <p>1. How many sunrises do astronauts see every day?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-1" data-correct="false"> A. one</label><label><input type="radio" value="1" name="t8-mc-1" data-correct="false"> B. six</label><label><input type="radio" value="2" name="t8-mc-1" data-correct="true"> C. about sixteen</label><label><input type="radio" value="3" name="t8-mc-1" data-correct="false"> D. ninety</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-2">
+          <p>2. Why are the sleeping bags fixed to the wall?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-2" data-correct="false"> A. to keep them warm</label><label><input type="radio" value="1" name="t8-mc-2" data-correct="true"> B. so astronauts do not float and hit something</label><label><input type="radio" value="2" name="t8-mc-2" data-correct="false"> C. because there are no beds</label><label><input type="radio" value="3" name="t8-mc-2" data-correct="false"> D. to save space</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-3">
+          <p>3. Why do many astronauts wear earplugs?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-3" data-correct="true"> A. The station is noisy.</label><label><input type="radio" value="1" name="t8-mc-3" data-correct="false"> B. They sleep near engines.</label><label><input type="radio" value="2" name="t8-mc-3" data-correct="false"> C. Other astronauts snore.</label><label><input type="radio" value="3" name="t8-mc-3" data-correct="false"> D. It is a rule.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-4">
+          <p>4. How long do astronauts often sleep?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-4" data-correct="true"> A. about six hours</label><label><input type="radio" value="1" name="t8-mc-4" data-correct="false"> B. eight and a half hours</label><label><input type="radio" value="2" name="t8-mc-4" data-correct="false"> C. ten hours</label><label><input type="radio" value="3" name="t8-mc-4" data-correct="false"> D. ninety minutes</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-5">
+          <p>5. What does orange light in the evening do?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-5" data-correct="false"> A. helps them wake up</label><label><input type="radio" value="1" name="t8-mc-5" data-correct="true"> B. helps them feel sleepy</label><label><input type="radio" value="2" name="t8-mc-5" data-correct="false"> C. helps plants grow</label><label><input type="radio" value="3" name="t8-mc-5" data-correct="false"> D. saves energy</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-mc', 't8-mc-score')">Check answers</button>
+          <span id="t8-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 80 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 80 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="80" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>The article explains why sleeping in space is difficult. Astronauts on the International Space Station see about sixteen sunrises a day, which confuses the body. Because there is no gravity, they sleep in sleeping bags fixed to the walls of small cabins, and many use eye masks and earplugs because the station is bright and noisy. They often sleep only about six hours, so special lights help them: blue-white light in the morning and orange light in the evening. Some astronauts find sleeping in space comfortable. I found the details about the lights very interesting.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 30 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 30 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 20</div>
+      <h2>Extra Reading 2 — Roads Made of Plastic</h2>
+      <p class="task-sub">A second extra article. Decide TRUE, FALSE or NOT GIVEN, then give your opinion.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Roads Made of Plastic</h3>
+        <p class="article-meta">Extra reading 2 · Environment · 185 words</p>
+        <p><span class="para-label">A</span>Every year, millions of tonnes of plastic waste end up in landfill or in the oceans. One idea for putting some of it to use is to mix it into the materials used to build roads.</p><p><span class="para-label">B</span>The technique was pioneered in India by Rajagopalan Vasudevan, a chemistry professor in Madurai, who in the early 2000s developed a method of shredding plastic bags and bottles, melting them and coating stones with the plastic before adding bitumen, the black material that binds road surfaces together. Since then, more than 100,000 kilometres of roads in India have reportedly been built using the method.</p><p><span class="para-label">C</span>Supporters say plastic roads are cheaper, use waste that would otherwise be burned or dumped, and may resist water damage and potholes better than conventional roads. Trials have also taken place in the Netherlands, Britain and Ghana.</p><p><span class="para-label">D</span>However, scientists warn that the long-term effects are not yet fully understood. As roads wear down, they may release microplastics into soil and water, and the plastic used cannot easily be recycled again. Critics argue that the priority should be to reduce plastic production in the first place.</p>
+      </div>
+      <div class="card" id="t9-tf"><div class="q-item" id="t9-tf-1">
+          <p>1. Vasudevan was a chemistry professor.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t9-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t9-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-2">
+          <p>2. The technique was first developed in the Netherlands.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t9-tf-2" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t9-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-3">
+          <p>3. Plastic roads cost more than conventional roads.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t9-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t9-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-4">
+          <p>4. Plastic roads have been tested in Ghana.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-4" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t9-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t9-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-5">
+          <p>5. Plastic roads last twice as long as conventional roads.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t9-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t9-tf-5" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-tf', 't9-tf-score')">Check answers</button>
+          <span id="t9-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Should your country build plastic roads? Give your opinion and two reasons (3–4 sentences).</p><textarea class="no-check mini-answer" id="t9-op-1" placeholder="Write here..." style="min-height:110px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-op-btn">Show an example answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-op-ans"><p><i>Example:</i> I think my country should test plastic roads, but carefully. First, they use plastic waste that would otherwise be burned. Second, they may be cheaper and have fewer potholes. However, scientists are not sure about microplastics, so we should start with small trials.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 20</div>
+      <h2>Reading Skill — Spotting Paraphrase</h2>
+      <p class="task-sub">Match the question words (left) with the passage words (right).</p>
+      <div class="card" id="t10-lm">
+        <div class="line-match" id="t10-lm-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. one in five</button><button type="button" class="lm-item" data-key="2">2. put on (laughter)</button><button type="button" class="lm-item" data-key="3">3. changing hands</button><button type="button" class="lm-item" data-key="4">4. abolished</button><button type="button" class="lm-item" data-key="5">5. kept informed</button><button type="button" class="lm-item" data-key="6">6. slow and dangerous</button><button type="button" class="lm-item" data-key="7">7. roadside inns</button><button type="button" class="lm-item" data-key="8">8. reportedly</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. passing from one merchant to another</button><button type="button" class="lm-item" data-key="b">b. according to reports</button><button type="button" class="lm-item" data-key="c">c. false</button><button type="button" class="lm-item" data-key="d">d. difficult and risky</button><button type="button" class="lm-item" data-key="e">e. stopped completely</button><button type="button" class="lm-item" data-key="f">f. 20 per cent</button><button type="button" class="lm-item" data-key="g">g. told about</button><button type="button" class="lm-item" data-key="h">h. caravanserais</button></div>
+          <select class="lm-hidden-select select" id="t10-lm-1" data-lm-key="1" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-5" data-lm-key="5" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-7" data-lm-key="7" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-8" data-lm-key="8" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm');">Check answers</button>
+          <span id="t10-lm-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t10-mc"><div class="q-item" id="t10-mc-1">
+          <p>1. “Laughter has surprisingly little to do with jokes.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-1" data-correct="false"> A. Laughter is mostly caused by jokes.</label><label><input type="radio" value="1" name="t10-mc-1" data-correct="true"> B. Laughter is not mainly caused by jokes.</label><label><input type="radio" value="2" name="t10-mc-1" data-correct="false"> C. Jokes are not funny.</label><label><input type="radio" value="3" name="t10-mc-1" data-correct="false"> D. Laughter is a surprise.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-2">
+          <p>2. “Few traders travelled the whole distance.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-2" data-correct="false"> A. Most traders travelled the whole route.</label><label><input type="radio" value="1" name="t10-mc-2" data-correct="true"> B. Most traders did not travel the whole route.</label><label><input type="radio" value="2" name="t10-mc-2" data-correct="false"> C. No traders travelled.</label><label><input type="radio" value="3" name="t10-mc-2" data-correct="false"> D. Traders travelled quickly.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-3">
+          <p>3. “The effect of homework depends greatly on age.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-3" data-correct="true"> A. Age changes how useful homework is.</label><label><input type="radio" value="1" name="t10-mc-3" data-correct="false"> B. Homework is useful at every age.</label><label><input type="radio" value="2" name="t10-mc-3" data-correct="false"> C. Homework is useless.</label><label><input type="radio" value="3" name="t10-mc-3" data-correct="false"> D. Older people do homework.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-4">
+          <p>4. “The long-term effects are not yet fully understood.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-4" data-correct="false"> A. Scientists know everything about the effects.</label><label><input type="radio" value="1" name="t10-mc-4" data-correct="true"> B. Scientists do not yet know all the effects.</label><label><input type="radio" value="2" name="t10-mc-4" data-correct="false"> C. There are no effects.</label><label><input type="radio" value="3" name="t10-mc-4" data-correct="false"> D. The effects are short.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-mc', 't10-mc-score')">Check answers</button>
+          <span id="t10-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 20</div>
+      <h2>Reading Skill — What Does It Refer To?</h2>
+      <p class="task-sub">Choose what each word in bold refers to.</p>
+      <div class="card" id="t11-ref"><div class="q-item" id="t11-ref-1">
+          <p>1. “…the merchants who used the routes never called <b>them</b> by a single name.” — <b>them</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-1" data-correct="false"> A. the merchants</label><label><input type="radio" value="1" name="t11-ref-1" data-correct="true"> B. the routes</label><label><input type="radio" value="2" name="t11-ref-1" data-correct="false"> C. the geographers</label><label><input type="radio" value="3" name="t11-ref-1" data-correct="false"> D. the goods</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-2">
+          <p>2. “Even rats make high-pitched sounds…, although humans cannot hear <b>them</b>…” — <b>them</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-2" data-correct="false"> A. rats</label><label><input type="radio" value="1" name="t11-ref-2" data-correct="true"> B. the sounds</label><label><input type="radio" value="2" name="t11-ref-2" data-correct="false"> C. humans</label><label><input type="radio" value="3" name="t11-ref-2" data-correct="false"> D. apes</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-3">
+          <p>3. “…sleeping bags fixed to the wall so that <b>they</b> do not float around.” — <b>they</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-3" data-correct="false"> A. the bags</label><label><input type="radio" value="1" name="t11-ref-3" data-correct="true"> B. the astronauts</label><label><input type="radio" value="2" name="t11-ref-3" data-correct="false"> C. the walls</label><label><input type="radio" value="3" name="t11-ref-3" data-correct="false"> D. the fans</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-4">
+          <p>4. “…some children have a quiet place to work…, while <b>others</b> do not.” — <b>others</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-4" data-correct="false"> A. other schools</label><label><input type="radio" value="1" name="t11-ref-4" data-correct="true"> B. other children</label><label><input type="radio" value="2" name="t11-ref-4" data-correct="false"> C. other parents</label><label><input type="radio" value="3" name="t11-ref-4" data-correct="false"> D. other places</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-5">
+          <p>5. “…a solution in 1795: <b>he</b> mixed powdered graphite with clay…” (pencil text) — <b>he</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-5" data-correct="false"> A. a shepherd</label><label><input type="radio" value="1" name="t11-ref-5" data-correct="true"> B. Conté</label><label><input type="radio" value="2" name="t11-ref-5" data-correct="false"> C. a smuggler</label><label><input type="radio" value="3" name="t11-ref-5" data-correct="false"> D. a factory owner</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-6">
+          <p>6. “<b>This</b> makes it difficult for the body to know when it is time to sleep.” — <b>This</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-6" data-correct="true"> A. the many sunrises and sunsets</label><label><input type="radio" value="1" name="t11-ref-6" data-correct="false"> B. the sleeping bags</label><label><input type="radio" value="2" name="t11-ref-6" data-correct="false"> C. the noise</label><label><input type="radio" value="3" name="t11-ref-6" data-correct="false"> D. the food</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-ref', 't11-ref-score')">Check answers</button>
+          <span id="t11-ref-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 20</div>
+      <h2>Reading Skill — Speed Reading Challenge</h2>
+      <p class="task-sub"><b>Part 1:</b> skim in <b>60 seconds</b>. <b>Part 2:</b> scan for six answers in <b>3 minutes</b>.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Story of the Pencil</h3>
+        <p class="article-meta">Speed reading · 280 words · 186 words</p>
+        <p><span class="para-label">A</span>For most of history, people wrote with brushes, quills or pieces of charcoal. The modern pencil became possible after 1564, when a large deposit of unusually pure graphite was discovered in Borrowdale, in the north of England. Local shepherds first used it to mark their sheep. Because graphite is soft and breaks easily, people wrapped it in string or sheepskin, and later in wood.</p><p><span class="para-label">B</span>The Borrowdale mine was so valuable that it was guarded, and graphite was sometimes smuggled. When supplies ran short in France during wars with Britain, the French engineer Nicolas-Jacques Conté found a solution in 1795: he mixed powdered graphite with clay and baked it. By changing the amount of clay, he could make pencils harder or softer — the basis of the grading system still used today.</p><p><span class="para-label">C</span>In the nineteenth century, pencil factories grew in Germany and the United States. The famous yellow colour was introduced in the 1890s, when some manufacturers painted their best pencils yellow to suggest that the graphite came from China, where the colour was associated with royalty. Today, more than fourteen billion pencils are produced every year.</p>
+      </div>
+      <div class="card" id="t12-title"><div class="q-item" id="t12-title-1">
+          <p>1. Part 1 — What is the text mainly about?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-title-1" data-correct="false"> A. how to draw with a pencil</label><label><input type="radio" value="1" name="t12-title-1" data-correct="true"> B. the history of the pencil</label><label><input type="radio" value="2" name="t12-title-1" data-correct="false"> C. the life of shepherds</label><label><input type="radio" value="3" name="t12-title-1" data-correct="false"> D. wars between France and Britain</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-title', 't12-title-score')">Check answers</button>
+          <span id="t12-title-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t12-scan" style="line-height:2.4;"><p>1. When was the graphite discovered in Borrowdale? <input type="text" class="text-answer" id="t12-1" data-correct="1564" autocomplete="off" style="width:90px;"></p><p>2. Who first used the graphite to mark their sheep? <input type="text" class="text-answer" id="t12-2" data-correct="shepherds" autocomplete="off" style="width:120px;"></p><p>3. What did Conté mix with powdered graphite? <input type="text" class="text-answer" id="t12-3" data-correct="clay" autocomplete="off" style="width:90px;"></p><p>4. In which year did Conté find his solution? <input type="text" class="text-answer" id="t12-4" data-correct="1795" autocomplete="off" style="width:90px;"></p><p>5. When was the yellow colour introduced? the <input type="text" class="text-answer" id="t12-5" data-correct="1890s" autocomplete="off" style="width:90px;"></p><p>6. How many pencils are produced every year? more than fourteen <input type="text" class="text-answer" id="t12-6" data-correct="billion" autocomplete="off" style="width:110px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-scan', 't12-scan-score')">Check answers</button>
+          <span id="t12-scan-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 20</div>
+      <h2>Vocabulary — Word Forms and Collocations</h2>
+      <p class="task-sub">Write the correct form, then choose the collocation.</p>
+      <div class="card" id="t13-wf" style="line-height:2.4;"><p>1. Laughter is a social <input type="text" class="text-answer" id="t13-1" data-correct="signal" autocomplete="off" style="width:100px;">. (signal — noun)</p><p>2. People showed <input type="text" class="text-answer" id="t13-2" data-correct="friendliness" autocomplete="off" style="width:140px;"> by laughing. (friendly)</p><p>3. Samarkand’s paper was considered among the <input type="text" class="text-answer" id="t13-3" data-correct="best" autocomplete="off" style="width:90px;"> in the world. (good — superlative)</p><p>4. Travel was slow and <input type="text" class="text-answer" id="t13-4" data-correct="dangerous" autocomplete="off" style="width:120px;">. (danger)</p><p>5. Homework can cause <input type="text" class="text-answer" id="t13-5" data-correct="stress" autocomplete="off" style="width:100px;">. (stressful)</p><p>6. Homework may increase <input type="text" class="text-answer" id="t13-6" data-correct="inequality" autocomplete="off" style="width:130px;">. (equal)</p><p>7. The station is very <input type="text" class="text-answer" id="t13-7" data-correct="noisy" autocomplete="off" style="width:100px;">. (noise)</p><p>8. The roads may resist water <input type="text" class="text-answer" id="t13-8" data-correct="damage" autocomplete="off" style="width:110px;">. (damaged)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-wf', 't13-wf-score')">Check answers</button>
+          <span id="t13-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t13-col"><div class="q-item" id="t13-col-1">
+          <p>1. to ______ a joke</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-1" data-correct="false"> say</label><label><input type="radio" value="1" name="t13-col-1" data-correct="true"> tell</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-2">
+          <p>2. to ______ homework</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-2" data-correct="true"> do</label><label><input type="radio" value="1" name="t13-col-2" data-correct="false"> make</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-3">
+          <p>3. to ______ knowledge</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-3" data-correct="false"> divide</label><label><input type="radio" value="1" name="t13-col-3" data-correct="true"> share</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-4">
+          <p>4. to ______ attention</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-4" data-correct="true"> pay</label><label><input type="radio" value="1" name="t13-col-4" data-correct="false"> give up</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-5">
+          <p>5. to ______ a risk</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-5" data-correct="false"> do</label><label><input type="radio" value="1" name="t13-col-5" data-correct="true"> take</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-6">
+          <p>6. to ______ a rest</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-6" data-correct="true"> have</label><label><input type="radio" value="1" name="t13-col-6" data-correct="false"> make</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-col', 't13-col-score')">Check answers</button>
+          <span id="t13-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 20</div>
+      <h2>Grammar for Writing — Pie Chart Language and Opinions</h2>
+      <p class="task-sub">Choose the correct option.</p>
+      <div class="card" id="t14-gr"><div class="q-item" id="t14-gr-1">
+          <p>1. Walking ______ for 45% of journeys in 2000.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-1" data-correct="false"> accounted</label><label><input type="radio" value="1" name="t14-gr-1" data-correct="true"> accounted for</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-2">
+          <p>2. The proportion of students who travelled by car ______ from 15% to 35%.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-2" data-correct="true"> rose</label><label><input type="radio" value="1" name="t14-gr-2" data-correct="false"> raised</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-3">
+          <p>3. ______ half of students walked to school in 2000.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-3" data-correct="false"> Most</label><label><input type="radio" value="1" name="t14-gr-3" data-correct="true"> Almost</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-4">
+          <p>4. The figure for buses remained ______ at 30%.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-4" data-correct="true"> the same</label><label><input type="radio" value="1" name="t14-gr-4" data-correct="false"> same</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-5">
+          <p>5. In my opinion, homework ______ banned.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-5" data-correct="true"> should not be</label><label><input type="radio" value="1" name="t14-gr-5" data-correct="false"> should not</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-6">
+          <p>6. Young children learn ______ by playing than by doing worksheets.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-6" data-correct="false"> more good</label><label><input type="radio" value="1" name="t14-gr-6" data-correct="true"> better</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-7">
+          <p>7. ______, homework helps pupils practise.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-7" data-correct="true"> On the one hand</label><label><input type="radio" value="1" name="t14-gr-7" data-correct="false"> In one hand</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-8">
+          <p>8. A quarter ______ students walked in 2020.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-8" data-correct="false"> from</label><label><input type="radio" value="1" name="t14-gr-8" data-correct="true"> of</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-gr', 't14-gr-score')">Check answers</button>
+          <span id="t14-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task15" data-task="15">
+      <div class="task-eyebrow">Task 15 of 20</div>
+      <h2>Writing Task 1 — Skills: Pie Charts</h2>
+      <p class="task-sub">Study the two pie charts and practise the language before you write.</p>
+<div class="card"><p class="prompt-label" style="text-align:center;">How students at one school travelled to school</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;"><div><svg viewBox="0 0 320 374" class="svg-chart" role="img" aria-label="2000" style="width:100%;max-width:320px;display:block;margin:0 auto;font-family:inherit;"><text x="160.0" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">2000</text><path d="M160.0,165 L160.0,60.0 A105,105 0 0 1 192.4,264.9 Z" fill="#2c6bed" stroke="#fff" stroke-width="1.5"/><text x="230.5" y="157.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">45%</text><path d="M160.0,165 L192.4,264.9 A105,105 0 0 1 55.0,165.0 Z" fill="#d9480f" stroke="#fff" stroke-width="1.5"/><text x="118.0" y="226.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">30%</text><path d="M160.0,165 L55.0,165.0 A105,105 0 0 1 98.3,80.1 Z" fill="#2b8a3e" stroke="#fff" stroke-width="1.5"/><text x="96.4" y="136.6" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">15%</text><path d="M160.0,165 L98.3,80.1 A105,105 0 0 1 160.0,60.0 Z" fill="#7048e8" stroke="#fff" stroke-width="1.5"/><text x="137.9" y="101.1" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">10%</text><rect x="14.0" y="286" width="12" height="12" fill="#2c6bed"/><text x="32.0" y="296" font-size="12" fill="#14162b">walk</text><rect x="174.0" y="286" width="12" height="12" fill="#d9480f"/><text x="192.0" y="296" font-size="12" fill="#14162b">bus</text><rect x="14.0" y="308" width="12" height="12" fill="#2b8a3e"/><text x="32.0" y="318" font-size="12" fill="#14162b">car</text><rect x="174.0" y="308" width="12" height="12" fill="#7048e8"/><text x="192.0" y="318" font-size="12" fill="#14162b">bicycle</text></svg></div><div><svg viewBox="0 0 320 374" class="svg-chart" role="img" aria-label="2020" style="width:100%;max-width:320px;display:block;margin:0 auto;font-family:inherit;"><text x="160.0" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">2020</text><path d="M160.0,165 L160.0,60.0 A105,105 0 0 1 265.0,165.0 Z" fill="#2c6bed" stroke="#fff" stroke-width="1.5"/><text x="210.5" y="118.5" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">25%</text><path d="M160.0,165 L265.0,165.0 A105,105 0 0 1 127.6,264.9 Z" fill="#d9480f" stroke="#fff" stroke-width="1.5"/><text x="202.0" y="226.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">30%</text><path d="M160.0,165 L127.6,264.9 A105,105 0 0 1 98.3,80.1 Z" fill="#2b8a3e" stroke="#fff" stroke-width="1.5"/><text x="89.5" y="180.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">35%</text><path d="M160.0,165 L98.3,80.1 A105,105 0 0 1 160.0,60.0 Z" fill="#7048e8" stroke="#fff" stroke-width="1.5"/><text x="137.9" y="101.1" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">10%</text><rect x="14.0" y="286" width="12" height="12" fill="#2c6bed"/><text x="32.0" y="296" font-size="12" fill="#14162b">walk</text><rect x="174.0" y="286" width="12" height="12" fill="#d9480f"/><text x="192.0" y="296" font-size="12" fill="#14162b">bus</text><rect x="14.0" y="308" width="12" height="12" fill="#2b8a3e"/><text x="32.0" y="318" font-size="12" fill="#14162b">car</text><rect x="174.0" y="308" width="12" height="12" fill="#7048e8"/><text x="192.0" y="318" font-size="12" fill="#14162b">bicycle</text></svg></div></div></div>
+      <div class="card" id="t15-acc"><div class="sel-row"><select class="select" id="t15-acc-1" data-answer="correct"><option value="">—</option><option value="correct">correct</option><option value="wrong">wrong</option></select><span><b>1.</b> Walking was the most common way to travel in 2000.</span></div><div class="sel-row"><select class="select" id="t15-acc-2" data-answer="correct"><option value="">—</option><option value="correct">correct</option><option value="wrong">wrong</option></select><span><b>2.</b> By 2020, the car had become the most common way.</span></div><div class="sel-row"><select class="select" id="t15-acc-3" data-answer="wrong"><option value="">—</option><option value="correct">correct</option><option value="wrong">wrong</option></select><span><b>3.</b> The proportion who took the bus fell.</span></div><div class="sel-row"><select class="select" id="t15-acc-4" data-answer="correct"><option value="">—</option><option value="correct">correct</option><option value="wrong">wrong</option></select><span><b>4.</b> Cycling stayed the same.</span></div><div class="sel-row"><select class="select" id="t15-acc-5" data-answer="wrong"><option value="">—</option><option value="correct">correct</option><option value="wrong">wrong</option></select><span><b>5.</b> Walking increased by 20%.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-acc', 't15-acc-score')">Check answers</button>
+          <span id="t15-acc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t15-g" style="line-height:2.4;"><p>1. In 2000, almost <input type="text" class="text-answer" id="t15-1" data-correct="half" autocomplete="off" style="width:90px;"> of students walked to school.</p><p>2. The proportion of students travelling by car more than <input type="text" class="text-answer" id="t15-2" data-correct="doubled" autocomplete="off" style="width:110px;">.</p><p>3. The percentage of students who walked fell <input type="text" class="text-answer" id="t15-3" data-correct="by" autocomplete="off" style="width:70px;"> 20 percentage points.</p><p>4. The figures for bus and bicycle remained <input type="text" class="text-answer" id="t15-4" data-correct="unchanged/stable/the same" autocomplete="off" style="width:130px;">.</p><p>5. A quarter of students walked in 2020, <input type="text" class="text-answer" id="t15-5" data-correct="compared" autocomplete="off" style="width:120px;"> with 45% in 2000.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-g', 't15-g-score')">Check answers</button>
+          <span id="t15-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task16" data-task="16">
+      <div class="task-eyebrow">Task 16 of 20</div>
+      <h2>Writing Task 1 — Your Report</h2>
+      <p class="task-sub">Write the full report. About <b>20 minutes</b>, <b>at least 150 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The pie charts below show how students at one school travelled to school in 2000 and 2020.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;"><div><svg viewBox="0 0 320 374" class="svg-chart" role="img" aria-label="2000" style="width:100%;max-width:320px;display:block;margin:0 auto;font-family:inherit;"><text x="160.0" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">2000</text><path d="M160.0,165 L160.0,60.0 A105,105 0 0 1 192.4,264.9 Z" fill="#2c6bed" stroke="#fff" stroke-width="1.5"/><text x="230.5" y="157.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">45%</text><path d="M160.0,165 L192.4,264.9 A105,105 0 0 1 55.0,165.0 Z" fill="#d9480f" stroke="#fff" stroke-width="1.5"/><text x="118.0" y="226.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">30%</text><path d="M160.0,165 L55.0,165.0 A105,105 0 0 1 98.3,80.1 Z" fill="#2b8a3e" stroke="#fff" stroke-width="1.5"/><text x="96.4" y="136.6" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">15%</text><path d="M160.0,165 L98.3,80.1 A105,105 0 0 1 160.0,60.0 Z" fill="#7048e8" stroke="#fff" stroke-width="1.5"/><text x="137.9" y="101.1" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">10%</text><rect x="14.0" y="286" width="12" height="12" fill="#2c6bed"/><text x="32.0" y="296" font-size="12" fill="#14162b">walk</text><rect x="174.0" y="286" width="12" height="12" fill="#d9480f"/><text x="192.0" y="296" font-size="12" fill="#14162b">bus</text><rect x="14.0" y="308" width="12" height="12" fill="#2b8a3e"/><text x="32.0" y="318" font-size="12" fill="#14162b">car</text><rect x="174.0" y="308" width="12" height="12" fill="#7048e8"/><text x="192.0" y="318" font-size="12" fill="#14162b">bicycle</text></svg></div><div><svg viewBox="0 0 320 374" class="svg-chart" role="img" aria-label="2020" style="width:100%;max-width:320px;display:block;margin:0 auto;font-family:inherit;"><text x="160.0" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#14162b">2020</text><path d="M160.0,165 L160.0,60.0 A105,105 0 0 1 265.0,165.0 Z" fill="#2c6bed" stroke="#fff" stroke-width="1.5"/><text x="210.5" y="118.5" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">25%</text><path d="M160.0,165 L265.0,165.0 A105,105 0 0 1 127.6,264.9 Z" fill="#d9480f" stroke="#fff" stroke-width="1.5"/><text x="202.0" y="226.8" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">30%</text><path d="M160.0,165 L127.6,264.9 A105,105 0 0 1 98.3,80.1 Z" fill="#2b8a3e" stroke="#fff" stroke-width="1.5"/><text x="89.5" y="180.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">35%</text><path d="M160.0,165 L98.3,80.1 A105,105 0 0 1 160.0,60.0 Z" fill="#7048e8" stroke="#fff" stroke-width="1.5"/><text x="137.9" y="101.1" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">10%</text><rect x="14.0" y="286" width="12" height="12" fill="#2c6bed"/><text x="32.0" y="296" font-size="12" fill="#14162b">walk</text><rect x="174.0" y="286" width="12" height="12" fill="#d9480f"/><text x="192.0" y="296" font-size="12" fill="#14162b">bus</text><rect x="14.0" y="308" width="12" height="12" fill="#2b8a3e"/><text x="32.0" y="318" font-size="12" fill="#14162b">car</text><rect x="174.0" y="308" width="12" height="12" fill="#7048e8"/><text x="192.0" y="318" font-size="12" fill="#14162b">bicycle</text></svg></div></div></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t16-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t16-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t16-essay-model"><div class="model-text">
+  <p>The pie charts compare the ways in which students at one school travelled to school in 2000 and 2020.</p>
+  <p>Overall, walking was the most popular method in 2000, but by 2020 travelling by car had taken its place. The proportions of students who took the bus or cycled did not change.</p>
+  <p>In 2000, almost half of the students (45%) walked to school. The bus was the second most common method, used by 30%, while 15% came by car and only 10% cycled.</p>
+  <p>Twenty years later, the picture was quite different. The percentage of students who travelled by car more than doubled to 35%, making it the most common method. In contrast, the proportion who walked fell by 20 percentage points to a quarter of all students. The figures for the bus and the bicycle remained the same, at 30% and 10% respectively.</p>
+  <p class="alt">≈ 160 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task17" data-task="17">
+      <div class="task-eyebrow">Task 17 of 20</div>
+      <h2>Writing Task 2 — Planning</h2>
+      <p class="task-sub">Plan before you write. You read about this topic in Passage 3 — use the ideas, but in your own words.</p>
+<div class="card task-prompt"><p class="prompt-label">Writing Task 2</p><p><i>Some people think that homework should be banned in primary schools. To what extent do you agree or disagree?</i></p></div>
+      <div class="card" id="t17-pl"><div class="q-item" id="t17-pl-1">
+          <p>1. What type of essay is this?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-1" data-correct="false"> A. discuss both views</label><label><input type="radio" value="1" name="t17-pl-1" data-correct="true"> B. opinion (agree or disagree)</label><label><input type="radio" value="2" name="t17-pl-1" data-correct="false"> C. problem and solution</label><label><input type="radio" value="3" name="t17-pl-1" data-correct="false"> D. advantages only</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-2">
+          <p>2. Best thesis statement:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-2" data-correct="false"> A. Homework is a thing.</label><label><input type="radio" value="1" name="t17-pl-2" data-correct="true"> B. I partly agree: long homework should be banned for young children, but short reading at home is useful.</label><label><input type="radio" value="2" name="t17-pl-2" data-correct="false"> C. Children go to school.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-3">
+          <p>3. Best evidence for banning homework:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-3" data-correct="true"> A. Research found homework has only a very small effect for primary school children.</label><label><input type="radio" value="1" name="t17-pl-3" data-correct="false"> B. Teachers are busy.</label><label><input type="radio" value="2" name="t17-pl-3" data-correct="false"> C. Children like toys.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-4">
+          <p>4. Best idea for the other side:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-4" data-correct="false"> A. Homework is bad.</label><label><input type="radio" value="1" name="t17-pl-4" data-correct="false"> B. Schools are big.</label><label><input type="radio" value="2" name="t17-pl-4" data-correct="true"> C. Short homework keeps parents informed about what their children are learning.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t17-pl', 't17-pl-score')">Check answers</button>
+          <span id="t17-pl-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write your short plan: thesis + one idea and example for each body paragraph.</p><textarea class="no-check mini-answer" id="t17-out-1" placeholder="Write your plan here..." style="min-height:110px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t17-out-btn">Show an example plan</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t17-out-ans"><p><b>Thesis:</b> partly agree. <b>Body 1:</b> why ban — small effect (Cooper), stress, less time to play, inequality. <b>Body 2:</b> what to keep — reading for pleasure, parents informed. <b>Conclusion:</b> replace worksheets with reading.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task18" data-task="18">
+      <div class="task-eyebrow">Task 18 of 20</div>
+      <h2>Writing Task 2 — Your Essay</h2>
+      <p class="task-sub">Write the full essay. About <b>40 minutes</b>, <b>at least 250 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Some people think that homework should be banned in primary schools. To what extent do you agree or disagree?</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t18-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t18-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t18-essay-model"><div class="model-text">
+  <p>In many countries, young children are given homework almost every day. Some people believe that it should be banned in primary schools. I partly agree with this view: long homework tasks should be stopped, but a small amount of reading at home is still useful.</p>
+  <p>There are good reasons to stop giving young children traditional homework. First, research has shown that homework has only a very small effect on the achievement of primary school pupils. Second, too much homework can make children stressed and tired, and it leaves them less time for play, sport and family life, which are also important for their development. Finally, homework can be unfair, because some children have parents who can help them and a quiet place to work, while others do not.</p>
+  <p>However, I do not think that all homework should disappear. Reading for pleasure at home is one of the best ways for young children to improve their language and imagination, and it only takes fifteen or twenty minutes a day. In addition, simple tasks such as talking to parents about what they learnt at school help families to understand what their children are studying.</p>
+  <p>In conclusion, I agree that worksheets and long exercises should be banned in primary schools, because they bring few benefits and can cause stress. Instead, schools should encourage children to read at home every day, which is more enjoyable and more useful.</p>
+  <p class="alt">≈ 270 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task19" data-task="19">
+      <div class="task-eyebrow">Task 19 of 20</div>
+      <h2>Speaking Part 3 — Today’s Topics</h2>
+      <p class="task-sub">Answer each question in its own box — about <b>30–45 seconds</b> each.</p>
+      <div class="question-box" data-field="t19-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Why do people laugh more when they are with friends?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think it’s because…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Why are cities like Samarkand and Bukhara important for tourism?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The main reason is…”</li><li>“Visitors can…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">How much homework should children have?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“In my opinion,…”</li><li>“It depends on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Would you like to travel to space? Why or why not?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d love to, because…”</li><li>“However,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task20" data-task="20">
+      <div class="task-eyebrow">Task 20 of 20</div>
+      <h2>Self-Check — Two Reading and Writing Days</h2>
+      <p class="task-sub">Compare today with yesterday.</p>
+      <div class="card"><p class="mini-q">1. Your reading scores on Day 35 and Day 36 (out of 40):</p><textarea class="no-check mini-answer" id="t20-rf-1" placeholder="Write here..." style="min-height:56px;"></textarea><p class="mini-q">2. Which question type improved? Which is still difficult?</p><textarea class="no-check mini-answer" id="t20-rf-2" placeholder="Write here..." style="min-height:56px;"></textarea><p class="mini-q">3. Compare your two Task 1 reports: what did you do better today?</p><textarea class="no-check mini-answer" id="t20-rf-3" placeholder="Write here..." style="min-height:56px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t20-rf-btn">Show some guidance</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t20-rf-ans"><p>Look for real changes: fewer NOT GIVEN mistakes, fewer spelling errors in completion tasks, a clearer overview in Task 1, and a clear opinion in the first paragraph of Task 2.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 20</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 36 of 45</div>
+    <h1>Day 36 complete! 🎉</h1>
+    <p>Day 36 done — a full reading test, two extra articles, reading skills, vocabulary and grammar, Writing Task 1 (pie charts) and Task 2, and speaking.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t10-lm-lm');
+
+    initWritingCoach('t16-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The pie charts below show how students at one school travelled to school in 2000 and 2020.' });
+    initWritingCoach('t18-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Some people think that homework should be banned in primary schools. To what extent do you agree or disagree?' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 36, 8, 't8-speaking-summary', 30); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-1"]'); if (b) initRecordControl(b, user.id, 36, 19, 't19-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-2"]'); if (b) initRecordControl(b, user.id, 36, 19, 't19-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-3"]'); if (b) initRecordControl(b, user.id, 36, 19, 't19-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-4"]'); if (b) initRecordControl(b, user.id, 36, 19, 't19-speaking-4', 0); }
+
+    await initTaskFlow(36, 20, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-notes1', 't2-notes1-score'); checkAllAnswers('t2-mc', 't2-mc-score'); },
+      4: () => { checkAllAnswers('t4-h', 't4-h-score'); checkAllAnswers('t4-sc', 't4-sc-score'); checkAllAnswers('t4-sa', 't4-sa-score'); },
+      6: () => { checkAllAnswers('t6-mi', 't6-mi-score'); checkAllAnswers('t6-s', 't6-s-score'); checkAllAnswers('t6-yn', 't6-yn-score'); },
+      8: () => { checkAllAnswers('t8-mc', 't8-mc-score'); },
+      9: () => { checkAllAnswers('t9-tf', 't9-tf-score'); },
+      10: () => { checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm'); checkAllAnswers('t10-mc', 't10-mc-score'); },
+      11: () => { checkAllAnswers('t11-ref', 't11-ref-score'); },
+      12: () => { checkAllAnswers('t12-title', 't12-title-score'); checkAllAnswers('t12-scan', 't12-scan-score'); },
+      13: () => { checkAllAnswers('t13-wf', 't13-wf-score'); checkAllAnswers('t13-col', 't13-col-score'); },
+      14: () => { checkAllAnswers('t14-gr', 't14-gr-score'); },
+      15: () => { checkAllAnswers('t15-acc', 't15-acc-score'); checkAllAnswers('t15-g', 't15-g-score'); },
+      17: () => { checkAllAnswers('t17-pl', 't17-pl-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-op-btn', 't9-op-ans', '[id^="t9-op-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t16-essay-model-btn', 't16-essay-model', '#t16-essay');
+    initGatedMistakeReveal('t17-out-btn', 't17-out-ans', '[id^="t17-out-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t18-essay-model-btn', 't18-essay-model', '#t18-essay');
+    initGatedMistakeReveal('t20-rf-btn', 't20-rf-ans', '[id^="t20-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>
