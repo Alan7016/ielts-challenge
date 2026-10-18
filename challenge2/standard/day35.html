@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 35 — Standard — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 35 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 20</div>
+      <h2>Starting Off — A Reading and Writing Day</h2>
+      <p class="task-sub">Today is a long <b>reading and writing day</b> — plan for about <b>4 hours</b>, with breaks. A full reading test (3 passages, 40 questions), two extra articles, reading skills, vocabulary and grammar, a full <b>Writing Task 1</b> and a full <b>Writing Task 2</b>, and speaking.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. You have 60 minutes for 40 reading questions. About how long should one passage take?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. 10 minutes</label><label><input type="radio" value="1" name="t1-st-1" data-correct="true"> B. 20 minutes</label><label><input type="radio" value="2" name="t1-st-1" data-correct="false"> C. 30 minutes</label><label><input type="radio" value="3" name="t1-st-1" data-correct="false"> D. 40 minutes</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. In Writing Task 1, what must you always include?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="false"> A. your opinion</label><label><input type="radio" value="1" name="t1-st-2" data-correct="true"> B. an overview of the main features</label><label><input type="radio" value="2" name="t1-st-2" data-correct="false"> C. every number on the chart</label><label><input type="radio" value="3" name="t1-st-2" data-correct="false"> D. a conclusion with advice</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. In Writing Task 2, how many words must you write?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="false"> A. at least 150</label><label><input type="radio" value="1" name="t1-st-3" data-correct="false"> B. at least 200</label><label><input type="radio" value="2" name="t1-st-3" data-correct="true"> C. at least 250</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. exactly 300</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. Which task is worth more marks?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="false"> A. Task 1</label><label><input type="radio" value="1" name="t1-st-4" data-correct="true"> B. Task 2</label><label><input type="radio" value="2" name="t1-st-4" data-correct="false"> C. They are equal.</label><label><input type="radio" value="3" name="t1-st-4" data-correct="false"> D. It depends on the chart.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Vocabulary for today.</strong> Match each word to its meaning.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. luxury</button><button type="button" class="lm-item" data-key="2">2. possessions</button><button type="button" class="lm-item" data-key="3">3. pavement</button><button type="button" class="lm-item" data-key="4">4. operator</button><button type="button" class="lm-item" data-key="5">5. tense</button><button type="button" class="lm-item" data-key="6">6. tournament</button><button type="button" class="lm-item" data-key="7">7. loan</button><button type="button" class="lm-item" data-key="8">8. authorities</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. the people who control a city or country</button><button type="button" class="lm-item" data-key="b">b. a competition with many players or teams</button><button type="button" class="lm-item" data-key="c">c. things that you own</button><button type="button" class="lm-item" data-key="d">d. not relaxed (about muscles or a person)</button><button type="button" class="lm-item" data-key="e">e. the path at the side of a road for people walking</button><button type="button" class="lm-item" data-key="f">f. money that you borrow from a bank</button><button type="button" class="lm-item" data-key="g">g. something expensive that you enjoy but do not need</button><button type="button" class="lm-item" data-key="h">h. a person who controls a machine</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 20</div>
+      <h2>Reading Passage 1 — The Story of Chocolate</h2>
+      <p class="task-sub"><b>The test starts now.</b> Spend about <b>20 minutes</b> on Questions 1–13. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Story of Chocolate<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">From a bitter drink to a treat for everyone.</small></h3>
+            <p class="article-meta">Reading Passage 1 · Food and history · 358 words</p>
+            <p><span class="para-label">A</span>Chocolate is made from the seeds of the cacao tree, which grows in hot, wet regions near the equator. The seeds, often called beans, grow inside large pods that hang directly from the trunk and branches of the tree. Each pod contains between 30 and 50 beans.</p><p><span class="para-label">B</span>People in Central America were using cacao more than 3,000 years ago. The Maya and later the Aztecs made a bitter drink from roasted beans mixed with water, chilli and spices. The drink was not sweet at all, and it was usually served cold. Cacao beans were so valuable that the Aztecs used them as money: a rabbit, for example, could be bought for about ten beans.</p><p><span class="para-label">C</span>Spanish explorers brought cacao to Europe in the sixteenth century. At first, Europeans did not like the bitter taste, but when sugar and cinnamon were added, the hot drink became fashionable among rich families. For more than two hundred years, chocolate was a luxury that only wealthy people could afford.</p><p><span class="para-label">D</span>Everything changed in the nineteenth century. In 1828, a Dutch chemist, Coenraad van Houten, invented a machine that removed some of the fat from the beans, making a powder that was easier to mix with water. In 1847, a British company made the first chocolate bar, and in 1875 Swiss producers added milk to create milk chocolate. Factories could now produce chocolate cheaply, and it became a treat for everyone.</p><p><span class="para-label">E</span>Today, most of the world’s cacao is grown in West Africa, especially in Côte d’Ivoire and Ghana, which together produce more than half of the global supply. Most of it is grown on small family farms. However, many farmers earn very little, and some experts are worried that young people no longer want to work on cacao farms.</p><p><span class="para-label">F</span>There are also environmental concerns. Cacao trees need shade, but in some areas forests have been cut down to make room for new farms. Climate change may also make some growing regions too hot and dry in the future. Some chocolate companies are now paying farmers more and helping them to plant trees, but many people believe that the price of chocolate will have to rise.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–5</p><p class="qg-instr">Do the following statements agree with the information in the passage? Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. Cacao pods grow directly on the trunk and branches of the tree.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. The Aztec cacao drink was usually served hot.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. Europeans liked the taste of cacao as soon as they tried it.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. Van Houten’s machine was very expensive to buy.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-4" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-5">
+          <p>5. Swiss producers were the first to make milk chocolate.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-5" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 6–9</p><p class="qg-instr">Complete the notes. Choose <b>ONE WORD AND/OR A NUMBER</b> from the passage.</p></div>
+<div class="card" id="t2-notes1"><p class="prompt-label">Chocolate — key facts</p><div style="line-height:2.1;"><div>• Each pod contains between 30 and 50 (6) <input type="text" class="text-answer" id="t2-6" data-correct="beans" autocomplete="off" style="width:110px;"></div><div>• The Aztecs used cacao beans as (7) <input type="text" class="text-answer" id="t2-7" data-correct="money" autocomplete="off" style="width:110px;"></div><div>• In Europe, sugar and (8) <input type="text" class="text-answer" id="t2-8" data-correct="cinnamon" autocomplete="off" style="width:120px;"> were added to the drink</div><div>• The first chocolate bar was made in (9) <input type="text" class="text-answer" id="t2-9" data-correct="1847" autocomplete="off" style="width:90px;"></div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-notes1', 't2-notes1-score')">Check answers</button>
+          <span id="t2-notes1-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 10–13</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-10">
+          <p>10. Paragraph D mainly describes</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-10" data-correct="false"> A. the life of Coenraad van Houten.</label><label><input type="radio" value="1" name="t2-mc-10" data-correct="true"> B. how chocolate became cheaper and more popular.</label><label><input type="radio" value="2" name="t2-mc-10" data-correct="false"> C. how milk is produced in Switzerland.</label><label><input type="radio" value="3" name="t2-mc-10" data-correct="false"> D. the first chocolate factory in Britain.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-11">
+          <p>11. Côte d’Ivoire and Ghana together produce</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-11" data-correct="false"> A. about a quarter of the world’s cacao.</label><label><input type="radio" value="1" name="t2-mc-11" data-correct="false"> B. less cacao than Central America.</label><label><input type="radio" value="2" name="t2-mc-11" data-correct="true"> C. more than half of the world’s cacao.</label><label><input type="radio" value="3" name="t2-mc-11" data-correct="false"> D. all of the world’s cacao.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-12">
+          <p>12. What are some experts worried about?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-12" data-correct="true"> A. Young people do not want to work on cacao farms.</label><label><input type="radio" value="1" name="t2-mc-12" data-correct="false"> B. Family farms are too large.</label><label><input type="radio" value="2" name="t2-mc-12" data-correct="false"> C. Cacao trees grow too slowly.</label><label><input type="radio" value="3" name="t2-mc-12" data-correct="false"> D. People are eating less chocolate.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-13">
+          <p>13. What does the writer suggest in the last paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-13" data-correct="false"> A. Chocolate companies do not care about farmers.</label><label><input type="radio" value="1" name="t2-mc-13" data-correct="true"> B. The price of chocolate will probably rise.</label><label><input type="radio" value="2" name="t2-mc-13" data-correct="false"> C. Cacao will soon be grown in Europe.</label><label><input type="radio" value="3" name="t2-mc-13" data-correct="false"> D. Forests are no longer being cut down.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 20</div>
+      <h2>Reading Passage 1 — Answer Analysis</h2>
+      <p class="task-sub">Open each answer and check the evidence.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Story of Chocolate</summary>
+        <p><span class="para-label">A</span>Chocolate is made from the seeds of the cacao tree, which grows in hot, wet regions near the equator. The seeds, often called beans, grow inside large pods that hang directly from the trunk and branches of the tree. Each pod contains between 30 and 50 beans.</p><p><span class="para-label">B</span>People in Central America were using cacao more than 3,000 years ago. The Maya and later the Aztecs made a bitter drink from roasted beans mixed with water, chilli and spices. The drink was not sweet at all, and it was usually served cold. Cacao beans were so valuable that the Aztecs used them as money: a rabbit, for example, could be bought for about ten beans.</p><p><span class="para-label">C</span>Spanish explorers brought cacao to Europe in the sixteenth century. At first, Europeans did not like the bitter taste, but when sugar and cinnamon were added, the hot drink became fashionable among rich families. For more than two hundred years, chocolate was a luxury that only wealthy people could afford.</p><p><span class="para-label">D</span>Everything changed in the nineteenth century. In 1828, a Dutch chemist, Coenraad van Houten, invented a machine that removed some of the fat from the beans, making a powder that was easier to mix with water. In 1847, a British company made the first chocolate bar, and in 1875 Swiss producers added milk to create milk chocolate. Factories could now produce chocolate cheaply, and it became a treat for everyone.</p><p><span class="para-label">E</span>Today, most of the world’s cacao is grown in West Africa, especially in Côte d’Ivoire and Ghana, which together produce more than half of the global supply. Most of it is grown on small family farms. However, many farmers earn very little, and some experts are worried that young people no longer want to work on cacao farms.</p><p><span class="para-label">F</span>There are also environmental concerns. Cacao trees need shade, but in some areas forests have been cut down to make room for new farms. Climate change may also make some growing regions too hot and dry in the future. Some chocolate companies are now paying farmers more and helping them to plant trees, but many people believe that the price of chocolate will have to rise.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">pods that hang directly from the trunk and branches of the tree</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">it was usually served cold</span>.</p><p><span class="trap">Trap:</span> In Europe it became a <i>hot</i> drink — but that was later.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">FALSE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">At first, Europeans did not like the bitter taste</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para D</span></summary><div class="an-body"><p>The passage describes what the machine did, but not its price.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">TRUE</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">in 1875 Swiss producers added milk to create milk chocolate</span>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">beans</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Each pod contains between 30 and 50 beans</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">money</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">the Aztecs used them as money</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">cinnamon</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">when sugar and cinnamon were added</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">1847</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">In 1847, a British company made the first chocolate bar</span>.</p><p><span class="trap">Trap:</span> 1828 is the machine; 1875 is milk chocolate.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Factories could now produce chocolate cheaply, and it became a treat for everyone</span>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">C</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">together produce more than half of the global supply</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">A</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">young people no longer want to work on cacao farms</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">many people believe that the price of chocolate will have to rise</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 20</div>
+      <h2>Reading Passage 2 — Living in a Tiny House</h2>
+      <p class="task-sub">Spend about <b>20 minutes</b> on Questions 14–26: <b>matching headings</b>, <b>sentence completion</b> and <b>short answers</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Living in a Tiny House<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Why are thousands of people choosing to live in very small homes?</small></h3>
+            <p class="article-meta">Reading Passage 2 · Homes and lifestyles · 289 words</p>
+            <p><span class="para-label">A</span>Imagine a home that is smaller than a parking space for two cars. That is the size of a typical ‘tiny house’ — usually between 10 and 40 square metres. In the last fifteen years, thousands of people in the United States, Europe and Australia have chosen to live in homes like these.</p><p><span class="para-label">B</span>Many tiny houses are built on wheels, so their owners can move them from place to place. Others are built on small pieces of land, often in the countryside. Inside, every centimetre is used carefully: beds are placed above the kitchen, stairs contain drawers, and tables fold away into the wall.</p><p><span class="para-label">C</span>The main reason people choose tiny houses is money. In many cities, a normal house costs ten or twenty times a person’s yearly salary. A tiny house, by contrast, can be built for between 30,000 and 80,000 dollars. Many owners say they no longer need a large loan from a bank, and so they can work fewer hours.</p><p><span class="para-label">D</span>Others are attracted by the idea of a simpler life. Because there is little space, owners have to give away most of their possessions. Many say that this makes them happier, as they spend less time cleaning and shopping and more time outdoors or with friends.</p><p><span class="para-label">E</span>Tiny houses are also better for the environment. They need much less energy for heating and lighting, and some owners use solar panels and collect rainwater, so they do not need to connect to public services at all.</p><p><span class="para-label">F</span>However, tiny homes are not for everyone. Families with children often find them too small, and in some countries it is difficult to get permission to live in one all year round. Some owners also discover that they miss having guests to stay.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–19</p><p class="qg-instr">Choose the correct heading for each paragraph, <b>A–F</b>, from the list.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; A growing trend<br><b>ii</b>&nbsp; Clever use of space<br><b>iii</b>&nbsp; Saving money<br><b>iv</b>&nbsp; Owning less, living more<br><b>v</b>&nbsp; An environmentally friendly choice<br><b>vi</b>&nbsp; The disadvantages<br><b>vii</b>&nbsp; How to build your own tiny house<br><b>viii</b>&nbsp; Famous tiny houses</p></div>
+      <div class="card" id="t4-h"><div class="sel-row"><select class="select" id="t4-h-14" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>14.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t4-h-15" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>15.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t4-h-16" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>16.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t4-h-17" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>17.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t4-h-18" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>18.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t4-h-19" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>19.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-h', 't4-h-score')">Check answers</button>
+          <span id="t4-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 20–23</p><p class="qg-instr">Complete the sentences. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t4-sc" style="line-height:2.4;"><p>20. Many tiny houses are built on <input type="text" class="text-answer" id="t4-20" data-correct="wheels" autocomplete="off" style="width:110px;">.</p><p>21. Beds are often placed above the <input type="text" class="text-answer" id="t4-21" data-correct="kitchen" autocomplete="off" style="width:110px;">.</p><p>22. Owners have to give away most of their <input type="text" class="text-answer" id="t4-22" data-correct="possessions" autocomplete="off" style="width:140px;">.</p><p>23. Some owners collect <input type="text" class="text-answer" id="t4-23" data-correct="rainwater" autocomplete="off" style="width:130px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-sc', 't4-sc-score')">Check answers</button>
+          <span id="t4-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 24–26</p><p class="qg-instr">Answer the questions. Choose <b>NO MORE THAN TWO WORDS AND/OR A NUMBER</b> from the passage.</p></div>
+      <div class="card" id="t4-sa" style="line-height:2.4;"><p>24. What is the largest typical size of a tiny house? <input type="text" class="text-answer" id="t4-24" data-correct="40 square metres/40 sq metres/40m2/40 m2" autocomplete="off" style="width:170px;"></p><p>25. What do some owners use to produce electricity? <input type="text" class="text-answer" id="t4-25" data-correct="solar panels" autocomplete="off" style="width:150px;"></p><p>26. Which group of people often find tiny houses too small? <input type="text" class="text-answer" id="t4-26" data-correct="families" autocomplete="off" style="width:130px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-sa', 't4-sa-score')">Check answers</button>
+          <span id="t4-sa-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 20</div>
+      <h2>Reading Passage 2 — Answer Analysis</h2>
+      <p class="task-sub">Check every answer. For headings, notice the <b>main idea</b> of each paragraph.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Living in a Tiny House</summary>
+        <p><span class="para-label">A</span>Imagine a home that is smaller than a parking space for two cars. That is the size of a typical ‘tiny house’ — usually between 10 and 40 square metres. In the last fifteen years, thousands of people in the United States, Europe and Australia have chosen to live in homes like these.</p><p><span class="para-label">B</span>Many tiny houses are built on wheels, so their owners can move them from place to place. Others are built on small pieces of land, often in the countryside. Inside, every centimetre is used carefully: beds are placed above the kitchen, stairs contain drawers, and tables fold away into the wall.</p><p><span class="para-label">C</span>The main reason people choose tiny houses is money. In many cities, a normal house costs ten or twenty times a person’s yearly salary. A tiny house, by contrast, can be built for between 30,000 and 80,000 dollars. Many owners say they no longer need a large loan from a bank, and so they can work fewer hours.</p><p><span class="para-label">D</span>Others are attracted by the idea of a simpler life. Because there is little space, owners have to give away most of their possessions. Many say that this makes them happier, as they spend less time cleaning and shopping and more time outdoors or with friends.</p><p><span class="para-label">E</span>Tiny houses are also better for the environment. They need much less energy for heating and lighting, and some owners use solar panels and collect rainwater, so they do not need to connect to public services at all.</p><p><span class="para-label">F</span>However, tiny homes are not for everyone. Families with children often find them too small, and in some countries it is difficult to get permission to live in one all year round. Some owners also discover that they miss having guests to stay.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">i</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">thousands of people … have chosen to live in homes like these</span>.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">ii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">every centimetre is used carefully</span>.</p><p><span class="trap">Trap:</span> vii — the paragraph describes the inside, not how to build one.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">iii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">The main reason people choose tiny houses is money</span>.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">iv</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">owners have to give away most of their possessions … this makes them happier</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">v</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Tiny houses are also better for the environment</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">vi</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">However, tiny homes are not for everyone</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">wheels</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Many tiny houses are built on wheels</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">kitchen</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">beds are placed above the kitchen</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">possessions</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">give away most of their possessions</span>.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">rainwater</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">collect rainwater</span>.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">40 square metres</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">usually between 10 and 40 square metres</span>. The question asks for the largest size.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">solar panels</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">some owners use solar panels</span>.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">families</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Families with children often find them too small</span>. <i>families with children</i> is three words — too many.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 20</div>
+      <h2>Reading Passage 3 — Robots That Deliver</h2>
+      <p class="task-sub">Spend about <b>20 minutes</b> on Questions 27–40: <b>matching information</b>, <b>summary completion</b> and <b>YES / NO / NOT GIVEN</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Robots That Deliver<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Small robots are carrying food along city pavements. Are they here to stay?</small></h3>
+            <p class="article-meta">Reading Passage 3 · Technology · 283 words</p>
+            <p><span class="para-label">A</span>On the streets of some cities, small six-wheeled robots now carry food and parcels to people’s homes. About the size of a supermarket trolley, they travel along pavements at walking speed, stopping at traffic lights and crossing roads carefully. Customers order using an app and receive a message when the robot arrives; then they open the lid with a code.</p><p><span class="para-label">B</span>The robots were first tested in Estonia in 2015 by a company called Starship Technologies. Since then, they have made millions of deliveries in the United States, Britain and other countries, many of them on university campuses, where students order coffee and snacks between classes.</p><p><span class="para-label">C</span>Companies say the robots have several advantages. They are cheap to run, they do not need breaks, and because they are electric they produce no exhaust fumes. Each robot is watched by a human operator, who can take control if it gets stuck, but one operator can look after several robots at the same time.</p><p><span class="para-label">D</span>There are also problems. Robots can only carry small loads, and they find snow, steps and very busy pavements difficult. Some pedestrians complain that the robots get in their way, and there have been cases of people kicking them or trying to steal the food inside. In a few cities, the authorities have limited the number of robots allowed on the streets.</p><p><span class="para-label">E</span>In my opinion, delivery robots will not replace human delivery drivers, at least not soon. They are useful for short trips in quiet areas, such as campuses or new housing estates. But for long distances or heavy goods, people and vans will still be needed for many years. Cities should make clear rules now, before the pavements become crowded with machines.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 27–31</p><p class="qg-instr">Which paragraph, <b>A–E</b>, contains the following information? You may use any letter more than once.</p></div>
+      <div class="card" id="t6-mi"><div class="sel-row"><select class="select" id="t6-mi-27" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>27.</b> where the robots were first tested</span></div><div class="sel-row"><select class="select" id="t6-mi-28" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>28.</b> how customers get their order out of the robot</span></div><div class="sel-row"><select class="select" id="t6-mi-29" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>29.</b> examples of bad behaviour towards the robots</span></div><div class="sel-row"><select class="select" id="t6-mi-30" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>30.</b> the number of robots one person can watch</span></div><div class="sel-row"><select class="select" id="t6-mi-31" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select><span><b>31.</b> a recommendation for cities</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mi', 't6-mi-score')">Check answers</button>
+          <span id="t6-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 32–36</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD</b> from the box.</p></div>
+      <div class="word-bank">trolley · walking · electric · steps · authorities · running · cars · students · petrol</div><div class="card" id="t6-s" style="line-height:2.7;"><p>Delivery robots are about the size of a supermarket (32) <input type="text" class="text-answer" id="t6-32" data-correct="trolley" autocomplete="off" style="width:110px;"> and travel at (33) <input type="text" class="text-answer" id="t6-33" data-correct="walking" autocomplete="off" style="width:110px;"> speed. They are (34) <input type="text" class="text-answer" id="t6-34" data-correct="electric" autocomplete="off" style="width:110px;">, so they produce no fumes. However, they find snow and (35) <input type="text" class="text-answer" id="t6-35" data-correct="steps" autocomplete="off" style="width:100px;"> difficult, and in some cities the (36) <input type="text" class="text-answer" id="t6-36" data-correct="authorities" autocomplete="off" style="width:130px;"> have limited their number.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-s', 't6-s-score')">Check answers</button>
+          <span id="t6-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 37–40</p><p class="qg-instr">Do the statements agree with the views of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-37">
+          <p>37. Delivery robots will soon replace human drivers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-37" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-37" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-37" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-38">
+          <p>38. Robots are useful for short trips in quiet areas.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-38" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-38" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-38" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-39">
+          <p>39. Delivery robots are more popular in Britain than in the United States.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-39" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-39" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-39" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-40">
+          <p>40. Cities should make rules about delivery robots now.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-40" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-40" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-40" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 20</div>
+      <h2>Reading Passage 3 — Answer Analysis and Your Score</h2>
+      <p class="task-sub">Check Passage 3, then add up your score out of 40.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Robots That Deliver</summary>
+        <p><span class="para-label">A</span>On the streets of some cities, small six-wheeled robots now carry food and parcels to people’s homes. About the size of a supermarket trolley, they travel along pavements at walking speed, stopping at traffic lights and crossing roads carefully. Customers order using an app and receive a message when the robot arrives; then they open the lid with a code.</p><p><span class="para-label">B</span>The robots were first tested in Estonia in 2015 by a company called Starship Technologies. Since then, they have made millions of deliveries in the United States, Britain and other countries, many of them on university campuses, where students order coffee and snacks between classes.</p><p><span class="para-label">C</span>Companies say the robots have several advantages. They are cheap to run, they do not need breaks, and because they are electric they produce no exhaust fumes. Each robot is watched by a human operator, who can take control if it gets stuck, but one operator can look after several robots at the same time.</p><p><span class="para-label">D</span>There are also problems. Robots can only carry small loads, and they find snow, steps and very busy pavements difficult. Some pedestrians complain that the robots get in their way, and there have been cases of people kicking them or trying to steal the food inside. In a few cities, the authorities have limited the number of robots allowed on the streets.</p><p><span class="para-label">E</span>In my opinion, delivery robots will not replace human delivery drivers, at least not soon. They are useful for short trips in quiet areas, such as campuses or new housing estates. But for long distances or heavy goods, people and vans will still be needed for many years. Cities should make clear rules now, before the pavements become crowded with machines.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">first tested in Estonia in 2015</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">A</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">they open the lid with a code</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">D</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">people kicking them or trying to steal the food</span>.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">C</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">one operator can look after several robots</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">E</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Cities should make clear rules now</span>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">trolley</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">About the size of a supermarket trolley</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">walking</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">at walking speed</span>.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">electric</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">because they are electric they produce no exhaust fumes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">steps</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">they find snow, steps and very busy pavements difficult</span>.</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">authorities</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">the authorities have limited the number of robots</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">NO</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">delivery robots will not replace human delivery drivers, at least not soon</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">YES</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">They are useful for short trips in quiet areas</span>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>Both countries are mentioned, but they are never compared.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">YES</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Cities should make clear rules now</span>.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Academic Reading)</p><table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr><tr><td>13–14</td><td>4.5</td></tr><tr><td>15–18</td><td>5.0</td></tr><tr><td>19–22</td><td>5.5</td></tr><tr><td>23–26</td><td>6.0</td></tr><tr><td>27–29</td><td>6.5</td></tr><tr><td>30–32</td><td>7.0</td></tr><tr><td>33+</td><td>7.5+</td></tr></table></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 20</div>
+      <h2>Extra Reading 1 — Learning to Swim as an Adult</h2>
+      <p class="task-sub">After the test, an extra article (about <b>15 minutes</b>). Answer the questions, then summarise it in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Learning to Swim as an Adult</h3>
+        <p class="article-meta">Extra reading 1 · Health · 214 words</p>
+        <p><span class="para-label">A</span>Around the world, millions of adults cannot swim. In some countries, more than half of the adult population has never learnt. Many of them feel embarrassed, and some avoid holidays near the sea or trips with friends because of it.</p><p><span class="para-label">B</span>Swimming teachers say that adults are often more afraid of the water than children are. Children usually learn through play, but adults tend to think about the dangers, and fear makes their bodies tense. A tense body sinks more easily, which makes the fear even stronger.</p><p><span class="para-label">C</span>For this reason, most adult courses begin with breathing. Learners practise breathing slowly and calmly, and they learn to float in shallow water where they can always stand up. Only when they feel relaxed do they start learning strokes such as front crawl or breaststroke.</p><p><span class="para-label">D</span>Progress can be surprisingly fast. Many adults can swim a short distance after about ten lessons, although becoming a confident swimmer takes longer. Teachers recommend practising at least twice a week, because skills are quickly forgotten after long breaks.</p><p><span class="para-label">E</span>Learning to swim is not only about safety. Swimming is excellent exercise for people of all ages, and it puts very little pressure on the joints. Many adult learners also say that overcoming their fear gave them more confidence in other areas of life.</p>
+      </div>
+      <div class="card" id="t8-mc"><div class="q-item" id="t8-mc-1">
+          <p>1. Why do some adults avoid holidays near the sea?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-1" data-correct="false"> A. They do not like hot weather.</label><label><input type="radio" value="1" name="t8-mc-1" data-correct="true"> B. They are embarrassed that they cannot swim.</label><label><input type="radio" value="2" name="t8-mc-1" data-correct="false"> C. Holidays are too expensive.</label><label><input type="radio" value="3" name="t8-mc-1" data-correct="false"> D. They prefer the mountains.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-2">
+          <p>2. Why do adults often find it harder to learn than children?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-2" data-correct="false"> A. They are less fit.</label><label><input type="radio" value="1" name="t8-mc-2" data-correct="true"> B. They are more afraid, and their bodies become tense.</label><label><input type="radio" value="2" name="t8-mc-2" data-correct="false"> C. They have less time.</label><label><input type="radio" value="3" name="t8-mc-2" data-correct="false"> D. Teachers prefer children.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-3">
+          <p>3. What do adult courses usually begin with?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-3" data-correct="false"> A. front crawl</label><label><input type="radio" value="1" name="t8-mc-3" data-correct="false"> B. diving</label><label><input type="radio" value="2" name="t8-mc-3" data-correct="true"> C. breathing and floating</label><label><input type="radio" value="3" name="t8-mc-3" data-correct="false"> D. swimming long distances</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-4">
+          <p>4. After about how many lessons can many adults swim a short distance?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-4" data-correct="false"> A. two</label><label><input type="radio" value="1" name="t8-mc-4" data-correct="false"> B. five</label><label><input type="radio" value="2" name="t8-mc-4" data-correct="true"> C. ten</label><label><input type="radio" value="3" name="t8-mc-4" data-correct="false"> D. thirty</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-5">
+          <p>5. What do teachers recommend?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-5" data-correct="true"> A. practising at least twice a week</label><label><input type="radio" value="1" name="t8-mc-5" data-correct="false"> B. taking long breaks</label><label><input type="radio" value="2" name="t8-mc-5" data-correct="false"> C. learning only in the sea</label><label><input type="radio" value="3" name="t8-mc-5" data-correct="false"> D. swimming every day for hours</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-mc', 't8-mc-score')">Check answers</button>
+          <span id="t8-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 80 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 80 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="80" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>The article explains that millions of adults cannot swim, and many feel embarrassed about it. Adults usually find learning harder than children because they are more afraid, and fear makes their bodies tense, so they sink more easily. For this reason, adult courses begin with slow breathing and floating in shallow water before learners try strokes. Many adults can swim a short distance after about ten lessons, especially if they practise twice a week. Swimming is also excellent exercise and can give people more confidence. I think this article could encourage many adults to start lessons.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 30 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 30 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 20</div>
+      <h2>Extra Reading 2 — The Rise of Esports</h2>
+      <p class="task-sub">A second extra article (about <b>10 minutes</b>). Decide TRUE, FALSE or NOT GIVEN.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Rise of Esports</h3>
+        <p class="article-meta">Extra reading 2 · Sport and technology · 163 words</p>
+        <p><span class="para-label">A</span>Esports — competitive video gaming — has grown from a hobby into a global industry. Professional players compete in teams, and the biggest tournaments fill sports stadiums, with millions more watching online. In 2019, a sixteen-year-old American player won three million dollars in the first Fortnite World Cup.</p><p><span class="para-label">B</span>Like traditional athletes, top players train for many hours a day. Teams employ coaches, and some also have nutritionists and psychologists to help players stay healthy and calm under pressure. Most professional careers are short, however; many players retire in their early twenties because their reactions become slower.</p><p><span class="para-label">C</span>Some universities in the United States and China now offer scholarships to talented gamers, and esports appeared as a medal event at the 2022 Asian Games. Supporters argue that gaming develops teamwork and fast decision-making.</p><p><span class="para-label">D</span>Critics, on the other hand, worry that young people spend too much time in front of screens, and that the dream of becoming a professional is unrealistic for almost everyone who tries.</p>
+      </div>
+      <div class="card" id="t9-tf"><div class="q-item" id="t9-tf-1">
+          <p>1. The biggest esports tournaments take place in sports stadiums.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t9-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t9-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-2">
+          <p>2. The winner of the 2019 Fortnite World Cup was a teenager.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t9-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t9-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-3">
+          <p>3. All esports teams employ psychologists.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t9-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t9-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-4">
+          <p>4. Professional gaming careers are usually long.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t9-tf-4" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t9-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-5">
+          <p>5. Esports will be an Olympic sport in 2028.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t9-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t9-tf-5" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-tf', 't9-tf-score')">Check answers</button>
+          <span id="t9-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Do you think esports is a real sport? Give two reasons (3–4 sentences).</p><textarea class="no-check mini-answer" id="t9-op-1" placeholder="Write here..." style="min-height:110px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-op-btn">Show an example answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-op-ans"><p><i>Example:</i> I think esports can be called a sport, although it is different from football or running. First, top players train for many hours every day, just like athletes. Second, they compete in teams in big tournaments, and it was even a medal event at the Asian Games. However, it does not involve much physical exercise.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 20</div>
+      <h2>Reading Skill — Spotting Paraphrase</h2>
+      <p class="task-sub">Match the words from the questions (left) to the words in today’s passages (right).</p>
+      <div class="card" id="t10-lm">
+        <div class="line-match" id="t10-lm-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. worth a lot</button><button type="button" class="lm-item" data-key="2">2. rich families</button><button type="button" class="lm-item" data-key="3">3. things you own</button><button type="button" class="lm-item" data-key="4">4. quicker than expected</button><button type="button" class="lm-item" data-key="5">5. allowed only a certain number</button><button type="button" class="lm-item" data-key="6">6. can work without stopping</button><button type="button" class="lm-item" data-key="7">7. stop working</button><button type="button" class="lm-item" data-key="8">8. world production</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. possessions</button><button type="button" class="lm-item" data-key="b">b. global supply</button><button type="button" class="lm-item" data-key="c">c. wealthy people</button><button type="button" class="lm-item" data-key="d">d. do not need breaks</button><button type="button" class="lm-item" data-key="e">e. surprisingly fast</button><button type="button" class="lm-item" data-key="f">f. valuable</button><button type="button" class="lm-item" data-key="g">g. limited the number</button><button type="button" class="lm-item" data-key="h">h. retire</button></div>
+          <select class="lm-hidden-select select" id="t10-lm-1" data-lm-key="1" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-5" data-lm-key="5" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-7" data-lm-key="7" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-8" data-lm-key="8" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm');">Check answers</button>
+          <span id="t10-lm-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t10-mc"><div class="q-item" id="t10-mc-1">
+          <p>1. “Chocolate was a luxury that only wealthy people could afford.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-1" data-correct="false"> A. Everyone ate chocolate.</label><label><input type="radio" value="1" name="t10-mc-1" data-correct="true"> B. Only rich people could buy chocolate.</label><label><input type="radio" value="2" name="t10-mc-1" data-correct="false"> C. Chocolate was cheap.</label><label><input type="radio" value="3" name="t10-mc-1" data-correct="false"> D. Chocolate was healthy.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-2">
+          <p>2. “Tiny homes are not for everyone.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-2" data-correct="false"> A. Nobody likes tiny homes.</label><label><input type="radio" value="1" name="t10-mc-2" data-correct="true"> B. Tiny homes do not suit some people.</label><label><input type="radio" value="2" name="t10-mc-2" data-correct="false"> C. Tiny homes are for families.</label><label><input type="radio" value="3" name="t10-mc-2" data-correct="false"> D. Tiny homes are expensive.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-3">
+          <p>3. “Progress can be surprisingly fast.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-3" data-correct="true"> A. Learners often improve more quickly than expected.</label><label><input type="radio" value="1" name="t10-mc-3" data-correct="false"> B. Learning is always slow.</label><label><input type="radio" value="2" name="t10-mc-3" data-correct="false"> C. Teachers are surprised by bad progress.</label><label><input type="radio" value="3" name="t10-mc-3" data-correct="false"> D. Swimming fast is dangerous.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-4">
+          <p>4. “The dream of becoming a professional is unrealistic.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-4" data-correct="false"> A. Most players will become professionals.</label><label><input type="radio" value="1" name="t10-mc-4" data-correct="true"> B. Very few players will become professionals.</label><label><input type="radio" value="2" name="t10-mc-4" data-correct="false"> C. Professionals do not dream.</label><label><input type="radio" value="3" name="t10-mc-4" data-correct="false"> D. Gaming is not a dream job.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-mc', 't10-mc-score')">Check answers</button>
+          <span id="t10-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 20</div>
+      <h2>Reading Skill — What Does It Refer To?</h2>
+      <p class="task-sub">Choose what each word in bold refers to.</p>
+      <div class="card" id="t11-ref"><div class="q-item" id="t11-ref-1">
+          <p>1. “Cacao beans were so valuable that the Aztecs used <b>them</b> as money.” — <b>them</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-1" data-correct="false"> A. the Aztecs</label><label><input type="radio" value="1" name="t11-ref-1" data-correct="true"> B. cacao beans</label><label><input type="radio" value="2" name="t11-ref-1" data-correct="false"> C. rabbits</label><label><input type="radio" value="3" name="t11-ref-1" data-correct="false"> D. drinks</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-2">
+          <p>2. “…a machine that removed some of the fat from the beans, making a powder <b>that</b> was easier to mix.” — <b>that</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-2" data-correct="false"> A. the machine</label><label><input type="radio" value="1" name="t11-ref-2" data-correct="false"> B. the fat</label><label><input type="radio" value="2" name="t11-ref-2" data-correct="true"> C. the powder</label><label><input type="radio" value="3" name="t11-ref-2" data-correct="false"> D. the beans</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-3">
+          <p>3. “Others are attracted by the idea of a simpler life.” — <b>Others</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-3" data-correct="false"> A. other houses</label><label><input type="radio" value="1" name="t11-ref-3" data-correct="true"> B. other people</label><label><input type="radio" value="2" name="t11-ref-3" data-correct="false"> C. other countries</label><label><input type="radio" value="3" name="t11-ref-3" data-correct="false"> D. other banks</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-4">
+          <p>4. “…one operator can look after several robots at the same time.” — the operator is</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-4" data-correct="false"> A. a customer</label><label><input type="radio" value="1" name="t11-ref-4" data-correct="true"> B. a person who watches the robots</label><label><input type="radio" value="2" name="t11-ref-4" data-correct="false"> C. a robot</label><label><input type="radio" value="3" name="t11-ref-4" data-correct="false"> D. a student</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-5">
+          <p>5. “A tense body sinks more easily, which makes the fear even stronger.” — <b>which</b> refers to</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-5" data-correct="true"> A. the body sinking</label><label><input type="radio" value="1" name="t11-ref-5" data-correct="false"> B. the water</label><label><input type="radio" value="2" name="t11-ref-5" data-correct="false"> C. the teacher</label><label><input type="radio" value="3" name="t11-ref-5" data-correct="false"> D. the lesson</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-6">
+          <p>6. “…many players retire in their early twenties because <b>their</b> reactions become slower.” — <b>their</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-6" data-correct="false"> A. the coaches’</label><label><input type="radio" value="1" name="t11-ref-6" data-correct="true"> B. the players’</label><label><input type="radio" value="2" name="t11-ref-6" data-correct="false"> C. the universities’</label><label><input type="radio" value="3" name="t11-ref-6" data-correct="false"> D. the fans’</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-ref', 't11-ref-score')">Check answers</button>
+          <span id="t11-ref-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 20</div>
+      <h2>Reading Skill — Speed Reading Challenge</h2>
+      <p class="task-sub"><b>Part 1:</b> skim in <b>60 seconds</b> and choose the best title. <b>Part 2:</b> scan for the answers in <b>3 minutes</b>.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">A Short History of Paper</h3>
+        <p class="article-meta">Speed reading · 200 words · 138 words</p>
+        <p><span class="para-label">A</span>Paper was invented in China around the year 105, when an official called Cai Lun made sheets from tree bark, old cloth and fishing nets. Before this, people wrote on silk, which was expensive, or on bamboo, which was heavy.</p><p><span class="para-label">B</span>The secret of paper-making spread slowly. It reached Samarkand in the eighth century, and from there it travelled to Baghdad, where paper mills were built in the 790s. Paper arrived in Spain in the eleventh century and soon spread across Europe.</p><p><span class="para-label">C</span>For hundreds of years, paper was made by hand from old rags. In 1798, a Frenchman, Louis-Nicolas Robert, invented a machine that could make a long, continuous sheet. In the 1840s, people learnt to make paper from wood, which was much cheaper than rags. Today, the world uses more than 400 million tonnes of paper every year.</p>
+      </div>
+      <div class="card" id="t12-title"><div class="q-item" id="t12-title-1">
+          <p>1. Part 1 — Choose the best title.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-title-1" data-correct="false"> A. How to recycle paper</label><label><input type="radio" value="1" name="t12-title-1" data-correct="true"> B. The journey of paper from China to the world</label><label><input type="radio" value="2" name="t12-title-1" data-correct="false"> C. Why silk is expensive</label><label><input type="radio" value="3" name="t12-title-1" data-correct="false"> D. Famous French inventors</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-title', 't12-title-score')">Check answers</button>
+          <span id="t12-title-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t12-scan" style="line-height:2.4;"><p>1. Around which year was paper invented? <input type="text" class="text-answer" id="t12-1" data-correct="105" autocomplete="off" style="width:90px;"></p><p>2. Which expensive material did people write on before paper? <input type="text" class="text-answer" id="t12-2" data-correct="silk" autocomplete="off" style="width:100px;"></p><p>3. Which Central Asian city did paper-making reach in the eighth century? <input type="text" class="text-answer" id="t12-3" data-correct="samarkand" autocomplete="off" style="width:130px;"></p><p>4. When were paper mills built in Baghdad? the <input type="text" class="text-answer" id="t12-4" data-correct="790s" autocomplete="off" style="width:90px;"></p><p>5. In which year did Robert invent his machine? <input type="text" class="text-answer" id="t12-5" data-correct="1798" autocomplete="off" style="width:90px;"></p><p>6. How many tonnes of paper does the world use every year? more than 400 <input type="text" class="text-answer" id="t12-6" data-correct="million" autocomplete="off" style="width:110px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-scan', 't12-scan-score')">Check answers</button>
+          <span id="t12-scan-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 20</div>
+      <h2>Vocabulary — Word Forms and Collocations</h2>
+      <p class="task-sub">Write the correct form of the word in brackets, then choose the correct collocation.</p>
+      <div class="card" id="t13-wf" style="line-height:2.4;"><p>1. Cacao beans were very <input type="text" class="text-answer" id="t13-1" data-correct="valuable" autocomplete="off" style="width:120px;">. (value)</p><p>2. Chocolate became <input type="text" class="text-answer" id="t13-2" data-correct="fashionable" autocomplete="off" style="width:130px;"> among rich families. (fashion)</p><p>3. A tiny house can be <input type="text" class="text-answer" id="t13-3" data-correct="environmentally" autocomplete="off" style="width:150px;"> friendly. (environment)</p><p>4. Many owners feel <input type="text" class="text-answer" id="t13-4" data-correct="happier" autocomplete="off" style="width:110px;"> with fewer possessions. (happy — comparative)</p><p>5. Robots produce no <input type="text" class="text-answer" id="t13-5" data-correct="pollution" autocomplete="off" style="width:120px;">. (pollute)</p><p>6. Fear makes the body <input type="text" class="text-answer" id="t13-6" data-correct="tense" autocomplete="off" style="width:100px;">. (tension)</p><p>7. Swimming is good for people of all <input type="text" class="text-answer" id="t13-7" data-correct="ages" autocomplete="off" style="width:90px;">. (age — plural)</p><p>8. The dream is <input type="text" class="text-answer" id="t13-8" data-correct="unrealistic" autocomplete="off" style="width:130px;"> for most people. (realistic — opposite)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-wf', 't13-wf-score')">Check answers</button>
+          <span id="t13-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t13-col"><div class="q-item" id="t13-col-1">
+          <p>1. to ______ a loan</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-1" data-correct="true"> take out</label><label><input type="radio" value="1" name="t13-col-1" data-correct="false"> make up</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-2">
+          <p>2. to ______ permission</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-2" data-correct="false"> do</label><label><input type="radio" value="1" name="t13-col-2" data-correct="true"> get</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-3">
+          <p>3. to ______ a decision</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-3" data-correct="true"> make</label><label><input type="radio" value="1" name="t13-col-3" data-correct="false"> do</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-4">
+          <p>4. to ______ confidence</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-4" data-correct="true"> gain</label><label><input type="radio" value="1" name="t13-col-4" data-correct="false"> win up</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-5">
+          <p>5. to ______ a tournament</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-5" data-correct="false"> beat</label><label><input type="radio" value="1" name="t13-col-5" data-correct="true"> win</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-6">
+          <p>6. a ______ trend</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-6" data-correct="true"> growing</label><label><input type="radio" value="1" name="t13-col-6" data-correct="false"> rising up</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-col', 't13-col-score')">Check answers</button>
+          <span id="t13-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 20</div>
+      <h2>Grammar for Writing — Comparing and Linking</h2>
+      <p class="task-sub">You will need these structures in both writing tasks today.</p>
+      <div class="card" id="t14-gr"><div class="q-item" id="t14-gr-1">
+          <p>1. Older people read ______ than teenagers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-1" data-correct="true"> more</label><label><input type="radio" value="1" name="t14-gr-1" data-correct="false"> most</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-2">
+          <p>2. The 65+ group spent the ______ time reading.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-2" data-correct="false"> more</label><label><input type="radio" value="1" name="t14-gr-2" data-correct="true"> most</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-3">
+          <p>3. Teenagers read less in 2020 ______ in 2010.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-3" data-correct="true"> than</label><label><input type="radio" value="1" name="t14-gr-3" data-correct="false"> then</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-4">
+          <p>4. Reading time fell. ______, it rose among older people.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-4" data-correct="false"> Because</label><label><input type="radio" value="1" name="t14-gr-4" data-correct="true"> In contrast</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-5">
+          <p>5. Children should learn to cook ______ it is a useful skill.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-5" data-correct="true"> because</label><label><input type="radio" value="1" name="t14-gr-5" data-correct="false"> although</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-6">
+          <p>6. ______ cooking classes are useful, they cost money.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-6" data-correct="true"> Although</label><label><input type="radio" value="1" name="t14-gr-6" data-correct="false"> Because</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-7">
+          <p>7. The figure for 45–64-year-olds stayed ______ same.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-7" data-correct="false"> a</label><label><input type="radio" value="1" name="t14-gr-7" data-correct="true"> the</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-8">
+          <p>8. There was a slight ______ in reading time.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-8" data-correct="false"> fell</label><label><input type="radio" value="1" name="t14-gr-8" data-correct="true"> fall</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-gr', 't14-gr-score')">Check answers</button>
+          <span id="t14-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task15" data-task="15">
+      <div class="task-eyebrow">Task 15 of 20</div>
+      <h2>Writing Task 1 — Skills: Comparing Groups</h2>
+      <p class="task-sub">Study the chart, then practise the language you need before you write the full report.</p>
+<div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Average hours spent reading per week, by age group" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Average hours spent reading per week, by age group</text><line x1="64" y1="284.0" x2="620" y2="284.0" stroke="#e3e5ec"/><text x="56" y="288.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="236.4" x2="620" y2="236.4" stroke="#e3e5ec"/><text x="56" y="240.4" text-anchor="end" font-size="11" fill="#4b4e5c">2</text><line x1="64" y1="188.8" x2="620" y2="188.8" stroke="#e3e5ec"/><text x="56" y="192.8" text-anchor="end" font-size="11" fill="#4b4e5c">4</text><line x1="64" y1="141.2" x2="620" y2="141.2" stroke="#e3e5ec"/><text x="56" y="145.2" text-anchor="end" font-size="11" fill="#4b4e5c">6</text><line x1="64" y1="93.6" x2="620" y2="93.6" stroke="#e3e5ec"/><text x="56" y="97.6" text-anchor="end" font-size="11" fill="#4b4e5c">8</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">10</text><text x="14" y="165.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 165.0)">hours per week</text><rect x="99.5" y="141.2" width="32.0" height="142.8" fill="#2c6bed"/><rect x="133.5" y="188.8" width="32.0" height="95.2" fill="#d9480f"/><text x="133.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">15–24</text><rect x="238.5" y="165.0" width="32.0" height="119.0" fill="#2c6bed"/><rect x="272.5" y="188.8" width="32.0" height="95.2" fill="#d9480f"/><text x="272.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">25–44</text><rect x="377.5" y="141.2" width="32.0" height="142.8" fill="#2c6bed"/><rect x="411.5" y="141.2" width="32.0" height="142.8" fill="#d9480f"/><text x="411.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">45–64</text><rect x="516.5" y="93.6" width="32.0" height="190.4" fill="#2c6bed"/><rect x="550.5" y="69.8" width="32.0" height="214.2" fill="#d9480f"/><text x="550.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">65+</text><rect x="64" y="330" width="12" height="12" fill="#2c6bed"/><text x="82" y="340" font-size="12" fill="#14162b">2010</text><rect x="122.8" y="330" width="12" height="12" fill="#d9480f"/><text x="140.8" y="340" font-size="12" fill="#14162b">2020</text></svg></div>
+      <div class="card" id="t15-acc"><div class="sel-row"><select class="select" id="t15-acc-1" data-answer="correct"><option value="">—</option><option value="correct">correct</option><option value="wrong">wrong</option></select><span><b>1.</b> People aged 65+ read the most in both years.</span></div><div class="sel-row"><select class="select" id="t15-acc-2" data-answer="wrong"><option value="">—</option><option value="correct">correct</option><option value="wrong">wrong</option></select><span><b>2.</b> Reading time rose for 15–24-year-olds.</span></div><div class="sel-row"><select class="select" id="t15-acc-3" data-answer="correct"><option value="">—</option><option value="correct">correct</option><option value="wrong">wrong</option></select><span><b>3.</b> The figure for 45–64-year-olds did not change.</span></div><div class="sel-row"><select class="select" id="t15-acc-4" data-answer="correct"><option value="">—</option><option value="correct">correct</option><option value="wrong">wrong</option></select><span><b>4.</b> In 2020, the youngest group read two hours less than in 2010.</span></div><div class="sel-row"><select class="select" id="t15-acc-5" data-answer="wrong"><option value="">—</option><option value="correct">correct</option><option value="wrong">wrong</option></select><span><b>5.</b> All groups read more in 2020.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-acc', 't15-acc-score')">Check answers</button>
+          <span id="t15-acc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t15-g" style="line-height:2.4;"><p>1. In 2010, people aged 65 and over read for <input type="text" class="text-answer" id="t15-1" data-correct="8" autocomplete="off" style="width:70px;"> hours a week.</p><p>2. The time spent reading by 15–24-year-olds <input type="text" class="text-answer" id="t15-2" data-correct="fell/decreased/dropped" autocomplete="off" style="width:120px;"> from 6 to 4 hours.</p><p>3. The figure for 45–64-year-olds remained <input type="text" class="text-answer" id="t15-3" data-correct="stable/unchanged/constant" autocomplete="off" style="width:130px;"> at 6 hours.</p><p>4. Older people read <input type="text" class="text-answer" id="t15-4" data-correct="more" autocomplete="off" style="width:90px;"> than any other group.</p><p>5. Overall, younger people read less, <input type="text" class="text-answer" id="t15-5" data-correct="while/whereas" autocomplete="off" style="width:110px;"> older people read slightly more.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-g', 't15-g-score')">Check answers</button>
+          <span id="t15-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task16" data-task="16">
+      <div class="task-eyebrow">Task 16 of 20</div>
+      <h2>Writing Task 1 — Your Report</h2>
+      <p class="task-sub">Write the full report. Spend about <b>20 minutes</b> and write <b>at least 150 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The chart below shows the average number of hours that people in four age groups spent reading each week in 2010 and 2020.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Average hours spent reading per week, by age group" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Average hours spent reading per week, by age group</text><line x1="64" y1="284.0" x2="620" y2="284.0" stroke="#e3e5ec"/><text x="56" y="288.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="236.4" x2="620" y2="236.4" stroke="#e3e5ec"/><text x="56" y="240.4" text-anchor="end" font-size="11" fill="#4b4e5c">2</text><line x1="64" y1="188.8" x2="620" y2="188.8" stroke="#e3e5ec"/><text x="56" y="192.8" text-anchor="end" font-size="11" fill="#4b4e5c">4</text><line x1="64" y1="141.2" x2="620" y2="141.2" stroke="#e3e5ec"/><text x="56" y="145.2" text-anchor="end" font-size="11" fill="#4b4e5c">6</text><line x1="64" y1="93.6" x2="620" y2="93.6" stroke="#e3e5ec"/><text x="56" y="97.6" text-anchor="end" font-size="11" fill="#4b4e5c">8</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">10</text><text x="14" y="165.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 165.0)">hours per week</text><rect x="99.5" y="141.2" width="32.0" height="142.8" fill="#2c6bed"/><rect x="133.5" y="188.8" width="32.0" height="95.2" fill="#d9480f"/><text x="133.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">15–24</text><rect x="238.5" y="165.0" width="32.0" height="119.0" fill="#2c6bed"/><rect x="272.5" y="188.8" width="32.0" height="95.2" fill="#d9480f"/><text x="272.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">25–44</text><rect x="377.5" y="141.2" width="32.0" height="142.8" fill="#2c6bed"/><rect x="411.5" y="141.2" width="32.0" height="142.8" fill="#d9480f"/><text x="411.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">45–64</text><rect x="516.5" y="93.6" width="32.0" height="190.4" fill="#2c6bed"/><rect x="550.5" y="69.8" width="32.0" height="214.2" fill="#d9480f"/><text x="550.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">65+</text><rect x="64" y="330" width="12" height="12" fill="#2c6bed"/><text x="82" y="340" font-size="12" fill="#14162b">2010</text><rect x="122.8" y="330" width="12" height="12" fill="#d9480f"/><text x="140.8" y="340" font-size="12" fill="#14162b">2020</text></svg></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t16-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t16-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t16-essay-model"><div class="model-text">
+  <p>The bar chart compares the average weekly reading time of people in four age groups in 2010 and 2020.</p>
+  <p>Overall, people aged 65 and over read the most in both years, and they were the only group whose reading time increased. In contrast, the two youngest groups read less in 2020 than in 2010.</p>
+  <p>In 2010, the oldest group read for 8 hours a week, while 15–24-year-olds and 45–64-year-olds read for 6 hours. People aged 25–44 read the least, at 5 hours a week.</p>
+  <p>Ten years later, reading time among 15–24-year-olds had fallen by 2 hours to 4 hours, the same as the 25–44 group, which had dropped by one hour. The figure for 45–64-year-olds remained stable at 6 hours, whereas the oldest group read slightly more, at 9 hours per week.</p>
+  <p class="alt">≈ 160 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task17" data-task="17">
+      <div class="task-eyebrow">Task 17 of 20</div>
+      <h2>Writing Task 2 — Planning</h2>
+      <p class="task-sub">Plan your essay before you write. Choose the best option for each part of the plan.</p>
+<div class="card task-prompt"><p class="prompt-label">Writing Task 2</p><p><i>Some people think that all children should learn to cook at school. To what extent do you agree or disagree?</i></p></div>
+      <div class="card" id="t17-pl"><div class="q-item" id="t17-pl-1">
+          <p>1. What type of essay is this?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-1" data-correct="false"> A. advantages and disadvantages</label><label><input type="radio" value="1" name="t17-pl-1" data-correct="true"> B. opinion (agree or disagree)</label><label><input type="radio" value="2" name="t17-pl-1" data-correct="false"> C. problem and solution</label><label><input type="radio" value="3" name="t17-pl-1" data-correct="false"> D. discuss both views</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-2">
+          <p>2. Best thesis statement:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-2" data-correct="false"> A. Cooking is food.</label><label><input type="radio" value="1" name="t17-pl-2" data-correct="true"> B. I strongly agree, because cooking is a life skill that helps children to eat healthily and become independent.</label><label><input type="radio" value="2" name="t17-pl-2" data-correct="false"> C. Some people cook.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-3">
+          <p>3. Best topic sentence for Body 1:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-3" data-correct="false"> A. Pizza is popular.</label><label><input type="radio" value="1" name="t17-pl-3" data-correct="false"> B. My mother cooks well.</label><label><input type="radio" value="2" name="t17-pl-3" data-correct="true"> C. First, cooking teaches children to eat more healthily.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-4">
+          <p>4. Best example for Body 1:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-4" data-correct="false"> A. Restaurants are expensive.</label><label><input type="radio" value="1" name="t17-pl-4" data-correct="true"> B. Children who cook vegetables themselves are more likely to eat them.</label><label><input type="radio" value="2" name="t17-pl-4" data-correct="false"> C. Cooking is fun.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-5">
+          <p>5. Best idea for the other side (Body 2):</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-5" data-correct="true"> A. Schools have little time and money, so cooking classes could replace important subjects.</label><label><input type="radio" value="1" name="t17-pl-5" data-correct="false"> B. Children do not like food.</label><label><input type="radio" value="2" name="t17-pl-5" data-correct="false"> C. Cooking is boring.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t17-pl', 't17-pl-score')">Check answers</button>
+          <span id="t17-pl-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write your own short plan: thesis + one idea for each body paragraph.</p><textarea class="no-check mini-answer" id="t17-out-1" placeholder="Write your plan here..." style="min-height:110px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t17-out-btn">Show an example plan</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t17-out-ans"><p><b>Thesis:</b> strongly agree. <b>Body 1:</b> health — children learn about fresh food. <b>Body 2:</b> independence — they can look after themselves later. <b>Concession:</b> schools need time and money, but short courses are enough.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task18" data-task="18">
+      <div class="task-eyebrow">Task 18 of 20</div>
+      <h2>Writing Task 2 — Your Essay</h2>
+      <p class="task-sub">Write the full essay. Spend about <b>40 minutes</b> and write <b>at least 250 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Some people think that all children should learn to cook at school. To what extent do you agree or disagree?</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t18-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t18-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t18-essay-model"><div class="model-text">
+  <p>Nowadays, many young people leave home without knowing how to prepare a simple meal. For this reason, some people believe that cooking should be taught to all children at school. I strongly agree with this view.</p>
+  <p>The main reason is that cooking helps children to eat more healthily. When children prepare food themselves, they learn which ingredients are fresh and nutritious and which are full of sugar and fat. They are also more likely to try new things: for example, a child who has cooked vegetable soup is much more likely to eat it. In this way, cooking lessons could help to reduce problems such as childhood obesity.</p>
+  <p>Another benefit is that cooking makes young people more independent. Students who go to university or start work in another city need to feed themselves every day. If they can cook, they will spend less money on fast food and take better care of their health. Cooking also teaches useful skills such as planning, measuring and working safely.</p>
+  <p>Of course, some people argue that schools already have too little time for important subjects such as mathematics and languages, and that kitchens are expensive to build. However, cooking lessons do not need to take many hours. A short course once a week, perhaps for one term, would be enough to teach the basics.</p>
+  <p>In conclusion, I believe that every child should learn to cook at school, because it is a skill that improves their health and independence for the rest of their lives.</p>
+  <p class="alt">≈ 280 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task19" data-task="19">
+      <div class="task-eyebrow">Task 19 of 20</div>
+      <h2>Speaking Part 3 — Today’s Topics</h2>
+      <p class="task-sub">Answer each question in its own box — opinion, reason and example, about <b>30–45 seconds</b> each.</p>
+      <div class="question-box" data-field="t19-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Why do people enjoy sweet food like chocolate so much?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Would you like to live in a very small house? Why or why not?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Personally, I would / wouldn’t…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Should robots deliver food in your city?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“In my opinion,…”</li><li>“One problem is that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Is it important for everyone to learn to swim?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Definitely, because…”</li><li>“In my country,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task20" data-task="20">
+      <div class="task-eyebrow">Task 20 of 20</div>
+      <h2>Self-Check — Today’s Reading and Writing</h2>
+      <p class="task-sub">Check your work honestly before you finish the day.</p>
+      <div class="card"><p class="mini-q">1. Your reading score out of 40 and estimated band:</p><textarea class="no-check mini-answer" id="t20-rf-1" placeholder="Write here..." style="min-height:56px;"></textarea><p class="mini-q">2. Which reading question type was the most difficult today?</p><textarea class="no-check mini-answer" id="t20-rf-2" placeholder="Write here..." style="min-height:56px;"></textarea><p class="mini-q">3. One thing you will improve in your next essay:</p><textarea class="no-check mini-answer" id="t20-rf-3" placeholder="Write here..." style="min-height:56px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t20-rf-btn">Show examples</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t20-rf-ans"><p>Good targets: “I will spend 5 minutes planning before I write”; “I will write an overview as my second paragraph in Task 1”; “I will check NOT GIVEN answers by looking for the exact sentence”.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 20</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 35 of 45</div>
+    <h1>Day 35 complete! 🎉</h1>
+    <p>Day 35 done — a full reading test, two extra articles, reading skills, vocabulary and grammar, Writing Task 1 and Task 2, and speaking.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t10-lm-lm');
+
+    initWritingCoach('t16-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The chart below shows the average number of hours that people in four age groups spent reading each week in 2010 and 2020.' });
+    initWritingCoach('t18-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Some people think that all children should learn to cook at school. To what extent do you agree or disagree?' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 35, 8, 't8-speaking-summary', 30); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-1"]'); if (b) initRecordControl(b, user.id, 35, 19, 't19-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-2"]'); if (b) initRecordControl(b, user.id, 35, 19, 't19-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-3"]'); if (b) initRecordControl(b, user.id, 35, 19, 't19-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-4"]'); if (b) initRecordControl(b, user.id, 35, 19, 't19-speaking-4', 0); }
+
+    await initTaskFlow(35, 20, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-notes1', 't2-notes1-score'); checkAllAnswers('t2-mc', 't2-mc-score'); },
+      4: () => { checkAllAnswers('t4-h', 't4-h-score'); checkAllAnswers('t4-sc', 't4-sc-score'); checkAllAnswers('t4-sa', 't4-sa-score'); },
+      6: () => { checkAllAnswers('t6-mi', 't6-mi-score'); checkAllAnswers('t6-s', 't6-s-score'); checkAllAnswers('t6-yn', 't6-yn-score'); },
+      8: () => { checkAllAnswers('t8-mc', 't8-mc-score'); },
+      9: () => { checkAllAnswers('t9-tf', 't9-tf-score'); },
+      10: () => { checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm'); checkAllAnswers('t10-mc', 't10-mc-score'); },
+      11: () => { checkAllAnswers('t11-ref', 't11-ref-score'); },
+      12: () => { checkAllAnswers('t12-title', 't12-title-score'); checkAllAnswers('t12-scan', 't12-scan-score'); },
+      13: () => { checkAllAnswers('t13-wf', 't13-wf-score'); checkAllAnswers('t13-col', 't13-col-score'); },
+      14: () => { checkAllAnswers('t14-gr', 't14-gr-score'); },
+      15: () => { checkAllAnswers('t15-acc', 't15-acc-score'); checkAllAnswers('t15-g', 't15-g-score'); },
+      17: () => { checkAllAnswers('t17-pl', 't17-pl-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-op-btn', 't9-op-ans', '[id^="t9-op-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t16-essay-model-btn', 't16-essay-model', '#t16-essay');
+    initGatedMistakeReveal('t17-out-btn', 't17-out-ans', '[id^="t17-out-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t18-essay-model-btn', 't18-essay-model', '#t18-essay');
+    initGatedMistakeReveal('t20-rf-btn', 't20-rf-ans', '[id^="t20-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>

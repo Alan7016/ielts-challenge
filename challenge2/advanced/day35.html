@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 35 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 35 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 20</div>
+      <h2>Starting Off — A Reading and Writing Day</h2>
+      <p class="task-sub">Today is a long <b>reading and writing day</b> — plan for about <b>4 hours</b>, with breaks. A full reading test, two extra articles, reading skills, vocabulary and grammar, a full <b>Writing Task 1</b> and <b>Task 2</b>, and speaking.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. A TRUE/FALSE/NOT GIVEN statement contains “all”; the passage says “some”.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. TRUE</label><label><input type="radio" value="1" name="t1-st-1" data-correct="true"> B. FALSE</label><label><input type="radio" value="2" name="t1-st-1" data-correct="false"> C. NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. In matching features, the statements are usually</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="false"> A. in passage order</label><label><input type="radio" value="1" name="t1-st-2" data-correct="true"> B. not in passage order</label><label><input type="radio" value="2" name="t1-st-2" data-correct="false"> C. all about one person</label><label><input type="radio" value="3" name="t1-st-2" data-correct="false"> D. copied word for word</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. In Task 1, the overview should</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="false"> A. give your opinion</label><label><input type="radio" value="1" name="t1-st-3" data-correct="false"> B. list every number</label><label><input type="radio" value="2" name="t1-st-3" data-correct="true"> C. summarise the main trends or differences</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. explain the causes</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. In a “discuss both views” essay you must</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="false"> A. give only your opinion</label><label><input type="radio" value="1" name="t1-st-4" data-correct="true"> B. discuss both views and give your opinion</label><label><input type="radio" value="2" name="t1-st-4" data-correct="false"> C. avoid giving an opinion</label><label><input type="radio" value="3" name="t1-st-4" data-correct="false"> D. discuss only one view</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. adolescence</button><button type="button" class="lm-item" data-key="2">2. hormone</button><button type="button" class="lm-item" data-key="3">3. filament</button><button type="button" class="lm-item" data-key="4">4. cooperative</button><button type="button" class="lm-item" data-key="5">5. garment</button><button type="button" class="lm-item" data-key="6">6. naive</button><button type="button" class="lm-item" data-key="7">7. outright</button><button type="button" class="lm-item" data-key="8">8. association</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. a connection in the mind</button><button type="button" class="lm-item" data-key="b">b. too ready to believe that things are simple</button><button type="button" class="lm-item" data-key="c">c. a chemical in the body that controls a process</button><button type="button" class="lm-item" data-key="d">d. a piece of clothing</button><button type="button" class="lm-item" data-key="e">e. a very thin thread</button><button type="button" class="lm-item" data-key="f">f. completely and immediately</button><button type="button" class="lm-item" data-key="g">g. the period between childhood and adulthood</button><button type="button" class="lm-item" data-key="h">h. working together</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 20</div>
+      <h2>Reading Passage 1 — Why Teenagers Need More Sleep</h2>
+      <p class="task-sub"><b>The test starts now.</b> About <b>18 minutes</b> for Questions 1–13. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Why Teenagers Need More Sleep<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Late nights and sleepy mornings may be more biological than many parents think.</small></h3>
+            <p class="article-meta">Reading Passage 1 · Health and education · 329 words</p>
+            <p><span class="para-label">A</span>Parents have long complained that teenagers stay up late and are impossible to wake in the morning. For years, this behaviour was blamed on laziness or too much screen time. However, research over the past three decades suggests that a large part of the explanation is biological.</p><p><span class="para-label">B</span>The key factor is melatonin, a hormone that makes us feel sleepy. In adults and younger children, melatonin is released in the evening, typically around nine or ten o’clock. During adolescence, however, its release is delayed by up to two hours. As a result, many teenagers simply do not feel tired until eleven o’clock or later, even if they go to bed earlier.</p><p><span class="para-label">C</span>Sleep scientists estimate that teenagers need between eight and ten hours of sleep a night. Yet in many countries, secondary school begins at around eight o’clock, and pupils who travel long distances may have to get up before six. Surveys in the United States suggest that around seventy per cent of high school students sleep less than eight hours on school nights.</p><p><span class="para-label">D</span>The consequences of this ‘sleep debt’ are serious. Tired students find it harder to concentrate and remember information, and they are more likely to suffer from low mood. Lack of sleep has also been linked to car accidents among young drivers and to weight gain, because tiredness affects the hormones that control appetite.</p><p><span class="para-label">E</span>Some school districts have responded by starting the school day later. In Seattle, for instance, secondary schools moved their start time from 7.50 to 8.45 in 2016. A study by the University of Washington found that students slept around thirty-four minutes longer on average, their attendance improved, and their grades in biology rose by four and a half per cent.</p><p><span class="para-label">F</span>Later start times are not without difficulties. They can make it harder for parents to drop children off before work, and they push after-school sports and part-time jobs later into the evening. Nevertheless, many researchers now argue that the benefits clearly outweigh the costs.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. Teenagers’ late nights used to be blamed on laziness or screens.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. Melatonin is released earlier in teenagers than in adults.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. Teenagers need more sleep than adults.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-3" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. Most US high school students sleep at least eight hours on school nights.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-5">
+          <p>5. Tiredness affects the hormones that control appetite.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-5" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-6">
+          <p>6. Most parents in Seattle were against the later start time.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-6" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-6" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-6" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–10</p><p class="qg-instr">Complete the notes. Choose <b>ONE WORD AND/OR A NUMBER</b> from the passage.</p></div>
+<div class="card" id="t2-notes1"><p class="prompt-label">The Seattle study</p><div style="line-height:2.1;"><div>• New start time for secondary schools: (7) <input type="text" class="text-answer" id="t2-7" data-correct="8.45/8:45" autocomplete="off" style="width:90px;"></div><div>• Extra sleep on average: (8) <input type="text" class="text-answer" id="t2-8" data-correct="34/thirty-four" autocomplete="off" style="width:90px;"> minutes</div><div>• Improvements: grades in biology and (9) <input type="text" class="text-answer" id="t2-9" data-correct="attendance" autocomplete="off" style="width:130px;"></div><div>• Effect of tiredness on young drivers: more car (10) <input type="text" class="text-answer" id="t2-10" data-correct="accidents" autocomplete="off" style="width:120px;"></div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-notes1', 't2-notes1-score')">Check answers</button>
+          <span id="t2-notes1-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–13</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-11">
+          <p>11. Paragraph B mainly explains</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-11" data-correct="false"> A. why teenagers use screens at night.</label><label><input type="radio" value="1" name="t2-mc-11" data-correct="true"> B. a biological reason for teenagers’ sleep patterns.</label><label><input type="radio" value="2" name="t2-mc-11" data-correct="false"> C. how to produce more melatonin.</label><label><input type="radio" value="3" name="t2-mc-11" data-correct="false"> D. why adults sleep less than children.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-12">
+          <p>12. Which effect of “sleep debt” is mentioned?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-12" data-correct="true"> A. difficulty concentrating</label><label><input type="radio" value="1" name="t2-mc-12" data-correct="false"> B. poor eyesight</label><label><input type="radio" value="2" name="t2-mc-12" data-correct="false"> C. better memory</label><label><input type="radio" value="3" name="t2-mc-12" data-correct="false"> D. higher grades</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-13">
+          <p>13. What is the writer’s conclusion in the last paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-13" data-correct="false"> A. Later start times cause too many problems.</label><label><input type="radio" value="1" name="t2-mc-13" data-correct="true"> B. Many researchers think the advantages are greater than the disadvantages.</label><label><input type="radio" value="2" name="t2-mc-13" data-correct="false"> C. Parents should drive children to school.</label><label><input type="radio" value="3" name="t2-mc-13" data-correct="false"> D. After-school sport should be stopped.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 20</div>
+      <h2>Reading Passage 1 — Answer Analysis</h2>
+      <p class="task-sub">Check the evidence for every answer.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Why Teenagers Need More Sleep</summary>
+        <p><span class="para-label">A</span>Parents have long complained that teenagers stay up late and are impossible to wake in the morning. For years, this behaviour was blamed on laziness or too much screen time. However, research over the past three decades suggests that a large part of the explanation is biological.</p><p><span class="para-label">B</span>The key factor is melatonin, a hormone that makes us feel sleepy. In adults and younger children, melatonin is released in the evening, typically around nine or ten o’clock. During adolescence, however, its release is delayed by up to two hours. As a result, many teenagers simply do not feel tired until eleven o’clock or later, even if they go to bed earlier.</p><p><span class="para-label">C</span>Sleep scientists estimate that teenagers need between eight and ten hours of sleep a night. Yet in many countries, secondary school begins at around eight o’clock, and pupils who travel long distances may have to get up before six. Surveys in the United States suggest that around seventy per cent of high school students sleep less than eight hours on school nights.</p><p><span class="para-label">D</span>The consequences of this ‘sleep debt’ are serious. Tired students find it harder to concentrate and remember information, and they are more likely to suffer from low mood. Lack of sleep has also been linked to car accidents among young drivers and to weight gain, because tiredness affects the hormones that control appetite.</p><p><span class="para-label">E</span>Some school districts have responded by starting the school day later. In Seattle, for instance, secondary schools moved their start time from 7.50 to 8.45 in 2016. A study by the University of Washington found that students slept around thirty-four minutes longer on average, their attendance improved, and their grades in biology rose by four and a half per cent.</p><p><span class="para-label">F</span>Later start times are not without difficulties. They can make it harder for parents to drop children off before work, and they push after-school sports and part-time jobs later into the evening. Nevertheless, many researchers now argue that the benefits clearly outweigh the costs.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">this behaviour was blamed on laziness or too much screen time</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">During adolescence … its release is delayed by up to two hours</span> — later, not earlier.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para C</span></summary><div class="an-body"><p>The passage gives teenagers’ needs (8–10 hours) but says nothing about adults’ needs.</p><p><span class="trap">Trap:</span> adults are mentioned in Para B — but only about melatonin.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">FALSE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">around seventy per cent … sleep less than eight hours</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">TRUE</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">tiredness affects the hormones that control appetite</span>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para F</span></summary><div class="an-body"><p>Problems for parents are mentioned, but not how many parents opposed the change.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">8.45</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">from 7.50 to 8.45</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">34</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">slept around thirty-four minutes longer</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">attendance</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">their attendance improved</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">accidents</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">car accidents among young drivers</span>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">The key factor is melatonin, a hormone</span> — a biological explanation.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">A</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Tired students find it harder to concentrate</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">the benefits clearly outweigh the costs</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 20</div>
+      <h2>Reading Passage 2 — The Secret Life of Trees</h2>
+      <p class="task-sub">About <b>20 minutes</b> for Questions 14–26: <b>headings</b>, <b>sentence endings</b> and <b>summary completion</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Secret Life of Trees<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Are forests made of competitors — or of partners?</small></h3>
+            <p class="article-meta">Reading Passage 2 · Ecology · 288 words</p>
+            <p><span class="para-label">A</span>For centuries, foresters regarded trees as solitary competitors, each fighting its neighbours for light, water and nutrients. Over the past thirty years, however, research has revealed a far more cooperative picture of forest life.</p><p><span class="para-label">B</span>Much of this work began with the Canadian ecologist Suzanne Simard. In the 1990s, she injected birch and fir trees with different forms of carbon that could be traced, and found that sugars were moving underground from one tree to another. The connection was made by fungi, whose thread-like filaments wrap around tree roots and spread through the soil.</p><p><span class="para-label">C</span>These fungal networks, sometimes called the ‘wood wide web’, benefit both partners. The fungi receive sugars that trees produce through photosynthesis, while the trees gain water and minerals such as nitrogen and phosphorus that the fungi collect from the soil.</p><p><span class="para-label">D</span>Simard and others have suggested that large, old trees — which she calls ‘mother trees’ — may support younger trees growing in their shade by passing them nutrients. Some studies even indicate that trees can send chemical warning signals through the network when attacked by insects, prompting neighbours to strengthen their defences.</p><p><span class="para-label">E</span>Not all scientists accept these claims. A review published in 2023 argued that the evidence for mother trees deliberately helping their offspring is weak, and that many popular descriptions have exaggerated what the research shows. Movement of nutrients through fungi, critics say, does not prove that trees are cooperating in any meaningful sense.</p><p><span class="para-label">F</span>Whatever the final verdict, the research has practical implications. Forestry practices such as clear-cutting, in which every tree in an area is removed, may destroy fungal networks and make it harder for new forests to grow. Some foresters now leave a number of older trees standing when they harvest timber.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–19</p><p class="qg-instr">Choose the correct heading for each paragraph, <b>A–F</b>.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; A change in scientific thinking<br><b>ii</b>&nbsp; The discovery of an underground link<br><b>iii</b>&nbsp; A partnership that helps both sides<br><b>iv</b>&nbsp; Older trees helping the young<br><b>v</b>&nbsp; Doubts about the evidence<br><b>vi</b>&nbsp; Lessons for forest management<br><b>vii</b>&nbsp; The economic value of timber<br><b>viii</b>&nbsp; Why fungi are dangerous to trees</p></div>
+      <div class="card" id="t4-h"><div class="sel-row"><select class="select" id="t4-h-14" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>14.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t4-h-15" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>15.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t4-h-16" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>16.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t4-h-17" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>17.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t4-h-18" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>18.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t4-h-19" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>19.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-h', 't4-h-score')">Check answers</button>
+          <span id="t4-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 20–23</p><p class="qg-instr">Complete each sentence with the correct ending, <b>A–F</b>.</p></div>
+<div class="card"><p class="prompt-label">Endings</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; send chemical warnings to their neighbours.<br><b>B</b>&nbsp; damage fungal networks in the soil.<br><b>C</b>&nbsp; using forms of carbon that could be traced.<br><b>D</b>&nbsp; water and minerals from the soil.<br><b>E</b>&nbsp; grow faster than older trees.<br><b>F</b>&nbsp; reduce the price of timber.</p></div>
+      <div class="card" id="t4-se"><div class="sel-row"><select class="select" id="t4-se-20" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>20.</b> Simard followed the movement of sugars between trees by</span></div><div class="sel-row"><select class="select" id="t4-se-21" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>21.</b> The fungi receive sugars, while the trees receive</span></div><div class="sel-row"><select class="select" id="t4-se-22" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>22.</b> Trees attacked by insects may</span></div><div class="sel-row"><select class="select" id="t4-se-23" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>23.</b> Clear-cutting may</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-se', 't4-se-score')">Check answers</button>
+          <span id="t4-se-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 24–26</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t4-s" style="line-height:2.7;"><p>A (24) <input type="text" class="text-answer" id="t4-24" data-correct="review" autocomplete="off" style="width:110px;"> published in 2023 argued that the evidence for mother trees helping their offspring is (25) <input type="text" class="text-answer" id="t4-25" data-correct="weak" autocomplete="off" style="width:100px;">, and that popular descriptions have (26) <input type="text" class="text-answer" id="t4-26" data-correct="exaggerated" autocomplete="off" style="width:130px;"> what the research shows.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-s', 't4-s-score')">Check answers</button>
+          <span id="t4-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 20</div>
+      <h2>Reading Passage 2 — Answer Analysis</h2>
+      <p class="task-sub">Check every answer. Which distractor headings almost caught you?</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Secret Life of Trees</summary>
+        <p><span class="para-label">A</span>For centuries, foresters regarded trees as solitary competitors, each fighting its neighbours for light, water and nutrients. Over the past thirty years, however, research has revealed a far more cooperative picture of forest life.</p><p><span class="para-label">B</span>Much of this work began with the Canadian ecologist Suzanne Simard. In the 1990s, she injected birch and fir trees with different forms of carbon that could be traced, and found that sugars were moving underground from one tree to another. The connection was made by fungi, whose thread-like filaments wrap around tree roots and spread through the soil.</p><p><span class="para-label">C</span>These fungal networks, sometimes called the ‘wood wide web’, benefit both partners. The fungi receive sugars that trees produce through photosynthesis, while the trees gain water and minerals such as nitrogen and phosphorus that the fungi collect from the soil.</p><p><span class="para-label">D</span>Simard and others have suggested that large, old trees — which she calls ‘mother trees’ — may support younger trees growing in their shade by passing them nutrients. Some studies even indicate that trees can send chemical warning signals through the network when attacked by insects, prompting neighbours to strengthen their defences.</p><p><span class="para-label">E</span>Not all scientists accept these claims. A review published in 2023 argued that the evidence for mother trees deliberately helping their offspring is weak, and that many popular descriptions have exaggerated what the research shows. Movement of nutrients through fungi, critics say, does not prove that trees are cooperating in any meaningful sense.</p><p><span class="para-label">F</span>Whatever the final verdict, the research has practical implications. Forestry practices such as clear-cutting, in which every tree in an area is removed, may destroy fungal networks and make it harder for new forests to grow. Some foresters now leave a number of older trees standing when they harvest timber.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">i</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">foresters regarded trees as solitary competitors … research has revealed a far more cooperative picture</span>.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">ii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">sugars were moving underground from one tree to another</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">iii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">benefit both partners</span>.</p><p><span class="trap">Trap:</span> viii — fungi are partners, not dangers.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">iv</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">mother trees — may support younger trees</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">v</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Not all scientists accept these claims</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">vi</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">the research has practical implications … Some foresters now leave … older trees standing</span>.</p><p><span class="trap">Trap:</span> vii — timber is mentioned, but not its value.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">C</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">injected birch and fir trees with different forms of carbon that could be traced</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">D</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">the trees gain water and minerals</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">A</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">trees can send chemical warning signals through the network when attacked by insects</span>.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">may destroy fungal networks</span>.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">review</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">A review published in 2023</span>.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">weak</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">the evidence … is weak</span>.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">exaggerated</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">have exaggerated what the research shows</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 20</div>
+      <h2>Reading Passage 3 — The True Cost of Fast Fashion</h2>
+      <p class="task-sub">About <b>22 minutes</b> for Questions 27–40: <b>matching features</b>, <b>YES / NO / NOT GIVEN</b>, <b>multiple choice</b> and <b>completion</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The True Cost of Fast Fashion<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Clothes have never been cheaper. Who pays the difference?</small></h3>
+            <p class="article-meta">Reading Passage 3 · Consumers and environment · 330 words</p>
+            <p><span class="para-label">A</span>Over the past two decades, the way people buy clothes has changed dramatically. Retailers such as Zara and H&amp;M pioneered what became known as ‘fast fashion’: copying catwalk styles quickly and cheaply, and delivering new designs to stores every few weeks rather than twice a year. More recently, online companies have accelerated the process even further, adding thousands of new items to their websites every day.</p><p><span class="para-label">B</span>The result has been an explosion in consumption. According to a report by the Ellen MacArthur Foundation, global clothing production roughly doubled between 2000 and 2015, while the average number of times a garment was worn before being thrown away fell by around 36 per cent. In some wealthy countries, many items are worn fewer than ten times.</p><p><span class="para-label">C</span>The environmental costs are considerable. Producing a single cotton T-shirt can require around 2,700 litres of water, and dyeing and treating textiles is a major source of water pollution in producing countries. Synthetic fabrics such as polyester, which now make up the majority of clothing fibres, release tiny plastic fibres into the water every time they are washed.</p><p><span class="para-label">D</span>There are human costs, too. Much clothing is made in countries such as Bangladesh, where wages are low. The collapse of the Rana Plaza factory building near Dhaka in 2013, which killed more than 1,100 workers, drew global attention to unsafe working conditions in the industry. Since then, a legally binding safety agreement signed by many international brands has improved inspections, but campaigners say that wages remain far too low.</p><p><span class="para-label">E</span>Consumers are not powerless. Buying fewer, better-quality clothes, repairing items and buying second-hand can all reduce the impact of a wardrobe. The second-hand market has grown rapidly, helped by apps that make reselling easy. Yet I believe it would be naive to expect individual shoppers alone to solve the problem. Real change will require governments to set rules — for example, making producers responsible for collecting and recycling the clothes they sell, as France has begun to do.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 27–30</p><p class="qg-instr">Match each statement with the correct item, <b>A–D</b>.</p></div>
+<div class="card"><p class="prompt-label">Items</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; the Ellen MacArthur Foundation<br><b>B</b>&nbsp; the Rana Plaza disaster<br><b>C</b>&nbsp; a legally binding safety agreement<br><b>D</b>&nbsp; France</p></div>
+      <div class="card" id="t6-mf"><div class="sel-row"><select class="select" id="t6-mf-27" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>27.</b> led to better factory inspections</span></div><div class="sel-row"><select class="select" id="t6-mf-28" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>28.</b> reported a fall in how often clothes are worn</span></div><div class="sel-row"><select class="select" id="t6-mf-29" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>29.</b> has begun to make producers responsible for recycling</span></div><div class="sel-row"><select class="select" id="t6-mf-30" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>30.</b> made people around the world aware of dangerous conditions</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mf', 't6-mf-score')">Check answers</button>
+          <span id="t6-mf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 31–35</p><p class="qg-instr">Do the statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-31">
+          <p>31. Fast fashion has made clothes more affordable for poorer families.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-31" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-31" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-31" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-32">
+          <p>32. Consumers can do something to reduce the impact of their clothing.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-32" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-32" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-32" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-33">
+          <p>33. Shoppers alone can solve the problems caused by fast fashion.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-33" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-33" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-33" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-34">
+          <p>34. Governments should introduce rules for clothing producers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-34" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-34" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-34" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-35">
+          <p>35. Polyester is now the most common clothing fibre.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-35" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-35" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-35" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 36–38</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-36">
+          <p>36. Paragraph A mainly describes</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-36" data-correct="false"> A. the history of Zara.</label><label><input type="radio" value="1" name="t6-mc-36" data-correct="true"> B. how the speed of fashion has increased.</label><label><input type="radio" value="2" name="t6-mc-36" data-correct="false"> C. why online shopping is cheaper.</label><label><input type="radio" value="3" name="t6-mc-36" data-correct="false"> D. catwalk shows.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-37">
+          <p>37. According to Paragraph B, clothes are now</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-37" data-correct="true"> A. worn fewer times before being thrown away.</label><label><input type="radio" value="1" name="t6-mc-37" data-correct="false"> B. produced less often.</label><label><input type="radio" value="2" name="t6-mc-37" data-correct="false"> C. of better quality.</label><label><input type="radio" value="3" name="t6-mc-37" data-correct="false"> D. more expensive.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-38">
+          <p>38. Why does the writer mention polyester?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-38" data-correct="false"> A. It is cheaper than cotton.</label><label><input type="radio" value="1" name="t6-mc-38" data-correct="false"> B. It needs a lot of water.</label><label><input type="radio" value="2" name="t6-mc-38" data-correct="true"> C. It releases plastic fibres when washed.</label><label><input type="radio" value="3" name="t6-mc-38" data-correct="false"> D. It is made in Bangladesh.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 39–40</p><p class="qg-instr">Complete the sentences. Choose <b>NO MORE THAN TWO WORDS AND/OR A NUMBER</b>.</p></div>
+      <div class="card" id="t6-sc" style="line-height:2.4;"><p>39. One cotton T-shirt can need around <input type="text" class="text-answer" id="t6-39" data-correct="2,700 litres/2700 litres" autocomplete="off" style="width:150px;"> of water.</p><p>40. Reselling clothes has become easier because of <input type="text" class="text-answer" id="t6-40" data-correct="apps" autocomplete="off" style="width:100px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-sc', 't6-sc-score')">Check answers</button>
+          <span id="t6-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 20</div>
+      <h2>Reading Passage 3 — Answer Analysis and Your Score</h2>
+      <p class="task-sub">Check Passage 3 and find your band.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The True Cost of Fast Fashion</summary>
+        <p><span class="para-label">A</span>Over the past two decades, the way people buy clothes has changed dramatically. Retailers such as Zara and H&amp;M pioneered what became known as ‘fast fashion’: copying catwalk styles quickly and cheaply, and delivering new designs to stores every few weeks rather than twice a year. More recently, online companies have accelerated the process even further, adding thousands of new items to their websites every day.</p><p><span class="para-label">B</span>The result has been an explosion in consumption. According to a report by the Ellen MacArthur Foundation, global clothing production roughly doubled between 2000 and 2015, while the average number of times a garment was worn before being thrown away fell by around 36 per cent. In some wealthy countries, many items are worn fewer than ten times.</p><p><span class="para-label">C</span>The environmental costs are considerable. Producing a single cotton T-shirt can require around 2,700 litres of water, and dyeing and treating textiles is a major source of water pollution in producing countries. Synthetic fabrics such as polyester, which now make up the majority of clothing fibres, release tiny plastic fibres into the water every time they are washed.</p><p><span class="para-label">D</span>There are human costs, too. Much clothing is made in countries such as Bangladesh, where wages are low. The collapse of the Rana Plaza factory building near Dhaka in 2013, which killed more than 1,100 workers, drew global attention to unsafe working conditions in the industry. Since then, a legally binding safety agreement signed by many international brands has improved inspections, but campaigners say that wages remain far too low.</p><p><span class="para-label">E</span>Consumers are not powerless. Buying fewer, better-quality clothes, repairing items and buying second-hand can all reduce the impact of a wardrobe. The second-hand market has grown rapidly, helped by apps that make reselling easy. Yet I believe it would be naive to expect individual shoppers alone to solve the problem. Real change will require governments to set rules — for example, making producers responsible for collecting and recycling the clothes they sell, as France has begun to do.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">C</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">a legally binding safety agreement … has improved inspections</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">A</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">the average number of times a garment was worn … fell by around 36 per cent</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">D</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">making producers responsible for collecting and recycling … as France has begun to do</span>.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">drew global attention to unsafe working conditions</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>Prices are described as cheap, but poorer families are never mentioned.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">YES</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Consumers are not powerless</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">NO</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">it would be naive to expect individual shoppers alone to solve the problem</span>.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">YES</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Real change will require governments to set rules</span>.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">YES</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">polyester, which now make up the majority of clothing fibres</span>.</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">B</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">new designs … every few weeks … online companies have accelerated the process</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">A</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">the average number of times a garment was worn … fell</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">C</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">release tiny plastic fibres into the water every time they are washed</span>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">2,700 litres</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">around 2,700 litres of water</span>.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">apps</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">helped by apps that make reselling easy</span>.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Academic Reading)</p><table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr><tr><td>15–18</td><td>5.0</td></tr><tr><td>19–22</td><td>5.5</td></tr><tr><td>23–26</td><td>6.0</td></tr><tr><td>27–29</td><td>6.5</td></tr><tr><td>30–32</td><td>7.0</td></tr><tr><td>33–34</td><td>7.5</td></tr><tr><td>35+</td><td>8.0+</td></tr></table></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 20</div>
+      <h2>Extra Reading 1 — Cities Without Cars</h2>
+      <p class="task-sub">An extra article (about <b>15 minutes</b>). Answer the questions, then summarise it in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Cities Without Cars</h3>
+        <p class="article-meta">Extra reading 1 · Cities · 204 words</p>
+        <p><span class="para-label">A</span>Across Europe, a growing number of cities are removing cars from their centres. Oslo, Norway’s capital, set out in 2017 to make its city centre largely car-free. Rather than banning cars outright, the city removed around 700 on-street parking spaces, replacing them with cycle lanes, benches, small parks and play areas. Pontevedra, a small city in north-west Spain, went further: since 1999 most private vehicles have been banned from its historic centre, and road deaths in the city have fallen dramatically.</p><p><span class="para-label">B</span>Supporters point to cleaner air, quieter streets and safer conditions for children and older people. Some studies have found that pedestrians spend more money in local shops over a month than drivers do, because they visit more often, even though they spend less on each visit.</p><p><span class="para-label">C</span>Not everyone is convinced. Shopkeepers in several cities have feared losing customers who arrive by car, and residents of suburbs with poor public transport may find it harder to reach the centre. Delivery companies and people with disabilities have also raised concerns about access.</p><p><span class="para-label">D</span>Experts agree that car-free schemes work best when they are introduced gradually, with good public transport and delivery arrangements in place, and when local people are involved in planning them from the beginning.</p>
+      </div>
+      <div class="card" id="t8-mc"><div class="q-item" id="t8-mc-1">
+          <p>1. How did Oslo reduce cars in its centre?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-1" data-correct="false"> A. by banning all cars</label><label><input type="radio" value="1" name="t8-mc-1" data-correct="true"> B. by removing parking spaces</label><label><input type="radio" value="2" name="t8-mc-1" data-correct="false"> C. by making buses free</label><label><input type="radio" value="3" name="t8-mc-1" data-correct="false"> D. by charging drivers</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-2">
+          <p>2. Since when has Pontevedra banned most private cars from its centre?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-2" data-correct="false"> A. 1979</label><label><input type="radio" value="1" name="t8-mc-2" data-correct="true"> B. 1999</label><label><input type="radio" value="2" name="t8-mc-2" data-correct="false"> C. 2017</label><label><input type="radio" value="3" name="t8-mc-2" data-correct="false"> D. 2019</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-3">
+          <p>3. Why do pedestrians spend more in local shops over a month?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-3" data-correct="false"> A. They spend more on each visit.</label><label><input type="radio" value="1" name="t8-mc-3" data-correct="true"> B. They visit more often.</label><label><input type="radio" value="2" name="t8-mc-3" data-correct="false"> C. Shops give them discounts.</label><label><input type="radio" value="3" name="t8-mc-3" data-correct="false"> D. They have more money.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-4">
+          <p>4. Who has raised concerns about access?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-4" data-correct="false"> A. tourists</label><label><input type="radio" value="1" name="t8-mc-4" data-correct="true"> B. delivery companies and people with disabilities</label><label><input type="radio" value="2" name="t8-mc-4" data-correct="false"> C. cyclists</label><label><input type="radio" value="3" name="t8-mc-4" data-correct="false"> D. children</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-5">
+          <p>5. According to experts, car-free schemes work best when they are</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-5" data-correct="false"> A. introduced quickly</label><label><input type="radio" value="1" name="t8-mc-5" data-correct="true"> B. introduced gradually, with local people involved</label><label><input type="radio" value="2" name="t8-mc-5" data-correct="false"> C. introduced only in small cities</label><label><input type="radio" value="3" name="t8-mc-5" data-correct="false"> D. paid for by shopkeepers</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-mc', 't8-mc-score')">Check answers</button>
+          <span id="t8-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 100 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 100 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>The article describes how several European cities are removing cars from their centres. Oslo removed around 700 parking spaces and replaced them with cycle lanes, benches and play areas, while Pontevedra in Spain has banned most private cars since 1999, and road deaths there have fallen sharply. Supporters mention cleaner air, quieter and safer streets, and evidence that pedestrians spend more in local shops because they visit more often. However, shopkeepers, suburban residents, delivery companies and people with disabilities have raised concerns. Experts say such schemes work best when introduced gradually, with good public transport and local involvement. I think this is a sensible approach for crowded city centres.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 45 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 20</div>
+      <h2>Extra Reading 2 — The Psychology of Colour in Marketing</h2>
+      <p class="task-sub">A second extra article. Complete the sentences, then summarise it in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Psychology of Colour in Marketing</h3>
+        <p class="article-meta">Extra reading 2 · Business · 168 words</p>
+        <p><span class="para-label">A</span>Colour is one of the first things consumers notice about a product, and companies spend large sums choosing it. Research suggests that people make a judgement about a product within about ninety seconds, and that much of this judgement is based on colour alone.</p><p><span class="para-label">B</span>Certain associations appear to be widespread. Blue is often linked with trust and reliability, which may explain why it is popular with banks and technology companies. Red is associated with energy and urgency, and is frequently used for sales and fast-food brands. Green suggests nature and health.</p><p><span class="para-label">C</span>However, the meanings of colours are not universal. White is associated with weddings and purity in many Western countries, but with mourning in parts of East Asia. Companies that sell internationally must therefore research local meanings carefully.</p><p><span class="para-label">D</span>Psychologists also warn against exaggerating the power of colour. What matters most, studies suggest, is whether the colour seems appropriate for the product: a pink power drill or a brown perfume bottle may look strange, whatever the colour’s general associations.</p>
+      </div>
+      <div class="card" id="t9-sc" style="line-height:2.4;"><p class="example-q" style="margin:0 0 6px;">Write <b>ONE WORD AND/OR A NUMBER</b> from the article.</p><p>1. People judge a product in about <input type="text" class="text-answer" id="t9-1" data-correct="90/ninety" autocomplete="off" style="width:90px;"> seconds.</p><p>2. Blue is linked with trust and <input type="text" class="text-answer" id="t9-2" data-correct="reliability" autocomplete="off" style="width:130px;">.</p><p>3. Red is often used for sales and <input type="text" class="text-answer" id="t9-3" data-correct="fast-food/fast food" autocomplete="off" style="width:120px;"> brands.</p><p>4. In parts of East Asia, white is associated with <input type="text" class="text-answer" id="t9-4" data-correct="mourning" autocomplete="off" style="width:120px;">.</p><p>5. Most important is whether a colour seems <input type="text" class="text-answer" id="t9-5" data-correct="appropriate" autocomplete="off" style="width:130px;"> for the product.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-sc', 't9-sc-score')">Check answers</button>
+          <span id="t9-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 100 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 100 words):</p><textarea class="no-check mini-answer" id="t9-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-sum-ans"><p>The article explains how companies use colour in marketing. Consumers judge products very quickly, often within ninety seconds, and largely on colour. Some associations are common: blue suggests trust and is popular with banks, red suggests energy and is used for sales and fast food, and green suggests nature and health. However, colour meanings vary between cultures — white means purity in many Western countries but mourning in parts of East Asia — so international companies must do research. Psychologists add that the most important thing is whether a colour suits the product. I found the point about cultural differences especially useful.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 45 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 20</div>
+      <h2>Reading Skill — Paraphrase</h2>
+      <p class="task-sub">Match the question language to the passage language, then choose the closest meaning.</p>
+      <div class="card" id="t10-lm">
+        <div class="line-match" id="t10-lm-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. released later</button><button type="button" class="lm-item" data-key="2">2. working together</button><button type="button" class="lm-item" data-key="3">3. make bigger than it is</button><button type="button" class="lm-item" data-key="4">4. drew attention to</button><button type="button" class="lm-item" data-key="5">5. completely and immediately</button><button type="button" class="lm-item" data-key="6">6. becoming much faster</button><button type="button" class="lm-item" data-key="7">7. advantages are greater</button><button type="button" class="lm-item" data-key="8">8. not the same everywhere</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. exaggerate</button><button type="button" class="lm-item" data-key="b">b. not universal</button><button type="button" class="lm-item" data-key="c">c. cooperative</button><button type="button" class="lm-item" data-key="d">d. accelerated</button><button type="button" class="lm-item" data-key="e">e. made people aware of</button><button type="button" class="lm-item" data-key="f">f. delayed</button><button type="button" class="lm-item" data-key="g">g. outright</button><button type="button" class="lm-item" data-key="h">h. benefits outweigh the costs</button></div>
+          <select class="lm-hidden-select select" id="t10-lm-1" data-lm-key="1" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-5" data-lm-key="5" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-7" data-lm-key="7" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-8" data-lm-key="8" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm');">Check answers</button>
+          <span id="t10-lm-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t10-mc"><div class="q-item" id="t10-mc-1">
+          <p>1. “Consumers are not powerless.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-1" data-correct="false"> A. Consumers can do nothing.</label><label><input type="radio" value="1" name="t10-mc-1" data-correct="true"> B. Consumers have some ability to make a difference.</label><label><input type="radio" value="2" name="t10-mc-1" data-correct="false"> C. Consumers have too much power.</label><label><input type="radio" value="3" name="t10-mc-1" data-correct="false"> D. Consumers do not care.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-2">
+          <p>2. “Later start times are not without difficulties.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-2" data-correct="true"> A. Later start times have some problems.</label><label><input type="radio" value="1" name="t10-mc-2" data-correct="false"> B. Later start times have no problems.</label><label><input type="radio" value="2" name="t10-mc-2" data-correct="false"> C. Later start times are impossible.</label><label><input type="radio" value="3" name="t10-mc-2" data-correct="false"> D. Later start times are popular.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-3">
+          <p>3. “Whatever the final verdict, the research has practical implications.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-3" data-correct="false"> A. The research is useless until a decision is made.</label><label><input type="radio" value="1" name="t10-mc-3" data-correct="true"> B. The research is useful in practice, whoever turns out to be right.</label><label><input type="radio" value="2" name="t10-mc-3" data-correct="false"> C. The research has been finished.</label><label><input type="radio" value="3" name="t10-mc-3" data-correct="false"> D. Judges must decide.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-4">
+          <p>4. “Rather than banning cars outright…”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-4" data-correct="true"> A. Instead of a complete ban…</label><label><input type="radio" value="1" name="t10-mc-4" data-correct="false"> B. Because of a ban…</label><label><input type="radio" value="2" name="t10-mc-4" data-correct="false"> C. After banning cars…</label><label><input type="radio" value="3" name="t10-mc-4" data-correct="false"> D. Although cars were banned…</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-mc', 't10-mc-score')">Check answers</button>
+          <span id="t10-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 20</div>
+      <h2>Reading Skill — Linking Words and Reference</h2>
+      <p class="task-sub">Identify the function of linking words and what reference words refer to.</p>
+      <div class="card" id="t11-fn"><div class="sel-row"><select class="select" id="t11-fn-1" data-answer="contrast"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="example">example</option><option value="addition">addition</option></select><span><b>1.</b> “<u>However</u>, research … suggests that a large part of the explanation is biological.”</span></div><div class="sel-row"><select class="select" id="t11-fn-2" data-answer="result"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="example">example</option><option value="addition">addition</option></select><span><b>2.</b> “<u>As a result</u>, many teenagers simply do not feel tired until eleven.”</span></div><div class="sel-row"><select class="select" id="t11-fn-3" data-answer="example"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="example">example</option><option value="addition">addition</option></select><span><b>3.</b> “In Seattle, <u>for instance</u>, secondary schools moved their start time.”</span></div><div class="sel-row"><select class="select" id="t11-fn-4" data-answer="addition"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="example">example</option><option value="addition">addition</option></select><span><b>4.</b> “There are human costs, <u>too</u>.”</span></div><div class="sel-row"><select class="select" id="t11-fn-5" data-answer="result"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="example">example</option><option value="addition">addition</option></select><span><b>5.</b> “Companies … must <u>therefore</u> research local meanings carefully.”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-fn', 't11-fn-score')">Check answers</button>
+          <span id="t11-fn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t11-ref"><div class="q-item" id="t11-ref-1">
+          <p>1. “…she injected birch and fir trees … and found that sugars were moving…” — <b>she</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-1" data-correct="false"> A. a forester</label><label><input type="radio" value="1" name="t11-ref-1" data-correct="true"> B. Suzanne Simard</label><label><input type="radio" value="2" name="t11-ref-1" data-correct="false"> C. a critic</label><label><input type="radio" value="3" name="t11-ref-1" data-correct="false"> D. a mother tree</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-2">
+          <p>2. “…which she calls ‘mother trees’…” — <b>which</b> refers to</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-2" data-correct="true"> A. large, old trees</label><label><input type="radio" value="1" name="t11-ref-2" data-correct="false"> B. young trees</label><label><input type="radio" value="2" name="t11-ref-2" data-correct="false"> C. fungi</label><label><input type="radio" value="3" name="t11-ref-2" data-correct="false"> D. insects</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-3">
+          <p>3. “They can make it harder for parents…” (Passage 1, F) — <b>They</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-3" data-correct="false"> A. teenagers</label><label><input type="radio" value="1" name="t11-ref-3" data-correct="true"> B. later start times</label><label><input type="radio" value="2" name="t11-ref-3" data-correct="false"> C. researchers</label><label><input type="radio" value="3" name="t11-ref-3" data-correct="false"> D. sports</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-4">
+          <p>4. “…as France has begun to do.” — France has begun to</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-4" data-correct="false"> A. ban fast fashion</label><label><input type="radio" value="1" name="t11-ref-4" data-correct="true"> B. make producers responsible for recycling</label><label><input type="radio" value="2" name="t11-ref-4" data-correct="false"> C. close factories</label><label><input type="radio" value="3" name="t11-ref-4" data-correct="false"> D. reduce prices</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-ref', 't11-ref-score')">Check answers</button>
+          <span id="t11-ref-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 20</div>
+      <h2>Reading Skill — Speed Reading Challenge</h2>
+      <p class="task-sub"><b>Part 1:</b> skim in <b>50 seconds</b>. <b>Part 2:</b> scan for six answers in <b>2½ minutes</b>.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">From Ethiopian Hills to Global Habit</h3>
+        <p class="article-meta">Speed reading · 300 words · 183 words</p>
+        <p><span class="para-label">A</span>According to legend, coffee was discovered in Ethiopia by a goat herder called Kaldi, who noticed that his goats became unusually energetic after eating the red berries of a certain bush. Whether or not the story is true, by the fifteenth century coffee was being grown in Yemen, and Sufi monks drank it to stay awake during night-time prayers.</p><p><span class="para-label">B</span>Coffee houses spread rapidly across the Middle East. The first in Istanbul opened in 1555, and they became important places for conversation, music and the exchange of news. Coffee reached Venice in the early seventeenth century, and the first coffee house in England opened in Oxford in 1650. In London, some coffee houses developed into businesses: Lloyd’s of London, now one of the world’s largest insurance markets, began in Edward Lloyd’s coffee house in the 1680s.</p><p><span class="para-label">C</span>For a long time, Yemen controlled the coffee trade, but in 1616 Dutch traders managed to take plants to Europe, and the Dutch later established plantations on the island of Java. Today, Brazil is by far the world’s largest producer, growing around a third of the global supply.</p>
+      </div>
+      <div class="card" id="t12-title"><div class="q-item" id="t12-title-1">
+          <p>1. Part 1 — What is the text mainly about?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-title-1" data-correct="false"> A. how to make good coffee</label><label><input type="radio" value="1" name="t12-title-1" data-correct="true"> B. the spread of coffee around the world</label><label><input type="radio" value="2" name="t12-title-1" data-correct="false"> C. the health effects of coffee</label><label><input type="radio" value="3" name="t12-title-1" data-correct="false"> D. the insurance industry</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-title', 't12-title-score')">Check answers</button>
+          <span id="t12-title-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t12-scan" style="line-height:2.4;"><p>1. Name of the goat herder in the legend: <input type="text" class="text-answer" id="t12-1" data-correct="kaldi" autocomplete="off" style="width:100px;"></p><p>2. Country where coffee was grown by the fifteenth century: <input type="text" class="text-answer" id="t12-2" data-correct="yemen" autocomplete="off" style="width:100px;"></p><p>3. Year the first coffee house opened in Istanbul: <input type="text" class="text-answer" id="t12-3" data-correct="1555" autocomplete="off" style="width:90px;"></p><p>4. City of the first coffee house in England: <input type="text" class="text-answer" id="t12-4" data-correct="oxford" autocomplete="off" style="width:100px;"></p><p>5. Decade when Lloyd’s began: the <input type="text" class="text-answer" id="t12-5" data-correct="1680s" autocomplete="off" style="width:90px;"></p><p>6. The world’s largest coffee producer today: <input type="text" class="text-answer" id="t12-6" data-correct="brazil" autocomplete="off" style="width:100px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-scan', 't12-scan-score')">Check answers</button>
+          <span id="t12-scan-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 20</div>
+      <h2>Vocabulary — Word Families and Collocations</h2>
+      <p class="task-sub">Accurate word forms matter in completion tasks and in Writing.</p>
+      <div class="card" id="t13-wf" style="line-height:2.4;"><p>1. The <input type="text" class="text-answer" id="t13-1" data-correct="release" autocomplete="off" style="width:110px;"> of melatonin is delayed. (release — noun)</p><p>2. Lack of sleep reduces <input type="text" class="text-answer" id="t13-2" data-correct="concentration" autocomplete="off" style="width:140px;">. (concentrate)</p><p>3. The research has practical <input type="text" class="text-answer" id="t13-3" data-correct="implications" autocomplete="off" style="width:140px;">. (imply)</p><p>4. Global clothing <input type="text" class="text-answer" id="t13-4" data-correct="production" autocomplete="off" style="width:130px;"> doubled. (produce)</p><p>5. Synthetic fabrics are a major source of water <input type="text" class="text-answer" id="t13-5" data-correct="pollution" autocomplete="off" style="width:120px;">. (pollute)</p><p>6. Working conditions were <input type="text" class="text-answer" id="t13-6" data-correct="unsafe" autocomplete="off" style="width:110px;">. (safe — opposite)</p><p>7. The meanings of colours are not <input type="text" class="text-answer" id="t13-7" data-correct="universal" autocomplete="off" style="width:120px;">. (universe)</p><p>8. Schemes work best when introduced <input type="text" class="text-answer" id="t13-8" data-correct="gradually" autocomplete="off" style="width:120px;">. (gradual)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-wf', 't13-wf-score')">Check answers</button>
+          <span id="t13-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t13-col"><div class="q-item" id="t13-col-1">
+          <p>1. to ______ attention to a problem</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-1" data-correct="false"> pull</label><label><input type="radio" value="1" name="t13-col-1" data-correct="true"> draw</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-2">
+          <p>2. to ______ a verdict</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-2" data-correct="true"> reach</label><label><input type="radio" value="1" name="t13-col-2" data-correct="false"> arrive</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-3">
+          <p>3. the benefits ______ the costs</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-3" data-correct="false"> overweigh</label><label><input type="radio" value="1" name="t13-col-3" data-correct="true"> outweigh</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-4">
+          <p>4. to ______ conditions</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-4" data-correct="false"> better</label><label><input type="radio" value="1" name="t13-col-4" data-correct="true"> improve</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-5">
+          <p>5. to ______ a scheme</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-5" data-correct="true"> introduce</label><label><input type="radio" value="1" name="t13-col-5" data-correct="false"> enter</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-6">
+          <p>6. a ______ agreement</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-6" data-correct="false"> law binding</label><label><input type="radio" value="1" name="t13-col-6" data-correct="true"> legally binding</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-col', 't13-col-score')">Check answers</button>
+          <span id="t13-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 20</div>
+      <h2>Grammar for Writing — Accuracy at Band 6.5+</h2>
+      <p class="task-sub">Choose the correct option. You will use these structures in today’s writing.</p>
+      <div class="card" id="t14-gr"><div class="q-item" id="t14-gr-1">
+          <p>1. Online sales ______ steadily since 2010.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-1" data-correct="false"> rose</label><label><input type="radio" value="1" name="t14-gr-1" data-correct="true"> have risen</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-2">
+          <p>2. In 2010, online sales ______ for 8% of the total.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-2" data-correct="true"> accounted</label><label><input type="radio" value="1" name="t14-gr-2" data-correct="false"> have accounted</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-3">
+          <p>3. The share of shop sales fell ______ 92% to 55%.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-3" data-correct="false"> by</label><label><input type="radio" value="1" name="t14-gr-3" data-correct="true"> from</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-4">
+          <p>4. By 2022, online sales ______ almost half of the total.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-4" data-correct="false"> reach</label><label><input type="radio" value="1" name="t14-gr-4" data-correct="true"> had reached</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-5">
+          <p>5. ______ some people blame consumers, others blame companies.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-5" data-correct="false"> Because</label><label><input type="radio" value="1" name="t14-gr-5" data-correct="true"> While</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-6">
+          <p>6. Not only ______ clothes cheaper, but they are also worn less.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-6" data-correct="true"> are</label><label><input type="radio" value="1" name="t14-gr-6" data-correct="false"> they are</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-7">
+          <p>7. The government should make producers ______ for recycling.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-7" data-correct="true"> responsible</label><label><input type="radio" value="1" name="t14-gr-7" data-correct="false"> responsibly</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-8">
+          <p>8. There ______ a sharp increase in online sales.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-8" data-correct="false"> were</label><label><input type="radio" value="1" name="t14-gr-8" data-correct="true"> was</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-gr', 't14-gr-score')">Check answers</button>
+          <span id="t14-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task15" data-task="15">
+      <div class="task-eyebrow">Task 15 of 20</div>
+      <h2>Writing Task 1 — Skills: Describing Opposite Trends</h2>
+      <p class="task-sub">Study the chart and practise the language before you write.</p>
+<div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Share of clothing sales online and in shops (%)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Share of clothing sales online and in shops (%)</text><line x1="64" y1="290.0" x2="620" y2="290.0" stroke="#e3e5ec"/><text x="56" y="294.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="241.2" x2="620" y2="241.2" stroke="#e3e5ec"/><text x="56" y="245.2" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="192.4" x2="620" y2="192.4" stroke="#e3e5ec"/><text x="56" y="196.4" text-anchor="end" font-size="11" fill="#4b4e5c">40</text><line x1="64" y1="143.6" x2="620" y2="143.6" stroke="#e3e5ec"/><text x="56" y="147.6" text-anchor="end" font-size="11" fill="#4b4e5c">60</text><line x1="64" y1="94.8" x2="620" y2="94.8" stroke="#e3e5ec"/><text x="56" y="98.8" text-anchor="end" font-size="11" fill="#4b4e5c">80</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">100</text><text x="64.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2010</text><text x="203.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2013</text><text x="342.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2016</text><text x="481.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2019</text><text x="620.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2022</text><text x="14" y="168.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 168.0)">% of sales</text><polyline fill="none" stroke="#2c6bed" stroke-width="2.6" points="64.0,270.5 203.0,253.4 342.0,229.0 481.0,197.3 620.0,180.2"/><circle cx="64.0" cy="270.5" r="3.6" fill="#2c6bed"/><circle cx="203.0" cy="253.4" r="3.6" fill="#2c6bed"/><circle cx="342.0" cy="229.0" r="3.6" fill="#2c6bed"/><circle cx="481.0" cy="197.3" r="3.6" fill="#2c6bed"/><circle cx="620.0" cy="180.2" r="3.6" fill="#2c6bed"/><rect x="64" y="334" width="14" height="4" fill="#2c6bed"/><text x="84" y="339" font-size="12" fill="#14162b">online</text><polyline fill="none" stroke="#d9480f" stroke-width="2.6" points="64.0,65.5 203.0,82.6 342.0,107.0 481.0,138.7 620.0,155.8"/><circle cx="64.0" cy="65.5" r="3.6" fill="#d9480f"/><circle cx="203.0" cy="82.6" r="3.6" fill="#d9480f"/><circle cx="342.0" cy="107.0" r="3.6" fill="#d9480f"/><circle cx="481.0" cy="138.7" r="3.6" fill="#d9480f"/><circle cx="620.0" cy="155.8" r="3.6" fill="#d9480f"/><rect x="137.2" y="334" width="14" height="4" fill="#d9480f"/><text x="157.2" y="339" font-size="12" fill="#14162b">in shops</text></svg></div>
+      <div class="card" id="t15-ov"><div class="sel-row"><select class="select" id="t15-ov-1" data-answer="overview"><option value="">—</option><option value="overview">overview</option><option value="detail">detail</option></select><span><b>1.</b> Online sales rose steadily, while shop sales fell.</span></div><div class="sel-row"><select class="select" id="t15-ov-2" data-answer="detail"><option value="">—</option><option value="overview">overview</option><option value="detail">detail</option></select><span><b>2.</b> In 2013, online sales were 15%.</span></div><div class="sel-row"><select class="select" id="t15-ov-3" data-answer="overview"><option value="">—</option><option value="overview">overview</option><option value="detail">detail</option></select><span><b>3.</b> Shops remained the main way of buying clothes throughout the period.</span></div><div class="sel-row"><select class="select" id="t15-ov-4" data-answer="detail"><option value="">—</option><option value="overview">overview</option><option value="detail">detail</option></select><span><b>4.</b> Shop sales fell by 13 points between 2016 and 2019.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-ov', 't15-ov-score')">Check answers</button>
+          <span id="t15-ov-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t15-g" style="line-height:2.4;"><p>1. The share of online sales more than <input type="text" class="text-answer" id="t15-1" data-correct="quintupled" autocomplete="off" style="width:130px;"> — from 8% to 45%. (×5)</p><p>2. Shop sales fell <input type="text" class="text-answer" id="t15-2" data-correct="steadily/consistently" autocomplete="off" style="width:130px;"> over the period.</p><p>3. By 2022, online sales accounted <input type="text" class="text-answer" id="t15-3" data-correct="for" autocomplete="off" style="width:80px;"> almost half of all sales.</p><p>4. The gap between the two <input type="text" class="text-answer" id="t15-4" data-correct="narrowed" autocomplete="off" style="width:120px;"> from 84 to 10 percentage points.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-g', 't15-g-score')">Check answers</button>
+          <span id="t15-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task16" data-task="16">
+      <div class="task-eyebrow">Task 16 of 20</div>
+      <h2>Writing Task 1 — Your Report</h2>
+      <p class="task-sub">Write the full report. About <b>20 minutes</b>, <b>at least 150 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The graph below shows the percentage of clothing sold online and in shops in one country between 2010 and 2022.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Share of clothing sales online and in shops (%)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Share of clothing sales online and in shops (%)</text><line x1="64" y1="290.0" x2="620" y2="290.0" stroke="#e3e5ec"/><text x="56" y="294.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="241.2" x2="620" y2="241.2" stroke="#e3e5ec"/><text x="56" y="245.2" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="192.4" x2="620" y2="192.4" stroke="#e3e5ec"/><text x="56" y="196.4" text-anchor="end" font-size="11" fill="#4b4e5c">40</text><line x1="64" y1="143.6" x2="620" y2="143.6" stroke="#e3e5ec"/><text x="56" y="147.6" text-anchor="end" font-size="11" fill="#4b4e5c">60</text><line x1="64" y1="94.8" x2="620" y2="94.8" stroke="#e3e5ec"/><text x="56" y="98.8" text-anchor="end" font-size="11" fill="#4b4e5c">80</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">100</text><text x="64.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2010</text><text x="203.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2013</text><text x="342.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2016</text><text x="481.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2019</text><text x="620.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2022</text><text x="14" y="168.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 168.0)">% of sales</text><polyline fill="none" stroke="#2c6bed" stroke-width="2.6" points="64.0,270.5 203.0,253.4 342.0,229.0 481.0,197.3 620.0,180.2"/><circle cx="64.0" cy="270.5" r="3.6" fill="#2c6bed"/><circle cx="203.0" cy="253.4" r="3.6" fill="#2c6bed"/><circle cx="342.0" cy="229.0" r="3.6" fill="#2c6bed"/><circle cx="481.0" cy="197.3" r="3.6" fill="#2c6bed"/><circle cx="620.0" cy="180.2" r="3.6" fill="#2c6bed"/><rect x="64" y="334" width="14" height="4" fill="#2c6bed"/><text x="84" y="339" font-size="12" fill="#14162b">online</text><polyline fill="none" stroke="#d9480f" stroke-width="2.6" points="64.0,65.5 203.0,82.6 342.0,107.0 481.0,138.7 620.0,155.8"/><circle cx="64.0" cy="65.5" r="3.6" fill="#d9480f"/><circle cx="203.0" cy="82.6" r="3.6" fill="#d9480f"/><circle cx="342.0" cy="107.0" r="3.6" fill="#d9480f"/><circle cx="481.0" cy="138.7" r="3.6" fill="#d9480f"/><circle cx="620.0" cy="155.8" r="3.6" fill="#d9480f"/><rect x="137.2" y="334" width="14" height="4" fill="#d9480f"/><text x="157.2" y="339" font-size="12" fill="#14162b">in shops</text></svg></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t16-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t16-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t16-essay-model"><div class="model-text">
+  <p>The line graph compares the proportion of clothing sold online and in physical shops in one country between 2010 and 2022.</p>
+  <p>Overall, online sales grew steadily throughout the period, while the share of sales made in shops declined by the same amount. Despite this, shops remained the main place where people bought clothes.</p>
+  <p>In 2010, the vast majority of clothing (92%) was sold in shops, and only 8% was bought online. Over the next six years, online sales roughly tripled to 25%, while shop sales fell to 75%.</p>
+  <p>The trend continued after 2016. By 2019, online sales had risen to 38%, and by 2022 they accounted for 45% of all clothing sold, more than five times the 2010 figure. Meanwhile, the share of shop sales dropped to 55%, so the gap between the two narrowed from 84 to just 10 percentage points.</p>
+  <p class="alt">≈ 165 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task17" data-task="17">
+      <div class="task-eyebrow">Task 17 of 20</div>
+      <h2>Writing Task 2 — Planning</h2>
+      <p class="task-sub">Plan before you write.</p>
+<div class="card task-prompt"><p class="prompt-label">Writing Task 2</p><p><i>Some people believe that clothing companies should be made responsible for the environmental damage caused by fashion. Others think that consumers should change their buying habits. Discuss both views and give your own opinion.</i></p></div>
+      <div class="card" id="t17-pl"><div class="q-item" id="t17-pl-1">
+          <p>1. What must the essay contain?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-1" data-correct="false"> A. only your opinion</label><label><input type="radio" value="1" name="t17-pl-1" data-correct="true"> B. both views, each developed, plus your opinion</label><label><input type="radio" value="2" name="t17-pl-1" data-correct="false"> C. only advantages</label><label><input type="radio" value="3" name="t17-pl-1" data-correct="false"> D. a solution to every problem</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-2">
+          <p>2. Best example for the “companies” view:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-2" data-correct="true"> A. Rana Plaza and France’s recycling rules show what regulation can achieve.</label><label><input type="radio" value="1" name="t17-pl-2" data-correct="false"> B. Many people like fashion.</label><label><input type="radio" value="2" name="t17-pl-2" data-correct="false"> C. Clothes are colourful.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-3">
+          <p>3. Best example for the “consumers” view:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-3" data-correct="false"> A. Shops are crowded.</label><label><input type="radio" value="1" name="t17-pl-3" data-correct="true"> B. Buying second-hand and repairing clothes reduces waste.</label><label><input type="radio" value="2" name="t17-pl-3" data-correct="false"> C. Polyester is a fibre.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-4">
+          <p>4. Best thesis:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-4" data-correct="false"> A. Fashion is a problem.</label><label><input type="radio" value="1" name="t17-pl-4" data-correct="true"> B. Both groups matter, but I believe the main responsibility lies with companies and governments, because individual choices alone cannot change a global industry.</label><label><input type="radio" value="2" name="t17-pl-4" data-correct="false"> C. Consumers buy clothes.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t17-pl', 't17-pl-score')">Check answers</button>
+          <span id="t17-pl-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write a short plan: thesis + main idea and example for each body paragraph.</p><textarea class="no-check mini-answer" id="t17-out-1" placeholder="Write your plan here..." style="min-height:110px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t17-out-btn">Show an example plan</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t17-out-ans"><p><b>Thesis:</b> both matter; main responsibility on companies. <b>Body 1 (consumers):</b> buy less, second-hand apps, repair. <b>Body 2 (companies):</b> scale, design for recycling, France’s rules, safety agreement after Rana Plaza. <b>Conclusion:</b> regulation + informed consumers.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task18" data-task="18">
+      <div class="task-eyebrow">Task 18 of 20</div>
+      <h2>Writing Task 2 — Your Essay</h2>
+      <p class="task-sub">Write the full essay. About <b>40 minutes</b>, <b>at least 250 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Some people believe that clothing companies should be made responsible for the environmental damage caused by fashion. Others think that consumers should change their buying habits. Discuss both views and give your own opinion.</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t18-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t18-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t18-essay-model"><div class="model-text">
+  <p>The fashion industry is now one of the world’s major sources of pollution, and people disagree about who should take action. While consumers certainly have a role to play, I believe the main responsibility lies with clothing companies.</p>
+  <p>On the one hand, there are strong arguments for asking consumers to change their habits. Clothes are now worn far fewer times than twenty years ago, and much of this waste results from people buying items they do not really need. If shoppers bought fewer, better-quality garments, repaired them and used second-hand apps, the demand for cheap clothing would fall. In this sense, every purchase is a small vote for or against fast fashion.</p>
+  <p>On the other hand, it is unrealistic to expect individual shoppers to solve a global problem. Most consumers know little about how their clothes are made, and cheap prices are hard to resist, especially for families on low incomes. Companies, by contrast, decide which materials to use, how quickly to produce new designs and how factories are managed. Regulation has already shown its value: after the Rana Plaza disaster, a binding safety agreement improved factory inspections, and France now requires producers to help collect and recycle clothes.</p>
+  <p>In conclusion, although consumers can make a difference by buying more carefully, the greater responsibility belongs to companies, supported by government rules. Only regulation can change the practices of an entire industry.</p>
+  <p class="alt">≈ 270 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task19" data-task="19">
+      <div class="task-eyebrow">Task 19 of 20</div>
+      <h2>Speaking Part 3 — Today’s Topics</h2>
+      <p class="task-sub">Answer each question in its own box — about <b>45 seconds</b> each, with a reason and an example.</p>
+      <div class="question-box" data-field="t19-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Should schools start later in the morning?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“There’s a strong case for…”</li><li>“However,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Why do people buy more clothes than they need?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think one reason is…”</li><li>“Advertising also…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Would a car-free city centre work in your city?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It could work if…”</li><li>“The main obstacle would be…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">How important are colours when you choose a product?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Personally,…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task20" data-task="20">
+      <div class="task-eyebrow">Task 20 of 20</div>
+      <h2>Self-Check — Today’s Reading and Writing</h2>
+      <p class="task-sub">Reflect honestly before you finish.</p>
+      <div class="card"><p class="mini-q">1. Your reading score out of 40 and estimated band:</p><textarea class="no-check mini-answer" id="t20-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. Which question type cost you most marks, and why?</p><textarea class="no-check mini-answer" id="t20-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Check your Task 2 essay: does each body paragraph have a topic sentence, explanation and example? What will you improve next time?</p><textarea class="no-check mini-answer" id="t20-rf-3" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t20-rf-btn">Show examples</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t20-rf-ans"><p>Good targets: “I will find the exact sentence before choosing FALSE”; “I will write an overview as the second paragraph of Task 1”; “each body paragraph will include a specific example”.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 20</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 35 of 45</div>
+    <h1>Day 35 complete! 🎉</h1>
+    <p>Day 35 done — a full reading test, two extra articles, reading skills, vocabulary and grammar, Writing Task 1 and Task 2, and speaking.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t10-lm-lm');
+
+    initWritingCoach('t16-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The graph below shows the percentage of clothing sold online and in shops in one country between 2010 and 2022.' });
+    initWritingCoach('t18-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Some people believe that clothing companies should be made responsible for the environmental damage caused by fashion. Others think that consumers should change their buying habits. Discuss both views and give your own opinion.' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 35, 8, 't8-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-summary"]'); if (b) initRecordControl(b, user.id, 35, 9, 't9-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-1"]'); if (b) initRecordControl(b, user.id, 35, 19, 't19-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-2"]'); if (b) initRecordControl(b, user.id, 35, 19, 't19-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-3"]'); if (b) initRecordControl(b, user.id, 35, 19, 't19-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-4"]'); if (b) initRecordControl(b, user.id, 35, 19, 't19-speaking-4', 0); }
+
+    await initTaskFlow(35, 20, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-notes1', 't2-notes1-score'); checkAllAnswers('t2-mc', 't2-mc-score'); },
+      4: () => { checkAllAnswers('t4-h', 't4-h-score'); checkAllAnswers('t4-se', 't4-se-score'); checkAllAnswers('t4-s', 't4-s-score'); },
+      6: () => { checkAllAnswers('t6-mf', 't6-mf-score'); checkAllAnswers('t6-yn', 't6-yn-score'); checkAllAnswers('t6-mc', 't6-mc-score'); checkAllAnswers('t6-sc', 't6-sc-score'); },
+      8: () => { checkAllAnswers('t8-mc', 't8-mc-score'); },
+      9: () => { checkAllAnswers('t9-sc', 't9-sc-score'); },
+      10: () => { checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm'); checkAllAnswers('t10-mc', 't10-mc-score'); },
+      11: () => { checkAllAnswers('t11-fn', 't11-fn-score'); checkAllAnswers('t11-ref', 't11-ref-score'); },
+      12: () => { checkAllAnswers('t12-title', 't12-title-score'); checkAllAnswers('t12-scan', 't12-scan-score'); },
+      13: () => { checkAllAnswers('t13-wf', 't13-wf-score'); checkAllAnswers('t13-col', 't13-col-score'); },
+      14: () => { checkAllAnswers('t14-gr', 't14-gr-score'); },
+      15: () => { checkAllAnswers('t15-ov', 't15-ov-score'); checkAllAnswers('t15-g', 't15-g-score'); },
+      17: () => { checkAllAnswers('t17-pl', 't17-pl-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-sum-btn', 't9-sum-ans', '[id^="t9-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t16-essay-model-btn', 't16-essay-model', '#t16-essay');
+    initGatedMistakeReveal('t17-out-btn', 't17-out-ans', '[id^="t17-out-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t18-essay-model-btn', 't18-essay-model', '#t18-essay');
+    initGatedMistakeReveal('t20-rf-btn', 't20-rf-ans', '[id^="t20-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>

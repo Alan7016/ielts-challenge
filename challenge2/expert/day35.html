@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 35 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 35 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 20</div>
+      <h2>Starting Off — A Reading and Writing Day</h2>
+      <p class="task-sub">An extended <b>reading and writing day</b> — plan for about <b>4 hours</b>, with breaks. An exam-difficulty reading test, two extra articles, advanced reading skills, vocabulary and grammar, a full <b>Writing Task 1</b> and <b>Task 2</b>, and speaking.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. A statement uses “definitely”; the writer says the idea is “highly speculative”.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. YES</label><label><input type="radio" value="1" name="t1-st-1" data-correct="true"> B. NO</label><label><input type="radio" value="2" name="t1-st-1" data-correct="false"> C. NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. A heading repeats a striking word from the paragraph but not its function.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="false"> A. It is probably correct.</label><label><input type="radio" value="1" name="t1-st-2" data-correct="true"> B. It is probably a distractor.</label><label><input type="radio" value="2" name="t1-st-2" data-correct="false"> C. It is always correct.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. For a Task 1 table with many figures, the best approach is to</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="false"> A. describe every number</label><label><input type="radio" value="1" name="t1-st-3" data-correct="true"> B. group the data and highlight the significant changes</label><label><input type="radio" value="2" name="t1-st-3" data-correct="false"> C. give your opinion of the data</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. write two overviews</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. In a band 8 Task 2 essay, your position should be</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="false"> A. hidden until the conclusion</label><label><input type="radio" value="1" name="t1-st-4" data-correct="true"> B. clear throughout, with appropriate qualification</label><label><input type="radio" value="2" name="t1-st-4" data-correct="false"> C. changed in every paragraph</label><label><input type="radio" value="3" name="t1-st-4" data-correct="false"> D. avoided</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. density</button><button type="button" class="lm-item" data-key="2">2. spontaneously</button><button type="button" class="lm-item" data-key="3">3. erosion</button><button type="button" class="lm-item" data-key="4">4. resilience</button><button type="button" class="lm-item" data-key="5">5. speculative</button><button type="button" class="lm-item" data-key="6">6. verbatim</button><button type="button" class="lm-item" data-key="7">7. bottleneck</button><button type="button" class="lm-item" data-key="8">8. immunity</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. the body’s ability to resist a disease</button><button type="button" class="lm-item" data-key="b">b. using exactly the same words</button><button type="button" class="lm-item" data-key="c">c. without being planned or directed</button><button type="button" class="lm-item" data-key="d">d. based on guesses rather than evidence</button><button type="button" class="lm-item" data-key="e">e. the gradual wearing away of soil or rock</button><button type="button" class="lm-item" data-key="f">f. a narrow point where movement slows</button><button type="button" class="lm-item" data-key="g">g. the number of people or things in a given space</button><button type="button" class="lm-item" data-key="h">h. the ability to recover from difficulties</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 20</div>
+      <h2>Reading Passage 1 — The Science of Crowds</h2>
+      <p class="task-sub"><b>The test starts now.</b> About <b>18 minutes</b> for Questions 1–13. Answers are checked when you press <b>Next</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Science of Crowds<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Crowd disasters are rarely caused by panic. Understanding why could save lives.</small></h3>
+            <p class="article-meta">Reading Passage 1 · Physics and psychology · 336 words</p>
+            <p><span class="para-label">A</span>On 24 July 2010, twenty-one people died in a crush at the Love Parade music festival in Duisburg, Germany. As with many similar disasters, early reports spoke of ‘panic’ — of a frightened crowd stampeding and trampling those who fell. Researchers who study crowds now regard this explanation as largely mistaken.</p><p><span class="para-label">B</span>The physicist Dirk Helbing and colleagues analysed video footage of the disaster and of a 2006 crush during the Hajj pilgrimage at Mina, near Mecca. They found that the deaths were caused not by people pushing in fear but by density. When more than about five people occupy each square metre, individuals can no longer control their own movement; forces travel through the crowd like waves, and pressure can build to levels that make breathing impossible.</p><p><span class="para-label">C</span>At lower densities, crowds organise themselves with remarkable efficiency. In busy pedestrian streets, people spontaneously form lanes moving in opposite directions, and at narrow doorways, flows alternate in bursts. These patterns emerge without any central coordination, which is why researchers often compare crowds to flowing liquids or flocks of birds.</p><p><span class="para-label">D</span>Psychologists have challenged the panic theory from another direction. Studies of emergencies such as the London bombings of 2005 found that survivors more often helped strangers than abandoned them. John Drury of the University of Sussex argues that shared danger tends to create a sense of common identity, which encourages cooperation rather than selfishness.</p><p><span class="para-label">E</span>These findings have practical consequences. Organisers of large events now use computer models to predict where dangerous densities may develop, and design routes that avoid bottlenecks. Paradoxically, placing a pillar slightly in front of an exit can, in some circumstances, increase the rate at which people leave, by breaking up the build-up of pressure.</p><p><span class="para-label">F</span>Nonetheless, models cannot capture everything. Real crowds contain children, older people and groups who refuse to separate, and information — or rumour — can spread unpredictably. Most experts agree that the most important safety measure remains the simplest: limiting the number of people allowed into a space in the first place.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">Choose the correct heading for each paragraph, <b>A–F</b>.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; A misleading explanation<br><b>ii</b>&nbsp; Density, not fear<br><b>iii</b>&nbsp; Order without leaders<br><b>iv</b>&nbsp; Cooperation in emergencies<br><b>v</b>&nbsp; Designing safer spaces<br><b>vi</b>&nbsp; The limits of computer models<br><b>vii</b>&nbsp; The history of music festivals<br><b>viii</b>&nbsp; Why individuals behave selfishly</p></div>
+      <div class="card" id="t2-h"><div class="sel-row"><select class="select" id="t2-h-1" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>1.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t2-h-2" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>2.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t2-h-3" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>3.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t2-h-4" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>4.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t2-h-5" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>5.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t2-h-6" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>6.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-h', 't2-h-score')">Check answers</button>
+          <span id="t2-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–10</p><p class="qg-instr">Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-7">
+          <p>7. The Duisburg and Mina disasters were caused mainly by people pushing in panic.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-7" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-7" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-7" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-8">
+          <p>8. Above about five people per square metre, individuals lose control of their movement.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-8" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-8" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-8" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-9">
+          <p>9. Lanes in busy pedestrian streets form only when police direct people.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-9" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-9" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-9" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-10">
+          <p>10. Drury’s research included the 2010 Love Parade disaster.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-10" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-10" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-10" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–13</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t2-s" style="line-height:2.7;"><p>Event organisers now use computer (11) <input type="text" class="text-answer" id="t2-11" data-correct="models" autocomplete="off" style="width:110px;"> to predict dangerous densities and design routes that avoid (12) <input type="text" class="text-answer" id="t2-12" data-correct="bottlenecks" autocomplete="off" style="width:140px;">. Surprisingly, placing a (13) <input type="text" class="text-answer" id="t2-13" data-correct="pillar" autocomplete="off" style="width:100px;"> slightly in front of an exit can sometimes increase the rate at which people leave.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-s', 't2-s-score')">Check answers</button>
+          <span id="t2-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 20</div>
+      <h2>Reading Passage 1 — Answer Analysis</h2>
+      <p class="task-sub">Check every answer, especially the heading distractors.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Science of Crowds</summary>
+        <p><span class="para-label">A</span>On 24 July 2010, twenty-one people died in a crush at the Love Parade music festival in Duisburg, Germany. As with many similar disasters, early reports spoke of ‘panic’ — of a frightened crowd stampeding and trampling those who fell. Researchers who study crowds now regard this explanation as largely mistaken.</p><p><span class="para-label">B</span>The physicist Dirk Helbing and colleagues analysed video footage of the disaster and of a 2006 crush during the Hajj pilgrimage at Mina, near Mecca. They found that the deaths were caused not by people pushing in fear but by density. When more than about five people occupy each square metre, individuals can no longer control their own movement; forces travel through the crowd like waves, and pressure can build to levels that make breathing impossible.</p><p><span class="para-label">C</span>At lower densities, crowds organise themselves with remarkable efficiency. In busy pedestrian streets, people spontaneously form lanes moving in opposite directions, and at narrow doorways, flows alternate in bursts. These patterns emerge without any central coordination, which is why researchers often compare crowds to flowing liquids or flocks of birds.</p><p><span class="para-label">D</span>Psychologists have challenged the panic theory from another direction. Studies of emergencies such as the London bombings of 2005 found that survivors more often helped strangers than abandoned them. John Drury of the University of Sussex argues that shared danger tends to create a sense of common identity, which encourages cooperation rather than selfishness.</p><p><span class="para-label">E</span>These findings have practical consequences. Organisers of large events now use computer models to predict where dangerous densities may develop, and design routes that avoid bottlenecks. Paradoxically, placing a pillar slightly in front of an exit can, in some circumstances, increase the rate at which people leave, by breaking up the build-up of pressure.</p><p><span class="para-label">F</span>Nonetheless, models cannot capture everything. Real crowds contain children, older people and groups who refuse to separate, and information — or rumour — can spread unpredictably. Most experts agree that the most important safety measure remains the simplest: limiting the number of people allowed into a space in the first place.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">i</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">early reports spoke of ‘panic’ … Researchers … now regard this explanation as largely mistaken</span>.</p><p><span class="trap">Trap:</span> vii — a festival is mentioned, but the paragraph is not about festivals.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">ii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">the deaths were caused not by people pushing in fear but by density</span>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">iii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">These patterns emerge without any central coordination</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">iv</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">survivors more often helped strangers than abandoned them</span>.</p><p><span class="trap">Trap:</span> viii — the paragraph argues the <i>opposite</i> of selfishness.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">v</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">design routes that avoid bottlenecks</span>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">vi</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">models cannot capture everything</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">caused not by people pushing in fear but by density</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">TRUE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">When more than about five people occupy each square metre, individuals can no longer control their own movement</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">FALSE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">spontaneously … without any central coordination</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para D</span></summary><div class="an-body"><p>Drury is linked to studies such as the <span class="ev">London bombings of 2005</span>; nothing connects him to Duisburg.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">models</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">use computer models</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">bottlenecks</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">design routes that avoid bottlenecks</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">pillar</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">placing a pillar slightly in front of an exit</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 20</div>
+      <h2>Reading Passage 2 — Rethinking Easter Island</h2>
+      <p class="task-sub">About <b>20 minutes</b> for Questions 14–26: <b>matching information</b>, <b>matching features</b> and <b>sentence completion</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Rethinking Easter Island<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">For decades, Rapa Nui was a warning about environmental self-destruction. The evidence now tells a different story.</small></h3>
+            <p class="article-meta">Reading Passage 2 · Archaeology · 348 words</p>
+            <p><span class="para-label">A</span>Easter Island, or Rapa Nui, lies more than 2,000 kilometres from the nearest inhabited land in the south-eastern Pacific. It is famous for nearly 1,000 giant stone statues, known as moai, carved by its Polynesian inhabitants. For decades, the island was also famous as a warning: a society that had destroyed its own environment and collapsed as a result.</p><p><span class="para-label">B</span>This ‘ecocide’ story was popularised by the geographer Jared Diamond in his 2005 book <i>Collapse</i>. According to Diamond, the islanders cut down the palm forests that once covered Rapa Nui, partly to move the statues, leading to soil erosion, food shortages, warfare and a dramatic population decline before Europeans arrived in 1722.</p><p><span class="para-label">C</span>In recent years, however, many archaeologists have challenged this account. Terry Hunt and Carl Lipo argued that the island was settled later than previously thought — around 1200 AD rather than 800 AD — leaving less time for a slow decline. They also pointed to evidence that Polynesian rats, which arrived with the first settlers, ate the seeds of the palm trees, preventing the forest from regrowing.</p><p><span class="para-label">D</span>Studies of the island’s soils and food remains suggest that, rather than starving, islanders adapted to deforestation. They developed ‘rock gardens’, covering fields with stones to retain moisture and protect crops from wind, and continued to grow sweet potatoes in large quantities. A 2020 study led by Robert DiNapoli, examining the dating of statue platforms, found that construction continued after European contact, contradicting the idea of an earlier collapse.</p><p><span class="para-label">E</span>If there was a catastrophe, the evidence now suggests it came from outside. European visitors brought diseases such as smallpox, to which islanders had no immunity, and in the 1860s Peruvian slave raiders kidnapped around 1,500 islanders, perhaps half the population. By 1877 only about 110 people remained on the island.</p><p><span class="para-label">F</span>The debate matters beyond Rapa Nui. The ecocide story has often been used as a lesson about humanity’s relationship with the environment. Its critics argue that it unfairly blames the victims of colonialism for their own suffering, and that the island’s history is better understood as an example of resilience.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–18</p><p class="qg-instr">Which paragraph, <b>A–F</b>, contains the following information?</p></div>
+      <div class="card" id="t4-mi"><div class="sel-row"><select class="select" id="t4-mi-14" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>14.</b> figures showing how far the population fell in the nineteenth century</span></div><div class="sel-row"><select class="select" id="t4-mi-15" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>15.</b> an explanation of a farming technique</span></div><div class="sel-row"><select class="select" id="t4-mi-16" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>16.</b> a reference to animals that may have prevented forest recovery</span></div><div class="sel-row"><select class="select" id="t4-mi-17" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>17.</b> the publication that made a particular theory well known</span></div><div class="sel-row"><select class="select" id="t4-mi-18" data-answer="F"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>18.</b> a claim that a common story is unfair to a group of people</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mi', 't4-mi-score')">Check answers</button>
+          <span id="t4-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 19–22</p><p class="qg-instr">Match each statement with the correct person or people, <b>A–C</b>. You may use any letter more than once.</p></div>
+<div class="card"><p class="prompt-label">People</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; Jared Diamond<br><b>B</b>&nbsp; Terry Hunt and Carl Lipo<br><b>C</b>&nbsp; Robert DiNapoli</p></div>
+      <div class="card" id="t4-mf"><div class="sel-row"><select class="select" id="t4-mf-19" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select><span><b>19.</b> argued that the island was first settled later than had been believed</span></div><div class="sel-row"><select class="select" id="t4-mf-20" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select><span><b>20.</b> linked the removal of trees partly to moving the statues</span></div><div class="sel-row"><select class="select" id="t4-mf-21" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select><span><b>21.</b> studied the dates of statue platforms</span></div><div class="sel-row"><select class="select" id="t4-mf-22" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select><span><b>22.</b> described a decline caused by environmental damage</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mf', 't4-mf-score')">Check answers</button>
+          <span id="t4-mf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 23–26</p><p class="qg-instr">Complete the sentences. Choose <b>NO MORE THAN TWO WORDS</b> from the passage.</p></div>
+      <div class="card" id="t4-sc" style="line-height:2.4;"><p>23. Islanders protected crops from wind by creating <input type="text" class="text-answer" id="t4-23" data-correct="rock gardens" autocomplete="off" style="width:150px;">.</p><p>24. Islanders continued to grow large quantities of <input type="text" class="text-answer" id="t4-24" data-correct="sweet potatoes" autocomplete="off" style="width:150px;">.</p><p>25. Many islanders died from diseases such as <input type="text" class="text-answer" id="t4-25" data-correct="smallpox" autocomplete="off" style="width:120px;">.</p><p>26. Critics argue that the island’s history is an example of <input type="text" class="text-answer" id="t4-26" data-correct="resilience" autocomplete="off" style="width:130px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-sc', 't4-sc-score')">Check answers</button>
+          <span id="t4-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 20</div>
+      <h2>Reading Passage 2 — Answer Analysis</h2>
+      <p class="task-sub">Check every answer. Notice how matching information focuses on the <b>type</b> of information.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Rethinking Easter Island</summary>
+        <p><span class="para-label">A</span>Easter Island, or Rapa Nui, lies more than 2,000 kilometres from the nearest inhabited land in the south-eastern Pacific. It is famous for nearly 1,000 giant stone statues, known as moai, carved by its Polynesian inhabitants. For decades, the island was also famous as a warning: a society that had destroyed its own environment and collapsed as a result.</p><p><span class="para-label">B</span>This ‘ecocide’ story was popularised by the geographer Jared Diamond in his 2005 book <i>Collapse</i>. According to Diamond, the islanders cut down the palm forests that once covered Rapa Nui, partly to move the statues, leading to soil erosion, food shortages, warfare and a dramatic population decline before Europeans arrived in 1722.</p><p><span class="para-label">C</span>In recent years, however, many archaeologists have challenged this account. Terry Hunt and Carl Lipo argued that the island was settled later than previously thought — around 1200 AD rather than 800 AD — leaving less time for a slow decline. They also pointed to evidence that Polynesian rats, which arrived with the first settlers, ate the seeds of the palm trees, preventing the forest from regrowing.</p><p><span class="para-label">D</span>Studies of the island’s soils and food remains suggest that, rather than starving, islanders adapted to deforestation. They developed ‘rock gardens’, covering fields with stones to retain moisture and protect crops from wind, and continued to grow sweet potatoes in large quantities. A 2020 study led by Robert DiNapoli, examining the dating of statue platforms, found that construction continued after European contact, contradicting the idea of an earlier collapse.</p><p><span class="para-label">E</span>If there was a catastrophe, the evidence now suggests it came from outside. European visitors brought diseases such as smallpox, to which islanders had no immunity, and in the 1860s Peruvian slave raiders kidnapped around 1,500 islanders, perhaps half the population. By 1877 only about 110 people remained on the island.</p><p><span class="para-label">F</span>The debate matters beyond Rapa Nui. The ecocide story has often been used as a lesson about humanity’s relationship with the environment. Its critics argue that it unfairly blames the victims of colonialism for their own suffering, and that the island’s history is better understood as an example of resilience.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">E</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">kidnapped around 1,500 islanders … By 1877 only about 110 people remained</span>.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">D</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">‘rock gardens’, covering fields with stones to retain moisture</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">C</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Polynesian rats … ate the seeds of the palm trees, preventing the forest from regrowing</span>.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">popularised by … Jared Diamond in his 2005 book Collapse</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">F</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">it unfairly blames the victims of colonialism</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">settled later than previously thought — around 1200 AD rather than 800 AD</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">A</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">cut down the palm forests … partly to move the statues</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">C</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">examining the dating of statue platforms</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">A</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">soil erosion, food shortages, warfare and a dramatic population decline</span>.</p><p><span class="trap">Trap:</span> DiNapoli’s findings <i>contradict</i> an earlier collapse.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">rock gardens</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">They developed ‘rock gardens’</span>.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">sweet potatoes</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">continued to grow sweet potatoes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">smallpox</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">diseases such as smallpox</span>.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">resilience</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">an example of resilience</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 20</div>
+      <h2>Reading Passage 3 — Should We Bring Back Extinct Species?</h2>
+      <p class="task-sub">About <b>22 minutes</b> for Questions 27–40: <b>YES / NO / NOT GIVEN</b>, <b>multiple choice</b> and <b>summary completion with a word bank</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Should We Bring Back Extinct Species?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Genetic technology promises to reverse extinction. The writer is not convinced it should be a priority.</small></h3>
+            <p class="article-meta">Reading Passage 3 · Biotechnology · 383 words</p>
+            <p><span class="para-label">A</span>In 2003, a team of Spanish and French scientists briefly brought an extinct animal back to life. Using frozen skin cells taken from the last Pyrenean ibex, a wild goat that had died three years earlier, they produced a cloned kid. It lived for only a few minutes before dying from a lung defect. Nevertheless, the experiment raised a question that had previously belonged to science fiction: could extinction be reversed?</p><p><span class="para-label">B</span>Since then, so-called ‘de-extinction’ has attracted considerable investment. The US company Colossal Biosciences, founded in 2021, has raised hundreds of millions of dollars with the aim of recreating animals resembling the woolly mammoth and the thylacine, or Tasmanian tiger. Because no complete cells of these animals survive, the company plans to edit the genes of their closest living relatives — the Asian elephant and a small marsupial called the dunnart — to give them key characteristics of the extinct species.</p><p><span class="para-label">C</span>Supporters argue that the technology could benefit conservation more broadly. The genetic tools being developed could help endangered species by increasing their genetic diversity, or by making them resistant to diseases. Some also claim that reintroducing large herbivores such as mammoth-like elephants to the Arctic could help to preserve permafrost by trampling snow and encouraging grassland, though this idea remains highly speculative.</p><p><span class="para-label">D</span>I find many of these arguments unconvincing. An animal created by editing an elephant’s genes would not be a mammoth; it would be a cold-adapted elephant, without the behaviour that mammoths learnt from their herds over thousands of years. Moreover, the habitats in which many extinct species lived have themselves disappeared, so it is unclear where the recreated animals would survive.</p><p><span class="para-label">E</span>There is also the question of cost. Research suggests that resources spent on de-extinction could save several times as many species if invested in protecting existing ones. With around a million species estimated to be at risk of extinction, according to a 2019 United Nations report, this is not a trivial concern.</p><p><span class="para-label">F</span>That said, it would be wrong to dismiss the research altogether. The techniques may yet prove valuable for species on the brink, such as the northern white rhino, of which only two females survive. De-extinction should perhaps be seen not as a way of undoing past mistakes, but as one tool among many for preventing future ones.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 27–32</p><p class="qg-instr">Do the statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-27">
+          <p>27. The cloned Pyrenean ibex survived for several days.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-27" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-27" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-27" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-28">
+          <p>28. An animal created from elephant genes would not be a true mammoth.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-28" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-28" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-28" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-29">
+          <p>29. Reintroducing mammoth-like animals would certainly protect the permafrost.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-29" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-29" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-29" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-30">
+          <p>30. Colossal Biosciences will achieve its aims within ten years.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-30" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-30" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-30" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-31">
+          <p>31. Money might achieve more if spent on protecting existing species.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-31" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-31" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-31" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-32">
+          <p>32. De-extinction research should be stopped completely.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-32" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-32" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-32" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 33–36</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-33">
+          <p>33. Why does the writer mention the Pyrenean ibex?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-33" data-correct="false"> A. to show that cloning is easy</label><label><input type="radio" value="1" name="t6-mc-33" data-correct="true"> B. as the first case of an extinct animal being briefly revived</label><label><input type="radio" value="2" name="t6-mc-33" data-correct="false"> C. to explain why goats are endangered</label><label><input type="radio" value="3" name="t6-mc-33" data-correct="false"> D. to criticise Spanish scientists</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-34">
+          <p>34. How does Colossal Biosciences plan to recreate a mammoth-like animal?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-34" data-correct="false"> A. by cloning complete mammoth cells</label><label><input type="radio" value="1" name="t6-mc-34" data-correct="true"> B. by editing the genes of Asian elephants</label><label><input type="radio" value="2" name="t6-mc-34" data-correct="false"> C. by breeding wild elephants in the Arctic</label><label><input type="radio" value="3" name="t6-mc-34" data-correct="false"> D. by using ibex cells</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-35">
+          <p>35. The writer’s objections in Paragraph D concern</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-35" data-correct="false"> A. cost and investment</label><label><input type="radio" value="1" name="t6-mc-35" data-correct="true"> B. behaviour and habitat</label><label><input type="radio" value="2" name="t6-mc-35" data-correct="false"> C. disease and diversity</label><label><input type="radio" value="3" name="t6-mc-35" data-correct="false"> D. climate and permafrost</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-36">
+          <p>36. What is the writer’s overall position?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-36" data-correct="false"> A. De-extinction is the best way to protect biodiversity.</label><label><input type="radio" value="1" name="t6-mc-36" data-correct="false"> B. De-extinction is useless.</label><label><input type="radio" value="2" name="t6-mc-36" data-correct="true"> C. The techniques may be useful mainly for preventing future extinctions.</label><label><input type="radio" value="3" name="t6-mc-36" data-correct="false"> D. Only mammoths should be recreated.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 37–40</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD</b> from the box.</p></div>
+      <div class="word-bank">diversity · diseases · risk · females · habitats · males · permafrost · cost · herds</div><div class="card" id="t6-s" style="line-height:2.7;"><p>Genetic tools might increase the genetic (37) <input type="text" class="text-answer" id="t6-37" data-correct="diversity" autocomplete="off" style="width:120px;"> of endangered species or make them resistant to (38) <input type="text" class="text-answer" id="t6-38" data-correct="diseases" autocomplete="off" style="width:120px;">. A 2019 UN report estimated that around a million species are at (39) <input type="text" class="text-answer" id="t6-39" data-correct="risk" autocomplete="off" style="width:90px;"> of extinction, and of the northern white rhino, only two (40) <input type="text" class="text-answer" id="t6-40" data-correct="females" autocomplete="off" style="width:110px;"> survive.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-s', 't6-s-score')">Check answers</button>
+          <span id="t6-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 20</div>
+      <h2>Reading Passage 3 — Answer Analysis and Your Score</h2>
+      <p class="task-sub">Check Passage 3, total your score and diagnose your errors.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Should We Bring Back Extinct Species?</summary>
+        <p><span class="para-label">A</span>In 2003, a team of Spanish and French scientists briefly brought an extinct animal back to life. Using frozen skin cells taken from the last Pyrenean ibex, a wild goat that had died three years earlier, they produced a cloned kid. It lived for only a few minutes before dying from a lung defect. Nevertheless, the experiment raised a question that had previously belonged to science fiction: could extinction be reversed?</p><p><span class="para-label">B</span>Since then, so-called ‘de-extinction’ has attracted considerable investment. The US company Colossal Biosciences, founded in 2021, has raised hundreds of millions of dollars with the aim of recreating animals resembling the woolly mammoth and the thylacine, or Tasmanian tiger. Because no complete cells of these animals survive, the company plans to edit the genes of their closest living relatives — the Asian elephant and a small marsupial called the dunnart — to give them key characteristics of the extinct species.</p><p><span class="para-label">C</span>Supporters argue that the technology could benefit conservation more broadly. The genetic tools being developed could help endangered species by increasing their genetic diversity, or by making them resistant to diseases. Some also claim that reintroducing large herbivores such as mammoth-like elephants to the Arctic could help to preserve permafrost by trampling snow and encouraging grassland, though this idea remains highly speculative.</p><p><span class="para-label">D</span>I find many of these arguments unconvincing. An animal created by editing an elephant’s genes would not be a mammoth; it would be a cold-adapted elephant, without the behaviour that mammoths learnt from their herds over thousands of years. Moreover, the habitats in which many extinct species lived have themselves disappeared, so it is unclear where the recreated animals would survive.</p><p><span class="para-label">E</span>There is also the question of cost. Research suggests that resources spent on de-extinction could save several times as many species if invested in protecting existing ones. With around a million species estimated to be at risk of extinction, according to a 2019 United Nations report, this is not a trivial concern.</p><p><span class="para-label">F</span>That said, it would be wrong to dismiss the research altogether. The techniques may yet prove valuable for species on the brink, such as the northern white rhino, of which only two females survive. De-extinction should perhaps be seen not as a way of undoing past mistakes, but as one tool among many for preventing future ones.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">NO</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">It lived for only a few minutes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">YES</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">would not be a mammoth; it would be a cold-adapted elephant</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">NO</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">this idea remains highly speculative</span> — the opposite of <i>certainly</i>.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para B</span></summary><div class="an-body"><p>The company’s funding and aims are described, but no prediction about its success is made.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">YES</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">resources … could save several times as many species if invested in protecting existing ones</span>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">NO</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">it would be wrong to dismiss the research altogether</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">B</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">briefly brought an extinct animal back to life</span>.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">edit the genes of their closest living relatives — the Asian elephant</span>.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">without the behaviour … the habitats … have themselves disappeared</span>.</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">C</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">not as a way of undoing past mistakes, but as one tool among many for preventing future ones</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">diversity</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">increasing their genetic diversity</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">diseases</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">resistant to diseases</span>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">risk</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">at risk of extinction</span>.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">females</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">only two females survive</span>.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Academic Reading)</p><table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr><tr><td>23–26</td><td>6.0</td></tr><tr><td>27–29</td><td>6.5</td></tr><tr><td>30–32</td><td>7.0</td></tr><tr><td>33–34</td><td>7.5</td></tr><tr><td>35–36</td><td>8.0</td></tr><tr><td>37–38</td><td>8.5</td></tr><tr><td>39–40</td><td>9.0</td></tr></table></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 20</div>
+      <h2>Extra Reading 1 — Cities Without Cars</h2>
+      <p class="task-sub">An extra article (about <b>15 minutes</b>). Decide TRUE/FALSE/NOT GIVEN, then summarise in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Cities Without Cars</h3>
+        <p class="article-meta">Extra reading 1 · Urban policy · 204 words</p>
+        <p><span class="para-label">A</span>Across Europe, a growing number of cities are removing cars from their centres. Oslo, Norway’s capital, set out in 2017 to make its city centre largely car-free. Rather than banning cars outright, the city removed around 700 on-street parking spaces, replacing them with cycle lanes, benches, small parks and play areas. Pontevedra, a small city in north-west Spain, went further: since 1999 most private vehicles have been banned from its historic centre, and road deaths in the city have fallen dramatically.</p><p><span class="para-label">B</span>Supporters point to cleaner air, quieter streets and safer conditions for children and older people. Some studies have found that pedestrians spend more money in local shops over a month than drivers do, because they visit more often, even though they spend less on each visit.</p><p><span class="para-label">C</span>Not everyone is convinced. Shopkeepers in several cities have feared losing customers who arrive by car, and residents of suburbs with poor public transport may find it harder to reach the centre. Delivery companies and people with disabilities have also raised concerns about access.</p><p><span class="para-label">D</span>Experts agree that car-free schemes work best when they are introduced gradually, with good public transport and delivery arrangements in place, and when local people are involved in planning them from the beginning.</p>
+      </div>
+      <div class="card" id="t8-tf"><div class="q-item" id="t8-tf-1">
+          <p>1. Oslo banned all cars from its city centre in 2017.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-1" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t8-tf-1" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t8-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-2">
+          <p>2. Road deaths in Pontevedra have fallen since cars were restricted.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t8-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-3">
+          <p>3. Pedestrians spend more per visit than drivers do.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t8-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t8-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-4">
+          <p>4. Pontevedra’s scheme was copied by Oslo.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t8-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-4" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-5">
+          <p>5. Experts recommend introducing car-free schemes gradually.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-5" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t8-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-tf', 't8-tf-score')">Check answers</button>
+          <span id="t8-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 120 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 120 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>The article examines the growing trend of removing cars from European city centres. Rather than banning cars outright, Oslo removed around 700 parking spaces and repurposed them for cycling, seating and play, while Pontevedra has banned most private vehicles from its historic centre since 1999, with a dramatic fall in road deaths. Supporters cite cleaner air, quieter and safer streets, and evidence that pedestrians spend more in local shops over time because they visit more frequently. Opponents, including shopkeepers, suburban residents, delivery firms and people with disabilities, worry about access. The consensus is that such schemes succeed when introduced gradually, supported by public transport and shaped by local residents. The article is balanced, though it would be stronger with data on economic effects.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 60 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 20</div>
+      <h2>Extra Reading 2 — Why Handwriting Still Matters</h2>
+      <p class="task-sub">A second extra article. Answer the questions, then summarise in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Why Handwriting Still Matters</h3>
+        <p class="article-meta">Extra reading 2 · Learning · 214 words</p>
+        <p><span class="para-label">A</span>As keyboards and touchscreens replace pens, many schools have reduced the time spent teaching handwriting; several American states stopped requiring joined-up writing in the 2010s. Yet a growing body of research suggests that writing by hand may offer cognitive benefits that typing does not.</p><p><span class="para-label">B</span>In a frequently cited 2014 study, the psychologists Pam Mueller and Daniel Oppenheimer found that students who took lecture notes on laptops tended to transcribe the lecturer’s words verbatim, while those writing by hand, being slower, had to summarise. Although both groups remembered facts similarly, the handwriting group performed better on conceptual questions. Later attempts to replicate the study, however, produced mixed results, and some researchers argue that the difference disappears when laptop users are told not to copy verbatim.</p><p><span class="para-label">C</span>Neuroscience offers further evidence. A 2024 Norwegian study using EEG found that handwriting produced more widespread connectivity across brain regions associated with memory and learning than typing did. For young children, forming letters by hand appears to help them recognise letters more quickly.</p><p><span class="para-label">D</span>None of this means that typing is harmful; for long texts, and for students with certain disabilities, it is often essential. The emerging consensus is not that one method should replace the other, but that handwriting deserves a continued place in education, particularly in the early years.</p>
+      </div>
+      <div class="card" id="t9-mc"><div class="q-item" id="t9-mc-1">
+          <p>1. What did several American states do in the 2010s?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-1" data-correct="false"> A. ban laptops in schools</label><label><input type="radio" value="1" name="t9-mc-1" data-correct="true"> B. stop requiring joined-up writing</label><label><input type="radio" value="2" name="t9-mc-1" data-correct="false"> C. introduce handwriting exams</label><label><input type="radio" value="3" name="t9-mc-1" data-correct="false"> D. increase handwriting lessons</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-2">
+          <p>2. In the 2014 study, the handwriting group did better on</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-2" data-correct="false"> A. factual questions</label><label><input type="radio" value="1" name="t9-mc-2" data-correct="true"> B. conceptual questions</label><label><input type="radio" value="2" name="t9-mc-2" data-correct="false"> C. spelling tests</label><label><input type="radio" value="3" name="t9-mc-2" data-correct="false"> D. speed tests</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-3">
+          <p>3. What happened when other researchers tried to repeat the study?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-3" data-correct="false"> A. They got identical results.</label><label><input type="radio" value="1" name="t9-mc-3" data-correct="true"> B. The results were mixed.</label><label><input type="radio" value="2" name="t9-mc-3" data-correct="false"> C. They found typing was always better.</label><label><input type="radio" value="3" name="t9-mc-3" data-correct="false"> D. They could not find students.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-4">
+          <p>4. The Norwegian study measured</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-4" data-correct="false"> A. students’ grades</label><label><input type="radio" value="1" name="t9-mc-4" data-correct="true"> B. brain connectivity using EEG</label><label><input type="radio" value="2" name="t9-mc-4" data-correct="false"> C. writing speed</label><label><input type="radio" value="3" name="t9-mc-4" data-correct="false"> D. eyesight</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-mc-5">
+          <p>5. What is the emerging consensus?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-mc-5" data-correct="false"> A. Typing should replace handwriting.</label><label><input type="radio" value="1" name="t9-mc-5" data-correct="false"> B. Handwriting should replace typing.</label><label><input type="radio" value="2" name="t9-mc-5" data-correct="true"> C. Handwriting deserves a place, especially in the early years.</label><label><input type="radio" value="3" name="t9-mc-5" data-correct="false"> D. Neither method matters.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-mc', 't9-mc-score')">Check answers</button>
+          <span id="t9-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 120 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 120 words):</p><textarea class="no-check mini-answer" id="t9-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-sum-ans"><p>The article argues that handwriting still has value even as schools reduce the time spent teaching it. A well-known 2014 study found that students taking notes by hand had to summarise rather than copy, and performed better on conceptual questions, although later replications produced mixed results and the effect may disappear if laptop users avoid verbatim copying. Neuroscientific research adds support: a 2024 Norwegian EEG study found greater connectivity in brain regions linked to memory when people wrote by hand, and handwriting appears to help young children recognise letters. The writer accepts that typing is essential for long texts and for some students with disabilities, and concludes that the two methods should coexist, with handwriting retained especially in early education. The argument is persuasive because it acknowledges the weaknesses of the evidence.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 60 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 20</div>
+      <h2>Reading Skill — Inference and Paraphrase</h2>
+      <p class="task-sub">Match the paraphrases, then decide what can be inferred.</p>
+      <div class="card" id="t10-lm">
+        <div class="line-match" id="t10-lm-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. largely mistaken</button><button type="button" class="lm-item" data-key="2">2. emerge without coordination</button><button type="button" class="lm-item" data-key="3">3. popularised</button><button type="button" class="lm-item" data-key="4">4. contradicting</button><button type="button" class="lm-item" data-key="5">5. not a trivial concern</button><button type="button" class="lm-item" data-key="6">6. on the brink</button><button type="button" class="lm-item" data-key="7">7. dismiss altogether</button><button type="button" class="lm-item" data-key="8">8. replicate</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. made widely known</button><button type="button" class="lm-item" data-key="b">b. repeat to check the results</button><button type="button" class="lm-item" data-key="c">c. appear without anyone organising them</button><button type="button" class="lm-item" data-key="d">d. very close to disappearing</button><button type="button" class="lm-item" data-key="e">e. going against</button><button type="button" class="lm-item" data-key="f">f. mostly wrong</button><button type="button" class="lm-item" data-key="g">g. a serious issue</button><button type="button" class="lm-item" data-key="h">h. reject completely</button></div>
+          <select class="lm-hidden-select select" id="t10-lm-1" data-lm-key="1" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-5" data-lm-key="5" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-7" data-lm-key="7" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-8" data-lm-key="8" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm');">Check answers</button>
+          <span id="t10-lm-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t10-inf"><div class="q-item" id="t10-inf-1">
+          <p>1. What can be inferred about early reports of the Duisburg disaster?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-inf-1" data-correct="false"> A. They were based on careful analysis.</label><label><input type="radio" value="1" name="t10-inf-1" data-correct="true"> B. They relied on a common but inaccurate assumption.</label><label><input type="radio" value="2" name="t10-inf-1" data-correct="false"> C. They blamed the organisers.</label><label><input type="radio" value="3" name="t10-inf-1" data-correct="false"> D. They were written by physicists.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-inf-2">
+          <p>2. What does the writer of Passage 2 imply about the ecocide story?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-inf-2" data-correct="false"> A. It is completely supported by evidence.</label><label><input type="radio" value="1" name="t10-inf-2" data-correct="true"> B. It may reflect assumptions more than evidence.</label><label><input type="radio" value="2" name="t10-inf-2" data-correct="false"> C. It was invented by islanders.</label><label><input type="radio" value="3" name="t10-inf-2" data-correct="false"> D. It is no longer discussed.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-inf-3">
+          <p>3. “…this idea remains highly speculative” implies that the permafrost idea</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-inf-3" data-correct="false"> A. has been proved</label><label><input type="radio" value="1" name="t10-inf-3" data-correct="true"> B. lacks strong evidence</label><label><input type="radio" value="2" name="t10-inf-3" data-correct="false"> C. is impossible</label><label><input type="radio" value="3" name="t10-inf-3" data-correct="false"> D. is widely accepted</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-inf-4">
+          <p>4. What does the handwriting article imply about the 2014 study?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-inf-4" data-correct="true"> A. Its findings are less certain than often assumed.</label><label><input type="radio" value="1" name="t10-inf-4" data-correct="false"> B. It was fraudulent.</label><label><input type="radio" value="2" name="t10-inf-4" data-correct="false"> C. It studied children.</label><label><input type="radio" value="3" name="t10-inf-4" data-correct="false"> D. It proved typing is harmful.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-inf', 't10-inf-score')">Check answers</button>
+          <span id="t10-inf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 20</div>
+      <h2>Reading Skill — Fact, the Writer’s View and Others’ Views</h2>
+      <p class="task-sub">Classify each sentence, then judge how strongly each claim is made.</p>
+      <div class="card" id="t11-st"><div class="sel-row"><select class="select" id="t11-st-1" data-answer="the writer’s view"><option value="">—</option><option value="fact">fact</option><option value="the writer’s view">the writer’s view</option><option value="others’ view">others’ view</option></select><span><b>1.</b> “I find many of these arguments unconvincing.”</span></div><div class="sel-row"><select class="select" id="t11-st-2" data-answer="fact"><option value="">—</option><option value="fact">fact</option><option value="the writer’s view">the writer’s view</option><option value="others’ view">others’ view</option></select><span><b>2.</b> “The US company Colossal Biosciences [was] founded in 2021.”</span></div><div class="sel-row"><select class="select" id="t11-st-3" data-answer="others’ view"><option value="">—</option><option value="fact">fact</option><option value="the writer’s view">the writer’s view</option><option value="others’ view">others’ view</option></select><span><b>3.</b> “Its critics argue that it unfairly blames the victims of colonialism.”</span></div><div class="sel-row"><select class="select" id="t11-st-4" data-answer="others’ view"><option value="">—</option><option value="fact">fact</option><option value="the writer’s view">the writer’s view</option><option value="others’ view">others’ view</option></select><span><b>4.</b> “Supporters argue that the technology could benefit conservation.”</span></div><div class="sel-row"><select class="select" id="t11-st-5" data-answer="the writer’s view"><option value="">—</option><option value="fact">fact</option><option value="the writer’s view">the writer’s view</option><option value="others’ view">others’ view</option></select><span><b>5.</b> “That said, it would be wrong to dismiss the research altogether.”</span></div><div class="sel-row"><select class="select" id="t11-st-6" data-answer="fact"><option value="">—</option><option value="fact">fact</option><option value="the writer’s view">the writer’s view</option><option value="others’ view">others’ view</option></select><span><b>6.</b> “By 1877 only about 110 people remained on the island.”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-st', 't11-st-score')">Check answers</button>
+          <span id="t11-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t11-h"><div class="q-item" id="t11-h-1">
+          <p>1. “The techniques <u>may yet prove</u> valuable.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-h-1" data-correct="false"> A. certain</label><label><input type="radio" value="1" name="t11-h-1" data-correct="true"> B. tentative</label><label><input type="radio" value="2" name="t11-h-1" data-correct="false"> C. rejected</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-h-2">
+          <p>2. “The evidence <u>now suggests</u> it came from outside.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-h-2" data-correct="false"> A. proof</label><label><input type="radio" value="1" name="t11-h-2" data-correct="true"> B. a reasonable conclusion from evidence</label><label><input type="radio" value="2" name="t11-h-2" data-correct="false"> C. pure guess</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-h-3">
+          <p>3. “Researchers … now regard this explanation as <u>largely mistaken</u>.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-h-3" data-correct="false"> A. completely wrong in every detail</label><label><input type="radio" value="1" name="t11-h-3" data-correct="true"> B. mostly wrong</label><label><input type="radio" value="2" name="t11-h-3" data-correct="false"> C. mostly right</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-h', 't11-h-score')">Check answers</button>
+          <span id="t11-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 20</div>
+      <h2>Reading Skill — Speed Reading Challenge</h2>
+      <p class="task-sub"><b>Part 1:</b> skim in <b>40 seconds</b>. <b>Part 2:</b> scan for six answers in <b>2 minutes</b>.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">From Ethiopian Hills to Global Habit</h3>
+        <p class="article-meta">Speed reading · 300 words · 183 words</p>
+        <p><span class="para-label">A</span>According to legend, coffee was discovered in Ethiopia by a goat herder called Kaldi, who noticed that his goats became unusually energetic after eating the red berries of a certain bush. Whether or not the story is true, by the fifteenth century coffee was being grown in Yemen, and Sufi monks drank it to stay awake during night-time prayers.</p><p><span class="para-label">B</span>Coffee houses spread rapidly across the Middle East. The first in Istanbul opened in 1555, and they became important places for conversation, music and the exchange of news. Coffee reached Venice in the early seventeenth century, and the first coffee house in England opened in Oxford in 1650. In London, some coffee houses developed into businesses: Lloyd’s of London, now one of the world’s largest insurance markets, began in Edward Lloyd’s coffee house in the 1680s.</p><p><span class="para-label">C</span>For a long time, Yemen controlled the coffee trade, but in 1616 Dutch traders managed to take plants to Europe, and the Dutch later established plantations on the island of Java. Today, Brazil is by far the world’s largest producer, growing around a third of the global supply.</p>
+      </div>
+      <div class="card" id="t12-title"><div class="q-item" id="t12-title-1">
+          <p>1. Part 1 — Best title:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-title-1" data-correct="false"> A. The chemistry of caffeine</label><label><input type="radio" value="1" name="t12-title-1" data-correct="true"> B. How coffee spread from Africa to the world</label><label><input type="radio" value="2" name="t12-title-1" data-correct="false"> C. Coffee and health</label><label><input type="radio" value="3" name="t12-title-1" data-correct="false"> D. The rise of insurance companies</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-title', 't12-title-score')">Check answers</button>
+          <span id="t12-title-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t12-scan" style="line-height:2.4;"><p>1. Goat herder in the legend: <input type="text" class="text-answer" id="t12-1" data-correct="kaldi" autocomplete="off" style="width:100px;"></p><p>2. Who drank coffee to stay awake during prayers? Sufi <input type="text" class="text-answer" id="t12-2" data-correct="monks" autocomplete="off" style="width:100px;"></p><p>3. Year of Istanbul’s first coffee house: <input type="text" class="text-answer" id="t12-3" data-correct="1555" autocomplete="off" style="width:90px;"></p><p>4. Year of England’s first coffee house: <input type="text" class="text-answer" id="t12-4" data-correct="1650" autocomplete="off" style="width:90px;"></p><p>5. Island where the Dutch established plantations: <input type="text" class="text-answer" id="t12-5" data-correct="java" autocomplete="off" style="width:100px;"></p><p>6. Brazil’s approximate share of world production: a <input type="text" class="text-answer" id="t12-6" data-correct="third" autocomplete="off" style="width:100px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-scan', 't12-scan-score')">Check answers</button>
+          <span id="t12-scan-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 20</div>
+      <h2>Vocabulary — Academic Word Families and Collocations</h2>
+      <p class="task-sub">Complete each sentence with the correct form, then choose the natural collocation.</p>
+      <div class="card" id="t13-wf" style="line-height:2.4;"><p>1. Crowd <input type="text" class="text-answer" id="t13-1" data-correct="density" autocomplete="off" style="width:110px;"> was the main cause of death. (dense)</p><p>2. Patterns emerge <input type="text" class="text-answer" id="t13-2" data-correct="spontaneously" autocomplete="off" style="width:150px;">. (spontaneous)</p><p>3. The islanders showed remarkable <input type="text" class="text-answer" id="t13-3" data-correct="resilience" autocomplete="off" style="width:130px;">. (resilient)</p><p>4. The study could not be <input type="text" class="text-answer" id="t13-4" data-correct="replicated" autocomplete="off" style="width:130px;"> easily. (replication)</p><p>5. The permafrost idea is highly <input type="text" class="text-answer" id="t13-5" data-correct="speculative" autocomplete="off" style="width:140px;">. (speculate)</p><p>6. The emerging <input type="text" class="text-answer" id="t13-6" data-correct="consensus" autocomplete="off" style="width:120px;"> is that both methods have a place. (general agreement — one word)</p><p>7. Deforestation led to soil <input type="text" class="text-answer" id="t13-7" data-correct="erosion" autocomplete="off" style="width:110px;">. (erode)</p><p>8. The islanders had no <input type="text" class="text-answer" id="t13-8" data-correct="immunity" autocomplete="off" style="width:120px;"> to smallpox. (immune)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-wf', 't13-wf-score')">Check answers</button>
+          <span id="t13-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t13-col"><div class="q-item" id="t13-col-1">
+          <p>1. to ______ an account</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-1" data-correct="false"> contest up</label><label><input type="radio" value="1" name="t13-col-1" data-correct="true"> challenge</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-2">
+          <p>2. a body of ______</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-2" data-correct="true"> research</label><label><input type="radio" value="1" name="t13-col-2" data-correct="false"> researches</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-3">
+          <p>3. to ______ consequences</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-3" data-correct="true"> have practical</label><label><input type="radio" value="1" name="t13-col-3" data-correct="false"> make practical</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-4">
+          <p>4. to ______ the brink</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-4" data-correct="false"> stand at the</label><label><input type="radio" value="1" name="t13-col-4" data-correct="true"> be on</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-5">
+          <p>5. to ______ attention</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-5" data-correct="true"> attract</label><label><input type="radio" value="1" name="t13-col-5" data-correct="false"> gain over</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-6">
+          <p>6. a ______ concern</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-6" data-correct="false"> trifle</label><label><input type="radio" value="1" name="t13-col-6" data-correct="true"> trivial</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-col', 't13-col-score')">Check answers</button>
+          <span id="t13-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 20</div>
+      <h2>Grammar for Band 8 — Cleft Sentences, Nominalisation and Concession</h2>
+      <p class="task-sub">Choose the most accurate and academic option.</p>
+      <div class="card" id="t14-gr"><div class="q-item" id="t14-gr-1">
+          <p>1. ______ density, not panic, that causes most crowd deaths.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-1" data-correct="false"> What is</label><label><input type="radio" value="1" name="t14-gr-1" data-correct="true"> It is</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-2">
+          <p>2. ______ the island’s history shows is resilience.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-2" data-correct="false"> That</label><label><input type="radio" value="1" name="t14-gr-2" data-correct="true"> What</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-3">
+          <p>3. The ______ of the forest led to erosion.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-3" data-correct="false"> destroying</label><label><input type="radio" value="1" name="t14-gr-3" data-correct="true"> destruction</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-4">
+          <p>4. ______ the research is promising, it should not be a priority.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-4" data-correct="true"> Although</label><label><input type="radio" value="1" name="t14-gr-4" data-correct="false"> Despite</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-5">
+          <p>5. ______ the high cost, investment has continued.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-5" data-correct="false"> Although</label><label><input type="radio" value="1" name="t14-gr-5" data-correct="true"> Despite</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-6">
+          <p>6. Visitor numbers fell sharply in 2020, ______ a result of closures.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-6" data-correct="false"> so</label><label><input type="radio" value="1" name="t14-gr-6" data-correct="true"> as</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-7">
+          <p>7. Only in 2023 ______ numbers return to previous levels.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-7" data-correct="true"> did</label><label><input type="radio" value="1" name="t14-gr-7" data-correct="false"> were</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-8">
+          <p>8. Museum C saw the ______ recovery of the five.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-8" data-correct="true"> most dramatic</label><label><input type="radio" value="1" name="t14-gr-8" data-correct="false"> more dramatic</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-gr', 't14-gr-score')">Check answers</button>
+          <span id="t14-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task15" data-task="15">
+      <div class="task-eyebrow">Task 15 of 20</div>
+      <h2>Writing Task 1 — Skills: Selecting from a Table</h2>
+      <p class="task-sub">Tables tempt candidates to list everything. Practise selecting and grouping the key features.</p>
+<div class="card"><p class="prompt-label" style="text-align:center;">Annual visitors to five museums (millions)</p><div style="overflow-x:auto;"><table class="data-table" style="width:100%;"><tr><th>Museum</th><th>2015</th><th>2020</th><th>2023</th></tr><tr><td>Museum A</td><td>8.6</td><td>2.7</td><td>8.9</td></tr><tr><td>Museum B</td><td>6.0</td><td>1.3</td><td>6.8</td></tr><tr><td>Museum C</td><td>6.8</td><td>1.3</td><td>5.8</td></tr><tr><td>Museum D</td><td>6.5</td><td>1.1</td><td>5.4</td></tr><tr><td>Museum E</td><td>4.7</td><td>1.4</td><td>4.7</td></tr></table></div></div>
+      <div class="card" id="t15-ov"><div class="sel-row"><select class="select" id="t15-ov-1" data-answer="overview"><option value="">—</option><option value="overview">overview</option><option value="detail">detail</option></select><span><b>1.</b> All five museums experienced a dramatic fall in 2020.</span></div><div class="sel-row"><select class="select" id="t15-ov-2" data-answer="detail"><option value="">—</option><option value="overview">overview</option><option value="detail">detail</option></select><span><b>2.</b> Museum E had 4.7 million visitors in 2015.</span></div><div class="sel-row"><select class="select" id="t15-ov-3" data-answer="overview"><option value="">—</option><option value="overview">overview</option><option value="detail">detail</option></select><span><b>3.</b> By 2023, only two museums had exceeded their 2015 figures.</span></div><div class="sel-row"><select class="select" id="t15-ov-4" data-answer="detail"><option value="">—</option><option value="overview">overview</option><option value="detail">detail</option></select><span><b>4.</b> Museum D received 1.1 million visitors in 2020.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-ov', 't15-ov-score')">Check answers</button>
+          <span id="t15-ov-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t15-g" style="line-height:2.4;"><p>1. Museum A remained the most <input type="text" class="text-answer" id="t15-1" data-correct="visited/popular" autocomplete="off" style="width:120px;"> throughout the period.</p><p>2. Attendance at every museum <input type="text" class="text-answer" id="t15-2" data-correct="plummeted/plunged/collapsed" autocomplete="off" style="width:130px;"> in 2020.</p><p>3. Museum B recovered most strongly, <input type="text" class="text-answer" id="t15-3" data-correct="exceeding/surpassing" autocomplete="off" style="width:130px;"> its 2015 figure by 0.8 million.</p><p>4. Museum E’s 2023 figure was <input type="text" class="text-answer" id="t15-4" data-correct="identical" autocomplete="off" style="width:120px;"> to that of 2015.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-g', 't15-g-score')">Check answers</button>
+          <span id="t15-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task16" data-task="16">
+      <div class="task-eyebrow">Task 16 of 20</div>
+      <h2>Writing Task 1 — Your Report</h2>
+      <p class="task-sub">Write the full report. About <b>20 minutes</b>, <b>at least 150 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The table below shows the number of visitors to five museums in 2015, 2020 and 2023.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><p class="prompt-label" style="text-align:center;">Annual visitors to five museums (millions)</p><div style="overflow-x:auto;"><table class="data-table" style="width:100%;"><tr><th>Museum</th><th>2015</th><th>2020</th><th>2023</th></tr><tr><td>Museum A</td><td>8.6</td><td>2.7</td><td>8.9</td></tr><tr><td>Museum B</td><td>6.0</td><td>1.3</td><td>6.8</td></tr><tr><td>Museum C</td><td>6.8</td><td>1.3</td><td>5.8</td></tr><tr><td>Museum D</td><td>6.5</td><td>1.1</td><td>5.4</td></tr><tr><td>Museum E</td><td>4.7</td><td>1.4</td><td>4.7</td></tr></table></div></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t16-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t16-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t16-essay-model"><div class="model-text">
+  <p>The table compares annual visitor numbers at five museums in 2015, 2020 and 2023.</p>
+  <p>Overall, attendance at all five museums collapsed in 2020 before recovering substantially by 2023. However, the extent of the recovery varied, and only two museums ended the period with more visitors than in 2015. Museum A was the most visited throughout.</p>
+  <p>In 2015, Museum A attracted 8.6 million visitors, well ahead of Museums C, D and B, which received between 6.0 and 6.8 million, while Museum E had the fewest, at 4.7 million. In 2020, figures plummeted across the board, falling to between 1.1 and 1.4 million at four of the museums and to 2.7 million at Museum A.</p>
+  <p>By 2023, Museum A had risen to 8.9 million and Museum B to 6.8 million, both exceeding their 2015 levels. Museum E returned to exactly its original figure of 4.7 million. In contrast, Museums C and D remained around a million visitors below their pre-2020 totals, at 5.8 and 5.4 million respectively.</p>
+  <p class="alt">≈ 185 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task17" data-task="17">
+      <div class="task-eyebrow">Task 17 of 20</div>
+      <h2>Writing Task 2 — Planning a Nuanced Essay</h2>
+      <p class="task-sub">Plan carefully: a band 8 essay develops both views fully and reaches a precise position.</p>
+<div class="card task-prompt"><p class="prompt-label">Writing Task 2</p><p><i>Some people believe that scientists should use new technology to bring back extinct animal species. Others think that this money should be spent on protecting species that still exist. Discuss both views and give your own opinion.</i></p></div>
+      <div class="card" id="t17-pl"><div class="q-item" id="t17-pl-1">
+          <p>1. Most precise thesis:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-1" data-correct="false"> A. Both views have merit.</label><label><input type="radio" value="1" name="t17-pl-1" data-correct="true"> B. While de-extinction research may yield useful conservation tools, protecting existing species should receive the overwhelming majority of funding.</label><label><input type="radio" value="2" name="t17-pl-1" data-correct="false"> C. Animals are important.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-2">
+          <p>2. Strongest argument for de-extinction:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-2" data-correct="false"> A. Mammoths are famous.</label><label><input type="radio" value="1" name="t17-pl-2" data-correct="true"> B. The genetic tools developed could help endangered species, for example by increasing genetic diversity.</label><label><input type="radio" value="2" name="t17-pl-2" data-correct="false"> C. It would be exciting.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-3">
+          <p>3. Strongest argument against:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-3" data-correct="true"> A. Resources could save several times as many species if spent on existing ones.</label><label><input type="radio" value="1" name="t17-pl-3" data-correct="false"> B. Elephants are large.</label><label><input type="radio" value="2" name="t17-pl-3" data-correct="false"> C. Scientists are expensive.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-4">
+          <p>4. Effective concession in the conclusion:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-4" data-correct="false"> A. In conclusion, I disagree.</label><label><input type="radio" value="1" name="t17-pl-4" data-correct="true"> B. Although de-extinction research should not be abandoned, it should be judged by its value in preventing future extinctions.</label><label><input type="radio" value="2" name="t17-pl-4" data-correct="false"> C. In conclusion, both are good.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t17-pl', 't17-pl-score')">Check answers</button>
+          <span id="t17-pl-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write your plan: thesis, the main point and example for each view, and your concluding position.</p><textarea class="no-check mini-answer" id="t17-out-1" placeholder="Write your plan here..." style="min-height:120px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t17-out-btn">Show an example plan</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t17-out-ans"><p><b>Thesis:</b> limited research acceptable; priority = existing species. <b>View 1:</b> genetic tools (diversity, disease resistance); scientific knowledge. <b>View 2:</b> cost-effectiveness (several times as many species), habitats gone, a gene-edited elephant is not a mammoth. <b>Conclusion:</b> fund research only where it serves present conservation (e.g. northern white rhino).</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task18" data-task="18">
+      <div class="task-eyebrow">Task 18 of 20</div>
+      <h2>Writing Task 2 — Your Essay</h2>
+      <p class="task-sub">Write the full essay. About <b>40 minutes</b>, <b>at least 250 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Some people believe that scientists should use new technology to bring back extinct animal species. Others think that this money should be spent on protecting species that still exist. Discuss both views and give your own opinion.</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t18-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t18-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t18-essay-model"><div class="model-text">
+  <p>Advances in genetic engineering have raised the possibility of recreating animals that disappeared long ago, and some companies have already invested heavily in the idea. While I accept that this research may produce useful tools, I believe that the vast majority of conservation funding should be devoted to protecting species that still exist.</p>
+  <p>Those who support de-extinction argue that its benefits extend beyond spectacular projects such as recreating the mammoth. The techniques required — editing genes, cloning cells and managing genetic diversity — could be applied to endangered animals, for instance by making them resistant to diseases. Moreover, scientific progress often comes from ambitious goals, and research of this kind may lead to discoveries that no one can yet predict.</p>
+  <p>However, the case for prioritising existing species is far stronger. Estimates suggest that money spent on de-extinction could save several times as many species if invested in habitat protection and anti-poaching measures, and with around a million species thought to be at risk, the opportunity cost is enormous. In addition, a recreated animal would rarely be a true copy: an elephant with edited genes would lack the learnt behaviour of mammoth herds, and the ecosystems in which many extinct species lived no longer exist.</p>
+  <p>In conclusion, de-extinction research should not be abandoned entirely, particularly where it can help species on the brink, such as the northern white rhino. Nevertheless, it should be judged by its contribution to preventing future extinctions rather than reversing past ones, and protecting living species must remain the priority.</p>
+  <p class="alt">≈ 290 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task19" data-task="19">
+      <div class="task-eyebrow">Task 19 of 20</div>
+      <h2>Speaking Part 3 — Today’s Topics</h2>
+      <p class="task-sub">Answer each abstract question in its own box — about <b>60 seconds</b>, with a qualification.</p>
+      <div class="question-box" data-field="t19-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Why do people often behave differently in large crowds?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It’s often assumed that…, but…”</li><li>“Research suggests…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">What can past civilisations teach us about the environment?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“One lesson might be…”</li><li>“That said, we should be careful about…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Is it ethical to bring extinct species back to life?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“There’s a genuine ethical dilemma here…”</li><li>“On balance,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Will handwriting disappear in the future?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I doubt it will disappear entirely, because…”</li><li>“Its role may change…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task20" data-task="20">
+      <div class="task-eyebrow">Task 20 of 20</div>
+      <h2>Self-Check — Today’s Reading and Writing</h2>
+      <p class="task-sub">Analyse your performance precisely.</p>
+      <div class="card"><p class="mini-q">1. Your reading score out of 40 and estimated band:</p><textarea class="no-check mini-answer" id="t20-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. Classify every wrong answer (trap / misreading / spelling / time). What pattern do you see?</p><textarea class="no-check mini-answer" id="t20-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Re-read your Task 2 essay: underline your thesis and your concession. Is your position precise and consistent? What will you change?</p><textarea class="no-check mini-answer" id="t20-rf-3" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t20-rf-btn">Show some guidance</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t20-rf-ans"><p>At band 7–8, the most common patterns are NOT GIVEN errors with comparisons or predictions (Q10, Q30), heading distractors that echo a single word, and essays whose position becomes vague in the conclusion. A precise position names <i>what</i> should be prioritised and <i>under what conditions</i>.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 20</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 35 of 45</div>
+    <h1>Day 35 complete! 🎉</h1>
+    <p>Day 35 done — an exam-difficulty reading test, two extra articles, advanced reading skills, vocabulary and grammar, Writing Task 1 and Task 2, and speaking.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t10-lm-lm');
+
+    initWritingCoach('t16-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The table below shows the number of visitors to five museums in 2015, 2020 and 2023.' });
+    initWritingCoach('t18-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Some people believe that scientists should use new technology to bring back extinct animal species. Others think that this money should be spent on protecting species that still exist. Discuss both views and give your own opinion.' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 35, 8, 't8-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-summary"]'); if (b) initRecordControl(b, user.id, 35, 9, 't9-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-1"]'); if (b) initRecordControl(b, user.id, 35, 19, 't19-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-2"]'); if (b) initRecordControl(b, user.id, 35, 19, 't19-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-3"]'); if (b) initRecordControl(b, user.id, 35, 19, 't19-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-4"]'); if (b) initRecordControl(b, user.id, 35, 19, 't19-speaking-4', 0); }
+
+    await initTaskFlow(35, 20, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-h', 't2-h-score'); checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-s', 't2-s-score'); },
+      4: () => { checkAllAnswers('t4-mi', 't4-mi-score'); checkAllAnswers('t4-mf', 't4-mf-score'); checkAllAnswers('t4-sc', 't4-sc-score'); },
+      6: () => { checkAllAnswers('t6-yn', 't6-yn-score'); checkAllAnswers('t6-mc', 't6-mc-score'); checkAllAnswers('t6-s', 't6-s-score'); },
+      8: () => { checkAllAnswers('t8-tf', 't8-tf-score'); },
+      9: () => { checkAllAnswers('t9-mc', 't9-mc-score'); },
+      10: () => { checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm'); checkAllAnswers('t10-inf', 't10-inf-score'); },
+      11: () => { checkAllAnswers('t11-st', 't11-st-score'); checkAllAnswers('t11-h', 't11-h-score'); },
+      12: () => { checkAllAnswers('t12-title', 't12-title-score'); checkAllAnswers('t12-scan', 't12-scan-score'); },
+      13: () => { checkAllAnswers('t13-wf', 't13-wf-score'); checkAllAnswers('t13-col', 't13-col-score'); },
+      14: () => { checkAllAnswers('t14-gr', 't14-gr-score'); },
+      15: () => { checkAllAnswers('t15-ov', 't15-ov-score'); checkAllAnswers('t15-g', 't15-g-score'); },
+      17: () => { checkAllAnswers('t17-pl', 't17-pl-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-sum-btn', 't9-sum-ans', '[id^="t9-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t16-essay-model-btn', 't16-essay-model', '#t16-essay');
+    initGatedMistakeReveal('t17-out-btn', 't17-out-ans', '[id^="t17-out-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t18-essay-model-btn', 't18-essay-model', '#t18-essay');
+    initGatedMistakeReveal('t20-rf-btn', 't20-rf-ans', '[id^="t20-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>
