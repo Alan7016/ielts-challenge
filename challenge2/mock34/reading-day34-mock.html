@@ -1065,7 +1065,7 @@
             if (!text) { hideSelectionToolbar(); return; }
             const anchorNode = sel.anchorNode;
             const anchorEl = anchorNode && (anchorNode.nodeType === 1 ? anchorNode : anchorNode.parentNode);
-            const passage = anchorEl && anchorEl.closest('.passage-part:not(.hidden)');
+            const passage = anchorEl && anchorEl.closest('.passage-part:not(.hidden), .right-panel');
             if (!passage || !anchorEl) { hideSelectionToolbar(); return; }
             const range = sel.getRangeAt(0);
             selectedRange = range;
@@ -1106,9 +1106,16 @@
             if (!e.target.closest('#selectionToolbar')) hideSelectionToolbar();
         });
 
+        // Highlights work in the passage AND the questions; a selection that
+        // touches an answer box is ignored so answers can never be affected.
+        function hlTouchesField(r) { const f = r.cloneContents(); return !!(f.querySelector && f.querySelector('input, select, textarea, button')); }
+        function hlWrap(r, span) {
+            try { r.surroundContents(span); return true; }
+            catch (e) { try { const f = r.extractContents(); span.appendChild(f); r.insertNode(span); return true; } catch (e2) { return false; } }
+        }
         function highlightText() {
             if (!selectedRange || selectedRange.collapsed) return;
-            try { const span = document.createElement('span'); span.className = 'highlight'; selectedRange.surroundContents(span); } catch (e) { }
+            if (!hlTouchesField(selectedRange)) { const span = document.createElement('span'); span.className = 'highlight'; hlWrap(selectedRange, span); }
             window.getSelection().removeAllRanges();
             document.getElementById('contextMenu').style.display = 'none';
             hideSelectionToolbar();
@@ -1116,11 +1123,11 @@
         function addComment() {
             const t = prompt('Enter your comment:');
             if (!t || !selectedRange) return;
-            try {
+            if (!hlTouchesField(selectedRange)) {
                 const span = document.createElement('span'); span.className = 'comment-highlight';
                 const tip = document.createElement('span'); tip.className = 'comment-tooltip'; tip.textContent = t;
-                span.appendChild(tip); selectedRange.surroundContents(span);
-            } catch (e) { }
+                if (hlWrap(selectedRange, span)) span.appendChild(tip);
+            }
             window.getSelection().removeAllRanges();
             document.getElementById('contextMenu').style.display = 'none';
             hideSelectionToolbar();
