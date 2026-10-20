@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 38 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 38 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 10</div>
+      <h2>Writing Task 2 Day — The Five Question Types</h2>
+      <p class="task-sub">Today is a <b>full Writing Task 2 day</b> — about <b>3 hours</b>. Every level writes the same essay, aiming at <b>Band 7.0</b>. First, recognise the five question types: each one needs a different structure.</p>
+      <div class="card" id="t1-ty"><div class="sel-row"><select class="select" id="t1-ty-1" data-answer="opinion"><option value="">—</option><option value="opinion">opinion</option><option value="discussion">discussion</option><option value="advantages / disadvantages">advantages / disadvantages</option><option value="problem / solution">problem / solution</option><option value="two-part question">two-part question</option></select><span><b>1.</b> “Some people think all children should learn to cook at school. <b>To what extent do you agree or disagree?</b>”</span></div><div class="sel-row"><select class="select" id="t1-ty-2" data-answer="discussion"><option value="">—</option><option value="opinion">opinion</option><option value="discussion">discussion</option><option value="advantages / disadvantages">advantages / disadvantages</option><option value="problem / solution">problem / solution</option><option value="two-part question">two-part question</option></select><span><b>2.</b> “Some people think … Others believe … <b>Discuss both views and give your own opinion.</b>”</span></div><div class="sel-row"><select class="select" id="t1-ty-3" data-answer="advantages / disadvantages"><option value="">—</option><option value="opinion">opinion</option><option value="discussion">discussion</option><option value="advantages / disadvantages">advantages / disadvantages</option><option value="problem / solution">problem / solution</option><option value="two-part question">two-part question</option></select><span><b>3.</b> “More people work in the gig economy. <b>Do the advantages outweigh the disadvantages?</b>”</span></div><div class="sel-row"><select class="select" id="t1-ty-4" data-answer="problem / solution"><option value="">—</option><option value="opinion">opinion</option><option value="discussion">discussion</option><option value="advantages / disadvantages">advantages / disadvantages</option><option value="problem / solution">problem / solution</option><option value="two-part question">two-part question</option></select><span><b>4.</b> “Traffic in cities is getting worse. <b>What are the causes, and what can be done?</b>”</span></div><div class="sel-row"><select class="select" id="t1-ty-5" data-answer="two-part question"><option value="">—</option><option value="opinion">opinion</option><option value="discussion">discussion</option><option value="advantages / disadvantages">advantages / disadvantages</option><option value="problem / solution">problem / solution</option><option value="two-part question">two-part question</option></select><span><b>5.</b> “Many people now shop online. <b>Why is this? Is it a positive or negative development?</b>”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-ty', 't1-ty-score')">Check answers</button>
+          <span id="t1-ty-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t1-mc"><div class="q-item" id="t1-mc-1">
+          <p>1. In a <b>discussion</b> essay, you must</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-1" data-correct="false"> A. give only your opinion</label><label><input type="radio" value="1" name="t1-mc-1" data-correct="true"> B. explain both views and give your own opinion</label><label><input type="radio" value="2" name="t1-mc-1" data-correct="false"> C. explain one view only</label><label><input type="radio" value="3" name="t1-mc-1" data-correct="false"> D. avoid an opinion</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-2">
+          <p>2. In a <b>problem / solution</b> essay, you must</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-2" data-correct="false"> A. give your opinion only</label><label><input type="radio" value="1" name="t1-mc-2" data-correct="true"> B. explain the causes (or problems) and suggest solutions</label><label><input type="radio" value="2" name="t1-mc-2" data-correct="false"> C. describe a chart</label><label><input type="radio" value="3" name="t1-mc-2" data-correct="false"> D. list advantages</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-mc-3">
+          <p>3. How many words must a Task 2 essay have?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-mc-3" data-correct="false"> A. at least 150</label><label><input type="radio" value="1" name="t1-mc-3" data-correct="true"> B. at least 250</label><label><input type="radio" value="2" name="t1-mc-3" data-correct="false"> C. exactly 300</label><label><input type="radio" value="3" name="t1-mc-3" data-correct="false"> D. no limit</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-mc', 't1-mc-score')">Check answers</button>
+          <span id="t1-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 10</div>
+      <h2>Today’s Question — Unpack It</h2>
+      <p class="task-sub">Read today’s question carefully. Most low scores come from not answering every part.</p>
+<div class="card task-prompt"><p class="prompt-label">Writing Task 2 — today’s essay</p><p><i>Some people believe that university education should be free for everyone. Others think that students should pay for their own studies. Discuss both views and give your own opinion.</i></p></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-1">
+          <p>1. What type of question is this?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-1" data-correct="false"> A. opinion</label><label><input type="radio" value="1" name="t2-mc-1" data-correct="true"> B. discussion</label><label><input type="radio" value="2" name="t2-mc-1" data-correct="false"> C. problem / solution</label><label><input type="radio" value="3" name="t2-mc-1" data-correct="false"> D. advantages / disadvantages</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-2">
+          <p>2. How many things must your essay do?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-2" data-correct="false"> A. one: give my opinion</label><label><input type="radio" value="1" name="t2-mc-2" data-correct="false"> B. two: explain view 1 and view 2</label><label><input type="radio" value="2" name="t2-mc-2" data-correct="true"> C. three: explain view 1, explain view 2, and give my opinion</label><label><input type="radio" value="3" name="t2-mc-2" data-correct="false"> D. four</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-3">
+          <p>3. Which essay would get a low Task Response score?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-3" data-correct="false"> A. one that explains both views and gives a clear opinion</label><label><input type="radio" value="1" name="t2-mc-3" data-correct="true"> B. one that only explains why university should be free</label><label><input type="radio" value="2" name="t2-mc-3" data-correct="false"> C. one that partly agrees with both views</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-4">
+          <p>4. Which thesis answers the question?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-4" data-correct="false"> A. University is very important.</label><label><input type="radio" value="1" name="t2-mc-4" data-correct="true"> B. Although free education helps poorer students, I believe students should pay part of the cost.</label><label><input type="radio" value="2" name="t2-mc-4" data-correct="false"> C. This essay will talk about universities.</label><label><input type="radio" value="3" name="t2-mc-4" data-correct="false"> D. Many people go to university.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-5">
+          <p>5. Which is a precise paraphrase of “students should pay for their own studies”?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-5" data-correct="true"> A. students should finance their own degrees</label><label><input type="radio" value="1" name="t2-mc-5" data-correct="false"> B. students should study harder</label><label><input type="radio" value="2" name="t2-mc-5" data-correct="false"> C. students should work while studying</label><label><input type="radio" value="3" name="t2-mc-5" data-correct="false"> D. universities should be private</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 10</div>
+      <h2>Ideas — Both Sides</h2>
+      <p class="task-sub">Sort the ideas, then add your own.</p>
+      <div class="card" id="t3-id"><div class="sel-row"><select class="select" id="t3-id-1" data-answer="free for everyone"><option value="">—</option><option value="free for everyone">free for everyone</option><option value="students should pay">students should pay</option><option value="off-topic">off-topic</option></select><span><b>1.</b> Talented students from poor families can go to university.</span></div><div class="sel-row"><select class="select" id="t3-id-2" data-answer="free for everyone"><option value="">—</option><option value="free for everyone">free for everyone</option><option value="students should pay">students should pay</option><option value="off-topic">off-topic</option></select><span><b>2.</b> Society benefits from more educated doctors, teachers and engineers.</span></div><div class="sel-row"><select class="select" id="t3-id-3" data-answer="students should pay"><option value="">—</option><option value="free for everyone">free for everyone</option><option value="students should pay">students should pay</option><option value="off-topic">off-topic</option></select><span><b>3.</b> Graduates usually earn more, so it is fair that they pay.</span></div><div class="sel-row"><select class="select" id="t3-id-4" data-answer="students should pay"><option value="">—</option><option value="free for everyone">free for everyone</option><option value="students should pay">students should pay</option><option value="off-topic">off-topic</option></select><span><b>4.</b> Taxpayers who never went to university should not pay for others.</span></div><div class="sel-row"><select class="select" id="t3-id-5" data-answer="students should pay"><option value="">—</option><option value="free for everyone">free for everyone</option><option value="students should pay">students should pay</option><option value="off-topic">off-topic</option></select><span><b>5.</b> Students who pay may take their studies more seriously.</span></div><div class="sel-row"><select class="select" id="t3-id-6" data-answer="free for everyone"><option value="">—</option><option value="free for everyone">free for everyone</option><option value="students should pay">students should pay</option><option value="off-topic">off-topic</option></select><span><b>6.</b> Education is a basic right, like healthcare.</span></div><div class="sel-row"><select class="select" id="t3-id-7" data-answer="off-topic"><option value="">—</option><option value="free for everyone">free for everyone</option><option value="students should pay">students should pay</option><option value="off-topic">off-topic</option></select><span><b>7.</b> Universities in big cities have beautiful buildings.</span></div><div class="sel-row"><select class="select" id="t3-id-8" data-answer="off-topic"><option value="">—</option><option value="free for everyone">free for everyone</option><option value="students should pay">students should pay</option><option value="off-topic">off-topic</option></select><span><b>8.</b> Online courses are becoming popular.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-id', 't3-id-score')">Check answers</button>
+          <span id="t3-id-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">1. One more reason why university should be free (with an example):</p><textarea class="no-check mini-answer" id="t3-own-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. One more reason why students should pay (with an example):</p><textarea class="no-check mini-answer" id="t3-own-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Your opinion in one sentence:</p><textarea class="no-check mini-answer" id="t3-own-3" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t3-own-btn">Show example ideas</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t3-own-ans"><p>Free: graduates pay more tax later, so the state gets its money back; Germany abolished tuition fees in 2014. Pay: free places are limited, so universities may lack money for teachers and equipment; a loan repaid only after graduation is fairer. Opinion: e.g. “University should be free for students from low-income families, while others should repay a loan once they earn enough.”</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 10</div>
+      <h2>The Introduction</h2>
+      <p class="task-sub">An introduction has two parts: <b>paraphrase the question</b> and <b>give your position</b> (thesis). Two or three sentences are enough.</p>
+      <div class="card" id="t4-mc"><div class="q-item" id="t4-mc-1">
+          <p>1. Which is the best paraphrase of the first part of the question?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-1" data-correct="false"> A. Some people believe that university education should be free for everyone.</label><label><input type="radio" value="1" name="t4-mc-1" data-correct="true"> B. It is sometimes argued that higher education ought to be provided free of charge to all.</label><label><input type="radio" value="2" name="t4-mc-1" data-correct="false"> C. University is free.</label><label><input type="radio" value="3" name="t4-mc-1" data-correct="false"> D. Education is good for everyone.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-2">
+          <p>2. Which introduction is best?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-2" data-correct="false"> A. Nowadays, education is very important in our modern world in these days.</label><label><input type="radio" value="1" name="t4-mc-2" data-correct="true"> B. Some argue that higher education should be free for all, while others feel that students should cover the cost themselves. In my view, the cost should be shared.</label><label><input type="radio" value="2" name="t4-mc-2" data-correct="false"> C. I will write about free university.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mc', 't4-mc-score')">Check answers</button>
+          <span id="t4-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write your own introduction for today’s question (2–3 sentences):</p><textarea class="no-check mini-answer" id="t4-intro-1" placeholder="Write your introduction here..." style="min-height:110px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t4-intro-btn">Show a model introduction</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t4-intro-ans"><p>It is sometimes argued that higher education ought to be provided free of charge to all, while others believe that students should finance their own degrees. Although both views have merit, I believe the cost should be shared between the state and graduates.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 10</div>
+      <h2>Body Paragraphs — Point, Explain, Example, Link</h2>
+      <p class="task-sub">A strong body paragraph has a clear <b>topic sentence</b>, an <b>explanation</b>, an <b>example</b>, and a <b>link</b> back to the question.</p>
+      <p style="margin-top:26px;">Put the sentences of this paragraph in the correct order.</p>
+      <div class="card" id="t5-ord"><div class="sel-row"><select class="select" id="t5-ord-1" data-answer="3rd"><option value="">—</option><option value="1st">1st</option><option value="2nd">2nd</option><option value="3rd">3rd</option><option value="4th">4th</option></select><span><b>1.</b> “For example, in countries such as Germany, where tuition is free, students from low-income families are more likely to attend university.”</span></div><div class="sel-row"><select class="select" id="t5-ord-2" data-answer="1st"><option value="">—</option><option value="1st">1st</option><option value="2nd">2nd</option><option value="3rd">3rd</option><option value="4th">4th</option></select><span><b>2.</b> “On the one hand, those who support free university education argue that it gives everyone an equal chance.”</span></div><div class="sel-row"><select class="select" id="t5-ord-3" data-answer="4th"><option value="">—</option><option value="1st">1st</option><option value="2nd">2nd</option><option value="3rd">3rd</option><option value="4th">4th</option></select><span><b>3.</b> “Therefore, free education helps a country to use the talents of all its young people.”</span></div><div class="sel-row"><select class="select" id="t5-ord-4" data-answer="2nd"><option value="">—</option><option value="1st">1st</option><option value="2nd">2nd</option><option value="3rd">3rd</option><option value="4th">4th</option></select><span><b>4.</b> “If students have to pay high fees, many talented young people from poorer families may decide not to study at all.”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-ord', 't5-ord-score')">Check answers</button>
+          <span id="t5-ord-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t5-mc"><div class="q-item" id="t5-mc-1">
+          <p>1. What is the job of the first sentence?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-1" data-correct="false"> A. to give an example</label><label><input type="radio" value="1" name="t5-mc-1" data-correct="true"> B. to state the main idea of the paragraph</label><label><input type="radio" value="2" name="t5-mc-1" data-correct="false"> C. to conclude the essay</label><label><input type="radio" value="3" name="t5-mc-1" data-correct="false"> D. to give the writer’s opinion of the whole essay</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-mc-2">
+          <p>2. Which linker best introduces the opposite view in the next paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-mc-2" data-correct="false"> A. For example,</label><label><input type="radio" value="1" name="t5-mc-2" data-correct="true"> B. On the other hand,</label><label><input type="radio" value="2" name="t5-mc-2" data-correct="false"> C. Therefore,</label><label><input type="radio" value="3" name="t5-mc-2" data-correct="false"> D. In addition,</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-mc', 't5-mc-score')">Check answers</button>
+          <span id="t5-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Now write the <b>second</b> body paragraph: why some people think students should pay (topic sentence → explanation → example → link):</p><textarea class="no-check mini-answer" id="t5-body-1" placeholder="Write your paragraph here..." style="min-height:200px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t5-body-btn">Show a model paragraph</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t5-body-ans"><p>On the other hand, those who believe that students should finance their own studies point out that a degree is, above all, a personal investment. Graduates generally earn considerably more over their lifetimes than non-graduates, so it seems reasonable that they, rather than the general taxpayer, should bear the cost. Moreover, students who pay fees may take their courses more seriously and choose subjects with good job prospects. In the UK, for instance, students repay their loans only once their income reaches a certain level, which allows them to contribute without being prevented from studying.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 10</div>
+      <h2>Language for Task 2</h2>
+      <p class="task-sub">Concession, cause and effect, and hypothetical forms.</p>
+      <div class="card" id="t6-gr"><div class="q-item" id="t6-gr-1">
+          <p>1. ______ free education is expensive, it benefits society as a whole.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-gr-1" data-correct="true"> Although</label><label><input type="radio" value="1" name="t6-gr-1" data-correct="false"> Despite</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-gr-2">
+          <p>2. ______ the high cost, many governments still fund universities.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-gr-2" data-correct="true"> Despite</label><label><input type="radio" value="1" name="t6-gr-2" data-correct="false"> Although</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-gr-3">
+          <p>3. Graduates earn more, ______ it seems fair that they pay.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-gr-3" data-correct="true"> so</label><label><input type="radio" value="1" name="t6-gr-3" data-correct="false"> because</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-gr-4">
+          <p>4. Free education ______ more students from poor families to study.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-gr-4" data-correct="true"> would allow</label><label><input type="radio" value="1" name="t6-gr-4" data-correct="false"> would allows</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-gr-5">
+          <p>5. It is often ______ that education is a basic right.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-gr-5" data-correct="true"> argued</label><label><input type="radio" value="1" name="t6-gr-5" data-correct="false"> arguing</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-gr-6">
+          <p>6. Those ______ support fees point to graduates’ higher salaries.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-gr-6" data-correct="true"> who</label><label><input type="radio" value="1" name="t6-gr-6" data-correct="false"> which</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-gr-7">
+          <p>7. If tuition were free, universities ______ less money for equipment.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-gr-7" data-correct="true"> might have</label><label><input type="radio" value="1" name="t6-gr-7" data-correct="false"> will have</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-gr-8">
+          <p>8. The cost should be shared ______ the state and graduates.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-gr-8" data-correct="true"> between</label><label><input type="radio" value="1" name="t6-gr-8" data-correct="false"> among from</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-gr', 't6-gr-score')">Check answers</button>
+          <span id="t6-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 10</div>
+      <h2>Find and Fix the Mistakes</h2>
+      <p class="task-sub">Each sentence comes from a real student essay on today’s question and has <b>one</b> mistake. Write the whole correct sentence.</p>
+      <div class="card"><p class="mini-q">1. Despite of the cost, free education has many benefits.</p><textarea class="no-check mini-answer" id="t7-fix-1" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><p class="mini-q">2. Graduates earn more money, therefore they should pay.</p><textarea class="no-check mini-answer" id="t7-fix-2" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><p class="mini-q">3. If university will be free, more people will study.</p><textarea class="no-check mini-answer" id="t7-fix-3" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><p class="mini-q">4. This leads to students take their studies more seriously.</p><textarea class="no-check mini-answer" id="t7-fix-4" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><p class="mini-q">5. The amount of students from poor families would increase.</p><textarea class="no-check mini-answer" id="t7-fix-5" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t7-fix-btn">Show the correct sentences</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t7-fix-ans"><ol><li>Despite the cost, free education has many benefits.</li><li>Graduates earn more money; therefore, they should pay. / …money, so they should pay.</li><li>If university is free, more people will study.</li><li>This leads students to take their studies more seriously.</li><li>The number of students from poor families would increase.</li></ol></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 10</div>
+      <h2>Your Essay — Today’s Question</h2>
+      <p class="task-sub">Now put it all together. Use your ideas, introduction and paragraph from the earlier tasks — you may improve them. About <b>40 minutes</b>, <b>at least 250 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Some people believe that university education should be free for everyone. Others think that students should pay for their own studies. Discuss both views and give your own opinion.</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t8-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-essay-model"><div class="model-text">
+  <p>It is sometimes argued that higher education ought to be provided free of charge to all, while others believe that students should finance their own degrees. Although both views have merit, I believe the cost should be shared between the state and graduates.</p>
+  <p>Those who support free university education argue that it is the only way to guarantee equal opportunity. When fees are high, talented students from low-income families are often discouraged from applying, either because they cannot afford the fees or because they fear years of debt. A country that loses these students also loses future doctors, engineers and teachers. Moreover, society as a whole benefits from a highly educated population, so it seems reasonable that society should pay.</p>
+  <p>On the other hand, those who believe that students should pay point out that a degree is, above all, a personal investment. Graduates generally earn considerably more over their lifetimes than non-graduates, so it seems fair that they, rather than the general taxpayer, should bear the cost. Fees can also provide universities with the funds they need to employ good teachers and maintain modern facilities.</p>
+  <p>In my view, the best solution combines the strengths of both approaches. Tuition should not be free for everyone, but it should never be paid in advance. Instead, students could take a government loan that they repay only once their income reaches a certain level, as happens in the UK and Australia. Students from the poorest families could receive grants.</p>
+  <p>In conclusion, while free education promotes equality and paid education is fairer to taxpayers, I believe that a system of income-based loans would allow everyone to study while ensuring that those who benefit most contribute the most.</p>
+  <p class="alt">≈ 300 words · aiming at Band 7.0: a clear position throughout, developed arguments, a range of complex sentences</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 10</div>
+      <h2>A Second Essay — Exam Conditions</h2>
+      <p class="task-sub">A different question type: <b>problem / solution</b>. Write the whole essay under exam conditions: <b>40 minutes</b>, <b>at least 250 words</b>, no notes.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>In many countries, young people are spending less time outdoors than in the past. What are the causes of this, and what can be done to solve the problem?</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t9-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-essay-model"><div class="model-text">
+  <p>In many parts of the world, young people now spend far less time outdoors than previous generations did. This essay will examine the main reasons for this change and suggest how it could be reversed.</p>
+  <p>The most obvious cause is the growing appeal of digital entertainment. Smartphones, video games and social media offer instant stimulation, so many teenagers prefer to spend their free time indoors in front of a screen. A second reason is parental anxiety. With busier roads and widespread fears about safety, many parents are reluctant to let their children play outside unsupervised, and as a result children grow used to staying at home.</p>
+  <p>Several measures could help to solve this problem. Firstly, schools could build more outdoor activities into the timetable, such as sports, gardening or lessons held outside, so that spending time outdoors becomes part of daily routine. Secondly, local governments should create safe green spaces, such as parks and car-free streets near residential areas, which would reassure parents. Finally, parents themselves could set limits on screen time and organise family activities outdoors at weekends.</p>
+  <p>In conclusion, young people are spending less time outside mainly because of digital entertainment and parents’ safety concerns. However, if schools, local authorities and families work together, it should be possible to encourage children to enjoy the outdoors again.</p>
+  <p class="alt">≈ 250 words · Band 7.0 model</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 10</div>
+      <h2>Self-Check — The Band Descriptors</h2>
+      <p class="task-sub">Read your essay from Task 8 again and check it against the four criteria the examiner uses.</p>
+<div class="card advice-card"><p class="prompt-label">Checklist</p><ul style="margin:0; padding-left:20px; line-height:1.9;"><li><b>Task Response</b> — I explained both views AND gave my own opinion, in the introduction and the conclusion.</li><li><b>Coherence and Cohesion</b> — each body paragraph has one clear main idea and a topic sentence.</li><li><b>Lexical Resource</b> — I paraphrased the question instead of copying it.</li><li><b>Grammatical Range and Accuracy</b> — I used some complex sentences correctly.</li></ul></div>
+      <div class="card"><p class="mini-q">1. Which point in the checklist is your weakest, and why?</p><textarea class="no-check mini-answer" id="t10-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. How many words did your Task 8 essay have, and how long did it take?</p><textarea class="no-check mini-answer" id="t10-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Compare your essay with the model: what is one thing the model does that you did not?</p><textarea class="no-check mini-answer" id="t10-rf-3" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">4. Your target for the next essay:</p><textarea class="no-check mini-answer" id="t10-rf-4" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t10-rf-btn">Show some guidance</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t10-rf-ans"><p>Most common gaps at Band 7.0: an opinion that appears only in the conclusion (state it in the introduction too); body paragraphs without a specific example; repeated words from the question; and long sentences with grammar mistakes. Choose one of these as your target.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 10</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 38 of 45</div>
+    <h1>Day 38 complete! 🎉</h1>
+    <p>Day 38 done — a full Writing Task 2 day: question types, planning, introductions, body paragraphs, language, a full essay and a second question.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+
+
+    initWritingCoach('t8-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Some people believe that university education should be free for everyone. Others think that students should pay for their own studies. Discuss both views and give your own opinion.' });
+    initWritingCoach('t9-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'In many countries, young people are spending less time outdoors than in the past. What are the causes of this, and what can be done to solve the problem?' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+
+
+    await initTaskFlow(38, 10, user.id, {
+      1: () => { checkAllAnswers('t1-ty', 't1-ty-score'); checkAllAnswers('t1-mc', 't1-mc-score'); },
+      2: () => { checkAllAnswers('t2-mc', 't2-mc-score'); },
+      3: () => { checkAllAnswers('t3-id', 't3-id-score'); },
+      4: () => { checkAllAnswers('t4-mc', 't4-mc-score'); },
+      5: () => { checkAllAnswers('t5-ord', 't5-ord-score'); checkAllAnswers('t5-mc', 't5-mc-score'); },
+      6: () => { checkAllAnswers('t6-gr', 't6-gr-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t3-own-btn', 't3-own-ans', '[id^="t3-own-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t4-intro-btn', 't4-intro-ans', '[id^="t4-intro-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t5-body-btn', 't5-body-ans', '[id^="t5-body-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t7-fix-btn', 't7-fix-ans', '[id^="t7-fix-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t8-essay-model-btn', 't8-essay-model', '#t8-essay');
+    initGatedMistakeReveal('t9-essay-model-btn', 't9-essay-model', '#t9-essay');
+    initGatedMistakeReveal('t10-rf-btn', 't10-rf-ans', '[id^="t10-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 37 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 37 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 7</div>
+      <h2>Check-up 1 — Words from This Week</h2>
+      <p class="task-sub">A <b>short recap day</b> — about <b>1½ hours</b>. Today you check what you remember from the last two weeks: words, question types, one short reading test and a few writing points.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. inevitable</button><button type="button" class="lm-item" data-key="2">2. intercept</button><button type="button" class="lm-item" data-key="3">3. stigma</button><button type="button" class="lm-item" data-key="4">4. inflationary</button><button type="button" class="lm-item" data-key="5">5. conditional</button><button type="button" class="lm-item" data-key="6">6. perverse</button><button type="button" class="lm-item" data-key="7">7. consolidate</button><button type="button" class="lm-item" data-key="8">8. on principle</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. because of a basic belief</button><button type="button" class="lm-item" data-key="b">b. producing the opposite of what was intended</button><button type="button" class="lm-item" data-key="c">c. stop before it reaches its destination</button><button type="button" class="lm-item" data-key="d">d. depending on certain requirements</button><button type="button" class="lm-item" data-key="e">e. shame attached to something</button><button type="button" class="lm-item" data-key="f">f. make stronger and more permanent</button><button type="button" class="lm-item" data-key="g">g. certain to happen</button><button type="button" class="lm-item" data-key="h">h. causing prices to rise</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t1-g" style="line-height:2.4;"><p>1. Change is an <input type="text" class="text-answer" id="t1-g1" data-correct="inevitable" autocomplete="off" style="width:120px;"> feature of every living language.</p><p>2. Conditional benefits can create <input type="text" class="text-answer" id="t1-g2" data-correct="perverse" autocomplete="off" style="width:110px;"> incentives that punish people for working.</p><p>3. A universal payment would avoid the <input type="text" class="text-answer" id="t1-g3" data-correct="stigma" autocomplete="off" style="width:100px;"> of claiming welfare.</p><p>4. Sleep helps the brain <input type="text" class="text-answer" id="t1-g4" data-correct="consolidate" autocomplete="off" style="width:130px;"> new memories.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-g', 't1-g-score')">Check answers</button>
+          <span id="t1-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 7</div>
+      <h2>Check-up 2 — Reading Question Types</h2>
+      <p class="task-sub">How well do you know the rules? Answer quickly — these are the points that cost marks most often.</p>
+      <div class="card" id="t2-qt"><div class="q-item" id="t2-qt-1">
+          <p>1. A statement says something the passage does not mention at all. The answer is</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-qt-1" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-qt-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-qt-1" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-qt-2">
+          <p>2. A statement says the opposite of the passage. The answer is</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-qt-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-qt-2" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-qt-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-qt-3">
+          <p>3. YES / NO / NOT GIVEN questions are about</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-qt-3" data-correct="false"> facts in the passage</label><label><input type="radio" value="1" name="t2-qt-3" data-correct="true"> the writer’s opinions and claims</label><label><input type="radio" value="2" name="t2-qt-3" data-correct="false"> the title</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-qt-4">
+          <p>4. “NO MORE THAN TWO WORDS” — is “the electric fences” correct?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-qt-4" data-correct="false"> Yes</label><label><input type="radio" value="1" name="t2-qt-4" data-correct="true"> No — it is three words</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-qt-5">
+          <p>5. In a headings task, the best heading matches</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-qt-5" data-correct="false"> one word in the paragraph</label><label><input type="radio" value="1" name="t2-qt-5" data-correct="true"> the main idea of the whole paragraph</label><label><input type="radio" value="2" name="t2-qt-5" data-correct="false"> the first sentence only</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-qt-6">
+          <p>6. Summary completion with a word bank: the words</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-qt-6" data-correct="false"> are always copied from the passage</label><label><input type="radio" value="1" name="t2-qt-6" data-correct="true"> may be synonyms of words in the passage</label><label><input type="radio" value="2" name="t2-qt-6" data-correct="false"> are never nouns</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-qt-7">
+          <p>7. In “matching information”, a paragraph letter</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-qt-7" data-correct="true"> can be used more than once</label><label><input type="radio" value="1" name="t2-qt-7" data-correct="false"> can only be used once</label><label><input type="radio" value="2" name="t2-qt-7" data-correct="false"> must be used</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-qt', 't2-qt-score')">Check answers</button>
+          <span id="t2-qt-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 7</div>
+      <h2>Lead-in — The Student Who Studied Less</h2>
+      <p class="task-sub">Read this short article, answer the questions, then summarise it in writing and aloud. It prepares you for today’s reading test.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Student Who Studied Less</h3>
+        <p class="article-meta">Lead-in · Learning · 149 words</p>
+        <p><span class="para-label">A</span>Dilnoza used to study for six hours every evening before an exam. She read her notes again and again and highlighted almost every line. By the end, the notes felt very familiar — but in the exam, she often could not remember the answers.</p><p><span class="para-label">B</span>Last year, a teacher suggested a different method. Instead of rereading, Dilnoza closed her notebook and tried to write down everything she could remember. Then she checked what she had missed. She also stopped studying everything the night before, and instead reviewed each topic a few times, with a few days between each review.</p><p><span class="para-label">C</span>At first, it felt harder and slower. ‘I thought I was learning less, because I kept making mistakes,’ she says. But her results improved quickly, and she now studies for about three hours a day instead of six. ‘The mistakes were the learning,’ she explains. ‘Rereading only made me feel clever.’</p>
+      </div>
+      <div class="card" id="t3-mc"><div class="q-item" id="t3-mc-1">
+          <p>1. What was the problem with Dilnoza’s old method?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-1" data-correct="false"> A. She studied too little.</label><label><input type="radio" value="1" name="t3-mc-1" data-correct="true"> B. Her notes felt familiar, but she could not remember answers in the exam.</label><label><input type="radio" value="2" name="t3-mc-1" data-correct="false"> C. She had no notes.</label><label><input type="radio" value="3" name="t3-mc-1" data-correct="false"> D. She studied in the morning.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-mc-2">
+          <p>2. What did she do instead of rereading?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-2" data-correct="true"> A. She wrote down everything she could remember, then checked.</label><label><input type="radio" value="1" name="t3-mc-2" data-correct="false"> B. She highlighted more.</label><label><input type="radio" value="2" name="t3-mc-2" data-correct="false"> C. She listened to music.</label><label><input type="radio" value="3" name="t3-mc-2" data-correct="false"> D. She studied with friends.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-mc-3">
+          <p>3. What does she mean by “The mistakes were the learning”?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-3" data-correct="false"> A. Mistakes are bad.</label><label><input type="radio" value="1" name="t3-mc-3" data-correct="true"> B. Trying to remember and making mistakes helped her learn.</label><label><input type="radio" value="2" name="t3-mc-3" data-correct="false"> C. Her teacher made mistakes.</label><label><input type="radio" value="3" name="t3-mc-3" data-correct="false"> D. She failed the exam.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-mc', 't3-mc-score')">Check answers</button>
+          <span id="t3-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 120 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 120 words):</p><textarea class="no-check mini-answer" id="t3-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t3-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t3-sum-ans"><p>The article is about a student, Dilnoza, who used to study for six hours a night by rereading and highlighting her notes, but still forgot the answers in exams. A teacher suggested two changes: testing herself by writing down everything she remembered and then checking it, and reviewing each topic several times with gaps of a few days. Although it felt harder at first, her results improved and she now studies for half as long. I think the article shows that feeling comfortable while studying is not the same as really learning.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t3-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 60 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 7</div>
+      <h2>Mini Reading Test — The Science of Remembering</h2>
+      <p class="task-sub">A short check-up test: <b>10 questions</b>, about <b>12 minutes</b>.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Science of Remembering</h3>
+            <p class="article-meta">Mini reading test · Psychology · 375 words</p>
+            <p><span class="para-label">A</span>In 1885, the German psychologist Hermann Ebbinghaus conducted one of the first scientific studies of memory, using himself as the only subject. To avoid the influence of meaning, he memorised lists of nonsense syllables such as ‘WID’ and ‘ZOF’ and measured how quickly he forgot them. More than half of each list was lost within an hour and around two-thirds within a day, after which forgetting slowed considerably. His ‘forgetting curve’ has proved remarkably durable: when researchers in Amsterdam repeated the experiment in 2015, they obtained a very similar result.</p><p><span class="para-label">B</span>Ebbinghaus also observed that each review of a list made the curve less steep. This ‘spacing effect’ underlies the spaced-repetition apps now used by millions of language learners, which schedule reviews at gradually increasing intervals. Research suggests that the ideal gap between reviews grows with the length of time the information needs to be remembered.</p><p><span class="para-label">C</span>Unfortunately, the strategy most students prefer — rereading notes repeatedly shortly before an exam — exploits none of these findings. Rereading creates what psychologists call an ‘illusion of fluency’: material becomes familiar, and learners mistake this familiarity for mastery. Such ‘massed practice’ can produce good results in a test the following day, but the information is rapidly forgotten.</p><p><span class="para-label">D</span>A more effective approach is retrieval practice. In a 2006 study at Washington University, Henry Roediger and Jeffrey Karpicke found that students who read a text once and then attempted to recall it three times remembered far more after a week than students who read it four times. Strikingly, the rereaders predicted that they would perform better.</p><p><span class="para-label">E</span>A related technique is ‘interleaving’ — mixing different types of problems rather than practising one type at a time. Interleaving feels harder and leads to more errors during practice, yet it produces better long-term results. The psychologist Robert Bjork has described such techniques as ‘desirable difficulties’: obstacles that slow learning in the short term but strengthen it in the long term.</p><p><span class="para-label">F</span>Sleep completes the picture, since memories are consolidated while we sleep. For teachers, the implications are clear: schedule reviews over weeks rather than days, and use frequent low-stakes quizzes. Yet many students still rely on rereading and highlighting, techniques that a major 2013 review led by John Dunlosky judged to be of ‘low utility’.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–5</p><p class="qg-instr">Choose the correct heading for paragraphs <b>B–F</b>.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; Making the curve less steep<br><b>ii</b>&nbsp; A misleading sense of mastery<br><b>iii</b>&nbsp; Remembering by recalling<br><b>iv</b>&nbsp; Harder now, better later<br><b>v</b>&nbsp; What happens at night, and lessons for the classroom<br><b>vi</b>&nbsp; Why some people have better memories<br><b>vii</b>&nbsp; The limits of computer memory</p></div>
+      <div class="card" id="t4-h"><div class="sel-row"><select class="select" id="t4-h-1" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select><span><b>1.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t4-h-2" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select><span><b>2.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t4-h-3" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select><span><b>3.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t4-h-4" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select><span><b>4.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t4-h-5" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option></select><span><b>5.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-h', 't4-h-score')">Check answers</button>
+          <span id="t4-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 6–8</p><p class="qg-instr">Complete the summary using the list of words below.</p></div>
+      <div class="word-bank">fluency · mastery · difficulties · memory · confidence · practice · problems</div><div class="card" id="t4-s" style="line-height:2.7;"><p>Rereading creates an illusion of (6) <input type="text" class="text-answer" id="t4-6" data-correct="fluency" autocomplete="off" style="width:110px;">, so that students mistake familiarity for (7) <input type="text" class="text-answer" id="t4-7" data-correct="mastery" autocomplete="off" style="width:110px;">. Techniques such as interleaving slow learning at first, and Bjork calls them desirable (8) <input type="text" class="text-answer" id="t4-8" data-correct="difficulties" autocomplete="off" style="width:130px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-s', 't4-s-score')">Check answers</button>
+          <span id="t4-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 9–10</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t4-mc"><div class="q-item" id="t4-mc-9">
+          <p>9. What does the writer say about the 2015 Amsterdam study?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-9" data-correct="false"> A. It disproved Ebbinghaus’s curve.</label><label><input type="radio" value="1" name="t4-mc-9" data-correct="true"> B. It confirmed Ebbinghaus’s findings.</label><label><input type="radio" value="2" name="t4-mc-9" data-correct="false"> C. It used meaningful words.</label><label><input type="radio" value="3" name="t4-mc-9" data-correct="false"> D. It studied sleep.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-mc-10">
+          <p>10. What is “strikingly” emphasising in Paragraph D?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-mc-10" data-correct="true"> A. that the rereaders’ confidence was misplaced</label><label><input type="radio" value="1" name="t4-mc-10" data-correct="false"> B. that the study was large</label><label><input type="radio" value="2" name="t4-mc-10" data-correct="false"> C. that the text was difficult</label><label><input type="radio" value="3" name="t4-mc-10" data-correct="false"> D. that recall took longer</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mc', 't4-mc-score')">Check answers</button>
+          <span id="t4-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 7</div>
+      <h2>Mini Reading Test — Answer Analysis</h2>
+      <p class="task-sub">Check your answers and the evidence. Out of 10: <b>9–10</b> excellent · <b>7–8</b> good · <b>5–6</b> review the question types in Check-up 2 · <b>0–4</b> ask your mentor for help.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Science of Remembering</summary>
+        <p><span class="para-label">A</span>In 1885, the German psychologist Hermann Ebbinghaus conducted one of the first scientific studies of memory, using himself as the only subject. To avoid the influence of meaning, he memorised lists of nonsense syllables such as ‘WID’ and ‘ZOF’ and measured how quickly he forgot them. More than half of each list was lost within an hour and around two-thirds within a day, after which forgetting slowed considerably. His ‘forgetting curve’ has proved remarkably durable: when researchers in Amsterdam repeated the experiment in 2015, they obtained a very similar result.</p><p><span class="para-label">B</span>Ebbinghaus also observed that each review of a list made the curve less steep. This ‘spacing effect’ underlies the spaced-repetition apps now used by millions of language learners, which schedule reviews at gradually increasing intervals. Research suggests that the ideal gap between reviews grows with the length of time the information needs to be remembered.</p><p><span class="para-label">C</span>Unfortunately, the strategy most students prefer — rereading notes repeatedly shortly before an exam — exploits none of these findings. Rereading creates what psychologists call an ‘illusion of fluency’: material becomes familiar, and learners mistake this familiarity for mastery. Such ‘massed practice’ can produce good results in a test the following day, but the information is rapidly forgotten.</p><p><span class="para-label">D</span>A more effective approach is retrieval practice. In a 2006 study at Washington University, Henry Roediger and Jeffrey Karpicke found that students who read a text once and then attempted to recall it three times remembered far more after a week than students who read it four times. Strikingly, the rereaders predicted that they would perform better.</p><p><span class="para-label">E</span>A related technique is ‘interleaving’ — mixing different types of problems rather than practising one type at a time. Interleaving feels harder and leads to more errors during practice, yet it produces better long-term results. The psychologist Robert Bjork has described such techniques as ‘desirable difficulties’: obstacles that slow learning in the short term but strengthen it in the long term.</p><p><span class="para-label">F</span>Sleep completes the picture, since memories are consolidated while we sleep. For teachers, the implications are clear: schedule reviews over weeks rather than days, and use frequent low-stakes quizzes. Yet many students still rely on rereading and highlighting, techniques that a major 2013 review led by John Dunlosky judged to be of ‘low utility’.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">i</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">each review of a list made the curve less steep</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">ii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">learners mistake this familiarity for mastery</span>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">iii</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">attempted to recall it three times remembered far more</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">iv</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">obstacles that slow learning in the short term but strengthen it in the long term</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">v</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">memories are consolidated while we sleep. For teachers, the implications</span>.</p><p><span class="trap">Trap:</span> vi — individual differences in memory are never discussed.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">fluency</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">an ‘illusion of fluency’</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">mastery</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">mistake this familiarity for mastery</span>.</p><p><span class="trap">Trap:</span> “confidence” fits the grammar, but the passage says mastery.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">difficulties</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">‘desirable difficulties’</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">B</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">they obtained a very similar result</span> — and “remarkably durable”.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">A</span><span class="an-where">Para D</span></summary><div class="an-body"><p>“Strikingly” highlights the surprise: the group that did worse expected to do better.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 7</div>
+      <h2>Check-up 3 — Writing</h2>
+      <p class="task-sub">Choose the best overview and thesis, then correct the sentences.</p>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-1">
+          <p>1. Task 1 — Which is the best <b>overview</b> for a chart showing that car use fell and cycling rose between 2010 and 2020?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-1" data-correct="false"> A. In 2010, 60% of people used cars.</label><label><input type="radio" value="1" name="t6-mc-1" data-correct="true"> B. Overall, cycling became more popular over the period, while car use declined.</label><label><input type="radio" value="2" name="t6-mc-1" data-correct="false"> C. I think cycling is better than driving.</label><label><input type="radio" value="3" name="t6-mc-1" data-correct="false"> D. The chart shows information about transport.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-2">
+          <p>2. Task 2 — “Some people think homework should be banned. To what extent do you agree?” Which is the best <b>thesis</b>?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-2" data-correct="false"> A. Homework is a common thing in schools.</label><label><input type="radio" value="1" name="t6-mc-2" data-correct="false"> B. There are many opinions about homework.</label><label><input type="radio" value="2" name="t6-mc-2" data-correct="true"> C. I partly agree: homework should be reduced for young children, but not banned completely.</label><label><input type="radio" value="3" name="t6-mc-2" data-correct="false"> D. This essay will talk about homework.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Correct the sentences.</strong> Each sentence has <b>one</b> mistake. Write the whole correct sentence.</p>
+      <div class="card"><p class="mini-q">1. The share of housing rose sharply, it reached 31% in 2025.</p><textarea class="no-check mini-answer" id="t6-fix-1" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><p class="mini-q">2. Not only a basic income would be expensive, but it would also benefit the rich.</p><textarea class="no-check mini-answer" id="t6-fix-2" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><p class="mini-q">3. Should it is introduced, taxes would rise.</p><textarea class="no-check mini-answer" id="t6-fix-3" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><p class="mini-q">4. There is little evidence what UBI makes people stop working.</p><textarea class="no-check mini-answer" id="t6-fix-4" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t6-fix-btn">Show the correct sentences</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t6-fix-ans"><ol><li>The share of housing rose sharply, reaching 31% in 2025.</li><li>Not only would a basic income be expensive, but it would also benefit the rich.</li><li>Should it be introduced, taxes would rise.</li><li>There is little evidence that UBI makes people stop working.</li></ol></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 7</div>
+      <h2>Speaking and Self-Check</h2>
+      <p class="task-sub">One speaking question, then a short look back at the last two weeks.</p>
+      <div class="question-box" data-field="t7-speaking">
+        <div class="q-num">Your answer</div>
+        <div class="q-text">How do you usually study for an important exam? After today, would you change anything?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I usually…”</li><li>“After reading about…, I think I will…”</li><li>“The main reason is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="card"><p class="mini-q">1. Your score in today’s mini reading test (out of 10). Which question type was hardest?</p><textarea class="no-check mini-answer" id="t7-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. One reading strategy and one writing point you will focus on before the next mock test:</p><textarea class="no-check mini-answer" id="t7-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t7-rf-btn">Show some ideas</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t7-rf-ans"><p>Good focus points: underline key words in the question and find their paraphrases; check the word limit; write an overview in Task 1; state your position clearly in the Task 2 introduction and repeat it in the conclusion. Tomorrow is a full Writing Task 2 day.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 7</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 37 of 45</div>
+    <h1>Day 37 complete! 🎉</h1>
+    <p>Day 37 done — a quick check-up on vocabulary, question types, a mini reading test and writing. Tomorrow is a full Writing Task 2 day.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t3-speaking-summary"]'); if (b) initRecordControl(b, user.id, 37, 3, 't3-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking"]'); if (b) initRecordControl(b, user.id, 37, 7, 't7-speaking', 0); }
+
+    await initTaskFlow(37, 7, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-g', 't1-g-score'); },
+      2: () => { checkAllAnswers('t2-qt', 't2-qt-score'); },
+      3: () => { checkAllAnswers('t3-mc', 't3-mc-score'); },
+      4: () => { checkAllAnswers('t4-h', 't4-h-score'); checkAllAnswers('t4-s', 't4-s-score'); checkAllAnswers('t4-mc', 't4-mc-score'); },
+      6: () => { checkAllAnswers('t6-mc', 't6-mc-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t3-sum-btn', 't3-sum-ans', '[id^="t3-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t6-fix-btn', 't6-fix-ans', '[id^="t6-fix-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t7-rf-btn', 't7-rf-ans', '[id^="t7-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>
