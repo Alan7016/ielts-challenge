@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 39 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 39 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 20</div>
+      <h2>Starting Off — A Reading and Writing Day</h2>
+      <p class="task-sub">A long <b>reading and writing day</b> — about <b>4 hours</b>, with breaks. A full Band 8-level reading test, two extra articles, advanced reading skills, vocabulary and grammar, a full <b>Writing Task 1</b> (a line graph) and <b>Task 2</b>, and speaking.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. In a headings task, a heading that repeats a striking word from the paragraph is often</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. the answer</label><label><input type="radio" value="1" name="t1-st-1" data-correct="true"> B. a distractor</label><label><input type="radio" value="2" name="t1-st-1" data-correct="false"> C. always wrong</label><label><input type="radio" value="3" name="t1-st-1" data-correct="false"> D. the title</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. With four lines on a Task 1 graph, the most effective organisation is usually</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="false"> A. one paragraph per year</label><label><input type="radio" value="1" name="t1-st-2" data-correct="true"> B. grouping lines with similar trends</label><label><input type="radio" value="2" name="t1-st-2" data-correct="false"> C. describing the colours</label><label><input type="radio" value="3" name="t1-st-2" data-correct="false"> D. listing all figures in order</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. In a Band 8 “to what extent” essay, the position should be</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="false"> A. stated only in the conclusion</label><label><input type="radio" value="1" name="t1-st-3" data-correct="true"> B. clear, nuanced and consistent throughout</label><label><input type="radio" value="2" name="t1-st-3" data-correct="false"> C. avoided</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. changed in each paragraph</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. A YES/NO/NOT GIVEN statement about the writer’s view is NOT GIVEN when</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="false"> A. the writer disagrees</label><label><input type="radio" value="1" name="t1-st-4" data-correct="true"> B. the writer expresses no view on that point</label><label><input type="radio" value="2" name="t1-st-4" data-correct="false"> C. the writer agrees</label><label><input type="radio" value="3" name="t1-st-4" data-correct="false"> D. the statement is long</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. artefact</button><button type="button" class="lm-item" data-key="2">2. restitution</button><button type="button" class="lm-item" data-key="3">3. looted</button><button type="button" class="lm-item" data-key="4">4. corroded</button><button type="button" class="lm-item" data-key="5">5. microbe</button><button type="button" class="lm-item" data-key="6">6. diversity</button><button type="button" class="lm-item" data-key="7">7. ingenious</button><button type="button" class="lm-item" data-key="8">8. provenance</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. the history of who has owned an object</button><button type="button" class="lm-item" data-key="b">b. variety</button><button type="button" class="lm-item" data-key="c">c. returning something to its owner</button><button type="button" class="lm-item" data-key="d">d. a very small living organism</button><button type="button" class="lm-item" data-key="e">e. stolen, especially in war</button><button type="button" class="lm-item" data-key="f">f. very clever and original</button><button type="button" class="lm-item" data-key="g">g. an object made by people, of historical interest</button><button type="button" class="lm-item" data-key="h">h. damaged by chemical reaction over time</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 20</div>
+      <h2>Reading Passage 1 — The Antikythera Mechanism</h2>
+      <p class="task-sub"><b>The test starts now.</b> About <b>18 minutes</b> for Questions 1–13.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Antikythera Mechanism<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">An ancient Greek device that rewrote the history of technology.</small></h3>
+            <p class="article-meta">Reading Passage 1 · History of science · 388 words</p>
+            <p><span class="para-label">A</span>In 1901, sponge divers working off the Greek island of Antikythera recovered a collection of treasures from a Roman-era shipwreck: bronze and marble statues, glassware and coins. Among them was an unremarkable lump of corroded bronze and wood, roughly the size of a shoebox. Only months later did an archaeologist notice that it contained a gearwheel, and it would take more than a century to understand what it was.</p><p><span class="para-label">B</span>The first serious study was carried out by the British historian of science Derek de Solla Price, who from the 1950s used X-ray images to examine the fragments. In his 1974 book <i>Gears from the Greeks</i>, he argued that the device was a mechanical calculator for astronomical positions. Many scholars were sceptical: nothing so complex was thought to have existed before the astronomical clocks of medieval Europe, more than a thousand years later.</p><p><span class="para-label">C</span>Decisive evidence came in 2005, when the Antikythera Mechanism Research Project used high-resolution computed tomography (CT) scanning to see inside the fragments. The scans revealed around thirty surviving bronze gears and thousands of characters of previously hidden inscriptions, which functioned as a kind of user’s manual.</p><p><span class="para-label">D</span>Together, the gears and inscriptions show that the mechanism was operated by turning a handle. Dials on the front displayed the positions of the Sun and Moon in the zodiac and the phase of the Moon, while dials on the back predicted solar and lunar eclipses. One small dial even tracked the four-year cycle of the Panhellenic games, including the Olympic Games.</p><p><span class="para-label">E</span>The mechanism is generally dated to between the second and first centuries BC, and the ship is thought to have sunk around 60 BC. Who made it remains unknown. Inscriptions and the design of its calendar have led some researchers to link it with Corinth or its colonies, possibly including Syracuse, the home of Archimedes, though there is no direct evidence that he was involved.</p><p><span class="para-label">F</span>Not all of the mechanism survives, and the display of the five planets known in antiquity was lost. In 2021, a team at University College London led by Tony Freeth published a proposed reconstruction of this planetary display, consistent with the inscriptions and the surviving gears. Whether or not every detail is correct, the device demonstrates a level of mechanical sophistication that forces us to reconsider what the ancient world was capable of.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">Choose the correct heading for each paragraph, <b>A–F</b>.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; An overlooked object<br><b>ii</b>&nbsp; A bold claim met with doubt<br><b>iii</b>&nbsp; Seeing the invisible<br><b>iv</b>&nbsp; What the device could do<br><b>v</b>&nbsp; An unsolved question of origin<br><b>vi</b>&nbsp; Filling the gaps<br><b>vii</b>&nbsp; The career of Archimedes<br><b>viii</b>&nbsp; Why the ship sank</p></div>
+      <div class="card" id="t2-h"><div class="sel-row"><select class="select" id="t2-h-1" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>1.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t2-h-2" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>2.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t2-h-3" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>3.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t2-h-4" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>4.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t2-h-5" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>5.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t2-h-6" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>6.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-h', 't2-h-score')">Check answers</button>
+          <span id="t2-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–10</p><p class="qg-instr">Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-7">
+          <p>7. The significance of the mechanism was recognised as soon as it was recovered.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-7" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-7" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-7" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-8">
+          <p>8. Price’s interpretation was immediately accepted by most scholars.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-8" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-8" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-8" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-9">
+          <p>9. The inscriptions explained how the device should be used.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-9" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-9" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-9" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-10">
+          <p>10. Archimedes is known to have designed the mechanism.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-10" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-10" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-10" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–13</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t2-s" style="line-height:2.7;"><p>The mechanism was operated with a (11) <input type="text" class="text-answer" id="t2-11" data-correct="handle" autocomplete="off" style="width:100px;">. Dials on the back predicted (12) <input type="text" class="text-answer" id="t2-12" data-correct="eclipses" autocomplete="off" style="width:110px;">, and a small dial followed the cycle of the Panhellenic (13) <input type="text" class="text-answer" id="t2-13" data-correct="games" autocomplete="off" style="width:90px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-s', 't2-s-score')">Check answers</button>
+          <span id="t2-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 20</div>
+      <h2>Reading Passage 1 — Answer Analysis</h2>
+      <p class="task-sub">Check the evidence for every answer.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Antikythera Mechanism</summary>
+        <p><span class="para-label">A</span>In 1901, sponge divers working off the Greek island of Antikythera recovered a collection of treasures from a Roman-era shipwreck: bronze and marble statues, glassware and coins. Among them was an unremarkable lump of corroded bronze and wood, roughly the size of a shoebox. Only months later did an archaeologist notice that it contained a gearwheel, and it would take more than a century to understand what it was.</p><p><span class="para-label">B</span>The first serious study was carried out by the British historian of science Derek de Solla Price, who from the 1950s used X-ray images to examine the fragments. In his 1974 book <i>Gears from the Greeks</i>, he argued that the device was a mechanical calculator for astronomical positions. Many scholars were sceptical: nothing so complex was thought to have existed before the astronomical clocks of medieval Europe, more than a thousand years later.</p><p><span class="para-label">C</span>Decisive evidence came in 2005, when the Antikythera Mechanism Research Project used high-resolution computed tomography (CT) scanning to see inside the fragments. The scans revealed around thirty surviving bronze gears and thousands of characters of previously hidden inscriptions, which functioned as a kind of user’s manual.</p><p><span class="para-label">D</span>Together, the gears and inscriptions show that the mechanism was operated by turning a handle. Dials on the front displayed the positions of the Sun and Moon in the zodiac and the phase of the Moon, while dials on the back predicted solar and lunar eclipses. One small dial even tracked the four-year cycle of the Panhellenic games, including the Olympic Games.</p><p><span class="para-label">E</span>The mechanism is generally dated to between the second and first centuries BC, and the ship is thought to have sunk around 60 BC. Who made it remains unknown. Inscriptions and the design of its calendar have led some researchers to link it with Corinth or its colonies, possibly including Syracuse, the home of Archimedes, though there is no direct evidence that he was involved.</p><p><span class="para-label">F</span>Not all of the mechanism survives, and the display of the five planets known in antiquity was lost. In 2021, a team at University College London led by Tony Freeth published a proposed reconstruction of this planetary display, consistent with the inscriptions and the surviving gears. Whether or not every detail is correct, the device demonstrates a level of mechanical sophistication that forces us to reconsider what the ancient world was capable of.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">i</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">an unremarkable lump of corroded bronze … Only months later did an archaeologist notice</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">ii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">he argued that the device was a mechanical calculator … Many scholars were sceptical</span>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">iii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">used high-resolution computed tomography (CT) scanning to see inside</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">iv</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">displayed the positions of the Sun and Moon … predicted solar and lunar eclipses</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">v</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">Who made it remains unknown</span>.</p><p><span class="trap">Trap:</span> vii — Archimedes is mentioned only in passing.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">vi</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">published a proposed reconstruction of this planetary display</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">FALSE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Only months later did an archaeologist notice that it contained a gearwheel</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Many scholars were sceptical</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">TRUE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">functioned as a kind of user’s manual</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">FALSE</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">there is no direct evidence that he was involved</span> — so it is not “known”.</p><p><span class="trap">Trap:</span> Some students choose NOT GIVEN, but the passage directly contradicts “is known to have”.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">handle</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">operated by turning a handle</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">eclipses</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">predicted solar and lunar eclipses</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">games</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">the four-year cycle of the Panhellenic games</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 20</div>
+      <h2>Reading Passage 2 — The Hidden Organ</h2>
+      <p class="task-sub">About <b>20 minutes</b> for Questions 14–26.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Hidden Organ<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">The microbes living in our gut may influence our health in ways we are only beginning to understand.</small></h3>
+            <p class="article-meta">Reading Passage 2 · Medicine · 398 words</p>
+            <p><span class="para-label">A</span>The human gut is home to tens of trillions of microorganisms — bacteria, fungi and viruses — collectively known as the gut microbiome. For decades it was claimed that bacterial cells in the body outnumber human cells by ten to one. In 2016, however, the researchers Ron Sender, Shai Fuchs and Ron Milo recalculated the figures and concluded that the ratio is closer to one to one, with around 38 trillion bacteria in a typical adult. Even so, the microbiome contains far more genes than the human genome.</p><p><span class="para-label">B</span>These microbes are not passive passengers. They break down dietary fibre that human enzymes cannot digest, producing compounds that nourish the cells of the gut wall; they synthesise certain vitamins; and they help to train the immune system. Some scientists now describe the microbiome as a ‘hidden organ’.</p><p><span class="para-label">C</span>Some of the most striking evidence has come from experiments on mice raised in completely sterile conditions. In 2006, the team of Jeffrey Gordon at Washington University in St Louis showed that when gut microbes from obese mice were transferred to such ‘germ-free’ mice, the recipients gained more fat than mice given microbes from lean animals, even when they ate the same amount of food.</p><p><span class="para-label">D</span>The microbiome’s medical potential is clearest in the treatment of infection with <i>Clostridioides difficile</i>, a bacterium that can cause severe diarrhoea, often after antibiotics have wiped out competing microbes. In a 2013 trial in the Netherlands, transplanting microbes from the faeces of healthy donors cured 81% of patients after a single treatment, compared with 31% of those given antibiotics alone. The trial was stopped early because the difference was so large.</p><p><span class="para-label">E</span>Studies of traditional societies suggest that modern lifestyles may have reduced the diversity of our microbes. The Hadza, hunter-gatherers in Tanzania, have a considerably more diverse microbiome than people in industrialised countries, and their microbes change with the seasons as their diet changes. Researchers believe that processed food, low fibre intake and frequent antibiotic use may all contribute to this loss.</p><p><span class="para-label">F</span>Enthusiasm should, however, be tempered by caution. Many findings come from mice or from studies that show associations rather than causes, and the evidence for most commercial probiotic products remains weak. Links between the gut and the brain — the so-called ‘gut–brain axis’ — are an exciting area of research, but claims that changing one’s microbes can treat depression or anxiety are, for now, premature.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–18</p><p class="qg-instr">Which paragraph, <b>A–F</b>, contains the following information? You may use any letter more than once.</p></div>
+      <div class="card" id="t4-mi"><div class="sel-row"><select class="select" id="t4-mi-14" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>14.</b> a reason why a medical trial ended sooner than planned</span></div><div class="sel-row"><select class="select" id="t4-mi-15" data-answer="F"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>15.</b> a warning against drawing conclusions too quickly</span></div><div class="sel-row"><select class="select" id="t4-mi-16" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>16.</b> a correction of a widely repeated figure</span></div><div class="sel-row"><select class="select" id="t4-mi-17" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>17.</b> a list of functions carried out by gut microbes</span></div><div class="sel-row"><select class="select" id="t4-mi-18" data-answer="E"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>18.</b> a comparison between two groups of people</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mi', 't4-mi-score')">Check answers</button>
+          <span id="t4-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 19–22</p><p class="qg-instr">Match each finding with the correct researcher or group, <b>A–D</b>.</p></div>
+<div class="card"><p class="prompt-label">Researchers and groups</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; Sender, Fuchs and Milo<br><b>B</b>&nbsp; Jeffrey Gordon’s team<br><b>C</b>&nbsp; researchers in the Netherlands<br><b>D</b>&nbsp; researchers studying the Hadza</p></div>
+      <div class="card" id="t4-mf"><div class="sel-row"><select class="select" id="t4-mf-19" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>19.</b> Microbes from one animal can affect the body weight of another.</span></div><div class="sel-row"><select class="select" id="t4-mf-20" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>20.</b> Seasonal changes in diet affect the microbiome.</span></div><div class="sel-row"><select class="select" id="t4-mf-21" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>21.</b> There are roughly as many bacterial cells as human cells in the body.</span></div><div class="sel-row"><select class="select" id="t4-mf-22" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>22.</b> A microbial treatment was far more effective than a conventional one.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-mf', 't4-mf-score')">Check answers</button>
+          <span id="t4-mf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 23–26</p><p class="qg-instr">Complete the notes. Choose <b>NO MORE THAN TWO WORDS AND/OR A NUMBER</b>.</p></div>
+<div class="card" id="t4-notes1"><p class="prompt-label">The gut microbiome</p><div style="line-height:2.1;"><div>• Number of bacteria in a typical adult: about (23) <input type="text" class="text-answer" id="t4-23" data-correct="38 trillion" autocomplete="off" style="width:130px;"></div><div>• Microbes break down dietary (24) <input type="text" class="text-answer" id="t4-24" data-correct="fibre/fiber" autocomplete="off" style="width:100px;"> that humans cannot digest</div><div>• Mice used in Gordon’s experiment were raised in (25) <input type="text" class="text-answer" id="t4-25" data-correct="sterile conditions/sterile" autocomplete="off" style="width:150px;"></div><div>• Cure rate after microbial transplant in 2013 trial: (26) <input type="text" class="text-answer" id="t4-26" data-correct="81%/81/81 percent/81 per cent" autocomplete="off" style="width:100px;"></div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-notes1', 't4-notes1-score')">Check answers</button>
+          <span id="t4-notes1-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 20</div>
+      <h2>Reading Passage 2 — Answer Analysis</h2>
+      <p class="task-sub">Check every answer.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Hidden Organ</summary>
+        <p><span class="para-label">A</span>The human gut is home to tens of trillions of microorganisms — bacteria, fungi and viruses — collectively known as the gut microbiome. For decades it was claimed that bacterial cells in the body outnumber human cells by ten to one. In 2016, however, the researchers Ron Sender, Shai Fuchs and Ron Milo recalculated the figures and concluded that the ratio is closer to one to one, with around 38 trillion bacteria in a typical adult. Even so, the microbiome contains far more genes than the human genome.</p><p><span class="para-label">B</span>These microbes are not passive passengers. They break down dietary fibre that human enzymes cannot digest, producing compounds that nourish the cells of the gut wall; they synthesise certain vitamins; and they help to train the immune system. Some scientists now describe the microbiome as a ‘hidden organ’.</p><p><span class="para-label">C</span>Some of the most striking evidence has come from experiments on mice raised in completely sterile conditions. In 2006, the team of Jeffrey Gordon at Washington University in St Louis showed that when gut microbes from obese mice were transferred to such ‘germ-free’ mice, the recipients gained more fat than mice given microbes from lean animals, even when they ate the same amount of food.</p><p><span class="para-label">D</span>The microbiome’s medical potential is clearest in the treatment of infection with <i>Clostridioides difficile</i>, a bacterium that can cause severe diarrhoea, often after antibiotics have wiped out competing microbes. In a 2013 trial in the Netherlands, transplanting microbes from the faeces of healthy donors cured 81% of patients after a single treatment, compared with 31% of those given antibiotics alone. The trial was stopped early because the difference was so large.</p><p><span class="para-label">E</span>Studies of traditional societies suggest that modern lifestyles may have reduced the diversity of our microbes. The Hadza, hunter-gatherers in Tanzania, have a considerably more diverse microbiome than people in industrialised countries, and their microbes change with the seasons as their diet changes. Researchers believe that processed food, low fibre intake and frequent antibiotic use may all contribute to this loss.</p><p><span class="para-label">F</span>Enthusiasm should, however, be tempered by caution. Many findings come from mice or from studies that show associations rather than causes, and the evidence for most commercial probiotic products remains weak. Links between the gut and the brain — the so-called ‘gut–brain axis’ — are an exciting area of research, but claims that changing one’s microbes can treat depression or anxiety are, for now, premature.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">D</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">The trial was stopped early because the difference was so large</span>.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">F</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Enthusiasm should, however, be tempered by caution … premature</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">A</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">For decades it was claimed … ten to one … closer to one to one</span>.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">They break down dietary fibre … synthesise certain vitamins … help to train the immune system</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">E</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">The Hadza … have a considerably more diverse microbiome than people in industrialised countries</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">the recipients gained more fat than mice given microbes from lean animals</span>.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">D</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">their microbes change with the seasons as their diet changes</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">A</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">the ratio is closer to one to one</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">C</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">cured 81% of patients … compared with 31%</span>.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">38 trillion</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">around 38 trillion bacteria in a typical adult</span>.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">fibre</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">They break down dietary fibre</span>.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">sterile conditions</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">raised in completely sterile conditions</span>.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">81%</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">cured 81% of patients</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 20</div>
+      <h2>Reading Passage 3 — Whose Heritage?</h2>
+      <p class="task-sub">About <b>22 minutes</b> for Questions 27–40.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Whose Heritage?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">The debate over returning museum objects to their countries of origin.</small></h3>
+            <p class="article-meta">Reading Passage 3 · Culture and ethics · 486 words</p>
+            <p><span class="para-label">A</span>The great museums of Europe and North America hold millions of objects from other parts of the world. Many were acquired legitimately, through purchase, exchange or archaeological excavation conducted with permission. Others, however, were taken during colonial wars or in circumstances that would today be regarded as theft. Over the past decade, the question of whether such objects should be returned — a process known as restitution — has moved from the margins to the centre of museum policy.</p><p><span class="para-label">B</span>The most widely discussed case is that of the Benin Bronzes, thousands of sculptures and plaques taken by British forces from the Kingdom of Benin, in what is now Nigeria, during a military expedition in 1897. The objects were later sold and dispersed to museums around the world. In 2022, Germany transferred ownership of more than 1,000 Benin Bronzes in its public collections to Nigeria, and several museums in Britain and the United States have also returned items.</p><p><span class="para-label">C</span>A turning point came in 2018, when a report commissioned by the French president Emmanuel Macron and written by the scholars Felwine Sarr and Bénédicte Savoy recommended that objects taken from sub-Saharan Africa without consent be returned. France subsequently returned 26 artefacts to the Republic of Benin in 2021, although critics noted that this was a small fraction of the tens of thousands of African objects held in French museums.</p><p><span class="para-label">D</span>Opponents of large-scale restitution make several arguments. Some point out that ‘universal’ museums allow visitors to see the cultures of the world side by side, encouraging understanding between peoples. Others raise practical concerns about whether returned objects will be adequately conserved. In some countries, legal obstacles also stand in the way: the British Museum, for example, is prevented by the British Museum Act of 1963 from permanently removing objects from its collection except in very limited circumstances, which is why the Parthenon Marbles, taken from Athens in the early nineteenth century, remain in London despite repeated requests from Greece.</p><p><span class="para-label">E</span>Supporters reply that such arguments are often applied selectively. The concern about conservation, in particular, assumes that institutions in the countries of origin are less capable than those in Europe — an assumption that many find patronising, and one that is contradicted by the construction of major new museums in West Africa. Moreover, they argue, the ‘universal museum’ ideal is difficult to sustain when most of the world’s population cannot obtain visas to visit it.</p><p><span class="para-label">F</span>In my view, the strongest case for restitution concerns objects whose provenance shows that they were looted. For these, there is no convincing argument for retention, and the burden should lie with museums to demonstrate legitimate acquisition rather than with claimants to prove theft. This does not mean that every foreign object must be sent home: many were acquired fairly, and long-term loans and shared ownership offer workable alternatives. But it does mean that museums can no longer treat their collections as a closed question.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 27–31</p><p class="qg-instr">Do the statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-27">
+          <p>27. All objects in Western museums from other countries should be returned.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-27" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-27" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-27" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-28">
+          <p>28. Museums should have to prove that they acquired disputed objects legitimately.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-28" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-28" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-28" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-29">
+          <p>29. Looted objects should be returned to their countries of origin.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-29" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-29" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-29" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-30">
+          <p>30. Long-term loans can be a practical alternative to restitution.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-30" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-30" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-30" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-31">
+          <p>31. The Parthenon Marbles are better protected in London than in Athens.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-31" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-31" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-31" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 32–35</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-32">
+          <p>32. What point does the writer make about France’s return of 26 objects?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-32" data-correct="true"> A. It was criticised as only a token gesture.</label><label><input type="radio" value="1" name="t6-mc-32" data-correct="false"> B. It was the largest return in history.</label><label><input type="radio" value="2" name="t6-mc-32" data-correct="false"> C. It was rejected by Benin.</label><label><input type="radio" value="3" name="t6-mc-32" data-correct="false"> D. It was opposed by Sarr and Savoy.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-33">
+          <p>33. Why do the Parthenon Marbles remain in London?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-33" data-correct="false"> A. Greece has not asked for them.</label><label><input type="radio" value="1" name="t6-mc-33" data-correct="true"> B. A law limits the British Museum’s ability to remove objects.</label><label><input type="radio" value="2" name="t6-mc-33" data-correct="false"> C. They are too fragile to move.</label><label><input type="radio" value="3" name="t6-mc-33" data-correct="false"> D. They were bought legally.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-34">
+          <p>34. Why do supporters of restitution find the conservation argument “patronising”?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-34" data-correct="true"> A. It assumes institutions in countries of origin are less capable.</label><label><input type="radio" value="1" name="t6-mc-34" data-correct="false"> B. It ignores the cost of transport.</label><label><input type="radio" value="2" name="t6-mc-34" data-correct="false"> C. It praises African museums too much.</label><label><input type="radio" value="3" name="t6-mc-34" data-correct="false"> D. It is based on visa rules.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-35">
+          <p>35. What is the writer’s main point in the final paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-35" data-correct="false"> A. Museums should close.</label><label><input type="radio" value="1" name="t6-mc-35" data-correct="true"> B. Looted objects should be returned, but not every foreign object must be.</label><label><input type="radio" value="2" name="t6-mc-35" data-correct="false"> C. All objects should be shared.</label><label><input type="radio" value="3" name="t6-mc-35" data-correct="false"> D. Restitution is impossible.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 36–40</p><p class="qg-instr">Complete the summary using the list of words below.</p></div>
+      <div class="word-bank">legitimately · expedition · dispersed · consent · understanding · conserved · secretly · payment · tourism</div><div class="card" id="t6-s" style="line-height:2.7;"><p>Many objects in Western museums were acquired (36) <input type="text" class="text-answer" id="t6-36" data-correct="legitimately" autocomplete="off" style="width:140px;">, but others were taken in colonial wars. In 1897, the Benin Bronzes were taken in a military (37) <input type="text" class="text-answer" id="t6-37" data-correct="expedition" autocomplete="off" style="width:130px;"> and later (38) <input type="text" class="text-answer" id="t6-38" data-correct="dispersed" autocomplete="off" style="width:120px;"> around the world. A 2018 French report recommended returning objects taken without (39) <input type="text" class="text-answer" id="t6-39" data-correct="consent" autocomplete="off" style="width:110px;">. Opponents argue that ‘universal’ museums promote (40) <input type="text" class="text-answer" id="t6-40" data-correct="understanding" autocomplete="off" style="width:140px;"> between peoples.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-s', 't6-s-score')">Check answers</button>
+          <span id="t6-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 20</div>
+      <h2>Reading Passage 3 — Answer Analysis and Your Score</h2>
+      <p class="task-sub">Check Passage 3 and find your band.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Whose Heritage?</summary>
+        <p><span class="para-label">A</span>The great museums of Europe and North America hold millions of objects from other parts of the world. Many were acquired legitimately, through purchase, exchange or archaeological excavation conducted with permission. Others, however, were taken during colonial wars or in circumstances that would today be regarded as theft. Over the past decade, the question of whether such objects should be returned — a process known as restitution — has moved from the margins to the centre of museum policy.</p><p><span class="para-label">B</span>The most widely discussed case is that of the Benin Bronzes, thousands of sculptures and plaques taken by British forces from the Kingdom of Benin, in what is now Nigeria, during a military expedition in 1897. The objects were later sold and dispersed to museums around the world. In 2022, Germany transferred ownership of more than 1,000 Benin Bronzes in its public collections to Nigeria, and several museums in Britain and the United States have also returned items.</p><p><span class="para-label">C</span>A turning point came in 2018, when a report commissioned by the French president Emmanuel Macron and written by the scholars Felwine Sarr and Bénédicte Savoy recommended that objects taken from sub-Saharan Africa without consent be returned. France subsequently returned 26 artefacts to the Republic of Benin in 2021, although critics noted that this was a small fraction of the tens of thousands of African objects held in French museums.</p><p><span class="para-label">D</span>Opponents of large-scale restitution make several arguments. Some point out that ‘universal’ museums allow visitors to see the cultures of the world side by side, encouraging understanding between peoples. Others raise practical concerns about whether returned objects will be adequately conserved. In some countries, legal obstacles also stand in the way: the British Museum, for example, is prevented by the British Museum Act of 1963 from permanently removing objects from its collection except in very limited circumstances, which is why the Parthenon Marbles, taken from Athens in the early nineteenth century, remain in London despite repeated requests from Greece.</p><p><span class="para-label">E</span>Supporters reply that such arguments are often applied selectively. The concern about conservation, in particular, assumes that institutions in the countries of origin are less capable than those in Europe — an assumption that many find patronising, and one that is contradicted by the construction of major new museums in West Africa. Moreover, they argue, the ‘universal museum’ ideal is difficult to sustain when most of the world’s population cannot obtain visas to visit it.</p><p><span class="para-label">F</span>In my view, the strongest case for restitution concerns objects whose provenance shows that they were looted. For these, there is no convincing argument for retention, and the burden should lie with museums to demonstrate legitimate acquisition rather than with claimants to prove theft. This does not mean that every foreign object must be sent home: many were acquired fairly, and long-term loans and shared ownership offer workable alternatives. But it does mean that museums can no longer treat their collections as a closed question.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">NO</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">This does not mean that every foreign object must be sent home</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">the burden should lie with museums to demonstrate legitimate acquisition</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">For these, there is no convincing argument for retention</span>.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">long-term loans and shared ownership offer workable alternatives</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para D</span></summary><div class="an-body"><p>The writer reports conservation concerns in general but gives no view on the Marbles’ protection.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">A</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">critics noted that this was a small fraction</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">B</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">prevented by the British Museum Act of 1963 from permanently removing objects</span>.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">A</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">assumes that institutions in the countries of origin are less capable</span>.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p>The writer distinguishes looted objects (return) from those acquired fairly (loans, shared ownership).</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">legitimately</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Many were acquired legitimately</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">expedition</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">during a military expedition in 1897</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">dispersed</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">later sold and dispersed</span>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">consent</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">taken from sub-Saharan Africa without consent</span>.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">understanding</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">encouraging understanding between peoples</span>.</p><p><span class="trap">Trap:</span> “tourism” fits the grammar but is not the passage’s idea.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Academic Reading)</p><table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr><tr><td>23–26</td><td>6.0</td></tr><tr><td>27–29</td><td>6.5</td></tr><tr><td>30–32</td><td>7.0</td></tr><tr><td>33–34</td><td>7.5</td></tr><tr><td>35–36</td><td>8.0</td></tr><tr><td>37–38</td><td>8.5</td></tr><tr><td>39–40</td><td>9.0</td></tr></table></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 20</div>
+      <h2>Extra Reading 1 — The Four-Day Working Week</h2>
+      <p class="task-sub">An extra article (about <b>12 minutes</b>). Answer the questions, then summarise in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Four-Day Working Week</h3>
+        <p class="article-meta">Extra reading 1 · Work · 216 words</p>
+        <p><span class="para-label">A</span>For most of the past century, the standard working week in many countries has been five days. In recent years, however, a growing number of employers have experimented with a four-day week, in which employees work fewer hours for the same pay.</p><p><span class="para-label">B</span>Among the largest experiments were two trials in Iceland between 2015 and 2019, involving around 2,500 public-sector workers. Their working week was reduced from 40 hours to 35 or 36 hours without any loss of pay. Researchers reported that productivity stayed the same or improved in most workplaces, while workers’ wellbeing increased considerably.</p><p><span class="para-label">C</span>In 2022, a six-month trial in the United Kingdom involved 61 companies and around 2,900 employees. At the end of the trial, 56 of the companies decided to continue with the shorter week, and 18 made it permanent. Employees reported less stress and fewer sick days, and the number of people leaving their jobs fell sharply.</p><p><span class="para-label">D</span>Critics point out that a four-day week is easier to introduce in offices than in hospitals, schools or factories, where work cannot simply be done faster. Some also warn that squeezing five days of work into four could make each day more intense. Nevertheless, supporters argue that the trials show a long-held assumption — that more hours mean more output — deserves to be questioned.</p>
+      </div>
+      <div class="card" id="t8-mc"><div class="q-item" id="t8-mc-1">
+          <p>1. What assumption do the trials challenge, according to supporters?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-1" data-correct="false"> A. that workers dislike change</label><label><input type="radio" value="1" name="t8-mc-1" data-correct="true"> B. that more hours produce more output</label><label><input type="radio" value="2" name="t8-mc-1" data-correct="false"> C. that offices are efficient</label><label><input type="radio" value="3" name="t8-mc-1" data-correct="false"> D. that pay should be reduced</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-2">
+          <p>2. Which statement about the Iceland trials is accurate?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-2" data-correct="false"> A. Pay was cut slightly.</label><label><input type="radio" value="1" name="t8-mc-2" data-correct="true"> B. Most workplaces maintained or improved productivity.</label><label><input type="radio" value="2" name="t8-mc-2" data-correct="false"> C. They involved private companies only.</label><label><input type="radio" value="3" name="t8-mc-2" data-correct="false"> D. They lasted six months.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-3">
+          <p>3. Of the UK companies, how many made the change permanent?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-3" data-correct="true"> A. 18</label><label><input type="radio" value="1" name="t8-mc-3" data-correct="false"> B. 56</label><label><input type="radio" value="2" name="t8-mc-3" data-correct="false"> C. 61</label><label><input type="radio" value="3" name="t8-mc-3" data-correct="false"> D. all of them</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-4">
+          <p>4. Which concern do critics raise?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-4" data-correct="false"> A. Workers will become lazy.</label><label><input type="radio" value="1" name="t8-mc-4" data-correct="true"> B. Work may become more intense on the remaining days.</label><label><input type="radio" value="2" name="t8-mc-4" data-correct="false"> C. Companies will lose all their customers.</label><label><input type="radio" value="3" name="t8-mc-4" data-correct="false"> D. Wages will rise too quickly.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-mc', 't8-mc-score')">Check answers</button>
+          <span id="t8-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 120 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 120 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>The article examines trials of a four-day week without loss of pay. Icelandic trials involving some 2,500 public-sector workers between 2015 and 2019 cut weekly hours from 40 to 35–36, with productivity largely maintained and wellbeing markedly improved. A 2022 UK trial produced similarly positive results: 56 of 61 firms continued the scheme and 18 made it permanent, citing reduced stress, absence and staff turnover. Critics, however, question its feasibility in sectors such as healthcare and manufacturing and warn of work intensification. The evidence is encouraging, though largely drawn from office-based employers, which limits how far it can be generalised.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 60 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 20</div>
+      <h2>Extra Reading 2 — Farming Upwards</h2>
+      <p class="task-sub">A second extra article. Decide TRUE, FALSE or NOT GIVEN, then summarise it in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Farming Upwards</h3>
+        <p class="article-meta">Extra reading 2 · Food and technology · 201 words</p>
+        <p><span class="para-label">A</span>In warehouses in cities from Singapore to New Jersey, lettuces, herbs and strawberries grow in stacked trays under pink and blue LED lights. This is vertical farming: growing crops indoors in layers, without soil and without sunlight, often using hydroponics, in which roots sit in water containing nutrients.</p><p><span class="para-label">B</span>Supporters list several advantages. Because conditions are controlled, crops can be grown all year round, without pesticides, and close to the people who will eat them, which reduces transport. Vertical farms can also use up to 95% less water than traditional fields, since water is recycled.</p><p><span class="para-label">C</span>The main problem is energy. Replacing the sun with electric lights is expensive, and after energy prices rose sharply in 2022, several well-funded vertical farming companies in Europe and the United States went out of business. For this reason, most vertical farms grow high-value, fast-growing crops such as salad leaves and herbs, rather than staple foods such as wheat or rice, which need large areas and would be far too costly to grow under lights.</p><p><span class="para-label">D</span>Most experts therefore see vertical farming as a useful addition to traditional agriculture rather than a replacement for it — particularly in crowded cities and in countries with little farmland or water.</p>
+      </div>
+      <div class="card" id="t9-tf"><div class="q-item" id="t9-tf-1">
+          <p>1. Vertical farms rely entirely on natural light.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-1" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t9-tf-1" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t9-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-2">
+          <p>2. Water in vertical farms is reused.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t9-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t9-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-3">
+          <p>3. Rising energy costs contributed to the failure of some vertical farming companies.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-3" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t9-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t9-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-4">
+          <p>4. Vertical farms produce more nutritious vegetables than traditional farms.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t9-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t9-tf-4" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-5">
+          <p>5. Staple crops are unsuitable for vertical farming mainly because of cost.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-5" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t9-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t9-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-6">
+          <p>6. Most experts expect vertical farming to replace traditional agriculture.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-6" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t9-tf-6" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t9-tf-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-tf', 't9-tf-score')">Check answers</button>
+          <span id="t9-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 120 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 120 words):</p><textarea class="no-check mini-answer" id="t9-sum-1" data-min-words="120" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-sum-ans"><p>The article evaluates vertical farming, the indoor cultivation of crops in stacked, soil-free layers under LED lighting. Its proponents emphasise year-round, pesticide-free production close to consumers and water savings of up to 95% through recycling. Its principal weakness is energy: artificial lighting is costly, and several heavily funded firms collapsed after energy prices surged in 2022. As a result, the sector concentrates on high-value, fast-growing produce rather than land-intensive staples. The article concludes, persuasively in my view, that vertical farming is best seen as a complement to conventional agriculture, especially where land and water are scarce.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-summary">
+        <div class="q-num">Spoken summary (at least 60 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 60 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 20</div>
+      <h2>Reading Skill — Advanced Paraphrase</h2>
+      <p class="task-sub">Match the passage language to its meaning, then interpret complex sentences.</p>
+      <div class="card" id="t10-lm">
+        <div class="line-match" id="t10-lm-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. sceptical</button><button type="button" class="lm-item" data-key="2">2. decisive</button><button type="button" class="lm-item" data-key="3">3. passive passengers</button><button type="button" class="lm-item" data-key="4">4. tempered by caution</button><button type="button" class="lm-item" data-key="5">5. premature</button><button type="button" class="lm-item" data-key="6">6. from the margins to the centre</button><button type="button" class="lm-item" data-key="7">7. applied selectively</button><button type="button" class="lm-item" data-key="8">8. the burden should lie with</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. organisms that have no effect</button><button type="button" class="lm-item" data-key="b">b. the responsibility should belong to</button><button type="button" class="lm-item" data-key="c">c. settling a question</button><button type="button" class="lm-item" data-key="d">d. from minor to major importance</button><button type="button" class="lm-item" data-key="e">e. made more careful</button><button type="button" class="lm-item" data-key="f">f. doubtful</button><button type="button" class="lm-item" data-key="g">g. too early</button><button type="button" class="lm-item" data-key="h">h. used only when convenient</button></div>
+          <select class="lm-hidden-select select" id="t10-lm-1" data-lm-key="1" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-5" data-lm-key="5" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-7" data-lm-key="7" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-8" data-lm-key="8" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm');">Check answers</button>
+          <span id="t10-lm-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t10-mc"><div class="q-item" id="t10-mc-1">
+          <p>1. “…it would take more than a century to understand what it was.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-1" data-correct="false"> A. Its purpose was understood immediately.</label><label><input type="radio" value="1" name="t10-mc-1" data-correct="true"> B. Its purpose was only understood over a hundred years later.</label><label><input type="radio" value="2" name="t10-mc-1" data-correct="false"> C. It was lost for a century.</label><label><input type="radio" value="3" name="t10-mc-1" data-correct="false"> D. Nobody studied it.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-2">
+          <p>2. “Even so, the microbiome contains far more genes than the human genome.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-2" data-correct="true"> A. Despite the revised ratio, the microbiome is still genetically larger.</label><label><input type="radio" value="1" name="t10-mc-2" data-correct="false"> B. The microbiome has fewer genes.</label><label><input type="radio" value="2" name="t10-mc-2" data-correct="false"> C. Genes are not important.</label><label><input type="radio" value="3" name="t10-mc-2" data-correct="false"> D. The ratio is ten to one.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-3">
+          <p>3. “…claims that changing one’s microbes can treat depression … are, for now, premature.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-3" data-correct="false"> A. The claims are proven.</label><label><input type="radio" value="1" name="t10-mc-3" data-correct="true"> B. The evidence does not yet support these claims.</label><label><input type="radio" value="2" name="t10-mc-3" data-correct="false"> C. Microbes cause depression.</label><label><input type="radio" value="3" name="t10-mc-3" data-correct="false"> D. The claims are false forever.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-4">
+          <p>4. “…museums can no longer treat their collections as a closed question.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-4" data-correct="false"> A. Museums must close.</label><label><input type="radio" value="1" name="t10-mc-4" data-correct="true"> B. Museums must accept that ownership can be reconsidered.</label><label><input type="radio" value="2" name="t10-mc-4" data-correct="false"> C. Museums should stop collecting.</label><label><input type="radio" value="3" name="t10-mc-4" data-correct="false"> D. Collections are complete.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-mc', 't10-mc-score')">Check answers</button>
+          <span id="t10-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 20</div>
+      <h2>Reading Skill — Writer’s Stance and Reference</h2>
+      <p class="task-sub">Identify the writer’s attitude and what reference words refer to.</p>
+      <div class="card" id="t11-st"><div class="sel-row"><select class="select" id="t11-st-1" data-answer="reporting others"><option value="">—</option><option value="reporting others">reporting others</option><option value="warning">warning</option><option value="personal opinion">personal opinion</option><option value="evaluation">evaluation</option></select><span><b>1.</b> “Many scholars were sceptical.”</span></div><div class="sel-row"><select class="select" id="t11-st-2" data-answer="warning"><option value="">—</option><option value="reporting others">reporting others</option><option value="warning">warning</option><option value="personal opinion">personal opinion</option><option value="evaluation">evaluation</option></select><span><b>2.</b> “Enthusiasm should, however, be tempered by caution.”</span></div><div class="sel-row"><select class="select" id="t11-st-3" data-answer="reporting others"><option value="">—</option><option value="reporting others">reporting others</option><option value="warning">warning</option><option value="personal opinion">personal opinion</option><option value="evaluation">evaluation</option></select><span><b>3.</b> “…an assumption that many find patronising.”</span></div><div class="sel-row"><select class="select" id="t11-st-4" data-answer="personal opinion"><option value="">—</option><option value="reporting others">reporting others</option><option value="warning">warning</option><option value="personal opinion">personal opinion</option><option value="evaluation">evaluation</option></select><span><b>4.</b> “In my view, the strongest case for restitution concerns objects…”</span></div><div class="sel-row"><select class="select" id="t11-st-5" data-answer="evaluation"><option value="">—</option><option value="reporting others">reporting others</option><option value="warning">warning</option><option value="personal opinion">personal opinion</option><option value="evaluation">evaluation</option></select><span><b>5.</b> “…a level of mechanical sophistication that forces us to reconsider…”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-st', 't11-st-score')">Check answers</button>
+          <span id="t11-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t11-ref"><div class="q-item" id="t11-ref-1">
+          <p>1. “…<b>which</b> functioned as a kind of user’s manual.” — which =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-1" data-correct="true"> A. the inscriptions</label><label><input type="radio" value="1" name="t11-ref-1" data-correct="false"> B. the gears</label><label><input type="radio" value="2" name="t11-ref-1" data-correct="false"> C. the scans</label><label><input type="radio" value="3" name="t11-ref-1" data-correct="false"> D. the fragments</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-2">
+          <p>2. “…given microbes from lean animals” — the comparison group was mice given microbes from</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-2" data-correct="false"> A. obese mice</label><label><input type="radio" value="1" name="t11-ref-2" data-correct="true"> B. lean mice</label><label><input type="radio" value="2" name="t11-ref-2" data-correct="false"> C. humans</label><label><input type="radio" value="3" name="t11-ref-2" data-correct="false"> D. the Hadza</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-3">
+          <p>3. “…this loss” (Para E) refers to</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-3" data-correct="true"> A. the loss of microbial diversity</label><label><input type="radio" value="1" name="t11-ref-3" data-correct="false"> B. weight loss</label><label><input type="radio" value="2" name="t11-ref-3" data-correct="false"> C. the loss of traditional societies</label><label><input type="radio" value="3" name="t11-ref-3" data-correct="false"> D. loss of appetite</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-4">
+          <p>4. “For <b>these</b>, there is no convincing argument for retention.” — these =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-4" data-correct="true"> A. objects shown to have been looted</label><label><input type="radio" value="1" name="t11-ref-4" data-correct="false"> B. all foreign objects</label><label><input type="radio" value="2" name="t11-ref-4" data-correct="false"> C. long-term loans</label><label><input type="radio" value="3" name="t11-ref-4" data-correct="false"> D. museums</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-ref', 't11-ref-score')">Check answers</button>
+          <span id="t11-ref-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 20</div>
+      <h2>Reading Skill — Speed Reading Challenge</h2>
+      <p class="task-sub"><b>Part 1:</b> skim in <b>40 seconds</b>. <b>Part 2:</b> scan for six answers in <b>2 minutes</b>.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">A Short History of the Umbrella</h3>
+        <p class="article-meta">Speed reading · 280 words · 195 words</p>
+        <p><span class="para-label">A</span>Umbrellas were first used not against rain but against the sun. More than three thousand years ago, sunshades appear in art from ancient Egypt, Assyria and China, where they were often a sign of rank: only kings and nobles were shaded by them. In China, oiled paper was used to make shades that could also keep off rain, and Chinese craftsmen were also among the first to make umbrellas that could fold.</p><p><span class="para-label">B</span>In Europe, umbrellas were long seen as something for women. When the traveller Jonas Hanway began carrying one in London in the 1750s, he was laughed at in the street, and coach drivers, who earned money from people trying to stay dry, shouted insults at him. Within thirty years, however, umbrellas had become common among men too, and some were still called ‘Hanways’.</p><p><span class="para-label">C</span>Early umbrellas were heavy, with frames of wood or whalebone. In 1852 the English manufacturer Samuel Fox introduced a frame with steel ribs, which was lighter and stronger, and the basic design has changed little since. The folding pocket umbrella followed in the twentieth century. Today, around one billion umbrellas are sold every year, and most are made in China.</p>
+      </div>
+      <div class="card" id="t12-title"><div class="q-item" id="t12-title-1">
+          <p>1. Part 1 — Best title:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-title-1" data-correct="false"> A. Rain in London</label><label><input type="radio" value="1" name="t12-title-1" data-correct="true"> B. From royal sunshade to everyday object</label><label><input type="radio" value="2" name="t12-title-1" data-correct="false"> C. How umbrellas are made in China</label><label><input type="radio" value="3" name="t12-title-1" data-correct="false"> D. The life of Jonas Hanway</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-title', 't12-title-score')">Check answers</button>
+          <span id="t12-title-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t12-scan" style="line-height:2.4;"><p>1. Name two ancient civilisations whose art shows sunshades (one word): Egypt, <input type="text" class="text-answer" id="t12-1" data-correct="assyria/china" autocomplete="off" style="width:110px;"></p><p>2. In which decade did Hanway begin carrying an umbrella? the <input type="text" class="text-answer" id="t12-2" data-correct="1750s" autocomplete="off" style="width:90px;"></p><p>3. How long did it take for umbrellas to become common among men? within <input type="text" class="text-answer" id="t12-3" data-correct="thirty/30" autocomplete="off" style="width:90px;"> years</p><p>4. What were some umbrellas called? <input type="text" class="text-answer" id="t12-4" data-correct="hanways" autocomplete="off" style="width:110px;"></p><p>5. Samuel Fox’s nationality: <input type="text" class="text-answer" id="t12-5" data-correct="english/british" autocomplete="off" style="width:100px;"></p><p>6. Annual umbrella sales: around one <input type="text" class="text-answer" id="t12-6" data-correct="billion" autocomplete="off" style="width:100px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-scan', 't12-scan-score')">Check answers</button>
+          <span id="t12-scan-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 20</div>
+      <h2>Vocabulary — Advanced Word Forms and Collocations</h2>
+      <p class="task-sub">Complete each sentence, then choose the natural collocation.</p>
+      <div class="card" id="t13-wf" style="line-height:2.4;"><p>1. Many scholars were <input type="text" class="text-answer" id="t13-1" data-correct="sceptical/skeptical" autocomplete="off" style="width:120px;"> of Price’s claim. (scepticism)</p><p>2. The device shows remarkable mechanical <input type="text" class="text-answer" id="t13-2" data-correct="sophistication" autocomplete="off" style="width:150px;">. (sophisticated)</p><p>3. The trial was stopped because the results were so <input type="text" class="text-answer" id="t13-3" data-correct="striking" autocomplete="off" style="width:110px;">. (strike — adjective)</p><p>4. Modern lifestyles may have reduced microbial <input type="text" class="text-answer" id="t13-4" data-correct="diversity" autocomplete="off" style="width:120px;">. (diverse)</p><p>5. Some claims about probiotics are <input type="text" class="text-answer" id="t13-5" data-correct="premature" autocomplete="off" style="width:120px;">. (too early)</p><p>6. The <input type="text" class="text-answer" id="t13-6" data-correct="restitution" autocomplete="off" style="width:130px;"> of looted objects is increasingly common. (restore — noun for returning)</p><p>7. Many objects were <input type="text" class="text-answer" id="t13-7" data-correct="acquired" autocomplete="off" style="width:110px;"> legitimately. (acquisition)</p><p>8. Critics found the assumption <input type="text" class="text-answer" id="t13-8" data-correct="patronising/patronizing" autocomplete="off" style="width:140px;">. (patronise — adjective)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-wf', 't13-wf-score')">Check answers</button>
+          <span id="t13-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t13-col"><div class="q-item" id="t13-col-1">
+          <p>1. to ______ a reconstruction</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-1" data-correct="true"> propose</label><label><input type="radio" value="1" name="t13-col-1" data-correct="false"> say</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-2">
+          <p>2. to ______ ownership</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-2" data-correct="true"> transfer</label><label><input type="radio" value="1" name="t13-col-2" data-correct="false"> move</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-3">
+          <p>3. to ______ doubt on</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-3" data-correct="true"> cast</label><label><input type="radio" value="1" name="t13-col-3" data-correct="false"> put</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-4">
+          <p>4. to ______ a claim</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-4" data-correct="true"> substantiate</label><label><input type="radio" value="1" name="t13-col-4" data-correct="false"> substance</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-5">
+          <p>5. to ______ caution</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-5" data-correct="true"> exercise</label><label><input type="radio" value="1" name="t13-col-5" data-correct="false"> make</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-6">
+          <p>6. to ______ the burden of proof</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-6" data-correct="true"> bear</label><label><input type="radio" value="1" name="t13-col-6" data-correct="false"> carry out</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-col', 't13-col-score')">Check answers</button>
+          <span id="t13-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 20</div>
+      <h2>Grammar for Writing — Precision in Trends and Arguments</h2>
+      <p class="task-sub">Band 8 writing needs precise structures. Choose the best option.</p>
+      <div class="card" id="t14-gr"><div class="q-item" id="t14-gr-1">
+          <p>1. Country A’s share rose fivefold, ______ 50% by 2020.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-1" data-correct="true"> reaching</label><label><input type="radio" value="1" name="t14-gr-1" data-correct="false"> reached</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-2">
+          <p>2. ______ Country D, whose share barely changed, all four countries saw growth.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-2" data-correct="true"> With the exception of</label><label><input type="radio" value="1" name="t14-gr-2" data-correct="false"> Except of</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-3">
+          <p>3. The share in Country B, ______ had been the highest in 1990, was overtaken.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-3" data-correct="true"> which</label><label><input type="radio" value="1" name="t14-gr-3" data-correct="false"> that</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-4">
+          <p>4. By 2020, Country C ______ its share.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-4" data-correct="true"> had tripled</label><label><input type="radio" value="1" name="t14-gr-4" data-correct="false"> has tripled</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-5">
+          <p>5. Only after 2010 ______ significant growth in Country D.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-5" data-correct="true"> was there</label><label><input type="radio" value="1" name="t14-gr-5" data-correct="false"> there was</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-6">
+          <p>6. ______ objects have been looted, they should be returned.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-6" data-correct="true"> Where</label><label><input type="radio" value="1" name="t14-gr-6" data-correct="false"> Whereas</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-7">
+          <p>7. Museums have yet ______ the ownership of many objects.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-7" data-correct="true"> to justify</label><label><input type="radio" value="1" name="t14-gr-7" data-correct="false"> justifying</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-8">
+          <p>8. It is not so much the objects themselves ______ the way they were acquired that matters.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-8" data-correct="true"> as</label><label><input type="radio" value="1" name="t14-gr-8" data-correct="false"> than</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-gr', 't14-gr-score')">Check answers</button>
+          <span id="t14-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task15" data-task="15">
+      <div class="task-eyebrow">Task 15 of 20</div>
+      <h2>Writing Task 1 — Skills: Grouping Trends</h2>
+      <p class="task-sub">Study the graph and plan how to group the four lines.</p>
+<div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Share of electricity generated from renewable sources, 1990–2020 (%)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Share of electricity generated from renewable sources, 1990–2020 (%)</text><line x1="64" y1="290.0" x2="620" y2="290.0" stroke="#e3e5ec"/><text x="56" y="294.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="249.3" x2="620" y2="249.3" stroke="#e3e5ec"/><text x="56" y="253.3" text-anchor="end" font-size="11" fill="#4b4e5c">10</text><line x1="64" y1="208.7" x2="620" y2="208.7" stroke="#e3e5ec"/><text x="56" y="212.7" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="168.0" x2="620" y2="168.0" stroke="#e3e5ec"/><text x="56" y="172.0" text-anchor="end" font-size="11" fill="#4b4e5c">30</text><line x1="64" y1="127.3" x2="620" y2="127.3" stroke="#e3e5ec"/><text x="56" y="131.3" text-anchor="end" font-size="11" fill="#4b4e5c">40</text><line x1="64" y1="86.7" x2="620" y2="86.7" stroke="#e3e5ec"/><text x="56" y="90.7" text-anchor="end" font-size="11" fill="#4b4e5c">50</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">60</text><text x="64.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">1990</text><text x="156.7" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">1995</text><text x="249.3" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2000</text><text x="342.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2005</text><text x="434.7" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2010</text><text x="527.3" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2015</text><text x="620.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2020</text><text x="14" y="168.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 168.0)">% of electricity</text><polyline fill="none" stroke="#2c6bed" stroke-width="2.6" points="64.0,249.3 156.7,241.2 249.3,229.0 342.0,208.7 434.7,168.0 527.3,119.2 620.0,86.7"/><circle cx="64.0" cy="249.3" r="3.6" fill="#2c6bed"/><circle cx="156.7" cy="241.2" r="3.6" fill="#2c6bed"/><circle cx="249.3" cy="229.0" r="3.6" fill="#2c6bed"/><circle cx="342.0" cy="208.7" r="3.6" fill="#2c6bed"/><circle cx="434.7" cy="168.0" r="3.6" fill="#2c6bed"/><circle cx="527.3" cy="119.2" r="3.6" fill="#2c6bed"/><circle cx="620.0" cy="86.7" r="3.6" fill="#2c6bed"/><rect x="64" y="334" width="14" height="4" fill="#2c6bed"/><text x="84" y="339" font-size="12" fill="#14162b">Country A</text><polyline fill="none" stroke="#d9480f" stroke-width="2.6" points="64.0,147.7 156.7,151.7 249.3,159.9 342.0,168.0 434.7,163.9 527.3,155.8 620.0,147.7"/><circle cx="64.0" cy="147.7" r="3.6" fill="#d9480f"/><circle cx="156.7" cy="151.7" r="3.6" fill="#d9480f"/><circle cx="249.3" cy="159.9" r="3.6" fill="#d9480f"/><circle cx="342.0" cy="168.0" r="3.6" fill="#d9480f"/><circle cx="434.7" cy="163.9" r="3.6" fill="#d9480f"/><circle cx="527.3" cy="155.8" r="3.6" fill="#d9480f"/><circle cx="620.0" cy="147.7" r="3.6" fill="#d9480f"/><rect x="158.8" y="334" width="14" height="4" fill="#d9480f"/><text x="178.8" y="339" font-size="12" fill="#14162b">Country B</text><polyline fill="none" stroke="#2b8a3e" stroke-width="2.6" points="64.0,269.7 156.7,265.6 249.3,257.5 342.0,249.3 434.7,229.0 527.3,200.5 620.0,168.0"/><circle cx="64.0" cy="269.7" r="3.6" fill="#2b8a3e"/><circle cx="156.7" cy="265.6" r="3.6" fill="#2b8a3e"/><circle cx="249.3" cy="257.5" r="3.6" fill="#2b8a3e"/><circle cx="342.0" cy="249.3" r="3.6" fill="#2b8a3e"/><circle cx="434.7" cy="229.0" r="3.6" fill="#2b8a3e"/><circle cx="527.3" cy="200.5" r="3.6" fill="#2b8a3e"/><circle cx="620.0" cy="168.0" r="3.6" fill="#2b8a3e"/><rect x="253.60000000000002" y="334" width="14" height="4" fill="#2b8a3e"/><text x="273.6" y="339" font-size="12" fill="#14162b">Country C</text><polyline fill="none" stroke="#7048e8" stroke-width="2.6" points="64.0,281.9 156.7,281.9 249.3,277.8 342.0,277.8 434.7,273.7 527.3,269.7 620.0,265.6"/><circle cx="64.0" cy="281.9" r="3.6" fill="#7048e8"/><circle cx="156.7" cy="281.9" r="3.6" fill="#7048e8"/><circle cx="249.3" cy="277.8" r="3.6" fill="#7048e8"/><circle cx="342.0" cy="277.8" r="3.6" fill="#7048e8"/><circle cx="434.7" cy="273.7" r="3.6" fill="#7048e8"/><circle cx="527.3" cy="269.7" r="3.6" fill="#7048e8"/><circle cx="620.0" cy="265.6" r="3.6" fill="#7048e8"/><rect x="348.40000000000003" y="334" width="14" height="4" fill="#7048e8"/><text x="368.40000000000003" y="339" font-size="12" fill="#14162b">Country D</text></svg></div>
+      <div class="card" id="t15-q"><div class="q-item" id="t15-q-1">
+          <p>1. Which two countries showed the strongest growth?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-q-1" data-correct="true"> A. A and C</label><label><input type="radio" value="1" name="t15-q-1" data-correct="false"> B. B and D</label><label><input type="radio" value="2" name="t15-q-1" data-correct="false"> C. A and B</label><label><input type="radio" value="3" name="t15-q-1" data-correct="false"> D. C and D</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t15-q-2">
+          <p>2. Which country’s share fluctuated but ended where it started?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-q-2" data-correct="false"> A. A</label><label><input type="radio" value="1" name="t15-q-2" data-correct="true"> B. B</label><label><input type="radio" value="2" name="t15-q-2" data-correct="false"> C. C</label><label><input type="radio" value="3" name="t15-q-2" data-correct="false"> D. D</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t15-q-3">
+          <p>3. Best overview:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-q-3" data-correct="false"> A. Country A reached 50% in 2020.</label><label><input type="radio" value="1" name="t15-q-3" data-correct="true"> B. Overall, the share of renewables rose substantially in Countries A and C, whereas it remained broadly stable in B and very low in D; A overtook B to become the leader.</label><label><input type="radio" value="2" name="t15-q-3" data-correct="false"> C. Renewables are good.</label><label><input type="radio" value="3" name="t15-q-3" data-correct="false"> D. There are four countries.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t15-q-4">
+          <p>4. Best paragraph plan:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-q-4" data-correct="false"> A. one paragraph per country in alphabetical order</label><label><input type="radio" value="1" name="t15-q-4" data-correct="true"> B. Body 1: A and C (strong growth); Body 2: B and D (little change)</label><label><input type="radio" value="2" name="t15-q-4" data-correct="false"> C. one paragraph per decade</label><label><input type="radio" value="3" name="t15-q-4" data-correct="false"> D. one paragraph only</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-q', 't15-q-score')">Check answers</button>
+          <span id="t15-q-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t15-g" style="line-height:2.4;"><p>1. Country A’s share increased <input type="text" class="text-answer" id="t15-1" data-correct="fivefold/five-fold" autocomplete="off" style="width:110px;">, from 10% to 50%.</p><p>2. Country B’s figure dipped <input type="text" class="text-answer" id="t15-2" data-correct="slightly/marginally" autocomplete="off" style="width:110px;"> to 30% in 2005 before recovering.</p><p>3. Country A <input type="text" class="text-answer" id="t15-3" data-correct="overtook/surpassed" autocomplete="off" style="width:110px;"> Country B around 2010.</p><p>4. Country C’s share <input type="text" class="text-answer" id="t15-4" data-correct="sextupled/rose sixfold/increased sixfold" autocomplete="off" style="width:140px;">, climbing from 5% to 30%.</p><p>5. Country D lagged far behind, never <input type="text" class="text-answer" id="t15-5" data-correct="exceeding/surpassing/passing" autocomplete="off" style="width:120px;"> 6%.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-g', 't15-g-score')">Check answers</button>
+          <span id="t15-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task16" data-task="16">
+      <div class="task-eyebrow">Task 16 of 20</div>
+      <h2>Writing Task 1 — Your Report</h2>
+      <p class="task-sub">Write the full report. About <b>20 minutes</b>, <b>at least 150 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The graph below shows the percentage of electricity generated from renewable sources in four countries between 1990 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Share of electricity generated from renewable sources, 1990–2020 (%)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Share of electricity generated from renewable sources, 1990–2020 (%)</text><line x1="64" y1="290.0" x2="620" y2="290.0" stroke="#e3e5ec"/><text x="56" y="294.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="249.3" x2="620" y2="249.3" stroke="#e3e5ec"/><text x="56" y="253.3" text-anchor="end" font-size="11" fill="#4b4e5c">10</text><line x1="64" y1="208.7" x2="620" y2="208.7" stroke="#e3e5ec"/><text x="56" y="212.7" text-anchor="end" font-size="11" fill="#4b4e5c">20</text><line x1="64" y1="168.0" x2="620" y2="168.0" stroke="#e3e5ec"/><text x="56" y="172.0" text-anchor="end" font-size="11" fill="#4b4e5c">30</text><line x1="64" y1="127.3" x2="620" y2="127.3" stroke="#e3e5ec"/><text x="56" y="131.3" text-anchor="end" font-size="11" fill="#4b4e5c">40</text><line x1="64" y1="86.7" x2="620" y2="86.7" stroke="#e3e5ec"/><text x="56" y="90.7" text-anchor="end" font-size="11" fill="#4b4e5c">50</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">60</text><text x="64.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">1990</text><text x="156.7" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">1995</text><text x="249.3" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2000</text><text x="342.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2005</text><text x="434.7" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2010</text><text x="527.3" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2015</text><text x="620.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2020</text><text x="14" y="168.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 168.0)">% of electricity</text><polyline fill="none" stroke="#2c6bed" stroke-width="2.6" points="64.0,249.3 156.7,241.2 249.3,229.0 342.0,208.7 434.7,168.0 527.3,119.2 620.0,86.7"/><circle cx="64.0" cy="249.3" r="3.6" fill="#2c6bed"/><circle cx="156.7" cy="241.2" r="3.6" fill="#2c6bed"/><circle cx="249.3" cy="229.0" r="3.6" fill="#2c6bed"/><circle cx="342.0" cy="208.7" r="3.6" fill="#2c6bed"/><circle cx="434.7" cy="168.0" r="3.6" fill="#2c6bed"/><circle cx="527.3" cy="119.2" r="3.6" fill="#2c6bed"/><circle cx="620.0" cy="86.7" r="3.6" fill="#2c6bed"/><rect x="64" y="334" width="14" height="4" fill="#2c6bed"/><text x="84" y="339" font-size="12" fill="#14162b">Country A</text><polyline fill="none" stroke="#d9480f" stroke-width="2.6" points="64.0,147.7 156.7,151.7 249.3,159.9 342.0,168.0 434.7,163.9 527.3,155.8 620.0,147.7"/><circle cx="64.0" cy="147.7" r="3.6" fill="#d9480f"/><circle cx="156.7" cy="151.7" r="3.6" fill="#d9480f"/><circle cx="249.3" cy="159.9" r="3.6" fill="#d9480f"/><circle cx="342.0" cy="168.0" r="3.6" fill="#d9480f"/><circle cx="434.7" cy="163.9" r="3.6" fill="#d9480f"/><circle cx="527.3" cy="155.8" r="3.6" fill="#d9480f"/><circle cx="620.0" cy="147.7" r="3.6" fill="#d9480f"/><rect x="158.8" y="334" width="14" height="4" fill="#d9480f"/><text x="178.8" y="339" font-size="12" fill="#14162b">Country B</text><polyline fill="none" stroke="#2b8a3e" stroke-width="2.6" points="64.0,269.7 156.7,265.6 249.3,257.5 342.0,249.3 434.7,229.0 527.3,200.5 620.0,168.0"/><circle cx="64.0" cy="269.7" r="3.6" fill="#2b8a3e"/><circle cx="156.7" cy="265.6" r="3.6" fill="#2b8a3e"/><circle cx="249.3" cy="257.5" r="3.6" fill="#2b8a3e"/><circle cx="342.0" cy="249.3" r="3.6" fill="#2b8a3e"/><circle cx="434.7" cy="229.0" r="3.6" fill="#2b8a3e"/><circle cx="527.3" cy="200.5" r="3.6" fill="#2b8a3e"/><circle cx="620.0" cy="168.0" r="3.6" fill="#2b8a3e"/><rect x="253.60000000000002" y="334" width="14" height="4" fill="#2b8a3e"/><text x="273.6" y="339" font-size="12" fill="#14162b">Country C</text><polyline fill="none" stroke="#7048e8" stroke-width="2.6" points="64.0,281.9 156.7,281.9 249.3,277.8 342.0,277.8 434.7,273.7 527.3,269.7 620.0,265.6"/><circle cx="64.0" cy="281.9" r="3.6" fill="#7048e8"/><circle cx="156.7" cy="281.9" r="3.6" fill="#7048e8"/><circle cx="249.3" cy="277.8" r="3.6" fill="#7048e8"/><circle cx="342.0" cy="277.8" r="3.6" fill="#7048e8"/><circle cx="434.7" cy="273.7" r="3.6" fill="#7048e8"/><circle cx="527.3" cy="269.7" r="3.6" fill="#7048e8"/><circle cx="620.0" cy="265.6" r="3.6" fill="#7048e8"/><rect x="348.40000000000003" y="334" width="14" height="4" fill="#7048e8"/><text x="368.40000000000003" y="339" font-size="12" fill="#14162b">Country D</text></svg></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t16-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t16-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t16-essay-model"><div class="model-text">
+  <p>The line graph illustrates the proportion of electricity produced from renewable sources in four countries over a thirty-year period from 1990.</p>
+  <p>Overall, renewables came to account for a substantially larger share of electricity in Countries A and C, whereas the figure remained broadly stable in Country B and negligible in Country D. Notably, Country A replaced Country B as the leader.</p>
+  <p>Country A experienced the most dramatic growth. Its share rose steadily from 10% in 1990 to 20% in 2005, before accelerating sharply to reach 50% in 2020, a fivefold increase. Country C followed a similar, if less pronounced, trajectory, with its figure climbing slowly from 5% to 10% by 2005 and then more rapidly to 30%, six times its initial level.</p>
+  <p>In contrast, Country B, which had the highest share in 1990 at 35%, saw a slight decline to 30% in 2005 before recovering to its original level, and was overtaken by Country A around 2010. Country D lagged far behind throughout, its share edging up from just 2% to 6%.</p>
+  <p class="alt">≈ 185 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task17" data-task="17">
+      <div class="task-eyebrow">Task 17 of 20</div>
+      <h2>Writing Task 2 — Planning</h2>
+      <p class="task-sub">Plan a nuanced position before you write. Passage 3 gives you ideas — use them, but in your own words and with your own judgement.</p>
+<div class="card task-prompt"><p class="prompt-label">Writing Task 2</p><p><i>Some people believe that museums should return historical objects to the countries they originally came from. To what extent do you agree or disagree?</i></p></div>
+      <div class="card" id="t17-pl"><div class="q-item" id="t17-pl-1">
+          <p>1. Which thesis is clearest and most nuanced?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-1" data-correct="false"> A. Museums have many objects.</label><label><input type="radio" value="1" name="t17-pl-1" data-correct="true"> B. I agree that objects taken by force should be returned, but I do not believe every foreign artefact must be sent back.</label><label><input type="radio" value="2" name="t17-pl-1" data-correct="false"> C. Both sides are right.</label><label><input type="radio" value="3" name="t17-pl-1" data-correct="false"> D. History is important.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-2">
+          <p>2. Which point best supports returning objects?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-2" data-correct="true"> A. Objects taken during colonial wars were acquired without consent.</label><label><input type="radio" value="1" name="t17-pl-2" data-correct="false"> B. Museums are popular.</label><label><input type="radio" value="2" name="t17-pl-2" data-correct="false"> C. Some objects are heavy.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-3">
+          <p>3. Which counter-argument deserves a response?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-3" data-correct="true"> A. Universal museums allow people to compare cultures side by side.</label><label><input type="radio" value="1" name="t17-pl-3" data-correct="false"> B. Tickets are expensive.</label><label><input type="radio" value="2" name="t17-pl-3" data-correct="false"> C. Museums have cafés.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-4">
+          <p>4. A strong way to refute that counter-argument:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-4" data-correct="false"> A. Ignore it.</label><label><input type="radio" value="1" name="t17-pl-4" data-correct="true"> B. Point out that most of the world’s population cannot easily visit Western museums, and loans can preserve shared access.</label><label><input type="radio" value="2" name="t17-pl-4" data-correct="false"> C. Say it is stupid.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t17-pl', 't17-pl-score')">Check answers</button>
+          <span id="t17-pl-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write your plan: thesis + two supporting points + one counter-argument and your response.</p><textarea class="no-check mini-answer" id="t17-out-1" placeholder="Write your plan here..." style="min-height:110px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t17-out-btn">Show an example plan</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t17-out-ans"><p><b>Thesis:</b> agree for looted objects; not all. <b>Support:</b> injustice of acquisition (Benin Bronzes 1897); cultural identity for countries of origin; new museum capacity. <b>Counter:</b> universal museum / conservation → many cannot visit; conservation argument patronising; loans and shared ownership.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task18" data-task="18">
+      <div class="task-eyebrow">Task 18 of 20</div>
+      <h2>Writing Task 2 — Your Essay</h2>
+      <p class="task-sub">Write the full essay. About <b>40 minutes</b>, <b>at least 250 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Some people believe that museums should return historical objects to the countries they originally came from. To what extent do you agree or disagree?</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t18-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t18-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t18-essay-model"><div class="model-text">
+  <p>Many of the world’s leading museums hold objects that originated in other countries, and there are growing calls for these to be returned. I agree with this principle to a considerable extent where objects were taken by force or deception, but I do not believe that every foreign artefact must be repatriated.</p>
+  <p>The strongest argument for restitution is that many objects were acquired unjustly. The Benin Bronzes, for instance, were seized by British troops in 1897 and later sold to collections around the world. To continue displaying such objects as if their ownership were unproblematic is, in effect, to profit from an injustice. Moreover, for the communities from which they were taken, these objects are not merely works of art but part of their history and identity, which their descendants have a stronger claim to than foreign institutions.</p>
+  <p>Opponents argue that “universal” museums allow visitors to compare the cultures of the world side by side, and that some countries lack the facilities to conserve fragile objects. Neither argument, however, is decisive. The universal ideal rings hollow when most of the world’s population cannot obtain visas to visit these museums, and the conservation concern is increasingly undermined by the construction of modern museums in countries such as Nigeria.</p>
+  <p>That said, restitution need not be all-or-nothing. Many objects were bought, exchanged or excavated with permission, and there is no reason why these should be returned. Even for disputed items, arrangements such as long-term loans or shared ownership can allow objects to be seen in both places.</p>
+  <p>In conclusion, I believe museums have a clear obligation to return objects that were looted, while those acquired legitimately may justifiably remain, ideally as part of a more equal partnership between institutions.</p>
+  <p class="alt">≈ 310 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task19" data-task="19">
+      <div class="task-eyebrow">Task 19 of 20</div>
+      <h2>Speaking Part 3 — Today’s Topics</h2>
+      <p class="task-sub">Answer each question in its own box — about <b>50 seconds</b> each. Aim for nuanced, developed answers.</p>
+      <div class="question-box" data-field="t19-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Why is it important to preserve objects from the past?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d argue that…”</li><li>“Beyond their historical value,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Should museums be free to enter?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“There’s a strong case for…, although…”</li><li>“It depends to some extent on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">How much should ordinary people trust health advice they read online?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“With a degree of caution, because…”</li><li>“What I tend to look for is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Do you think working hours will become shorter in the future?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I suspect that…”</li><li>“Much will depend on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task20" data-task="20">
+      <div class="task-eyebrow">Task 20 of 20</div>
+      <h2>Self-Check — Your Reading Days</h2>
+      <p class="task-sub">Compare today with Days 35 and 36.</p>
+      <div class="card"><p class="mini-q">1. Your reading scores on Days 35, 36 and 39 (out of 40) and estimated bands:</p><textarea class="no-check mini-answer" id="t20-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. Which question type cost you the most marks across the three days, and why?</p><textarea class="no-check mini-answer" id="t20-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Compare your Task 2 essays: is your position nuanced and consistent from introduction to conclusion? What will you improve next?</p><textarea class="no-check mini-answer" id="t20-rf-3" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t20-rf-btn">Show some guidance</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t20-rf-ans"><p>Band 8 signs: headings chosen by the main idea rather than a repeated word; FALSE vs NOT GIVEN decided by whether the passage contradicts the statement; a Task 1 report that groups similar trends; a Task 2 position with a clear limit or condition, maintained throughout.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 20</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 39 of 45</div>
+    <h1>Day 39 complete! 🎉</h1>
+    <p>Day 39 done — a full reading test, two extra articles, advanced reading skills, vocabulary and grammar, Writing Task 1 and Task 2, and speaking.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t10-lm-lm');
+
+    initWritingCoach('t16-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The graph below shows the percentage of electricity generated from renewable sources in four countries between 1990 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.' });
+    initWritingCoach('t18-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Some people believe that museums should return historical objects to the countries they originally came from. To what extent do you agree or disagree?' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 39, 8, 't8-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-summary"]'); if (b) initRecordControl(b, user.id, 39, 9, 't9-speaking-summary', 60); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-1"]'); if (b) initRecordControl(b, user.id, 39, 19, 't19-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-2"]'); if (b) initRecordControl(b, user.id, 39, 19, 't19-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-3"]'); if (b) initRecordControl(b, user.id, 39, 19, 't19-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-4"]'); if (b) initRecordControl(b, user.id, 39, 19, 't19-speaking-4', 0); }
+
+    await initTaskFlow(39, 20, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-h', 't2-h-score'); checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-s', 't2-s-score'); },
+      4: () => { checkAllAnswers('t4-mi', 't4-mi-score'); checkAllAnswers('t4-mf', 't4-mf-score'); checkAllAnswers('t4-notes1', 't4-notes1-score'); },
+      6: () => { checkAllAnswers('t6-yn', 't6-yn-score'); checkAllAnswers('t6-mc', 't6-mc-score'); checkAllAnswers('t6-s', 't6-s-score'); },
+      8: () => { checkAllAnswers('t8-mc', 't8-mc-score'); },
+      9: () => { checkAllAnswers('t9-tf', 't9-tf-score'); },
+      10: () => { checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm'); checkAllAnswers('t10-mc', 't10-mc-score'); },
+      11: () => { checkAllAnswers('t11-st', 't11-st-score'); checkAllAnswers('t11-ref', 't11-ref-score'); },
+      12: () => { checkAllAnswers('t12-title', 't12-title-score'); checkAllAnswers('t12-scan', 't12-scan-score'); },
+      13: () => { checkAllAnswers('t13-wf', 't13-wf-score'); checkAllAnswers('t13-col', 't13-col-score'); },
+      14: () => { checkAllAnswers('t14-gr', 't14-gr-score'); },
+      15: () => { checkAllAnswers('t15-q', 't15-q-score'); checkAllAnswers('t15-g', 't15-g-score'); },
+      17: () => { checkAllAnswers('t17-pl', 't17-pl-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-sum-btn', 't9-sum-ans', '[id^="t9-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t16-essay-model-btn', 't16-essay-model', '#t16-essay');
+    initGatedMistakeReveal('t17-out-btn', 't17-out-ans', '[id^="t17-out-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t18-essay-model-btn', 't18-essay-model', '#t18-essay');
+    initGatedMistakeReveal('t20-rf-btn', 't20-rf-ans', '[id^="t20-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>

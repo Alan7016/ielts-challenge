@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 39 — Standard — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 39 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 20</div>
+      <h2>Starting Off — A Reading and Writing Day</h2>
+      <p class="task-sub">A long <b>reading and writing day</b> — about <b>4 hours</b>, with breaks. A full reading test (three passages, 40 questions), two extra articles, reading skills, vocabulary and grammar, <b>Writing Task 1</b> (a line graph) and <b>Task 2</b>, and speaking.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. Before you read a passage, it is best to</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. read every word slowly</label><label><input type="radio" value="1" name="t1-st-1" data-correct="true"> B. look at the title and the questions first</label><label><input type="radio" value="2" name="t1-st-1" data-correct="false"> C. start with the last question</label><label><input type="radio" value="3" name="t1-st-1" data-correct="false"> D. skip the instructions</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. “NOT GIVEN” means</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="false"> A. the passage says the opposite</label><label><input type="radio" value="1" name="t1-st-2" data-correct="true"> B. the passage does not give this information</label><label><input type="radio" value="2" name="t1-st-2" data-correct="false"> C. the statement is partly true</label><label><input type="radio" value="3" name="t1-st-2" data-correct="false"> D. the answer is in the title</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. In a line graph report, your overview should describe</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="false"> A. every number</label><label><input type="radio" value="1" name="t1-st-3" data-correct="true"> B. the main trends</label><label><input type="radio" value="2" name="t1-st-3" data-correct="false"> C. your opinion</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. the colours of the lines</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. In an “agree or disagree” essay, you should</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="true"> A. give a clear opinion</label><label><input type="radio" value="1" name="t1-st-4" data-correct="false"> B. describe both sides with no opinion</label><label><input type="radio" value="2" name="t1-st-4" data-correct="false"> C. write about something else</label><label><input type="radio" value="3" name="t1-st-4" data-correct="false"> D. write a story</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. colony</button><button type="button" class="lm-item" data-key="2">2. pollinate</button><button type="button" class="lm-item" data-key="3">3. ancient</button><button type="button" class="lm-item" data-key="4">4. currency</button><button type="button" class="lm-item" data-key="5">5. addictive</button><button type="button" class="lm-item" data-key="6">6. ban</button><button type="button" class="lm-item" data-key="7">7. decline</button><button type="button" class="lm-item" data-key="8">8. steady</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. not changing much</button><button type="button" class="lm-item" data-key="b">b. officially stop something</button><button type="button" class="lm-item" data-key="c">c. move pollen from one flower to another</button><button type="button" class="lm-item" data-key="d">d. difficult to stop using</button><button type="button" class="lm-item" data-key="e">e. very old; from long ago</button><button type="button" class="lm-item" data-key="f">f. go down; fall</button><button type="button" class="lm-item" data-key="g">g. a large group of insects living together</button><button type="button" class="lm-item" data-key="h">h. money used in a country</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 20</div>
+      <h2>Reading Passage 1 — The Busy Life of the Honeybee</h2>
+      <p class="task-sub"><b>The test starts now.</b> About <b>20 minutes</b> for Questions 1–13.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Busy Life of the Honeybee<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Small insects with a big job.</small></h3>
+            <p class="article-meta">Reading Passage 1 · Nature · 313 words</p>
+            <p><span class="para-label">A</span>A honeybee colony is like a small city. In summer, one hive can contain up to 60,000 bees, but only one of them is the queen. Her job is to lay eggs — up to 1,500 a day in the busiest season. Almost all the other bees are female workers. The male bees, called drones, do no work in the hive.</p><p><span class="para-label">B</span>Worker bees have many different jobs, and these change as they get older. Young workers clean the hive and feed the baby bees. Later they build wax cells and guard the entrance. In the last part of their lives, they fly out to collect nectar and pollen from flowers. In summer, a worker bee lives for only about six weeks.</p><p><span class="para-label">C</span>How do bees tell each other where to find flowers? In the 1940s, the Austrian scientist Karl von Frisch discovered that bees ‘dance’. A bee that has found good flowers moves in a figure-of-eight pattern. The direction of the dance shows the direction of the flowers, and the length of the dance shows how far away they are. Von Frisch received the Nobel Prize for this work in 1973.</p><p><span class="para-label">D</span>Making honey is slow work. Bees turn nectar into honey by drying it and adding special substances. In her whole life, one worker bee makes only about one-twelfth of a teaspoon of honey.</p><p><span class="para-label">E</span>Bees are even more important for another reason: pollination. When bees move from flower to flower, they carry pollen, which helps plants to produce fruit and seeds. Many crops, such as apples, almonds and strawberries, depend on bees, and experts say that around one in every three mouthfuls of food we eat depends on pollinators.</p><p><span class="para-label">F</span>Unfortunately, bees are in danger. Since 2006, beekeepers in the United States and Europe have reported large losses of bees. Scientists believe there are several causes, including pesticides, disease and the loss of wild flowers.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. There is only one queen in a colony.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. Drones do most of the work in the hive.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. Young worker bees collect nectar from flowers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. Von Frisch studied bees in Austria and Germany.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-4" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-5">
+          <p>5. The length of a bee’s dance shows the distance to the flowers.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-5" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-6">
+          <p>6. A worker bee makes a large amount of honey in its life.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-6" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-6" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–10</p><p class="qg-instr">Complete the notes. Choose <b>ONE WORD AND/OR A NUMBER</b> from the passage.</p></div>
+<div class="card" id="t2-notes1"><p class="prompt-label">Honeybees — key facts</p><div style="line-height:2.1;"><div>• Number of bees in a summer hive: up to (7) <input type="text" class="text-answer" id="t2-7" data-correct="60,000/60000" autocomplete="off" style="width:100px;"></div><div>• Lifespan of a worker bee in summer: about six (8) <input type="text" class="text-answer" id="t2-8" data-correct="weeks" autocomplete="off" style="width:100px;"></div><div>• Year von Frisch won the Nobel Prize: (9) <input type="text" class="text-answer" id="t2-9" data-correct="1973" autocomplete="off" style="width:80px;"></div><div>• Bees carry (10) <input type="text" class="text-answer" id="t2-10" data-correct="pollen" autocomplete="off" style="width:100px;"> from flower to flower</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-notes1', 't2-notes1-score')">Check answers</button>
+          <span id="t2-notes1-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–13</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-11">
+          <p>11. What does the direction of a bee’s dance show?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-11" data-correct="false"> A. how many flowers there are</label><label><input type="radio" value="1" name="t2-mc-11" data-correct="true"> B. where the flowers are</label><label><input type="radio" value="2" name="t2-mc-11" data-correct="false"> C. what colour the flowers are</label><label><input type="radio" value="3" name="t2-mc-11" data-correct="false"> D. when to leave the hive</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-12">
+          <p>12. Which crop is given as an example of food that depends on bees?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-12" data-correct="false"> A. rice</label><label><input type="radio" value="1" name="t2-mc-12" data-correct="true"> B. apples</label><label><input type="radio" value="2" name="t2-mc-12" data-correct="false"> C. potatoes</label><label><input type="radio" value="3" name="t2-mc-12" data-correct="false"> D. wheat</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-13">
+          <p>13. According to Paragraph F, why are bees in danger?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-13" data-correct="false"> A. for one main reason</label><label><input type="radio" value="1" name="t2-mc-13" data-correct="true"> B. for several reasons</label><label><input type="radio" value="2" name="t2-mc-13" data-correct="false"> C. because of cold weather</label><label><input type="radio" value="3" name="t2-mc-13" data-correct="false"> D. because of too many flowers</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 20</div>
+      <h2>Reading Passage 1 — Answer Analysis</h2>
+      <p class="task-sub">Check the evidence for every answer.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Busy Life of the Honeybee</summary>
+        <p><span class="para-label">A</span>A honeybee colony is like a small city. In summer, one hive can contain up to 60,000 bees, but only one of them is the queen. Her job is to lay eggs — up to 1,500 a day in the busiest season. Almost all the other bees are female workers. The male bees, called drones, do no work in the hive.</p><p><span class="para-label">B</span>Worker bees have many different jobs, and these change as they get older. Young workers clean the hive and feed the baby bees. Later they build wax cells and guard the entrance. In the last part of their lives, they fly out to collect nectar and pollen from flowers. In summer, a worker bee lives for only about six weeks.</p><p><span class="para-label">C</span>How do bees tell each other where to find flowers? In the 1940s, the Austrian scientist Karl von Frisch discovered that bees ‘dance’. A bee that has found good flowers moves in a figure-of-eight pattern. The direction of the dance shows the direction of the flowers, and the length of the dance shows how far away they are. Von Frisch received the Nobel Prize for this work in 1973.</p><p><span class="para-label">D</span>Making honey is slow work. Bees turn nectar into honey by drying it and adding special substances. In her whole life, one worker bee makes only about one-twelfth of a teaspoon of honey.</p><p><span class="para-label">E</span>Bees are even more important for another reason: pollination. When bees move from flower to flower, they carry pollen, which helps plants to produce fruit and seeds. Many crops, such as apples, almonds and strawberries, depend on bees, and experts say that around one in every three mouthfuls of food we eat depends on pollinators.</p><p><span class="para-label">F</span>Unfortunately, bees are in danger. Since 2006, beekeepers in the United States and Europe have reported large losses of bees. Scientists believe there are several causes, including pesticides, disease and the loss of wild flowers.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">TRUE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">only one of them is the queen</span>.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">FALSE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">The male bees, called drones, do no work in the hive</span>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Young workers clean the hive … In the last part of their lives, they fly out to collect nectar</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para C</span></summary><div class="an-body"><p>Von Frisch was Austrian, but the passage does not say where he did his research.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">TRUE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">the length of the dance shows how far away they are</span>.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">FALSE</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">only about one-twelfth of a teaspoon of honey</span>.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">60,000</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">up to 60,000 bees</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">weeks</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">only about six weeks</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">1973</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">received the Nobel Prize for this work in 1973</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">pollen</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">they carry pollen</span>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">The direction of the dance shows the direction of the flowers</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">B</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">such as apples, almonds and strawberries</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">there are several causes</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 20</div>
+      <h2>Reading Passage 2 — The Story of Chocolate</h2>
+      <p class="task-sub">About <b>20 minutes</b> for Questions 14–26.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Story of Chocolate<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">From a bitter drink to the world’s favourite sweet.</small></h3>
+            <p class="article-meta">Reading Passage 2 · History · 289 words</p>
+            <p><span class="para-label">A</span>Chocolate comes from the seeds of the cacao tree, which grows in hot, wet regions near the equator. People in Central America were using cacao more than 3,000 years ago. The ancient Maya made a drink from roasted cacao seeds, water and spices. It was bitter, not sweet, and it was often drunk at important ceremonies.</p><p><span class="para-label">B</span>For the Aztecs, cacao was so valuable that its seeds were used as money. A rabbit, for example, could be bought for about ten seeds. The Aztec ruler Moctezuma was said to drink large amounts of chocolate every day.</p><p><span class="para-label">C</span>In the sixteenth century, Spanish explorers brought cacao back to Europe. The Spanish added sugar to the drink, and it soon became fashionable among rich people across Europe. For many years, however, chocolate was still only a drink, and it was too expensive for ordinary people.</p><p><span class="para-label">D</span>This changed in the nineteenth century. In 1828, the Dutch chemist Coenraad van Houten invented a machine that pressed out the fat from cacao, leaving a powder that was easier to use. In 1847, a British company, J. S. Fry & Sons, made the first chocolate bar, and in 1875 the Swiss chocolate maker Daniel Peter added milk to create milk chocolate.</p><p><span class="para-label">E</span>Today, chocolate is a huge global business. About 60% of the world’s cocoa comes from just two West African countries, Côte d’Ivoire (Ivory Coast) and Ghana. However, many cocoa farmers earn very little money, and some companies have been criticised for using children as workers on cocoa farms.</p><p><span class="para-label">F</span>Is chocolate good for you? Dark chocolate contains substances that may be good for the heart, but most chocolate also contains a lot of sugar and fat. Doctors therefore say that it should be enjoyed in small amounts.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–19</p><p class="qg-instr">Choose the correct heading for each paragraph, <b>A–F</b>.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; A bitter drink for special occasions<br><b>ii</b>&nbsp; Seeds that could buy things<br><b>iii</b>&nbsp; A sweet drink for the rich<br><b>iv</b>&nbsp; New inventions change chocolate<br><b>v</b>&nbsp; Big business, small incomes<br><b>vi</b>&nbsp; Healthy or not?<br><b>vii</b>&nbsp; How to make chocolate at home<br><b>viii</b>&nbsp; The most popular chocolate shops</p></div>
+      <div class="card" id="t4-h"><div class="sel-row"><select class="select" id="t4-h-14" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>14.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t4-h-15" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>15.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t4-h-16" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>16.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t4-h-17" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>17.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t4-h-18" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>18.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t4-h-19" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>19.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-h', 't4-h-score')">Check answers</button>
+          <span id="t4-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 20–23</p><p class="qg-instr">Complete the sentences. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t4-sc" style="line-height:2.4;"><p>20. The Maya added <input type="text" class="text-answer" id="t4-20" data-correct="spices" autocomplete="off" style="width:100px;"> to their cacao drink.</p><p>21. A rabbit cost about ten cacao <input type="text" class="text-answer" id="t4-21" data-correct="seeds" autocomplete="off" style="width:100px;">.</p><p>22. The Spanish made the drink sweeter by adding <input type="text" class="text-answer" id="t4-22" data-correct="sugar" autocomplete="off" style="width:100px;">.</p><p>23. Van Houten’s machine produced a <input type="text" class="text-answer" id="t4-23" data-correct="powder" autocomplete="off" style="width:100px;"> that was easier to use.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-sc', 't4-sc-score')">Check answers</button>
+          <span id="t4-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 24–26</p><p class="qg-instr">Answer the questions. Choose <b>NO MORE THAN TWO WORDS AND/OR A NUMBER</b>.</p></div>
+      <div class="card" id="t4-sa" style="line-height:2.4;"><p>24. In which year was the first chocolate bar made? <input type="text" class="text-answer" id="t4-24" data-correct="1847" autocomplete="off" style="width:80px;"></p><p>25. What did Daniel Peter add to chocolate? <input type="text" class="text-answer" id="t4-25" data-correct="milk" autocomplete="off" style="width:90px;"></p><p>26. What percentage of the world’s cocoa comes from Côte d’Ivoire and Ghana? <input type="text" class="text-answer" id="t4-26" data-correct="60%/60/60 percent/60 per cent/about 60%" autocomplete="off" style="width:100px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-sa', 't4-sa-score')">Check answers</button>
+          <span id="t4-sa-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 20</div>
+      <h2>Reading Passage 2 — Answer Analysis</h2>
+      <p class="task-sub">Check every answer.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Story of Chocolate</summary>
+        <p><span class="para-label">A</span>Chocolate comes from the seeds of the cacao tree, which grows in hot, wet regions near the equator. People in Central America were using cacao more than 3,000 years ago. The ancient Maya made a drink from roasted cacao seeds, water and spices. It was bitter, not sweet, and it was often drunk at important ceremonies.</p><p><span class="para-label">B</span>For the Aztecs, cacao was so valuable that its seeds were used as money. A rabbit, for example, could be bought for about ten seeds. The Aztec ruler Moctezuma was said to drink large amounts of chocolate every day.</p><p><span class="para-label">C</span>In the sixteenth century, Spanish explorers brought cacao back to Europe. The Spanish added sugar to the drink, and it soon became fashionable among rich people across Europe. For many years, however, chocolate was still only a drink, and it was too expensive for ordinary people.</p><p><span class="para-label">D</span>This changed in the nineteenth century. In 1828, the Dutch chemist Coenraad van Houten invented a machine that pressed out the fat from cacao, leaving a powder that was easier to use. In 1847, a British company, J. S. Fry & Sons, made the first chocolate bar, and in 1875 the Swiss chocolate maker Daniel Peter added milk to create milk chocolate.</p><p><span class="para-label">E</span>Today, chocolate is a huge global business. About 60% of the world’s cocoa comes from just two West African countries, Côte d’Ivoire (Ivory Coast) and Ghana. However, many cocoa farmers earn very little money, and some companies have been criticised for using children as workers on cocoa farms.</p><p><span class="para-label">F</span>Is chocolate good for you? Dark chocolate contains substances that may be good for the heart, but most chocolate also contains a lot of sugar and fat. Doctors therefore say that it should be enjoyed in small amounts.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">i</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">It was bitter, not sweet, and it was often drunk at important ceremonies</span>.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">ii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">its seeds were used as money</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">iii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">The Spanish added sugar … fashionable among rich people</span>.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">iv</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">invented a machine … made the first chocolate bar … milk chocolate</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">v</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">a huge global business … many cocoa farmers earn very little money</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">vi</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">Is chocolate good for you?</span></p><p><span class="trap">Trap:</span> vii — the passage never explains how to make chocolate at home.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">spices</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">roasted cacao seeds, water and spices</span>.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">seeds</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">about ten seeds</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">sugar</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">The Spanish added sugar</span>.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">powder</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">leaving a powder that was easier to use</span>.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">1847</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">In 1847 … made the first chocolate bar</span>.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">milk</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Daniel Peter added milk</span>.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">60%</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">About 60% of the world’s cocoa</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 20</div>
+      <h2>Reading Passage 3 — Should Children Have Smartphones?</h2>
+      <p class="task-sub">About <b>20 minutes</b> for Questions 27–40.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Should Children Have Smartphones?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Parents, schools and governments are all asking the same question.</small></h3>
+            <p class="article-meta">Reading Passage 3 · Society · 299 words</p>
+            <p><span class="para-label">A</span>In many countries, children now get their first smartphone at a young age. In the United Kingdom, according to the regulator Ofcom, around nine in ten children own a phone by the age of eleven. Many parents say they buy one so that they can contact their children and know where they are.</p><p><span class="para-label">B</span>However, more and more people are worried. In 2024, a group of British parents started a campaign called ‘Smartphone Free Childhood’, and within weeks thousands of parents had joined. They promised each other not to give their children smartphones before the age of fourteen, so that no child would feel left out.</p><p><span class="para-label">C</span>Schools have also taken action. Many schools now ban phones during the school day, and in 2024 the Netherlands stopped students from using phones in most classrooms. Teachers report that students concentrate better and talk to each other more at break times.</p><p><span class="para-label">D</span>Some researchers believe that smartphones are harming young people’s mental health. The American psychologist Jonathan Haidt argues that a rise in anxiety among teenagers in the 2010s happened at the same time as smartphones became common. Other researchers, however, say that the evidence is not clear, and that other causes may be more important.</p><p><span class="para-label">E</span>There are also benefits. Smartphones can help children to learn, to stay in touch with friends and family, and to feel safe when they travel alone. For children who live far away from relatives, video calls can be very important.</p><p><span class="para-label">F</span>In my view, the answer is not to ban phones completely but to delay them. A young child can have a simple phone for calls and messages, and a smartphone can come later, with clear family rules about when and where it can be used. What matters most is not the phone itself, but how it is used.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 27–31</p><p class="qg-instr">Which paragraph, <b>A–F</b>, contains the following information? You may use any letter more than once.</p></div>
+      <div class="card" id="t6-mi"><div class="sel-row"><select class="select" id="t6-mi-27" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>27.</b> a reason why parents give their children phones</span></div><div class="sel-row"><select class="select" id="t6-mi-28" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>28.</b> an example of a country that limited phone use in classrooms</span></div><div class="sel-row"><select class="select" id="t6-mi-29" data-answer="F"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>29.</b> the writer’s own suggestion</span></div><div class="sel-row"><select class="select" id="t6-mi-30" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>30.</b> a promise made by a group of parents</span></div><div class="sel-row"><select class="select" id="t6-mi-31" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>31.</b> a disagreement between researchers</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mi', 't6-mi-score')">Check answers</button>
+          <span id="t6-mi-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 32–35</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t6-s" style="line-height:2.7;"><p>The ‘Smartphone Free Childhood’ campaign started in (32) <input type="text" class="text-answer" id="t6-32" data-correct="2024" autocomplete="off" style="width:80px;">. Parents agreed not to give children smartphones before the age of (33) <input type="text" class="text-answer" id="t6-33" data-correct="fourteen/14" autocomplete="off" style="width:100px;">. In schools that ban phones, teachers say students (34) <input type="text" class="text-answer" id="t6-34" data-correct="concentrate" autocomplete="off" style="width:130px;"> better. Haidt connects smartphones with a rise in (35) <input type="text" class="text-answer" id="t6-35" data-correct="anxiety" autocomplete="off" style="width:110px;"> among teenagers.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-s', 't6-s-score')">Check answers</button>
+          <span id="t6-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 36–40</p><p class="qg-instr">Do the statements agree with the views of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-36">
+          <p>36. Smartphones should be banned for all children.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-36" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-36" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-36" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-37">
+          <p>37. Young children can have a simple phone for calls and messages.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-37" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-37" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-37" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-38">
+          <p>38. Families should have clear rules about smartphone use.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-38" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-38" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-38" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-39">
+          <p>39. Smartphones are more harmful than television.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-39" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-39" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-39" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-40">
+          <p>40. How a phone is used is more important than the phone itself.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-40" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-40" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-40" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 20</div>
+      <h2>Reading Passage 3 — Answer Analysis and Your Score</h2>
+      <p class="task-sub">Check Passage 3, then add up your score out of 40.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Should Children Have Smartphones?</summary>
+        <p><span class="para-label">A</span>In many countries, children now get their first smartphone at a young age. In the United Kingdom, according to the regulator Ofcom, around nine in ten children own a phone by the age of eleven. Many parents say they buy one so that they can contact their children and know where they are.</p><p><span class="para-label">B</span>However, more and more people are worried. In 2024, a group of British parents started a campaign called ‘Smartphone Free Childhood’, and within weeks thousands of parents had joined. They promised each other not to give their children smartphones before the age of fourteen, so that no child would feel left out.</p><p><span class="para-label">C</span>Schools have also taken action. Many schools now ban phones during the school day, and in 2024 the Netherlands stopped students from using phones in most classrooms. Teachers report that students concentrate better and talk to each other more at break times.</p><p><span class="para-label">D</span>Some researchers believe that smartphones are harming young people’s mental health. The American psychologist Jonathan Haidt argues that a rise in anxiety among teenagers in the 2010s happened at the same time as smartphones became common. Other researchers, however, say that the evidence is not clear, and that other causes may be more important.</p><p><span class="para-label">E</span>There are also benefits. Smartphones can help children to learn, to stay in touch with friends and family, and to feel safe when they travel alone. For children who live far away from relatives, video calls can be very important.</p><p><span class="para-label">F</span>In my view, the answer is not to ban phones completely but to delay them. A young child can have a simple phone for calls and messages, and a smartphone can come later, with clear family rules about when and where it can be used. What matters most is not the phone itself, but how it is used.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">A</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">so that they can contact their children and know where they are</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">C</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">in 2024 the Netherlands stopped students from using phones in most classrooms</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">F</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">In my view, the answer is not to ban phones completely but to delay them</span>.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">They promised each other not to give their children smartphones before the age of fourteen</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">D</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Other researchers, however, say that the evidence is not clear</span>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">2024</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">In 2024, a group of British parents started a campaign</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">fourteen</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">before the age of fourteen</span>.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">concentrate</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">students concentrate better</span>.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">anxiety</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">a rise in anxiety among teenagers</span>.</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">NO</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">the answer is not to ban phones completely</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">A young child can have a simple phone for calls and messages</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">with clear family rules about when and where it can be used</span>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>Television is never mentioned.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">What matters most is not the phone itself, but how it is used</span>.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Academic Reading)</p><table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr><tr><td>13–14</td><td>4.5</td></tr><tr><td>15–18</td><td>5.0</td></tr><tr><td>19–22</td><td>5.5</td></tr><tr><td>23–26</td><td>6.0</td></tr><tr><td>27–29</td><td>6.5</td></tr><tr><td>30–32</td><td>7.0</td></tr><tr><td>33+</td><td>7.5+</td></tr></table></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 20</div>
+      <h2>Extra Reading 1 — The Four-Day Working Week</h2>
+      <p class="task-sub">An extra article (about <b>15 minutes</b>). Answer the questions, then summarise it in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Four-Day Working Week</h3>
+        <p class="article-meta">Extra reading 1 · Work · 216 words</p>
+        <p><span class="para-label">A</span>For most of the past century, the standard working week in many countries has been five days. In recent years, however, a growing number of employers have experimented with a four-day week, in which employees work fewer hours for the same pay.</p><p><span class="para-label">B</span>Among the largest experiments were two trials in Iceland between 2015 and 2019, involving around 2,500 public-sector workers. Their working week was reduced from 40 hours to 35 or 36 hours without any loss of pay. Researchers reported that productivity stayed the same or improved in most workplaces, while workers’ wellbeing increased considerably.</p><p><span class="para-label">C</span>In 2022, a six-month trial in the United Kingdom involved 61 companies and around 2,900 employees. At the end of the trial, 56 of the companies decided to continue with the shorter week, and 18 made it permanent. Employees reported less stress and fewer sick days, and the number of people leaving their jobs fell sharply.</p><p><span class="para-label">D</span>Critics point out that a four-day week is easier to introduce in offices than in hospitals, schools or factories, where work cannot simply be done faster. Some also warn that squeezing five days of work into four could make each day more intense. Nevertheless, supporters argue that the trials show a long-held assumption — that more hours mean more output — deserves to be questioned.</p>
+      </div>
+      <div class="card" id="t8-mc"><div class="q-item" id="t8-mc-1">
+          <p>1. In a four-day week, employees</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-1" data-correct="false"> A. work fewer hours for less pay</label><label><input type="radio" value="1" name="t8-mc-1" data-correct="true"> B. work fewer hours for the same pay</label><label><input type="radio" value="2" name="t8-mc-1" data-correct="false"> C. work more hours</label><label><input type="radio" value="3" name="t8-mc-1" data-correct="false"> D. work at weekends</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-2">
+          <p>2. How many workers took part in the Iceland trials?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-2" data-correct="false"> A. about 250</label><label><input type="radio" value="1" name="t8-mc-2" data-correct="true"> B. about 2,500</label><label><input type="radio" value="2" name="t8-mc-2" data-correct="false"> C. about 2,900</label><label><input type="radio" value="3" name="t8-mc-2" data-correct="false"> D. about 25,000</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-3">
+          <p>3. What happened to productivity in most Iceland workplaces?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-3" data-correct="false"> A. It fell sharply.</label><label><input type="radio" value="1" name="t8-mc-3" data-correct="true"> B. It stayed the same or improved.</label><label><input type="radio" value="2" name="t8-mc-3" data-correct="false"> C. Nobody measured it.</label><label><input type="radio" value="3" name="t8-mc-3" data-correct="false"> D. It doubled.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-4">
+          <p>4. How many UK companies continued with the shorter week?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-4" data-correct="false"> A. 18</label><label><input type="radio" value="1" name="t8-mc-4" data-correct="true"> B. 56</label><label><input type="radio" value="2" name="t8-mc-4" data-correct="false"> C. 61</label><label><input type="radio" value="3" name="t8-mc-4" data-correct="false"> D. 2,900</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-mc-5">
+          <p>5. Why is a four-day week harder to introduce in hospitals?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-mc-5" data-correct="false"> A. Doctors do not want it.</label><label><input type="radio" value="1" name="t8-mc-5" data-correct="true"> B. The work cannot simply be done faster.</label><label><input type="radio" value="2" name="t8-mc-5" data-correct="false"> C. Hospitals are closed at weekends.</label><label><input type="radio" value="3" name="t8-mc-5" data-correct="false"> D. It is illegal.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-mc', 't8-mc-score')">Check answers</button>
+          <span id="t8-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 80 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 80 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="80" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>The article describes experiments with a four-day working week, in which people work fewer hours for the same pay. In Iceland, about 2,500 workers worked 35 or 36 hours instead of 40, and productivity stayed the same or improved while wellbeing increased. In a UK trial in 2022, 56 of 61 companies continued with the shorter week, and workers reported less stress. However, critics say it is harder in hospitals, schools and factories. I think the idea is interesting, especially for office jobs.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 30 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 30 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 20</div>
+      <h2>Extra Reading 2 — Farming Upwards</h2>
+      <p class="task-sub">A second extra article. Decide TRUE, FALSE or NOT GIVEN, then summarise it.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Farming Upwards</h3>
+        <p class="article-meta">Extra reading 2 · Food and technology · 201 words</p>
+        <p><span class="para-label">A</span>In warehouses in cities from Singapore to New Jersey, lettuces, herbs and strawberries grow in stacked trays under pink and blue LED lights. This is vertical farming: growing crops indoors in layers, without soil and without sunlight, often using hydroponics, in which roots sit in water containing nutrients.</p><p><span class="para-label">B</span>Supporters list several advantages. Because conditions are controlled, crops can be grown all year round, without pesticides, and close to the people who will eat them, which reduces transport. Vertical farms can also use up to 95% less water than traditional fields, since water is recycled.</p><p><span class="para-label">C</span>The main problem is energy. Replacing the sun with electric lights is expensive, and after energy prices rose sharply in 2022, several well-funded vertical farming companies in Europe and the United States went out of business. For this reason, most vertical farms grow high-value, fast-growing crops such as salad leaves and herbs, rather than staple foods such as wheat or rice, which need large areas and would be far too costly to grow under lights.</p><p><span class="para-label">D</span>Most experts therefore see vertical farming as a useful addition to traditional agriculture rather than a replacement for it — particularly in crowded cities and in countries with little farmland or water.</p>
+      </div>
+      <div class="card" id="t9-tf"><div class="q-item" id="t9-tf-1">
+          <p>1. Vertical farms use soil and sunlight.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-1" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t9-tf-1" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t9-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-2">
+          <p>2. Crops in vertical farms can be grown all year round.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t9-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t9-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-3">
+          <p>3. Vertical farms use more water than traditional fields.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t9-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t9-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-4">
+          <p>4. Vertical farm lettuce tastes better than field lettuce.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t9-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t9-tf-4" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t9-tf-5">
+          <p>5. Most vertical farms grow wheat and rice.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t9-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t9-tf-5" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t9-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-tf', 't9-tf-score')">Check answers</button>
+          <span id="t9-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 80 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 80 words):</p><textarea class="no-check mini-answer" id="t9-sum-1" data-min-words="80" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-sum-ans"><p>The article explains vertical farming, which means growing crops indoors in stacked layers under LED lights, without soil or sunlight. Its advantages are that crops can grow all year, without pesticides and close to cities, and it uses much less water. However, electricity is very expensive, and some companies closed after energy prices rose. That is why most vertical farms grow salad and herbs, not wheat or rice. I think it is useful for big cities, but it cannot replace normal farms.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-summary">
+        <div class="q-num">Spoken summary (at least 30 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 30 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 20</div>
+      <h2>Reading Skill — Spotting Paraphrase</h2>
+      <p class="task-sub">Match the question words (left) with the passage words (right).</p>
+      <div class="card" id="t10-lm">
+        <div class="line-match" id="t10-lm-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. lay eggs</button><button type="button" class="lm-item" data-key="2">2. six weeks</button><button type="button" class="lm-item" data-key="3">3. valuable</button><button type="button" class="lm-item" data-key="4">4. fashionable</button><button type="button" class="lm-item" data-key="5">5. ban</button><button type="button" class="lm-item" data-key="6">6. concentrate</button><button type="button" class="lm-item" data-key="7">7. delay</button><button type="button" class="lm-item" data-key="8">8. stay in touch</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. worth a lot</button><button type="button" class="lm-item" data-key="b">b. keep contact</button><button type="button" class="lm-item" data-key="c">c. a month and a half</button><button type="button" class="lm-item" data-key="d">d. focus</button><button type="button" class="lm-item" data-key="e">e. popular</button><button type="button" class="lm-item" data-key="f">f. produce eggs</button><button type="button" class="lm-item" data-key="g">g. not allow</button><button type="button" class="lm-item" data-key="h">h. make something happen later</button></div>
+          <select class="lm-hidden-select select" id="t10-lm-1" data-lm-key="1" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-5" data-lm-key="5" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-7" data-lm-key="7" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-8" data-lm-key="8" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm');">Check answers</button>
+          <span id="t10-lm-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t10-mc"><div class="q-item" id="t10-mc-1">
+          <p>1. “Her job is to lay eggs.” means</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-1" data-correct="true"> A. The queen produces eggs.</label><label><input type="radio" value="1" name="t10-mc-1" data-correct="false"> B. The queen eats eggs.</label><label><input type="radio" value="2" name="t10-mc-1" data-correct="false"> C. The queen protects eggs.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-2">
+          <p>2. “…too expensive for ordinary people.” means</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-2" data-correct="true"> A. Only rich people could buy it.</label><label><input type="radio" value="1" name="t10-mc-2" data-correct="false"> B. Everyone could buy it.</label><label><input type="radio" value="2" name="t10-mc-2" data-correct="false"> C. It was cheap.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-3">
+          <p>3. “…so that no child would feel left out.” means</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-3" data-correct="true"> A. so that no child would feel different from friends</label><label><input type="radio" value="1" name="t10-mc-3" data-correct="false"> B. so that children would go outside</label><label><input type="radio" value="2" name="t10-mc-3" data-correct="false"> C. so that children would leave school</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-4">
+          <p>4. “…the evidence is not clear.” means</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-4" data-correct="false"> A. Scientists are sure.</label><label><input type="radio" value="1" name="t10-mc-4" data-correct="true"> B. Scientists are not sure.</label><label><input type="radio" value="2" name="t10-mc-4" data-correct="false"> C. There is no research.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-mc', 't10-mc-score')">Check answers</button>
+          <span id="t10-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 20</div>
+      <h2>Reading Skill — What Does It Refer To?</h2>
+      <p class="task-sub">Choose what each word in bold refers to.</p>
+      <div class="card" id="t11-ref"><div class="q-item" id="t11-ref-1">
+          <p>1. “<b>Her</b> job is to lay eggs.” — her =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-1" data-correct="false"> A. a worker bee</label><label><input type="radio" value="1" name="t11-ref-1" data-correct="true"> B. the queen</label><label><input type="radio" value="2" name="t11-ref-1" data-correct="false"> C. a drone</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-2">
+          <p>2. “…and <b>these</b> change as they get older.” — these =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-2" data-correct="true"> A. the bees’ jobs</label><label><input type="radio" value="1" name="t11-ref-2" data-correct="false"> B. the flowers</label><label><input type="radio" value="2" name="t11-ref-2" data-correct="false"> C. the hives</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-3">
+          <p>3. “<b>It</b> was bitter, not sweet.” — it =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-3" data-correct="false"> A. the Maya</label><label><input type="radio" value="1" name="t11-ref-3" data-correct="true"> B. the cacao drink</label><label><input type="radio" value="2" name="t11-ref-3" data-correct="false"> C. the ceremony</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-4">
+          <p>4. “<b>They</b> promised each other…” — they =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-4" data-correct="false"> A. the children</label><label><input type="radio" value="1" name="t11-ref-4" data-correct="true"> B. the parents in the campaign</label><label><input type="radio" value="2" name="t11-ref-4" data-correct="false"> C. the teachers</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-5">
+          <p>5. “…a smartphone can come later, with clear family rules about when and where <b>it</b> can be used.” — it =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-5" data-correct="true"> A. the smartphone</label><label><input type="radio" value="1" name="t11-ref-5" data-correct="false"> B. the family</label><label><input type="radio" value="2" name="t11-ref-5" data-correct="false"> C. the simple phone</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-ref', 't11-ref-score')">Check answers</button>
+          <span id="t11-ref-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 20</div>
+      <h2>Reading Skill — Speed Reading Challenge</h2>
+      <p class="task-sub"><b>Part 1:</b> skim in <b>60 seconds</b>. <b>Part 2:</b> scan for six answers in <b>3 minutes</b>.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">A Short History of the Umbrella</h3>
+        <p class="article-meta">Speed reading · 280 words · 195 words</p>
+        <p><span class="para-label">A</span>Umbrellas were first used not against rain but against the sun. More than three thousand years ago, sunshades appear in art from ancient Egypt, Assyria and China, where they were often a sign of rank: only kings and nobles were shaded by them. In China, oiled paper was used to make shades that could also keep off rain, and Chinese craftsmen were also among the first to make umbrellas that could fold.</p><p><span class="para-label">B</span>In Europe, umbrellas were long seen as something for women. When the traveller Jonas Hanway began carrying one in London in the 1750s, he was laughed at in the street, and coach drivers, who earned money from people trying to stay dry, shouted insults at him. Within thirty years, however, umbrellas had become common among men too, and some were still called ‘Hanways’.</p><p><span class="para-label">C</span>Early umbrellas were heavy, with frames of wood or whalebone. In 1852 the English manufacturer Samuel Fox introduced a frame with steel ribs, which was lighter and stronger, and the basic design has changed little since. The folding pocket umbrella followed in the twentieth century. Today, around one billion umbrellas are sold every year, and most are made in China.</p>
+      </div>
+      <div class="card" id="t12-title"><div class="q-item" id="t12-title-1">
+          <p>1. Part 1 — What is the text mainly about?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-title-1" data-correct="false"> A. how to choose an umbrella</label><label><input type="radio" value="1" name="t12-title-1" data-correct="true"> B. the history of the umbrella</label><label><input type="radio" value="2" name="t12-title-1" data-correct="false"> C. the weather in London</label><label><input type="radio" value="3" name="t12-title-1" data-correct="false"> D. kings in ancient Egypt</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-title', 't12-title-score')">Check answers</button>
+          <span id="t12-title-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t12-scan" style="line-height:2.4;"><p>1. Umbrellas were first used against the <input type="text" class="text-answer" id="t12-1" data-correct="sun" autocomplete="off" style="width:80px;">.</p><p>2. Who carried an umbrella in London in the 1750s? Jonas <input type="text" class="text-answer" id="t12-2" data-correct="hanway" autocomplete="off" style="width:110px;"></p><p>3. Which workers shouted insults at him? coach <input type="text" class="text-answer" id="t12-3" data-correct="drivers" autocomplete="off" style="width:100px;"></p><p>4. In which year did Samuel Fox introduce steel ribs? <input type="text" class="text-answer" id="t12-4" data-correct="1852" autocomplete="off" style="width:80px;"></p><p>5. How many umbrellas are sold every year? around one <input type="text" class="text-answer" id="t12-5" data-correct="billion" autocomplete="off" style="width:100px;"></p><p>6. Where are most umbrellas made? <input type="text" class="text-answer" id="t12-6" data-correct="china" autocomplete="off" style="width:100px;"></p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-scan', 't12-scan-score')">Check answers</button>
+          <span id="t12-scan-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 20</div>
+      <h2>Vocabulary — Word Forms and Collocations</h2>
+      <p class="task-sub">Write the correct form, then choose the collocation.</p>
+      <div class="card" id="t13-wf" style="line-height:2.4;"><p>1. Bees are very <input type="text" class="text-answer" id="t13-1" data-correct="important" autocomplete="off" style="width:120px;"> for farmers. (importance)</p><p>2. Chocolate became <input type="text" class="text-answer" id="t13-2" data-correct="fashionable" autocomplete="off" style="width:130px;"> in Europe. (fashion)</p><p>3. Van Houten was a Dutch <input type="text" class="text-answer" id="t13-3" data-correct="chemist" autocomplete="off" style="width:110px;">. (chemistry — person)</p><p>4. Teachers say students <input type="text" class="text-answer" id="t13-4" data-correct="concentrate" autocomplete="off" style="width:130px;"> better without phones. (concentration)</p><p>5. Some people think phones are bad for <input type="text" class="text-answer" id="t13-5" data-correct="mental" autocomplete="off" style="width:100px;"> health. (mind — adjective)</p><p>6. Many cocoa farmers are very <input type="text" class="text-answer" id="t13-6" data-correct="poor" autocomplete="off" style="width:90px;">. (poverty)</p><p>7. The <input type="text" class="text-answer" id="t13-7" data-correct="invention" autocomplete="off" style="width:120px;"> of the chocolate bar happened in 1847. (invent)</p><p>8. Bees help plants to <input type="text" class="text-answer" id="t13-8" data-correct="produce" autocomplete="off" style="width:110px;"> fruit. (production — verb)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-wf', 't13-wf-score')">Check answers</button>
+          <span id="t13-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t13-col"><div class="q-item" id="t13-col-1">
+          <p>1. to ______ a campaign</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-1" data-correct="true"> start</label><label><input type="radio" value="1" name="t13-col-1" data-correct="false"> do</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-2">
+          <p>2. to ______ a prize</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-2" data-correct="true"> win</label><label><input type="radio" value="1" name="t13-col-2" data-correct="false"> earn</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-3">
+          <p>3. to ______ attention</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-3" data-correct="true"> pay</label><label><input type="radio" value="1" name="t13-col-3" data-correct="false"> do</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-4">
+          <p>4. to ______ in touch</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-4" data-correct="true"> stay</label><label><input type="radio" value="1" name="t13-col-4" data-correct="false"> make</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-5">
+          <p>5. to ______ eggs</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-5" data-correct="true"> lay</label><label><input type="radio" value="1" name="t13-col-5" data-correct="false"> lie</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-6">
+          <p>6. to ______ money</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-6" data-correct="true"> earn</label><label><input type="radio" value="1" name="t13-col-6" data-correct="false"> win</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-col', 't13-col-score')">Check answers</button>
+          <span id="t13-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 20</div>
+      <h2>Grammar for Writing — Line Graph Language and Opinions</h2>
+      <p class="task-sub">Choose the correct option.</p>
+      <div class="card" id="t14-gr"><div class="q-item" id="t14-gr-1">
+          <p>1. The number of visitors ______ from 2 million to 5 million.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-1" data-correct="true"> rose</label><label><input type="radio" value="1" name="t14-gr-1" data-correct="false"> raised</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-2">
+          <p>2. There was a ______ fall in visitors in 2020.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-2" data-correct="true"> sharp</label><label><input type="radio" value="1" name="t14-gr-2" data-correct="false"> sharply</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-3">
+          <p>3. Visitor numbers fell ______ in 2020.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-3" data-correct="false"> dramatic</label><label><input type="radio" value="1" name="t14-gr-3" data-correct="true"> dramatically</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-4">
+          <p>4. The figure ______ steady at 3 million.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-4" data-correct="true"> remained</label><label><input type="radio" value="1" name="t14-gr-4" data-correct="false"> was remain</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-5">
+          <p>5. ______ 2000 and 2020, visitors doubled.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-5" data-correct="true"> Between</label><label><input type="radio" value="1" name="t14-gr-5" data-correct="false"> From</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-6">
+          <p>6. I believe that children ______ have smartphones before 14.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-6" data-correct="true"> should not</label><label><input type="radio" value="1" name="t14-gr-6" data-correct="false"> should not to</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-7">
+          <p>7. Smartphones help children stay safe. ______, they can be addictive.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-7" data-correct="true"> However</label><label><input type="radio" value="1" name="t14-gr-7" data-correct="false"> Because</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-8">
+          <p>8. In my ______, phones should be delayed, not banned.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-8" data-correct="true"> opinion</label><label><input type="radio" value="1" name="t14-gr-8" data-correct="false"> think</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-gr', 't14-gr-score')">Check answers</button>
+          <span id="t14-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task15" data-task="15">
+      <div class="task-eyebrow">Task 15 of 20</div>
+      <h2>Writing Task 1 — Skills: Line Graphs</h2>
+      <p class="task-sub">Study the line graph and practise the language before you write.</p>
+<div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Visitors to three museums in one city, 2000–2020 (millions)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Visitors to three museums in one city, 2000–2020 (millions)</text><line x1="64" y1="290.0" x2="620" y2="290.0" stroke="#e3e5ec"/><text x="56" y="294.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="249.3" x2="620" y2="249.3" stroke="#e3e5ec"/><text x="56" y="253.3" text-anchor="end" font-size="11" fill="#4b4e5c">1</text><line x1="64" y1="208.7" x2="620" y2="208.7" stroke="#e3e5ec"/><text x="56" y="212.7" text-anchor="end" font-size="11" fill="#4b4e5c">2</text><line x1="64" y1="168.0" x2="620" y2="168.0" stroke="#e3e5ec"/><text x="56" y="172.0" text-anchor="end" font-size="11" fill="#4b4e5c">3</text><line x1="64" y1="127.3" x2="620" y2="127.3" stroke="#e3e5ec"/><text x="56" y="131.3" text-anchor="end" font-size="11" fill="#4b4e5c">4</text><line x1="64" y1="86.7" x2="620" y2="86.7" stroke="#e3e5ec"/><text x="56" y="90.7" text-anchor="end" font-size="11" fill="#4b4e5c">5</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">6</text><text x="64.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2000</text><text x="203.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2005</text><text x="342.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2010</text><text x="481.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2015</text><text x="620.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2020</text><text x="14" y="168.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 168.0)">millions of visitors</text><polyline fill="none" stroke="#2c6bed" stroke-width="2.6" points="64.0,208.7 203.0,168.0 342.0,127.3 481.0,86.7 620.0,208.7"/><circle cx="64.0" cy="208.7" r="3.6" fill="#2c6bed"/><circle cx="203.0" cy="168.0" r="3.6" fill="#2c6bed"/><circle cx="342.0" cy="127.3" r="3.6" fill="#2c6bed"/><circle cx="481.0" cy="86.7" r="3.6" fill="#2c6bed"/><circle cx="620.0" cy="208.7" r="3.6" fill="#2c6bed"/><rect x="64" y="334" width="14" height="4" fill="#2c6bed"/><text x="84" y="339" font-size="12" fill="#14162b">Science Museum</text><polyline fill="none" stroke="#d9480f" stroke-width="2.6" points="64.0,127.3 203.0,127.3 342.0,127.3 481.0,127.3 620.0,229.0"/><circle cx="64.0" cy="127.3" r="3.6" fill="#d9480f"/><circle cx="203.0" cy="127.3" r="3.6" fill="#d9480f"/><circle cx="342.0" cy="127.3" r="3.6" fill="#d9480f"/><circle cx="481.0" cy="127.3" r="3.6" fill="#d9480f"/><circle cx="620.0" cy="229.0" r="3.6" fill="#d9480f"/><rect x="194.8" y="334" width="14" height="4" fill="#d9480f"/><text x="214.8" y="339" font-size="12" fill="#14162b">Art Gallery</text><polyline fill="none" stroke="#2b8a3e" stroke-width="2.6" points="64.0,168.0 203.0,188.3 342.0,208.7 481.0,229.0 620.0,249.3"/><circle cx="64.0" cy="168.0" r="3.6" fill="#2b8a3e"/><circle cx="203.0" cy="188.3" r="3.6" fill="#2b8a3e"/><circle cx="342.0" cy="208.7" r="3.6" fill="#2b8a3e"/><circle cx="481.0" cy="229.0" r="3.6" fill="#2b8a3e"/><circle cx="620.0" cy="249.3" r="3.6" fill="#2b8a3e"/><rect x="304.0" y="334" width="14" height="4" fill="#2b8a3e"/><text x="324.0" y="339" font-size="12" fill="#14162b">History Museum</text></svg></div>
+      <div class="card" id="t15-acc"><div class="sel-row"><select class="select" id="t15-acc-1" data-answer="True"><option value="">—</option><option value="True">True</option><option value="False">False</option></select><span><b>1.</b> The Science Museum’s visitors rose from 2 million to 5 million between 2000 and 2015.</span></div><div class="sel-row"><select class="select" id="t15-acc-2" data-answer="True"><option value="">—</option><option value="True">True</option><option value="False">False</option></select><span><b>2.</b> The Art Gallery had the most visitors in 2000.</span></div><div class="sel-row"><select class="select" id="t15-acc-3" data-answer="False"><option value="">—</option><option value="True">True</option><option value="False">False</option></select><span><b>3.</b> The History Museum’s visitors increased over the period.</span></div><div class="sel-row"><select class="select" id="t15-acc-4" data-answer="True"><option value="">—</option><option value="True">True</option><option value="False">False</option></select><span><b>4.</b> All three museums had fewer visitors in 2020 than in 2015.</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-acc', 't15-acc-score')">Check answers</button>
+          <span id="t15-acc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t15-g" style="line-height:2.4;"><p>1. The number of visitors to the Science Museum rose <input type="text" class="text-answer" id="t15-1" data-correct="steadily/gradually" autocomplete="off" style="width:110px;"> from 2 million to 5 million between 2000 and 2015.</p><p>2. Visitors to the Art Gallery <input type="text" class="text-answer" id="t15-2" data-correct="remained/stayed" autocomplete="off" style="width:100px;"> stable at 4 million until 2015.</p><p>3. The History Museum saw a gradual <input type="text" class="text-answer" id="t15-3" data-correct="decline/decrease/fall" autocomplete="off" style="width:110px;"> throughout the period.</p><p>4. In 2020, all three museums experienced a sharp <input type="text" class="text-answer" id="t15-4" data-correct="drop/fall/decline/decrease" autocomplete="off" style="width:100px;"> in visitors.</p><p>5. <input type="text" class="text-answer" id="t15-5" data-correct="overall" autocomplete="off" style="width:90px;">, the Science Museum became the most popular museum.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-g', 't15-g-score')">Check answers</button>
+          <span id="t15-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task16" data-task="16">
+      <div class="task-eyebrow">Task 16 of 20</div>
+      <h2>Writing Task 1 — Your Report</h2>
+      <p class="task-sub">Write the full report. About <b>20 minutes</b>, <b>at least 150 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The line graph below shows the number of visitors to three museums in one city between 2000 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Visitors to three museums in one city, 2000–2020 (millions)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Visitors to three museums in one city, 2000–2020 (millions)</text><line x1="64" y1="290.0" x2="620" y2="290.0" stroke="#e3e5ec"/><text x="56" y="294.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="249.3" x2="620" y2="249.3" stroke="#e3e5ec"/><text x="56" y="253.3" text-anchor="end" font-size="11" fill="#4b4e5c">1</text><line x1="64" y1="208.7" x2="620" y2="208.7" stroke="#e3e5ec"/><text x="56" y="212.7" text-anchor="end" font-size="11" fill="#4b4e5c">2</text><line x1="64" y1="168.0" x2="620" y2="168.0" stroke="#e3e5ec"/><text x="56" y="172.0" text-anchor="end" font-size="11" fill="#4b4e5c">3</text><line x1="64" y1="127.3" x2="620" y2="127.3" stroke="#e3e5ec"/><text x="56" y="131.3" text-anchor="end" font-size="11" fill="#4b4e5c">4</text><line x1="64" y1="86.7" x2="620" y2="86.7" stroke="#e3e5ec"/><text x="56" y="90.7" text-anchor="end" font-size="11" fill="#4b4e5c">5</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">6</text><text x="64.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2000</text><text x="203.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2005</text><text x="342.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2010</text><text x="481.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2015</text><text x="620.0" y="308" text-anchor="middle" font-size="11" fill="#4b4e5c">2020</text><text x="14" y="168.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 168.0)">millions of visitors</text><polyline fill="none" stroke="#2c6bed" stroke-width="2.6" points="64.0,208.7 203.0,168.0 342.0,127.3 481.0,86.7 620.0,208.7"/><circle cx="64.0" cy="208.7" r="3.6" fill="#2c6bed"/><circle cx="203.0" cy="168.0" r="3.6" fill="#2c6bed"/><circle cx="342.0" cy="127.3" r="3.6" fill="#2c6bed"/><circle cx="481.0" cy="86.7" r="3.6" fill="#2c6bed"/><circle cx="620.0" cy="208.7" r="3.6" fill="#2c6bed"/><rect x="64" y="334" width="14" height="4" fill="#2c6bed"/><text x="84" y="339" font-size="12" fill="#14162b">Science Museum</text><polyline fill="none" stroke="#d9480f" stroke-width="2.6" points="64.0,127.3 203.0,127.3 342.0,127.3 481.0,127.3 620.0,229.0"/><circle cx="64.0" cy="127.3" r="3.6" fill="#d9480f"/><circle cx="203.0" cy="127.3" r="3.6" fill="#d9480f"/><circle cx="342.0" cy="127.3" r="3.6" fill="#d9480f"/><circle cx="481.0" cy="127.3" r="3.6" fill="#d9480f"/><circle cx="620.0" cy="229.0" r="3.6" fill="#d9480f"/><rect x="194.8" y="334" width="14" height="4" fill="#d9480f"/><text x="214.8" y="339" font-size="12" fill="#14162b">Art Gallery</text><polyline fill="none" stroke="#2b8a3e" stroke-width="2.6" points="64.0,168.0 203.0,188.3 342.0,208.7 481.0,229.0 620.0,249.3"/><circle cx="64.0" cy="168.0" r="3.6" fill="#2b8a3e"/><circle cx="203.0" cy="188.3" r="3.6" fill="#2b8a3e"/><circle cx="342.0" cy="208.7" r="3.6" fill="#2b8a3e"/><circle cx="481.0" cy="229.0" r="3.6" fill="#2b8a3e"/><circle cx="620.0" cy="249.3" r="3.6" fill="#2b8a3e"/><rect x="304.0" y="334" width="14" height="4" fill="#2b8a3e"/><text x="324.0" y="339" font-size="12" fill="#14162b">History Museum</text></svg></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t16-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t16-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t16-essay-model"><div class="model-text">
+  <p>The line graph shows how many people visited three museums in one city between 2000 and 2020.</p>
+  <p>Overall, the Science Museum became more popular until 2015, while the History Museum became less popular throughout the period. All three museums had far fewer visitors in 2020.</p>
+  <p>In 2000, the Art Gallery was the most popular museum, with 4 million visitors, and this figure remained stable until 2015. The Science Museum started with 2 million visitors, but this number rose steadily to 5 million in 2015, making it the most popular museum.</p>
+  <p>By contrast, visitors to the History Museum fell gradually from 3 million in 2000 to 1.5 million in 2015. Between 2015 and 2020, all three museums saw a sharp drop. Visitors to the Science Museum fell to 2 million, the Art Gallery dropped to 1.5 million and the History Museum fell to just 1 million.</p>
+  <p class="alt">≈ 165 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task17" data-task="17">
+      <div class="task-eyebrow">Task 17 of 20</div>
+      <h2>Writing Task 2 — Planning</h2>
+      <p class="task-sub">Plan before you write. You read about this topic in Passage 3 — use the ideas, but in your own words.</p>
+<div class="card task-prompt"><p class="prompt-label">Writing Task 2</p><p><i>Some people think that children under the age of 14 should not be allowed to have a smartphone. To what extent do you agree or disagree?</i></p></div>
+      <div class="card" id="t17-pl"><div class="q-item" id="t17-pl-1">
+          <p>1. What type of question is this?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-1" data-correct="true"> A. opinion (agree / disagree)</label><label><input type="radio" value="1" name="t17-pl-1" data-correct="false"> B. discussion</label><label><input type="radio" value="2" name="t17-pl-1" data-correct="false"> C. problem / solution</label><label><input type="radio" value="3" name="t17-pl-1" data-correct="false"> D. advantages / disadvantages</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-2">
+          <p>2. Best thesis:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-2" data-correct="false"> A. Smartphones are popular.</label><label><input type="radio" value="1" name="t17-pl-2" data-correct="true"> B. I partly agree: children under 14 should have a simple phone, but not a smartphone.</label><label><input type="radio" value="2" name="t17-pl-2" data-correct="false"> C. There are many phones.</label><label><input type="radio" value="3" name="t17-pl-2" data-correct="false"> D. This essay is about phones.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-3">
+          <p>3. Best reason to AGREE:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-3" data-correct="true"> A. Smartphones can be addictive and stop children concentrating at school.</label><label><input type="radio" value="1" name="t17-pl-3" data-correct="false"> B. Phones are expensive to repair.</label><label><input type="radio" value="2" name="t17-pl-3" data-correct="false"> C. Smartphones have cameras.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-4">
+          <p>4. Best reason to DISAGREE (or partly):</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-4" data-correct="true"> A. Parents need to contact their children and know they are safe.</label><label><input type="radio" value="1" name="t17-pl-4" data-correct="false"> B. Phones are black.</label><label><input type="radio" value="2" name="t17-pl-4" data-correct="false"> C. Adults like phones.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t17-pl', 't17-pl-score')">Check answers</button>
+          <span id="t17-pl-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write your plan: your opinion + two main reasons, each with an example.</p><textarea class="no-check mini-answer" id="t17-out-1" placeholder="Write your plan here..." style="min-height:110px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t17-out-btn">Show an example plan</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t17-out-ans"><p><b>Opinion:</b> partly agree. <b>Reason 1 (agree):</b> smartphones are addictive and hurt concentration — schools that ban phones report better focus. <b>Reason 2 (but):</b> children need to contact parents — a simple phone is enough. <b>Conclusion:</b> simple phone before 14, smartphone later with family rules.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task18" data-task="18">
+      <div class="task-eyebrow">Task 18 of 20</div>
+      <h2>Writing Task 2 — Your Essay</h2>
+      <p class="task-sub">Write the full essay. About <b>40 minutes</b>, <b>at least 250 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Some people think that children under the age of 14 should not be allowed to have a smartphone. To what extent do you agree or disagree?</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t18-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t18-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t18-essay-model"><div class="model-text">
+  <p>Nowadays, many children get a smartphone at a very young age. Some people believe that children under fourteen should not have one. I partly agree with this view: young children should have a phone, but not a smartphone.</p>
+  <p>On the one hand, there are good reasons to keep smartphones away from young children. Firstly, smartphones can be very addictive. Many children spend hours on games and social media instead of doing homework, playing sports or sleeping. Secondly, smartphones can make it difficult to concentrate at school. For example, teachers in schools that ban phones report that students focus better in lessons and talk to each other more at break times.</p>
+  <p>On the other hand, children do need a way to contact their parents. Many children travel to school alone, and parents want to know that they are safe. However, a simple phone that can only make calls and send messages is enough for this. It gives parents and children the safety they need without the problems of the internet and social media.</p>
+  <p>In addition, when children are older, they can learn to use a smartphone responsibly. Parents can set clear rules, for example no phones at the dinner table or in the bedroom at night.</p>
+  <p>In conclusion, I agree that children under fourteen should not have smartphones, but I believe they should have a simple phone for safety. When they are older, they can have a smartphone with clear family rules.</p>
+  <p class="alt">≈ 260 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task19" data-task="19">
+      <div class="task-eyebrow">Task 19 of 20</div>
+      <h2>Speaking Part 3 — Today’s Topics</h2>
+      <p class="task-sub">Answer each question in its own box — about <b>30–45 seconds</b> each.</p>
+      <div class="question-box" data-field="t19-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Why are insects such as bees important?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“They are important because…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Do you think people eat too much sweet food nowadays?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Yes, I think so, because…”</li><li>“In my country,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">At what age should children get their first phone?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“In my opinion,…”</li><li>“The main reason is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Would you like to work four days a week? Why?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d love to, because…”</li><li>“On the other hand,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task20" data-task="20">
+      <div class="task-eyebrow">Task 20 of 20</div>
+      <h2>Self-Check — Your Reading Days</h2>
+      <p class="task-sub">Compare today with Day 35 and Day 36.</p>
+      <div class="card"><p class="mini-q">1. Your reading scores on Days 35, 36 and 39 (out of 40):</p><textarea class="no-check mini-answer" id="t20-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. Which question type is getting easier? Which is still difficult?</p><textarea class="no-check mini-answer" id="t20-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Look at your Task 2 essay: did you give your opinion in the introduction AND the conclusion?</p><textarea class="no-check mini-answer" id="t20-rf-3" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t20-rf-btn">Show some guidance</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t20-rf-ans"><p>Signs of progress: fewer NOT GIVEN mistakes; correct spelling in gap-fills; a Task 1 overview that describes the main trends; a clear opinion at the start and the end of your Task 2 essay.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 20</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 39 of 45</div>
+    <h1>Day 39 complete! 🎉</h1>
+    <p>Day 39 done — a full reading test, two extra articles, reading skills, vocabulary and grammar, Writing Task 1 (a line graph) and Task 2, and speaking.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t10-lm-lm');
+
+    initWritingCoach('t16-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The line graph below shows the number of visitors to three museums in one city between 2000 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.' });
+    initWritingCoach('t18-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Some people think that children under the age of 14 should not be allowed to have a smartphone. To what extent do you agree or disagree?' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 39, 8, 't8-speaking-summary', 30); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-summary"]'); if (b) initRecordControl(b, user.id, 39, 9, 't9-speaking-summary', 30); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-1"]'); if (b) initRecordControl(b, user.id, 39, 19, 't19-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-2"]'); if (b) initRecordControl(b, user.id, 39, 19, 't19-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-3"]'); if (b) initRecordControl(b, user.id, 39, 19, 't19-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-4"]'); if (b) initRecordControl(b, user.id, 39, 19, 't19-speaking-4', 0); }
+
+    await initTaskFlow(39, 20, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-notes1', 't2-notes1-score'); checkAllAnswers('t2-mc', 't2-mc-score'); },
+      4: () => { checkAllAnswers('t4-h', 't4-h-score'); checkAllAnswers('t4-sc', 't4-sc-score'); checkAllAnswers('t4-sa', 't4-sa-score'); },
+      6: () => { checkAllAnswers('t6-mi', 't6-mi-score'); checkAllAnswers('t6-s', 't6-s-score'); checkAllAnswers('t6-yn', 't6-yn-score'); },
+      8: () => { checkAllAnswers('t8-mc', 't8-mc-score'); },
+      9: () => { checkAllAnswers('t9-tf', 't9-tf-score'); },
+      10: () => { checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm'); checkAllAnswers('t10-mc', 't10-mc-score'); },
+      11: () => { checkAllAnswers('t11-ref', 't11-ref-score'); },
+      12: () => { checkAllAnswers('t12-title', 't12-title-score'); checkAllAnswers('t12-scan', 't12-scan-score'); },
+      13: () => { checkAllAnswers('t13-wf', 't13-wf-score'); checkAllAnswers('t13-col', 't13-col-score'); },
+      14: () => { checkAllAnswers('t14-gr', 't14-gr-score'); },
+      15: () => { checkAllAnswers('t15-acc', 't15-acc-score'); checkAllAnswers('t15-g', 't15-g-score'); },
+      17: () => { checkAllAnswers('t17-pl', 't17-pl-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-sum-btn', 't9-sum-ans', '[id^="t9-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t16-essay-model-btn', 't16-essay-model', '#t16-essay');
+    initGatedMistakeReveal('t17-out-btn', 't17-out-ans', '[id^="t17-out-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t18-essay-model-btn', 't18-essay-model', '#t18-essay');
+    initGatedMistakeReveal('t20-rf-btn', 't20-rf-ans', '[id^="t20-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>

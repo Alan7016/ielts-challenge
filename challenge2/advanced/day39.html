@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 39 — Advanced — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 39 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 20</div>
+      <h2>Starting Off — A Reading and Writing Day</h2>
+      <p class="task-sub">A long <b>reading and writing day</b> — about <b>4 hours</b>, with breaks. A full reading test, two extra articles, reading skills, vocabulary and grammar, a full <b>Writing Task 1</b> (a table) and <b>Task 2</b>, and speaking.</p>
+      <div class="card" id="t1-st"><div class="q-item" id="t1-st-1">
+          <p>1. With a table in Task 1, you should</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-1" data-correct="false"> A. describe every number</label><label><input type="radio" value="1" name="t1-st-1" data-correct="true"> B. select the most important figures and compare them</label><label><input type="radio" value="2" name="t1-st-1" data-correct="false"> C. give reasons for the changes</label><label><input type="radio" value="3" name="t1-st-1" data-correct="false"> D. copy the table into sentences</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-2">
+          <p>2. In a matching-features task, each option</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-2" data-correct="false"> A. must be used once</label><label><input type="radio" value="1" name="t1-st-2" data-correct="true"> B. may be used more than once or not at all</label><label><input type="radio" value="2" name="t1-st-2" data-correct="false"> C. appears in alphabetical order</label><label><input type="radio" value="3" name="t1-st-2" data-correct="false"> D. is a paragraph letter</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-3">
+          <p>3. A “harm than good” question is a kind of</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-3" data-correct="true"> A. opinion essay</label><label><input type="radio" value="1" name="t1-st-3" data-correct="false"> B. process description</label><label><input type="radio" value="2" name="t1-st-3" data-correct="false"> C. discussion with no opinion</label><label><input type="radio" value="3" name="t1-st-3" data-correct="false"> D. letter</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-st-4">
+          <p>4. When the passage gives a theory that was later rejected, a statement saying the theory is correct is</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-st-4" data-correct="false"> A. TRUE</label><label><input type="radio" value="1" name="t1-st-4" data-correct="true"> B. FALSE</label><label><input type="radio" value="2" name="t1-st-4" data-correct="false"> C. NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-st', 't1-st-score')">Check answers</button>
+          <span id="t1-st-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. swarm</button><button type="button" class="lm-item" data-key="2">2. devastate</button><button type="button" class="lm-item" data-key="3">3. gregarious</button><button type="button" class="lm-item" data-key="4">4. contagious</button><button type="button" class="lm-item" data-key="5">5. empathy</button><button type="button" class="lm-item" data-key="6">6. overcrowded</button><button type="button" class="lm-item" data-key="7">7. levy</button><button type="button" class="lm-item" data-key="8">8. resident</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. a person who lives in a place</button><button type="button" class="lm-item" data-key="b">b. with too many people</button><button type="button" class="lm-item" data-key="c">c. destroy completely</button><button type="button" class="lm-item" data-key="d">d. the ability to share another person’s feelings</button><button type="button" class="lm-item" data-key="e">e. living in groups</button><button type="button" class="lm-item" data-key="f">f. an official charge or tax</button><button type="button" class="lm-item" data-key="g">g. a very large group of flying insects</button><button type="button" class="lm-item" data-key="h">h. spreading from one person to another</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 20</div>
+      <h2>Reading Passage 1 — The Desert Locust</h2>
+      <p class="task-sub"><b>The test starts now.</b> About <b>18 minutes</b> for Questions 1–13.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">The Desert Locust<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">How a harmless grasshopper becomes one of the world’s most destructive pests.</small></h3>
+            <p class="article-meta">Reading Passage 1 · Nature · 375 words</p>
+            <p><span class="para-label">A</span>For most of its life, the desert locust is an unremarkable grasshopper. Living alone in the dry regions between West Africa and India, it avoids other locusts and does little damage. But under certain conditions it undergoes a dramatic transformation: it changes colour, becomes more active and begins to seek out other locusts. Scientists call these two forms the ‘solitary’ and ‘gregarious’ phases.</p><p><span class="para-label">B</span>The trigger is crowding. After heavy rains, vegetation grows rapidly and locusts breed in large numbers. When the rain stops and plants dry out, the insects are forced together on the remaining patches of green. Research published in 2009 by scientists at the universities of Oxford and Cambridge showed that repeated contact between locusts’ back legs causes a rise in the chemical serotonin, which switches them into the gregarious phase within a few hours.</p><p><span class="para-label">C</span>Gregarious locusts form swarms that can be enormous. A single swarm may cover hundreds of square kilometres, with up to 80 million locusts in each square kilometre. Carried by the wind, swarms can travel up to 150 kilometres a day, and each locust can eat roughly its own weight in fresh food daily. A swarm of one square kilometre can therefore eat as much food in a day as about 35,000 people.</p><p><span class="para-label">D</span>Between 2019 and 2021, East Africa suffered its worst locust outbreak for decades. Unusually heavy cyclones had created ideal breeding conditions in the Arabian Peninsula, and swarms spread into Ethiopia, Somalia and Kenya, where it was the worst outbreak for 70 years. Millions of people already facing food shortages were put at further risk.</p><p><span class="para-label">E</span>Controlling locusts is difficult because swarms move quickly across national borders, often into remote or politically unstable areas. The Food and Agriculture Organization (FAO) of the United Nations runs a Desert Locust Information Service, which uses satellite data on rainfall and vegetation to predict where locusts are likely to breed, so that countries can act early.</p><p><span class="para-label">F</span>The main method of control remains spraying chemical pesticides, which can harm other wildlife and people. An alternative is a biopesticide based on a natural fungus, Metarhizium, which kills locusts but is harmless to most other species. However, it acts slowly, taking up to two weeks, so it is most useful when outbreaks are detected early.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 1–6</p><p class="qg-instr">Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t2-tf"><div class="q-item" id="t2-tf-1">
+          <p>1. Solitary locusts actively look for other locusts.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-1" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-1" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-2">
+          <p>2. Locust numbers increase after heavy rains.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-3">
+          <p>3. The change to the gregarious phase takes several weeks.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-4">
+          <p>4. Swarms always fly against the wind.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-4" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-4" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t2-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-5">
+          <p>5. The 2019–2021 outbreak in Kenya was the worst for seven decades.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-5" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t2-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-5" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-tf-6">
+          <p>6. Most farmers in East Africa prefer biopesticides.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-tf-6" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t2-tf-6" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t2-tf-6" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-tf', 't2-tf-score')">Check answers</button>
+          <span id="t2-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–10</p><p class="qg-instr">Complete the notes. Choose <b>ONE WORD AND/OR A NUMBER</b> from the passage.</p></div>
+<div class="card" id="t2-notes1"><p class="prompt-label">Desert locusts</p><div style="line-height:2.1;"><div>• Chemical that causes the change: (7) <input type="text" class="text-answer" id="t2-7" data-correct="serotonin" autocomplete="off" style="width:130px;"></div><div>• Distance a swarm can travel each day: up to (8) <input type="text" class="text-answer" id="t2-8" data-correct="150" autocomplete="off" style="width:80px;"> kilometres</div><div>• FAO predictions use satellite data on rainfall and (9) <input type="text" class="text-answer" id="t2-9" data-correct="vegetation" autocomplete="off" style="width:130px;"></div><div>• Biopesticide based on a natural (10) <input type="text" class="text-answer" id="t2-10" data-correct="fungus" autocomplete="off" style="width:100px;"></div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-notes1', 't2-notes1-score')">Check answers</button>
+          <span id="t2-notes1-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 11–13</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t2-mc"><div class="q-item" id="t2-mc-11">
+          <p>11. What causes locusts to be forced together?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-11" data-correct="false"> A. cold weather</label><label><input type="radio" value="1" name="t2-mc-11" data-correct="true"> B. plants drying out after the rain stops</label><label><input type="radio" value="2" name="t2-mc-11" data-correct="false"> C. strong winds</label><label><input type="radio" value="3" name="t2-mc-11" data-correct="false"> D. pesticides</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-12">
+          <p>12. Why is controlling locusts difficult?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-12" data-correct="true"> A. Swarms move quickly across borders, often into remote areas.</label><label><input type="radio" value="1" name="t2-mc-12" data-correct="false"> B. Pesticides are illegal.</label><label><input type="radio" value="2" name="t2-mc-12" data-correct="false"> C. Locusts are too small to see.</label><label><input type="radio" value="3" name="t2-mc-12" data-correct="false"> D. Satellites cannot see them.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-mc-13">
+          <p>13. What is the main disadvantage of the Metarhizium biopesticide?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-mc-13" data-correct="false"> A. It harms other species.</label><label><input type="radio" value="1" name="t2-mc-13" data-correct="true"> B. It works slowly.</label><label><input type="radio" value="2" name="t2-mc-13" data-correct="false"> C. It is very expensive.</label><label><input type="radio" value="3" name="t2-mc-13" data-correct="false"> D. It only works in rain.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-mc', 't2-mc-score')">Check answers</button>
+          <span id="t2-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 20</div>
+      <h2>Reading Passage 1 — Answer Analysis</h2>
+      <p class="task-sub">Check the evidence for every answer.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — The Desert Locust</summary>
+        <p><span class="para-label">A</span>For most of its life, the desert locust is an unremarkable grasshopper. Living alone in the dry regions between West Africa and India, it avoids other locusts and does little damage. But under certain conditions it undergoes a dramatic transformation: it changes colour, becomes more active and begins to seek out other locusts. Scientists call these two forms the ‘solitary’ and ‘gregarious’ phases.</p><p><span class="para-label">B</span>The trigger is crowding. After heavy rains, vegetation grows rapidly and locusts breed in large numbers. When the rain stops and plants dry out, the insects are forced together on the remaining patches of green. Research published in 2009 by scientists at the universities of Oxford and Cambridge showed that repeated contact between locusts’ back legs causes a rise in the chemical serotonin, which switches them into the gregarious phase within a few hours.</p><p><span class="para-label">C</span>Gregarious locusts form swarms that can be enormous. A single swarm may cover hundreds of square kilometres, with up to 80 million locusts in each square kilometre. Carried by the wind, swarms can travel up to 150 kilometres a day, and each locust can eat roughly its own weight in fresh food daily. A swarm of one square kilometre can therefore eat as much food in a day as about 35,000 people.</p><p><span class="para-label">D</span>Between 2019 and 2021, East Africa suffered its worst locust outbreak for decades. Unusually heavy cyclones had created ideal breeding conditions in the Arabian Peninsula, and swarms spread into Ethiopia, Somalia and Kenya, where it was the worst outbreak for 70 years. Millions of people already facing food shortages were put at further risk.</p><p><span class="para-label">E</span>Controlling locusts is difficult because swarms move quickly across national borders, often into remote or politically unstable areas. The Food and Agriculture Organization (FAO) of the United Nations runs a Desert Locust Information Service, which uses satellite data on rainfall and vegetation to predict where locusts are likely to breed, so that countries can act early.</p><p><span class="para-label">F</span>The main method of control remains spraying chemical pesticides, which can harm other wildlife and people. An alternative is a biopesticide based on a natural fungus, Metarhizium, which kills locusts but is harmless to most other species. However, it acts slowly, taking up to two weeks, so it is most useful when outbreaks are detected early.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">1</span><span class="an-ans">FALSE</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">it avoids other locusts</span> — it is the gregarious form that seeks out others.</p></div></details><details class="an-item"><summary><span class="an-n">2</span><span class="an-ans">TRUE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">After heavy rains … locusts breed in large numbers</span>.</p></div></details><details class="an-item"><summary><span class="an-n">3</span><span class="an-ans">FALSE</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">within a few hours</span>.</p></div></details><details class="an-item"><summary><span class="an-n">4</span><span class="an-ans">FALSE</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">Carried by the wind</span>.</p></div></details><details class="an-item"><summary><span class="an-n">5</span><span class="an-ans">TRUE</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">Kenya, where it was the worst outbreak for 70 years</span>. Seventy years = seven decades.</p></div></details><details class="an-item"><summary><span class="an-n">6</span><span class="an-ans">NOT GIVEN</span><span class="an-where">Para F</span></summary><div class="an-body"><p>Farmers’ preferences are never mentioned.</p></div></details><details class="an-item"><summary><span class="an-n">7</span><span class="an-ans">serotonin</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">a rise in the chemical serotonin</span>.</p></div></details><details class="an-item"><summary><span class="an-n">8</span><span class="an-ans">150</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">up to 150 kilometres a day</span>.</p></div></details><details class="an-item"><summary><span class="an-n">9</span><span class="an-ans">vegetation</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">satellite data on rainfall and vegetation</span>.</p></div></details><details class="an-item"><summary><span class="an-n">10</span><span class="an-ans">fungus</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">based on a natural fungus</span>.</p></div></details><details class="an-item"><summary><span class="an-n">11</span><span class="an-ans">B</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">When the rain stops and plants dry out, the insects are forced together</span>.</p></div></details><details class="an-item"><summary><span class="an-n">12</span><span class="an-ans">A</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">swarms move quickly across national borders, often into remote or politically unstable areas</span>.</p></div></details><details class="an-item"><summary><span class="an-n">13</span><span class="an-ans">B</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">it acts slowly, taking up to two weeks</span>.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 20</div>
+      <h2>Reading Passage 2 — Why Do We Yawn?</h2>
+      <p class="task-sub">About <b>20 minutes</b> for Questions 14–26.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Why Do We Yawn?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">One of the most common human behaviours is still not fully understood.</small></h3>
+            <p class="article-meta">Reading Passage 2 · Biology · 373 words</p>
+            <p><span class="para-label">A</span>Everyone yawns, often many times a day, and yet scientists are still not certain why. Yawning appears very early in life: ultrasound scans show that babies begin to yawn in the womb, around eleven weeks after conception. Most vertebrates, from fish to birds to dogs, yawn too, which suggests that the behaviour is ancient and serves some useful purpose.</p><p><span class="para-label">B</span>For a long time, the most popular explanation was that we yawn to take in more oxygen when levels in the blood are low. In 1987, however, the psychologist Robert Provine tested this idea by asking volunteers to breathe air with extra oxygen or extra carbon dioxide. Their rate of yawning did not change, and the oxygen theory has since been largely abandoned.</p><p><span class="para-label">C</span>A more recent theory proposes that yawning cools the brain. When we yawn, the deep breath and the stretching of the jaw increase blood flow to the head, bringing cooler blood from the body. Studies by the psychologist Andrew Gallup found that people yawn more often when the air temperature is moderate, and less often when it is very hot or very cold — exactly as the theory predicts, since cooler air is most effective at cooling.</p><p><span class="para-label">D</span>Perhaps the most intriguing feature of yawning is that it is contagious. Seeing, hearing or even reading about someone yawning makes many people yawn themselves. Studies suggest that around half of adults catch yawns in this way. Interestingly, contagious yawning appears to develop only around the age of four or five, at about the same time that children begin to understand other people’s feelings.</p><p><span class="para-label">E</span>This has led some researchers to link contagious yawning with empathy. People are more likely to catch a yawn from a family member than from a stranger, and chimpanzees and dogs have been observed catching yawns, especially from those they are close to. However, the link is debated: some large studies have found that age is a better predictor of contagious yawning than empathy, since older people catch yawns less often.</p><p><span class="para-label">F</span>Whatever its purpose, yawning is generally harmless. Frequent yawning can occasionally be a sign of tiredness or certain medical conditions, but for most people a yawn is simply a reminder of how much about the human body remains unexplained.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 14–19</p><p class="qg-instr">Choose the correct heading for each paragraph, <b>A–F</b>.</p></div>
+<div class="card"><p class="prompt-label">List of Headings</p><p style="line-height:1.9; margin:0;"><b>i</b>&nbsp; An ancient and universal behaviour<br><b>ii</b>&nbsp; A popular idea tested and rejected<br><b>iii</b>&nbsp; Keeping the brain at the right temperature<br><b>iv</b>&nbsp; Catching yawns from others<br><b>v</b>&nbsp; A disputed connection<br><b>vi</b>&nbsp; Usually nothing to worry about<br><b>vii</b>&nbsp; How to stop yourself yawning<br><b>viii</b>&nbsp; Why animals sleep</p></div>
+      <div class="card" id="t4-h"><div class="sel-row"><select class="select" id="t4-h-14" data-answer="i"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>14.</b> Paragraph A</span></div><div class="sel-row"><select class="select" id="t4-h-15" data-answer="ii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>15.</b> Paragraph B</span></div><div class="sel-row"><select class="select" id="t4-h-16" data-answer="iii"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>16.</b> Paragraph C</span></div><div class="sel-row"><select class="select" id="t4-h-17" data-answer="iv"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>17.</b> Paragraph D</span></div><div class="sel-row"><select class="select" id="t4-h-18" data-answer="v"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>18.</b> Paragraph E</span></div><div class="sel-row"><select class="select" id="t4-h-19" data-answer="vi"><option value="">—</option><option value="i">i</option><option value="ii">ii</option><option value="iii">iii</option><option value="iv">iv</option><option value="v">v</option><option value="vi">vi</option><option value="vii">vii</option><option value="viii">viii</option></select><span><b>19.</b> Paragraph F</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-h', 't4-h-score')">Check answers</button>
+          <span id="t4-h-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 20–23</p><p class="qg-instr">Complete each sentence with the correct ending, <b>A–F</b>.</p></div>
+<div class="card"><p class="prompt-label">Endings</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; did not yawn more or less when the air they breathed was changed.<br><b>B</b>&nbsp; yawn more often at moderate temperatures.<br><b>C</b>&nbsp; begin to catch yawns at around four or five.<br><b>D</b>&nbsp; catch yawns less often than younger people.<br><b>E</b>&nbsp; never yawn at all.<br><b>F</b>&nbsp; yawn because their blood lacks oxygen.</p></div>
+      <div class="card" id="t4-se"><div class="sel-row"><select class="select" id="t4-se-20" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>20.</b> Provine’s volunteers</span></div><div class="sel-row"><select class="select" id="t4-se-21" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>21.</b> According to Gallup’s research, people</span></div><div class="sel-row"><select class="select" id="t4-se-22" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>22.</b> Children</span></div><div class="sel-row"><select class="select" id="t4-se-23" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option></select><span><b>23.</b> Older people</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-se', 't4-se-score')">Check answers</button>
+          <span id="t4-se-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 24–26</p><p class="qg-instr">Complete the summary. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t4-s" style="line-height:2.7;"><p>Yawning starts before birth: babies yawn in the (24) <input type="text" class="text-answer" id="t4-24" data-correct="womb" autocomplete="off" style="width:100px;">. Contagious yawning may be linked to (25) <input type="text" class="text-answer" id="t4-25" data-correct="empathy" autocomplete="off" style="width:110px;">, since people catch yawns more easily from family than from strangers, and even (26) <input type="text" class="text-answer" id="t4-26" data-correct="chimpanzees/dogs" autocomplete="off" style="width:130px;"> have been seen catching yawns.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-s', 't4-s-score')">Check answers</button>
+          <span id="t4-s-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 20</div>
+      <h2>Reading Passage 2 — Answer Analysis</h2>
+      <p class="task-sub">Check every answer.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Why Do We Yawn?</summary>
+        <p><span class="para-label">A</span>Everyone yawns, often many times a day, and yet scientists are still not certain why. Yawning appears very early in life: ultrasound scans show that babies begin to yawn in the womb, around eleven weeks after conception. Most vertebrates, from fish to birds to dogs, yawn too, which suggests that the behaviour is ancient and serves some useful purpose.</p><p><span class="para-label">B</span>For a long time, the most popular explanation was that we yawn to take in more oxygen when levels in the blood are low. In 1987, however, the psychologist Robert Provine tested this idea by asking volunteers to breathe air with extra oxygen or extra carbon dioxide. Their rate of yawning did not change, and the oxygen theory has since been largely abandoned.</p><p><span class="para-label">C</span>A more recent theory proposes that yawning cools the brain. When we yawn, the deep breath and the stretching of the jaw increase blood flow to the head, bringing cooler blood from the body. Studies by the psychologist Andrew Gallup found that people yawn more often when the air temperature is moderate, and less often when it is very hot or very cold — exactly as the theory predicts, since cooler air is most effective at cooling.</p><p><span class="para-label">D</span>Perhaps the most intriguing feature of yawning is that it is contagious. Seeing, hearing or even reading about someone yawning makes many people yawn themselves. Studies suggest that around half of adults catch yawns in this way. Interestingly, contagious yawning appears to develop only around the age of four or five, at about the same time that children begin to understand other people’s feelings.</p><p><span class="para-label">E</span>This has led some researchers to link contagious yawning with empathy. People are more likely to catch a yawn from a family member than from a stranger, and chimpanzees and dogs have been observed catching yawns, especially from those they are close to. However, the link is debated: some large studies have found that age is a better predictor of contagious yawning than empathy, since older people catch yawns less often.</p><p><span class="para-label">F</span>Whatever its purpose, yawning is generally harmless. Frequent yawning can occasionally be a sign of tiredness or certain medical conditions, but for most people a yawn is simply a reminder of how much about the human body remains unexplained.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">14</span><span class="an-ans">i</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">Most vertebrates … yawn too, which suggests that the behaviour is ancient</span>.</p></div></details><details class="an-item"><summary><span class="an-n">15</span><span class="an-ans">ii</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">the oxygen theory has since been largely abandoned</span>.</p></div></details><details class="an-item"><summary><span class="an-n">16</span><span class="an-ans">iii</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">yawning cools the brain</span>.</p></div></details><details class="an-item"><summary><span class="an-n">17</span><span class="an-ans">iv</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">it is contagious</span>.</p></div></details><details class="an-item"><summary><span class="an-n">18</span><span class="an-ans">v</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">However, the link is debated</span>.</p></div></details><details class="an-item"><summary><span class="an-n">19</span><span class="an-ans">vi</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">yawning is generally harmless</span>.</p><p><span class="trap">Trap:</span> vii — the passage never gives advice on stopping yawns.</p></div></details><details class="an-item"><summary><span class="an-n">20</span><span class="an-ans">A</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">Their rate of yawning did not change</span>.</p><p><span class="trap">Trap:</span> F is the theory Provine’s study rejected.</p></div></details><details class="an-item"><summary><span class="an-n">21</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">people yawn more often when the air temperature is moderate</span>.</p></div></details><details class="an-item"><summary><span class="an-n">22</span><span class="an-ans">C</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">develop only around the age of four or five</span>.</p></div></details><details class="an-item"><summary><span class="an-n">23</span><span class="an-ans">D</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">older people catch yawns less often</span>.</p></div></details><details class="an-item"><summary><span class="an-n">24</span><span class="an-ans">womb</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">babies begin to yawn in the womb</span>.</p></div></details><details class="an-item"><summary><span class="an-n">25</span><span class="an-ans">empathy</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">link contagious yawning with empathy</span>.</p></div></details><details class="an-item"><summary><span class="an-n">26</span><span class="an-ans">chimpanzees / dogs</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">chimpanzees and dogs have been observed catching yawns</span> — either word is accepted.</p></div></details></div>
+    </section>
+
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 20</div>
+      <h2>Reading Passage 3 — Too Many Tourists?</h2>
+      <p class="task-sub">About <b>22 minutes</b> for Questions 27–40.</p>
+      <div class="split">
+        <div class="split-pane split-left">
+          <div class="article labelled">
+            <h3 class="article-title">Too Many Tourists?<br><small style="font-size:0.95rem; font-weight:500; font-style:italic; color:var(--ink-soft);">Popular destinations are trying to protect themselves from their own success.</small></h3>
+            <p class="article-meta">Reading Passage 3 · Travel and society · 351 words</p>
+            <p><span class="para-label">A</span>Tourism is one of the world’s largest industries, accounting for around one in ten jobs worldwide. For many cities and countries, visitors are a vital source of income. Yet in recent years, the word ‘overtourism’ has entered the language to describe places where the number of visitors has become so great that it damages the quality of life of residents and the experience of tourists themselves.</p><p><span class="para-label">B</span>Venice is perhaps the best-known example. The historic centre now has fewer than 50,000 permanent residents, while millions of visitors arrive each year, many on day trips. In 2024, the city became the first in the world to charge day-trippers an entry fee on its busiest days, in an attempt to spread visitors more evenly.</p><p><span class="para-label">C</span>In Barcelona, frustration has been more visible. In the summer of 2024, thousands of residents marched through the city, some spraying tourists with water pistols, to protest against rising rents, which many blamed on short-term holiday rentals. The city government has announced that it intends to end all licences for tourist apartments by 2028.</p><p><span class="para-label">D</span>Amsterdam has taken a range of measures, including banning the construction of new hotels in the city and voting to move cruise ships away from the city centre. The city has also run advertising campaigns aimed at discouraging certain kinds of visitor, particularly young people coming mainly to party.</p><p><span class="para-label">E</span>A very different approach has been taken by the Himalayan kingdom of Bhutan, which has long followed a policy of ‘high value, low volume’ tourism. Most international visitors must pay a daily Sustainable Development Fee, which is used to fund healthcare, education and environmental protection. As a result, Bhutan receives relatively few visitors, but each contributes significantly to the local economy.</p><p><span class="para-label">F</span>In my view, the problem is not tourism itself but how it is managed. Fees and limits can help, but they risk turning popular places into destinations only the wealthy can afford. The more effective solutions spread visitors across seasons and regions and ensure that local people share in the benefits — otherwise, residents will continue to feel that their homes have been taken from them.</p>
+          </div>
+        </div>
+        <div class="split-pane split-right">
+      <div class="qgroup"><p class="qg-title">Questions 27–30</p><p class="qg-instr">Match each measure with the correct place, <b>A–D</b>.</p></div>
+<div class="card"><p class="prompt-label">Places</p><p style="line-height:1.9; margin:0;"><b>A</b>&nbsp; Venice<br><b>B</b>&nbsp; Barcelona<br><b>C</b>&nbsp; Amsterdam<br><b>D</b>&nbsp; Bhutan</p></div>
+      <div class="card" id="t6-mf"><div class="sel-row"><select class="select" id="t6-mf-27" data-answer="B"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>27.</b> plans to stop tourist apartment licences</span></div><div class="sel-row"><select class="select" id="t6-mf-28" data-answer="D"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>28.</b> charges a daily fee used for public services</span></div><div class="sel-row"><select class="select" id="t6-mf-29" data-answer="C"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>29.</b> stopped new hotels from being built</span></div><div class="sel-row"><select class="select" id="t6-mf-30" data-answer="A"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><span><b>30.</b> introduced an entry fee for visitors who do not stay overnight</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mf', 't6-mf-score')">Check answers</button>
+          <span id="t6-mf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 31–35</p><p class="qg-instr">Do the statements agree with the claims of the writer? Choose <b>YES</b>, <b>NO</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t6-yn"><div class="q-item" id="t6-yn-31">
+          <p>31. Tourism itself is the main cause of overtourism.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-31" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-31" data-correct="true"> NO</label><label><input type="radio" value="2" name="t6-yn-31" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-32">
+          <p>32. Fees may make some destinations too expensive for many people.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-32" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-32" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-32" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-33">
+          <p>33. Bhutan’s policy should be copied by every country.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-33" data-correct="false"> YES</label><label><input type="radio" value="1" name="t6-yn-33" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-33" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-34">
+          <p>34. Spreading visitors across seasons is an effective solution.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-34" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-34" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-34" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-yn-35">
+          <p>35. Local people should benefit from tourism.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-yn-35" data-correct="true"> YES</label><label><input type="radio" value="1" name="t6-yn-35" data-correct="false"> NO</label><label><input type="radio" value="2" name="t6-yn-35" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-yn', 't6-yn-score')">Check answers</button>
+          <span id="t6-yn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 36–38</p><p class="qg-instr">Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</p></div>
+      <div class="card" id="t6-mc"><div class="q-item" id="t6-mc-36">
+          <p>36. What does “overtourism” describe?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-36" data-correct="false"> A. a fall in tourist numbers</label><label><input type="radio" value="1" name="t6-mc-36" data-correct="true"> B. too many visitors harming residents and the visitor experience</label><label><input type="radio" value="2" name="t6-mc-36" data-correct="false"> C. tourism in winter</label><label><input type="radio" value="3" name="t6-mc-36" data-correct="false"> D. expensive holidays</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-37">
+          <p>37. Why did Barcelona residents protest?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-37" data-correct="false"> A. because of noise from bars</label><label><input type="radio" value="1" name="t6-mc-37" data-correct="true"> B. because of rising rents linked to holiday rentals</label><label><input type="radio" value="2" name="t6-mc-37" data-correct="false"> C. because hotels closed</label><label><input type="radio" value="3" name="t6-mc-37" data-correct="false"> D. because of cruise ships</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t6-mc-38">
+          <p>38. Who did Amsterdam’s advertising campaigns try to discourage?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t6-mc-38" data-correct="false"> A. families</label><label><input type="radio" value="1" name="t6-mc-38" data-correct="false"> B. business travellers</label><label><input type="radio" value="2" name="t6-mc-38" data-correct="true"> C. young people coming mainly to party</label><label><input type="radio" value="3" name="t6-mc-38" data-correct="false"> D. cruise passengers</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-mc', 't6-mc-score')">Check answers</button>
+          <span id="t6-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 39–40</p><p class="qg-instr">Complete the sentences. Choose <b>NO MORE THAN TWO WORDS AND/OR A NUMBER</b>.</p></div>
+      <div class="card" id="t6-sc" style="line-height:2.4;"><p>39. Tourism accounts for around one in <input type="text" class="text-answer" id="t6-39" data-correct="ten/10" autocomplete="off" style="width:80px;"> jobs worldwide.</p><p>40. Barcelona aims to end licences for tourist apartments by <input type="text" class="text-answer" id="t6-40" data-correct="2028" autocomplete="off" style="width:80px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t6-sc', 't6-sc-score')">Check answers</button>
+          <span id="t6-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 20</div>
+      <h2>Reading Passage 3 — Answer Analysis and Your Score</h2>
+      <p class="task-sub">Check Passage 3 and find your band.</p>
+      <details class="card article passage-ref labelled">
+        <summary>📄 The passage — Too Many Tourists?</summary>
+        <p><span class="para-label">A</span>Tourism is one of the world’s largest industries, accounting for around one in ten jobs worldwide. For many cities and countries, visitors are a vital source of income. Yet in recent years, the word ‘overtourism’ has entered the language to describe places where the number of visitors has become so great that it damages the quality of life of residents and the experience of tourists themselves.</p><p><span class="para-label">B</span>Venice is perhaps the best-known example. The historic centre now has fewer than 50,000 permanent residents, while millions of visitors arrive each year, many on day trips. In 2024, the city became the first in the world to charge day-trippers an entry fee on its busiest days, in an attempt to spread visitors more evenly.</p><p><span class="para-label">C</span>In Barcelona, frustration has been more visible. In the summer of 2024, thousands of residents marched through the city, some spraying tourists with water pistols, to protest against rising rents, which many blamed on short-term holiday rentals. The city government has announced that it intends to end all licences for tourist apartments by 2028.</p><p><span class="para-label">D</span>Amsterdam has taken a range of measures, including banning the construction of new hotels in the city and voting to move cruise ships away from the city centre. The city has also run advertising campaigns aimed at discouraging certain kinds of visitor, particularly young people coming mainly to party.</p><p><span class="para-label">E</span>A very different approach has been taken by the Himalayan kingdom of Bhutan, which has long followed a policy of ‘high value, low volume’ tourism. Most international visitors must pay a daily Sustainable Development Fee, which is used to fund healthcare, education and environmental protection. As a result, Bhutan receives relatively few visitors, but each contributes significantly to the local economy.</p><p><span class="para-label">F</span>In my view, the problem is not tourism itself but how it is managed. Fees and limits can help, but they risk turning popular places into destinations only the wealthy can afford. The more effective solutions spread visitors across seasons and regions and ensure that local people share in the benefits — otherwise, residents will continue to feel that their homes have been taken from them.</p>
+      </details>
+      <div class="card an-card"><div class="an-tools"><button type="button" class="ghost an-open">Open all</button></div><details class="an-item"><summary><span class="an-n">27</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">intends to end all licences for tourist apartments by 2028</span>.</p></div></details><details class="an-item"><summary><span class="an-n">28</span><span class="an-ans">D</span><span class="an-where">Para E</span></summary><div class="an-body"><p><span class="ev">a daily Sustainable Development Fee, which is used to fund healthcare, education</span>.</p></div></details><details class="an-item"><summary><span class="an-n">29</span><span class="an-ans">C</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">banning the construction of new hotels</span>.</p></div></details><details class="an-item"><summary><span class="an-n">30</span><span class="an-ans">A</span><span class="an-where">Para B</span></summary><div class="an-body"><p><span class="ev">charge day-trippers an entry fee</span>.</p></div></details><details class="an-item"><summary><span class="an-n">31</span><span class="an-ans">NO</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">the problem is not tourism itself but how it is managed</span>.</p></div></details><details class="an-item"><summary><span class="an-n">32</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">they risk turning popular places into destinations only the wealthy can afford</span>.</p></div></details><details class="an-item"><summary><span class="an-n">33</span><span class="an-ans">NOT GIVEN</span><span class="an-where">—</span></summary><div class="an-body"><p>The writer describes Bhutan’s approach but never says other countries should copy it.</p></div></details><details class="an-item"><summary><span class="an-n">34</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">The more effective solutions spread visitors across seasons and regions</span>.</p></div></details><details class="an-item"><summary><span class="an-n">35</span><span class="an-ans">YES</span><span class="an-where">Para F</span></summary><div class="an-body"><p><span class="ev">ensure that local people share in the benefits</span>.</p></div></details><details class="an-item"><summary><span class="an-n">36</span><span class="an-ans">B</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">damages the quality of life of residents and the experience of tourists themselves</span>.</p></div></details><details class="an-item"><summary><span class="an-n">37</span><span class="an-ans">B</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">to protest against rising rents, which many blamed on short-term holiday rentals</span>.</p></div></details><details class="an-item"><summary><span class="an-n">38</span><span class="an-ans">C</span><span class="an-where">Para D</span></summary><div class="an-body"><p><span class="ev">particularly young people coming mainly to party</span>.</p></div></details><details class="an-item"><summary><span class="an-n">39</span><span class="an-ans">ten</span><span class="an-where">Para A</span></summary><div class="an-body"><p><span class="ev">around one in ten jobs worldwide</span>.</p></div></details><details class="an-item"><summary><span class="an-n">40</span><span class="an-ans">2028</span><span class="an-where">Para C</span></summary><div class="an-body"><p><span class="ev">by 2028</span>.</p></div></details></div>
+<div class="card advice-card"><p class="prompt-label">Your score → estimated band (Academic Reading)</p><table class="data-table" style="width:100%;"><tr><th>correct answers (out of 40)</th><th>band</th></tr><tr><td>15–18</td><td>5.0</td></tr><tr><td>19–22</td><td>5.5</td></tr><tr><td>23–26</td><td>6.0</td></tr><tr><td>27–29</td><td>6.5</td></tr><tr><td>30–32</td><td>7.0</td></tr><tr><td>33–34</td><td>7.5</td></tr><tr><td>35+</td><td>8.0+</td></tr></table></div>
+    </section>
+
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 20</div>
+      <h2>Extra Reading 1 — The Four-Day Working Week</h2>
+      <p class="task-sub">An extra article (about <b>15 minutes</b>). Answer the questions, then summarise in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Four-Day Working Week</h3>
+        <p class="article-meta">Extra reading 1 · Work · 216 words</p>
+        <p><span class="para-label">A</span>For most of the past century, the standard working week in many countries has been five days. In recent years, however, a growing number of employers have experimented with a four-day week, in which employees work fewer hours for the same pay.</p><p><span class="para-label">B</span>Among the largest experiments were two trials in Iceland between 2015 and 2019, involving around 2,500 public-sector workers. Their working week was reduced from 40 hours to 35 or 36 hours without any loss of pay. Researchers reported that productivity stayed the same or improved in most workplaces, while workers’ wellbeing increased considerably.</p><p><span class="para-label">C</span>In 2022, a six-month trial in the United Kingdom involved 61 companies and around 2,900 employees. At the end of the trial, 56 of the companies decided to continue with the shorter week, and 18 made it permanent. Employees reported less stress and fewer sick days, and the number of people leaving their jobs fell sharply.</p><p><span class="para-label">D</span>Critics point out that a four-day week is easier to introduce in offices than in hospitals, schools or factories, where work cannot simply be done faster. Some also warn that squeezing five days of work into four could make each day more intense. Nevertheless, supporters argue that the trials show a long-held assumption — that more hours mean more output — deserves to be questioned.</p>
+      </div>
+      <div class="card" id="t8-tf"><div class="q-item" id="t8-tf-1">
+          <p>1. Workers in the Iceland trials earned less money.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-1" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t8-tf-1" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t8-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-2">
+          <p>2. The Iceland trials took place over four years.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t8-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-3">
+          <p>3. All 61 UK companies made the four-day week permanent.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t8-tf-3" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t8-tf-3" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-4">
+          <p>4. Fewer UK employees left their jobs during the trial.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-4" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t8-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-5">
+          <p>5. The UK trial was more successful than the Iceland trials.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-5" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t8-tf-5" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-5" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t8-tf-6">
+          <p>6. Some critics fear that working days could become more intense.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t8-tf-6" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t8-tf-6" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t8-tf-6" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t8-tf', 't8-tf-score')">Check answers</button>
+          <span id="t8-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 100 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 100 words):</p><textarea class="no-check mini-answer" id="t8-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-sum-ans"><p>The article reports on trials of a four-day working week with no loss of pay. In Iceland, around 2,500 public-sector workers reduced their hours from 40 to 35 or 36 between 2015 and 2019, and productivity was generally maintained while wellbeing rose. In a 2022 UK trial, 56 of the 61 companies kept the shorter week, with lower stress, fewer sick days and fewer resignations. Critics argue that the model suits offices better than hospitals or factories and may intensify work. Overall, the trials challenge the assumption that longer hours produce more, which I find convincing for office jobs.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t8-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 45 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task9" data-task="9">
+      <div class="task-eyebrow">Task 9 of 20</div>
+      <h2>Extra Reading 2 — Farming Upwards</h2>
+      <p class="task-sub">A second extra article. Complete the sentences, then summarise it in writing and aloud.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">Farming Upwards</h3>
+        <p class="article-meta">Extra reading 2 · Food and technology · 201 words</p>
+        <p><span class="para-label">A</span>In warehouses in cities from Singapore to New Jersey, lettuces, herbs and strawberries grow in stacked trays under pink and blue LED lights. This is vertical farming: growing crops indoors in layers, without soil and without sunlight, often using hydroponics, in which roots sit in water containing nutrients.</p><p><span class="para-label">B</span>Supporters list several advantages. Because conditions are controlled, crops can be grown all year round, without pesticides, and close to the people who will eat them, which reduces transport. Vertical farms can also use up to 95% less water than traditional fields, since water is recycled.</p><p><span class="para-label">C</span>The main problem is energy. Replacing the sun with electric lights is expensive, and after energy prices rose sharply in 2022, several well-funded vertical farming companies in Europe and the United States went out of business. For this reason, most vertical farms grow high-value, fast-growing crops such as salad leaves and herbs, rather than staple foods such as wheat or rice, which need large areas and would be far too costly to grow under lights.</p><p><span class="para-label">D</span>Most experts therefore see vertical farming as a useful addition to traditional agriculture rather than a replacement for it — particularly in crowded cities and in countries with little farmland or water.</p>
+      </div>
+      <div class="card" id="t9-sc" style="line-height:2.4;"><p class="example-q" style="margin:0 0 6px;">Write <b>ONE WORD AND/OR A NUMBER</b> from the article.</p><p>1. In <input type="text" class="text-answer" id="t9-1" data-correct="hydroponics" autocomplete="off" style="width:140px;">, plant roots sit in water containing nutrients.</p><p>2. Because conditions are controlled, no <input type="text" class="text-answer" id="t9-2" data-correct="pesticides" autocomplete="off" style="width:130px;"> are needed.</p><p>3. Vertical farms can use up to <input type="text" class="text-answer" id="t9-3" data-correct="95%/95/95 percent/95 per cent" autocomplete="off" style="width:100px;"> less water than fields.</p><p>4. The main problem with vertical farming is <input type="text" class="text-answer" id="t9-4" data-correct="energy" autocomplete="off" style="width:100px;">.</p><p>5. Wheat and rice are described as <input type="text" class="text-answer" id="t9-5" data-correct="staple" autocomplete="off" style="width:100px;"> foods.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t9-sc', 't9-sc-score')">Check answers</button>
+          <span id="t9-sc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Written summary.</strong> Summarise the article in your own words — <b>at least 100 words</b>. Give the main idea and the most important points, and finish with one sentence of evaluation.</p>
+      <div class="card"><p class="mini-q">Your summary of the article (at least 100 words):</p><textarea class="no-check mini-answer" id="t9-sum-1" data-min-words="100" placeholder="Write your summary here..." style="min-height:170px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t9-sum-btn">Show a model summary</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t9-sum-ans"><p>The article describes vertical farming, in which crops are grown indoors in stacked layers under LED lights, usually using hydroponics instead of soil. Its supporters point to year-round production without pesticides, shorter transport distances and up to 95% less water use. However, artificial lighting is very energy-intensive, and several companies failed after energy prices rose in 2022. Consequently, vertical farms focus on high-value crops such as salad and herbs rather than staples like wheat. Experts see it as a complement to, not a replacement for, traditional farming — a balanced view I agree with.</p></div>
+        </div></div>
+      <div class="question-box" data-field="t9-speaking-summary">
+        <div class="q-num">Spoken summary (at least 45 seconds)</div>
+        <div class="q-text">Now summarise the article <b>aloud</b> without reading your written summary — speak for <b>at least 45 seconds</b>.</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“This article is about…”</li><li>“The main point is that…”</li><li>“The writer also explains that…”</li><li>“In my view,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task10" data-task="10">
+      <div class="task-eyebrow">Task 10 of 20</div>
+      <h2>Reading Skill — Paraphrase</h2>
+      <p class="task-sub">Match the question language to the passage language, then choose the closest meaning.</p>
+      <div class="card" id="t10-lm">
+        <div class="line-match" id="t10-lm-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. unremarkable</button><button type="button" class="lm-item" data-key="2">2. undergoes a transformation</button><button type="button" class="lm-item" data-key="3">3. trigger</button><button type="button" class="lm-item" data-key="4">4. largely abandoned</button><button type="button" class="lm-item" data-key="5">5. intriguing</button><button type="button" class="lm-item" data-key="6">6. vital</button><button type="button" class="lm-item" data-key="7">7. discouraging</button><button type="button" class="lm-item" data-key="8">8. relatively few</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. cause</button><button type="button" class="lm-item" data-key="b">b. not many compared with others</button><button type="button" class="lm-item" data-key="c">c. changes completely</button><button type="button" class="lm-item" data-key="d">d. extremely important</button><button type="button" class="lm-item" data-key="e">e. mostly given up</button><button type="button" class="lm-item" data-key="f">f. ordinary</button><button type="button" class="lm-item" data-key="g">g. very interesting</button><button type="button" class="lm-item" data-key="h">h. trying to put off</button></div>
+          <select class="lm-hidden-select select" id="t10-lm-1" data-lm-key="1" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-3" data-lm-key="3" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-4" data-lm-key="4" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-5" data-lm-key="5" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-6" data-lm-key="6" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-7" data-lm-key="7" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t10-lm-8" data-lm-key="8" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm');">Check answers</button>
+          <span id="t10-lm-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t10-mc"><div class="q-item" id="t10-mc-1">
+          <p>1. “…each locust can eat roughly its own weight in fresh food daily.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-1" data-correct="true"> A. Each locust eats about as much as it weighs every day.</label><label><input type="radio" value="1" name="t10-mc-1" data-correct="false"> B. Locusts eat only once a week.</label><label><input type="radio" value="2" name="t10-mc-1" data-correct="false"> C. Locusts are heavy.</label><label><input type="radio" value="3" name="t10-mc-1" data-correct="false"> D. Locusts eat dry food.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-2">
+          <p>2. “…exactly as the theory predicts.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-2" data-correct="true"> A. The results matched the theory.</label><label><input type="radio" value="1" name="t10-mc-2" data-correct="false"> B. The theory was wrong.</label><label><input type="radio" value="2" name="t10-mc-2" data-correct="false"> C. Nobody tested the theory.</label><label><input type="radio" value="3" name="t10-mc-2" data-correct="false"> D. The results were surprising.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-3">
+          <p>3. “…protect themselves from their own success.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-3" data-correct="true"> A. Their popularity has become a problem.</label><label><input type="radio" value="1" name="t10-mc-3" data-correct="false"> B. They have no visitors.</label><label><input type="radio" value="2" name="t10-mc-3" data-correct="false"> C. They are poor.</label><label><input type="radio" value="3" name="t10-mc-3" data-correct="false"> D. They want more tourists.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t10-mc-4">
+          <p>4. “…otherwise, residents will continue to feel that their homes have been taken from them.”</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t10-mc-4" data-correct="true"> A. If nothing changes, residents will keep feeling pushed out.</label><label><input type="radio" value="1" name="t10-mc-4" data-correct="false"> B. Residents will move abroad.</label><label><input type="radio" value="2" name="t10-mc-4" data-correct="false"> C. Tourists will buy homes.</label><label><input type="radio" value="3" name="t10-mc-4" data-correct="false"> D. Homes will become cheaper.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t10-mc', 't10-mc-score')">Check answers</button>
+          <span id="t10-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task11" data-task="11">
+      <div class="task-eyebrow">Task 11 of 20</div>
+      <h2>Reading Skill — Linking and Reference</h2>
+      <p class="task-sub">Identify linking functions and reference words.</p>
+      <div class="card" id="t11-fn"><div class="sel-row"><select class="select" id="t11-fn-1" data-answer="contrast"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="reason">reason</option><option value="example">example</option></select><span><b>1.</b> “<u>But</u> under certain conditions it undergoes a dramatic transformation.”</span></div><div class="sel-row"><select class="select" id="t11-fn-2" data-answer="result"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="reason">reason</option><option value="example">example</option></select><span><b>2.</b> “A swarm of one square kilometre can <u>therefore</u> eat as much food…”</span></div><div class="sel-row"><select class="select" id="t11-fn-3" data-answer="reason"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="reason">reason</option><option value="example">example</option></select><span><b>3.</b> “…<u>since</u> cooler air is most effective at cooling.”</span></div><div class="sel-row"><select class="select" id="t11-fn-4" data-answer="example"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="reason">reason</option><option value="example">example</option></select><span><b>4.</b> “…<u>including</u> banning the construction of new hotels.”</span></div><div class="sel-row"><select class="select" id="t11-fn-5" data-answer="result"><option value="">—</option><option value="contrast">contrast</option><option value="result">result</option><option value="reason">reason</option><option value="example">example</option></select><span><b>5.</b> “<u>As a result</u>, Bhutan receives relatively few visitors.”</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-fn', 't11-fn-score')">Check answers</button>
+          <span id="t11-fn-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t11-ref"><div class="q-item" id="t11-ref-1">
+          <p>1. “…<b>which</b> switches them into the gregarious phase.” — which =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-1" data-correct="true"> A. the rise in serotonin</label><label><input type="radio" value="1" name="t11-ref-1" data-correct="false"> B. the back legs</label><label><input type="radio" value="2" name="t11-ref-1" data-correct="false"> C. the university</label><label><input type="radio" value="3" name="t11-ref-1" data-correct="false"> D. the rain</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-2">
+          <p>2. “This has led some researchers to link contagious yawning with empathy.” — <b>This</b> =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-2" data-correct="true"> A. the timing of contagious yawning in childhood</label><label><input type="radio" value="1" name="t11-ref-2" data-correct="false"> B. the oxygen theory</label><label><input type="radio" value="2" name="t11-ref-2" data-correct="false"> C. brain cooling</label><label><input type="radio" value="3" name="t11-ref-2" data-correct="false"> D. Provine’s study</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-3">
+          <p>3. “…in an attempt to spread visitors more evenly.” — whose attempt?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-3" data-correct="true"> A. Venice’s</label><label><input type="radio" value="1" name="t11-ref-3" data-correct="false"> B. Barcelona’s</label><label><input type="radio" value="2" name="t11-ref-3" data-correct="false"> C. Bhutan’s</label><label><input type="radio" value="3" name="t11-ref-3" data-correct="false"> D. tourists’</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t11-ref-4">
+          <p>4. “…but <b>they</b> risk turning popular places into destinations only the wealthy can afford.” — they =</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t11-ref-4" data-correct="true"> A. fees and limits</label><label><input type="radio" value="1" name="t11-ref-4" data-correct="false"> B. residents</label><label><input type="radio" value="2" name="t11-ref-4" data-correct="false"> C. tourists</label><label><input type="radio" value="3" name="t11-ref-4" data-correct="false"> D. cities</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t11-ref', 't11-ref-score')">Check answers</button>
+          <span id="t11-ref-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task12" data-task="12">
+      <div class="task-eyebrow">Task 12 of 20</div>
+      <h2>Reading Skill — Speed Reading Challenge</h2>
+      <p class="task-sub"><b>Part 1:</b> skim in <b>50 seconds</b>. <b>Part 2:</b> scan for six answers in <b>2½ minutes</b>.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">A Short History of the Umbrella</h3>
+        <p class="article-meta">Speed reading · 280 words · 195 words</p>
+        <p><span class="para-label">A</span>Umbrellas were first used not against rain but against the sun. More than three thousand years ago, sunshades appear in art from ancient Egypt, Assyria and China, where they were often a sign of rank: only kings and nobles were shaded by them. In China, oiled paper was used to make shades that could also keep off rain, and Chinese craftsmen were also among the first to make umbrellas that could fold.</p><p><span class="para-label">B</span>In Europe, umbrellas were long seen as something for women. When the traveller Jonas Hanway began carrying one in London in the 1750s, he was laughed at in the street, and coach drivers, who earned money from people trying to stay dry, shouted insults at him. Within thirty years, however, umbrellas had become common among men too, and some were still called ‘Hanways’.</p><p><span class="para-label">C</span>Early umbrellas were heavy, with frames of wood or whalebone. In 1852 the English manufacturer Samuel Fox introduced a frame with steel ribs, which was lighter and stronger, and the basic design has changed little since. The folding pocket umbrella followed in the twentieth century. Today, around one billion umbrellas are sold every year, and most are made in China.</p>
+      </div>
+      <div class="card" id="t12-title"><div class="q-item" id="t12-title-1">
+          <p>1. Part 1 — Best title:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t12-title-1" data-correct="false"> A. Rain in London</label><label><input type="radio" value="1" name="t12-title-1" data-correct="true"> B. From royal sunshade to everyday object</label><label><input type="radio" value="2" name="t12-title-1" data-correct="false"> C. How umbrellas are made in China</label><label><input type="radio" value="3" name="t12-title-1" data-correct="false"> D. The life of Jonas Hanway</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-title', 't12-title-score')">Check answers</button>
+          <span id="t12-title-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t12-scan" style="line-height:2.4;"><p>1. In ancient times, sunshades were often a sign of <input type="text" class="text-answer" id="t12-1" data-correct="rank" autocomplete="off" style="width:90px;">.</p><p>2. What material did the Chinese use to make shades that kept off rain? oiled <input type="text" class="text-answer" id="t12-2" data-correct="paper" autocomplete="off" style="width:100px;"></p><p>3. Why did coach drivers dislike Hanway? They earned money from people trying to stay <input type="text" class="text-answer" id="t12-3" data-correct="dry" autocomplete="off" style="width:80px;">.</p><p>4. Early umbrella frames were made of wood or <input type="text" class="text-answer" id="t12-4" data-correct="whalebone" autocomplete="off" style="width:120px;">.</p><p>5. Samuel Fox’s frame had ribs made of <input type="text" class="text-answer" id="t12-5" data-correct="steel" autocomplete="off" style="width:90px;">.</p><p>6. When did the folding pocket umbrella appear? in the <input type="text" class="text-answer" id="t12-6" data-correct="twentieth/20th" autocomplete="off" style="width:120px;"> century</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t12-scan', 't12-scan-score')">Check answers</button>
+          <span id="t12-scan-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task13" data-task="13">
+      <div class="task-eyebrow">Task 13 of 20</div>
+      <h2>Vocabulary — Word Families and Collocations</h2>
+      <p class="task-sub">Complete each sentence, then choose the natural collocation.</p>
+      <div class="card" id="t13-wf" style="line-height:2.4;"><p>1. Locusts undergo a dramatic <input type="text" class="text-answer" id="t13-1" data-correct="transformation" autocomplete="off" style="width:150px;">. (transform)</p><p>2. Swarms can be extremely <input type="text" class="text-answer" id="t13-2" data-correct="destructive" autocomplete="off" style="width:130px;">. (destroy)</p><p>3. The oxygen theory was <input type="text" class="text-answer" id="t13-3" data-correct="abandoned" autocomplete="off" style="width:120px;"> after Provine’s study. (abandon)</p><p>4. Yawning is <input type="text" class="text-answer" id="t13-4" data-correct="contagious" autocomplete="off" style="width:120px;">: it spreads from person to person. (contagion)</p><p>5. Tourism is a <input type="text" class="text-answer" id="t13-5" data-correct="vital" autocomplete="off" style="width:80px;"> source of income. (vitality)</p><p>6. Many <input type="text" class="text-answer" id="t13-6" data-correct="residents" autocomplete="off" style="width:120px;"> feel pushed out of their cities. (reside — people)</p><p>7. The fee funds environmental <input type="text" class="text-answer" id="t13-7" data-correct="protection" autocomplete="off" style="width:120px;">. (protect)</p><p>8. Bhutan receives <input type="text" class="text-answer" id="t13-8" data-correct="relatively" autocomplete="off" style="width:110px;"> few visitors. (relative)</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-wf', 't13-wf-score')">Check answers</button>
+          <span id="t13-wf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t13-col"><div class="q-item" id="t13-col-1">
+          <p>1. to ______ a fee</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-1" data-correct="true"> charge</label><label><input type="radio" value="1" name="t13-col-1" data-correct="false"> make</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-2">
+          <p>2. to ______ an outbreak</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-2" data-correct="true"> detect</label><label><input type="radio" value="1" name="t13-col-2" data-correct="false"> look</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-3">
+          <p>3. to ______ a theory</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-3" data-correct="true"> test</label><label><input type="radio" value="1" name="t13-col-3" data-correct="false"> do</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-4">
+          <p>4. to ______ a policy</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-4" data-correct="true"> follow</label><label><input type="radio" value="1" name="t13-col-4" data-correct="false"> go</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-5">
+          <p>5. to ______ quality of life</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-5" data-correct="true"> damage</label><label><input type="radio" value="1" name="t13-col-5" data-correct="false"> injure</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t13-col-6">
+          <p>6. to ______ the benefits</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t13-col-6" data-correct="true"> share in</label><label><input type="radio" value="1" name="t13-col-6" data-correct="false"> share on</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t13-col', 't13-col-score')">Check answers</button>
+          <span id="t13-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task14" data-task="14">
+      <div class="task-eyebrow">Task 14 of 20</div>
+      <h2>Grammar for Writing — Comparing Figures in Tables</h2>
+      <p class="task-sub">Tables need precise comparison. Choose the correct option.</p>
+      <div class="card" id="t14-gr"><div class="q-item" id="t14-gr-1">
+          <p>1. Air travel was ______ popular way to arrive in every year.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-1" data-correct="true"> the most</label><label><input type="radio" value="1" name="t14-gr-1" data-correct="false"> the more</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-2">
+          <p>2. Arrivals by sea were ______ those by rail.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-2" data-correct="true"> higher than</label><label><input type="radio" value="1" name="t14-gr-2" data-correct="false"> higher as</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-3">
+          <p>3. Rail arrivals ______ from 2 million in 2000 to 5 million in 2020.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-3" data-correct="true"> rose</label><label><input type="radio" value="1" name="t14-gr-3" data-correct="false"> were risen</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-4">
+          <p>4. Road arrivals fell ______ 1 million.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-4" data-correct="true"> by</label><label><input type="radio" value="1" name="t14-gr-4" data-correct="false"> with</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-5">
+          <p>5. Air arrivals were ______ as high in 2020 as in 2000.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-5" data-correct="true"> twice</label><label><input type="radio" value="1" name="t14-gr-5" data-correct="false"> two times more</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-6">
+          <p>6. ______ air travel grew, sea arrivals declined.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-6" data-correct="true"> While</label><label><input type="radio" value="1" name="t14-gr-6" data-correct="false"> Despite</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-7">
+          <p>7. Tourism ______ more harm than good in some cities.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-7" data-correct="true"> does</label><label><input type="radio" value="1" name="t14-gr-7" data-correct="false"> makes</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t14-gr-8">
+          <p>8. It is often argued ______ tourism benefits local economies.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t14-gr-8" data-correct="true"> that</label><label><input type="radio" value="1" name="t14-gr-8" data-correct="false"> what</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t14-gr', 't14-gr-score')">Check answers</button>
+          <span id="t14-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task15" data-task="15">
+      <div class="task-eyebrow">Task 15 of 20</div>
+      <h2>Writing Task 1 — Skills: Describing a Table</h2>
+      <p class="task-sub">Study the table and practise selecting and comparing key figures.</p>
+<div class="card"><p class="prompt-label" style="text-align:center;">International visitor arrivals to one country, by method of travel (millions)</p><div style="overflow-x:auto;"><table class="data-table" style="width:100%;"><tr><th>method</th><th>2000</th><th>2010</th><th>2020</th></tr><tr><td>air</td><td>6.0</td><td>9.5</td><td>12.0</td></tr><tr><td>sea</td><td>3.5</td><td>2.5</td><td>1.5</td></tr><tr><td>rail</td><td>2.0</td><td>3.5</td><td>5.0</td></tr><tr><td>road</td><td>4.0</td><td>3.5</td><td>3.0</td></tr></table></div></div>
+      <div class="card" id="t15-q"><div class="q-item" id="t15-q-1">
+          <p>1. Which method grew the most?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-q-1" data-correct="true"> A. air</label><label><input type="radio" value="1" name="t15-q-1" data-correct="false"> B. sea</label><label><input type="radio" value="2" name="t15-q-1" data-correct="false"> C. rail</label><label><input type="radio" value="3" name="t15-q-1" data-correct="false"> D. road</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t15-q-2">
+          <p>2. Which method more than doubled?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-q-2" data-correct="false"> A. air</label><label><input type="radio" value="1" name="t15-q-2" data-correct="true"> B. rail</label><label><input type="radio" value="2" name="t15-q-2" data-correct="false"> C. road</label><label><input type="radio" value="3" name="t15-q-2" data-correct="false"> D. sea</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t15-q-3">
+          <p>3. Best overview:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t15-q-3" data-correct="false"> A. Air arrivals were 12 million in 2020.</label><label><input type="radio" value="1" name="t15-q-3" data-correct="true"> B. Overall, air and rail travel became more popular, while arrivals by sea and road declined, with air remaining by far the most common method.</label><label><input type="radio" value="2" name="t15-q-3" data-correct="false"> C. People like travelling.</label><label><input type="radio" value="3" name="t15-q-3" data-correct="false"> D. Sea fell by 2 million.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-q', 't15-q-score')">Check answers</button>
+          <span id="t15-q-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t15-g" style="line-height:2.4;"><p>1. Air arrivals <input type="text" class="text-answer" id="t15-1" data-correct="doubled" autocomplete="off" style="width:100px;">, from 6 million to 12 million.</p><p>2. Rail arrivals rose <input type="text" class="text-answer" id="t15-2" data-correct="from" autocomplete="off" style="width:70px;"> 2 million to 5 million.</p><p>3. Sea arrivals more than <input type="text" class="text-answer" id="t15-3" data-correct="halved" autocomplete="off" style="width:100px;">, falling to 1.5 million.</p><p>4. Road travel saw a <input type="text" class="text-answer" id="t15-4" data-correct="slight/gradual/small" autocomplete="off" style="width:110px;"> decline, from 4 million to 3 million.</p><p>5. In 2000, road arrivals were <input type="text" class="text-answer" id="t15-5" data-correct="higher/greater" autocomplete="off" style="width:100px;"> than rail arrivals, but by 2020 the opposite was true.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t15-g', 't15-g-score')">Check answers</button>
+          <span id="t15-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task16" data-task="16">
+      <div class="task-eyebrow">Task 16 of 20</div>
+      <h2>Writing Task 1 — Your Report</h2>
+      <p class="task-sub">Write the full report. About <b>20 minutes</b>, <b>at least 150 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The table below shows the number of international visitors arriving in one country by different methods of travel in 2000, 2010 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><p class="prompt-label" style="text-align:center;">International visitor arrivals to one country, by method of travel (millions)</p><div style="overflow-x:auto;"><table class="data-table" style="width:100%;"><tr><th>method</th><th>2000</th><th>2010</th><th>2020</th></tr><tr><td>air</td><td>6.0</td><td>9.5</td><td>12.0</td></tr><tr><td>sea</td><td>3.5</td><td>2.5</td><td>1.5</td></tr><tr><td>rail</td><td>2.0</td><td>3.5</td><td>5.0</td></tr><tr><td>road</td><td>4.0</td><td>3.5</td><td>3.0</td></tr></table></div></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t16-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t16-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t16-essay-model"><div class="model-text">
+  <p>The table compares the numbers of international visitors who arrived in one country by air, sea, rail and road in 2000, 2010 and 2020.</p>
+  <p>Overall, air and rail travel became increasingly popular over the period, whereas arrivals by sea and road declined. Air was by far the most common method of arrival throughout.</p>
+  <p>In 2000, 6 million visitors arrived by air, and this figure doubled to 12 million by 2020. Rail arrivals also grew steadily, rising from 2 million to 3.5 million in 2010 and reaching 5 million in 2020, two and a half times the original figure.</p>
+  <p>By contrast, the number of visitors arriving by sea more than halved, falling from 3.5 million to just 1.5 million, making it the least popular method by 2020. Road arrivals declined more gradually, from 4 million to 3 million. As a result, while road travel had been the second most common method in 2000, it had been overtaken by rail by the end of the period.</p>
+  <p class="alt">≈ 175 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task17" data-task="17">
+      <div class="task-eyebrow">Task 17 of 20</div>
+      <h2>Writing Task 2 — Planning</h2>
+      <p class="task-sub">Plan before you write. Passage 3 gives you useful ideas — use them in your own words.</p>
+<div class="card task-prompt"><p class="prompt-label">Writing Task 2</p><p><i>Some people believe that international tourism does more harm than good to the places that tourists visit. To what extent do you agree or disagree?</i></p></div>
+      <div class="card" id="t17-pl"><div class="q-item" id="t17-pl-1">
+          <p>1. What must your essay do?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-1" data-correct="false"> A. describe your holidays</label><label><input type="radio" value="1" name="t17-pl-1" data-correct="true"> B. give and support a clear position on whether tourism does more harm than good</label><label><input type="radio" value="2" name="t17-pl-1" data-correct="false"> C. list tourist attractions</label><label><input type="radio" value="3" name="t17-pl-1" data-correct="false"> D. discuss both views with no opinion</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-2">
+          <p>2. Best thesis:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-2" data-correct="false"> A. Tourism is a big industry.</label><label><input type="radio" value="1" name="t17-pl-2" data-correct="true"> B. Although tourism can damage popular destinations, I believe it does more good than harm when it is properly managed.</label><label><input type="radio" value="2" name="t17-pl-2" data-correct="false"> C. Tourists travel a lot.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-3">
+          <p>3. Best evidence for the harms:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-3" data-correct="true"> A. In Barcelona, rising rents linked to holiday rentals led to protests.</label><label><input type="radio" value="1" name="t17-pl-3" data-correct="false"> B. Hotels have swimming pools.</label><label><input type="radio" value="2" name="t17-pl-3" data-correct="false"> C. Planes are fast.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t17-pl-4">
+          <p>4. Best evidence for the benefits:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t17-pl-4" data-correct="true"> A. Tourism provides around one in ten jobs worldwide.</label><label><input type="radio" value="1" name="t17-pl-4" data-correct="false"> B. Tourists take photos.</label><label><input type="radio" value="2" name="t17-pl-4" data-correct="false"> C. Souvenirs are cheap.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t17-pl', 't17-pl-score')">Check answers</button>
+          <span id="t17-pl-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card"><p class="mini-q">Write your plan: thesis + main points and examples.</p><textarea class="no-check mini-answer" id="t17-out-1" placeholder="Write your plan here..." style="min-height:110px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t17-out-btn">Show an example plan</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t17-out-ans"><p><b>Thesis:</b> more good than harm, if managed. <b>Harms:</b> rising rents, overcrowding, damage to heritage (Venice, Barcelona). <b>Benefits:</b> jobs and income (1 in 10 jobs), funding for public services (Bhutan’s fee), cultural exchange. <b>Solution:</b> spread visitors, fees used locally.</p></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task18" data-task="18">
+      <div class="task-eyebrow">Task 18 of 20</div>
+      <h2>Writing Task 2 — Your Essay</h2>
+      <p class="task-sub">Write the full essay. About <b>40 minutes</b>, <b>at least 250 words</b>.</p>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 2</p>
+        <p><i>Some people believe that international tourism does more harm than good to the places that tourists visit. To what extent do you agree or disagree?</i></p>
+        <p><i>Write at least 250 words.</i></p>
+      </div>
+      <p style="margin-top:22px;"><strong>Write your essay.</strong> Try to finish in 40 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t18-essay" placeholder="Introduction … Body paragraph 1 … Body paragraph 2 … Conclusion …" style="min-height:420px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t18-essay-model-btn">Show a model essay</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t18-essay-model"><div class="model-text">
+  <p>International tourism has grown enormously in recent decades, and some popular destinations now struggle to cope with the number of visitors they receive. Although I accept that tourism can cause serious problems, I disagree that it does more harm than good, provided that it is well managed.</p>
+  <p>It is undeniable that mass tourism can damage the places people visit. In cities such as Venice and Barcelona, crowds of visitors make daily life difficult for residents, and the conversion of homes into holiday rentals has pushed up rents, forcing many local people out of their own neighbourhoods. Heavy visitor numbers can also damage historic buildings and natural environments, from ancient city centres to fragile coastlines.</p>
+  <p>However, these problems should be weighed against the considerable benefits. Tourism provides around one in ten jobs worldwide, and for many developing countries it is one of the few industries that bring in foreign currency. The income it generates can also fund public services: Bhutan, for example, uses its daily visitor fee to pay for healthcare, education and environmental protection. In addition, tourism encourages cultural exchange, helping people from different countries to understand one another.</p>
+  <p>Crucially, most of the harm caused by tourism results from poor management rather than from tourism itself. Measures such as limiting short-term rentals, charging fees on the busiest days and promoting less well-known regions can reduce overcrowding while preserving the economic benefits.</p>
+  <p>In conclusion, while international tourism can damage popular destinations, I believe that its economic and cultural benefits outweigh its drawbacks, as long as governments manage it carefully and ensure that local people share in its rewards.</p>
+  <p class="alt">≈ 290 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task19" data-task="19">
+      <div class="task-eyebrow">Task 19 of 20</div>
+      <h2>Speaking Part 3 — Today’s Topics</h2>
+      <p class="task-sub">Answer each question in its own box — about <b>45 seconds</b> each.</p>
+      <div class="question-box" data-field="t19-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Why do some places become too popular with tourists?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think one reason is that…”</li><li>“Social media has also…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Should famous places charge visitors an entry fee?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“On the one hand,…”</li><li>“On balance, I’d say…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">How can countries prepare for natural disasters such as locust swarms or floods?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The most important thing is…”</li><li>“For instance,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t19-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">Would a four-day working week work in your country?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It might work for…, but…”</li><li>“The main challenge would be…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+    <section class="task" id="task20" data-task="20">
+      <div class="task-eyebrow">Task 20 of 20</div>
+      <h2>Self-Check — Your Reading Days</h2>
+      <p class="task-sub">Compare today with Days 35 and 36.</p>
+      <div class="card"><p class="mini-q">1. Your reading scores on Days 35, 36 and 39 (out of 40) and estimated bands:</p><textarea class="no-check mini-answer" id="t20-rf-1" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">2. Which question type has improved most, and which still costs you marks?</p><textarea class="no-check mini-answer" id="t20-rf-2" placeholder="Write here..." style="min-height:60px;"></textarea><p class="mini-q">3. Is your Task 2 position clear in the introduction and repeated in the conclusion? What will you work on next?</p><textarea class="no-check mini-answer" id="t20-rf-3" placeholder="Write here..." style="min-height:60px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t20-rf-btn">Show some guidance</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t20-rf-ans"><p>Signs of real progress: fewer NOT GIVEN errors; correct word forms in completion tasks; a Task 1 overview that names the main features; a Task 2 position that is clear from the first paragraph.</p></div>
+        </div></div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 20</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 39 of 45</div>
+    <h1>Day 39 complete! 🎉</h1>
+    <p>Day 39 done — a full reading test, two extra articles, reading skills, vocabulary and grammar, Writing Task 1 (a table) and Task 2, and speaking.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+    initLineMatch('t10-lm-lm');
+
+    initWritingCoach('t16-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The table below shows the number of international visitors arriving in one country by different methods of travel in 2000, 2010 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.' });
+    initWritingCoach('t18-essay', { mode: 'task2', minutes: 40, target: 250, prompt: 'Some people believe that international tourism does more harm than good to the places that tourists visit. To what extent do you agree or disagree?' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t8-speaking-summary"]'); if (b) initRecordControl(b, user.id, 39, 8, 't8-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t9-speaking-summary"]'); if (b) initRecordControl(b, user.id, 39, 9, 't9-speaking-summary', 45); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-1"]'); if (b) initRecordControl(b, user.id, 39, 19, 't19-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-2"]'); if (b) initRecordControl(b, user.id, 39, 19, 't19-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-3"]'); if (b) initRecordControl(b, user.id, 39, 19, 't19-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t19-speaking-4"]'); if (b) initRecordControl(b, user.id, 39, 19, 't19-speaking-4', 0); }
+
+    await initTaskFlow(39, 20, user.id, {
+      1: () => { checkAllAnswers('t1-st', 't1-st-score'); checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); },
+      2: () => { checkAllAnswers('t2-tf', 't2-tf-score'); checkAllAnswers('t2-notes1', 't2-notes1-score'); checkAllAnswers('t2-mc', 't2-mc-score'); },
+      4: () => { checkAllAnswers('t4-h', 't4-h-score'); checkAllAnswers('t4-se', 't4-se-score'); checkAllAnswers('t4-s', 't4-s-score'); },
+      6: () => { checkAllAnswers('t6-mf', 't6-mf-score'); checkAllAnswers('t6-yn', 't6-yn-score'); checkAllAnswers('t6-mc', 't6-mc-score'); checkAllAnswers('t6-sc', 't6-sc-score'); },
+      8: () => { checkAllAnswers('t8-tf', 't8-tf-score'); },
+      9: () => { checkAllAnswers('t9-sc', 't9-sc-score'); },
+      10: () => { checkAllAnswers('t10-lm', 't10-lm-score'); markLineMatchResult('t10-lm-lm'); checkAllAnswers('t10-mc', 't10-mc-score'); },
+      11: () => { checkAllAnswers('t11-fn', 't11-fn-score'); checkAllAnswers('t11-ref', 't11-ref-score'); },
+      12: () => { checkAllAnswers('t12-title', 't12-title-score'); checkAllAnswers('t12-scan', 't12-scan-score'); },
+      13: () => { checkAllAnswers('t13-wf', 't13-wf-score'); checkAllAnswers('t13-col', 't13-col-score'); },
+      14: () => { checkAllAnswers('t14-gr', 't14-gr-score'); },
+      15: () => { checkAllAnswers('t15-q', 't15-q-score'); checkAllAnswers('t15-g', 't15-g-score'); },
+      17: () => { checkAllAnswers('t17-pl', 't17-pl-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t8-sum-btn', 't8-sum-ans', '[id^="t8-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t9-sum-btn', 't9-sum-ans', '[id^="t9-sum-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t16-essay-model-btn', 't16-essay-model', '#t16-essay');
+    initGatedMistakeReveal('t17-out-btn', 't17-out-ans', '[id^="t17-out-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t18-essay-model-btn', 't18-essay-model', '#t18-essay');
+    initGatedMistakeReveal('t20-rf-btn', 't20-rf-ans', '[id^="t20-rf-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+</body>
+</html>
