@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 40 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 40 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 5</div>
+      <h2>Vocabulary Recap — Words from This Week</h2>
+      <p class="task-sub">A <b>short recap day</b> — about <b>1½ hours</b>, 5 tasks. Everything today comes from the words, grammar and topics of Days 35–39.</p>
+      <div class="card" id="t1-v">
+        <div class="line-match" id="t1-v-lm">
+          <div class="lm-side lm-left"><button type="button" class="lm-item" data-key="1">1. resilience</button><button type="button" class="lm-item" data-key="2">2. speculative</button><button type="button" class="lm-item" data-key="3">3. inevitable</button><button type="button" class="lm-item" data-key="4">4. stigma</button><button type="button" class="lm-item" data-key="5">5. perverse</button><button type="button" class="lm-item" data-key="6">6. provenance</button><button type="button" class="lm-item" data-key="7">7. restitution</button><button type="button" class="lm-item" data-key="8">8. premature</button></div>
+          <svg class="lm-svg"></svg>
+          <div class="lm-side lm-right"><button type="button" class="lm-item" data-key="a">a. happening too early</button><button type="button" class="lm-item" data-key="b">b. the history of who has owned an object</button><button type="button" class="lm-item" data-key="c">c. based on guesses rather than evidence</button><button type="button" class="lm-item" data-key="d">d. producing the opposite of what was intended</button><button type="button" class="lm-item" data-key="e">e. certain to happen</button><button type="button" class="lm-item" data-key="f">f. returning something to its owner</button><button type="button" class="lm-item" data-key="g">g. the ability to recover from difficulties</button><button type="button" class="lm-item" data-key="h">h. shame attached to something</button></div>
+          <select class="lm-hidden-select select" id="t1-v-1" data-lm-key="1" data-answer="g" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-2" data-lm-key="2" data-answer="c" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-3" data-lm-key="3" data-answer="e" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-4" data-lm-key="4" data-answer="h" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-5" data-lm-key="5" data-answer="d" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-6" data-lm-key="6" data-answer="b" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-7" data-lm-key="7" data-answer="f" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select><select class="lm-hidden-select select" id="t1-v-8" data-lm-key="8" data-answer="a" hidden><option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm');">Check answers</button>
+          <span id="t1-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div>
+      </div>
+      <div class="card" id="t1-g" style="line-height:2.4;"><p class="example-q" style="margin:0 0 6px;">Each word appeared this week.</p><p>1. Crowd disasters often occur at a <input type="text" class="text-answer" id="t1-1" data-correct="bottleneck" autocomplete="off" style="width:130px;">, where movement slows.</p><p>2. Change is an <input type="text" class="text-answer" id="t1-2" data-correct="inevitable" autocomplete="off" style="width:120px;"> feature of every living language.</p><p>3. Conditional benefits can create <input type="text" class="text-answer" id="t1-3" data-correct="perverse" autocomplete="off" style="width:110px;"> incentives.</p><p>4. Many scholars were <input type="text" class="text-answer" id="t1-4" data-correct="sceptical/skeptical" autocomplete="off" style="width:120px;"> of Price’s claims about the mechanism.</p><p>5. Museums should be able to prove the <input type="text" class="text-answer" id="t1-5" data-correct="provenance" autocomplete="off" style="width:130px;"> of disputed objects.</p><p>6. Claims that probiotics cure depression are, for now, <input type="text" class="text-answer" id="t1-6" data-correct="premature" autocomplete="off" style="width:120px;">.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-g', 't1-g-score')">Check answers</button>
+          <span id="t1-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t1-col"><div class="q-item" id="t1-col-1">
+          <p>1. to ______ doubt on</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-col-1" data-correct="true"> cast</label><label><input type="radio" value="1" name="t1-col-1" data-correct="false"> put</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-col-2">
+          <p>2. to ______ legislation</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-col-2" data-correct="true"> pass</label><label><input type="radio" value="1" name="t1-col-2" data-correct="false"> make through</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-col-3">
+          <p>3. to ______ objections</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-col-3" data-correct="true"> raise</label><label><input type="radio" value="1" name="t1-col-3" data-correct="false"> rise</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-col-4">
+          <p>4. to ______ the burden of proof</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-col-4" data-correct="true"> bear</label><label><input type="radio" value="1" name="t1-col-4" data-correct="false"> carry out</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-col', 't1-col-score')">Check answers</button>
+          <span id="t1-col-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 5</div>
+      <h2>Grammar Recap — This Week’s Structures</h2>
+      <p class="task-sub">Choose the correct option, then correct three sentences from this week’s student essays.</p>
+      <div class="card" id="t2-gr"><div class="q-item" id="t2-gr-1">
+          <p>1. Not only ______ expensive, but it would also benefit the rich.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-gr-1" data-correct="true"> would it be</label><label><input type="radio" value="1" name="t2-gr-1" data-correct="false"> it would be</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-gr-2">
+          <p>2. ______ it be introduced, taxes would rise.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-gr-2" data-correct="true"> Should</label><label><input type="radio" value="1" name="t2-gr-2" data-correct="false"> Would</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-gr-3">
+          <p>3. The share rose fivefold, ______ 50% by 2020.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-gr-3" data-correct="true"> reaching</label><label><input type="radio" value="1" name="t2-gr-3" data-correct="false"> reached</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-gr-4">
+          <p>4. By 2020, Country C ______ its share.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-gr-4" data-correct="true"> had tripled</label><label><input type="radio" value="1" name="t2-gr-4" data-correct="false"> has tripled</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-gr-5">
+          <p>5. Only after 2010 ______ significant growth.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-gr-5" data-correct="true"> was there</label><label><input type="radio" value="1" name="t2-gr-5" data-correct="false"> there was</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-gr-6">
+          <p>6. It is difficult to justify ______ taxpayers to pay.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-gr-6" data-correct="true"> asking</label><label><input type="radio" value="1" name="t2-gr-6" data-correct="false"> to asking</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-gr-7">
+          <p>7. Free tuition is ______ a complete solution.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-gr-7" data-correct="true"> by no means</label><label><input type="radio" value="1" name="t2-gr-7" data-correct="false"> by no way</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t2-gr-8">
+          <p>8. ______ objects have been looted, they should be returned.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t2-gr-8" data-correct="true"> Where</label><label><input type="radio" value="1" name="t2-gr-8" data-correct="false"> Whereas</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-gr', 't2-gr-score')">Check answers</button>
+          <span id="t2-gr-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Correct the sentences.</strong> Each has <b>one</b> mistake. Write the whole correct sentence.</p>
+      <div class="card"><p class="mini-q">1. Should tuition is abolished, taxes would rise.</p><textarea class="no-check mini-answer" id="t2-fix-1" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><p class="mini-q">2. The share rose sharply, it reached 50% in 2020.</p><textarea class="no-check mini-answer" id="t2-fix-2" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><p class="mini-q">3. There is little evidence what probiotics treat depression.</p><textarea class="no-check mini-answer" id="t2-fix-3" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t2-fix-btn">Show the correct sentences</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t2-fix-ans"><ol><li>Should tuition be abolished, taxes would rise.</li><li>The share rose sharply, reaching 50% in 2020.</li><li>There is little evidence that probiotics treat depression.</li></ol></div>
+        </div></div>
+    </section>
+
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 5</div>
+      <h2>Recap Reading — The Return of the Beaver</h2>
+      <p class="task-sub">A short reading with this week’s words and themes — about <b>12 minutes</b>, <b>8 questions</b>.</p>
+      <div class="card article labelled">
+        <h3 class="article-title">The Return of the Beaver</h3>
+        <p class="article-meta">Recap reading · Conservation · 256 words</p>
+        <p><span class="para-label">A</span>Four hundred years ago, the Eurasian beaver had been hunted to extinction in Britain for its fur, meat and scent glands. Its return began in 2009, when a licensed trial released beavers in Knapdale, in western Scotland. Meanwhile, beavers of uncertain origin — probably escapees or illegal releases — were establishing themselves on the River Tay. In 2019, the Scottish government granted the species legal protection, and in 2025 the first licensed releases into the wild took place in England.</p><p><span class="para-label">B</span>Beavers are often described as ‘ecosystem engineers’. By building dams, they create ponds and wetlands that store water, trap sediment and provide habitat for insects, amphibians and fish. Studies in England have found that beaver dams can reduce the peak flow of water downstream after heavy rain, potentially lessening the risk of flooding, and can help to maintain water levels during droughts.</p><p><span class="para-label">C</span>Not everyone welcomes them, however. Farmers have reported flooded fields, felled trees and blocked drainage channels, and in Scotland hundreds of beavers have been legally killed under licence where they caused serious damage. Critics argue that reintroduction has sometimes moved faster than plans to manage its consequences.</p><p><span class="para-label">D</span>Supporters respond that most conflicts can be resolved by simple measures, such as pipes that lower the water level behind a dam, and that the benefits for biodiversity and water management far outweigh the costs. The debate echoes that over other returning species, such as the wolf in continental Europe: the ecological case is now widely accepted, but the social challenge of living alongside wild animals remains.</p>
+      </div>
+      <div class="card" id="t3-tf"><div class="q-item" id="t3-tf-1">
+          <p>1. The beavers on the River Tay were released as part of an official trial.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-1" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-1" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-2">
+          <p>2. Beaver dams may reduce flooding downstream.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t3-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-3">
+          <p>3. Beavers have now spread to every river in Scotland.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-3" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-tf', 't3-tf-score')">Check answers</button>
+          <span id="t3-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="word-bank">engineers · licence · pipes · fences · protection · builders · trials</div><div class="card" id="t3-g" style="line-height:2.6;"><p>Beavers are called ecosystem (4) <input type="text" class="text-answer" id="t3-4" data-correct="engineers" autocomplete="off" style="width:120px;"> because their dams create ponds and wetlands. In Scotland, some beavers have been killed under (5) <input type="text" class="text-answer" id="t3-5" data-correct="licence/license" autocomplete="off" style="width:100px;">. Conflicts can often be solved with (6) <input type="text" class="text-answer" id="t3-6" data-correct="pipes" autocomplete="off" style="width:90px;"> that lower water levels.</p><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-g', 't3-g-score')">Check answers</button>
+          <span id="t3-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card" id="t3-mc"><div class="q-item" id="t3-mc-7">
+          <p>7. What criticism of reintroduction is mentioned?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-7" data-correct="false"> A. It has been too slow.</label><label><input type="radio" value="1" name="t3-mc-7" data-correct="true"> B. It has sometimes moved faster than plans to manage its effects.</label><label><input type="radio" value="2" name="t3-mc-7" data-correct="false"> C. It is illegal in Scotland.</label><label><input type="radio" value="3" name="t3-mc-7" data-correct="false"> D. Beavers do not build dams.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-mc-8">
+          <p>8. Why does the writer mention the wolf?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-8" data-correct="false"> A. to show beavers are dangerous</label><label><input type="radio" value="1" name="t3-mc-8" data-correct="true"> B. to compare a similar debate about living with returning wildlife</label><label><input type="radio" value="2" name="t3-mc-8" data-correct="false"> C. to explain beavers’ diet</label><label><input type="radio" value="3" name="t3-mc-8" data-correct="false"> D. to criticise farmers</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-mc', 't3-mc-score')">Check answers</button>
+          <span id="t3-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 5</div>
+      <h2>Writing Task 1 — Recap Report</h2>
+      <p class="task-sub">Use this week’s Task 1 language. Choose the best overview, then write the full report: about <b>20 minutes</b>, <b>at least 150 words</b>.</p>
+      <div class="card" id="t4-ov"><div class="q-item" id="t4-ov-1">
+          <p>1. Best overview:</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-ov-1" data-correct="false"> A. Park A had 300,000 visitors in summer.</label><label><input type="radio" value="1" name="t4-ov-1" data-correct="true"> B. Overall, Parks A and B were busiest in summer, Park C peaked in winter, and Park D attracted similar numbers all year; Park A received the most visitors in total.</label><label><input type="radio" value="2" name="t4-ov-1" data-correct="false"> C. National parks are popular.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-ov', 't4-ov-score')">Check answers</button>
+          <span id="t4-ov-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="card task-prompt">
+        <p class="prompt-label">Writing Task 1</p>
+        <p><i>The bar chart below shows the number of visitors to four national parks in each season in 2025. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</i></p>
+        <p style="margin:6px 0 0;">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+        <p><i>Write at least 150 words.</i></p>
+      </div>
+      <div class="card"><svg viewBox="0 0 640 360" class="svg-chart" role="img" aria-label="Visitors to four national parks, by season, 2025 (thousands)" style="width:100%;max-width:640px;display:block;margin:0 auto;font-family:inherit;"><text x="320.0" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#14162b">Visitors to four national parks, by season, 2025 (thousands)</text><line x1="64" y1="284.0" x2="620" y2="284.0" stroke="#e3e5ec"/><text x="56" y="288.0" text-anchor="end" font-size="11" fill="#4b4e5c">0</text><line x1="64" y1="250.0" x2="620" y2="250.0" stroke="#e3e5ec"/><text x="56" y="254.0" text-anchor="end" font-size="11" fill="#4b4e5c">50</text><line x1="64" y1="216.0" x2="620" y2="216.0" stroke="#e3e5ec"/><text x="56" y="220.0" text-anchor="end" font-size="11" fill="#4b4e5c">100</text><line x1="64" y1="182.0" x2="620" y2="182.0" stroke="#e3e5ec"/><text x="56" y="186.0" text-anchor="end" font-size="11" fill="#4b4e5c">150</text><line x1="64" y1="148.0" x2="620" y2="148.0" stroke="#e3e5ec"/><text x="56" y="152.0" text-anchor="end" font-size="11" fill="#4b4e5c">200</text><line x1="64" y1="114.0" x2="620" y2="114.0" stroke="#e3e5ec"/><text x="56" y="118.0" text-anchor="end" font-size="11" fill="#4b4e5c">250</text><line x1="64" y1="80.0" x2="620" y2="80.0" stroke="#e3e5ec"/><text x="56" y="84.0" text-anchor="end" font-size="11" fill="#4b4e5c">300</text><line x1="64" y1="46.0" x2="620" y2="46.0" stroke="#e3e5ec"/><text x="56" y="50.0" text-anchor="end" font-size="11" fill="#4b4e5c">350</text><text x="14" y="165.0" text-anchor="middle" font-size="11" fill="#4b4e5c" transform="rotate(-90 14 165.0)">thousands of visitors</text><rect x="84.8" y="202.4" width="22.3" height="81.6" fill="#2c6bed"/><rect x="109.2" y="80.0" width="22.3" height="204.0" fill="#d9480f"/><rect x="133.5" y="209.2" width="22.3" height="74.8" fill="#2b8a3e"/><rect x="157.8" y="263.6" width="22.3" height="20.4" fill="#7048e8"/><text x="133.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">Park A</text><rect x="223.8" y="243.2" width="22.3" height="40.8" fill="#2c6bed"/><rect x="248.2" y="182.0" width="22.3" height="102.0" fill="#d9480f"/><rect x="272.5" y="236.4" width="22.3" height="47.6" fill="#2b8a3e"/><rect x="296.8" y="270.4" width="22.3" height="13.6" fill="#7048e8"/><text x="272.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">Park B</text><rect x="362.9" y="256.8" width="22.3" height="27.2" fill="#2c6bed"/><rect x="387.2" y="253.4" width="22.3" height="30.6" fill="#d9480f"/><rect x="411.5" y="250.0" width="22.3" height="34.0" fill="#2b8a3e"/><rect x="435.8" y="175.2" width="22.3" height="108.8" fill="#7048e8"/><text x="411.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">Park C</text><rect x="501.9" y="222.8" width="22.3" height="61.2" fill="#2c6bed"/><rect x="526.2" y="219.4" width="22.3" height="64.6" fill="#d9480f"/><rect x="550.5" y="226.2" width="22.3" height="57.8" fill="#2b8a3e"/><rect x="574.8" y="229.6" width="22.3" height="54.4" fill="#7048e8"/><text x="550.5" y="302" text-anchor="middle" font-size="11" fill="#4b4e5c">Park D</text><rect x="64" y="330" width="12" height="12" fill="#2c6bed"/><text x="82" y="340" font-size="12" fill="#14162b">spring</text><rect x="137.2" y="330" width="12" height="12" fill="#d9480f"/><text x="155.2" y="340" font-size="12" fill="#14162b">summer</text><rect x="210.39999999999998" y="330" width="12" height="12" fill="#2b8a3e"/><text x="228.39999999999998" y="340" font-size="12" fill="#14162b">autumn</text><rect x="283.59999999999997" y="330" width="12" height="12" fill="#7048e8"/><text x="301.59999999999997" y="340" font-size="12" fill="#14162b">winter</text></svg></div>
+      <p style="margin-top:22px;"><strong>Write your report.</strong> Try to finish in 20 minutes — press the button to start the timer. Leave an empty line between paragraphs.</p>
+      <div class="card writing-card">
+        <textarea class="no-check writing-area" id="t4-essay" placeholder="Introduction (paraphrase the task) … Overview … Details paragraph 1 … Details paragraph 2 …" style="min-height:360px;"></textarea>
+        <div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t4-essay-model-btn">Show a model answer</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t4-essay-model"><div class="model-text"><p>The bar chart illustrates how many people visited four national parks in each season of 2025.</p>
+  <p>Overall, Parks A and B followed a strongly seasonal pattern, peaking in summer, whereas Park C was busiest in winter and Park D attracted remarkably consistent numbers throughout the year. Park A received the largest total number of visitors.</p>
+  <p>Park A was by far the most popular destination in summer, with 300,000 visitors, roughly two and a half times its spring and autumn figures of 120,000 and 110,000, before falling to just 30,000 in winter. Park B displayed a similar but less pronounced pattern, its numbers doubling from 60,000 in spring to 150,000 in summer and dropping to 20,000 in winter.</p>
+  <p>Park C, by contrast, recorded only 40,000–50,000 visitors in the warmer seasons but 160,000 in winter, which suggests that it is a winter-sports destination. Park D’s figures, meanwhile, fluctuated only marginally, between 80,000 and 95,000.</p>
+  <p class="alt">≈ 180 words</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 5</div>
+      <h2>Speaking — This Week’s Topics</h2>
+      <p class="task-sub">Answer each question in its own box — about <b>30–50 seconds</b> each. Try to use at least <b>two words</b> from Task 1 in every answer.</p>
+      <div class="question-box" data-field="t5-speaking-1">
+        <div class="q-num">Question 1</div>
+        <div class="q-text">Should wild animals that were once extinct be brought back to their old habitats?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The ecological case is…, but…”</li><li>“It would depend on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-2">
+        <div class="q-num">Question 2</div>
+        <div class="q-text">Should museums return objects to their countries of origin?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“Where objects were looted,…”</li><li>“That said,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-3">
+        <div class="q-num">Question 3</div>
+        <div class="q-text">Would a basic income change how people work?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“The evidence so far suggests…”</li><li>“Much would depend on…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t5-speaking-4">
+        <div class="q-num">Question 4</div>
+        <div class="q-text">How has your approach to learning changed during this course?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“If anything, I’ve become more…”</li><li>“What I’d do differently is…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 5</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 40 of 45</div>
+    <h1>Day 40 complete! 🎉</h1>
+    <p>Day 40 done — a short recap of this week’s vocabulary, grammar, reading, Task 1 writing and speaking.</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  // True/False with a rewrite box that appears only when False is chosen.
+  const TF_COUNTS = {};
+  function syncTfFix(cid) {
+    for (let i = 1; i <= (TF_COUNTS[cid] || 0); i++) {
+      const picked = document.querySelector(`input[name="${cid}-${i}"]:checked`);
+      const wrap = document.getElementById(`${cid}-fixwrap-${i}`);
+      if (wrap) wrap.hidden = !(picked && picked.value === '1');
+    }
+    if (window.refreshTaskFlowNext) window.refreshTaskFlowNext();
+  }
+  function revealCorrected(cid) {
+    const c = document.getElementById(cid + '-corrected'); if (c) c.hidden = false;
+    const n = document.getElementById(cid + '-corrected-note'); if (n) n.hidden = true;
+  }
+  function checkTfWithFixes(cid) {
+    const empty = Array.from(document.querySelectorAll(`#${cid} .tf-fix:not([hidden]) textarea`)).filter(t => !t.value.trim());
+    if (empty.length) {
+      const score = document.getElementById(cid + '-score');
+      score.textContent = `Rewrite the ${empty.length === 1 ? 'false sentence' : empty.length + ' false sentences'} first`;
+      score.style.color = 'var(--warn)';
+      empty[0].classList.remove('shake-invalid-field'); void empty[0].offsetWidth; empty[0].classList.add('shake-invalid-field');
+      empty[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    checkAllAnswers(cid, cid + '-score');
+    const btn = document.querySelector(`button[onclick*="'${cid}'"]`);
+    if (btn && btn.disabled) revealCorrected(cid);
+  }
+
+  requireAuth(async function (profile, user) {
+    initLineMatch('t1-v-lm');
+
+    initWritingCoach('t4-essay', { mode: 'task1', minutes: 20, target: 150, prompt: 'The bar chart below shows the number of visitors to four national parks in each season in 2025. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.' });
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-1"]'); if (b) initRecordControl(b, user.id, 40, 5, 't5-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-2"]'); if (b) initRecordControl(b, user.id, 40, 5, 't5-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-3"]'); if (b) initRecordControl(b, user.id, 40, 5, 't5-speaking-3', 0); }
+    { const b = document.querySelector('.question-box[data-field="t5-speaking-4"]'); if (b) initRecordControl(b, user.id, 40, 5, 't5-speaking-4', 0); }
+
+    await initTaskFlow(40, 5, user.id, {
+      1: () => { checkAllAnswers('t1-v', 't1-v-score'); markLineMatchResult('t1-v-lm'); checkAllAnswers('t1-g', 't1-g-score'); checkAllAnswers('t1-col', 't1-col-score'); },
+      2: () => { checkAllAnswers('t2-gr', 't2-gr-score'); },
+      3: () => { checkAllAnswers('t3-tf', 't3-tf-score'); checkAllAnswers('t3-g', 't3-g-score'); checkAllAnswers('t3-mc', 't3-mc-score'); },
+      4: () => { checkAllAnswers('t4-ov', 't4-ov-score'); },
+    });
+
+    // Saved answers are restored inside initTaskFlow — re-show any rewrite
+    // boxes for statements marked False, then wire the gated reveals.
+
+    initGatedMistakeReveal('t2-fix-btn', 't2-fix-ans', '[id^="t2-fix-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t4-essay-model-btn', 't4-essay-model', '#t4-essay');
+  });
+</script>
+</body>
+</html>
