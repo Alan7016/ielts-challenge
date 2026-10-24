@@ -2900,7 +2900,8 @@ const MOCK_UNLOCK_CODES = {
   13: 'mock13-s',
     20: 'mock20-s',
   27: 'mock27-s',
-  34: 'mock34-s'
+  34: 'mock34-s',
+  41: 'mock41-s'
 };
 function requireMockUnlockCode(dayNumber, onUnlocked) {
   const requiredCode = MOCK_UNLOCK_CODES[dayNumber];

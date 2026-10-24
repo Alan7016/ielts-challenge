@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading &mdash; Mock Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            line-height: 1.4;
+            font-size: 16px;
+            padding-bottom: 90px;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 60px;
+        }
+
+        .timer-container { display: none; }
+
+        .main-container {
+            margin-top: 60px;
+            display: flex;
+            background: #ffffff;
+            padding-bottom: 100px;
+        }
+
+        .left-panel {
+            width: 48%;
+            padding: 24px 28px;
+            border-right: 1px solid #e0e0e0;
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+            position: sticky;
+            top: 60px;
+        }
+
+        .right-panel {
+            display: block;
+            width: 52%;
+            padding: 24px 28px;
+        }
+
+        .passage-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .passage-sub {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 18px;
+            font-style: italic;
+        }
+
+        #passage-text p, .passage-text p { margin-bottom: 14px; text-align: justify; }
+
+        .part-header {
+            background-color: #f1f2ec;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .question { margin-bottom: 36px; }
+        .question p { margin-bottom: 10px; }
+        .question-prompt { margin-bottom: 16px; }
+
+        .answer-input {
+            border: 1px solid #9aa3ad;
+            border-radius: 4px;
+            background-color: #fff;
+            padding: 4px 8px;
+            font-size: 16px;
+            width: 140px;
+            height: 28px;
+            line-height: 1.2;
+            vertical-align: middle;
+            transition: border-color 0.15s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        .answer-input::placeholder { color: #999; font-weight: bold; text-align: center; }
+        .answer-input:focus { outline: none; border-color: #2c6bed; border-width: 2px; }
+        .answer-input.correct { border-color: #28a745; background-color: #e9f7ef; }
+        .answer-input.incorrect { border-color: #dc3545; background-color: #f8d7da; color: #721c24; }
+
+        .correct-inline {
+            color: #28a745;
+            font-weight: 700;
+            margin-left: 10px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .correct-inline::before { content: "\2192  "; }
+
+        .multi-choice-option {
+            display: block;
+            width: 100%;
+            padding: 10px 14px;
+            background-color: #fff;
+            border: 1px solid transparent;
+            transition: background-color 0.2s;
+        }
+        .multi-choice-option:hover { background-color: #f1f7ff; border-color: #c6dcfb; }
+        .multi-choice-option:has(input[type="radio"]:checked) { background-color: #cfe3f9; }
+        .multi-choice-option.correct { background-color: #d4edda !important; }
+        .multi-choice-option.incorrect { background-color: #f8d7da !important; }
+        .multi-choice-option label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 16px; width: 100%; }
+        .multi-choice-option input[type="radio"] { transform: scale(1.2); }
+
+        .headings-box {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px 18px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        .headings-box p { margin: 3px 0; }
+
+        .hidden { display: none; }
+
+        .nav-arrows { position: fixed; bottom: 100px; right: 20px; display: flex; gap: 5px; z-index: 101; }
+        .nav-arrow {
+            width: 50px; height: 50px; background: #333; color: white; border: none;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 22px; font-weight: bold;
+        }
+        .nav-arrow:hover { background: #555; }
+        .nav-arrow:disabled { background: #ccc; cursor: not-allowed; }
+
+        .nav-row {
+            position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff; padding: 0;
+            display: flex; align-items: center; height: 80px; z-index: 100;
+            overflow-x: auto; overflow-y: hidden; white-space: nowrap;
+        }
+        .footer__questionWrapper___1tZ46 { display: flex; align-items: center; margin-right: 20px; flex-shrink: 0; }
+        .footer__questionNo___3WNct {
+            background: none; border: none; padding: 10px 15px; font-size: 16px; font-weight: 600;
+            color: #333; cursor: pointer; display: flex; align-items: center; gap: 5px;
+        }
+        .footer__questionNo___3WNct:hover { background-color: #f8f9fa; }
+        .attemptedCount { font-size: 14px; color: #666; margin-left: 5px; font-weight: 400; }
+        .footer__subquestionWrapper___9GgoP { display: none; gap: 2px; margin-left: 10px; }
+        .footer__questionWrapper___1tZ46.selected .footer__subquestionWrapper___9GgoP { display: flex; }
+        .footer__questionWrapper___1tZ46.selected .attemptedCount { display: none; }
+        .subQuestion {
+            width: 32px; height: 32px; border: 1px solid #ccc; background: white; color: #333;
+            font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; transition: all 0.2s; border-radius: 2px;
+        }
+        .subQuestion.answered { background-color: #e9ecef; border-color: #ddd; }
+        .subQuestion.correct { background-color: #28a745; color: white; border-color: #28a745; }
+        .subQuestion.incorrect { background-color: #dc3545; color: white; border-color: #dc3545; }
+        .subQuestion:hover { background-color: #f0f0f0; border-color: #999; }
+        .subQuestion.active { background-color: #4a90e2; color: white; border-color: #4a90e2; }
+        .sr-only {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+        }
+        .footer__deliverButton___3FM07 {
+            margin-left: auto; margin-right: 20px; background-color: #f0f0f0; color: #333;
+            border: 1px solid #ccc; padding: 12px 20px; border-radius: 4px; font-size: 16px;
+            font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            min-width: 170px; justify-content: center;
+        }
+        .footer__deliverButton___3FM07:hover { background-color: #e0e0e0; border-color: #bbb; }
+        .footer__deliverButton___3FM07.success { background-color: #28a745; color: #fff; border-color: #28a745; }
+
+        .highlight { background-color: #ffff00; }
+        .comment-highlight { background-color: #90EE90; position: relative; cursor: help; }
+        .comment-tooltip {
+            position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #333;
+            color: white; padding: 8px 12px; border-radius: 4px; font-size: 14px; white-space: nowrap;
+            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .comment-highlight:hover .comment-tooltip { opacity: 1; }
+
+        .context-menu {
+            position: absolute; background: white; border: 1px solid #ccc; border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); z-index: 1000; display: none; min-width: 140px;
+        }
+        .context-menu-item {
+            padding: 12px 16px; cursor: pointer; font-size: 16px; border-bottom: 1px solid #f0f0f0;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .context-menu-item:hover { background-color: #f8f9fa; }
+        .context-menu-item:last-child { border-bottom: none; }
+
+        .tfng-question {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 26px;
+        }
+        .tfng-num-box {
+            width: 26px;
+            height: 26px;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .tfng-body { flex: 1; }
+        .tfng-statement { margin-bottom: 10px; }
+        .tfng-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .tfng-option input[type="radio"] { transform: scale(1.15); cursor: pointer; }
+
+        .selection-toolbar {
+            position: absolute;
+            display: none;
+            background: #2b2b2b;
+            border-radius: 6px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            z-index: 1500;
+            overflow: hidden;
+        }
+        .selection-toolbar button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            padding: 8px 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .selection-toolbar button:hover { background: #444; }
+        .selection-toolbar button + button { border-left: 1px solid #555; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6);
+            z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-content {
+            background: white; padding: 25px; border-radius: 8px; width: 100%; max-width: 800px;
+            max-height: 90vh; overflow-y: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd;
+            padding-bottom: 15px; margin-bottom: 20px;
+        }
+        .modal-header h2 { font-size: 24px; color: #333; }
+        .modal-close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #888; }
+        .modal-close-btn:hover { color: #333; }
+        #score-summary {
+            font-size: 16px; font-weight: 600; color: #111827; background: #f1f5f9; border: 1px solid #e2e8f0;
+            padding: 10px 12px; border-radius: 8px; display: inline-block; margin-bottom: 15px;
+        }
+        #result-details table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        #result-details th, #result-details td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        #result-details th { background-color: #f8f9fa; font-weight: 600; }
+        .result-correct { color: #28a745; font-weight: bold; }
+        .result-incorrect { color: #dc3545; font-weight: bold; }
+
+        @keyframes flash { 0% { background-color: #e6f4ff; } 100% { background-color: transparent; } }
+        .question.flash { animation: flash 1s ease-out; }
+
+        select.answer-select {
+            border: 1px solid #9aa3ad; border-radius: 4px; background-color: #fff; padding: 4px 8px;
+            font-size: 15px; height: 32px; vertical-align: middle;
+        }
+        select.answer-select.correct { border-color: #28a745; background-color: #e9f7ef; }
+        select.answer-select.incorrect { border-color: #dc3545; background-color: #f8d7da; }
+
+        @media (max-width: 1024px) {
+            .main-container { flex-direction: column; }
+            .left-panel { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid #e0e0e0; }
+            .right-panel { width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="timer-container"><span class="timer-display">60:00</span></div>
+        <div style="font-weight:700;color:#3e3e3e;">IELTS Reading &mdash; Mock Test</div>
+        <div></div>
+    </div>
+
+    <div class="main-container">
+        <div class="left-panel">
+            <div id="passage-1" class="passage-part">
+                <div class="passage-title">The Trans-Australian Railway (TAR)</div>
+                <div class="passage-sub">Reading Passage 1</div>
+                <div id="passage-text-1" class="passage-text">
+<p>Up until the first part of the 20th century, communications across the Australian continent were relatively undeveloped. Perth, the capital of Western Australia, remained isolated from Australia's eastern states until the Trans-Australian Railway (TAR) was built across the arid area known as the Nullarbor (No Trees) Plain. During the 19th century, the only form of transport between the west coast and the eastern cities was a long and often rough sea voyage across the Great Australian Bight, while the first east-west crossing of the Nullarbor Plain on foot was achieved by the English explorer Edward Eyre and his indigenous Australian guide Wylie in 1841. In 1877, a telegraph line was built across the plain, and it was this man-made structure that a mining engineer called Arthur Richardson followed, when he set out in 1896 to be the first to ride a bicycle around the Australian continent.</p>
+<p>The first railway in Western Australia had opened in 1871, and by 1896 there was a 313-mile line going eastwards through the inhospitable landscape as far as Kalgoorlie. This line was built alongside a pipeline carrying drinking water to the arid goldfields around Kalgoorlie. Meanwhile, in the south-east of the continent, a railway line from Port Augusta to Oodnadatta had opened in 1891. These early railways in both the east and the west were built to the narrow gauge of 3 ft 6 in.</p>
+<p>In 1901, the self-governing colonies of Queensland, New South Wales, Victoria, Tasmania, South Australia and Western Australia got together to form a federation. One of the incentives held out to Western Australia to become a member had been the promise of a trans-continental railway linking Perth with the eastern cities. A survey of the route across the featureless Nullarbor Plain was completed in 1909, and construction started to join the two existing railways at each end in 1912. Despite the onset of the First World War, work progressed until the two lines finally converged, at a site in an area of desert, in 1917. The railway's claim to fame is that its route includes the longest stretch – 297 miles – of straight track in the world. Although the existing railways at each end had been built to the narrow gauge, the new 1,052-mile stretch was built to the standard gauge of 4 ft 8½ in. These two breaks of gauge would mean a true trans-continental service did not exist until 1970.</p>
+<p>Water supplies for steam engines on the TAR route were non-existent, as the railway did not cross a permanent watercourse along its entire length. To overcome this, the TAR line's original chief engineer had requested diesel engines, but his request was not granted, so steam haulage had to be supported by extra water tankers carried on each train. Australian-built, diesel electric engines eventually replaced steam haulage in 1951.</p>
+<p>As well as being an important freight route, the new line saw the introduction of the Trans Australian Express, a service which commenced running in 1917 to serve isolated communities and settlements along its route. For much of its long-running life, this twice-weekly train consisted solely of sleeping cars; seated accommodation was only included from 1981 until the service terminated ten years later. The route of the train was extended following the conversion to standard gauge of its narrow-gauge sections in 1970, but facing increased competition from air travel it last ran in June 1991.</p>
+<p>One long-lived curiosity of the trans-Australian network was the Tea and Sugar Train, which also started running in 1917. The train brought to communities along the route not only the necessities for everyday life, but also a butcher's shop, medical facilities and a cinema. It last ran in 1996.</p>
+<p>Despite the withdrawal of the Trans-Australian Express between Adelaide and Perth in 1991, the Indian Pacific service has operated between Sydney on the east coast and Perth since 1970, the year that the TAR route was completely converted to standard gauge. This service is operated by Great Southern Rail. It runs twice a week between Adelaide and Perth, and once a week between Sydney and Perth. The journey time for the complete 2,704-mile journey is 66 hours westbound and 71.4 hours eastbound.</p>
+<p>The Indian Pacific service calls at the isolated outback railway settlements of Pimba, which has a population of around fifty, Kingoonya, which only has a hotel, and Tarcoola, which has a population of around forty and is a junction for the south-north line to Darwin. It then travels to Cook, which, despite having a population of fewer than ten, is a scheduled stop, before crossing the Nullarbor Plain in a dead straight line for 297 miles to Loongana, which is uninhabited and is a request stop, and Rawlinna, also a request stop serving Australia's largest sheep station. Civilisation is eventually reached at Kalgoorlie before the last leg of the journey westwards to East Perth Station. The train has carriages with seating, sleeping cars, a restaurant car, and wagons conveying passengers' motor cars.</p>
+                </div>
+            </div>
+            <div id="passage-2" class="passage-part hidden">
+                <div class="passage-title">The success of cellulose</div>
+                <div class="passage-sub">Reading Passage 2</div>
+                <div id="passage-text-2" class="passage-text">
+<p><strong>A</strong></p>
+<p>Not too long ago, many investors made the bet that renewable fuels from bio-mass would be the next big thing in energy. Converting corn, sugarcane, and soybeans into ethanol or diesel-type fuels lessens our nation’s dependence on oil imports while cutting carbon dioxide emissions. But already the nascent industry faces challenges. Escalating demand is hiking food prices while farmers clear rainforest habitats to grow fuel crops. And several recent studies say that certain biofuel-production processes either fail to yield net energy gains or release more carbon dioxide than they use.</p>
+<p><strong>B</strong></p>
+<p>A successor tier of start-up ventures aims to avoid those problems. Rather than focusing on the starches, sugars, and fats of food crops, many of the prototype bioethanol processes work with lignocellulose, the “woody” tissue that strengthens the cell walls of plants, says University of Massachusetts Amherst chemical engineer George W. Huber. Although cellulose breaks down less easily than sugars and starches and thus requires a complex series of enzyme-driven chemical reactions, its use opens the industry to non-food plant feedstocks such as agricultural wastes, wood chips, and switchgrass. But no company has yet demonstrated a cost-competitive industrial process for making cellulosic biofuels.</p>
+<p><strong>C</strong></p>
+<p>So scientists and engineers are working on dozens of possible biofuel-processing routes, reports Charles Wyman, a chemical engineer at the University of California, Riverside, who is a founder of Mascoma Corporation in Cambridge, Massachusetts, a leading developer of cellulosic ethanol processing. “There’s no miracle process out there,” he remarks. And fine-tuning a process involves considerable money and time. “The oil companies say that it takes 10 years to fully commercialize an industrial processing route,” warns Huber, who has contributed some thermochemical techniques to another biomass start-up, Virent Energy Systems in Madison, Wisconsin.</p>
+<p><strong>D</strong></p>
+<p>One promising biofuel procedure that avoids the complex enzymatic chemistry to break down cellulose is now being explored by Coskata in Warrenville, Illinois, a firm launched in 2006 by high-profile investors and entrepreneurs (General Motors recently took a minority stake in it as well). In the Coskata operation, a conventional gasification system will use heat to turn various feedstocks into a mixture of carbon monoxide and hydrogen called syngas, says Richard Tobey, vice president of Engineering and R&amp;D. The ability to handle multiple plant feedstocks would boost the flexibility of the overall process because each region in the country has access to certain feedstocks but not others.</p>
+<p><strong>E</strong></p>
+<p>Instead of using thermochemical methods to convert the syngas to fuel – a process that can be significantly more costly because of the added expense of pressurizing gases, according to Tobey – the Coskata group chose a biochemical route. The group focused on five promising strains of ethanol-excreting bacteria that Ralph Tanner, a microbiologist at the University of Oklahoma, had discovered years before in the oxygen-free sediments of a swamp. These anaerobic bugs make ethanol by voraciously consuming syngas.</p>
+<p><strong>F</strong></p>
+<p>The “heart and soul of the Coskata process,” as Tobey puts it, is the bioreactor in which the bacteria live. “Rather than searching for food in the fermentation mash in a large tank, our bacteria wait for the gas to be delivered to them,” he explains. The firm relies on plastic tubes, the filter-fabric straws as thin as human hair. The syngas flows through the straws, and water is pumped across their exteriors. The gases diffuse across the selective membrane to the bacteria embedded in the outer surface of the tubes, which permits no water inside. “We get an efficient mass transfer with the tubes, which is not easy,” Tobey says. “Our data suggest that in an optimal setting we could get 90 percent of the energy value of the gases into our fuel.” After the bugs eat the gases, they release ethanol into the surrounding water. Standard distillation or filtration techniques could extract the alcohol from the water.</p>
+<p><strong>G</strong></p>
+<p>Coskata researchers estimate that their commercialized process could deliver ethanol at under $1 per gallon – less than half of today’s $2-per-gallon wholesale price, Tobey claims. Outside evaluators of Argonne National Laboratory measured the input-output “energy balance” of the Coskata process and found that, optimally, it can produce 7.7 times as much energy in the end product as it takes to make it.</p>
+<p><strong>H</strong></p>
+<p>The company plans to construct a 40,000-gallon-a-year pilot plant near the GM test track in Milford, Michigan, by the end of this year and hopes to build a full-scale, 100-million-gallon-a-year plant by 2011. Coskata may have some company by then; Bioengineering Resources in Fayetteville, Ark., is already developing what seems to be a similar three-step pathway in which syngas is consumed by bacteria isolated by James Gaddy, a retired chemical engineer at the University of Arkansas. Considering the advances in these and other methods, plant cellulose could provide the greener ethanol everyone wants.</p>
+                </div>
+            </div>
+            <div id="passage-3" class="passage-part hidden">
+                <div class="passage-title">The Origin of Ancient Writing</div>
+                <div class="passage-sub">Reading Passage 3</div>
+                <div id="passage-text-3" class="passage-text">
+<p><strong>A</strong></p>
+<p>The Sumerians, an ancient people of the Middle East, had a story explaining the invention of writing more than 5,000 years ago. It seems a messenger of the King of Uruk arrived at the court of a distant ruler so exhausted that he was unable to deliver the oracle message. So, the king set down the words of his next messages on a clay tablet. A charming story, whose retelling at a recent symposium at the University of Pennsylvania amused scholars. They smiled at the absurdity of a letter which the recipient would not have been able to read.</p>
+<p><strong>B</strong></p>
+<p>They also doubted that the earliest writing was a direct rendering of speech. Writing more likely began as a separate, symbolic system of communication and only later merged with spoken language.</p>
+<p><strong>C</strong></p>
+<p>Yet in the story the Sumerians, who lived in Mesopotamia, in what is now southern Iraq, seemed to understand writing’s transforming function. As Dr Holly Pittman, director of the University’s Center for Ancient Studies, observed, writing “arose out of the need to store and transmit information… over time and space”.</p>
+<p><strong>D</strong></p>
+<p>In exchanging interpretations and information, the scholars acknowledged that they still had no fully satisfying answers to the questions of how and why writing developed. Many favoured an explanation of writing’s origins in the visual arts, pictures becoming increasingly abstract and eventually representing spoken words. Their views clashed with a widely held theory among archaeologists that writing developed from the pieces of clay that Sumerian accountants used as tokens to keep track of goods.</p>
+<p><strong>E</strong></p>
+<p>Archaeologists generally concede that they have no definitive answer to the question of whether writing was invented only once, or arose independently in several places, such as Egypt, the Indus Valley, China, Mexico and Central America. The weight of archaeological data shows that the urbanizing Sumerians were the first to develop writing, in 3,200 or 3,300 BC. These are the dates for many clay tablets in an early form of cuneiform, a script written by pressing the end of a sharpened stick into wet clay, found at the site of the ancient city of Uruk. The baked clay tablets bore such images as pictorial symbols of the names of people, places and things connected with government and commerce. The Sumerian script gradually evolved from the pictorial to the abstract, but did not at first represent recorded spoken language.</p>
+<p><strong>F</strong></p>
+<p>Dr Peter Damerow, a specialist in Sumerian cuneiform at the Max Planck Institute for the History of Science in Berlin, said, it is likely that there were mutual influences of writing systems around the world. However, their great variety now shows that the development of writing, once initiated, attains a considerable degree of independence and flexibility to adapt to specific characteristics of the sounds of the language to be represented. Not that he accepts the conventional view that writing started as a representation of words by pictures. New studies of early Sumerian writing, he said, challenge this interpretation. The structures of this earliest writing did not, for example, match the structure of spoken language, dealing mainly in lists and categories rather than in sentences and narrative.</p>
+<p><strong>G</strong></p>
+<p>For at least two decades, Dr Denise Schmandt-Besserat, a University of Texas archaeologist, has argued that the first writing grew directly out of a system practised by Sumerian accountants. They used clay tokens, each one shaped to represent a jar of oil, a container of grain or a particular kind of livestock. These tokens were sealed inside clay spheres, and then the number and type of tokens inside was recorded on the outside using impressions resembling the tokens. Eventually, the token impressions were replaced with inscribed signs, and writing had been invented.</p>
+<p><strong>H</strong></p>
+<p>Though Dr Schmandt-Besserat has won much support, some linguists question her thesis, and others, like Dr Pittman, think it too narrow. They emphasise that pictorial representation and writing evolved together. “There’s no question that the token system is a forerunner of writing,” Dr Pittman said, “but I have an argument with her evidence for a link between tokens and signs, and she doesn’t open up the process to include picture making.”</p>
+<p><strong>I</strong></p>
+<p>Dr Schmandt-Besserat vigorously defended her ideas. “My colleagues say that pictures were the beginning of writing,” she said, “but show me a single picture that becomes a sign in writing. They say that designs on pottery were the beginning of writing, but show me a single sign of writing you can trace back to a pot — it doesn’t exist.” In its first 500 years, she asserted, cuneiform writing was used almost solely for recording economic information, and after that its uses multiplied and broadened.</p>
+<p><strong>J</strong></p>
+<p>Yet other scholars have advanced different ideas. Dr Piotr Michalowski, Professor of Near East Civilizations at the University of Michigan, said that the proto-writing of Sumerian Uruk was “so radically different as to be a complete break with the past”. It no doubt served, he said, to store and communicate information, but also became a new instrument of power. Some scholars noted that the origins of writing may not always have been in economics. In Egypt, most early writing is high on monuments or deep in tombs. In this case, said Dr Pascal Vernus from a university in Paris, early writing was less administrative than sacred. It seems that the only certainty in this field is that many questions remain to be answered.</p>
+                </div>
+            </div>
+        </div><!-- end left-panel -->
+
+        <div class="right-panel">
+            <div id="part-1" class="question-part">
+                <div class="part-header">
+                    <p><strong>Reading Passage 1</strong></p>
+                    <p>You should spend about 20 minutes on Questions 1&ndash;13, which are based on Reading Passage 1.</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 1&ndash;8</strong></p>
+                            <p>Complete the notes below.</p>
+                            <p>Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+                        </div>
+                        <p style="font-weight:700;margin-bottom:8px;">Early long-distance communications in Australia</p>
+                        <table style="width:100%;border-collapse:collapse;">
+<tr><th style="border:1px solid #ccc;padding:8px 12px;background:#f0f0f0;text-align:left;width:130px;">Date</th><th style="border:1px solid #ccc;padding:8px 12px;background:#f0f0f0;text-align:left;">Details</th></tr>
+<tr><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;line-height:2;">19th century</td><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;line-height:2;">&#8211; lack of public transport across the continent resulted in people travelling by <input type="text" id="q1" class="answer-input" placeholder="1" style="width:120px;"></td></tr>
+<tr><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;line-height:2;">1841</td><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;line-height:2;">&#8211; an explorer walked across the Nullarbor Plain with the help of a <input type="text" id="q2" class="answer-input" placeholder="2" style="width:120px;"></td></tr>
+<tr><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;line-height:2;">1877</td><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;line-height:2;">&#8211; equipment for the <input type="text" id="q3" class="answer-input" placeholder="3" style="width:120px;"> was installed in the Nullarbor Plain</td></tr>
+<tr><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;line-height:2;">1896</td><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;line-height:2;">&#8211; a new railway line in Western Australia followed the route of a <input type="text" id="q4" class="answer-input" placeholder="4" style="width:120px;"></td></tr>
+<tr><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;line-height:2;">1901</td><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;line-height:2;">&#8211; the prospect of an interstate railway persuaded Western Australia to join a <input type="text" id="q5" class="answer-input" placeholder="5" style="width:120px;"></td></tr>
+<tr><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;line-height:2;">1917</td><td style="border:1px solid #ccc;padding:8px 12px;vertical-align:top;line-height:2;">&#8211; TAR was completed in a <input type="text" id="q6" class="answer-input" placeholder="6" style="width:120px;"> location<br>&#8211; the <input type="text" id="q7" class="answer-input" placeholder="7" style="width:120px;"> section of TAR was longer than that in any other country<br>&#8211; the new 4 ft 8&frac12; in TAR track was a <input type="text" id="q8" class="answer-input" placeholder="8" style="width:120px;"> width</td></tr>
+</table>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 9&ndash;13</strong></p>
+                            <p>Do the following statements agree with the information given in Reading Passage 1?</p>
+                            <p>Write <strong>TRUE</strong> if the statement agrees with the information, <strong>FALSE</strong> if the statement contradicts the information, <strong>NOT GIVEN</strong> if there is no information on this.</p>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">9</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">The first chief engineer's recommendation for TAR trains was fully implemented.</p>
+                                <label class="tfng-option"><input type="radio" name="q9" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q9" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q9" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">10</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">The Trans-Australian Express was popular with both local residents and tourists.</p>
+                                <label class="tfng-option"><input type="radio" name="q10" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q10" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q10" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">11</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">Demand for Trans-Australian Express services eventually fell due to the availability of alternative transport.</p>
+                                <label class="tfng-option"><input type="radio" name="q11" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q11" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q11" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">12</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">The Tea and Sugar Train provided health services as well as food supplies.</p>
+                                <label class="tfng-option"><input type="radio" name="q12" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q12" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q12" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">13</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">The Indian Pacific service was introduced before the entire TAR route became a standard gauge.</p>
+                                <label class="tfng-option"><input type="radio" name="q13" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q13" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q13" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="part-2" class="question-part hidden">
+                <div class="part-header">
+                    <p><strong>Reading Passage 2</strong></p>
+                    <p>You should spend about 20 minutes on Questions 14&ndash;26, which are based on Reading Passage 2.</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 14&ndash;19</strong></p>
+                            <p>Look at the following statements (Questions 14&ndash;19) and the list of people below.</p>
+                            <p>Match each statement with the correct person, <strong>A&ndash;D</strong>.</p>
+                            <p><em>NB</em> You may use any letter more than once.</p>
+                        </div>
+                        <div style="border:1px solid #ccc;border-radius:5px;padding:16px 20px;background:#fafafa;margin-bottom:16px;"><p style="font-weight:700;text-align:center;margin-bottom:8px;">List of people</p><p style="margin-bottom:5px;"><strong>A</strong> &nbsp; George W. Huber</p><p style="margin-bottom:5px;"><strong>B</strong> &nbsp; James Gaddy</p><p style="margin-bottom:5px;"><strong>C</strong> &nbsp; Richard Tobey</p><p style="margin-bottom:5px;"><strong>D</strong> &nbsp; Charles Wyman</p></div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">14 &nbsp; A key component to gain success lies in the place where the organisms survive.</span>
+                            <select class="answer-select" id="q14" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">15 &nbsp; engaged in separating fixed procedures to produce ethanol in the homologous biochemical way.</span>
+                            <select class="answer-select" id="q15" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">16 &nbsp; assists to develop certain skills.</span>
+                            <select class="answer-select" id="q16" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">17 &nbsp; It needs arduous efforts to achieve highly efficient transfer.</span>
+                            <select class="answer-select" id="q17" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">18 &nbsp; There is no shortcut to expedite the production process.</span>
+                            <select class="answer-select" id="q18" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">19 &nbsp; A combination of chemistry and biology can considerably lower the cost needed for the production company.</span>
+                            <select class="answer-select" id="q19" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 20&ndash;23</strong></p>
+                            <p>Do the following statements agree with the information given in Reading Passage 2?</p>
+                            <p>Write <strong>TRUE</strong> if the statement agrees with the information, <strong>FALSE</strong> if the statement contradicts the information, <strong>NOT GIVEN</strong> if there is no information on this.</p>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">20</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">A shift from conventionally targeted areas of the vegetation to get ethanol takes place.</p>
+                                <label class="tfng-option"><input type="radio" name="q20" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q20" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q20" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">21</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">It takes a considerably long way before a completely mature process is reached.</p>
+                                <label class="tfng-option"><input type="radio" name="q21" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q21" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q21" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">22</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">The Coskata group sees no bright future for the cost advantage available in the production of greener ethanol.</p>
+                                <label class="tfng-option"><input type="radio" name="q22" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q22" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q22" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                        <div class="tfng-question">
+                            <div class="tfng-num-box">23</div>
+                            <div class="tfng-body">
+                                <p class="tfng-statement">Some enterprises are trying to buy the shares of Coskata group.</p>
+                                <label class="tfng-option"><input type="radio" name="q23" value="TRUE"> TRUE</label>
+                                <label class="tfng-option"><input type="radio" name="q23" value="FALSE"> FALSE</label>
+                                <label class="tfng-option"><input type="radio" name="q23" value="NOT GIVEN"> NOT GIVEN</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 24&ndash;26</strong></p>
+                            <p>Complete the summary below.</p>
+                            <p>Write <strong>NO MORE THAN THREE WORDS</strong> from the passage for each answer.</p>
+                        </div>
+                        <div style="border:1px solid #ccc;border-radius:5px;padding:16px 20px;background:#fafafa;margin-bottom:16px;"><p style="line-height:2.2;">Tobey has noticed that the Coskata process can achieve huge success because it utilizes <input type="text" id="q24" class="answer-input" placeholder="24" style="width:170px;"> as the bioreactor on whose exterior surface the bacteria take the syngas going through the coated <input type="text" id="q25" class="answer-input" placeholder="25" style="width:170px;"> to produce the ethanol into the water outside, which researchers will later <input type="text" id="q26" class="answer-input" placeholder="26" style="width:140px;"> using certain techniques. The figures show a pretty high percentage of energy can be transferred into fuel, which is actually very difficult to achieve.</p></div>
+                    </div>
+                </div>
+            </div>
+            <div id="part-3" class="question-part hidden">
+                <div class="part-header">
+                    <p><strong>Reading Passage 3</strong></p>
+                    <p>You should spend about 20 minutes on Questions 27&ndash;40, which are based on Reading Passage 3.</p>
+                </div>
+                <div class="questions-container">
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 27&ndash;30</strong></p>
+                            <p>Choose the correct letter, <strong>A, B, C</strong> or <strong>D</strong>.</p>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">27 &nbsp; The researchers at the symposium regarded the story of the King of Uruk as ridiculous because</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q27" value="A"> A &nbsp; writing probably developed independently of speech.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q27" value="B"> B &nbsp; clay tablets had not been invented at that time.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q27" value="C"> C &nbsp; the distant ruler would have spoken another language.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q27" value="D"> D &nbsp; evidence of writing has been discovered from an earlier period.</label></div>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">28 &nbsp; According to the writer, the story of the King of Uruk</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q28" value="A"> A &nbsp; is a probable explanation of the origins of writing.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q28" value="B"> B &nbsp; proves that early writing had a different function to writing today.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q28" value="C"> C &nbsp; provides an example of symbolic writing.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q28" value="D"> D &nbsp; shows some awareness amongst Sumerians of the purpose of writing.</label></div>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">29 &nbsp; There was disagreement among the researchers at the symposium about</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q29" value="A"> A &nbsp; the area where writing began.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q29" value="B"> B &nbsp; the nature of early writing materials.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q29" value="C"> C &nbsp; the way writing began.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q29" value="D"> D &nbsp; the meaning of certain abstract images.</label></div>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <p style="font-weight:600;margin-bottom:10px;">30 &nbsp; The opponents of the theory that writing developed from tokens believe that it</p>
+                            <div class="multi-choice-option"><label><input type="radio" name="q30" value="A"> A &nbsp; grew out of accountancy.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q30" value="B"> B &nbsp; evolved from pictures.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q30" value="C"> C &nbsp; was initially intended as decoration.</label></div>
+                            <div class="multi-choice-option"><label><input type="radio" name="q30" value="D"> D &nbsp; was unlikely to have been connected with commerce.</label></div>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 31&ndash;36</strong></p>
+                            <p>Look at the following statements (Questions 31&ndash;36) and the list of people below.</p>
+                            <p>Match each statement with the correct person, <strong>A&ndash;E</strong>.</p>
+                            <p><em>NB</em> You may use any letter more than once.</p>
+                        </div>
+                        <div style="border:1px solid #ccc;border-radius:5px;padding:16px 20px;background:#fafafa;margin-bottom:16px;"><p style="font-weight:700;text-align:center;margin-bottom:8px;">List of people</p><p style="margin-bottom:5px;"><strong>A</strong> &nbsp; Dr Holly Pittman</p><p style="margin-bottom:5px;"><strong>B</strong> &nbsp; Dr Peter Damerow</p><p style="margin-bottom:5px;"><strong>C</strong> &nbsp; Dr Denise Schmandt-Besserat</p><p style="margin-bottom:5px;"><strong>D</strong> &nbsp; Dr Piotr Michalowski</p><p style="margin-bottom:5px;"><strong>E</strong> &nbsp; Dr Pascal Vernus</p></div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">31 &nbsp; There is no proof that early writing is connected to decorated household objects.</span>
+                            <select class="answer-select" id="q31" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">32 &nbsp; As writing developed, it came to represent speech.</span>
+                            <select class="answer-select" id="q32" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">33 &nbsp; Sumerian writing developed into a means of political control.</span>
+                            <select class="answer-select" id="q33" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">34 &nbsp; Early writing did not represent the grammatical features of speech.</span>
+                            <select class="answer-select" id="q34" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">35 &nbsp; There is no convincing proof that tokens and signs are connected.</span>
+                            <select class="answer-select" id="q35" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select>
+                        </div>
+                        <div style="margin-bottom:12px;display:flex;align-items:center;gap:14px;">
+                            <span style="font-weight:600;min-width:280px;">36 &nbsp; The uses of cuneiform writing were narrow at first, and later widened.</span>
+                            <select class="answer-select" id="q36" style="min-width:90px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option></select>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="question-prompt">
+                            <p><strong>Questions 37&ndash;40</strong></p>
+                            <p>Complete the summary using the list of words, <strong>A&ndash;M</strong>, below.</p>
+                        </div>
+                        <p style="font-weight:700;margin-bottom:8px;">The earliest form of writing</p>
+                        <div style="border:1px solid #ccc;border-radius:5px;padding:16px 20px;background:#fafafa;margin-bottom:16px;"><p style="line-height:2.2;">Most archaeological evidence shows that the people of <select class="answer-select" id="q37" style="min-width:70px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option><option value="J">J</option><option value="K">K</option><option value="L">L</option><option value="M">M</option></select> invented writing in around 3,300 BC. Their script was written on <select class="answer-select" id="q38" style="min-width:70px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option><option value="J">J</option><option value="K">K</option><option value="L">L</option><option value="M">M</option></select> and was called <select class="answer-select" id="q39" style="min-width:70px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option><option value="J">J</option><option value="K">K</option><option value="L">L</option><option value="M">M</option></select>. Their script originally showed images related to political power and business, and later developed to become more <select class="answer-select" id="q40" style="min-width:70px;"><option value="">--</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option><option value="I">I</option><option value="J">J</option><option value="K">K</option><option value="L">L</option><option value="M">M</option></select>.</p></div>
+                        <div style="border:1px solid #ccc;border-radius:5px;padding:16px 20px;background:#fafafa;margin-bottom:16px;"><p style="font-weight:700;text-align:center;margin-bottom:8px;">List of words</p><p style="display:flex;flex-wrap:wrap;gap:6px 30px;"><span><strong>A</strong> cuneiform</span><span><strong>B</strong> pictorial</span><span><strong>C</strong> tomb walls</span><span><strong>D</strong> urban</span><span><strong>E</strong> legible</span><span><strong>F</strong> stone blocks</span><span><strong>G</strong> simple</span><span><strong>H</strong> Mesopotamia</span><span><strong>I</strong> abstract</span><span><strong>J</strong> papyrus sheets</span><span><strong>K</strong> decorative</span><span><strong>L</strong> clay tablets</span><span><strong>M</strong> Egypt</span></p></div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- end right-panel -->
+    </div><!-- end main-container -->
+
+    <!-- Nav Arrows -->
+    <div class="nav-arrows">
+        <button class="nav-arrow" onclick="previousQ()" id="prevBtn">&#8249;</button>
+        <button class="nav-arrow" onclick="nextQ()" id="nextBtn">&#8250;</button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="nav-row" aria-label="Questions">
+        <div class="footer__questionWrapper___1tZ46 selected multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(1)">
+                <span><span class="section-prefix">Passage </span><span class="sectionNr">1</span><span class="attemptedCount">0 of 13</span></span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion" onclick="goToQuestion(1)"><span class="sr-only">Q1</span><span>1</span></button>
+                <button class="subQuestion" onclick="goToQuestion(2)"><span class="sr-only">Q2</span><span>2</span></button>
+                <button class="subQuestion" onclick="goToQuestion(3)"><span class="sr-only">Q3</span><span>3</span></button>
+                <button class="subQuestion" onclick="goToQuestion(4)"><span class="sr-only">Q4</span><span>4</span></button>
+                <button class="subQuestion" onclick="goToQuestion(5)"><span class="sr-only">Q5</span><span>5</span></button>
+                <button class="subQuestion" onclick="goToQuestion(6)"><span class="sr-only">Q6</span><span>6</span></button>
+                <button class="subQuestion" onclick="goToQuestion(7)"><span class="sr-only">Q7</span><span>7</span></button>
+                <button class="subQuestion" onclick="goToQuestion(8)"><span class="sr-only">Q8</span><span>8</span></button>
+                <button class="subQuestion" onclick="goToQuestion(9)"><span class="sr-only">Q9</span><span>9</span></button>
+                <button class="subQuestion" onclick="goToQuestion(10)"><span class="sr-only">Q10</span><span>10</span></button>
+                <button class="subQuestion" onclick="goToQuestion(11)"><span class="sr-only">Q11</span><span>11</span></button>
+                <button class="subQuestion" onclick="goToQuestion(12)"><span class="sr-only">Q12</span><span>12</span></button>
+                <button class="subQuestion" onclick="goToQuestion(13)"><span class="sr-only">Q13</span><span>13</span></button>
+            </div>
+        </div>
+        <div class="footer__questionWrapper___1tZ46 multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(2)">
+                <span><span class="section-prefix">Passage </span><span class="sectionNr">2</span><span class="attemptedCount">0 of 13</span></span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion" onclick="goToQuestion(14)"><span class="sr-only">Q14</span><span>14</span></button>
+                <button class="subQuestion" onclick="goToQuestion(15)"><span class="sr-only">Q15</span><span>15</span></button>
+                <button class="subQuestion" onclick="goToQuestion(16)"><span class="sr-only">Q16</span><span>16</span></button>
+                <button class="subQuestion" onclick="goToQuestion(17)"><span class="sr-only">Q17</span><span>17</span></button>
+                <button class="subQuestion" onclick="goToQuestion(18)"><span class="sr-only">Q18</span><span>18</span></button>
+                <button class="subQuestion" onclick="goToQuestion(19)"><span class="sr-only">Q19</span><span>19</span></button>
+                <button class="subQuestion" onclick="goToQuestion(20)"><span class="sr-only">Q20</span><span>20</span></button>
+                <button class="subQuestion" onclick="goToQuestion(21)"><span class="sr-only">Q21</span><span>21</span></button>
+                <button class="subQuestion" onclick="goToQuestion(22)"><span class="sr-only">Q22</span><span>22</span></button>
+                <button class="subQuestion" onclick="goToQuestion(23)"><span class="sr-only">Q23</span><span>23</span></button>
+                <button class="subQuestion" onclick="goToQuestion(24)"><span class="sr-only">Q24</span><span>24</span></button>
+                <button class="subQuestion" onclick="goToQuestion(25)"><span class="sr-only">Q25</span><span>25</span></button>
+                <button class="subQuestion" onclick="goToQuestion(26)"><span class="sr-only">Q26</span><span>26</span></button>
+            </div>
+        </div>
+        <div class="footer__questionWrapper___1tZ46 multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(3)">
+                <span><span class="section-prefix">Passage </span><span class="sectionNr">3</span><span class="attemptedCount">0 of 14</span></span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion" onclick="goToQuestion(27)"><span class="sr-only">Q27</span><span>27</span></button>
+                <button class="subQuestion" onclick="goToQuestion(28)"><span class="sr-only">Q28</span><span>28</span></button>
+                <button class="subQuestion" onclick="goToQuestion(29)"><span class="sr-only">Q29</span><span>29</span></button>
+                <button class="subQuestion" onclick="goToQuestion(30)"><span class="sr-only">Q30</span><span>30</span></button>
+                <button class="subQuestion" onclick="goToQuestion(31)"><span class="sr-only">Q31</span><span>31</span></button>
+                <button class="subQuestion" onclick="goToQuestion(32)"><span class="sr-only">Q32</span><span>32</span></button>
+                <button class="subQuestion" onclick="goToQuestion(33)"><span class="sr-only">Q33</span><span>33</span></button>
+                <button class="subQuestion" onclick="goToQuestion(34)"><span class="sr-only">Q34</span><span>34</span></button>
+                <button class="subQuestion" onclick="goToQuestion(35)"><span class="sr-only">Q35</span><span>35</span></button>
+                <button class="subQuestion" onclick="goToQuestion(36)"><span class="sr-only">Q36</span><span>36</span></button>
+                <button class="subQuestion" onclick="goToQuestion(37)"><span class="sr-only">Q37</span><span>37</span></button>
+                <button class="subQuestion" onclick="goToQuestion(38)"><span class="sr-only">Q38</span><span>38</span></button>
+                <button class="subQuestion" onclick="goToQuestion(39)"><span class="sr-only">Q39</span><span>39</span></button>
+                <button class="subQuestion" onclick="goToQuestion(40)"><span class="sr-only">Q40</span><span>40</span></button>
+            </div>
+        </div>
+        <button id="deliver-button" class="footer__deliverButton___3FM07"><span>Check Answers</span></button>
+    </nav>
+
+    <!-- Context Menu -->
+    <div id="contextMenu" class="context-menu">
+        <div class="context-menu-item" onclick="highlightText()">Highlight</div>
+        <div class="context-menu-item" onclick="addComment()">Comment</div>
+        <div class="context-menu-item" id="clear-item" onclick="clearHighlight()" style="display:none;">Clear</div>
+        <div class="context-menu-item" onclick="clearAllHighlights()">Clear All</div>
+    </div>
+
+    <!-- Selection Toolbar (appears on text selection, no right-click needed) -->
+    <div id="selectionToolbar" class="selection-toolbar">
+        <button type="button" onclick="highlightText()">&#9998; Highlight</button>
+        <button type="button" onclick="addComment()">&#128172; Comment</button>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="result-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Results</h2>
+                <button id="modal-close-button" class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="score-summary"></p>
+                <div id="result-details"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {"q1": ["sea"], "q2": ["guide"], "q3": ["telegraph"], "q4": ["pipeline"], "q5": ["federation"], "q6": ["desert"], "q7": ["straight"], "q8": ["standard"], "q9": "FALSE", "q10": "NOT GIVEN", "q11": "TRUE", "q12": "TRUE", "q13": "FALSE", "q14": ["C"], "q15": ["B"], "q16": ["A"], "q17": ["C"], "q18": ["D"], "q19": ["C"], "q20": "TRUE", "q21": "TRUE", "q22": "FALSE", "q23": "NOT GIVEN", "q24": ["plastic tubes", "filter-fabric straws", "the filter-fabric straws", "filter fabric straws"], "q25": ["selective membrane", "the selective membrane"], "q26": ["extract"], "q27": "A", "q28": "D", "q29": "C", "q30": "B", "q31": ["C"], "q32": ["B"], "q33": ["D"], "q34": ["B"], "q35": ["A"], "q36": ["C"], "q37": ["H"], "q38": ["L"], "q39": ["A"], "q40": ["I"]};
+
+        const questionTypes = {"q1": "text", "q2": "text", "q3": "text", "q4": "text", "q5": "text", "q6": "text", "q7": "text", "q8": "text", "q9": "radio", "q10": "radio", "q11": "radio", "q12": "radio", "q13": "radio", "q14": "select", "q15": "select", "q16": "select", "q17": "select", "q18": "select", "q19": "select", "q20": "radio", "q21": "radio", "q22": "radio", "q23": "radio", "q24": "text", "q25": "text", "q26": "text", "q27": "mcq", "q28": "mcq", "q29": "mcq", "q30": "mcq", "q31": "select", "q32": "select", "q33": "select", "q34": "select", "q35": "select", "q36": "select", "q37": "select", "q38": "select", "q39": "select", "q40": "select"};
+
+        // part ranges (variable size per passage)
+        const partRanges = { 1: [1, 13], 2: [14, 26], 3: [27, 40] };
+        const allQNums = [].concat(
+            Array.from({length: 13}, (_, i) => i + 1),
+            Array.from({length: 13}, (_, i) => i + 14),
+            Array.from({length: 14}, (_, i) => i + 27)
+        );
+
+        let currentPart = 1;
+        let currentQuestion = 1;
+        let selectedRange = null;
+        let contextElement = null;
+
+        function partOf(qNum) {
+            for (const p in partRanges) {
+                const [s, e] = partRanges[p];
+                if (qNum >= s && qNum <= e) return parseInt(p);
+            }
+            return 1;
+        }
+
+        function switchToPart(partNumber) {
+            currentPart = partNumber;
+            document.querySelectorAll('.question-part').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.passage-part').forEach(el => el.classList.add('hidden'));
+            const part = document.getElementById('part-' + partNumber);
+            if (part) part.classList.remove('hidden');
+            const passage = document.getElementById('passage-' + partNumber);
+            if (passage) passage.classList.remove('hidden');
+            document.querySelectorAll('.footer__questionWrapper___1tZ46').forEach((w, i) => w.classList.toggle('selected', i + 1 === partNumber));
+            const [partStart, partEnd] = partRanges[partNumber];
+            if (currentQuestion < partStart || currentQuestion > partEnd) {
+                currentQuestion = partStart;
+                document.querySelectorAll('.subQuestion').forEach(b => b.classList.remove('active'));
+                const activeBtn = document.querySelector('.subQuestion[onclick="goToQuestion(' + partStart + ')"]');
+                if (activeBtn) activeBtn.classList.add('active');
+            }
+            updateAttemptedCount(partNumber);
+            document.getElementById('prevBtn').disabled = currentQuestion <= allQNums[0];
+            document.getElementById('nextBtn').disabled = currentQuestion >= allQNums[allQNums.length - 1];
+        }
+
+        function goToQuestion(qNum) {
+            currentQuestion = qNum;
+            const part = partOf(qNum);
+            if (currentPart !== part) switchToPart(part);
+            document.querySelectorAll('.subQuestion').forEach(b => b.classList.remove('active'));
+            const btn = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
+            if (btn) btn.classList.add('active');
+            let el = document.getElementById('q' + qNum) || document.querySelector('input[name="q' + qNum + '"]');
+            if (el) {
+                const container = el.closest('.question') || el.closest('div[style]');
+                if (container) {
+                    container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    container.classList.add('flash');
+                    setTimeout(() => container.classList.remove('flash'), 1000);
+                }
+            }
+            const idx = allQNums.indexOf(qNum);
+            document.getElementById('prevBtn').disabled = idx <= 0;
+            document.getElementById('nextBtn').disabled = idx >= allQNums.length - 1;
+        }
+
+        function nextQ() {
+            const idx = allQNums.indexOf(currentQuestion);
+            if (idx < allQNums.length - 1) goToQuestion(allQNums[idx + 1]);
+        }
+        function previousQ() {
+            const idx = allQNums.indexOf(currentQuestion);
+            if (idx > 0) goToQuestion(allQNums[idx - 1]);
+        }
+
+        function updateAttemptedCount(partNumber) {
+            const [start, end] = partRanges[partNumber];
+            let count = 0;
+            for (let i = start; i <= end; i++) {
+                const el = document.getElementById('q' + i);
+                const rad = document.querySelector('input[name="q' + i + '"]:checked');
+                if (el && el.tagName === 'SELECT' && el.value) count++;
+                else if (el && el.tagName === 'INPUT' && el.value.trim()) count++;
+                else if (rad) count++;
+            }
+            const wrapper = document.querySelectorAll('.footer__questionWrapper___1tZ46')[partNumber - 1];
+            if (wrapper) {
+                const span = wrapper.querySelector('.attemptedCount');
+                if (span) span.textContent = count + ' of ' + (end - start + 1);
+            }
+        }
+
+        function updateAnsweredIndicators() {
+            allQNums.forEach(qNum => {
+                const btn = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
+                if (!btn || btn.classList.contains('correct') || btn.classList.contains('incorrect')) return;
+                const el = document.getElementById('q' + qNum);
+                const rad = document.querySelector('input[name="q' + qNum + '"]:checked');
+                let answered = false;
+                if (el && el.tagName === 'SELECT') answered = !!el.value;
+                else if (el && el.tagName === 'INPUT') answered = el.value.trim() !== '';
+                else if (rad) answered = true;
+                btn.classList.toggle('answered', answered);
+            });
+            [1, 2, 3].forEach(p => updateAttemptedCount(p));
+        }
+
+        document.querySelectorAll('.answer-input, .answer-select, input[type="radio"]').forEach(inp => {
+            inp.addEventListener('input', updateAnsweredIndicators);
+            inp.addEventListener('change', updateAnsweredIndicators);
+        });
+
+        // ---- Lenient answer matching (same rules as the mentor results page) ----
+        // Case, extra spaces, surrounding punctuation, "18th" vs "18",
+        // number words vs digits, British vs American spelling and
+        // "May 11" vs "11 May" are all treated as the same answer.
+        const __NUM = { zero:0, one:1, two:2, three:3, four:4, five:5, six:6, seven:7, eight:8, nine:9, ten:10, eleven:11, twelve:12, thirteen:13, fourteen:14, fifteen:15, sixteen:16, seventeen:17, eighteen:18, nineteen:19, twenty:20, thirty:30, forty:40, fifty:50, sixty:60, seventy:70, eighty:80, ninety:90, hundred:100 };
+        const __ORD = { first:1, second:2, third:3, fourth:4, fifth:5, sixth:6, seventh:7, eighth:8, ninth:9, tenth:10, eleventh:11, twelfth:12, thirteenth:13, fourteenth:14, fifteenth:15, sixteenth:16, seventeenth:17, eighteenth:18, nineteenth:19, twentieth:20, thirtieth:30 };
+        const __SPELL = { colour:'color', favourite:'favorite', neighbour:'neighbor', behaviour:'behavior', organise:'organize', organisation:'organization', realise:'realize', recognise:'recognize', analyse:'analyze', programme:'program', programmes:'programs', catalogue:'catalog', cheque:'check', grey:'gray', tyre:'tire', tyres:'tires', mould:'mold', aluminium:'aluminum', jewellery:'jewelry', defence:'defense', licence:'license', practise:'practice', enrolment:'enrollment', travelling:'traveling', traveller:'traveler', cancelled:'canceled', centre:'center', centres:'centers', theatre:'theater', metre:'meter', metres:'meters', litre:'liter', litres:'liters', kilometre:'kilometer', kilometres:'kilometers', fibre:'fiber', homogenise:'homogenize', fossilised:'fossilized', pedestrianised:'pedestrianized' };
+        const __MONTHS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+        function __normAns(raw) {
+            if (raw === undefined || raw === null) return '';
+            let s = String(raw).trim().toLowerCase();
+            if (!s) return '';
+            s = s.replace(/[‘’]/g, "'").replace(/\s+/g, ' ').replace(/^[\s.,;:'"()]+|[\s.,;:'"()!?]+$/g, '');
+            s = s.replace(/\b(\d+)(st|nd|rd|th)\b/g, '$1');
+            s = s.replace(/-/g, ' ').split(' ').map(w => (w in __NUM) ? String(__NUM[w]) : (w in __ORD) ? String(__ORD[w]) : (__SPELL[w] || w)).join(' ');
+            s = s.replace(/\s*,\s*/g, ' ').replace(/(\d) (?=\d{3}\b)/g, '$1').replace(/(\d),(?=\d{3}\b)/g, '$1');
+            const t = s.split(' ').filter(x => x !== 'of' && x !== 'the');
+            if (t.length === 2) {
+                if (__MONTHS.indexOf(t[0]) >= 0 && /^\d+$/.test(t[1])) s = t[1] + ' ' + t[0];
+                else if (__MONTHS.indexOf(t[1]) >= 0 && /^\d+$/.test(t[0])) s = t[0] + ' ' + t[1];
+            }
+            return s;
+        }
+        function __matches(accepted, user) {
+            const u = __normAns(user);
+            if (!u) return false;
+            return (Array.isArray(accepted) ? accepted : [accepted]).some(a => a !== '???' && __normAns(a) === u);
+        }
+        function __bandFor(r) {
+            if (r >= 39) return 9; if (r >= 37) return 8.5; if (r >= 35) return 8; if (r >= 32) return 7.5;
+            if (r >= 30) return 7; if (r >= 26) return 6.5; if (r >= 23) return 6; if (r >= 18) return 5.5;
+            if (r >= 16) return 5; if (r >= 13) return 4.5; if (r >= 10) return 4; if (r >= 8) return 3.5;
+            if (r >= 6) return 3; if (r >= 4) return 2.5; if (r >= 2) return 2; if (r === 1) return 1.5; return 0;
+        }
+        function __readAnswer(key) {
+            const el = document.getElementById(key);
+            if (el && (el.tagName === 'INPUT' || el.tagName === 'SELECT')) return (el.value || '').trim();
+            const checked = document.querySelector('input[name="' + key + '"]:checked');
+            return checked ? checked.value : '';
+        }
+        // ---- Mock exam bridge ----
+        // Used only by the mock orchestrator page. Grades silently (nothing on
+        // screen changes, no answers revealed) and returns the student's
+        // answers, the FULL list of accepted answers per question, and the score.
+        // "Choose THREE" groups (checkboxes) are stored one letter per question
+        // number, each letter graded against the group's full accepted list.
+        const __multi = (typeof multiGroups !== 'undefined') ? multiGroups : {};
+        window.__mockGetResult = function () {
+            const answers = {}, key = {};
+            let score = 0;
+            Object.keys(correctAnswers).forEach(k => {
+                const accepted = Array.isArray(correctAnswers[k]) ? correctAnswers[k].slice() : [correctAnswers[k]];
+                if (__multi[k]) {
+                    const picked = Array.from(document.querySelectorAll('input[name="' + k + '"]:checked')).map(c => c.value).slice(0, __multi[k].length);
+                    __multi[k].forEach((qn, i) => {
+                        const user = picked[i] || '';
+                        answers[String(qn)] = user;
+                        key[String(qn)] = accepted.slice();
+                        if (__matches(accepted, user)) score++;
+                    });
+                    return;
+                }
+                const q = k.replace('q', '');
+                const user = __readAnswer(k);
+                answers[q] = user;
+                key[q] = Array.isArray(correctAnswers[k]) ? correctAnswers[k].slice() : correctAnswers[k];
+                if (__matches(correctAnswers[k], user)) score++;
+            });
+            return { score: score, total: 40, band: __bandFor(score), answers: answers, key: key };
+        };
+        // Puts previously saved answers back (after a page reload mid-section).
+        window.__mockRestore = function (answers) {
+            if (!answers) return;
+            Object.keys(__multi).forEach(g => {
+                __multi[g].forEach(qn => {
+                    const v = answers[String(qn)];
+                    if (v) document.querySelectorAll('input[name="' + g + '"]').forEach(c => { if (c.value === v) c.checked = true; });
+                });
+            });
+            Object.keys(answers).forEach(q => {
+                const v = answers[q];
+                if (v === undefined || v === null || v === '' || v === 'No Answer') return;
+                const el = document.getElementById('q' + q);
+                if (el && (el.tagName === 'INPUT' || el.tagName === 'SELECT')) { el.value = v; return; }
+                document.querySelectorAll('input[name="q' + q + '"]').forEach(r => { if (r.value === v) r.checked = true; });
+            });
+            try { updateAnsweredIndicators(); } catch (e) { }
+        };
+        window.__mockLock = function () {
+            document.querySelectorAll('.answer-input, .answer-select, input[type="radio"], input[type="checkbox"]').forEach(el => el.disabled = true);
+        };
+
+        function checkAnswers() {
+            let score = 0;
+            const resultsData = [];
+
+            document.querySelectorAll('.correct-inline').forEach(el => el.remove());
+            document.querySelectorAll('.answer-input, .answer-select').forEach(el => el.classList.remove('correct', 'incorrect'));
+            document.querySelectorAll('.multi-choice-option').forEach(el => el.classList.remove('correct', 'incorrect'));
+
+            Object.keys(correctAnswers).forEach(key => {
+                const correct = correctAnswers[key];
+                const type = questionTypes[key];
+                const qNum = parseInt(key.replace('q', ''));
+                let userAnswer = '', isCorrect = false;
+
+                if (type === 'text') {
+                    const el = document.getElementById(key);
+                    userAnswer = el ? el.value.trim() : '';
+                    const accepted = Array.isArray(correct) ? correct : [correct];
+                    isCorrect = accepted.some(a => a.toLowerCase() === userAnswer.toLowerCase());
+                    if (el) {
+                        el.classList.add(isCorrect ? 'correct' : 'incorrect');
+                        if (!isCorrect) {
+                            const sp = document.createElement('span');
+                            sp.className = 'correct-inline';
+                            sp.textContent = accepted[0];
+                            el.insertAdjacentElement('afterend', sp);
+                        }
+                    }
+                } else if (type === 'select') {
+                    const el = document.getElementById(key);
+                    userAnswer = el ? el.value : '';
+                    const accepted = Array.isArray(correct) ? correct : [correct];
+                    isCorrect = accepted.some(a => a.toLowerCase() === (userAnswer || '').toLowerCase());
+                    if (el) {
+                        el.classList.add(isCorrect ? 'correct' : 'incorrect');
+                        if (!isCorrect) {
+                            const sp = document.createElement('span');
+                            sp.className = 'correct-inline';
+                            sp.textContent = accepted[0];
+                            el.insertAdjacentElement('afterend', sp);
+                        }
+                    }
+                } else if (type === 'radio') {
+                    const checked = document.querySelector('input[name="' + key + '"]:checked');
+                    userAnswer = checked ? checked.value : 'No Answer';
+                    const accepted = Array.isArray(correct) ? correct : [correct];
+                    isCorrect = accepted.some(a => a.toUpperCase() === userAnswer.toUpperCase());
+                } else if (type === 'mcq') {
+                    const checked = document.querySelector('input[name="' + key + '"]:checked');
+                    userAnswer = checked ? checked.value : 'No Answer';
+                    isCorrect = userAnswer === correct;
+                    document.querySelectorAll('input[name="' + key + '"]').forEach(r => {
+                        const wrapper = r.closest('.multi-choice-option');
+                        if (!wrapper) return;
+                        if (r.value === correct) wrapper.classList.add('correct');
+                        else if (r.checked) wrapper.classList.add('incorrect');
+                    });
+                }
+
+                if (isCorrect) score++;
+                const navBtn = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
+                if (navBtn) { navBtn.classList.remove('answered'); navBtn.classList.add(isCorrect ? 'correct' : 'incorrect'); }
+                resultsData.push({ question: qNum, userAnswer: userAnswer || 'No Answer', correctAnswer: Array.isArray(correct) ? correct[0] : correct, isCorrect });
+            });
+
+            document.querySelectorAll('.answer-input, .answer-select, input[type="radio"]').forEach(el => el.disabled = true);
+
+            const band = (function (r) {
+                if (r >= 39) return 9; if (r >= 37) return 8.5; if (r >= 35) return 8; if (r >= 32) return 7.5;
+                if (r >= 30) return 7; if (r >= 26) return 6.5; if (r >= 23) return 6; if (r >= 18) return 5.5;
+                if (r >= 16) return 5; if (r >= 13) return 4.5; if (r >= 10) return 4; if (r >= 8) return 3.5;
+                if (r >= 6) return 3; if (r >= 4) return 2.5; if (r >= 2) return 2; if (r === 1) return 1.5; return 0;
+            })(score);
+
+            document.getElementById('score-summary').textContent = 'You scored ' + score + ' out of 40 (Band ' + band + ').';
+
+            const resultDetails = document.getElementById('result-details');
+            let rhtml = '<table><thead><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr></thead><tbody>';
+            resultsData.sort((a, b) => a.question - b.question).forEach(r => {
+                rhtml += '<tr><td>' + r.question + '</td><td>' + r.userAnswer + '</td><td>' + r.correctAnswer + '</td><td class="' + (r.isCorrect ? 'result-correct' : 'result-incorrect') + '">' + (r.isCorrect ? '&#10003; Correct' : '&#10007; Incorrect') + '</td></tr>';
+            });
+            rhtml += '</tbody></table>';
+            resultDetails.innerHTML = rhtml;
+
+            const deliverButton = document.getElementById('deliver-button');
+            deliverButton.classList.add('success');
+            deliverButton.innerHTML = '<span>My Results</span>';
+            const newBtn = deliverButton.cloneNode(true);
+            deliverButton.parentNode.replaceChild(newBtn, deliverButton);
+            newBtn.addEventListener('click', () => { document.getElementById('result-modal').style.display = 'flex'; });
+            document.getElementById('result-modal').style.display = 'flex';
+        }
+
+        document.getElementById('deliver-button').addEventListener('click', checkAnswers);
+        document.getElementById('modal-close-button').addEventListener('click', () => { document.getElementById('result-modal').style.display = 'none'; });
+
+        document.addEventListener('selectionchange', () => {
+            const sel = window.getSelection();
+            if (sel && sel.rangeCount > 0 && !sel.isCollapsed) selectedRange = sel.getRangeAt(0);
+        });
+        document.body.addEventListener('contextmenu', function (e) {
+            const text = window.getSelection().toString();
+            if (!text) return;
+            e.preventDefault();
+            const menu = document.getElementById('contextMenu');
+            menu.style.left = e.pageX + 'px';
+            menu.style.top = e.pageY + 'px';
+            menu.style.display = 'block';
+            contextElement = e.target.closest('.highlight, .comment-highlight');
+            document.getElementById('clear-item').style.display = contextElement ? 'block' : 'none';
+        });
+        document.body.addEventListener('click', function (e) {
+            if (!e.target.closest('.context-menu')) document.getElementById('contextMenu').style.display = 'none';
+        });
+
+        // ---- Selection toolbar: shows a floating Highlight/Comment button
+        // above any text the user selects inside the passage, no right-click
+        // or long-press menu required. Works with mouse drag and touch.
+        const selectionToolbar = document.getElementById('selectionToolbar');
+
+        function showSelectionToolbar() {
+            const sel = window.getSelection();
+            if (!sel || sel.rangeCount === 0 || sel.isCollapsed) { hideSelectionToolbar(); return; }
+            const text = sel.toString().trim();
+            if (!text) { hideSelectionToolbar(); return; }
+            const anchorNode = sel.anchorNode;
+            const anchorEl = anchorNode && (anchorNode.nodeType === 1 ? anchorNode : anchorNode.parentNode);
+            const passage = anchorEl && anchorEl.closest('.passage-part:not(.hidden), .right-panel');
+            if (!passage || !anchorEl) { hideSelectionToolbar(); return; }
+            const range = sel.getRangeAt(0);
+            selectedRange = range;
+            const rect = range.getBoundingClientRect();
+            if (!rect || (rect.width === 0 && rect.height === 0)) { hideSelectionToolbar(); return; }
+            const toolbarWidth = selectionToolbar.offsetWidth || 160;
+            let left = rect.left + rect.width / 2 - toolbarWidth / 2 + window.scrollX;
+            left = Math.max(8, Math.min(left, window.innerWidth - toolbarWidth - 8 + window.scrollX));
+            let top = rect.top + window.scrollY - 44;
+            if (top < window.scrollY) top = rect.bottom + window.scrollY + 8;
+            selectionToolbar.style.left = left + 'px';
+            selectionToolbar.style.top = top + 'px';
+            selectionToolbar.style.display = 'flex';
+            toolbarShownAt = Date.now();
+        }
+
+        let toolbarShownAt = 0;
+
+        function hideSelectionToolbar() {
+            selectionToolbar.style.display = 'none';
+        }
+
+        document.addEventListener('mouseup', (e) => {
+            if (e.target.closest('#selectionToolbar')) return;
+            setTimeout(showSelectionToolbar, 0);
+        });
+        document.addEventListener('touchend', (e) => {
+            if (e.target.closest('#selectionToolbar')) return;
+            setTimeout(showSelectionToolbar, 0);
+        });
+        // Selecting text can itself trigger a browser auto-scroll-into-view,
+        // which would otherwise immediately hide the toolbar right after it
+        // appears. Ignore scroll events that land within 300ms of a show.
+        document.addEventListener('scroll', () => {
+            if (Date.now() - toolbarShownAt > 300) hideSelectionToolbar();
+        }, true);
+        document.addEventListener('mousedown', (e) => {
+            if (!e.target.closest('#selectionToolbar')) hideSelectionToolbar();
+        });
+
+        // Highlights work in the passage AND the questions; a selection that
+        // touches an answer box is ignored so answers can never be affected.
+        function hlTouchesField(r) { const f = r.cloneContents(); return !!(f.querySelector && f.querySelector('input, select, textarea, button')); }
+        function hlWrap(r, span) {
+            try { r.surroundContents(span); return true; }
+            catch (e) { try { const f = r.extractContents(); span.appendChild(f); r.insertNode(span); return true; } catch (e2) { return false; } }
+        }
+        function highlightText() {
+            if (!selectedRange || selectedRange.collapsed) return;
+            if (!hlTouchesField(selectedRange)) { const span = document.createElement('span'); span.className = 'highlight'; hlWrap(selectedRange, span); }
+            window.getSelection().removeAllRanges();
+            document.getElementById('contextMenu').style.display = 'none';
+            hideSelectionToolbar();
+        }
+        function addComment() {
+            const t = prompt('Enter your comment:');
+            if (!t || !selectedRange) return;
+            if (!hlTouchesField(selectedRange)) {
+                const span = document.createElement('span'); span.className = 'comment-highlight';
+                const tip = document.createElement('span'); tip.className = 'comment-tooltip'; tip.textContent = t;
+                if (hlWrap(selectedRange, span)) span.appendChild(tip);
+            }
+            window.getSelection().removeAllRanges();
+            document.getElementById('contextMenu').style.display = 'none';
+            hideSelectionToolbar();
+        }
+        function clearHighlight() {
+            if (contextElement) {
+                const parent = contextElement.parentNode;
+                while (contextElement.firstChild) parent.insertBefore(contextElement.firstChild, contextElement);
+                parent.removeChild(contextElement); parent.normalize();
+            }
+            document.getElementById('contextMenu').style.display = 'none';
+        }
+        function clearAllHighlights() {
+            document.querySelectorAll('.highlight, .comment-highlight').forEach(el => {
+                const parent = el.parentNode;
+                while (el.firstChild) parent.insertBefore(el.firstChild, el);
+                parent.removeChild(el); parent.normalize();
+            });
+            document.getElementById('contextMenu').style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            switchToPart(1);
+            goToQuestion(1);
+        });
+    </script>
+</body>
+
+</html>
