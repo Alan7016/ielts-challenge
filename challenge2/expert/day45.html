@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 45 — Expert — IELTS Marathon 2.0</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .article { font-size: 1.02rem; line-height: 1.8; }
+  .article-title { margin: 0 0 2px; font-size: 1.35rem; }
+  .article-meta { margin: 0 0 14px; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+  .article.labelled p { position: relative; padding-left: 34px; }
+  .para-label { position: absolute; left: 0; top: 2px; font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; width: 24px; text-align: center; font-size: 0.85rem; }
+  .word-bank { font-family: var(--mono); font-size: 0.88rem; color: var(--accent); background: var(--accent-soft); border: 1px dashed var(--accent-line); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; line-height: 1.8; }
+  .mini-q { margin: 16px 0 6px; color: var(--ink); font-weight: 500; }
+  .mini-q:first-child { margin-top: 0; }
+  .mini-answer { width: 100%; }
+  .example-q { color: var(--ink-soft); }
+  .alt { color: var(--muted); font-size: 0.88em; }
+  .task-prompt { background: var(--surface-2); }
+  .task-prompt p { margin: 0 0 8px; }
+  .prompt-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 10px !important; }
+  .advice-card { background: #fffaf0; border-color: #f0dca8; margin-top: 18px; }
+  .advice-card p:last-child, .advice-card ul:last-child, .advice-card table:last-child { margin-bottom: 0; }
+  .reveal-hint { margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .answer-reveal { margin-top: 12px; background: var(--good-soft); border: 1px solid #1f9d5533; border-radius: 10px; padding: 12px 14px; }
+  .answer-reveal ol { margin: 0; padding-left: 22px; }
+  .answer-reveal li { margin: 5px 0; }
+  .tf-fix { margin-top: 10px; background: var(--warn-soft); border: 1px solid #d5490f33; border-radius: 10px; padding: 10px 12px; }
+  .tf-fix label { display: block; font-size: 0.86rem; color: var(--warn); font-weight: 600; margin-bottom: 6px; }
+  .tf-fix textarea { background: #fff; }
+  .corrected-card ol { margin: 0; padding-left: 22px; line-height: 1.7; }
+  .corrected-card u { text-decoration-color: var(--good); text-decoration-thickness: 2px; }
+  .locked-note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin: 10px 0 0; }
+  .sel-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px dashed var(--border); }
+  .sel-row:last-of-type { border-bottom: none; }
+  .sel-row span { font-size: 0.95rem; line-height: 1.55; }
+  .sel-row select { padding: 5px 8px; border-radius: 8px; width: 100%; }
+  .opt-legend { display: grid; gap: 6px; margin: 0 0 10px; }
+  .opt-legend span { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; }
+  .model-text { background: var(--surface-2); }
+  .model-text p { line-height: 1.75; }
+  .sent-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 0 5px; margin-right: 3px; }
+  .writing-area { width: 100%; font-size: 1rem; line-height: 1.7; }
+  .data-table td, .data-table th { vertical-align: top; }
+  select.inline { padding: 3px 6px; border-radius: 8px; margin: 0 2px; }
+  .passage-ref summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .passage-ref[open] { max-height: 520px; overflow-y: auto; }
+  .stat-card { background: var(--surface-2); border-left: 4px solid var(--warn); }
+  .stat-card .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--warn); }
+  @media (max-width: 640px) { .sel-row { grid-template-columns: 1fr; gap: 6px; } .article.labelled p { padding-left: 30px; } }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); height: calc(100vh - 210px); min-height: 520px; margin-top: 16px; width: min(1720px, calc(100vw - 56px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .split-right .card { padding: 14px 16px; }
+  .split-right .q-item { margin-bottom: 10px; }
+  .split-right .q-item p { margin: 0 0 6px; font-size: 0.95rem; }
+  .split-right .q-options { gap: 4px; }
+  .split-right .q-options label { padding: 6px 10px; font-size: 0.9rem; }
+  .split-left .article { font-size: 0.98rem; }
+  .split-pane { overflow-y: auto; padding: 20px 22px; }
+  .split-left { border-right: 3px solid var(--border); background: #fffdf8; }
+  .split-left .article { margin: 0; }
+  .split-right { background: var(--surface-2); }
+  .split-right .card { margin: 0 0 16px; }
+  .split-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0 0 12px; }
+  .qgroup { margin: 6px 0 10px; }
+  .qg-title { font-family: var(--mono); font-weight: 700; font-size: 0.82rem; color: var(--ink); margin: 0 0 2px; }
+  .qg-instr { font-size: 0.86rem; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; height: auto; width: 100%; left: 0; transform: none; } .split-left { max-height: 62vh; border-right: none; border-bottom: 3px solid var(--border); } .split-right { overflow: visible; } }
+  .an-card { padding: 10px 14px; }
+  .an-intro { font-size: 0.92rem; color: var(--ink-soft); margin: 6px 4px 10px; }
+  .an-tools { text-align: right; margin-bottom: 6px; }
+  .an-tools button { padding: 4px 12px; font-size: 0.78rem; }
+  .an-item { border-bottom: 1px dashed var(--border); padding: 4px 0; }
+  .an-item:last-child { border-bottom: none; }
+  .an-item summary { cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 4px; list-style: none; }
+  .an-item summary::-webkit-details-marker { display: none; }
+  .an-n { font-family: var(--mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; text-align: center; font-size: 0.8rem; padding: 2px 0; }
+  .an-ans { font-weight: 700; color: var(--good); }
+  .an-where { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .an-body { padding: 4px 6px 12px 48px; font-size: 0.94rem; line-height: 1.65; color: var(--ink); }
+  .an-body p { margin: 0 0 8px; }
+  .an-body .q { color: var(--ink-soft); font-style: italic; }
+  .an-body .ev { background: #fff4c2; padding: 0 3px; border-radius: 3px; }
+  .an-body .trap { color: var(--warn); font-weight: 600; }
+  .article-warm { background: #fbfaf6; }
+
+</style>
+</head>
+<body>
+
+<div class="hl-tools" id="hlTools">
+  <button id="hlBtn"><span class="hl-sw"></span>Highlight</button>
+  <button id="hlClear">Clear</button>
+</div>
+
+<div id="content" style="display:none;">
+
+  <header class="day-header">
+    <div class="day-header-inner">
+      <a href="../../index.html" id="back-home" style="font-family:var(--mono); font-size:0.78rem; font-weight:600;">← Board</a>
+      <div class="bib">Day 45 <small>of 45</small></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="dots" id="dots"></div>
+        <button class="ghost" id="logout-btn" style="padding:5px 12px; font-size:0.75rem;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:36px; padding-bottom:36px;">
+
+    <section class="task" id="task1" data-task="1">
+      <div class="task-eyebrow">Task 1 of 8</div>
+      <h2>Starting Off — 45 Days in Review</h2>
+      <p class="task-sub">This is the <b>last day</b> of IELTS Marathon 2.0. Today is a short recap of the whole course — about <b>1½ hours</b>, 8 tasks — and at the end there is a little surprise. First, the most important strategies from all four skills.</p>
+      <div class="card" id="t1-q"><div class="q-item" id="t1-q-1">
+          <p>1. <b>Reading.</b> The passage says the opposite of the statement. The answer is</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-q-1" data-correct="false"> A. TRUE</label><label><input type="radio" value="1" name="t1-q-1" data-correct="true"> B. FALSE</label><label><input type="radio" value="2" name="t1-q-1" data-correct="false"> C. NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-q-2">
+          <p>2. <b>Reading.</b> Notes say “ONE WORD ONLY”. The best answer is</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-q-2" data-correct="true"> A. a word that fits the grammar of the note</label><label><input type="radio" value="1" name="t1-q-2" data-correct="false"> B. the longest word in the sentence</label><label><input type="radio" value="2" name="t1-q-2" data-correct="false"> C. two short words</label><label><input type="radio" value="3" name="t1-q-2" data-correct="false"> D. a synonym you know</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-q-3">
+          <p>3. <b>Listening.</b> A speaker mentions an option, then says “Actually, that isn’t necessary.” That option is</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-q-3" data-correct="false"> A. probably correct</label><label><input type="radio" value="1" name="t1-q-3" data-correct="true"> B. probably a distractor</label><label><input type="radio" value="2" name="t1-q-3" data-correct="false"> C. always correct</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-q-4">
+          <p>4. <b>Listening.</b> Before each section starts, you should</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-q-4" data-correct="false"> A. close your eyes and relax</label><label><input type="radio" value="1" name="t1-q-4" data-correct="true"> B. read the questions and predict the type of answer</label><label><input type="radio" value="2" name="t1-q-4" data-correct="false"> C. write possible answers in every gap</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-q-5">
+          <p>5. <b>Writing Task 1.</b> The most important paragraph for a high band is</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-q-5" data-correct="true"> A. the overview of the main trends</label><label><input type="radio" value="1" name="t1-q-5" data-correct="false"> B. a list of every number</label><label><input type="radio" value="2" name="t1-q-5" data-correct="false"> C. your opinion of the data</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-q-6">
+          <p>6. <b>Writing Task 2.</b> Your position should be clear</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-q-6" data-correct="false"> A. only in the conclusion</label><label><input type="radio" value="1" name="t1-q-6" data-correct="true"> B. in the introduction and kept the same until the end</label><label><input type="radio" value="2" name="t1-q-6" data-correct="false"> C. only in the second paragraph</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-q-7">
+          <p>7. <b>Speaking Part 2.</b> When you have one minute to prepare, you should</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-q-7" data-correct="false"> A. write full sentences</label><label><input type="radio" value="1" name="t1-q-7" data-correct="true"> B. write key words for each point on the card</label><label><input type="radio" value="2" name="t1-q-7" data-correct="false"> C. do nothing</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t1-q-8">
+          <p>8. <b>Speaking Part 3.</b> A strong answer usually</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t1-q-8" data-correct="true"> A. gives an opinion, a reason and an example</label><label><input type="radio" value="1" name="t1-q-8" data-correct="false"> B. is one word long</label><label><input type="radio" value="2" name="t1-q-8" data-correct="false"> C. repeats the question</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t1-q', 't1-q-score')">Check answers</button>
+          <span id="t1-q-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+    <section class="task" id="task2" data-task="2">
+      <div class="task-eyebrow">Task 2 of 8</div>
+      <h2>Vocabulary Recap — Words from the Whole Course</h2>
+      <p class="task-sub">Every word below appeared in a reading, listening or mock during the course. How many do you still remember?</p>
+      <div class="card" id="t2-v"><div class="sel-row"><select class="select" id="t2-v-1" data-answer="inevitable"><option value="">—</option><option value="erosion">erosion</option><option value="forerunner">forerunner</option><option value="inevitable">inevitable</option><option value="premature">premature</option><option value="provenance">provenance</option><option value="resilience">resilience</option><option value="restitution">restitution</option><option value="sceptical">sceptical</option></select><span><b>1.</b> certain to happen</span></div><div class="sel-row"><select class="select" id="t2-v-2" data-answer="provenance"><option value="">—</option><option value="erosion">erosion</option><option value="forerunner">forerunner</option><option value="inevitable">inevitable</option><option value="premature">premature</option><option value="provenance">provenance</option><option value="resilience">resilience</option><option value="restitution">restitution</option><option value="sceptical">sceptical</option></select><span><b>2.</b> the history of who has owned an object</span></div><div class="sel-row"><select class="select" id="t2-v-3" data-answer="restitution"><option value="">—</option><option value="erosion">erosion</option><option value="forerunner">forerunner</option><option value="inevitable">inevitable</option><option value="premature">premature</option><option value="provenance">provenance</option><option value="resilience">resilience</option><option value="restitution">restitution</option><option value="sceptical">sceptical</option></select><span><b>3.</b> returning something to its owner</span></div><div class="sel-row"><select class="select" id="t2-v-4" data-answer="premature"><option value="">—</option><option value="erosion">erosion</option><option value="forerunner">forerunner</option><option value="inevitable">inevitable</option><option value="premature">premature</option><option value="provenance">provenance</option><option value="resilience">resilience</option><option value="restitution">restitution</option><option value="sceptical">sceptical</option></select><span><b>4.</b> happening too early</span></div><div class="sel-row"><select class="select" id="t2-v-5" data-answer="sceptical"><option value="">—</option><option value="erosion">erosion</option><option value="forerunner">forerunner</option><option value="inevitable">inevitable</option><option value="premature">premature</option><option value="provenance">provenance</option><option value="resilience">resilience</option><option value="restitution">restitution</option><option value="sceptical">sceptical</option></select><span><b>5.</b> doubtful</span></div><div class="sel-row"><select class="select" id="t2-v-6" data-answer="forerunner"><option value="">—</option><option value="erosion">erosion</option><option value="forerunner">forerunner</option><option value="inevitable">inevitable</option><option value="premature">premature</option><option value="provenance">provenance</option><option value="resilience">resilience</option><option value="restitution">restitution</option><option value="sceptical">sceptical</option></select><span><b>6.</b> a person or thing that came before</span></div><div class="sel-row"><select class="select" id="t2-v-7" data-answer="erosion"><option value="">—</option><option value="erosion">erosion</option><option value="forerunner">forerunner</option><option value="inevitable">inevitable</option><option value="premature">premature</option><option value="provenance">provenance</option><option value="resilience">resilience</option><option value="restitution">restitution</option><option value="sceptical">sceptical</option></select><span><b>7.</b> the gradual wearing away of rock or soil</span></div><div class="sel-row"><select class="select" id="t2-v-8" data-answer="resilience"><option value="">—</option><option value="erosion">erosion</option><option value="forerunner">forerunner</option><option value="inevitable">inevitable</option><option value="premature">premature</option><option value="provenance">provenance</option><option value="resilience">resilience</option><option value="restitution">restitution</option><option value="sceptical">sceptical</option></select><span><b>8.</b> the ability to recover from difficulties</span></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-v', 't2-v-score')">Check answers</button>
+          <span id="t2-v-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Complete the sentences.</strong></p>
+      <div class="card" id="t2-g"><div style="line-height:2.1;"><div>1. “There’s no question that the token system is a <input type="text" class="text-answer" id="t2-1" data-correct="forerunner" autocomplete="off" style="width:130px;"> of writing,” Dr Pittman said.</div><div>2. Many scholars were <input type="text" class="text-answer" id="t2-2" data-correct="sceptical/skeptical" autocomplete="off" style="width:120px;"> of Price’s claims at first.</div><div>3. Museums should be able to prove the <input type="text" class="text-answer" id="t2-3" data-correct="provenance" autocomplete="off" style="width:130px;"> of disputed objects.</div><div>4. Claims that probiotics cure depression are, for now, <input type="text" class="text-answer" id="t2-4" data-correct="premature" autocomplete="off" style="width:120px;">.</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t2-g', 't2-g-score')">Check answers</button>
+          <span id="t2-g-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+    <section class="task" id="task3" data-task="3">
+      <div class="task-eyebrow">Task 3 of 8</div>
+      <h2>Reading Recap — The Last Few Days Before the Exam</h2>
+      <p class="task-sub">A short reading with the question types you know well — about <b>12 minutes</b>, <b>8 questions</b>.</p>
+      <div class="card article article-warm labelled"><h3 class="article-title">The Last Few Days Before the Exam</h3><p class="article-meta">Recap reading · Exam preparation</p><p><span class="para-label">A</span>In the final days before an important exam, many students try to study as much as possible, often staying up late to review everything one last time. Research on memory suggests that this is rarely the best strategy. New information is easily forgotten unless it is reviewed several times, with gaps between each review, and the brain needs sleep to store what has been learned.</p><p><span class="para-label">B</span>Experts therefore recommend that the last week should be used mainly for practice under exam conditions rather than for learning new material. Completing full practice tests with a timer helps students get used to the pace of the exam, and checking the answers afterwards shows which question types still cause problems.</p><p><span class="para-label">C</span>Nerves are normal. A little anxiety can actually improve performance by keeping people alert, but too much can make it hard to concentrate. Simple techniques, such as slow breathing and preparing everything the night before, can help. Many teachers also advise students to avoid comparing themselves with friends in the final days, since this often increases stress.</p><p><span class="para-label">D</span>On the day itself, small decisions make a difference: eating breakfast, arriving early and reading every instruction carefully. Above all, experts say, students should remember that the exam measures what they have built over weeks and months — not what they do in the last few hours.</p></div>
+      <div class="qgroup"><p class="qg-title">Questions 1–4</p><p class="qg-instr">Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p></div>
+      <div class="card" id="t3-tf"><div class="q-item" id="t3-tf-1">
+          <p>1. Staying up late to study is usually the most effective strategy.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-1" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-1" data-correct="true"> FALSE</label><label><input type="radio" value="2" name="t3-tf-1" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-2">
+          <p>2. Information is remembered better if it is reviewed several times with gaps in between.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-2" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t3-tf-2" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-2" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-3">
+          <p>3. Most students sleep less than eight hours before an exam.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-3" data-correct="false"> TRUE</label><label><input type="radio" value="1" name="t3-tf-3" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-3" data-correct="true"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-tf-4">
+          <p>4. A small amount of anxiety can help performance.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-tf-4" data-correct="true"> TRUE</label><label><input type="radio" value="1" name="t3-tf-4" data-correct="false"> FALSE</label><label><input type="radio" value="2" name="t3-tf-4" data-correct="false"> NOT GIVEN</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-tf', 't3-tf-score')">Check answers</button>
+          <span id="t3-tf-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 5–6</p><p class="qg-instr">Complete the sentences. Choose <b>ONE WORD ONLY</b> from the passage.</p></div>
+      <div class="card" id="t3-n"><div style="line-height:2.1;"><div>5. In the last week, students should mainly do practice tests under exam <input type="text" class="text-answer" id="t3-5" data-correct="conditions" autocomplete="off" style="width:130px;">.</div><div>6. Slow <input type="text" class="text-answer" id="t3-6" data-correct="breathing" autocomplete="off" style="width:120px;"> is one technique that can help with nerves.</div></div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-n', 't3-n-score')">Check answers</button>
+          <span id="t3-n-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <div class="qgroup"><p class="qg-title">Questions 7–8</p><p class="qg-instr">Choose the correct letter.</p></div>
+      <div class="card" id="t3-mc"><div class="q-item" id="t3-mc-7">
+          <p>7. Why do teachers advise students not to compare themselves with friends?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-7" data-correct="false"> A. It wastes time.</label><label><input type="radio" value="1" name="t3-mc-7" data-correct="true"> B. It often increases stress.</label><label><input type="radio" value="2" name="t3-mc-7" data-correct="false"> C. Friends give wrong answers.</label><label><input type="radio" value="3" name="t3-mc-7" data-correct="false"> D. It is against the rules.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t3-mc-8">
+          <p>8. What is the main message of the final paragraph?</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t3-mc-8" data-correct="false"> A. Breakfast is the most important meal.</label><label><input type="radio" value="1" name="t3-mc-8" data-correct="true"> B. Results depend on long-term work, not the last few hours.</label><label><input type="radio" value="2" name="t3-mc-8" data-correct="false"> C. Students should arrive late.</label><label><input type="radio" value="3" name="t3-mc-8" data-correct="false"> D. Instructions are usually wrong.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t3-mc', 't3-mc-score')">Check answers</button>
+          <span id="t3-mc-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+    <section class="task" id="task4" data-task="4">
+      <div class="task-eyebrow">Task 4 of 8</div>
+      <h2>Listening Recap — Spot the Trap</h2>
+      <p class="task-sub">Read each short extract from a recording, as if you were listening. Choose the answer the examiner wants. Every extract hides one of the traps you met in the mocks.</p>
+      <div class="card" id="t4-q"><div class="q-item" id="t4-q-1">
+          <p>1. “We hoped to pay about $400 each — there are three of us — but the total rent is $1,350.” <i>Rent: $___ per month</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-q-1" data-correct="false"> A. 400</label><label><input type="radio" value="1" name="t4-q-1" data-correct="false"> B. 1,200</label><label><input type="radio" value="2" name="t4-q-1" data-correct="true"> C. 1,350</label><label><input type="radio" value="3" name="t4-q-1" data-correct="false"> D. 450</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-q-2">
+          <p>2. “My surname is Whitfield — that’s W-H-I-T-F-I-E-L-D.” <i>Surname: ___</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-q-2" data-correct="false"> A. Whitfeild</label><label><input type="radio" value="1" name="t4-q-2" data-correct="true"> B. Whitfield</label><label><input type="radio" value="2" name="t4-q-2" data-correct="false"> C. Witfield</label><label><input type="radio" value="3" name="t4-q-2" data-correct="false"> D. Whitefield</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-q-3">
+          <p>3. “We were going to meet on the 13th, but let’s make it the 30th instead.” <i>Meeting date: ___</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-q-3" data-correct="false"> A. 13th</label><label><input type="radio" value="1" name="t4-q-3" data-correct="true"> B. 30th</label><label><input type="radio" value="2" name="t4-q-3" data-correct="false"> C. 3rd</label><label><input type="radio" value="3" name="t4-q-3" data-correct="false"> D. 31st</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-q-4">
+          <p>4. “Most visitors expect the museum café to be the highlight, but in fact it’s the rooftop garden that people love most.” <i>The most popular attraction is</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-q-4" data-correct="false"> A. the café</label><label><input type="radio" value="1" name="t4-q-4" data-correct="false"> B. the museum</label><label><input type="radio" value="2" name="t4-q-4" data-correct="true"> C. the rooftop garden</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-q-5">
+          <p>5. “I thought about adding more charts, but my tutor said the real problem was the structure.” <i>The tutor says the report needs</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-q-5" data-correct="false"> A. more charts</label><label><input type="radio" value="1" name="t4-q-5" data-correct="true"> B. better organisation</label><label><input type="radio" value="2" name="t4-q-5" data-correct="false"> C. a longer introduction</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t4-q-6">
+          <p>6. “The tour normally costs £15, but students pay only £9 — and children go free.” <i>Student ticket: £___</i></p>
+          <div class="q-options"><label><input type="radio" value="0" name="t4-q-6" data-correct="false"> A. 15</label><label><input type="radio" value="1" name="t4-q-6" data-correct="true"> B. 9</label><label><input type="radio" value="2" name="t4-q-6" data-correct="false"> C. 0</label><label><input type="radio" value="3" name="t4-q-6" data-correct="false"> D. 24</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t4-q', 't4-q-score')">Check answers</button>
+          <span id="t4-q-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+    </section>
+    <section class="task" id="task5" data-task="5">
+      <div class="task-eyebrow">Task 5 of 8</div>
+      <h2>Writing Task 1 Recap — Overviews and Trend Language</h2>
+      <p class="task-sub">The overview is the most important sentence in Task 1. Choose the best overview for each chart, then correct the sentences.</p>
+      <div class="card" id="t5-ov"><div class="q-item" id="t5-ov-1">
+          <p>1. <b>Line graph:</b> car use fell from 60% to 40%; cycling rose from 5% to 20%; bus use stayed at about 30% (2000–2020).</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-ov-1" data-correct="false"> A. In 2000, 60% of people used cars.</label><label><input type="radio" value="1" name="t5-ov-1" data-correct="true"> B. Overall, car use declined while cycling became more popular, and bus use remained stable.</label><label><input type="radio" value="2" name="t5-ov-1" data-correct="false"> C. Cycling is healthier than driving.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-ov-2">
+          <p>2. <b>Pie charts:</b> household spending on housing rose from 22% to 31%, food fell from 20% to 15%, other categories changed little (2005 vs 2025).</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-ov-2" data-correct="true"> A. The biggest change was that housing took a much larger share of spending, mainly at the expense of food.</label><label><input type="radio" value="1" name="t5-ov-2" data-correct="false"> B. Housing was 31% in 2025.</label><label><input type="radio" value="2" name="t5-ov-2" data-correct="false"> C. People spend money on many things.</label></div>
+          <div class="q-result"></div>
+        </div><div class="q-item" id="t5-ov-3">
+          <p>3. <b>Process:</b> eight stages, from collecting plastic waste to laying a road surface.</p>
+          <div class="q-options"><label><input type="radio" value="0" name="t5-ov-3" data-correct="false"> A. First, plastic waste is collected.</label><label><input type="radio" value="1" name="t5-ov-3" data-correct="true"> B. Overall, the process consists of eight stages, beginning with the collection of plastic waste and ending with the laying of the road.</label><label><input type="radio" value="2" name="t5-ov-3" data-correct="false"> C. Roads are important for transport.</label></div>
+          <div class="q-result"></div>
+        </div><div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+          <button onclick="checkAllAnswers('t5-ov', 't5-ov-score')">Check answers</button>
+          <span id="t5-ov-score" style="font-family: var(--mono); color: var(--muted);"></span>
+        </div></div>
+      <p style="margin-top:26px;"><strong>Correct the sentences.</strong> Each has <b>one</b> mistake. Write the whole correct sentence.</p>
+      <div class="card"><p class="mini-q">1. The share rose sharply, it reached 50% in 2020.</p><textarea class="no-check mini-answer" id="t5-fix-1" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><p class="mini-q">2. Country D lagged far behind, never exceeded 6%.</p><textarea class="no-check mini-answer" id="t5-fix-2" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><p class="mini-q">3. Only after 2010 there was significant growth.</p><textarea class="no-check mini-answer" id="t5-fix-3" placeholder="Write the correct sentence..." style="min-height:50px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t5-fix-btn">Show the correct sentences</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t5-fix-ans"><ol><li>The share rose sharply, reaching 50% in 2020.</li><li>Country D lagged far behind, never exceeding 6%.</li><li>Only after 2010 was there significant growth.</li></ol></div>
+        </div></div>
+    </section>
+    <section class="task" id="task6" data-task="6">
+      <div class="task-eyebrow">Task 6 of 8</div>
+      <h2>Writing Task 2 Recap — Introduction and One Body Paragraph</h2>
+      <p class="task-sub">One last essay plan. Write a strong <b>introduction</b> (paraphrase + clear position) and <b>one</b> developed body paragraph (topic sentence → explanation → example). About <b>20 minutes</b>.</p>
+      <div class="card task-prompt"><p class="prompt-label">Writing Task 2</p><p><i>It is often argued that the most important skill a student can develop is the ability to learn independently, rather than any particular body of knowledge. To what extent do you agree or disagree?</i></p></div>
+      <div class="card"><p class="mini-q">1. Your introduction (2–3 sentences):</p><textarea class="no-check mini-answer" id="t6-w-1" placeholder="Write here..." style="min-height:140px;"></textarea><p class="mini-q">2. One body paragraph (topic sentence → explanation → example):</p><textarea class="no-check mini-answer" id="t6-w-2" placeholder="Write here..." style="min-height:140px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t6-w-btn">Show a model</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t6-w-ans"><p><b>Introduction:</b> In an age when information can be found instantly online, it is often argued that knowing how to learn matters more than what one knows. I largely agree with this view, although I would argue that independent learning is only possible on a foundation of core knowledge.</p><p><b>Body paragraph:</b> The case for independent learning rests on the speed of change in the modern world. Much of what students learn at school or university will be outdated within a decade, whereas the ability to find, evaluate and apply new information remains valuable throughout a career. Yet this ability does not develop in a vacuum: a student cannot judge the reliability of a source, or even recognise what they need to learn, without a solid grasp of fundamental concepts. Independent learning, in other words, is not an alternative to knowledge but the means by which knowledge continues to grow.</p></div>
+        </div></div>
+    </section>
+    <section class="task" id="task7" data-task="7">
+      <div class="task-eyebrow">Task 7 of 8</div>
+      <h2>Speaking — Your 45 Days</h2>
+      <p class="task-sub">Record a Part 2 long turn (about <b>2 minutes</b>) and two Part 3 answers. Use the notes box to prepare for one minute first.</p>
+      <div class="card task-prompt"><p class="prompt-label">Speaking Part 2 — cue card</p><p><b>Describe a challenge you completed that you are proud of.</b></p><p>You should say:<br>• what the challenge was<br>• how long it took<br>• what was difficult about it<br>and explain why you are proud of it.</p></div>
+      <div class="question-box" data-field="t7-speaking-1">
+        <div class="q-num">Part 2 — long turn</div>
+        <div class="q-text">Talk about the cue card for 1–2 minutes. (You can talk about this course!)</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I’d like to talk about…”</li><li>“The hardest part was…”</li><li>“What I’m most proud of is…”</li><li>“Looking back,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-2">
+        <div class="q-num">Part 3 — Question 1</div>
+        <div class="q-text">Why do some people give up on long-term goals, while others keep going?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“I think the main reason is…”</li><li>“For example,…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+      <div class="question-box" data-field="t7-speaking-3">
+        <div class="q-num">Part 3 — Question 2</div>
+        <div class="q-text">Is it better to study alone or with other people?</div>
+        <button class="phrase-toggle" type="button">Show useful phrases ▾</button><div class="phrase-box"><p class="phrase-words"><strong>Useful phrases:</strong></p><ul><li>“It depends on…”</li><li>“Personally, I find that…”</li></ul></div>
+        <textarea class="notes-box no-check" placeholder="Jot down your key points before you record..."></textarea>
+        <button class="record-btn" data-state="idle">● Record</button>
+        <div class="record-status"></div>
+        <div class="record-player"></div>
+      </div>
+    </section>
+    <section class="task" id="task8" data-task="8">
+      <div class="task-eyebrow">Task 8 of 8</div>
+      <h2>The Finish Line — A Letter to Your Future Self</h2>
+      <p class="task-sub">The last task of IELTS Marathon 2.0. Write honestly — this is for you. When you finish, press <b>Next</b> one last time. 🎉</p>
+      <div class="card"><p class="mini-q">1. What is the biggest progress you made during these 45 days?</p><textarea class="no-check mini-answer" id="t8-l-1" placeholder="Write here..." style="min-height:70px;"></textarea><p class="mini-q">2. Which day or task do you remember most, and why?</p><textarea class="no-check mini-answer" id="t8-l-2" placeholder="Write here..." style="min-height:70px;"></textarea><p class="mini-q">3. What will you do in the next weeks to keep improving until your exam?</p><textarea class="no-check mini-answer" id="t8-l-3" placeholder="Write here..." style="min-height:70px;"></textarea><p class="mini-q">4. Write a short message to yourself on the day of your real IELTS exam:</p><textarea class="no-check mini-answer" id="t8-l-4" placeholder="Write here..." style="min-height:70px;"></textarea><div style="margin-top:14px;">
+          <button type="button" class="ghost" id="t8-l-btn">Show a message from us</button>
+          <p class="reveal-hint">Fill in every box above first — then you can compare. Your answers lock when you open this.</p>
+          <div class="answer-reveal" id="t8-l-ans"><p>Whatever you wrote, remember this: you finished a 45-day marathon. Reading tests, listening tests, essays, recordings, mocks — day after day. That habit is the real result of this course. Keep it going, and good luck in your exam!</p></div>
+        </div></div>
+    </section>
+
+  <footer class="task-navbar">
+    <button class="ghost" id="prevBtn">← Previous</button>
+    <span class="nav-info" id="navInfo">Task 1 of 8</span>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <div class="completion-screen" id="completionScreen">
+    <div class="big-check">✓</div>
+    <div class="eyebrow">Day 45 of 45</div>
+    <h1>Day 45 complete! 🎉</h1>
+    <p>You finished IELTS Marathon 2.0 — all 45 days. Thank you, and good luck!</p>
+    <div class="completion-actions">
+      <a href="../../index.html" class="btn" id="completion-home">← Back to the board</a>
+      <button class="ghost" id="reviewBtn">Review my work</button>
+    </div>
+  </div>
+  <canvas id="confettiCanvas"></canvas>
+
+</div>
+
+<script src="../../supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../script.js"></script>
+<script>
+  requireAuth(async function (profile, user) {
+    window.__ME = profile;
+    document.querySelectorAll('.phrase-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling; const on = box.classList.toggle('show');
+      btn.textContent = on ? 'Hide useful phrases ▴' : 'Show useful phrases ▾';
+    }));
+    document.querySelectorAll('.an-open').forEach(btn => btn.addEventListener('click', () => {
+      const items = btn.closest('.an-card').querySelectorAll('details.an-item');
+      const open = ![...items].every(d => d.open); items.forEach(d => d.open = open);
+      btn.textContent = open ? 'Close all' : 'Open all';
+    }));
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-1"]'); if (b) initRecordControl(b, user.id, 45, 7, 't7-speaking-1', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-2"]'); if (b) initRecordControl(b, user.id, 45, 7, 't7-speaking-2', 0); }
+    { const b = document.querySelector('.question-box[data-field="t7-speaking-3"]'); if (b) initRecordControl(b, user.id, 45, 7, 't7-speaking-3', 0); }
+
+    await initTaskFlow(45, 8, user.id, {
+      1: () => { checkAllAnswers('t1-q', 't1-q-score'); },
+      2: () => { checkAllAnswers('t2-v', 't2-v-score'); checkAllAnswers('t2-g', 't2-g-score'); },
+      3: () => { checkAllAnswers('t3-tf', 't3-tf-score'); checkAllAnswers('t3-n', 't3-n-score'); checkAllAnswers('t3-mc', 't3-mc-score'); },
+      4: () => { checkAllAnswers('t4-q', 't4-q-score'); },
+      5: () => { checkAllAnswers('t5-ov', 't5-ov-score'); },
+    });
+
+    initGatedMistakeReveal('t5-fix-btn', 't5-fix-ans', '[id^="t5-fix-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t6-w-btn', 't6-w-ans', '[id^="t6-w-"]:not([id$="-btn"]):not([id$="-ans"])');
+    initGatedMistakeReveal('t8-l-btn', 't8-l-ans', '[id^="t8-l-"]:not([id$="-btn"]):not([id$="-ans"])');
+  });
+</script>
+
+<style>
+  #farewell { position: fixed; inset: 0; z-index: 9999; display: none; overflow: hidden; background: radial-gradient(ellipse at 50% 120%, #2b3a8c 0%, #141a44 45%, #070914 100%); color: #fff; font-family: inherit; }
+  #farewell.on { display: block; animation: fwFade .8s ease both; }
+  @keyframes fwFade { from { opacity: 0; } to { opacity: 1; } }
+  #fwCanvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .fw-stage { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; pointer-events: none; }
+  .fw-kicker { font-family: var(--mono, monospace); letter-spacing: .35em; text-transform: uppercase; font-size: .8rem; color: #9fb4ff; opacity: 0; animation: fwUp .9s ease forwards 1.2s; }
+  .fw-word { font-size: clamp(3.2rem, 13vw, 9rem); font-weight: 800; line-height: 1; margin: 18px 0 8px; letter-spacing: -.02em; }
+  .fw-word span { display: inline-block; opacity: 0; transform: translateY(60px) rotate(8deg) scale(.6); animation: fwLetter .7s cubic-bezier(.2,1.4,.4,1) forwards; background: linear-gradient(180deg, #fff 30%, #ffd36b 100%); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(255, 211, 107, .25); }
+  @keyframes fwLetter { to { opacity: 1; transform: none; } }
+  .fw-name { font-size: clamp(1.3rem, 4vw, 2.2rem); font-weight: 700; opacity: 0; animation: fwUp .9s ease forwards 3.1s; }
+  .fw-lines { margin-top: 26px; max-width: 620px; }
+  .fw-lines p { margin: 8px 0; font-size: clamp(1rem, 2.6vw, 1.2rem); color: #d7defc; opacity: 0; animation: fwUp .9s ease forwards; }
+  .fw-stats { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 26px; }
+  .fw-stat { min-width: 120px; padding: 12px 16px; border: 1px solid rgba(255,255,255,.18); border-radius: 14px; background: rgba(255,255,255,.06); backdrop-filter: blur(4px); opacity: 0; animation: fwUp .8s ease forwards; }
+  .fw-stat b { display: block; font-size: 2rem; font-weight: 800; color: #ffd36b; font-variant-numeric: tabular-nums; }
+  .fw-stat small { font-family: var(--mono, monospace); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: #9fb4ff; }
+  @keyframes fwUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  .fw-actions { margin-top: 30px; display: flex; gap: 12px; justify-content: center; pointer-events: auto; opacity: 0; animation: fwUp .8s ease forwards 9.6s; }
+  .fw-actions button, .fw-actions a { font: inherit; font-weight: 700; padding: 11px 20px; border-radius: 999px; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.08); color: #fff; cursor: pointer; text-decoration: none; }
+  .fw-actions .primary { background: #ffd36b; color: #141a44; border-color: #ffd36b; }
+  .fw-plane { position: absolute; left: -80px; top: 70%; font-size: 2.6rem; animation: fwPlane 5.5s ease-in-out forwards .3s; filter: drop-shadow(0 6px 10px rgba(0,0,0,.4)); }
+  @keyframes fwPlane { 0% { transform: translate(0, 0) rotate(10deg); } 50% { transform: translate(55vw, -38vh) rotate(-8deg); } 100% { transform: translate(calc(100vw + 200px), -95vh) rotate(-20deg); opacity: 0; } }
+  @media (max-width: 560px) { .fw-actions { flex-wrap: wrap; gap: 8px; } .fw-actions button, .fw-actions a { padding: 9px 14px; font-size: .9rem; } .fw-stat { min-width: 96px; padding: 10px 12px; } .fw-stage { justify-content: flex-start; padding-top: 40px; } }
+  #fwReplay { position: fixed; right: 18px; bottom: 84px; z-index: 50; }
+</style>
+<div id="farewell" aria-live="polite">
+  <canvas id="fwCanvas"></canvas>
+  <div class="fw-plane">✈️</div>
+  <div class="fw-stage">
+    <div class="fw-kicker">IELTS Marathon 2.0 · Day 45 of 45</div>
+    <div class="fw-word" id="fwWord"></div>
+    <div class="fw-name" id="fwName"></div>
+    <div class="fw-lines">
+      <p style="animation-delay:4.0s">45 days. Reading, listening, writing, speaking — every single day.</p>
+      <p style="animation-delay:5.0s">You didn’t just prepare for an exam. You built a habit.</p>
+    </div>
+    <div class="fw-stats">
+      <div class="fw-stat" style="animation-delay:6.0s"><b data-count="45">0</b><small>days</small></div>
+      <div class="fw-stat" style="animation-delay:6.4s"><b data-count="4">0</b><small>skills</small></div>
+      <div class="fw-stat" style="animation-delay:6.8s"><b data-count="1">0</b><small>finish line</small></div>
+    </div>
+    <div class="fw-lines">
+      <p style="animation-delay:8.0s; color:#ffd36b; font-weight:700;">Xayr — and good luck in your IELTS exam! 🍀</p>
+      <p style="animation-delay:8.8s">Thank you for running this marathon with us.</p>
+    </div>
+    <div class="fw-actions">
+      <button type="button" id="fwAgain">↻ Play again</button>
+      <button type="button" id="fwClose">Close</button>
+      <a href="../../index.html" class="primary">Back to the board</a>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  const fw = document.getElementById('farewell'), cv = document.getElementById('fwCanvas'), ctx = cv.getContext('2d');
+  let parts = [], stars = [], raf = null, t0 = 0, rockets = [];
+  const COLORS = ['#ffd36b', '#ff7a9c', '#7ad7ff', '#a98bff', '#7dffb2', '#ffffff'];
+  function size() { cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0); }
+  function burst(x, y) {
+    const c = COLORS[Math.floor(Math.random() * COLORS.length)], n = 70 + Math.floor(Math.random() * 40);
+    for (let i = 0; i < n; i++) { const a = Math.random() * Math.PI * 2, s = 1.5 + Math.random() * 4.5; parts.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 1, c }); }
+  }
+  function launch() { rockets.push({ x: innerWidth * (0.15 + Math.random() * 0.7), y: innerHeight, vy: -(9 + Math.random() * 4), ty: innerHeight * (0.15 + Math.random() * 0.35) }); }
+  function frame(t) {
+    if (!t0) t0 = t; const el = (t - t0) / 1000;
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    stars.forEach(s => { ctx.globalAlpha = 0.35 + 0.65 * Math.abs(Math.sin(el * s.sp + s.ph)); ctx.fillStyle = '#fff'; ctx.fillRect(s.x, s.y, s.r, s.r); });
+    ctx.globalAlpha = 1;
+    if (el > 2.4 && Math.random() < (el < 12 ? 0.05 : 0.02)) launch();
+    rockets = rockets.filter(r => { r.y += r.vy; r.vy *= 0.985; ctx.fillStyle = '#fff3c4'; ctx.fillRect(r.x, r.y, 2, 8); if (r.y <= r.ty) { burst(r.x, r.y); return false; } return true; });
+    parts = parts.filter(p => p.life > 0);
+    parts.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.vx *= 0.985; p.life -= 0.012; ctx.globalAlpha = Math.max(p.life, 0); ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, 2.2, 0, Math.PI * 2); ctx.fill(); });
+    ctx.globalAlpha = 1;
+    raf = requestAnimationFrame(frame);
+  }
+  function countUp() {
+    fw.querySelectorAll('[data-count]').forEach((b, i) => {
+      const to = +b.dataset.count; b.textContent = '0';
+      setTimeout(() => { const st = performance.now(); (function step(n) { const k = Math.min((n - st) / 1200, 1); b.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); })(st); }, 6000 + i * 400);
+    });
+  }
+  function restartAnims() { fw.querySelectorAll('*').forEach(e => { if (getComputedStyle(e).animationName !== 'none') { e.style.animation = 'none'; void e.offsetWidth; e.style.animation = ''; } }); }
+  function play() {
+    const me = window.__ME || {}; const first = String(me.full_name || '').trim().split(/\s+/)[0];
+    document.getElementById('fwName').textContent = first ? first + ', you made it! 🎉' : 'You made it! 🎉';
+    const word = 'Goodbye!'; document.getElementById('fwWord').innerHTML = [...word].map((ch, i) => `<span style="animation-delay:${1.6 + i * 0.12}s">${ch}</span>`).join('');
+    stars = Array.from({ length: 140 }, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight * 0.85, r: Math.random() < 0.1 ? 2 : 1, sp: 0.5 + Math.random() * 2, ph: Math.random() * 6 }));
+    parts = []; rockets = []; t0 = 0; size(); fw.classList.add('on'); restartAnims(); countUp();
+    cancelAnimationFrame(raf); raf = requestAnimationFrame(frame);
+  }
+  function close() { fw.classList.remove('on'); cancelAnimationFrame(raf); }
+  addEventListener('resize', () => { if (fw.classList.contains('on')) size(); });
+  document.getElementById('fwAgain').addEventListener('click', play);
+  document.getElementById('fwClose').addEventListener('click', close);
+  window.playFarewell = play;
+  const cs = document.getElementById('completionScreen');
+  if (cs) {
+    const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'ghost'; btn.textContent = '✨ Watch the goodbye';
+    btn.addEventListener('click', play); const acts = cs.querySelector('.completion-actions'); if (acts) acts.appendChild(btn);
+    let shown = false;
+    new MutationObserver(() => { const on = cs.classList.contains('show'); if (on && !shown) setTimeout(play, 900); shown = on; }).observe(cs, { attributes: true, attributeFilter: ['class'] });
+  }
+})();
+</script>
+</body>
+</html>
